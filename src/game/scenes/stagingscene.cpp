@@ -1,0 +1,82 @@
+#include "../../core/gamedefs.h"
+
+
+std::vector<BaseEntity *> active_unit_list;
+std::vector<BaseEntity *> recruit_unit_list;
+//BaseEntity *active_unit_list[DRAW_LIST_SIZE] = {nullptr};
+//BaseEntity *recruit_unit_list[DRAW_LIST_SIZE] = {nullptr};
+
+
+StagingScene::StagingScene() {
+
+    scene_id = TITLE_SCENE;
+    return_scene = NO_SCENE;
+    ui_layer = new StagingUILayer();
+    
+    ui_layer->play_pressed.Connect( [&](){OnPlayPressed();} );
+    ui_layer->settings_pressed.Connect( [&](){OnSettingsPressed();} );
+    ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
+    ui_layer->add_to_team_pressed.Connect( [&](){OnAddToTeamPressed();} );
+    ui_layer->advertize_pressed.Connect( [&](){OnAdvertizePressed();} );
+
+
+    LoadSprite(bg_sprite_1, LoadTexture("assets/staging_bg1.png"), {0,0});
+
+    //active_unit_list.push_back(new BaseUnit({20,0}, units_data[0]));
+    //active_unit_list.push_back(new BaseUnit({20,50}, units_data[0]));
+    //active_unit_list.push_back(new BaseUnit({20,100}, units_data[0]));
+    //active_unit_list.push_back(new BaseUnit({20,150}, units_data[0]));
+
+
+    for(int i = 0; i < active_unit_list.size(); i++) {
+        if(active_unit_list[i] != nullptr) {
+            BaseUnit *unit =  dynamic_cast<BaseUnit *>(active_unit_list[i]); //(BaseUnit)active_unit_list[i];
+            TraceLog(LOG_INFO, "new troop: id: %i, health: %i, name: %s", unit->data.id, unit->data.health, unit->data.name.c_str());
+        }
+    }
+}
+
+
+SCENE_ID StagingScene::Update() {
+
+    ui_layer->Update();
+    if(IsKeyPressed(KEY_SPACE)) {
+        return_scene = GAME_SCENE;
+    }
+    return return_scene;
+}
+
+void StagingScene::Draw() {
+    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK);
+    DrawSprite(bg_sprite_1);
+    //DL_Draw(active_unit_list);
+    ui_layer->Draw();
+}
+
+StagingScene::~StagingScene() {
+    delete ui_layer;
+    UnloadTexture(bg_sprite_1.texture);
+    TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  STAGING");
+}
+
+void StagingScene::OnPlayPressed() {
+    return_scene = GAME_SCENE;
+}
+
+void StagingScene::OnSettingsPressed() {
+}
+
+void StagingScene::OnQuitPressed() {
+    return_scene = SPLASH_SCENE;
+}
+
+void StagingScene::OnAddToTeamPressed() {
+    if(active_unit_list.size() < 40 ) {
+        active_unit_list.push_back(new BaseUnit({200,200}, units_data[0]));
+    }
+}
+
+
+void StagingScene::OnAdvertizePressed() {
+
+}

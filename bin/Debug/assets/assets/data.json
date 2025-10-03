@@ -1,0 +1,10 @@
+{
+
+ "base_unit": [
+        {
+            "health":10,
+            "texture_id":0,
+            "portrait_id":0
+        }
+    ]
+}
