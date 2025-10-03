@@ -4,6 +4,7 @@
 #define MIN_ZOOM 0.5f
 #define ZOOM_STEP 0.05f
 
+std::vector<BaseEntity *> active_entity_list;
 int *level_data_array;
 int g_map_width;
 int g_map_height;
@@ -40,7 +41,8 @@ GameScene::GameScene(char map_path[]) {
     ground_tiles = LoadTexture("assets/tiles.png");
 
     //unit1 = new BaseUnit({0,0}, g_sprites[SPRITE_BASE_CHAR]);
-    //DL_Add(active_unit_list, unit1);
+    active_entity_list.push_back(new PlayerCharacter({20,150}, units_data[0]));
+    //DL_Add(active_entity_list, new PlayerCharacter({0,0}, units_data[0]) );
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -56,21 +58,22 @@ GameScene::GameScene(char map_path[]) {
 SCENE_ID GameScene::Update() {
     GetInputFromPlayer();
     ui_layer->Update();
-    DL_Update(active_unit_list);
-    if(g_input.keys_pressed[0] == KEY_SPACE) {
+    DL_Update(active_entity_list);
+    HandleCamera();
+    return return_scene;
+
+/*     if(g_input.keys_pressed[0] == KEY_SPACE) {
         return_scene = END_SCENE;
     }
     if (IsKeyPressed(g_input.keys_pressed[0] ==  KEY_ENTER)) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
 
-    HandleCamera();
-
+    
     if(g_input.keys_pressed[0] == KEY_D) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
-    }
-
-    return return_scene;
+        } */
+       
 }
 
 void GameScene::Draw() {
@@ -79,7 +82,7 @@ void GameScene::Draw() {
     BeginMode2D(g_camera);
     DrawLevel();
     
-    DL_Draw(active_unit_list);
+    DL_Draw(active_entity_list);
     
     
     if(g_input.selecting) {
@@ -143,6 +146,6 @@ void GameScene::HandleCamera() {
 GameScene::~GameScene() {
     delete ui_layer;
     UnloadTexture(ground_tiles);
-    DL_Clear(active_unit_list);
+    DL_Clear(active_entity_list);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }

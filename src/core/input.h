@@ -45,11 +45,11 @@ inline void GetInputFromPlayer() {
     g_input.mouse_wheel = GetMouseWheelMove();
     
     
-    memset(g_input.keys_pressed, KEY_NULL, KEY_BUFFER_SIZE);
+/*     memset(g_input.keys_pressed, KEY_NULL, KEY_BUFFER_SIZE);
 
     int key = GetKeyPressed();
     while(key != 0) {
-        //TraceLog(LOG_INFO, "next key %i", key);
+        TraceLog(LOG_INFO, "next key %i", key);
         for(int i = 0; i < KEY_BUFFER_SIZE; i++) {
             if(g_input.keys_pressed[i] == 0) {
                 g_input.keys_pressed[i] = (KeyboardKey)key;
@@ -59,7 +59,13 @@ inline void GetInputFromPlayer() {
         }
         key = GetKeyPressed();
         
-    }
+    } */
+
+    g_input.key_up = IsKeyDown(KEY_W);
+    g_input.key_down = IsKeyDown(KEY_S);
+    g_input.key_left = IsKeyDown(KEY_A);
+    g_input.key_right = IsKeyDown(KEY_D);
+
 
     if(g_input.selecting) {
         

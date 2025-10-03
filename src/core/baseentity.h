@@ -58,8 +58,9 @@ struct  RayCast {
     
 };
 
-extern std::vector<BaseEntity *> active_unit_list;
-extern std::vector<BaseEntity *> recruit_unit_list;
+
+extern std::vector<BaseEntity *> active_entity_list;
+//extern std::vector<BaseEntity *> recruit_unit_list;
 
 //extern BaseEntity *active_unit_list[DRAW_LIST_SIZE];
 //extern BaseEntity *recruit_unit_list[DRAW_LIST_SIZE];

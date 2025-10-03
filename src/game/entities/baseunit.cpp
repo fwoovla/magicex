@@ -1,4 +1,4 @@
-#include "../../core/gamedefs.h"
+/* #include "../../core/gamedefs.h"
 #include<cmath>
 #include <raymath.h>
 
@@ -182,3 +182,4 @@ BaseUnit::~BaseUnit()
     //UnloadTexture(sprite.texture);
 }
 
+ */

@@ -1,9 +1,10 @@
-obj/Debug/enduilayer.o: src/game/scenes/enduilayer.cpp \
- /usr/include/stdc-predef.h src/game/scenes/../../core/gamedefs.h \
+obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
+ /usr/include/stdc-predef.h src/game/entities/../../core/gamedefs.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/game/scenes/../../core/resources.h src/game/scenes/../../core/data.h \
- /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
+ src/game/entities/../../core/resources.h \
+ src/game/entities/../../core/data.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -165,8 +166,9 @@ obj/Debug/enduilayer.o: src/game/scenes/enduilayer.cpp \
  /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
- /usr/include/c++/13/bits/fstream.tcc src/game/scenes/../../core/json.hpp \
- /usr/include/c++/13/algorithm /usr/include/c++/13/bits/stl_algo.h \
+ /usr/include/c++/13/bits/fstream.tcc \
+ src/game/entities/../../core/json.hpp /usr/include/c++/13/algorithm \
+ /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
  /usr/include/c++/13/bits/stl_heap.h \
  /usr/include/c++/13/bits/uniform_int_dist.h \
@@ -246,23 +248,24 @@ obj/Debug/enduilayer.o: src/game/scenes/enduilayer.cpp \
  /usr/include/c++/13/optional /usr/include/c++/13/numeric \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
- src/game/scenes/../../core/input.h src/game/scenes/../../core/utils.h \
- src/game/scenes/../../core/button.h src/game/scenes/../../core/sprite.h \
- /usr/local/include/raymath.h /usr/include/c++/13/math.h \
- src/game/scenes/../../core/label.h \
- src/game/scenes/../../core/baseentity.h \
- src/game/scenes/../../core/playercharacter.h \
- src/game/scenes/../../core/uilayers.h \
- src/game/scenes/../../core/scenes.h \
- src/game/scenes/../../core/basescene.h \
- src/game/scenes/../../core/scenemanager.h \
- src/game/scenes/../../core/game.h
+ src/game/entities/../../core/input.h \
+ src/game/entities/../../core/utils.h \
+ src/game/entities/../../core/button.h \
+ src/game/entities/../../core/sprite.h /usr/local/include/raymath.h \
+ /usr/include/c++/13/math.h src/game/entities/../../core/label.h \
+ src/game/entities/../../core/baseentity.h \
+ src/game/entities/../../core/playercharacter.h \
+ src/game/entities/../../core/uilayers.h \
+ src/game/entities/../../core/scenes.h \
+ src/game/entities/../../core/basescene.h \
+ src/game/entities/../../core/scenemanager.h \
+ src/game/entities/../../core/game.h
 /usr/include/stdc-predef.h:
-src/game/scenes/../../core/gamedefs.h:
+src/game/entities/../../core/gamedefs.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/game/scenes/../../core/resources.h:
-src/game/scenes/../../core/data.h:
+src/game/entities/../../core/resources.h:
+src/game/entities/../../core/data.h:
 /usr/include/c++/13/vector:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -463,7 +466,7 @@ src/game/scenes/../../core/data.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h:
 /usr/include/c++/13/bits/fstream.tcc:
-src/game/scenes/../../core/json.hpp:
+src/game/entities/../../core/json.hpp:
 /usr/include/c++/13/algorithm:
 /usr/include/c++/13/bits/stl_algo.h:
 /usr/include/c++/13/bits/algorithmfwd.h:
@@ -572,17 +575,17 @@ src/game/scenes/../../core/json.hpp:
 /usr/include/c++/13/bits/stl_numeric.h:
 /usr/include/c++/13/pstl/glue_numeric_defs.h:
 /usr/include/c++/13/any:
-src/game/scenes/../../core/input.h:
-src/game/scenes/../../core/utils.h:
-src/game/scenes/../../core/button.h:
-src/game/scenes/../../core/sprite.h:
+src/game/entities/../../core/input.h:
+src/game/entities/../../core/utils.h:
+src/game/entities/../../core/button.h:
+src/game/entities/../../core/sprite.h:
 /usr/local/include/raymath.h:
 /usr/include/c++/13/math.h:
-src/game/scenes/../../core/label.h:
-src/game/scenes/../../core/baseentity.h:
-src/game/scenes/../../core/playercharacter.h:
-src/game/scenes/../../core/uilayers.h:
-src/game/scenes/../../core/scenes.h:
-src/game/scenes/../../core/basescene.h:
-src/game/scenes/../../core/scenemanager.h:
-src/game/scenes/../../core/game.h:
+src/game/entities/../../core/label.h:
+src/game/entities/../../core/baseentity.h:
+src/game/entities/../../core/playercharacter.h:
+src/game/entities/../../core/uilayers.h:
+src/game/entities/../../core/scenes.h:
+src/game/entities/../../core/basescene.h:
+src/game/entities/../../core/scenemanager.h:
+src/game/entities/../../core/game.h:

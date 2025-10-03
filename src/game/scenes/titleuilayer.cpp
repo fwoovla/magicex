@@ -59,7 +59,7 @@ void TitleUILayer::Update() {
             //PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "SETTINGS BUTTON PRESSED ");
+            TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
             //play_pressed.EmitSignal();
             quit_pressed.EmitSignal();
         }        

@@ -247,7 +247,7 @@ obj/Debug/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/core/input.h src/core/utils.h src/core/button.h src/core/sprite.h \
  /usr/local/include/raymath.h /usr/include/c++/13/math.h src/core/label.h \
- src/core/baseentity.h src/core/units.h src/core/uilayers.h \
+ src/core/baseentity.h src/core/playercharacter.h src/core/uilayers.h \
  src/core/scenes.h src/core/basescene.h src/core/scenemanager.h \
  src/core/game.h
 /usr/include/stdc-predef.h:
@@ -573,7 +573,7 @@ src/core/sprite.h:
 /usr/include/c++/13/math.h:
 src/core/label.h:
 src/core/baseentity.h:
-src/core/units.h:
+src/core/playercharacter.h:
 src/core/uilayers.h:
 src/core/scenes.h:
 src/core/basescene.h:

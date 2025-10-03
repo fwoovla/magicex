@@ -12,6 +12,7 @@ struct Sprite {
     Vector2 scale;
     float roataion;
     Color modulate;
+    
 };
 
 struct AnimatedSprite : public Sprite {

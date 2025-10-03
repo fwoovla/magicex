@@ -251,7 +251,8 @@ obj/Debug/gamescene.o: src/game/scenes/gamescene.cpp \
  /usr/local/include/raymath.h /usr/include/c++/13/math.h \
  src/game/scenes/../../core/label.h \
  src/game/scenes/../../core/baseentity.h \
- src/game/scenes/../../core/units.h src/game/scenes/../../core/uilayers.h \
+ src/game/scenes/../../core/playercharacter.h \
+ src/game/scenes/../../core/uilayers.h \
  src/game/scenes/../../core/scenes.h \
  src/game/scenes/../../core/basescene.h \
  src/game/scenes/../../core/scenemanager.h \
@@ -579,7 +580,7 @@ src/game/scenes/../../core/sprite.h:
 /usr/include/c++/13/math.h:
 src/game/scenes/../../core/label.h:
 src/game/scenes/../../core/baseentity.h:
-src/game/scenes/../../core/units.h:
+src/game/scenes/../../core/playercharacter.h:
 src/game/scenes/../../core/uilayers.h:
 src/game/scenes/../../core/scenes.h:
 src/game/scenes/../../core/basescene.h:

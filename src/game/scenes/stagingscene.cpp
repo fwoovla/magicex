@@ -1,8 +1,8 @@
 #include "../../core/gamedefs.h"
 
 
-std::vector<BaseEntity *> active_unit_list;
-std::vector<BaseEntity *> recruit_unit_list;
+
+//std::vector<BaseEntity *> recruit_unit_list;
 //BaseEntity *active_unit_list[DRAW_LIST_SIZE] = {nullptr};
 //BaseEntity *recruit_unit_list[DRAW_LIST_SIZE] = {nullptr};
 
@@ -28,12 +28,6 @@ StagingScene::StagingScene() {
     //active_unit_list.push_back(new BaseUnit({20,150}, units_data[0]));
 
 
-    for(int i = 0; i < active_unit_list.size(); i++) {
-        if(active_unit_list[i] != nullptr) {
-            BaseUnit *unit =  dynamic_cast<BaseUnit *>(active_unit_list[i]); //(BaseUnit)active_unit_list[i];
-            TraceLog(LOG_INFO, "new troop: id: %i, health: %i, name: %s", unit->data.id, unit->data.health, unit->data.name.c_str());
-        }
-    }
 }
 
 
@@ -71,9 +65,7 @@ void StagingScene::OnQuitPressed() {
 }
 
 void StagingScene::OnAddToTeamPressed() {
-    if(active_unit_list.size() < 40 ) {
-        active_unit_list.push_back(new BaseUnit({200,200}, units_data[0]));
-    }
+
 }
 
 

@@ -37,7 +37,14 @@ struct PlayerInput {
     float mouse_wheel;
     bool selecting;
     Rectangle selected_rect;
-    KeyboardKey keys_pressed[10];
+    //KeyboardKey keys_pressed[10];
+
+    bool key_up;
+    bool key_down;
+    bool key_left;
+    bool key_right;
+
+    //KeyboardKey keys_down[10];
 };
 
 enum SCENE_ID {
@@ -73,7 +80,8 @@ extern PlayerInput g_input;
 #include "sprite.h"
 #include "label.h"
 #include "baseentity.h"
-#include "units.h"
+#include "playercharacter.h"
+//#include "units.h"
 #include "uilayers.h"
 #include "scenes.h"
 #include "scenemanager.h"

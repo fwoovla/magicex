@@ -67,7 +67,7 @@ class GameScene : public  BaseScene{
 
         //Camera2D camera;
 
-        BaseUnit *unit1;
+        //BaseUnit *unit1;
 
 };
 

@@ -103,7 +103,7 @@ void StagingUILayer::Update() {
 
 void StagingUILayer::PopulatePortraits() {
 
-    if(active_unit_list.size() == portraits.size()) {
+/*     if(active_unit_list.size() == portraits.size()) {
         //TraceLog(LOG_INFO, " ALL PORTRAITS MADE: %i", portraits.size());
         return;
     }
@@ -121,7 +121,7 @@ void StagingUILayer::PopulatePortraits() {
 
         portraits.push_back(new_portrait);
         TraceLog(LOG_INFO, "PORTRAITS: %i", portraits.size());
-    }
+    } */
 
 }
 
