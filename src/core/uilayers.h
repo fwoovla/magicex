@@ -49,7 +49,9 @@ class StagingUILayer : public BaseUILayer {
     Button start_button;
     Button settings_button;
     Button quit_button;
-    Button add_to_team_button;
+
+    Rectangle character_selection_rect;
+    Button select_chatacter_button;
     Button advertize_button;
     
 

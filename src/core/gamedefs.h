@@ -16,8 +16,6 @@ struct GameSettings {
     Vector2 window_size;
     Vector2 resolution;
     bool show_debug;
-    //float game_scale;
-    //Vector2 screen_center;
 };
 
 struct PlayerInput {
@@ -37,14 +35,11 @@ struct PlayerInput {
     float mouse_wheel;
     bool selecting;
     Rectangle selected_rect;
-    //KeyboardKey keys_pressed[10];
 
     bool key_up;
     bool key_down;
     bool key_left;
     bool key_right;
-
-    //KeyboardKey keys_down[10];
 };
 
 enum SCENE_ID {
@@ -69,7 +64,6 @@ extern int g_map_width;
 extern int g_map_height;
 extern Camera2D g_camera;
 extern PlayerInput g_input;
-//extern std::unordered_map<int, UnitData> units_data;
 
 
 #include "resources.h"
@@ -87,7 +81,6 @@ extern PlayerInput g_input;
 #include "scenemanager.h"
 #include "game.h"
 
-//extern std::unordered_map<int, UnitData> units_data;
 
 
 
