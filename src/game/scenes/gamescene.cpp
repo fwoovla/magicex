@@ -41,7 +41,7 @@ GameScene::GameScene(char map_path[]) {
     ground_tiles = LoadTexture("assets/tiles.png");
 
     //unit1 = new BaseUnit({0,0}, g_sprites[SPRITE_BASE_CHAR]);
-    active_entity_list.push_back(new PlayerCharacter({20,150}, units_data[0]));
+    active_entity_list.push_back(new PlayerCharacter({20,150}));
     //DL_Add(active_entity_list, new PlayerCharacter({0,0}, units_data[0]) );
 
     g_camera = { 0 };
@@ -60,20 +60,20 @@ SCENE_ID GameScene::Update() {
     ui_layer->Update();
     DL_Update(active_entity_list);
     HandleCamera();
-    return return_scene;
-
-/*     if(g_input.keys_pressed[0] == KEY_SPACE) {
+    
+    if(g_input.keys_pressed[0] == KEY_SPACE) {
         return_scene = END_SCENE;
     }
     if (IsKeyPressed(g_input.keys_pressed[0] ==  KEY_ENTER)) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
-
     
-    if(g_input.keys_pressed[0] == KEY_D) {
+    
+    if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
-        } */
-       
+    }
+    
+    return return_scene;
 }
 
 void GameScene::Draw() {

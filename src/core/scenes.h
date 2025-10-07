@@ -41,8 +41,9 @@ class StagingScene : public  BaseScene{
         void OnPlayPressed();
         void OnSettingsPressed();
         void OnQuitPressed();
-        void OnAddToTeamPressed();
-        void OnAdvertizePressed();
+        void OnCharacterSelected();
+        void OnPreviousCharacter();
+        void OnNextCharacter();
         
         Sprite bg_sprite_1;
 

@@ -3,7 +3,7 @@
 #include <raymath.h>
 
 #define DETECT_RANGE 3
-#define SPEED 25.0f
+//#define SPEED 25.0f
 
 enum AnimationState {
     IDLE = 0,
@@ -11,20 +11,16 @@ enum AnimationState {
     RUN = 2,
 };
 
-PlayerCharacter::PlayerCharacter(Vector2 _position, UnitData _data): AnimatedSpriteEntity() {
+PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
 
-    data = _data;
-    data.name = unit_names[ GetRandomValue(0, 10)];
-    data.id = GetRandomValue(0, 100000);
+    //data = _data;
+    //data.name = unit_names[ GetRandomValue(0, 10)];
     position = _position;
     rotation = 0.0f;
     hovered = false;
     selected = false;
-    //target_position = {9999, 9999};
     velocity = {0,0};
-    spread_velocity = {0,0};
-    target_velocity = {0,0};
-    LoadSprite(sprite, g_unit_sprites[data.texture_id], position, 4, 24.0f, 0.10f);
+    LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 24.0f, 0.10f);
     collision_radius = (sprite.size.x + 1) /2;
     collided = false;
     times_collided = 0;
@@ -61,6 +57,7 @@ void PlayerCharacter::Update() {
 void PlayerCharacter::Draw() {
 
     DrawSprite(sprite);
+    //DrawCircleV(position, 2, RED);
 
 }
 
@@ -94,7 +91,7 @@ void PlayerCharacter::CheckInput() {
         input_dir.x = 1;
     }
     input_dir = Vector2Normalize(input_dir);
-    velocity = input_dir * SPEED;
+    velocity = input_dir * g_player_data.base_speed;
 }
 
 /*     if(CheckCollisionPointRec(g_input.screen_mouse_position, screen_rect )) {

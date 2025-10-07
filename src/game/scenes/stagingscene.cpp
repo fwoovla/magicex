@@ -16,11 +16,14 @@ StagingScene::StagingScene() {
     ui_layer->play_pressed.Connect( [&](){OnPlayPressed();} );
     ui_layer->settings_pressed.Connect( [&](){OnSettingsPressed();} );
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
-    ui_layer->add_to_team_pressed.Connect( [&](){OnAddToTeamPressed();} );
-    ui_layer->advertize_pressed.Connect( [&](){OnAdvertizePressed();} );
+    ui_layer->character_selected.Connect( [&](){OnCharacterSelected();} );
+
+    ui_layer->character_left_pressed.Connect( [&](){OnPreviousCharacter();} );
+    ui_layer->character_right_pressed.Connect( [&](){OnNextCharacter();} );
+    //ui_layer->advertize_pressed.Connect( [&](){OnAdvertizePressed();} );
 
 
-    LoadSprite(bg_sprite_1, LoadTexture("assets/staging_bg1.png"), {0,0});
+    LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_STAGING], {0,0});
 
     //active_unit_list.push_back(new BaseUnit({20,0}, units_data[0]));
     //active_unit_list.push_back(new BaseUnit({20,50}, units_data[0]));
@@ -49,7 +52,7 @@ void StagingScene::Draw() {
 
 StagingScene::~StagingScene() {
     delete ui_layer;
-    UnloadTexture(bg_sprite_1.texture);
+    //UnloadTexture(bg_sprite_1.texture);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  STAGING");
 }
 
@@ -64,11 +67,26 @@ void StagingScene::OnQuitPressed() {
     return_scene = SPLASH_SCENE;
 }
 
-void StagingScene::OnAddToTeamPressed() {
-
+void StagingScene::OnCharacterSelected() {
+    TraceLog(LOG_INFO, "CHARACTER SELECTED");
 }
 
 
-void StagingScene::OnAdvertizePressed() {
+void StagingScene::OnPreviousCharacter() {
+    ui_layer->select_index--;
+    if(ui_layer->select_index  < 0) {
+        ui_layer->select_index = g_class_data.size() - 1;
+    }
 
+    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index);
+}
+
+
+void StagingScene::OnNextCharacter() {
+    ui_layer->select_index++;
+    if(ui_layer->select_index  > g_class_data.size() - 1) {
+        ui_layer->select_index = 0;
+    }
+
+    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index);
 }

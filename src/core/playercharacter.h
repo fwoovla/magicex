@@ -3,13 +3,13 @@
 
 class PlayerCharacter : public AnimatedSpriteEntity {
     public:
-    PlayerCharacter(Vector2 _position, UnitData _data);
+    PlayerCharacter(Vector2 _position);
     ~PlayerCharacter() override;
     void Update() override;
     void Draw() override;
     void CheckInput();
 
-    UnitData data;
+    //ClassData data;
 
     bool hovered;
     bool selected;
@@ -23,8 +23,7 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     
     //Vector2 target_position;
     Vector2 velocity;
-    Vector2 target_velocity;
-    Vector2 spread_velocity;
+
 }; 
 
 /* inline bool CheckCollisionWithUnits(BaseEntity *checker, CollisionResult &collision_result) {

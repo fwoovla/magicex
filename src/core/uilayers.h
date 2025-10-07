@@ -41,8 +41,6 @@ class StagingUILayer : public BaseUILayer {
     
     void Update() override;
     void Draw() override;
-    void PopulatePortraits();
-    void DrawPortraits();
 
     Label title_label;
 
@@ -50,16 +48,25 @@ class StagingUILayer : public BaseUILayer {
     Button settings_button;
     Button quit_button;
 
-    Rectangle character_selection_rect;
+    //Rectangle character_selection_rect;
+
+    Button character_left_button;
+    Button character_right_button;
+    Sprite character_panel_sprite;
+    AnimatedSprite chatacter_sprite;
+
     Button select_chatacter_button;
-    Button advertize_button;
+    Label character_label;
     
+    int select_index;
+    bool is_selecting;
 
     Signal play_pressed;
     Signal settings_pressed;
     Signal quit_pressed;
-    Signal add_to_team_pressed;
-    Signal advertize_pressed;
+    Signal character_selected;
+    Signal character_left_pressed;
+    Signal character_right_pressed;
 
     std::vector<UnitPortrait > portraits;
 

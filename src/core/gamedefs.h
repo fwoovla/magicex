@@ -40,6 +40,8 @@ struct PlayerInput {
     bool key_down;
     bool key_left;
     bool key_right;
+
+    KeyboardKey keys_pressed[10];
 };
 
 enum SCENE_ID {

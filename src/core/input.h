@@ -45,21 +45,21 @@ inline void GetInputFromPlayer() {
     g_input.mouse_wheel = GetMouseWheelMove();
     
     
-/*     memset(g_input.keys_pressed, KEY_NULL, KEY_BUFFER_SIZE);
+    memset(g_input.keys_pressed, KEY_NULL, KEY_BUFFER_SIZE);
 
     int key = GetKeyPressed();
     while(key != 0) {
-        TraceLog(LOG_INFO, "next key %i", key);
+        //TraceLog(LOG_INFO, "next key %i", key);
         for(int i = 0; i < KEY_BUFFER_SIZE; i++) {
             if(g_input.keys_pressed[i] == 0) {
                 g_input.keys_pressed[i] = (KeyboardKey)key;
-                //TraceLog(LOG_INFO, "indexing key %i", i);
+                TraceLog(LOG_INFO, "indexing key %i", i);
                 break;
             }
         }
         key = GetKeyPressed();
         
-    } */
+    } 
 
     g_input.key_up = IsKeyDown(KEY_W);
     g_input.key_down = IsKeyDown(KEY_S);
