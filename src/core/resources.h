@@ -8,7 +8,8 @@
 #define MAX_UI_BACKGROUNDS 10
 
 enum UnitSpriteID {
-    SPRITE_BASE_CHAR,
+    SPRITE_APPRENTICE,
+    SPRITE_NERD,
     SPRITE_NUM_SPRITES
 };
 extern Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
@@ -40,7 +41,8 @@ extern Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];
 inline void LoadResources() {
     TraceLog(LOG_INFO, "LOADING UNIT SPRITES");
 
-    g_sprite_sheets[SPRITE_BASE_CHAR] = LoadTexture("assets/bandit.png");
+    g_sprite_sheets[SPRITE_APPRENTICE] = LoadTexture("assets/bandit.png");
+    g_sprite_sheets[SPRITE_NERD] = LoadTexture("assets/hero.png");
 
     TraceLog(LOG_INFO, "LOADING PORTRAITS");
     g_portrait_sprites[PORTRAIT_BASE_CHAR] = LoadTexture("assets/portrait1.png");
@@ -49,7 +51,7 @@ inline void LoadResources() {
     g_ui_panels[PANEL_GRAY] = LoadTexture("assets/graypanel1.png");
 
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
-    g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg1.png");
+    g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg2.png");
 
 }
 

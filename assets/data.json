@@ -11,7 +11,7 @@
         {
             "health":10,
             "base_speed":25.0,
-            "sprite_sheet_id":0,
+            "sprite_sheet_id":1,
             "portrait_id":0,
             "class_name": "Nerd"
         }

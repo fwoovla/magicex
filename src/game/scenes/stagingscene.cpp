@@ -69,24 +69,25 @@ void StagingScene::OnQuitPressed() {
 
 void StagingScene::OnCharacterSelected() {
     TraceLog(LOG_INFO, "CHARACTER SELECTED");
+    g_player_data = g_class_data[ui_layer->select_index];
 }
 
 
 void StagingScene::OnPreviousCharacter() {
-    ui_layer->select_index--;
+/*     ui_layer->select_index--;
     if(ui_layer->select_index  < 0) {
         ui_layer->select_index = g_class_data.size() - 1;
     }
 
-    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index);
+    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index); */
 }
 
 
 void StagingScene::OnNextCharacter() {
-    ui_layer->select_index++;
+/*     ui_layer->select_index++;
     if(ui_layer->select_index  > g_class_data.size() - 1) {
         ui_layer->select_index = 0;
     }
 
-    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index);
+    TraceLog(LOG_INFO, "index: %i", ui_layer->select_index); */
 }

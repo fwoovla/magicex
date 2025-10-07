@@ -7,7 +7,7 @@ StagingUILayer::StagingUILayer() {
 
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, BLACK, "staging");
 
-    CreateButton(start_button, {g_resolution.x - 80, 100}, {200/g_scale , 100/g_scale}, GREEN, "go!");
+    CreateButton(start_button, {g_screen_center.x, g_screen_center.y+100}, {200/g_scale , 100/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 20/g_scale;
 
@@ -22,7 +22,7 @@ StagingUILayer::StagingUILayer() {
     LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_GRAY], g_screen_center);
     //LoadSprite(chatacter_sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], g_screen_center, 4, 24.0f, 0.10f);
     LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[0], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
-    ScaleSprite(chatacter_sprite, {4,4});
+    ScaleSprite(chatacter_sprite, {3,3});
 
      CreateButton(select_chatacter_button, {g_screen_center.x, g_screen_center.y+50}, {200/g_scale , 50/g_scale}, GREEN, "choose character");
     select_chatacter_button.default_color = DARKGREEN;
@@ -49,11 +49,10 @@ StagingUILayer::~StagingUILayer() {
 void StagingUILayer::Draw() {
     DrawLabelCentered(title_label);
 
-    DrawButton(start_button);
     DrawButton(settings_button);
     DrawButton(quit_button);
     
-    DrawCircleV(g_screen_center, 2, RED);
+    //DrawCircleV(g_screen_center, 2, RED);
     
     if(is_selecting) {
         
@@ -64,20 +63,14 @@ void StagingUILayer::Draw() {
         DrawButton(character_right_button);
         DrawButton(character_left_button);
     }
+    else {
+        DrawButton(start_button);
+    }
 }
 
 void StagingUILayer::Update() {
 
-    if(IsButtonHovered(start_button, g_scale)){
-        if(start_button.already_hovered == false) {
-            //PlaySound(button_sound);
-        }
-        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
-            //play_pressed.EmitSignal();
-            play_pressed.EmitSignal();
-        }        
-    }
+
     if(IsButtonHovered(settings_button, g_scale)){
         if(settings_button.already_hovered == false) {
             //PlaySound(button_sound);
@@ -109,6 +102,7 @@ void StagingUILayer::Update() {
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 TraceLog(LOG_INFO, "CHARACTER SELECTED UI");
+                is_selecting = false;
                 //play_pressed.EmitSignal();
                 character_selected.EmitSignal();
             }        
@@ -120,6 +114,15 @@ void StagingUILayer::Update() {
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 TraceLog(LOG_INFO, "PREVIOUS CHARACTER");
+                select_index--;
+                if(select_index  < 0) {
+                    select_index = g_class_data.size() - 1;
+                }
+
+                TraceLog(LOG_INFO, "index: %i", select_index);
+
+                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
+                ScaleSprite(chatacter_sprite, {3,3});
                 //play_pressed.EmitSignal();
                 character_left_pressed.EmitSignal();
             }        
@@ -131,8 +134,29 @@ void StagingUILayer::Update() {
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 TraceLog(LOG_INFO, "NEXT CHARACTER");
+                select_index++;
+                if(select_index  > g_class_data.size() - 1) {
+                 select_index = 0;
+                }
+
+                TraceLog(LOG_INFO, "index: %i", select_index);
+
+                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
+                ScaleSprite(chatacter_sprite, {3,3});
                 //play_pressed.EmitSignal();
                 character_right_pressed.EmitSignal();
+            }        
+        }
+    }
+    else {
+        if(IsButtonHovered(start_button, g_scale)){
+            if(start_button.already_hovered == false) {
+                //PlaySound(button_sound);
+            }
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                TraceLog(LOG_INFO, "PLAY BUTTON PRESSED ");
+                //play_pressed.EmitSignal();
+                play_pressed.EmitSignal();
             }        
         }
     }
