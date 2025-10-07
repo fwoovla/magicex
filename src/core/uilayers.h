@@ -50,6 +50,7 @@ class StagingUILayer : public BaseUILayer {
 
     //Rectangle character_selection_rect;
 
+    Vector2 spo; //select_panel_offest
     Button character_left_button;
     Button character_right_button;
     Sprite character_panel_sprite;

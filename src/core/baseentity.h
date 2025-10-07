@@ -2,7 +2,6 @@
 
 
 #include "gamedefs.h"
-//#include "units.h"
 #include <raylib.h>
 #include <raymath.h>
 #include "sprite.h"
@@ -60,50 +59,34 @@ struct  RayCast {
 
 
 extern std::vector<BaseEntity *> active_entity_list;
-//extern std::vector<BaseEntity *> recruit_unit_list;
 
-//extern BaseEntity *active_unit_list[DRAW_LIST_SIZE];
-//extern BaseEntity *recruit_unit_list[DRAW_LIST_SIZE];
 
 extern int* level_array_data;
 
 
-
-//inline void DL_Add(BaseEntity *_draw_list[DRAW_LIST_SIZE], BaseEntity *new_entity) {
-inline void DL_Add(std::vector<BaseEntity *> _draw_list, BaseEntity *new_entity) {
+inline void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
 
 
     _draw_list.push_back(new_entity);
-    TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
+    //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
 
-/*     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        if(_draw_list[i] == nullptr){
-            _draw_list[i] = new_entity; 
-            //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", i);
-            return;
-        }
-    } */
+   //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
 
 
 //inline void DL_Draw(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
-inline void DL_Draw(std::vector<BaseEntity *> _draw_list) {
-
+inline void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
             _draw_list[i]->Draw();
         }
     }
-
-/*     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        if(_draw_list[i] != nullptr){
-            _draw_list[i]->Draw();
-        }
-    } */
 }
 
-//inline void DL_Update(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
-inline void DL_Update(std::vector<BaseEntity *> _draw_list) {
+
+inline void DL_Update(std::vector<BaseEntity *> &_draw_list) {
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE update %i", _draw_list.size());
 
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
@@ -115,29 +98,12 @@ inline void DL_Update(std::vector<BaseEntity *> _draw_list) {
             }
         }
     }
-
-/*     for(int i = 0; i < 100; i++) {
-        if(_draw_list[i] != nullptr){
-            _draw_list[i]->Update();
-            if(_draw_list[i]->should_delete) {
-                TraceLog(LOG_INFO, "DELETING ENTITY");
-                delete _draw_list[i];
-                _draw_list[i] = nullptr;
-            }
-        }
-    } */
 }
 
-//inline void DL_Clear(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
-inline void DL_Clear(std::vector<BaseEntity *> _draw_list) {
+inline void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
+    
     _draw_list.clear();
-
-/*     for(int i = 0; i < DRAW_LIST_SIZE; i++) {
-        if(_draw_list[i] != nullptr){
-            delete _draw_list[i];
-            _draw_list[i] = nullptr;
-        }
-    } */
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
 
 

@@ -4,10 +4,11 @@ StagingUILayer::StagingUILayer() {
 
     select_index = 0;
     is_selecting = true;
+    spo = {g_screen_center.x , g_screen_center.y - (100/g_scale) };
 
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, BLACK, "staging");
 
-    CreateButton(start_button, {g_screen_center.x, g_screen_center.y+100}, {200/g_scale , 100/g_scale}, GREEN, "go!");
+    CreateButton(start_button, {spo.x, spo.y + 100}, {200/g_scale , 100/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 20/g_scale;
 
@@ -19,23 +20,23 @@ StagingUILayer::StagingUILayer() {
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-    LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_GRAY], g_screen_center);
+    LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_WOOD_LARGE], spo);
     //LoadSprite(chatacter_sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], g_screen_center, 4, 24.0f, 0.10f);
-    LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[0], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
+    LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[0], {spo.x, spo.y - 40}, 4, 24.0f, 0.10f);
     ScaleSprite(chatacter_sprite, {3,3});
 
-     CreateButton(select_chatacter_button, {g_screen_center.x, g_screen_center.y+50}, {200/g_scale , 50/g_scale}, GREEN, "choose character");
+     CreateButton(select_chatacter_button, {spo.x, spo.y+50}, {200/g_scale , 50/g_scale}, GREEN, "choose character");
     select_chatacter_button.default_color = DARKGREEN;
     select_chatacter_button.text_size = 20/g_scale; 
 
-    CreateLabel(character_label,{g_screen_center.x, g_screen_center.y+25},20, RAYWHITE, g_player_data.class_name.c_str());
+    CreateLabel(character_label,{spo.x, spo.y+25},18, RAYWHITE, g_player_data.class_name.c_str());
 
 
-    CreateButton(character_left_button, {g_screen_center.x - 20 - character_panel_sprite.size.x/2 , g_screen_center.y}, {30/g_scale , 100/g_scale}, YELLOW, "<");
+    CreateButton(character_left_button, {spo.x - 20 - character_panel_sprite.size.x/2 , spo.y}, {30/g_scale , 100/g_scale}, YELLOW, "<");
     character_left_button.default_color = DARKYELLOW;
     character_left_button.text_size = 20/g_scale; 
 
-    CreateButton(character_right_button, {g_screen_center.x + 20 + character_panel_sprite.size.x/2 , g_screen_center.y}, {30/g_scale , 100/g_scale}, YELLOW, ">");
+    CreateButton(character_right_button, {spo.x + 20 + character_panel_sprite.size.x/2 , spo.y}, {30/g_scale , 100/g_scale}, YELLOW, ">");
     character_right_button.default_color = DARKYELLOW;
     character_right_button.text_size = 20/g_scale; 
 
@@ -121,7 +122,7 @@ void StagingUILayer::Update() {
 
                 TraceLog(LOG_INFO, "index: %i", select_index);
 
-                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
+                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {spo.x, spo.y - 40}, 4, 24.0f, 0.10f);
                 ScaleSprite(chatacter_sprite, {3,3});
                 //play_pressed.EmitSignal();
                 character_left_pressed.EmitSignal();
@@ -141,7 +142,7 @@ void StagingUILayer::Update() {
 
                 TraceLog(LOG_INFO, "index: %i", select_index);
 
-                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {g_screen_center.x, g_screen_center.y-50}, 4, 24.0f, 0.10f);
+                LoadSpriteCentered(chatacter_sprite, g_sprite_sheets[select_index], {spo.x, spo.y - 40}, 4, 24.0f, 0.10f);
                 ScaleSprite(chatacter_sprite, {3,3});
                 //play_pressed.EmitSignal();
                 character_right_pressed.EmitSignal();

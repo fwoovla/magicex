@@ -127,6 +127,7 @@ void PlayerCharacter::CheckInput() {
 
 PlayerCharacter::~PlayerCharacter()
 {
+    TraceLog(LOG_INFO, "deleting player!!!!!!!!!!!!!!!!!!!!");
     //UnloadTexture(sprite.texture);
 }
 

@@ -23,6 +23,7 @@ extern Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 
 enum UIPanelID {
     PANEL_GRAY,
+    PANEL_WOOD_LARGE,
     PANEL_NUM_SPRITES
 };
 
@@ -49,6 +50,7 @@ inline void LoadResources() {
 
     TraceLog(LOG_INFO, "LOADING UI");
     g_ui_panels[PANEL_GRAY] = LoadTexture("assets/graypanel1.png");
+    g_ui_panels[PANEL_WOOD_LARGE] = LoadTexture("assets/largepanel1.png");
 
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
     g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg2.png");

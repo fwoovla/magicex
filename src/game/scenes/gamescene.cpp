@@ -41,8 +41,8 @@ GameScene::GameScene(char map_path[]) {
     ground_tiles = LoadTexture("assets/tiles.png");
 
     //unit1 = new BaseUnit({0,0}, g_sprites[SPRITE_BASE_CHAR]);
-    active_entity_list.push_back(new PlayerCharacter({20,150}));
-    //DL_Add(active_entity_list, new PlayerCharacter({0,0}, units_data[0]) );
+    //active_entity_list.push_back(new PlayerCharacter({20,150}));
+    DL_Add(active_entity_list, new PlayerCharacter({100,100}) );
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -81,7 +81,7 @@ void GameScene::Draw() {
     DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
     BeginMode2D(g_camera);
     DrawLevel();
-    
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE  %i", active_entity_list.size());
     DL_Draw(active_entity_list);
     
     
