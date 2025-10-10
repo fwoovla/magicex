@@ -10,6 +10,7 @@ TitleScene::TitleScene() {
     ui_layer->play_pressed.Connect( [&](){OnPlayPressed();} );
     ui_layer->settings_pressed.Connect( [&](){OnSettingsPressed();} );
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
+    ui_layer->continue_pressed.Connect( [&](){OnContinuePressed();} );
 }
 
 
@@ -42,4 +43,11 @@ void TitleScene::OnSettingsPressed() {
 }
 
 void TitleScene::OnQuitPressed() {
+    
+}
+
+void TitleScene::OnContinuePressed() {
+    LoadGame();
+    g_game_data.is_new_player = false;
+    return_scene = STAGING_SCENE;
 }

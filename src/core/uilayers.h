@@ -15,6 +15,24 @@ class BaseUILayer{
 };
 
 
+class PauseMenu : public BaseUILayer {
+
+    public:
+    PauseMenu();
+    ~PauseMenu() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    Button continue_button;
+    Signal continue_pressed;
+
+    Button save_button;
+    Signal save_pressed;
+
+};
+
 class TitleUILayer : public BaseUILayer {
 
     public:
@@ -24,13 +42,19 @@ class TitleUILayer : public BaseUILayer {
     void Draw() override;
 
     Label title_label;
-    Button start_button;
-    Button settings_button;
-    Button quit_button;
 
+    Button continue_button;
+    Signal continue_pressed;
+
+    Button start_button;
     Signal play_pressed;
+
+    Button settings_button;
     Signal settings_pressed;
+
+    Button quit_button;
     Signal quit_pressed;
+
 };
 
 class StagingUILayer : public BaseUILayer {
@@ -137,6 +161,8 @@ class EndUILayer : public BaseUILayer {
 
     Label title_label;
 };
+
+
 
 /*  class GameMenu : public BaseUILayer {
 

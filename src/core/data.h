@@ -49,6 +49,15 @@ extern std::unordered_map<int, ClassData> g_class_data;
 
 extern ClassData g_player_data;
 
+extern ClassData g_save_data;
+
+
+struct GameData {
+    bool is_new_player = true;
+    bool save_available = false;
+};
+
+extern GameData g_game_data;
 
 
 inline void LoadGameData() {
@@ -87,8 +96,78 @@ inline void LoadGameData() {
 
         g_class_data[i] = this_class;
     }
+    file.close();
  
     TraceLog(LOG_INFO, "==========end class data================");
 
+
+    TraceLog(LOG_INFO, "==========check save data================");
+
+    std::string save_path = "assets/save.json";
+    if(std::filesystem::exists(save_path)) {
+        g_game_data.save_available = true;
+        TraceLog(LOG_INFO, "SAVE FILE FOUND");
+
+/*         std::ifstream file(save_path);
+        if (!file.is_open()) {
+            TraceLog(LOG_INFO, "CANNOT OPEN FILE");
+            //return;
+        } */
+
+    }
+
+    TraceLog(LOG_INFO, "==========end save data================");
+
+
     TraceLog(LOG_INFO, "==========DATA LOADED================");
+}
+
+inline void SaveGame() {
+    std::string save_path = "assets/save.json";
+    std::ofstream file(save_path);
+    if (!file.is_open()) {
+        TraceLog(LOG_INFO, "filed to open save file");
+        return;
+    }
+
+    json j;
+    
+    j["health"] = g_player_data.health;
+    j["exp"] = g_player_data.exp;
+    j["base_speed"] = g_player_data.base_speed;
+    j["sprite_sheet_id"] = g_player_data.sprite_sheet_id;
+    j["portrait_id"] = g_player_data.portrait_id;
+    j["name"] = g_player_data.name;
+    j["class_name"] = g_player_data.class_name;
+
+
+    file<<j.dump(4);
+
+    file.close();
+
+}
+
+inline void LoadGame() {
+    TraceLog(LOG_INFO, "LOADING SAVED DATA....save.json");
+
+    std::string save_path = "assets/save.json";
+    std::ifstream file(save_path);
+    if (!file.is_open()) {
+        TraceLog(LOG_INFO, "CANNOT OPEN FILE");
+        return;
+    }
+    
+    json j;
+    file>>j;
+
+    g_player_data.health = j["health"];
+    g_player_data.exp = j["exp"];
+    g_player_data.base_speed = j["base_speed"];
+    g_player_data.sprite_sheet_id = j["sprite_sheet_id"];
+    g_player_data.portrait_id = j["portrait_id"];
+    g_player_data.name = j["name"];
+    g_player_data.class_name = j["class_name"];
+
+    file.close();
+
 }

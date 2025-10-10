@@ -3,6 +3,11 @@
 TitleUILayer::TitleUILayer() {
 
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, BLACK, "title");
+
+    CreateButton(continue_button, {g_screen_center.x, g_screen_center.y-(105/g_scale)}, {200/g_scale , 100/g_scale}, BLUE, "continue");
+    continue_button.default_color = DARKBLUE;
+    continue_button.text_size = 40/g_scale;
+    
     CreateButton(start_button, {g_screen_center.x, g_screen_center.y}, {200/g_scale , 100/g_scale}, GREEN, "play");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 40/g_scale;
@@ -28,10 +33,27 @@ void TitleUILayer::Draw() {
     DrawButton(start_button);
     DrawButton(settings_button);
     DrawButton(quit_button);
+
+    if(g_game_data.save_available == true) {
+        DrawButton(continue_button);
+    }
 }
 
 void TitleUILayer::Update() {
     //TraceLog(LOG_INFO, "ui draw , %f", g_game_settings.game_scale);
+
+
+    if(IsButtonHovered(continue_button, g_scale)){
+        if(continue_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            TraceLog(LOG_INFO, "CONTINUE BUTTON PRESSED ");
+            //play_pressed.EmitSignal();
+            continue_pressed.EmitSignal();
+        }        
+    }
+
     if(IsButtonHovered(start_button, g_scale)){
         if(start_button.already_hovered == false) {
             //PlaySound(button_sound);

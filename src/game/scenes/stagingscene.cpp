@@ -11,6 +11,7 @@ StagingScene::StagingScene() {
 
     scene_id = TITLE_SCENE;
     return_scene = NO_SCENE;
+
     ui_layer = new StagingUILayer();
     
     ui_layer->play_pressed.Connect( [&](){OnPlayPressed();} );

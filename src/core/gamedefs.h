@@ -7,6 +7,7 @@ inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
 inline const Color CYAN = {.r = 0, .g = 201, .b = 153, .a = 255};
 inline const Color DARKYELLOW = {.r = 153, .g = 151, .b = 0, .a = 255};
 inline const Color DARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 255};
+inline const Color TRANSDARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 150};
 
 inline const int TILE_SIZE = 32;
 inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;

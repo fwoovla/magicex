@@ -26,7 +26,7 @@ StagingUILayer::StagingUILayer() {
     };
 
     LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_WOOD_LARGE], cpo);
-    LoadSpriteCentered(character_sprite, g_sprite_sheets[0], {cpo.x, cpo.y - 40}, 4, 24.0f, 0.10f);
+    LoadSpriteCentered(character_sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], {cpo.x, cpo.y - 40}, 4, 24.0f, 0.10f);
     ScaleSprite(character_sprite, {3,3});
 
     CreateLabel(character_label,{cpo.x, cpo.y+25},20, RAYWHITE, g_player_data.class_name.c_str());
@@ -86,6 +86,9 @@ void StagingUILayer::Draw() {
 
 void StagingUILayer::Update() {
 
+    if(!g_game_data.is_new_player){
+        is_selecting = false;
+    }
 
     if(IsButtonHovered(settings_button, g_scale)){
         if(settings_button.already_hovered == false) {

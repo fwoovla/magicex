@@ -26,6 +26,7 @@ class TitleScene : public  BaseScene{
         void OnPlayPressed();
         void OnSettingsPressed();
         void OnQuitPressed();
+        void OnContinuePressed();
 
         TitleUILayer *ui_layer;
 

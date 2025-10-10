@@ -1,0 +1,9 @@
+{
+    "base_speed": 35.0,
+    "class_name": "Nerd",
+    "exp": 0,
+    "health": 10,
+    "name": "not assigned",
+    "portrait_id": 0,
+    "sprite_sheet_id": 1
+}

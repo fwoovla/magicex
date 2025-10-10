@@ -53,7 +53,7 @@ GameScene::GameScene(char map_path[]) {
 
 
 SCENE_ID GameScene::Update() {
-    GetInputFromPlayer();
+    //GetInputFromPlayer();
     ui_layer->Update();
     DL_Update(active_entity_list);
     HandleCamera();
