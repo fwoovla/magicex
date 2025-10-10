@@ -40,34 +40,47 @@ class StagingUILayer : public BaseUILayer {
     ~StagingUILayer() override;
     
     void Update() override;
+    void UpdateSelectPanel();
+    void UpdateCharacterInfo();
     void Draw() override;
+    void DrawSelectPanel();
+    void DrawCharacterInfo();
 
     Label title_label;
 
     Button start_button;
+    Signal play_pressed;
+
     Button settings_button;
+    Signal settings_pressed;
+
     Button quit_button;
+    Signal quit_pressed;
 
     //Rectangle character_selection_rect;
 
     Vector2 spo; //select_panel_offest
-    Button character_left_button;
-    Button character_right_button;
-    Sprite character_panel_sprite;
-    AnimatedSprite chatacter_sprite;
-
+    Button select_character_left_button;
+    Button select_character_right_button;
+    Sprite select_character_panel_sprite;
+    AnimatedSprite select_chatacter_sprite;
     Button select_chatacter_button;
-    Label character_label;
+    Label select_character_label;
     
     int select_index;
     bool is_selecting;
-
-    Signal play_pressed;
-    Signal settings_pressed;
-    Signal quit_pressed;
     Signal character_selected;
     Signal character_left_pressed;
     Signal character_right_pressed;
+
+    Vector2 cpo;
+    Rectangle character_bounding_rect;
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+    Label character_label;
+    Label character_stat_label;
+
+
 
     std::vector<UnitPortrait > portraits;
 

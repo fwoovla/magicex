@@ -36,12 +36,9 @@ GameScene::GameScene(char map_path[]) {
             }
         }      
     }
-    
 
     ground_tiles = LoadTexture("assets/tiles.png");
 
-    //unit1 = new BaseUnit({0,0}, g_sprites[SPRITE_BASE_CHAR]);
-    //active_entity_list.push_back(new PlayerCharacter({20,150}));
     DL_Add(active_entity_list, new PlayerCharacter({100,100}) );
 
     g_camera = { 0 };
