@@ -14,7 +14,7 @@ StagingUILayer::StagingUILayer() {
     
     CreateButton(start_button, {g_screen_center.x, g_resolution.y - 40}, {200/g_scale , 100/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
-    start_button.text_size = 20/g_scale;
+    start_button.text_size = 40/g_scale;
     
     //=============character info===============
     cpo = {(float)g_screen_center.x * 0.30f, (float)g_screen_center.y * 0.5f};

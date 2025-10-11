@@ -15,7 +15,9 @@ PlayerInput g_input;
 GameScene::GameScene(char map_path[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
+    character_menu_visible = false;
     ui_layer = new GameUILayer();
+    character_menu = new CharacterMenu();
 
     Image level_image = LoadImage(map_path);
     level_data_array = new int[level_image.width * level_image.height];
@@ -54,6 +56,10 @@ GameScene::GameScene(char map_path[]) {
 
 SCENE_ID GameScene::Update() {
     //GetInputFromPlayer();
+    if(character_menu_visible) {
+        character_menu->Update();
+    }
+
     ui_layer->Update();
     DL_Update(active_entity_list);
     HandleCamera();
@@ -69,7 +75,11 @@ SCENE_ID GameScene::Update() {
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
-    
+
+    if(g_input.keys_pressed[0] == KEY_E) {
+        character_menu_visible = !character_menu_visible;
+    }
+
     return return_scene;
 }
 
@@ -89,6 +99,9 @@ void GameScene::Draw() {
     EndMode2D();
     
     ui_layer->Draw();
+    if(character_menu_visible) {
+        character_menu->Draw();
+    }
 }
 
 void GameScene::DrawLevel() {

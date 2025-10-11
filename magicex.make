@@ -79,6 +79,7 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/baseunit.o
+GENERATED += $(OBJDIR)/charactermenu.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/game.o
@@ -95,6 +96,7 @@ GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/baseunit.o
+OBJECTS += $(OBJDIR)/charactermenu.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/game.o
@@ -186,6 +188,9 @@ $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/scenemanager.o: src/game/scenemanager.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/charactermenu.o: src/game/scenes/charactermenu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/endscene.o: src/game/scenes/endscene.cpp

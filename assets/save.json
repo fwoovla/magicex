@@ -1,9 +1,9 @@
 {
-    "base_speed": 35.0,
-    "class_name": "Nerd",
+    "base_speed": 25.0,
+    "class_name": "Apprentice",
     "exp": 0,
-    "health": 10,
+    "health": 15,
     "name": "not assigned",
     "portrait_id": 0,
-    "sprite_sheet_id": 1
+    "sprite_sheet_id": 0
 }

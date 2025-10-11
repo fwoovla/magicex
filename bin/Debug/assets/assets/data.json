@@ -2,7 +2,7 @@
 
  "base_class": [
         {
-            "health":10,
+            "health":15,
             "base_speed":25.0,
             "sprite_sheet_id":0,
             "portrait_id":0,
@@ -10,7 +10,7 @@
         },
         {
             "health":10,
-            "base_speed":25.0,
+            "base_speed":35.0,
             "sprite_sheet_id":1,
             "portrait_id":0,
             "class_name": "Nerd"

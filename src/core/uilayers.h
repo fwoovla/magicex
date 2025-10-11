@@ -33,6 +33,24 @@ class PauseMenu : public BaseUILayer {
 
 };
 
+class CharacterMenu : public BaseUILayer {
+
+    public:
+    CharacterMenu();
+    ~CharacterMenu() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    //Button continue_button;
+    //Signal continue_pressed;
+
+    //Button save_button;
+    //Signal save_pressed;
+
+};
+
 class TitleUILayer : public BaseUILayer {
 
     public:

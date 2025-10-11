@@ -61,11 +61,16 @@ class GameScene : public  BaseScene{
         void DrawLevel();
         void HandleCamera();
 
+        CharacterMenu *character_menu;
+
+        bool character_menu_visible;
+
         GameUILayer *ui_layer;
 
         Texture2D ground_tiles;
 
         Texture2D unit_sprite_sheet;
+
 
         //Camera2D camera;
 
