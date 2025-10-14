@@ -111,7 +111,10 @@ void GameScene::Draw() {
 }
 
 void GameScene::DrawLevel() {
-    for(int x = 0; x < g_map_width; x++) {
+
+    tile_layer->Draw();
+
+/*     for(int x = 0; x < g_map_width; x++) {
         for(int y = 0; y < g_map_height; y++) {
             /* DrawTexturePro(
                         ground_tiles,
@@ -120,9 +123,9 @@ void GameScene::DrawLevel() {
                         {0,0},
                         0.0,
                         WHITE
-                    ); */
+                    ); 
         }
-    }
+    } */
 }
 
 void GameScene::HandleCamera() {

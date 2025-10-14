@@ -200,7 +200,7 @@ void StagingUILayer::UpdateCharacterInfo() {
 
 void StagingUILayer::DrawSelectPanel() {
     DrawSprite(select_character_panel_sprite);
-    //DrawSprite(select_chatacter_sprite);
+    DrawSprite(select_chatacter_sprite);
     DrawButton(select_chatacter_button);
     DrawLabelCentered(select_character_label);
     DrawButton(select_character_right_button);
