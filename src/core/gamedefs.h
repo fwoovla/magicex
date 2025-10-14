@@ -76,6 +76,7 @@ extern PlayerInput g_input;
 #include "button.h"
 #include "sprite.h"
 #include "label.h"
+#include "tilelayer.h"
 #include "baseentity.h"
 #include "playercharacter.h"
 //#include "units.h"

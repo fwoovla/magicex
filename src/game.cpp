@@ -4,6 +4,7 @@ std::unordered_map<int, ClassData> g_class_data;
 
 GameData g_game_data;
 
+Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
 Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 Texture2D g_ui_panels[MAX_UI_PANELS];

@@ -16,6 +16,10 @@ GameScene::GameScene(char map_path[]) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
+
+    tile_layer = new TileLayer();
+    
+
     ui_layer = new GameUILayer();
     character_menu = new CharacterMenu();
 
@@ -39,7 +43,9 @@ GameScene::GameScene(char map_path[]) {
         }      
     }
 
-    ground_tiles = LoadTexture("assets/tiles.png");
+    tile_layer->SetTiles( g_tile_sheets[TS_FOREST], {16,16});
+
+    //ground_tiles = LoadTexture("assets/tiles.png");
 
     DL_Add(active_entity_list, new PlayerCharacter({100,100}) );
 
@@ -107,14 +113,14 @@ void GameScene::Draw() {
 void GameScene::DrawLevel() {
     for(int x = 0; x < g_map_width; x++) {
         for(int y = 0; y < g_map_height; y++) {
-            DrawTexturePro(
+            /* DrawTexturePro(
                         ground_tiles,
                         {0.0, (float)level_data_array[y*g_map_width+x]*TILE_SIZE ,TILE_SIZE, TILE_SIZE},
                         {(float)x*TILE_SIZE, (float)y*TILE_SIZE ,TILE_SIZE, TILE_SIZE},
                         {0,0},
                         0.0,
                         WHITE
-                    );
+                    ); */
         }
     }
 }
@@ -155,7 +161,9 @@ void GameScene::HandleCamera() {
 
 GameScene::~GameScene() {
     delete ui_layer;
-    UnloadTexture(ground_tiles);
+    delete tile_layer;
+    delete level_data_array;
+    //UnloadTexture(ground_tiles);
     DL_Clear(active_entity_list);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }

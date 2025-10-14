@@ -67,10 +67,11 @@ class GameScene : public  BaseScene{
 
         GameUILayer *ui_layer;
 
-        Texture2D ground_tiles;
+        TileLayer *tile_layer;
+
+        //Texture2D ground_tiles;
 
         Texture2D unit_sprite_sheet;
-
 
         //Camera2D camera;
 
