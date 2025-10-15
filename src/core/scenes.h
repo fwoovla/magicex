@@ -53,7 +53,7 @@ class StagingScene : public  BaseScene{
 
 class GameScene : public  BaseScene{
     public:
-        GameScene(char map_path[]);
+        GameScene(int _map_index);
         ~GameScene() override;
         SCENE_ID Update() override;
         void Draw() override;

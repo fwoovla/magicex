@@ -10,18 +10,20 @@ class TileLayer {
 
     public:
     TileLayer();
-    void SetTiles(Texture2D &_tilesheet, Vector2 _tile_size);
+    void SetTiles(Texture2D &_tilesheet, int _map_index);
     ~TileLayer();
     void Update();
     void Draw();
 
     Texture2D tilesheet;
 
-    Vector2 tile_size;
-    int rows;
-    int cols;
+    //Vector2 tile_size;
+    //int rows;
+    //int cols;
 
     std::vector<Vector2> tile_lookup;
+
+    int map_index;
 
     int *level_tile_array;
 

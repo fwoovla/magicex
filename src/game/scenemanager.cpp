@@ -75,7 +75,7 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             break;
 
         case GAME_SCENE:
-            current_scene = new GameScene(level1_data);
+            current_scene = new GameScene(0);
             break;
 
         case END_SCENE:

@@ -12,18 +12,19 @@ Camera2D g_camera;
 PlayerInput g_input;
 
 
-GameScene::GameScene(char map_path[]) {
+GameScene::GameScene(int _map_index) {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
 
     tile_layer = new TileLayer();
+    tile_layer->SetTiles( g_tile_sheets[TS_FOREST], _map_index);
     
 
     ui_layer = new GameUILayer();
     character_menu = new CharacterMenu();
 
-    Image level_image = LoadImage(map_path);
+/*     Image level_image = LoadImage(map_path);
     level_data_array = new int[level_image.width * level_image.height];
     g_map_width = level_image.width;
     g_map_height = level_image.height;
@@ -41,9 +42,10 @@ GameScene::GameScene(char map_path[]) {
                 level_data_array[y * g_map_width + x] = 27;
             }
         }      
-    }
+    } */
 
-    tile_layer->SetTiles( g_tile_sheets[TS_FOREST], {16,16});
+
+
 
     //ground_tiles = LoadTexture("assets/tiles.png");
 
@@ -56,7 +58,7 @@ GameScene::GameScene(char map_path[]) {
     g_camera.zoom = 1.0f; 
     g_world2screen = (g_scale * g_camera.zoom);
     
-    UnloadImage(level_image);
+    //UnloadImage(level_image);
 }
 
 
@@ -165,7 +167,7 @@ void GameScene::HandleCamera() {
 GameScene::~GameScene() {
     delete ui_layer;
     delete tile_layer;
-    delete level_data_array;
+    //delete level_data_array;
     //UnloadTexture(ground_tiles);
     DL_Clear(active_entity_list);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
