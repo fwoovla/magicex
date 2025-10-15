@@ -34,11 +34,11 @@ GameScene::GameScene(char map_path[]) {
         for(int y = 0; y < g_map_height; y++) {
 
             if(colors[y * g_map_width + x].r == 0 and colors[y * g_map_width + x].g == 0 and colors[y * g_map_width + x].b == 0) {
-                level_data_array[y * g_map_width + x] = 0;
+                level_data_array[y * g_map_width + x] = 49;
             }
 
             else if (colors[y * g_map_width + x].r == 0 and colors[y * g_map_width + x].g == 255 and colors[y * g_map_width + x].b == 0) {
-                level_data_array[y * g_map_width + x] = 2;
+                level_data_array[y * g_map_width + x] = 27;
             }
         }      
     }

@@ -26,11 +26,12 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, Vector2 _tile_size) {
     //get the source x and y for each tile
     
     int index = 0;
-    for (int x = 0; x < cols - 1; x++) {
-        for (int y = 0; y < rows - 1; y++) {
+    for (int x = 0; x < cols; x++) {
+        for (int y = 0; y < rows; y++) {
             index = x * rows + y;
             tile_lookup.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
-            level_tile_array[index] = tile_lookup.size();
+
+
             //level_tile_array[y * g_map_width + x] = 0;
             //TraceLog(LOG_INFO, "new tile x: %i   y: %i  index: %i lta[index] %i", x, y, tile_lookup.size(), level_tile_array[index]);
         }
@@ -38,13 +39,18 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, Vector2 _tile_size) {
 
 
     //int index = 0;
-/*     for(int x = 0; x < cols; x++) {
-        for(int y = 0; y < rows; y++) {
-            level_tile_array[y * cols + x] = index;
-            TraceLog(LOG_INFO, "level tile x: %i   y: %i  = %i", x, y, index);
-            index++;
+     for(int x = 0; x < g_map_width; x++) {
+        for(int y = 0; y < g_map_height; y++) {
+            index = x * g_map_height + y;
+            level_tile_array[index] = level_data_array[index];// tile_lookup.size() - 1;
+
+            if(level_tile_array[index] == 49) {
+                if(GetRandomValue(0, 100) > 30) {
+                    level_tile_array[index] = 12;
+                }
+            }
         }      
-    } */
+    } 
 }
 
 void TileLayer::Update() {
@@ -54,9 +60,9 @@ void TileLayer::Update() {
 void TileLayer::Draw() {
     //limit to viewport pls?
     int index = 0;
-    for(int x = 0; x < cols - 1; x++) {
-        for(int y = 0; y < rows - 1; y++) {
-            index = x * rows + y;
+    for(int x = 0; x < g_map_width; x++) {
+        for(int y = 0; y < g_map_height; y++) {
+            index = x * g_map_height + y;
              DrawTexturePro(
                         tilesheet,
                         {tile_lookup[level_tile_array[index]].x * tile_size.x, tile_lookup[level_tile_array[index]].y * tile_size.y, tile_size.x, tile_size.y},
