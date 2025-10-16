@@ -5,7 +5,7 @@
 #define ZOOM_STEP 0.05f
 
 std::vector<BaseEntity *> active_entity_list;
-int *level_data_array;
+//int *level_data_array;
 int g_map_width;
 int g_map_height;
 Camera2D g_camera;

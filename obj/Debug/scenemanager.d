@@ -249,8 +249,8 @@ obj/Debug/scenemanager.o: src/game/scenemanager.cpp \
  src/game/../core/input.h src/game/../core/utils.h \
  src/game/../core/button.h src/game/../core/sprite.h \
  /usr/local/include/raymath.h /usr/include/c++/13/math.h \
- src/game/../core/label.h src/game/../core/tilelayer.h \
- src/game/../core/baseentity.h src/game/../core/playercharacter.h \
+ src/game/../core/label.h src/game/../core/baseentity.h \
+ src/game/../core/playercharacter.h src/game/../core/tilelayer.h \
  src/game/../core/uilayers.h src/game/../core/scenes.h \
  src/game/../core/basescene.h src/game/../core/scenemanager.h \
  src/game/../core/game.h
@@ -576,9 +576,9 @@ src/game/../core/sprite.h:
 /usr/local/include/raymath.h:
 /usr/include/c++/13/math.h:
 src/game/../core/label.h:
-src/game/../core/tilelayer.h:
 src/game/../core/baseentity.h:
 src/game/../core/playercharacter.h:
+src/game/../core/tilelayer.h:
 src/game/../core/uilayers.h:
 src/game/../core/scenes.h:
 src/game/../core/basescene.h:

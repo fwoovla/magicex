@@ -35,10 +35,18 @@ void PlayerCharacter::Update() {
     //move position
     collided = false;
     
+    Vector2 previous_position = position;
 
     if(velocity.x != 0 or velocity.y != 0) {
         position = Vector2Add(position, velocity * GetFrameTime());
         SetAmination(sprite, RUN);
+
+        CollisionResult result;
+        if(CheckCollisionWithLevel(this, result, 2) == true) {
+            TraceLog(LOG_INFO, "COLLIDED");
+            position = previous_position;
+
+        }
 
        if(velocity.x < -1) {
             sprite.source.width = -sprite.size.x;
@@ -94,36 +102,6 @@ void PlayerCharacter::CheckInput() {
     velocity = input_dir * g_player_data.base_speed;
 }
 
-/*     if(CheckCollisionPointRec(g_input.screen_mouse_position, screen_rect )) {
-        hovered = true;
-        if(g_input.mouse_left) {
-            selected = true;
-        }
-    }
-    else if (g_input.mouse_left) {
-        selected = false;
-    } */
-
-/*     if(g_input.selecting) {
-        if(CheckCollisionRecs(g_input.selected_rect, world_rect)) {
-            selected = true;
-        }
-        else {
-            selected = false;
-        }
-    }
-
-    if(selected) {
-        if(g_input.mouse_right) {
-            is_inside = false;
-            times_collided = 0;
-            target_position.x = (g_input.mouse_right_clicked_screen_position.x * g_screen2world) + (g_camera.target.x);
-            target_position.y = (g_input.mouse_right_clicked_screen_position.y * g_screen2world) + (g_camera.target.y);
-            float rad = GetAngleFromTo(position, target_position);
-            velocity = Vector2Rotate( {UNIT_SPEED,0}, rad );
-            //TraceLog(LOG_INFO, "--------\ntarget pisition.x %f  target pisition.y %f", target_position.x, target_position.y);
-        }
-    } */
 
 PlayerCharacter::~PlayerCharacter()
 {

@@ -73,6 +73,7 @@ struct TileLayerData {
 
 struct MapData {
     int tile_size;
+    float inv_tile_size;
     int map_width;
     int map_height;
     std::vector<TileLayerData> layers;
@@ -166,7 +167,7 @@ inline void LoadGameData() {
                     .id = std::stoi(id.c_str()),
                     .pos = { mj["layers"][l]["tiles"][t]["x"], mj["layers"][l]["tiles"][t]["y"] }
                 };
-                TraceLog(LOG_INFO, "tile check");
+                TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
 
                 this_layer.tiles.push_back(this_tile);
             }
@@ -178,6 +179,7 @@ inline void LoadGameData() {
 
         MapData this_map = {
             .tile_size = tile_size,
+            .inv_tile_size = 1.0f/(float)tile_size,
             .map_width = map_width,
             .map_height = map_height,
             .layers = these_layers

@@ -9,8 +9,8 @@ inline const Color DARKYELLOW = {.r = 153, .g = 151, .b = 0, .a = 255};
 inline const Color DARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 255};
 inline const Color TRANSDARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 150};
 
-inline const int TILE_SIZE = 32;
-inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;
+//inline const int TILE_SIZE = 32;
+//inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;
 
 
 struct GameSettings {
@@ -56,7 +56,7 @@ enum SCENE_ID {
 
 
 extern GameSettings g_game_settings;
-extern int *level_data_array;
+//extern int *level_data_array;
 extern GameSettings g_game_settings;
 extern float g_scale;
 extern float g_world2screen;
@@ -76,10 +76,10 @@ extern PlayerInput g_input;
 #include "button.h"
 #include "sprite.h"
 #include "label.h"
-#include "tilelayer.h"
 #include "baseentity.h"
 #include "playercharacter.h"
 //#include "units.h"
+#include "tilelayer.h"
 #include "uilayers.h"
 #include "scenes.h"
 #include "scenemanager.h"

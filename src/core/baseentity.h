@@ -22,6 +22,7 @@ class BaseEntity  {
     float rotation;
     //int id;
     Vector2 centered_offset;
+    float collision_radius;
 };
 
 class SpriteEntity : public BaseEntity {
@@ -61,7 +62,7 @@ struct  RayCast {
 extern std::vector<BaseEntity *> active_entity_list;
 
 
-extern int* level_array_data;
+//extern int* level_array_data;
 
 
 inline void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
@@ -151,7 +152,7 @@ inline void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
     return false;
 } */
 
-inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_result, int _range) {
+/* inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_result, int _range) {
     //================TILE COLLISION=========================
     for(int x = -1; x <  _range; x++) {
         for(int y = -1; y < _range; y++) {
@@ -168,9 +169,9 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     }
 
     return false;
-}
+} */
 
-inline bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
+/* inline bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
     Vector2 end = Vector2Add(_ray.position, _ray.direction);
     Vector2 step = _ray.direction * 0.1;
     //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
@@ -187,4 +188,4 @@ inline bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int
         }
     }
     return false;
-}
+} */

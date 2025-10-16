@@ -19,7 +19,7 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     int times_collided;
     int steps;
     
-    float collision_radius;
+    
     
     //Vector2 target_position;
     Vector2 velocity;

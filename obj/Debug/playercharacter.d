@@ -253,9 +253,9 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  src/game/entities/../../core/button.h \
  src/game/entities/../../core/sprite.h /usr/local/include/raymath.h \
  /usr/include/c++/13/math.h src/game/entities/../../core/label.h \
- src/game/entities/../../core/tilelayer.h \
  src/game/entities/../../core/baseentity.h \
  src/game/entities/../../core/playercharacter.h \
+ src/game/entities/../../core/tilelayer.h \
  src/game/entities/../../core/uilayers.h \
  src/game/entities/../../core/scenes.h \
  src/game/entities/../../core/basescene.h \
@@ -583,9 +583,9 @@ src/game/entities/../../core/sprite.h:
 /usr/local/include/raymath.h:
 /usr/include/c++/13/math.h:
 src/game/entities/../../core/label.h:
-src/game/entities/../../core/tilelayer.h:
 src/game/entities/../../core/baseentity.h:
 src/game/entities/../../core/playercharacter.h:
+src/game/entities/../../core/tilelayer.h:
 src/game/entities/../../core/uilayers.h:
 src/game/entities/../../core/scenes.h:
 src/game/entities/../../core/basescene.h:
