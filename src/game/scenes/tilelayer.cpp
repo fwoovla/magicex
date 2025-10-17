@@ -34,8 +34,8 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
     for (int y = 0; y < tsr; y++) {
         for (int x = 0; x < tsc; x++) {
             //index = y * cols + x;
-            tile_lookup.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
-            TraceLog(LOG_INFO, "new tile x: %i   y: %i  id: %i", x, y, tile_lookup.size() - 1);
+            tile_atlas.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
+            TraceLog(LOG_INFO, "new tile x: %i   y: %i  id: %i", x, y, tile_atlas.size() - 1);
         }
     }
 
@@ -44,7 +44,7 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
 
     TraceLog(LOG_INFO, "map tile size %i", tile_size);
     TraceLog(LOG_INFO, "base layer name %s", g_game_map_data.layers[0].layer_name.c_str());
-    TraceLog(LOG_INFO, "0,0 id %i", g_game_map_data.layers[0].tiles[0]);
+    //TraceLog(LOG_INFO, "0,0 id %i", g_game_map_data.layers[0].tiles[0]);
     
 
     g_ordered_map__data.clear();
@@ -82,18 +82,44 @@ void TileLayer::Draw() {
 
     int tile_size = g_game_map_data.tile_size;
 
+    int x_offset = ((g_resolution.x * 0.5f) / g_camera.zoom) * g_game_map_data.inv_tile_size;
+    int y_offset = ((g_resolution.y * 0.5f) / g_camera.zoom) * g_game_map_data.inv_tile_size;
 
-    TileLayerData base_layer = g_game_map_data.layers[0];
+    Vector2 center = {g_camera.target.x/tile_size, g_camera.target.y/tile_size};
+
+    //TileLayerData base_layer = g_game_map_data.layers[0];
+    //TraceLog(LOG_INFO, "x_offset %i  y_offset %i", x_offset, y_offset);
     
+    int x_min = center.x - x_offset;
+    if(x_min < 0) {
+        x_min = 0;
+    }
+
+    int y_min = center.y - y_offset;
+    if(y_min < 0) {
+        y_min = 0;
+    }
+
+    int tiles_drawn = 0;
     int index = 0;   
-    for (int y = 0; y < g_game_map_data.map_height; y++) {
-        for (int x = 0; x < g_game_map_data.map_width; x++) {
-            index = y * g_game_map_data.map_width + x;
+    for (int y = y_min; y < (center.y + (y_offset * 2) + 1); y++) {
+        for (int x = x_min; x < (center.x + (x_offset * 2) + 1); x++) {
+            index = (y) * g_game_map_data.map_width + (x);
+
             //TraceLog(LOG_INFO, "tile index %i ", index);
             //TraceLog(LOG_INFO, "tile id %i  atlas: x: %0.0f,  y: %0.0f", base_layer.tiles[index].id, base_layer.tiles[index].pos.x, base_layer.tiles[index].pos.y);
-            int tile_id = base_layer.tiles[index].id;
-            Vector2 atlas_pos = tile_lookup[ base_layer.tiles[index].id ];
-            Vector2 tile_pos = base_layer.tiles[index].pos;
+                      
+            int tile_id = g_ordered_map__data[index];
+            Vector2 atlas_pos = tile_atlas[ tile_id ];
+            Vector2 tile_pos = { (float)x, (float)y};// base_layer.tiles[index].pos;
+
+            Color color = WHITE;
+
+            if(g_game_settings.show_debug == true) {
+                if(tile_id == 31) {
+                    color = DARKGRAY;
+                }
+            }
 
             DrawTexturePro(
                 tilesheet,
@@ -101,8 +127,10 @@ void TileLayer::Draw() {
                 {(float)tile_pos.x*tile_size, (float)tile_pos.y*tile_size ,(float)tile_size, (float )tile_size},
                 {0,0},
                 0.0,
-                WHITE
+                color
             );
+            tiles_drawn++;
         }
     }
+    TraceLog(LOG_INFO, "tiles drawn %i ", tiles_drawn);
 }

@@ -65,7 +65,10 @@ void PlayerCharacter::Update() {
 void PlayerCharacter::Draw() {
 
     DrawSprite(sprite);
-    //DrawCircleV(position, 2, RED);
+    if(g_game_settings.show_debug == true) {
+        DrawCircleV(position, collision_radius, RED);
+        
+    }
 
 }
 

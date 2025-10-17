@@ -24,32 +24,7 @@ GameScene::GameScene(int _map_index) {
     ui_layer = new GameUILayer();
     character_menu = new CharacterMenu();
 
-/*     Image level_image = LoadImage(map_path);
-    level_data_array = new int[level_image.width * level_image.height];
-    g_map_width = level_image.width;
-    g_map_height = level_image.height;
-    
-    Color *colors = LoadImageColors(level_image);
-
-    for(int x = 0; x < g_map_width; x++) {
-        for(int y = 0; y < g_map_height; y++) {
-
-            if(colors[y * g_map_width + x].r == 0 and colors[y * g_map_width + x].g == 0 and colors[y * g_map_width + x].b == 0) {
-                level_data_array[y * g_map_width + x] = 49;
-            }
-
-            else if (colors[y * g_map_width + x].r == 0 and colors[y * g_map_width + x].g == 255 and colors[y * g_map_width + x].b == 0) {
-                level_data_array[y * g_map_width + x] = 27;
-            }
-        }      
-    } */
-
-
-
-
-    //ground_tiles = LoadTexture("assets/tiles.png");
-
-    DL_Add(active_entity_list, new PlayerCharacter({100,100}) );
+    DL_Add(active_entity_list, new PlayerCharacter({200,200}) );
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -142,25 +117,11 @@ void GameScene::HandleCamera() {
         g_camera.zoom = MAX_ZOOM;
     }
 
-    Vector2 worldPosAfterZoom = GetScreenToWorld2D(g_input.world_mouse_position, g_camera);
+    float x_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
+    float y_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
 
-    // Adjust camera target to keep mouse position stable
-    Vector2 delta = Vector2Subtract(worldPosBeforeZoom, worldPosAfterZoom);
-    g_camera.target = Vector2Add(g_camera.target, delta);
+    g_camera.target = Vector2Subtract(active_entity_list[0]->position, {x_offset, y_offset} );
 
-    if (g_input.mouse_middle_down) {
-            Vector2 delta = GetMouseDelta() * 0.5f;
-            delta = Vector2Scale(delta, -1.0f / g_camera.zoom);
-            g_camera.target = Vector2Add(g_camera.target, delta);
-    }
-
-    if(g_camera.target.x < 0) {g_camera.target.x = 0;}
-    if(g_camera.target.x > 1000) {g_camera.target.x = 1000;}
-    if(g_camera.target.y < 0) {g_camera.target.y = 0;}
-    if(g_camera.target.y > 1000) {g_camera.target.y = 1000;}
-
-    g_world2screen = g_camera.zoom * g_scale;
-    g_screen2world = 1/g_world2screen;
 }
 
 
