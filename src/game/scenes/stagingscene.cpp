@@ -58,19 +58,22 @@ StagingScene::~StagingScene() {
 }
 
 void StagingScene::OnPlayPressed() {
-    return_scene = GAME_SCENE;
+    return_scene = SHELTER_SCENE;
 }
 
 void StagingScene::OnSettingsPressed() {
 }
 
 void StagingScene::OnQuitPressed() {
-    return_scene = SPLASH_SCENE;
+    g_game_data.paused = true;
+    //return_scene = SPLASH_SCENE;
 }
 
 void StagingScene::OnCharacterSelected() {
     TraceLog(LOG_INFO, "CHARACTER SELECTED");
     g_player_data = g_class_data[ui_layer->select_index];
+    g_current_player = new PlayerCharacter({0,0});
+
 }
 
 

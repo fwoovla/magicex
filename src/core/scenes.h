@@ -51,6 +51,23 @@ class StagingScene : public  BaseScene{
         StagingUILayer *ui_layer;
 };
 
+
+class ShelterScene : public  BaseScene{
+    public:
+        ShelterScene();
+        ~ShelterScene() override;
+        SCENE_ID Update() override;
+        void Draw() override;
+
+        void OnQuitPressed();
+        void OnStartPressed();
+
+        Sprite bg_sprite_1;
+
+        ShelterUILayer *ui_layer;
+
+};
+
 class GameScene : public  BaseScene{
     public:
         GameScene(int _map_index);
@@ -60,6 +77,8 @@ class GameScene : public  BaseScene{
 
         void DrawLevel();
         void HandleCamera();
+
+        void OnQuitPressed();
 
         CharacterMenu *character_menu;
 
@@ -71,7 +90,6 @@ class GameScene : public  BaseScene{
 
         //Texture2D ground_tiles;
 
-        Texture2D unit_sprite_sheet;
 
         //Camera2D camera;
 

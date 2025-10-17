@@ -50,6 +50,7 @@ enum SCENE_ID {
     SPLASH_SCENE,
     TITLE_SCENE,
     STAGING_SCENE,
+    SHELTER_SCENE,
     GAME_SCENE,
     END_SCENE
 };
@@ -57,7 +58,7 @@ enum SCENE_ID {
 
 extern GameSettings g_game_settings;
 //extern int *level_data_array;
-extern GameSettings g_game_settings;
+//extern GameSettings g_game_settings;
 extern float g_scale;
 extern float g_world2screen;
 extern float g_screen2world;

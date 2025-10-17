@@ -11,7 +11,9 @@ class SceneManager{
     void ChangeSceneTo(SCENE_ID new_scene);
     void OnPausePressed();
     void OnSavePressed();
-    
+    void OnBackToMenuPressed();
+
+
     BaseScene *current_scene;
     PauseMenu *pause_menu;
 

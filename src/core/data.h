@@ -27,7 +27,7 @@ inline std::string unit_names[10] = {
 };
 
 
-struct ClassData {
+struct PlayerData {
     int health;
     int exp;
     float base_speed;
@@ -35,9 +35,16 @@ struct ClassData {
     int portrait_id;
     std::string name;
     std::string class_name;
+
+/*     Rectangle collision_rect;
+    bool collided;
+    Vector2 position;
+    float rotation;
+    Vector2 centered_offset;
+    float collision_radius; */
 };
 
-extern std::unordered_map<int, ClassData> g_class_data;
+extern std::unordered_map<int, PlayerData> g_class_data;
 
 /* struct PlayerData {
     int health;
@@ -47,14 +54,16 @@ extern std::unordered_map<int, ClassData> g_class_data;
 };
  */
 
-extern ClassData g_player_data;
+extern PlayerData g_player_data;
 
-extern ClassData g_save_data;
+extern PlayerData g_save_data;
 
 
 struct GameData {
-    bool is_new_player = true;
+    //bool is_new_player = true;
     bool save_available = false;
+    bool paused = false;
+    SCENE_ID current_scene_id;
 };
 
 extern GameData g_game_data;
@@ -103,7 +112,7 @@ inline void LoadGameData() {
         int portrait_id = cj["base_class"][i]["portrait_id"];
         std::string class_name = cj["base_class"][i]["class_name"];
 
-        ClassData this_class = {
+        PlayerData this_class = {
             .health = health,
             .exp = exp,
             .base_speed = base_speed,
@@ -167,7 +176,7 @@ inline void LoadGameData() {
                     .id = std::stoi(id.c_str()),
                     .pos = { mj["layers"][l]["tiles"][t]["x"], mj["layers"][l]["tiles"][t]["y"] }
                 };
-                TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
+                //TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
 
                 this_layer.tiles.push_back(this_tile);
             }

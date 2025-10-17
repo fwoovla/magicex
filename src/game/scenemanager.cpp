@@ -10,7 +10,7 @@ void SceneManager::UpdateScene()
     }
     SCENE_ID new_scene = NO_SCENE;
     
-    if(paused == false) {
+    if(g_game_data.paused == false) {
         new_scene = current_scene->Update();
     }
     else {
@@ -26,7 +26,7 @@ void SceneManager::UpdateScene()
     }
 
     if(g_input.keys_pressed[0] == KEY_P) {
-        paused = !paused;    
+        g_game_data.paused = !g_game_data.paused;    
     }
 }
 
@@ -37,7 +37,7 @@ void SceneManager::Init() {
     paused = false;
     pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
     pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
-    //current_scene = new GameScene(level1_data);
+    pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
 }
 
 void SceneManager::CleanUp() {
@@ -51,7 +51,7 @@ void SceneManager::DrawScene() {
 
     current_scene->Draw();
 
-    if(paused == true) {
+    if(g_game_data.paused == true) {
         pause_menu->Draw();
     }
 }
@@ -74,6 +74,10 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             current_scene = new StagingScene();
             break;
 
+        case SHELTER_SCENE:
+            current_scene = new ShelterScene();
+            break;
+
         case GAME_SCENE:
             current_scene = new GameScene(0);
             break;
@@ -85,13 +89,23 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
         default:
             break;
     }
+    g_game_data.current_scene_id = new_scene;
 }
 
 void SceneManager::OnPausePressed() {
-    paused = !paused;
+    g_game_data.paused = !g_game_data.paused;
 }
 
 void SceneManager::OnSavePressed() {
     SaveGame();
     TraceLog(LOG_INFO, "GAME SAVED ");
+}
+
+void SceneManager::OnBackToMenuPressed() {
+    //SaveGame();
+    if (g_current_player != nullptr) {
+        delete g_current_player;
+    }
+    g_game_data.paused = false;
+    ChangeSceneTo(TITLE_SCENE);
 }

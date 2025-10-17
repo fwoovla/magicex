@@ -35,6 +35,7 @@ enum UIBackgroundID {
     BG_SPLASH,
     BG_TITLE,
     BG_STAGING,
+    BG_SHELTER,
     BG_NUM_SPRITES
 };
 
@@ -63,6 +64,7 @@ inline void LoadResources() {
 
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
     g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg2.png");
+    g_ui_backgrounds[BG_SHELTER] = LoadTexture("assets/staging_bg1.png");
 
     TraceLog(LOG_INFO, "LOADING TILESHEETS");
     g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/forrest_tiles.png");

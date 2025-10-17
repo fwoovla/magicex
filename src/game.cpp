@@ -1,6 +1,6 @@
 #include "core/gamedefs.h"
 
-std::unordered_map<int, ClassData> g_class_data;
+std::unordered_map<int, PlayerData> g_class_data;
 
 GameData g_game_data;
 std::vector<MapData> g_map_data;
@@ -10,7 +10,9 @@ Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
 Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 Texture2D g_ui_panels[MAX_UI_PANELS];
 Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];
-ClassData g_player_data;
+PlayerData g_player_data;
+
+PlayerCharacter *g_current_player;
 
 bool game_running;
 float g_scale;
@@ -27,6 +29,7 @@ void Game::StartGame() {
     LoadGameData();
 
     g_player_data = g_class_data[0];
+    g_current_player = nullptr;
     
     game_running = true;
     

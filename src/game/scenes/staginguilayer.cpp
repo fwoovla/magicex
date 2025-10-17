@@ -86,9 +86,9 @@ void StagingUILayer::Draw() {
 
 void StagingUILayer::Update() {
 
-    if(!g_game_data.is_new_player){
+/*     if(!g_game_data.is_new_player){
         is_selecting = false;
-    }
+    } */
 
     if(IsButtonHovered(settings_button, g_scale)){
         if(settings_button.already_hovered == false) {

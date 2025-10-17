@@ -15,12 +15,11 @@ class BaseEntity  {
     virtual void Update() = 0;   
     virtual void Draw() = 0; 
 
-    Rectangle collision_rect;
     bool should_delete;
+    Rectangle collision_rect;
     bool collided;
     Vector2 position;
     float rotation;
-    //int id;
     Vector2 centered_offset;
     float collision_radius;
 };

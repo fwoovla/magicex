@@ -13,23 +13,17 @@ enum AnimationState {
 
 PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
 
-    //data = _data;
-    //data.name = unit_names[ GetRandomValue(0, 10)];
     position = _position;
     rotation = 0.0f;
-    hovered = false;
-    selected = false;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 24.0f, 0.10f);
     collision_radius = (sprite.size.x + 1) /2;
     collided = false;
-    times_collided = 0;
-    is_inside = false;
 }
 
 void PlayerCharacter::Update() {
     
-    hovered = false;
+    //hovered = false;
     CheckInput();
 
     //move position
@@ -43,7 +37,7 @@ void PlayerCharacter::Update() {
 
         CollisionResult result;
         if(CheckCollisionWithLevel(this, result, 2) == true) {
-            TraceLog(LOG_INFO, "COLLIDED");
+            //TraceLog(LOG_INFO, "COLLIDED");
             position = previous_position;
 
         }

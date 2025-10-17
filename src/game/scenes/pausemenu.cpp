@@ -12,6 +12,10 @@ PauseMenu::PauseMenu() {
     save_button.default_color = DARKGREEN;
     save_button.text_size = 40/g_scale;
 
+    CreateButton(back_to_menu_button, {g_screen_center.x, g_screen_center.y+(205/g_scale)}, {150/g_scale , 60/g_scale}, BLUE, "quit to menu");
+    back_to_menu_button.default_color = DARKBLUE;
+    back_to_menu_button.text_size = 30/g_scale;
+
 }
 
 PauseMenu::~PauseMenu() {
@@ -24,9 +28,21 @@ void PauseMenu::Draw() {
     DrawLabelCentered(title_label);
     DrawButton(continue_button);
     DrawButton(save_button);
+    DrawButton(back_to_menu_button);
 }
 
 void PauseMenu::Update() {
+
+    if(g_game_data.current_scene_id == GAME_SCENE){
+        save_button.default_color = DARKRED;
+        save_button.focus_color = RED;
+        save_button.text = "cant save";
+    }
+    else {
+        save_button.default_color = DARKGREEN;
+        save_button.focus_color = GREEN;
+        save_button.text = "save";
+    }
 
     if(IsButtonHovered(continue_button, g_scale)){
         if(continue_button.already_hovered == false) {
@@ -34,7 +50,6 @@ void PauseMenu::Update() {
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             TraceLog(LOG_INFO, "CONTINUE BUTTON PRESSED ");
-            //play_pressed.EmitSignal();
             continue_pressed.EmitSignal();
         }        
     }
@@ -44,9 +59,22 @@ void PauseMenu::Update() {
             //PlaySound(button_sound);
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            TraceLog(LOG_INFO, "SAVE BUTTON PRESSED ");
+            if(g_game_data.current_scene_id != GAME_SCENE){
+                TraceLog(LOG_INFO, "SAVE BUTTON PRESSED ");
+                //play_pressed.EmitSignal();
+                save_pressed.EmitSignal();
+            }
+        }        
+    }
+
+    if(IsButtonHovered(back_to_menu_button, g_scale)){
+        if(back_to_menu_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            TraceLog(LOG_INFO, "BACK TO MENu BUTTON PRESSED ");
             //play_pressed.EmitSignal();
-            save_pressed.EmitSignal();
+            back_to_menu_pressed.EmitSignal();
         }        
     }
 }

@@ -25,6 +25,9 @@ class PauseMenu : public BaseUILayer {
 
     Label title_label;
 
+    Button back_to_menu_button;
+    Signal back_to_menu_pressed;
+
     Button continue_button;
     Signal continue_pressed;
 
@@ -128,6 +131,27 @@ class StagingUILayer : public BaseUILayer {
 
 };
 
+class ShelterUILayer : public BaseUILayer {
+
+    public:
+    ShelterUILayer();
+    ~ShelterUILayer() override;
+    void Update() override;
+    void Draw() override;
+
+    //void DrawDebug();
+    
+    Button start_button;
+    Signal start_pressed;
+
+    Button quit_button;
+    Signal quit_pressed;
+
+    Label title_label;
+
+};
+
+
 class GameUILayer : public BaseUILayer {
 
     public:
@@ -136,33 +160,15 @@ class GameUILayer : public BaseUILayer {
     void Update() override;
     void Draw() override;
 
-    void DrawDebug();
+    //void DrawDebug();
+
+    Button quit_button;
+    Signal quit_pressed;
 
     Label title_label;
 
-    Label debug_input_smp;
-    Label debug_input_wmp;
-
-    Label debug_input_mbl;
-    Label debug_input_mbld;
-    Label debug_input_mblscp;
-    Label debug_input_mblwcp;
-
-    Label debug_input_mbr;
-    Label debug_input_mbrd;
-    Label debug_input_mbrscp;
-    Label debug_input_mbrwcp;
-
-    Label debug_input_mw;
-
-    Label debug_input_mm;
-    Label debug_input_mmd;
-
-    Label debug_scale;
     Label debug_zoom_level;
-    Label debug_camera_target;
-    Label debug_w2s;
-    Label debug_selected_rect;
+
 
 
 };

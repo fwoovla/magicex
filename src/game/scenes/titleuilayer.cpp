@@ -8,7 +8,7 @@ TitleUILayer::TitleUILayer() {
     continue_button.default_color = DARKBLUE;
     continue_button.text_size = 40/g_scale;
     
-    CreateButton(start_button, {g_screen_center.x, g_screen_center.y}, {200/g_scale , 100/g_scale}, GREEN, "play");
+    CreateButton(start_button, {g_screen_center.x, g_screen_center.y}, {200/g_scale , 100/g_scale}, GREEN, "new game");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 40/g_scale;
 

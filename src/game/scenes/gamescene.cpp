@@ -20,11 +20,14 @@ GameScene::GameScene(int _map_index) {
     tile_layer = new TileLayer();
     tile_layer->SetTiles( g_tile_sheets[TS_FOREST], _map_index);
     
-
     ui_layer = new GameUILayer();
+    ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
+
+
     character_menu = new CharacterMenu();
 
-    DL_Add(active_entity_list, new PlayerCharacter({200,200}) );
+    DL_Add(active_entity_list, g_current_player );
+    g_current_player->position = {300, 300};
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -50,10 +53,10 @@ SCENE_ID GameScene::Update() {
     if(g_input.keys_pressed[0] == KEY_SPACE) {
         return_scene = END_SCENE;
     }
+
     if (IsKeyPressed(g_input.keys_pressed[0] ==  KEY_ENTER)) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
-    
     
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
@@ -90,19 +93,6 @@ void GameScene::Draw() {
 void GameScene::DrawLevel() {
 
     tile_layer->Draw();
-
-/*     for(int x = 0; x < g_map_width; x++) {
-        for(int y = 0; y < g_map_height; y++) {
-            /* DrawTexturePro(
-                        ground_tiles,
-                        {0.0, (float)level_data_array[y*g_map_width+x]*TILE_SIZE ,TILE_SIZE, TILE_SIZE},
-                        {(float)x*TILE_SIZE, (float)y*TILE_SIZE ,TILE_SIZE, TILE_SIZE},
-                        {0,0},
-                        0.0,
-                        WHITE
-                    ); 
-        }
-    } */
 }
 
 void GameScene::HandleCamera() {
@@ -120,7 +110,31 @@ void GameScene::HandleCamera() {
     float x_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
     float y_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
 
-    g_camera.target = Vector2Subtract(active_entity_list[0]->position, {x_offset, y_offset} );
+
+
+    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
+
+    if(g_current_player->position.x - x_offset < 0) {
+        float x_dif = x_offset - g_current_player->position.x;
+        //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
+        g_camera.target.x = g_camera.target.x + x_dif;
+    }
+    else if(g_current_player->position.x + x_offset > g_game_map_data.map_width * g_game_map_data.tile_size) {
+        float x_dif = (x_offset + g_current_player->position.x) - g_game_map_data.map_width * g_game_map_data.tile_size;
+        //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
+        g_camera.target.x = g_camera.target.x - x_dif;
+    }
+
+    if(g_current_player->position.y - y_offset < 0) {
+        float y_dif = y_offset - g_current_player->position.y;
+        //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
+        g_camera.target.y = g_camera.target.y + y_dif;
+    }
+    else if(g_current_player->position.y + y_offset > g_game_map_data.map_height * g_game_map_data.tile_size) {
+        float y_dif = (y_offset + g_current_player->position.y) - g_game_map_data.map_height * g_game_map_data.tile_size;
+        //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
+        g_camera.target.y = g_camera.target.y - y_dif;
+    }
 
 }
 
@@ -132,4 +146,8 @@ GameScene::~GameScene() {
     //UnloadTexture(ground_tiles);
     DL_Clear(active_entity_list);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
+}
+
+void GameScene::OnQuitPressed() {
+    g_game_data.paused = true;
 }

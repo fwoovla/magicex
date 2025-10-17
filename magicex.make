@@ -89,6 +89,8 @@ GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
 GENERATED += $(OBJDIR)/scenemanager.o
+GENERATED += $(OBJDIR)/shelterscene.o
+GENERATED += $(OBJDIR)/shelteruilayer.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
@@ -107,6 +109,8 @@ OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
 OBJECTS += $(OBJDIR)/scenemanager.o
+OBJECTS += $(OBJDIR)/shelterscene.o
+OBJECTS += $(OBJDIR)/shelteruilayer.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
@@ -208,6 +212,12 @@ $(OBJDIR)/gameuilayer.o: src/game/scenes/gameuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pausemenu.o: src/game/scenes/pausemenu.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/shelterscene.o: src/game/scenes/shelterscene.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/shelteruilayer.o: src/game/scenes/shelteruilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/splashscene.o: src/game/scenes/splashscene.cpp

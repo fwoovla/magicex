@@ -3,14 +3,14 @@
  "base_class": [
         {
             "health":15,
-            "base_speed":25.0,
+            "base_speed":45.0,
             "sprite_sheet_id":0,
             "portrait_id":0,
             "class_name": "Apprentice"
         },
         {
             "health":10,
-            "base_speed":35.0,
+            "base_speed":45.0,
             "sprite_sheet_id":1,
             "portrait_id":0,
             "class_name": "Nerd"

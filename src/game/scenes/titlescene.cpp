@@ -35,6 +35,7 @@ TitleScene::~TitleScene() {
 }
 
 void TitleScene::OnPlayPressed() {
+
     return_scene = STAGING_SCENE;
 
 }
@@ -48,6 +49,7 @@ void TitleScene::OnQuitPressed() {
 
 void TitleScene::OnContinuePressed() {
     LoadGame();
-    g_game_data.is_new_player = false;
-    return_scene = STAGING_SCENE;
+    g_current_player = new PlayerCharacter({0,0});
+    //g_game_data.is_new_player = false;
+    return_scene = SHELTER_SCENE;
 }
