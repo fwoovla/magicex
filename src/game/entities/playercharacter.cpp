@@ -17,7 +17,8 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     rotation = 0.0f;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 24.0f, 0.10f);
-    collision_radius = (sprite.size.x + 1) /2;
+    collision_radius = (sprite.size.x + 1) /4;
+    centered_offset = {0,5};
     collided = false;
 }
 
@@ -60,7 +61,8 @@ void PlayerCharacter::Draw() {
 
     DrawSprite(sprite);
     if(g_game_settings.show_debug == true) {
-        DrawCircleV(position, collision_radius, RED);
+        DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
+        DrawCircleV(position, 1, WHITE);
         
     }
 

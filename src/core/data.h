@@ -85,10 +85,11 @@ struct MapData {
     float inv_tile_size;
     int map_width;
     int map_height;
+    int collision_layer_index;
     std::vector<TileLayerData> layers;
 };
 
-extern std::vector<MapData> g_map_data;
+extern std::vector<MapData> g_maps_data;
 
 inline void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
@@ -160,6 +161,7 @@ inline void LoadGameData() {
         //TraceLog(LOG_INFO, "map width check");
         int map_height = mj["mapHeight"];
         //TraceLog(LOG_INFO, "map height check %i", map_height);
+        int collision_layer_index = -1;
 
         std::vector<TileLayerData> these_layers;
 
@@ -168,7 +170,10 @@ inline void LoadGameData() {
 
             TileLayerData this_layer;
             this_layer.layer_name = mj["layers"][l]["name"];
-            TraceLog(LOG_INFO, "layer name check");
+            
+            if(mj["layers"][l]["collider"] == true) {
+                collision_layer_index = l;
+            }
 
             for (int t = 0; t < mj["layers"][l]["tiles"].size(); t++) {
                 std::string id = mj["layers"][l]["tiles"][t]["id"];
@@ -191,15 +196,16 @@ inline void LoadGameData() {
             .inv_tile_size = 1.0f/(float)tile_size,
             .map_width = map_width,
             .map_height = map_height,
+            .collision_layer_index = collision_layer_index,
             .layers = these_layers
         };
 
-        g_map_data.push_back(this_map);
+        g_maps_data.push_back(this_map);
 
         mfile.close();
     }
 
-    TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_map_data.size());
+    TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_maps_data.size());
     TraceLog(LOG_INFO, "==========DATA LOADED================");
 }
 

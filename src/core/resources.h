@@ -67,7 +67,7 @@ inline void LoadResources() {
     g_ui_backgrounds[BG_SHELTER] = LoadTexture("assets/staging_bg1.png");
 
     TraceLog(LOG_INFO, "LOADING TILESHEETS");
-    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/forrest_tiles.png");
+    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/spritesheet.png");
 
 }
 

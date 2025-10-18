@@ -3,7 +3,7 @@
 std::unordered_map<int, PlayerData> g_class_data;
 
 GameData g_game_data;
-std::vector<MapData> g_map_data;
+std::vector<MapData> g_maps_data;
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
