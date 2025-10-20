@@ -22,6 +22,13 @@ float g_screen2world;
 Vector2 g_resolution;
 Vector2 g_screen_center;
 
+std::vector<BaseEntity *> active_entity_list;
+//int *level_data_array;
+int g_map_width;
+int g_map_height;
+Camera2D g_camera;
+PlayerInput g_input;
+
 
 void Game::StartGame() {
     g_game_data.save_available = false;

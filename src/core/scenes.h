@@ -58,6 +58,7 @@ class ShelterScene : public  BaseScene{
         ~ShelterScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void HandleCamera();
 
         void OnQuitPressed();
         void OnStartPressed();
@@ -66,6 +67,8 @@ class ShelterScene : public  BaseScene{
         Sprite bg_sprite_1;
 
         ShelterUILayer *ui_layer;
+
+        TileLayer *tile_layer;
 
         MapMenu *map_menu;
 

@@ -42,6 +42,8 @@ struct PlayerInput {
     bool key_left;
     bool key_right;
 
+    bool key_sprint;
+
     KeyboardKey keys_pressed[10];
 };
 

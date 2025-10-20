@@ -65,6 +65,7 @@ struct GameData {
     bool paused = false;
     SCENE_ID current_scene_id;
     int current_map_index;
+    int shelter_map_index;
 };
 
 extern GameData g_game_data;
@@ -100,14 +101,12 @@ inline int load_maps( std::string _path) {
     int file_count = 0;
     std::string ext = ".json";
 
+
     for (const auto& entry : std::filesystem::directory_iterator(_path)) {
         if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ext) {
             std::string map_file = entry.path().filename().c_str();
 
             std::string full_map_path = _path +  "/" + map_file;
-
-            ++file_count;
-
 
             //if(std::filesystem::exists(map_path)) {
 
@@ -159,6 +158,13 @@ inline int load_maps( std::string _path) {
                         // TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
 
                         this_layer.tiles.push_back(this_tile);
+
+                        if(mj["layers"][l]["tiles"][t].contains("attributes")) {
+                            if(mj["layers"][l]["tiles"][t]["attributes"].contains("shelter")) {
+                                g_game_data.shelter_map_index = file_count;
+                                //TraceLog(LOG_INFO, "shelter map found at index %i", file_count);
+                            }
+                        }
                     }
 
                     these_layers.push_back(this_layer);
@@ -181,8 +187,11 @@ inline int load_maps( std::string _path) {
                 mfile.close();
                 TraceLog(LOG_INFO, "map loaded %s", map_file.c_str());
             }
+
+            ++file_count;
         
         }
+
     }
 
     return file_count;

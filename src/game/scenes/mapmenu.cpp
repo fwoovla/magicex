@@ -24,8 +24,9 @@ MapMenu::MapMenu() {
 
 
         Button new_map_button;
-        CreateButton(new_map_button, { g_resolution.x/2, g_resolution.y/2 - 50 + (i * (BUTTON_OFFEST + 30)) }, {100, 30}, DARKGRAY, g_maps_data[i].map_path.c_str());
+        CreateButton(new_map_button, { g_resolution.x/2, g_resolution.y/2 - 50 + (i * (BUTTON_OFFEST + 30)) }, {100, 30}, RAYWHITE, g_maps_data[i].map_path.c_str());
         new_map_button.text_size = 20/g_scale;
+        new_map_button.default_color = DARKERGRAY;
 
         map_buttons.push_back(new_map_button);
 
@@ -57,10 +58,12 @@ void MapMenu::Update() {
                 //PlaySound(button_sound);
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                TraceLog(LOG_INFO, "MAP BUTTON PRESSED %i", i);
-                g_game_data.current_map_index = i;
-                //play_pressed.EmitSignal();
-                map_selected.EmitSignal();
+                if(i != g_game_data.shelter_map_index) {
+                    TraceLog(LOG_INFO, "MAP BUTTON PRESSED %i", i);
+                    g_game_data.current_map_index = i;
+                    //play_pressed.EmitSignal();
+                    map_selected.EmitSignal();
+                }
         }        
         }
 

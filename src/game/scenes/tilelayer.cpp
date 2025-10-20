@@ -33,7 +33,7 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
     for (int y = 0; y < tsr; y++) {
         for (int x = 0; x < tsc; x++) {
             tile_atlas.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
-            TraceLog(LOG_INFO, "new tile x: %i   y: %i  id: %i", x, y, tile_atlas.size() - 1);
+            TraceLog(LOG_INFO, "new atlas tile : (%i, %i)  id: %i", x, y, tile_atlas.size() - 1);
         }
     }
 
@@ -80,7 +80,7 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
     }
     TraceLog(LOG_INFO, "map data w: %i   h: %i", g_current_map_data.map_width, g_current_map_data.map_height);
     TraceLog(LOG_INFO, "map tile size %i", tile_size);
-    TraceLog(LOG_INFO, "layer count %i", g_current_map_data.layers.size());
+    TraceLog(LOG_INFO, "layer count %i", g_current_ordered_layers.size());
     TraceLog(LOG_INFO, "collisiion layer index %i", g_current_map_data.collision_layer_index);
 
 }
@@ -98,60 +98,70 @@ void TileLayer::Draw() {
     int y_offset = ((g_resolution.y * 0.5f) / g_camera.zoom) * g_current_map_data.inv_tile_size;
 
     Vector2 center = {g_camera.target.x/tile_size, g_camera.target.y/tile_size};
-    //TraceLog(LOG_INFO, "drawing layers ");
-    //TileLayerData base_layer = g_game_map_data.layers[0];
-    
-    
+
     int x_min = center.x - x_offset;
     if(x_min < 0) {
         x_min = 0;
     }
+
+    int x_max = center.x + (x_offset * 2) + 2;
+    if(x_max > g_current_map_data.map_width) {
+        x_max = g_current_map_data.map_width;
+    } 
 
     int y_min = center.y - y_offset;
     if(y_min < 0) {
         y_min = 0;
     }
 
+    int y_max = center.y + (y_offset * 2) + 2;
+    if(y_max > g_current_map_data.map_height) {
+        y_max = g_current_map_data.map_height;
+    } 
+
+
     int tiles_drawn = 0;
 
     //invert layers for drawing
     for (int l = g_current_ordered_layers.size() - 1; l >= 0; l--) {
-        //TraceLog(LOG_INFO, "drawing layer %i  ", l);
-        int index = 0;   
-        for (int y = y_min; y < (center.y + (y_offset * 2)); y++) {
-            for (int x = x_min; x < (center.x + (x_offset * 2)); x++) {
+        if(l != g_current_map_data.collision_layer_index) {
+            //TraceLog(LOG_INFO, "drawing layer %i  ", l);
+            int index = 0;   
+            for (int y = y_min; y < y_max; y++) {
+                for (int x = x_min; x < x_max; x++) {
 
-                index = (y) * g_current_map_data.map_width + (x);
+                    index = (y) * g_current_map_data.map_width + (x);
 
-                if(index >= g_current_ordered_layers[l].size()) {
-                    break;
-                }
-
-                int tile_id = g_current_ordered_layers[l][index];
-
-                if(tile_id != -1) {
-                    //TraceLog(LOG_INFO, "layer %i  tile id %i", l, tile_id);
-                            
-                    Vector2 atlas_pos = tile_atlas[ tile_id ];
-                    Vector2 tile_pos = { (float)x, (float)y};// base_layer.tiles[index].pos;
-
-                    Color color = WHITE;
-
-                    if(g_game_settings.show_debug == true) {
-                        if(l == g_current_map_data.collision_layer_index) {
-                            color = DARKGRAY;
-                        }
+                    if(index >= g_current_ordered_layers[l].size()) {
+                        break;
                     }
+                    TraceLog(LOG_INFO, "drawing tile %i  ", index);
+                    int tile_id = g_current_ordered_layers[l][index];
 
-                    DrawTexturePro(
-                        tilesheet,
-                        {atlas_pos.x * tile_size, atlas_pos.y * tile_size, (float)tile_size, (float)tile_size},
-                        {(float)tile_pos.x*tile_size, (float)tile_pos.y*tile_size ,(float)tile_size, (float )tile_size},
-                        {0,0},
-                        0.0,
-                        color
-                    );
-                    tiles_drawn++;
+                    if(tile_id != -1) {
+                        //TraceLog(LOG_INFO, "layer %i  tile id %i", l, tile_id);
+                                
+                        Vector2 atlas_pos = tile_atlas[ tile_id ];
+                        Vector2 tile_pos = { (float)x, (float)y};// base_layer.tiles[index].pos;
+
+                        Color color = WHITE;
+
+                        if(g_game_settings.show_debug == true) {
+                            if(l == g_current_map_data.collision_layer_index) {
+                                color = DARKGRAY;
+                            }
+                        }
+
+                        DrawTexturePro(
+                            tilesheet,
+                            {atlas_pos.x * tile_size, atlas_pos.y * tile_size, (float)tile_size, (float)tile_size},
+                            {(float)tile_pos.x*tile_size, (float)tile_pos.y*tile_size ,(float)tile_size, (float )tile_size},
+                            {0,0},
+                            0.0,
+                            color
+                        );
+                        tiles_drawn++;
+                    }
                 }
             }
         }

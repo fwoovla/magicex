@@ -80,7 +80,7 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             break;
 
         case GAME_SCENE:
-            current_scene = new GameScene(0);
+            current_scene = new GameScene(g_game_data.current_map_index);
             break;
 
         case END_SCENE:

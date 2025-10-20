@@ -44,6 +44,7 @@ extern Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];
 
 enum TileSheetID {
     TS_FOREST,
+    TS_SHELTER,
     TS_NUM_SHEETS
 };
 
@@ -67,11 +68,13 @@ inline void LoadResources() {
     g_ui_backgrounds[BG_SHELTER] = LoadTexture("assets/staging_bg1.png");
 
     TraceLog(LOG_INFO, "LOADING TILESHEETS");
-    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/spritesheet.png");
+    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/forrest_spritesheet.png");
+    g_tile_sheets[TS_SHELTER] = LoadTexture("assets/maps/shelter_spritesheet.png");
 
 }
 
 inline void UnloadResources() {
+    
     TraceLog(LOG_INFO, "UNLOADING SPRITE SHEETS");
     for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
         UnloadTexture(g_sprite_sheets[i]);

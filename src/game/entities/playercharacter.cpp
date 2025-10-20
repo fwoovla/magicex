@@ -62,10 +62,8 @@ void PlayerCharacter::Draw() {
     DrawSprite(sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
-        DrawCircleV(position, 1, WHITE);
-        
+        DrawCircleV(position, 1, WHITE);   
     }
-
 }
 
 void PlayerCharacter::CheckInput() {
@@ -78,7 +76,6 @@ void PlayerCharacter::CheckInput() {
     };
 
     Rectangle world_rect = {position.x, position.y, sprite.size.x, sprite.size.y};
-
 
     Vector2 input_dir = {0,0};
 
@@ -98,7 +95,16 @@ void PlayerCharacter::CheckInput() {
         input_dir.x = 1;
     }
     input_dir = Vector2Normalize(input_dir);
-    velocity = input_dir * g_player_data.base_speed;
+
+    float speed = g_player_data.base_speed;
+
+    if(g_input.key_sprint) {
+        speed = speed + (speed * 1.5);
+    }
+
+    //velocity = input_dir * speed;
+
+    velocity = Vector2Lerp(velocity, input_dir * speed, .1);
 }
 
 

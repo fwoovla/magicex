@@ -4,12 +4,12 @@
 #define MIN_ZOOM 0.5f
 #define ZOOM_STEP 0.05f
 
-std::vector<BaseEntity *> active_entity_list;
+/* std::vector<BaseEntity *> active_entity_list;
 //int *level_data_array;
 int g_map_width;
 int g_map_height;
 Camera2D g_camera;
-PlayerInput g_input;
+PlayerInput g_input; */
 
 
 GameScene::GameScene(int _map_index) {
@@ -50,13 +50,9 @@ SCENE_ID GameScene::Update() {
     DL_Update(active_entity_list);
     HandleCamera();
     
-    if(g_input.keys_pressed[0] == KEY_SPACE) {
+/*     if(g_input.keys_pressed[0] == KEY_SPACE) {
         return_scene = END_SCENE;
-    }
-
-    if (IsKeyPressed(g_input.keys_pressed[0] ==  KEY_ENTER)) {
-        g_game_settings.show_debug = !g_game_settings.show_debug;
-    }
+    } */
     
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
