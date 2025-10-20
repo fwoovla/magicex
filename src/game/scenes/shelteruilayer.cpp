@@ -11,10 +11,14 @@ ShelterUILayer::ShelterUILayer() {
     CreateButton(start_button, {g_screen_center.x, g_resolution.y - 40}, {200/g_scale , 100/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 40/g_scale;
+
+    //map_menu = new MapMenu();
+    //show_map_menu = false;
 }
 
 ShelterUILayer::~ShelterUILayer() {
     //UnloadSound(button_sound);
+    //delete map_menu;
     TraceLog(LOG_INFO, "UI DESTRUCTOR:  GAME UI");
 }
 
@@ -44,7 +48,7 @@ void ShelterUILayer::Update() {
         }        
     }
 
-        if(IsButtonHovered(start_button, g_scale)){
+    if(IsButtonHovered(start_button, g_scale)){
         if(start_button.already_hovered == false) {
             //PlaySound(button_sound);
         }
@@ -52,6 +56,7 @@ void ShelterUILayer::Update() {
             TraceLog(LOG_INFO, "START BUTTON PRESSED ");
             //play_pressed.EmitSignal();
             start_pressed.EmitSignal();
+            //show_map_menu = true;
         }        
     }
 

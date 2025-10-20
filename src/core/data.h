@@ -64,6 +64,7 @@ struct GameData {
     bool save_available = false;
     bool paused = false;
     SCENE_ID current_scene_id;
+    int current_map_index;
 };
 
 extern GameData g_game_data;
@@ -87,9 +88,106 @@ struct MapData {
     int map_height;
     int collision_layer_index;
     std::vector<TileLayerData> layers;
+    std::string map_name;
+    std::string map_path;
 };
 
 extern std::vector<MapData> g_maps_data;
+
+
+
+inline int load_maps( std::string _path) {
+    int file_count = 0;
+    std::string ext = ".json";
+
+    for (const auto& entry : std::filesystem::directory_iterator(_path)) {
+        if (std::filesystem::is_regular_file(entry.status()) && entry.path().extension() == ext) {
+            std::string map_file = entry.path().filename().c_str();
+
+            std::string full_map_path = _path +  "/" + map_file;
+
+            ++file_count;
+
+
+            //if(std::filesystem::exists(map_path)) {
+
+            TraceLog(LOG_INFO, "MAP FILE FOUND %s", full_map_path.c_str());
+
+            std::ifstream mfile(full_map_path);
+
+            if (!mfile.is_open())
+            {
+                TraceLog(LOG_INFO, "failed to open map file %s", map_file.c_str());
+            }
+            else {
+
+            
+
+                TraceLog(LOG_INFO, "map file opened");
+                json mj;
+                // TraceLog(LOG_INFO, "file 1 check");
+                mfile >> mj;
+
+                // TraceLog(LOG_INFO, "file 2  check");
+                int tile_size = mj["tileSize"];
+                // TraceLog(LOG_INFO, "tile size check");
+                int map_width = mj["mapWidth"];
+                // TraceLog(LOG_INFO, "map width check");
+                int map_height = mj["mapHeight"];
+                // TraceLog(LOG_INFO, "map height check %i", map_height);
+                int collision_layer_index = -1;
+
+                std::vector<TileLayerData> these_layers;
+
+                for (int l = 0; l < mj["layers"].size(); l++)
+                {
+
+                    TileLayerData this_layer;
+                    this_layer.layer_name = mj["layers"][l]["name"];
+
+                    if (mj["layers"][l]["collider"] == true)
+                    {
+                        collision_layer_index = l;
+                    }
+
+                    for (int t = 0; t < mj["layers"][l]["tiles"].size(); t++)
+                    {
+                        std::string id = mj["layers"][l]["tiles"][t]["id"];
+                        TileData this_tile = {
+                            .id = std::stoi(id.c_str()),
+                            .pos = {mj["layers"][l]["tiles"][t]["x"], mj["layers"][l]["tiles"][t]["y"]}};
+                        // TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
+
+                        this_layer.tiles.push_back(this_tile);
+                    }
+
+                    these_layers.push_back(this_layer);
+                    TraceLog(LOG_INFO, "layer loaded %s", this_layer.layer_name.c_str());
+                }
+
+                MapData this_map = {
+                    .tile_size = tile_size,
+                    .inv_tile_size = 1.0f / (float)tile_size,
+                    .map_width = map_width,
+                    .map_height = map_height,
+                    .collision_layer_index = collision_layer_index,
+                    .layers = these_layers,
+                    .map_path = full_map_path
+                };
+
+
+                g_maps_data.push_back(this_map);
+
+                mfile.close();
+                TraceLog(LOG_INFO, "map loaded %s", map_file.c_str());
+            }
+        
+        }
+    }
+
+    return file_count;
+}
+
 
 inline void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
@@ -139,73 +237,14 @@ inline void LoadGameData() {
     TraceLog(LOG_INFO, "==========end save data================");
     TraceLog(LOG_INFO, "==========load map data================");
 
-    std::string map_path = "assets/maps/map.json";
-    if(std::filesystem::exists(map_path)) {
-        TraceLog(LOG_INFO, "MAP FILE FOUND");
+    std::string map_dir = "assets/maps";
+    
+    int num_maps = load_maps(map_dir);
+    TraceLog(LOG_INFO, "----------------------------------------- maps found %i", num_maps);
 
-        
-        std::ifstream mfile(map_path);
-        if (!mfile.is_open()) {
-            TraceLog(LOG_INFO, "filed to open map file");
-            return;
-        }
-        TraceLog(LOG_INFO, "map file opened");
-        json mj;
-        //TraceLog(LOG_INFO, "file 1 check");
-        mfile>>mj;
-
-        //TraceLog(LOG_INFO, "file 2  check");
-        int tile_size = mj["tileSize"];
-        //TraceLog(LOG_INFO, "tile size check");
-        int map_width = mj["mapWidth"];
-        //TraceLog(LOG_INFO, "map width check");
-        int map_height = mj["mapHeight"];
-        //TraceLog(LOG_INFO, "map height check %i", map_height);
-        int collision_layer_index = -1;
-
-        std::vector<TileLayerData> these_layers;
-
-
-        for(int l = 0; l < mj["layers"].size(); l++) {
-
-            TileLayerData this_layer;
-            this_layer.layer_name = mj["layers"][l]["name"];
-            
-            if(mj["layers"][l]["collider"] == true) {
-                collision_layer_index = l;
-            }
-
-            for (int t = 0; t < mj["layers"][l]["tiles"].size(); t++) {
-                std::string id = mj["layers"][l]["tiles"][t]["id"];
-                TileData this_tile = {
-                    .id = std::stoi(id.c_str()),
-                    .pos = { mj["layers"][l]["tiles"][t]["x"], mj["layers"][l]["tiles"][t]["y"] }
-                };
-                //TraceLog(LOG_INFO, "tile check %0.0f %0.0f    %i", this_tile.pos.x, this_tile.pos.y, this_tile.id);
-
-                this_layer.tiles.push_back(this_tile);
-            }
-
-            these_layers.push_back(this_layer);
-            TraceLog(LOG_INFO, "layer loaded %s", this_layer.layer_name.c_str());
-
-        }
-
-        MapData this_map = {
-            .tile_size = tile_size,
-            .inv_tile_size = 1.0f/(float)tile_size,
-            .map_width = map_width,
-            .map_height = map_height,
-            .collision_layer_index = collision_layer_index,
-            .layers = these_layers
-        };
-
-        g_maps_data.push_back(this_map);
-
-        mfile.close();
-    }
 
     TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_maps_data.size());
+
     TraceLog(LOG_INFO, "==========DATA LOADED================");
 }
 
@@ -258,3 +297,5 @@ inline void LoadGame() {
     file.close();
 
 }
+
+

@@ -36,6 +36,27 @@ class PauseMenu : public BaseUILayer {
 
 };
 
+class MapMenu : public BaseUILayer {
+
+    public:
+    MapMenu();
+    ~MapMenu() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    Rectangle panel_rect;
+
+    Vector2 map_list_pos;
+    std::vector<Button> map_buttons;
+
+    Signal map_selected;
+
+    
+
+};
+
 class CharacterMenu : public BaseUILayer {
 
     public:
@@ -140,7 +161,7 @@ class ShelterUILayer : public BaseUILayer {
     void Draw() override;
 
     //void DrawDebug();
-    
+   
     Button start_button;
     Signal start_pressed;
 

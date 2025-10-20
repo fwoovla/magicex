@@ -61,10 +61,15 @@ class ShelterScene : public  BaseScene{
 
         void OnQuitPressed();
         void OnStartPressed();
+        void OnMapSelected();
 
         Sprite bg_sprite_1;
 
         ShelterUILayer *ui_layer;
+
+        MapMenu *map_menu;
+
+        bool show_map_menu;
 
 };
 

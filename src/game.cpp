@@ -24,6 +24,10 @@ Vector2 g_screen_center;
 
 
 void Game::StartGame() {
+    g_game_data.save_available = false;
+    g_game_data.paused = false;
+    g_game_data.current_scene_id = NO_SCENE;
+    g_game_data.current_map_index = -1;
 
     LoadResources();
     LoadGameData();

@@ -33,8 +33,9 @@ void SceneManager::UpdateScene()
 
 void SceneManager::Init() {
     current_scene = new SplashScreen();
+    g_game_data.current_scene_id = SPLASH_SCENE;
+
     pause_menu = new PauseMenu();
-    paused = false;
     pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
     pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
     pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
