@@ -16,8 +16,8 @@ class TileLayer {
     void Update();
     void Draw();
 
-    Texture2D tilesheet;
-    std::vector<Vector2> tile_atlas;
+    Texture2D tile_texture;
+    std::vector<Vector2> tile_sheet;
     int map_index;
 
     //MapData map_data;

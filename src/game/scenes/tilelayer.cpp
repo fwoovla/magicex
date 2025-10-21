@@ -20,20 +20,20 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
     //set up tile sheet
     map_index = _map_index;
     g_current_map_data = g_maps_data[map_index];
-    tilesheet = _tilesheet;
+    tile_texture = _tilesheet;
     int tile_size = g_current_map_data.tile_size;
 
     //tilesheet rows and cols
-    int tsr = tilesheet.height / tile_size;
-    int tsc = tilesheet.width / tile_size;
+    int tsr = tile_texture.height / tile_size;
+    int tsc = tile_texture.width / tile_size;
     //TraceLog(LOG_INFO, "tile sheet cols: %i   tile rows: %i", tsc, tsr);
 
     //get the source x and y for each tile
 
     for (int y = 0; y < tsr; y++) {
         for (int x = 0; x < tsc; x++) {
-            tile_atlas.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
-            TraceLog(LOG_INFO, "new atlas tile : (%i, %i)  id: %i", x, y, tile_atlas.size() - 1);
+            tile_sheet.push_back( {(float)x,(float)y} );//  [y * cols + x] = {(float)x,(float)y};
+            TraceLog(LOG_INFO, "new atlas tile : (%i, %i)  id: %i", x, y, tile_sheet.size() - 1);
         }
     }
 
@@ -140,7 +140,7 @@ void TileLayer::Draw() {
                     if(tile_id != -1) {
                         //TraceLog(LOG_INFO, "layer %i  tile id %i", l, tile_id);
                                 
-                        Vector2 atlas_pos = tile_atlas[ tile_id ];
+                        Vector2 atlas_pos = tile_sheet[ tile_id ];
                         Vector2 tile_pos = { (float)x, (float)y};// base_layer.tiles[index].pos;
 
                         Color color = WHITE;
@@ -152,7 +152,7 @@ void TileLayer::Draw() {
                         }
 
                         DrawTexturePro(
-                            tilesheet,
+                            tile_texture,
                             {atlas_pos.x * tile_size, atlas_pos.y * tile_size, (float)tile_size, (float)tile_size},
                             {(float)tile_pos.x*tile_size, (float)tile_pos.y*tile_size ,(float)tile_size, (float )tile_size},
                             {0,0},

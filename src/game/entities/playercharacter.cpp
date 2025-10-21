@@ -38,7 +38,7 @@ void PlayerCharacter::Update() {
 
         CollisionResult result;
         if(CheckCollisionWithLevel(this, result, 2) == true) {
-            TraceLog(LOG_INFO, "COLLIDED");
+            //TraceLog(LOG_INFO, "COLLIDED");
             position = previous_position;
 
         }

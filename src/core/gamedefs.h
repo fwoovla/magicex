@@ -71,7 +71,7 @@ extern int g_map_height;
 extern Camera2D g_camera;
 extern PlayerInput g_input;
 
-
+#include "ldtk.h"
 #include "resources.h"
 #include "data.h"
 #include "input.h"

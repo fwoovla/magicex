@@ -97,7 +97,7 @@ extern std::vector<MapData> g_maps_data;
 
 
 
-inline int load_maps( std::string _path) {
+inline int load_json_maps( std::string _path) {
     int file_count = 0;
     std::string ext = ".json";
 
@@ -178,6 +178,7 @@ inline int load_maps( std::string _path) {
                     .map_height = map_height,
                     .collision_layer_index = collision_layer_index,
                     .layers = these_layers,
+                    .map_name = map_file,
                     .map_path = full_map_path
                 };
 
@@ -248,11 +249,22 @@ inline void LoadGameData() {
 
     std::string map_dir = "assets/maps";
     
-    int num_maps = load_maps(map_dir);
+    int num_maps = load_json_maps(map_dir);
     TraceLog(LOG_INFO, "----------------------------------------- maps found %i", num_maps);
 
 
     TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_maps_data.size());
+
+    TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
+
+    std::string ldtk_map_dir = "assets/maps/ldtk";
+    num_maps = load_ldtk_maps();
+
+
+TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
+
+
+
 
     TraceLog(LOG_INFO, "==========DATA LOADED================");
 }

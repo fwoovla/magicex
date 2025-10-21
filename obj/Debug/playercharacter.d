@@ -2,8 +2,7 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/stdc-predef.h src/game/entities/../../core/gamedefs.h \
  /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/game/entities/../../core/resources.h \
- src/game/entities/../../core/data.h /usr/include/c++/13/vector \
+ src/game/entities/../../core/ldtk.h /usr/include/c++/13/string \
  /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -16,51 +15,15 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
  /usr/include/c++/13/pstl/pstl_config.h \
- /usr/include/c++/13/bits/stl_algobase.h \
- /usr/include/c++/13/bits/functexcept.h \
- /usr/include/c++/13/bits/exception_defines.h \
- /usr/include/c++/13/bits/cpp_type_traits.h \
- /usr/include/c++/13/ext/type_traits.h \
- /usr/include/c++/13/ext/numeric_traits.h \
- /usr/include/c++/13/bits/stl_pair.h /usr/include/c++/13/type_traits \
- /usr/include/c++/13/bits/move.h /usr/include/c++/13/bits/utility.h \
- /usr/include/c++/13/bits/stl_iterator_base_types.h \
- /usr/include/c++/13/bits/stl_iterator_base_funcs.h \
- /usr/include/c++/13/bits/concept_check.h \
- /usr/include/c++/13/debug/assertions.h \
- /usr/include/c++/13/bits/stl_iterator.h \
- /usr/include/c++/13/bits/ptr_traits.h /usr/include/c++/13/debug/debug.h \
- /usr/include/c++/13/bits/predefined_ops.h /usr/include/c++/13/bit \
- /usr/include/c++/13/bits/allocator.h \
- /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
- /usr/include/c++/13/bits/new_allocator.h /usr/include/c++/13/new \
- /usr/include/c++/13/bits/exception.h \
+ /usr/include/c++/13/bits/stringfwd.h \
  /usr/include/c++/13/bits/memoryfwd.h \
- /usr/include/c++/13/bits/stl_construct.h \
- /usr/include/c++/13/bits/stl_uninitialized.h \
- /usr/include/c++/13/ext/alloc_traits.h \
- /usr/include/c++/13/bits/alloc_traits.h \
- /usr/include/c++/13/bits/stl_vector.h \
- /usr/include/c++/13/initializer_list \
- /usr/include/c++/13/bits/stl_bvector.h \
- /usr/include/c++/13/bits/functional_hash.h \
- /usr/include/c++/13/bits/hash_bytes.h /usr/include/c++/13/bits/refwrap.h \
- /usr/include/c++/13/bits/invoke.h \
- /usr/include/c++/13/bits/stl_function.h \
- /usr/include/c++/13/backward/binders.h \
- /usr/include/c++/13/bits/range_access.h \
- /usr/include/c++/13/bits/vector.tcc \
- /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
- /usr/include/c++/13/bits/uses_allocator.h \
- /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
- /usr/include/c++/13/string /usr/include/c++/13/bits/stringfwd.h \
  /usr/include/c++/13/bits/char_traits.h \
  /usr/include/c++/13/bits/postypes.h /usr/include/c++/13/cwchar \
  /usr/include/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
@@ -69,6 +32,14 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/c++/13/type_traits /usr/include/c++/13/bits/allocator.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
+ /usr/include/c++/13/bits/new_allocator.h /usr/include/c++/13/new \
+ /usr/include/c++/13/bits/exception.h \
+ /usr/include/c++/13/bits/functexcept.h \
+ /usr/include/c++/13/bits/exception_defines.h \
+ /usr/include/c++/13/bits/move.h \
+ /usr/include/c++/13/bits/cpp_type_traits.h \
  /usr/include/c++/13/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
  /usr/include/c++/13/clocale /usr/include/locale.h \
@@ -81,7 +52,29 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/x86_64-linux-gnu/bits/endianness.h \
  /usr/include/c++/13/bits/ostream_insert.h \
  /usr/include/c++/13/bits/cxxabi_forced.h \
- /usr/include/c++/13/bits/basic_string.h /usr/include/c++/13/string_view \
+ /usr/include/c++/13/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/13/bits/concept_check.h \
+ /usr/include/c++/13/debug/assertions.h \
+ /usr/include/c++/13/bits/stl_iterator_base_types.h \
+ /usr/include/c++/13/bits/stl_iterator.h \
+ /usr/include/c++/13/ext/type_traits.h \
+ /usr/include/c++/13/bits/ptr_traits.h \
+ /usr/include/c++/13/bits/stl_function.h \
+ /usr/include/c++/13/backward/binders.h \
+ /usr/include/c++/13/ext/numeric_traits.h \
+ /usr/include/c++/13/bits/stl_algobase.h \
+ /usr/include/c++/13/bits/stl_pair.h /usr/include/c++/13/bits/utility.h \
+ /usr/include/c++/13/debug/debug.h \
+ /usr/include/c++/13/bits/predefined_ops.h /usr/include/c++/13/bit \
+ /usr/include/c++/13/bits/refwrap.h /usr/include/c++/13/bits/invoke.h \
+ /usr/include/c++/13/bits/range_access.h \
+ /usr/include/c++/13/initializer_list \
+ /usr/include/c++/13/bits/basic_string.h \
+ /usr/include/c++/13/ext/alloc_traits.h \
+ /usr/include/c++/13/bits/alloc_traits.h \
+ /usr/include/c++/13/bits/stl_construct.h /usr/include/c++/13/string_view \
+ /usr/include/c++/13/bits/functional_hash.h \
+ /usr/include/c++/13/bits/hash_bytes.h \
  /usr/include/c++/13/bits/string_view.tcc \
  /usr/include/c++/13/ext/string_conversions.h /usr/include/c++/13/cstdlib \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
@@ -120,16 +113,12 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/13/bits/charconv.h \
  /usr/include/c++/13/bits/basic_string.tcc \
- /usr/include/c++/13/unordered_map \
- /usr/include/c++/13/bits/unordered_map.h \
- /usr/include/c++/13/bits/hashtable.h \
- /usr/include/c++/13/bits/hashtable_policy.h \
- /usr/include/c++/13/ext/aligned_buffer.h \
- /usr/include/c++/13/bits/enable_special_members.h \
- /usr/include/c++/13/bits/node_handle.h \
- /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/fstream \
- /usr/include/c++/13/istream /usr/include/c++/13/ios \
- /usr/include/c++/13/exception /usr/include/c++/13/bits/exception_ptr.h \
+ /usr/include/c++/13/bits/memory_resource.h /usr/include/c++/13/cstddef \
+ /usr/include/c++/13/bits/uses_allocator.h \
+ /usr/include/c++/13/bits/uses_allocator_args.h /usr/include/c++/13/tuple \
+ /usr/include/c++/13/fstream /usr/include/c++/13/istream \
+ /usr/include/c++/13/ios /usr/include/c++/13/exception \
+ /usr/include/c++/13/bits/exception_ptr.h \
  /usr/include/c++/13/bits/cxxabi_init_exception.h \
  /usr/include/c++/13/typeinfo /usr/include/c++/13/bits/nested_exception.h \
  /usr/include/c++/13/bits/ios_base.h /usr/include/c++/13/ext/atomicity.h \
@@ -175,7 +164,19 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/c++/13/bits/stl_tempbuf.h \
  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
  /usr/include/c++/13/pstl/execution_defs.h /usr/include/c++/13/functional \
- /usr/include/c++/13/bits/std_function.h /usr/include/c++/13/array \
+ /usr/include/c++/13/bits/std_function.h \
+ /usr/include/c++/13/unordered_map \
+ /usr/include/c++/13/bits/unordered_map.h \
+ /usr/include/c++/13/bits/hashtable.h \
+ /usr/include/c++/13/bits/hashtable_policy.h \
+ /usr/include/c++/13/ext/aligned_buffer.h \
+ /usr/include/c++/13/bits/enable_special_members.h \
+ /usr/include/c++/13/bits/node_handle.h \
+ /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/vector \
+ /usr/include/c++/13/bits/stl_uninitialized.h \
+ /usr/include/c++/13/bits/stl_vector.h \
+ /usr/include/c++/13/bits/stl_bvector.h \
+ /usr/include/c++/13/bits/vector.tcc /usr/include/c++/13/array \
  /usr/include/c++/13/compare /usr/include/c++/13/iterator \
  /usr/include/c++/13/bits/stream_iterator.h /usr/include/c++/13/memory \
  /usr/include/c++/13/bits/stl_raw_storage_iter.h \
@@ -248,7 +249,8 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/c++/13/optional /usr/include/c++/13/numeric \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
- src/game/entities/../../core/input.h \
+ src/game/entities/../../core/resources.h \
+ src/game/entities/../../core/data.h src/game/entities/../../core/input.h \
  src/game/entities/../../core/utils.h \
  src/game/entities/../../core/button.h \
  src/game/entities/../../core/sprite.h /usr/local/include/raymath.h \
@@ -265,9 +267,8 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
 src/game/entities/../../core/gamedefs.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/game/entities/../../core/resources.h:
-src/game/entities/../../core/data.h:
-/usr/include/c++/13/vector:
+src/game/entities/../../core/ldtk.h:
+/usr/include/c++/13/string:
 /usr/include/c++/13/bits/requires_hosted.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h:
@@ -281,54 +282,8 @@ src/game/entities/../../core/data.h:
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h:
 /usr/include/c++/13/pstl/pstl_config.h:
-/usr/include/c++/13/bits/stl_algobase.h:
-/usr/include/c++/13/bits/functexcept.h:
-/usr/include/c++/13/bits/exception_defines.h:
-/usr/include/c++/13/bits/cpp_type_traits.h:
-/usr/include/c++/13/ext/type_traits.h:
-/usr/include/c++/13/ext/numeric_traits.h:
-/usr/include/c++/13/bits/stl_pair.h:
-/usr/include/c++/13/type_traits:
-/usr/include/c++/13/bits/move.h:
-/usr/include/c++/13/bits/utility.h:
-/usr/include/c++/13/bits/stl_iterator_base_types.h:
-/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
-/usr/include/c++/13/bits/concept_check.h:
-/usr/include/c++/13/debug/assertions.h:
-/usr/include/c++/13/bits/stl_iterator.h:
-/usr/include/c++/13/bits/ptr_traits.h:
-/usr/include/c++/13/debug/debug.h:
-/usr/include/c++/13/bits/predefined_ops.h:
-/usr/include/c++/13/bit:
-/usr/include/c++/13/bits/allocator.h:
-/usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:
-/usr/include/c++/13/bits/new_allocator.h:
-/usr/include/c++/13/new:
-/usr/include/c++/13/bits/exception.h:
-/usr/include/c++/13/bits/memoryfwd.h:
-/usr/include/c++/13/bits/stl_construct.h:
-/usr/include/c++/13/bits/stl_uninitialized.h:
-/usr/include/c++/13/ext/alloc_traits.h:
-/usr/include/c++/13/bits/alloc_traits.h:
-/usr/include/c++/13/bits/stl_vector.h:
-/usr/include/c++/13/initializer_list:
-/usr/include/c++/13/bits/stl_bvector.h:
-/usr/include/c++/13/bits/functional_hash.h:
-/usr/include/c++/13/bits/hash_bytes.h:
-/usr/include/c++/13/bits/refwrap.h:
-/usr/include/c++/13/bits/invoke.h:
-/usr/include/c++/13/bits/stl_function.h:
-/usr/include/c++/13/backward/binders.h:
-/usr/include/c++/13/bits/range_access.h:
-/usr/include/c++/13/bits/vector.tcc:
-/usr/include/c++/13/bits/memory_resource.h:
-/usr/include/c++/13/cstddef:
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
-/usr/include/c++/13/bits/uses_allocator.h:
-/usr/include/c++/13/bits/uses_allocator_args.h:
-/usr/include/c++/13/tuple:
-/usr/include/c++/13/string:
 /usr/include/c++/13/bits/stringfwd.h:
+/usr/include/c++/13/bits/memoryfwd.h:
 /usr/include/c++/13/bits/char_traits.h:
 /usr/include/c++/13/bits/postypes.h:
 /usr/include/c++/13/cwchar:
@@ -336,6 +291,7 @@ src/game/entities/../../core/data.h:
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
@@ -344,6 +300,16 @@ src/game/entities/../../core/data.h:
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+/usr/include/c++/13/type_traits:
+/usr/include/c++/13/bits/allocator.h:
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:
+/usr/include/c++/13/bits/new_allocator.h:
+/usr/include/c++/13/new:
+/usr/include/c++/13/bits/exception.h:
+/usr/include/c++/13/bits/functexcept.h:
+/usr/include/c++/13/bits/exception_defines.h:
+/usr/include/c++/13/bits/move.h:
+/usr/include/c++/13/bits/cpp_type_traits.h:
 /usr/include/c++/13/bits/localefwd.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h:
 /usr/include/c++/13/clocale:
@@ -359,8 +325,33 @@ src/game/entities/../../core/data.h:
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 /usr/include/c++/13/bits/ostream_insert.h:
 /usr/include/c++/13/bits/cxxabi_forced.h:
+/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
+/usr/include/c++/13/bits/concept_check.h:
+/usr/include/c++/13/debug/assertions.h:
+/usr/include/c++/13/bits/stl_iterator_base_types.h:
+/usr/include/c++/13/bits/stl_iterator.h:
+/usr/include/c++/13/ext/type_traits.h:
+/usr/include/c++/13/bits/ptr_traits.h:
+/usr/include/c++/13/bits/stl_function.h:
+/usr/include/c++/13/backward/binders.h:
+/usr/include/c++/13/ext/numeric_traits.h:
+/usr/include/c++/13/bits/stl_algobase.h:
+/usr/include/c++/13/bits/stl_pair.h:
+/usr/include/c++/13/bits/utility.h:
+/usr/include/c++/13/debug/debug.h:
+/usr/include/c++/13/bits/predefined_ops.h:
+/usr/include/c++/13/bit:
+/usr/include/c++/13/bits/refwrap.h:
+/usr/include/c++/13/bits/invoke.h:
+/usr/include/c++/13/bits/range_access.h:
+/usr/include/c++/13/initializer_list:
 /usr/include/c++/13/bits/basic_string.h:
+/usr/include/c++/13/ext/alloc_traits.h:
+/usr/include/c++/13/bits/alloc_traits.h:
+/usr/include/c++/13/bits/stl_construct.h:
 /usr/include/c++/13/string_view:
+/usr/include/c++/13/bits/functional_hash.h:
+/usr/include/c++/13/bits/hash_bytes.h:
 /usr/include/c++/13/bits/string_view.tcc:
 /usr/include/c++/13/ext/string_conversions.h:
 /usr/include/c++/13/cstdlib:
@@ -408,14 +399,11 @@ src/game/entities/../../core/data.h:
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 /usr/include/c++/13/bits/charconv.h:
 /usr/include/c++/13/bits/basic_string.tcc:
-/usr/include/c++/13/unordered_map:
-/usr/include/c++/13/bits/unordered_map.h:
-/usr/include/c++/13/bits/hashtable.h:
-/usr/include/c++/13/bits/hashtable_policy.h:
-/usr/include/c++/13/ext/aligned_buffer.h:
-/usr/include/c++/13/bits/enable_special_members.h:
-/usr/include/c++/13/bits/node_handle.h:
-/usr/include/c++/13/bits/erase_if.h:
+/usr/include/c++/13/bits/memory_resource.h:
+/usr/include/c++/13/cstddef:
+/usr/include/c++/13/bits/uses_allocator.h:
+/usr/include/c++/13/bits/uses_allocator_args.h:
+/usr/include/c++/13/tuple:
 /usr/include/c++/13/fstream:
 /usr/include/c++/13/istream:
 /usr/include/c++/13/ios:
@@ -478,6 +466,19 @@ src/game/entities/../../core/json.hpp:
 /usr/include/c++/13/pstl/execution_defs.h:
 /usr/include/c++/13/functional:
 /usr/include/c++/13/bits/std_function.h:
+/usr/include/c++/13/unordered_map:
+/usr/include/c++/13/bits/unordered_map.h:
+/usr/include/c++/13/bits/hashtable.h:
+/usr/include/c++/13/bits/hashtable_policy.h:
+/usr/include/c++/13/ext/aligned_buffer.h:
+/usr/include/c++/13/bits/enable_special_members.h:
+/usr/include/c++/13/bits/node_handle.h:
+/usr/include/c++/13/bits/erase_if.h:
+/usr/include/c++/13/vector:
+/usr/include/c++/13/bits/stl_uninitialized.h:
+/usr/include/c++/13/bits/stl_vector.h:
+/usr/include/c++/13/bits/stl_bvector.h:
+/usr/include/c++/13/bits/vector.tcc:
 /usr/include/c++/13/array:
 /usr/include/c++/13/compare:
 /usr/include/c++/13/iterator:
@@ -576,6 +577,8 @@ src/game/entities/../../core/json.hpp:
 /usr/include/c++/13/bits/stl_numeric.h:
 /usr/include/c++/13/pstl/glue_numeric_defs.h:
 /usr/include/c++/13/any:
+src/game/entities/../../core/resources.h:
+src/game/entities/../../core/data.h:
 src/game/entities/../../core/input.h:
 src/game/entities/../../core/utils.h:
 src/game/entities/../../core/button.h:
