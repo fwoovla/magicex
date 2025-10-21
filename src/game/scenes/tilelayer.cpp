@@ -82,7 +82,6 @@ void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
     TraceLog(LOG_INFO, "map tile size %i", tile_size);
     TraceLog(LOG_INFO, "layer count %i", g_current_ordered_layers.size());
     TraceLog(LOG_INFO, "collisiion layer index %i", g_current_map_data.collision_layer_index);
-
 }
 
 void TileLayer::Update() {
@@ -135,7 +134,7 @@ void TileLayer::Draw() {
                     if(index >= g_current_ordered_layers[l].size()) {
                         break;
                     }
-                    TraceLog(LOG_INFO, "drawing tile %i  ", index);
+                    //TraceLog(LOG_INFO, "drawing tile %i  ", index);
                     int tile_id = g_current_ordered_layers[l][index];
 
                     if(tile_id != -1) {

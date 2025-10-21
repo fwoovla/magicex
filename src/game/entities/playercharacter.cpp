@@ -23,7 +23,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
 }
 
 void PlayerCharacter::Update() {
-    
+    //TraceLog(LOG_INFO, "player update");
     //hovered = false;
     CheckInput();
 
@@ -38,7 +38,7 @@ void PlayerCharacter::Update() {
 
         CollisionResult result;
         if(CheckCollisionWithLevel(this, result, 2) == true) {
-            //TraceLog(LOG_INFO, "COLLIDED");
+            TraceLog(LOG_INFO, "COLLIDED");
             position = previous_position;
 
         }
@@ -58,6 +58,7 @@ void PlayerCharacter::Update() {
 }
 
 void PlayerCharacter::Draw() {
+    //TraceLog(LOG_INFO, "player draw");
 
     DrawSprite(sprite);
     if(g_game_settings.show_debug == true) {
@@ -103,8 +104,12 @@ void PlayerCharacter::CheckInput() {
     }
 
     //velocity = input_dir * speed;
+    //TraceLog(LOG_INFO, "player speed : %0.04f", speed);
 
-    velocity = Vector2Lerp(velocity, input_dir * speed, .1);
+    velocity = Vector2Lerp(velocity, input_dir * speed, .05);
+    if(abs(velocity.x) < 0.8f and abs(velocity.y) < 0.8f) {
+        velocity = {0,0};
+    }
 }
 
 

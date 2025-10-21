@@ -66,7 +66,7 @@ inline void GetInputFromPlayer() {
     g_input.key_left = IsKeyDown(KEY_A);
     g_input.key_right = IsKeyDown(KEY_D);
 
-    g_input.key_sprint = IsKeyDown(KEY_LEFT_SHIFT);
+    g_input.key_sprint = IsKeyDown(KEY_SPACE);
 
 
     if(g_input.selecting) {

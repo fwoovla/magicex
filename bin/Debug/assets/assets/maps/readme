@@ -1,0 +1,8 @@
+maps are made in spritefusion
+
+must include collision layer
+collision layer is not drawn
+layers are drawn last to first
+
+any tile that is marked with a "shelter" attribute will make the map a shelter map
+

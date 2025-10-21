@@ -56,7 +56,7 @@ SCENE_ID ShelterScene::Update() {
 
 void ShelterScene::Draw() {
 
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
+    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
     //DrawSprite(bg_sprite_1);
     BeginMode2D(g_camera);
     tile_layer->Draw();

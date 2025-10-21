@@ -73,6 +73,7 @@ void StagingScene::OnCharacterSelected() {
     TraceLog(LOG_INFO, "CHARACTER SELECTED");
     g_player_data = g_class_data[ui_layer->select_index];
     g_current_player = new PlayerCharacter({0,0});
+    //DL_Add(active_entity_list, g_current_player );
 
 }
 
