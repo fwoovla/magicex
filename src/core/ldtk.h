@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <raymath.h>
 #include <string>
 #include <fstream>
 
@@ -368,6 +369,7 @@ inline void LDTKLoadMaps (json &mj) {
             }
 
             g_ldtk_maps.levels.push_back(this_level);
+            TraceLog(LOG_INFO, "++++++LEVEL ADDED %i", g_ldtk_maps.levels.size());
         }
     }
 }
@@ -379,10 +381,19 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
     float inv_tile_size = 1.0f/(float)tile_size;
     
     int x_offset = ((g_resolution.x * 0.5f) / g_camera.zoom) * inv_tile_size;
+    //x_offset--;
     int y_offset = ((g_resolution.y * 0.5f) / g_camera.zoom) * inv_tile_size;
+    //y_offset--;
 
+    float x_cam_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
+    float y_cam_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
 
-    Vector2 center = {focus_position.x * inv_tile_size, focus_position.y * inv_tile_size};
+    //Vector2 center = {focus_position.x * inv_tile_size, focus_position.y * inv_tile_size};
+    Vector2 center = Vector2Add(g_camera.target, {x_cam_offset, y_cam_offset} ) * inv_tile_size;
+
+    //Vector2 center = {x_cam_offset * inv_tile_size, y_cam_offset * inv_tile_size};
+    //TraceLog(LOG_INFO, "offset x:%i  y:%i \n", x_offset, y_offset); 
+    TraceLog(LOG_INFO, "center %0.2f  %0.2f \n", center.x, center.y); 
 
 
 
@@ -391,22 +402,22 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
     int64_t map_width = this_level->px_wid * inv_tile_size;
     int64_t map_height = this_level->px_hei * inv_tile_size;
     
-     int x_min = center.x - x_offset;
+    int x_min = center.x - (x_offset + 1);
     if(x_min < 0) {
         x_min = 0;
     }
         
-    int x_max = center.x + (x_offset * 2) + 2;
+    int x_max = center.x + (x_offset + 1);
     if(x_max > map_width) {
         x_max = map_width;
     } 
             
-    int y_min = center.y - y_offset;
+    int y_min = center.y - (y_offset + 1);
     if(y_min < 0) {
         y_min = 0;
     }
                 
-    int y_max = center.y + (y_offset * 2) + 2;
+    int y_max = center.y + (y_offset + 1);
     if(y_max > map_height) {
         y_max = map_height;
     } 
@@ -461,6 +472,7 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
             
         }
     }
+    //TraceLog(LOG_INFO, "ldtk draw");
 }
 
 inline void  LDTKDrawMapFree() {

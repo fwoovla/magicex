@@ -18,19 +18,22 @@ MapMenu::MapMenu() {
         .y = panel_rect.y + 20
     };
 
+    int level_count = g_ldtk_maps.levels.size();
 
-/*     for (int i = 0; i < g_maps_data.size(); i++) {
-        TraceLog(LOG_INFO, "map name: %s", g_maps_data[i].map_path.c_str());
 
+    for (int level = 0; level < level_count; level++) {
+        TraceLog(LOG_INFO, "map name: %s", g_ldtk_maps.levels[level].identifier.c_str()) ;//    g_maps_data[i].map_path.c_str());
+
+        std::string level_name = g_ldtk_maps.levels[level].identifier.c_str();
 
         Button new_map_button;
-        CreateButton(new_map_button, { g_resolution.x/2, g_resolution.y/2 - 50 + (i * (BUTTON_OFFEST + 30)) }, {100, 30}, RAYWHITE, g_maps_data[i].map_path.c_str());
+        CreateButton(new_map_button, { g_resolution.x/2, g_resolution.y/2 - 50 + (level * (BUTTON_OFFEST + 30)) }, {100, 30}, RAYWHITE, level_name);
         new_map_button.text_size = 20/g_scale;
         new_map_button.default_color = DARKERGRAY;
 
         map_buttons.push_back(new_map_button);
 
-    } */
+    }
  
 }
 

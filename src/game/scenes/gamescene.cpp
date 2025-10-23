@@ -18,7 +18,7 @@ GameScene::GameScene(int _map_index) {
     character_menu_visible = false;
 
     tile_layer = new TileLayer();
-    tile_layer->SetTiles( g_tile_sheets[TS_FOREST], _map_index);
+    //tile_layer->SetTiles( g_tile_sheets[TS_FOREST], _map_index);
     
     ui_layer = new GameUILayer();
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
@@ -27,7 +27,7 @@ GameScene::GameScene(int _map_index) {
     character_menu = new CharacterMenu();
 
     //DL_Add(active_entity_list, g_current_player );
-    g_current_player->position = {300, 300};
+    g_current_player->position = {100, 100};
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -67,16 +67,17 @@ SCENE_ID GameScene::Update() {
 
 void GameScene::Draw() {
 
+    TraceLog(LOG_INFO, "game scene draw");
     DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
     BeginMode2D(g_camera);
-    DrawLevel();
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE  %i", active_entity_list.size());
+    tile_layer->Draw();
+    //DrawLevel();
     DL_Draw(active_entity_list);
     
     
-    if(g_input.selecting) {
+/*     if(g_input.selecting) {
         DrawRectangleLines(g_input.selected_rect.x, g_input.selected_rect.y, g_input.selected_rect.width, g_input.selected_rect.height, RAYWHITE);
-    }
+    } */
     
     EndMode2D();
     
@@ -88,7 +89,6 @@ void GameScene::Draw() {
 
 void GameScene::DrawLevel() {
 
-    tile_layer->Draw();
 }
 
 void GameScene::HandleCamera() {
@@ -107,17 +107,17 @@ void GameScene::HandleCamera() {
     float y_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
 
 
+    //int tile_size = g_ldtk_maps.default_grid_size;
 
-    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
-    int tile_size = g_ldtk_maps.default_grid_size;
+    g_camera.target =  Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
 
     if(g_current_player->position.x - x_offset < 0) {
         float x_dif = x_offset - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
     }
-    else if(g_current_player->position.x + x_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid / tile_size) {
-        float x_dif = (x_offset + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid * tile_size;
+    else if(g_current_player->position.x + x_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid) {
+        float x_dif = (x_offset + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
         g_camera.target.x = g_camera.target.x - x_dif;
     }
@@ -127,12 +127,13 @@ void GameScene::HandleCamera() {
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y + y_dif;
     }
-    else if(g_current_player->position.y + y_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei * tile_size) {
-        float y_dif = (y_offset + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei * tile_size;
+    else if(g_current_player->position.y + y_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei) {
+        float y_dif = (y_offset + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
     }
 
+    
 }
 
 

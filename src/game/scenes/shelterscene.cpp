@@ -94,7 +94,8 @@ void ShelterScene::OnStartPressed() {
 }
 
 void ShelterScene::OnMapSelected() {
-    return_scene = GAME_SCENE;    
+    return_scene = GAME_SCENE;
+    TraceLog(LOG_INFO, "MAP SELECTED:  %i", g_game_data.current_map_index);
 }
 
 void ShelterScene::HandleCamera() {
