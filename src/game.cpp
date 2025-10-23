@@ -3,10 +3,13 @@
 std::unordered_map<int, PlayerData> g_class_data;
 
 GameData g_game_data;
-std::vector<MapData> g_maps_data;
+//std::vector<MapData> g_maps_data;
 
-std::vector<LDTK_MapData> g_ldtk_maps_data;
-Texture2D g_ldtk_tilesheets[MAX_TILE_SHEETS];
+LDTKMaps g_ldtk_maps;
+std::vector<LDTKLevel> g_ldtk_levels;
+std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
+std::vector<LDTKTileset> g_ldtk_tilesets;
+
 
 
 

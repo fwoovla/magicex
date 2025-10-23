@@ -15,7 +15,7 @@ ShelterScene::ShelterScene() {
     ui_layer->start_pressed.Connect( [&](){OnStartPressed();} );
     
     tile_layer = new TileLayer();
-    tile_layer->SetTiles( g_tile_sheets[TS_SHELTER], g_game_data.shelter_map_index);
+    //tile_layer->SetTiles( g_tile_sheets[TS_SHELTER], g_game_data.shelter_map_index);
 
     LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_SHELTER], {0,0});
     
@@ -51,6 +51,7 @@ SCENE_ID ShelterScene::Update() {
     //DL_Update(active_entity_list);
     DL_Update(active_entity_list);
     HandleCamera();
+
     return return_scene;
 }
 

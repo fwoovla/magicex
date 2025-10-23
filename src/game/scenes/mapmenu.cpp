@@ -19,7 +19,7 @@ MapMenu::MapMenu() {
     };
 
 
-    for (int i = 0; i < g_maps_data.size(); i++) {
+/*     for (int i = 0; i < g_maps_data.size(); i++) {
         TraceLog(LOG_INFO, "map name: %s", g_maps_data[i].map_path.c_str());
 
 
@@ -30,7 +30,7 @@ MapMenu::MapMenu() {
 
         map_buttons.push_back(new_map_button);
 
-    }
+    } */
  
 }
 

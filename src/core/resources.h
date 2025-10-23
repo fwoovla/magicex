@@ -71,9 +71,9 @@ inline void LoadResources() {
     g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/forrest_spritesheet.png");
     g_tile_sheets[TS_SHELTER] = LoadTexture("assets/maps/shelter_spritesheet.png");
 
-    TraceLog(LOG_INFO, "LOADING LDTK TILESHEETS");
+/*     TraceLog(LOG_INFO, "LOADING LDTK TILESHEETS");
     g_ldtk_tilesheets[TS_FOREST] = LoadTexture("assets/maps/forrest_spritesheet.png");
-    g_ldtk_tilesheets[TS_SHELTER] = LoadTexture("assets/maps/shelter_spritesheet.png");
+    g_ldtk_tilesheets[TS_SHELTER] = LoadTexture("assets/maps/shelter_spritesheet.png"); */
 
 
 }

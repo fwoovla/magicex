@@ -28,6 +28,7 @@ class TitleScene : public  BaseScene{
         void OnQuitPressed();
         void OnContinuePressed();
 
+        Sprite bg_sprite_1;
         TitleUILayer *ui_layer;
 
 };

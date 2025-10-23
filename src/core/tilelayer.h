@@ -2,8 +2,8 @@
 #include "gamedefs.h"
 
 
-extern MapData g_current_map_data;
-extern std::vector<std::vector<int>> g_current_ordered_layers;
+//extern MapData g_current_map_data;
+//extern std::vector<std::vector<int>> g_current_ordered_layers;
 
 
 
@@ -29,7 +29,7 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     //================TILE COLLISION=========================
     //TraceLog(LOG_INFO, "CHECKER POS: %0.0f    %0.0f", checker->position.x * g_game_map_data.inv_tile_size, checker->position.y * g_game_map_data.inv_tile_size);
     //for (int l = 0; l < g_current_map_data.layers.size(); l++) {
-        for(int y = -_range; y <=  _range; y++) {
+/*         for(int y = -_range; y <=  _range; y++) {
             for(int x = -_range; x <= _range; x++) {
 
                 int ix = (checker->position.x * g_current_map_data.inv_tile_size) + x;
@@ -49,7 +49,7 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
                 }
             }
         //}
-    }
+        } */
     //TraceLog(LOG_INFO, "\n");
 
     return false;

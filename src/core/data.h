@@ -59,19 +59,9 @@ extern PlayerData g_player_data;
 extern PlayerData g_save_data;
 
 
-struct GameData {
-    //bool is_new_player = true;
-    bool save_available = false;
-    bool paused = false;
-    SCENE_ID current_scene_id;
-    int current_map_index;
-    int shelter_map_index;
-};
-
-extern GameData g_game_data;
 
 
-struct TileData {
+/* struct TileData {
     int id;
     //std::string id;
     Vector2 pos;
@@ -93,11 +83,11 @@ struct MapData {
     std::string map_path;
 };
 
-extern std::vector<MapData> g_maps_data;
+extern std::vector<MapData> g_maps_data; */
 
 
 
-inline int load_json_maps( std::string _path) {
+/* inline int load_json_maps( std::string _path) {
     int file_count = 0;
     std::string ext = ".json";
 
@@ -196,7 +186,7 @@ inline int load_json_maps( std::string _path) {
     }
 
     return file_count;
-}
+} */
 
 
 inline void LoadGameData() {
@@ -204,14 +194,14 @@ inline void LoadGameData() {
 
     std::ifstream cfile("assets/data.json");
     if (!cfile.is_open()) {
-        TraceLog(LOG_INFO, "CANNOT OPEN FILE");
+        TraceLog(LOG_INFO, "CANNOT OPEN DATA FILE");
         return;
     }
     
     json cj;
     cfile>>cj;
-    TraceLog(LOG_INFO, "==========LOADING GAME DATA FROM FILE================");
-    TraceLog(LOG_INFO, "==========loading class data================");
+    //TraceLog(LOG_INFO, "==========LOADING GAME DATA FROM FILE================");
+    //TraceLog(LOG_INFO, "==========loading class data================");
 
     for(int i = 0; i < cj["base_class"].size(); i++) {
         int health = cj["base_class"][i]["health"];
@@ -235,8 +225,8 @@ inline void LoadGameData() {
     }
     cfile.close();
  
-    TraceLog(LOG_INFO, "==========end class data================");
-    TraceLog(LOG_INFO, "==========check save data================");
+    //TraceLog(LOG_INFO, "==========end class data================");
+    //TraceLog(LOG_INFO, "==========check save data================");
 
     std::string save_path = "assets/save.json";
     if(std::filesystem::exists(save_path)) {
@@ -244,29 +234,24 @@ inline void LoadGameData() {
         TraceLog(LOG_INFO, "SAVE FILE FOUND");
     }
 
-    TraceLog(LOG_INFO, "==========end save data================");
-    TraceLog(LOG_INFO, "==========load map data================");
+    //TraceLog(LOG_INFO, "==========end save data================");
+    //TraceLog(LOG_INFO, "==========load map data================");
 
-    std::string map_dir = "assets/maps";
+/*     std::string map_dir = "assets/maps";
     
     int num_maps = load_json_maps(map_dir);
     TraceLog(LOG_INFO, "----------------------------------------- maps found %i", num_maps);
 
 
-    TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_maps_data.size());
+    TraceLog(LOG_INFO, "==========end map data================ maps loaded %i", g_maps_data.size()); */
 
     TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
 
     std::string ldtk_map_dir = "assets/maps/ldtk";
-    num_maps = load_ldtk_maps();
+    int num_maps = load_ldtk_maps();
 
+    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
 
-TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
-
-
-
-
-    TraceLog(LOG_INFO, "==========DATA LOADED================");
 }
 
 inline void SaveGame() {

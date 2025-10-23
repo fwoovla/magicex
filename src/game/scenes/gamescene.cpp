@@ -109,14 +109,15 @@ void GameScene::HandleCamera() {
 
 
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
+    int tile_size = g_ldtk_maps.default_grid_size;
 
     if(g_current_player->position.x - x_offset < 0) {
         float x_dif = x_offset - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
     }
-    else if(g_current_player->position.x + x_offset > g_current_map_data.map_width * g_current_map_data.tile_size) {
-        float x_dif = (x_offset + g_current_player->position.x) - g_current_map_data.map_width * g_current_map_data.tile_size;
+    else if(g_current_player->position.x + x_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid / tile_size) {
+        float x_dif = (x_offset + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid * tile_size;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
         g_camera.target.x = g_camera.target.x - x_dif;
     }
@@ -126,8 +127,8 @@ void GameScene::HandleCamera() {
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y + y_dif;
     }
-    else if(g_current_player->position.y + y_offset > g_current_map_data.map_height * g_current_map_data.tile_size) {
-        float y_dif = (y_offset + g_current_player->position.y) - g_current_map_data.map_height * g_current_map_data.tile_size;
+    else if(g_current_player->position.y + y_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei * tile_size) {
+        float y_dif = (y_offset + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei * tile_size;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
     }

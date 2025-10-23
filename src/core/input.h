@@ -53,7 +53,7 @@ inline void GetInputFromPlayer() {
         for(int i = 0; i < KEY_BUFFER_SIZE; i++) {
             if(g_input.keys_pressed[i] == 0) {
                 g_input.keys_pressed[i] = (KeyboardKey)key;
-                TraceLog(LOG_INFO, "indexing key %i", i);
+                //TraceLog(LOG_INFO, "indexing key %i", i);
                 break;
             }
         }
