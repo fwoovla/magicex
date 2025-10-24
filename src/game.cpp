@@ -7,7 +7,7 @@ DebugData g_debug_data;
 //std::vector<MapData> g_maps_data;
 
 LDTKMaps g_ldtk_maps;
-std::vector<LDTKLevel> g_ldtk_levels;
+//std::vector<LDTKLevel> g_ldtk_levels;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
 
@@ -42,6 +42,7 @@ void Game::StartGame() {
     g_game_data.paused = false;
     g_game_data.current_scene_id = NO_SCENE;
     g_game_data.current_map_index = -1;
+    g_game_settings.show_debug = false;
 
     LoadResources();
     LoadGameData();
@@ -94,9 +95,11 @@ void Game::StartGame() {
         );
         EndDrawing();
 
-        //TraceLog(LOG_INFO, "dt %f", GetFrameTime());
-        //TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
-        //TraceLog(LOG_INFO, "fps %i\n", GetFPS());
+        if(g_game_settings.show_debug == true) {
+            TraceLog(LOG_INFO, "dt %f", GetFrameTime());
+            TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
+            TraceLog(LOG_INFO, "fps %i\n", GetFPS());
+        }
 
         if(WindowShouldClose()) {
             game_running = false;

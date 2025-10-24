@@ -118,7 +118,7 @@ struct LDTKLayerInstance {
     int64_t px_offset_y;
     bool visible;
     std::vector<nlohmann::json> optional_rules;
-    std::vector<nlohmann::json> int_grid_csv;
+    std::vector<int64_t> int_grid;
     std::vector<nlohmann::json> auto_layer_tiles;
     int64_t seed;
     nlohmann::json override_tileset_uid;
@@ -217,7 +217,7 @@ extern GameData g_game_data;
 extern LDTKMaps g_ldtk_maps;
 
 extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
-extern std::vector<LDTKLevel> g_ldtk_levels;
+//extern std::vector<LDTKLevel> g_ldtk_levels;
 
 
 
@@ -322,6 +322,7 @@ inline void LDTKLoadMaps (json &mj) {
             LDTKLevel this_level;
             
             this_level.identifier = mj["levels"][level]["identifier"];
+            
             this_level.bg_color = mj["levels"][level]["__bgColor"];
             this_level.world_x = mj["levels"][level]["worldX"];
             this_level.world_y = mj["levels"][level]["worldY"];
@@ -333,36 +334,54 @@ inline void LDTKLoadMaps (json &mj) {
 
                 LDTKLayerInstance this_layer;
 
-                this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
-                this_layer.tileset_def_uid = mj["levels"][level]["layerInstances"][layer]["__tilesetDefUid"];
-                this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
-                this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
+                this_layer.type = mj["levels"][level]["layerInstances"][layer]["__type"];
 
-                int size = mj["levels"][level]["layerInstances"][layer]["gridTiles"].size();
-                for (int i = 0; i < size; i++) {
-                    LDTKGridTile empty_tile;
-                    empty_tile.t = -1;
-                    this_layer.grid_tiles.push_back(empty_tile );
-                }
-                
+                if(this_layer.type == "IntGrid") {
+                    this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
+                    this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
+                    this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
+                    for (int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size(); _i++){
 
-                for( int tile = 0; tile < mj["levels"][level]["layerInstances"][layer]["gridTiles"].size(); tile++) {
-                    LDTKGridTile this_tile;
-                    this_tile.px.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["px"][0]);
-                    this_tile.px.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["px"][1]);
-                    this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][0]);
-                    this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][1]);
-                    this_tile.f = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["f"];
-                    this_tile.a = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["a"];
-                    this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
-                    this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
-
-                    int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
-                    this_layer.grid_tiles[tile] = this_tile;
-                    TraceLog(LOG_INFO, "tile loaded... index %i tile id %i  ", index, this_tile.t);
+                        this_layer.int_grid.push_back( mj["levels"][level]["layerInstances"][layer]["intGridCsv"][_i].get<int>());
+                        //TraceLog(LOG_INFO,"int grid %i %i %i", this_layer.int_grid.size(), _i, this_layer.int_grid[_i]);
+                    }
+                    TraceLog(LOG_INFO, "++++++COLLISION LAYER ADDED %i %i", this_layer.int_grid.size(),  mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
                 }
 
-                TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
+                if(this_layer.type == "Tiles") {
+
+                    this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
+                    this_layer.tileset_def_uid = mj["levels"][level]["layerInstances"][layer]["__tilesetDefUid"];
+                    this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
+                    this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
+
+                    int size = mj["levels"][level]["layerInstances"][layer]["gridTiles"].size();
+                    for (int i = 0; i < size; i++) {
+                        LDTKGridTile empty_tile;
+                        empty_tile.t = -1;
+                        this_layer.grid_tiles.push_back(empty_tile );
+                    }
+                    
+
+                    for( int tile = 0; tile < mj["levels"][level]["layerInstances"][layer]["gridTiles"].size(); tile++) {
+                        LDTKGridTile this_tile;
+                        this_tile.px.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["px"][0]);
+                        this_tile.px.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["px"][1]);
+                        this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][0]);
+                        this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][1]);
+                        this_tile.f = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["f"];
+                        this_tile.a = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["a"];
+                        this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
+                        this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
+
+                        int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
+                        this_layer.grid_tiles[tile] = this_tile;
+                        //TraceLog(LOG_INFO, "tile loaded... index %i tile id %i  ", index, this_tile.t);
+                    }
+
+                    TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
+                }
+
                 this_level.layer_instances.push_back(this_layer);
                 TraceLog(LOG_INFO, "++++++LAYERS FOUND %i/%i", this_level.layer_instances.size(), mj["levels"][level]["layerInstances"].size());
             }
@@ -431,6 +450,9 @@ inline int LDTKDrawMap(Vector2 focus_position) {
     int tilesheet_id = 0;
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
+        if(this_level->layer_instances[l].type == "IntGrid") {
+            break;
+        }
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
         for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
