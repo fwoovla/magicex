@@ -106,8 +106,8 @@ void PlayerCharacter::CheckInput() {
     //velocity = input_dir * speed;
     //TraceLog(LOG_INFO, "player speed : %0.04f", speed);
 
-    velocity = Vector2Lerp(velocity, input_dir * speed, .05);
-    if(abs(velocity.x) < 0.8f and abs(velocity.y) < 0.8f) {
+    velocity = Vector2Lerp(velocity, input_dir * speed, .15);
+    if(abs(velocity.x) < 4.0f and abs(velocity.y) < 4.0f) {
         velocity = {0,0};
     }
 }

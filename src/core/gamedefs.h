@@ -19,6 +19,14 @@ struct GameSettings {
     bool show_debug;
 };
 
+struct DebugData {
+    float tile_dt;
+    int tiles_drawn;
+};
+
+extern DebugData g_debug_data;
+
+
 struct PlayerInput {
     Vector2 screen_mouse_position;
     Vector2 world_mouse_position;

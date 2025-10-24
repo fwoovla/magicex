@@ -67,7 +67,7 @@ SCENE_ID GameScene::Update() {
 
 void GameScene::Draw() {
 
-    TraceLog(LOG_INFO, "game scene draw");
+    //TraceLog(LOG_INFO, "game scene draw");
     DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
     BeginMode2D(g_camera);
     tile_layer->Draw();

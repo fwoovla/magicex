@@ -223,8 +223,6 @@ extern std::vector<LDTKLevel> g_ldtk_levels;
 
 
 
-
-
 inline void LDTKLoadTileSets (json &mj);
 inline void LDTKLoadMaps (json &mj);
 
@@ -340,7 +338,7 @@ inline void LDTKLoadMaps (json &mj) {
                 this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
                 this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
 
-                int size = this_layer.c_wid * this_layer.c_hei;
+                int size = mj["levels"][level]["layerInstances"][layer]["gridTiles"].size();
                 for (int i = 0; i < size; i++) {
                     LDTKGridTile empty_tile;
                     empty_tile.t = -1;
@@ -360,7 +358,8 @@ inline void LDTKLoadMaps (json &mj) {
                     this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
 
                     int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
-                    this_layer.grid_tiles[index ] = this_tile;
+                    this_layer.grid_tiles[tile] = this_tile;
+                    TraceLog(LOG_INFO, "tile loaded... index %i tile id %i  ", index, this_tile.t);
                 }
 
                 TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
@@ -375,7 +374,10 @@ inline void LDTKLoadMaps (json &mj) {
 }
 
 
-inline void  LDTKDrawMap(Vector2 focus_position) {
+inline int LDTKDrawMap(Vector2 focus_position) {
+
+
+    int tiles_drawn = 0;
 
     int tile_size = g_ldtk_maps.default_grid_size ;
     float inv_tile_size = 1.0f/(float)tile_size;
@@ -393,9 +395,7 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
 
     //Vector2 center = {x_cam_offset * inv_tile_size, y_cam_offset * inv_tile_size};
     //TraceLog(LOG_INFO, "offset x:%i  y:%i \n", x_offset, y_offset); 
-    TraceLog(LOG_INFO, "center %0.2f  %0.2f \n", center.x, center.y); 
-
-
+    //TraceLog(LOG_INFO, "center %0.2f  %0.2f \n", center.x, center.y); 
 
     LDTKLevel *this_level = &g_ldtk_maps.levels[g_game_data.current_map_index];
 
@@ -407,7 +407,7 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
         x_min = 0;
     }
         
-    int x_max = center.x + (x_offset + 1);
+    int x_max = center.x + (x_offset + 2);
     if(x_max > map_width) {
         x_max = map_width;
     } 
@@ -417,14 +417,14 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
         y_min = 0;
     }
                 
-    int y_max = center.y + (y_offset + 1);
+    int y_max = center.y + (y_offset + 2);
     if(y_max > map_height) {
         y_max = map_height;
-    } 
-                    
-    //TraceLog(LOG_INFO, "x max: %i  y max %i \n", x_max, y_max);           
+    }
 
-    int tiles_drawn = 0;
+    //TraceLog(LOG_INFO, "x min - x_max %i     y min - y_max %i", x_max-x_min, y_max-y_min);
+    //TraceLog(LOG_INFO, "x min: %i  x max %i", x_min, x_max); 
+    //TraceLog(LOG_INFO, "y min: %i  y max %i \n", y_min, y_max);         
 
     //invert layers for drawing
 
@@ -432,49 +432,47 @@ inline void  LDTKDrawMap(Vector2 focus_position) {
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
-        //TraceLog(LOG_INFO, "tileset id %i  ", tilesheet_id);
+        for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
-        int index = 0;   
-        for (int y = y_min; y < y_max; y++) {
-            for (int x = x_min; x < x_max; x++) {
+            LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];
 
-                index = (y) * map_width + (x);
- 
+            //TraceLog(LOG_INFO, "GRID TILES||| tile index:  %i  id %i", tile, this_tile->t);
 
-                 if(index >= this_level->layer_instances[l].grid_tiles.size()) {
-                    break;
-                }
+            int tile_id = this_tile->t;
 
-                LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[index];
-                int tile_id = this_tile->t;
-                //TraceLog(LOG_INFO, "index %i tile id %i  ", index, tile_id);
-                    
-                if(tile_id != -1) {
-                    Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
+            int tile_x = this_tile->px[0] * inv_tile_size;
+            int tile_y = this_tile->px[1] * inv_tile_size;
 
-                    Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
+            if(tile_id == -1) {
+                TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %i  y %i", tile_x, tile_y);
+                break;
+            }
 
-                    Color color = WHITE;
+            //TraceLog(LOG_INFO, "GRID TILES||| is valid tile.... x:  %i  y %i", tile_x, tile_y);
 
+            if((tile_x >= x_min) and (tile_x <= x_max) and (tile_y >= y_min) and (tile_y <= y_max)) {
 
-                    DrawTexturePro(
-                        g_ldtk_tilesheets[tilesheet_id].texture,
-                        {atlas_pos.x, atlas_pos.y, (float)tile_size, (float)tile_size},
-                        {(float)tile_pos.x, (float)tile_pos.y,(float)tile_size, (float )tile_size},
-                        {0,0},
-                        0.0,
-                        color
-                    ); 
+                Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
+                Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
 
-                }
+                Color color = WHITE;
+
+                //TraceLog(LOG_INFO, "DRAWING TILE||| tile index:  %i  id %i", tile, this_tile->t);
+
+                DrawTexturePro(
+                    g_ldtk_tilesheets[tilesheet_id].texture,
+                    {atlas_pos.x, atlas_pos.y, (float)tile_size, (float)tile_size},
+                    {(float)tile_pos.x, (float)tile_pos.y,(float)tile_size, (float )tile_size},
+                    {0,0},
+                    0.0,
+                    color
+                );
                 tiles_drawn++;
             }
-            
+
         }
     }
-    //TraceLog(LOG_INFO, "ldtk draw");
+    return tiles_drawn;
 }
 
-inline void  LDTKDrawMapFree() {
 
-}

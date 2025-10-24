@@ -3,14 +3,13 @@
 std::unordered_map<int, PlayerData> g_class_data;
 
 GameData g_game_data;
+DebugData g_debug_data;
 //std::vector<MapData> g_maps_data;
 
 LDTKMaps g_ldtk_maps;
 std::vector<LDTKLevel> g_ldtk_levels;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
-
-
 
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
@@ -66,7 +65,11 @@ void Game::StartGame() {
       
     render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
 
+
+    SetTargetFPS(60);
+
     scene_manager.Init();
+
 
     while(game_running) {
 
@@ -90,6 +93,10 @@ void Game::StartGame() {
             (Vector2){0, 0}, 0.0f, WHITE
         );
         EndDrawing();
+
+        //TraceLog(LOG_INFO, "dt %f", GetFrameTime());
+        //TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
+        //TraceLog(LOG_INFO, "fps %i\n", GetFPS());
 
         if(WindowShouldClose()) {
             game_running = false;

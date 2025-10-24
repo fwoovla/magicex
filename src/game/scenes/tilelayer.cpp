@@ -20,6 +20,13 @@ void TileLayer::Update() {
 
 void TileLayer::Draw() {
 
-    LDTKDrawMap(g_current_player->position);
+    double time = GetTime();
+
+    g_debug_data.tiles_drawn =  LDTKDrawMap(g_current_player->position);
+
+    g_debug_data.tile_dt = GetTime() - time;
+
+    //TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
+    //TraceLog(LOG_INFO, "tiles drawn %i", g_debug_data.tiles_drawn);
 
 }
