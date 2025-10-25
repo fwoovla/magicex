@@ -54,17 +54,17 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     int top_i = (c_pos.y - c_rad) * inv_tile_size;
     int bottom_i = (c_pos.y + c_rad) * inv_tile_size;
 
-    TraceLog(LOG_INFO, "checker pos %i, %i", c_pos_x_i, c_pos_y_i);
+    //TraceLog(LOG_INFO, "checker pos %i, %i", c_pos_x_i, c_pos_y_i);
 
     //check x direction
     //left
     int index = c_pos_y_i * map_width + left_i;
     int value = col_layer->int_grid[index];
-    TraceLog(LOG_INFO, "checking l %i, %i  | index %i   | value %i", left_i, c_pos_y_i , index, value);
+    //TraceLog(LOG_INFO, "checking l %i, %i  | index %i   | value %i", left_i, c_pos_y_i , index, value);
     
     if(value == 1) {
         if(CheckCollisionCircleRec( c_pos, c_rad, { (float)left_i * tile_size, (float)c_pos_y_i * tile_size, (float)tile_size, (float)tile_size } )) {
-            TraceLog(LOG_INFO, "COLLISON LEFT");
+            //TraceLog(LOG_INFO, "COLLISON LEFT");
             collision_result.collision_dir.x = -1;
             collided =  true;
         }
@@ -75,11 +75,11 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     index = c_pos_y_i * map_width + right_i;
     value = col_layer->int_grid[index];
 
-    TraceLog(LOG_INFO, "checking r %i, %i  | index %i   | value %i", right_i, c_pos_y_i , index, value);
+    //TraceLog(LOG_INFO, "checking r %i, %i  | index %i   | value %i", right_i, c_pos_y_i , index, value);
 
     if(value == 1) {
         if(CheckCollisionCircleRec( c_pos, c_rad, { (float)right_i * tile_size, (float)c_pos_y_i * tile_size, (float)tile_size, (float)tile_size } )) {
-            TraceLog(LOG_INFO, "COLLISON RIGHT");
+            //TraceLog(LOG_INFO, "COLLISON RIGHT");
             collision_result.collision_dir.x = 1;
             collided =  true;
         }
@@ -91,11 +91,11 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     index = top_i * map_width + c_pos_x_i;
     value = col_layer->int_grid[index];
 
-    TraceLog(LOG_INFO, "checking t %i, %i  | index %i   | value %i", c_pos_x_i, top_i , index, value);
+    //TraceLog(LOG_INFO, "checking t %i, %i  | index %i   | value %i", c_pos_x_i, top_i , index, value);
 
     if(value == 1) {
         if(CheckCollisionCircleRec( c_pos, c_rad, { (float)c_pos_x_i * tile_size, (float)top_i * tile_size, (float)tile_size, (float)tile_size } )) {
-            TraceLog(LOG_INFO, "COLLISON TOP");
+            //TraceLog(LOG_INFO, "COLLISON TOP");
             collision_result.collision_dir.y = -1;
             collided =  true;
         }
@@ -105,20 +105,16 @@ inline bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collis
     index = bottom_i * map_width + c_pos_x_i;
     value = col_layer->int_grid[index];
     
-    TraceLog(LOG_INFO, "checking b %i, %i  | index %i   | value %i", c_pos_x_i, bottom_i, index, value);
+    //TraceLog(LOG_INFO, "checking b %i, %i  | index %i   | value %i", c_pos_x_i, bottom_i, index, value);
 
     if(value == 1) {
         if(CheckCollisionCircleRec( c_pos, c_rad, { (float)c_pos_x_i * tile_size, (float)bottom_i * tile_size, (float)tile_size, (float)tile_size } )) {
-            TraceLog(LOG_INFO, "COLLISON BOTTOM");
+            //TraceLog(LOG_INFO, "COLLISON BOTTOM");
             collision_result.collision_dir.y = 1;
             collided =  true;
         }
     }
 
-
-    
-    TraceLog(LOG_INFO, "\n");
-    
-
+    //TraceLog(LOG_INFO, "\n");
     return collided;
 }

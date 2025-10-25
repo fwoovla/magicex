@@ -40,8 +40,7 @@ void PlayerCharacter::Update() {
         result.collision_dir = {0,0};
 
         if(CheckCollisionWithLevel(this, result, 2) == true) {
-            TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
-
+            //TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
             if(result.collision_dir.x != 0) {
                 position.x = previous_position.x;
                 velocity.x = 0.0f;
@@ -50,10 +49,6 @@ void PlayerCharacter::Update() {
                 position.y = previous_position.y;
                 velocity.y = 0.0f;
             }
-
-            //position = previous_position;
-            //velocity = {0,0};
-
         }
 
        if(velocity.x < -1) {
