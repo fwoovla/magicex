@@ -4,15 +4,11 @@
 #define MIN_ZOOM 0.5f
 #define ZOOM_STEP 0.05f
 
-/* std::vector<BaseEntity *> active_entity_list;
-//int *level_data_array;
-int g_map_width;
-int g_map_height;
-Camera2D g_camera;
-PlayerInput g_input; */
-
 
 GameScene::GameScene(int _map_index) {
+    ClearLevelData();
+    LoadLevelData();
+
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
@@ -27,7 +23,8 @@ GameScene::GameScene(int _map_index) {
     character_menu = new CharacterMenu();
 
     //DL_Add(active_entity_list, g_current_player );
-    g_current_player->position = {100, 100};
+    g_current_player->position = g_level_data.spawn_position;
+    //g_current_player->position = {100, 100};
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -103,32 +100,34 @@ void GameScene::HandleCamera() {
         g_camera.zoom = MAX_ZOOM;
     }
 
-    float x_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
-    float y_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
+    CalculateViewport();
+    
+    float x_offset_f = g_viewport.x_offset_f;
+    float y_offset_f = g_viewport.y_offset_f;
 
 
     //int tile_size = g_ldtk_maps.default_grid_size;
 
-    g_camera.target =  Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
+    g_camera.target =  Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 
-    if(g_current_player->position.x - x_offset < 0) {
-        float x_dif = x_offset - g_current_player->position.x;
+    if(g_current_player->position.x - x_offset_f < 0) {
+        float x_dif = x_offset_f - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
     }
-    else if(g_current_player->position.x + x_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid) {
-        float x_dif = (x_offset + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid;
+    else if(g_current_player->position.x + x_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid) {
+        float x_dif = (x_offset_f + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
         g_camera.target.x = g_camera.target.x - x_dif;
     }
 
-    if(g_current_player->position.y - y_offset < 0) {
-        float y_dif = y_offset - g_current_player->position.y;
+    if(g_current_player->position.y - y_offset_f < 0) {
+        float y_dif = y_offset_f - g_current_player->position.y;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y + y_dif;
     }
-    else if(g_current_player->position.y + y_offset > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei) {
-        float y_dif = (y_offset + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei;
+    else if(g_current_player->position.y + y_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei) {
+        float y_dif = (y_offset_f + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
     }

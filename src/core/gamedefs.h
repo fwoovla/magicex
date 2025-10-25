@@ -66,6 +66,24 @@ enum SCENE_ID {
 };
 
 
+struct Viewport {
+    int tile_size;
+    int x_offset_i;
+    int y_offset_i;
+    int x_max;
+    int x_min;
+    int y_max;
+    int y_min;
+    float x_offset_f;
+    float y_offset_f;
+    float inv_tile_size;
+    Vector2 center_i;
+    Vector2 center_f;
+
+
+};
+
+
 extern GameSettings g_game_settings;
 //extern int *level_data_array;
 //extern GameSettings g_game_settings;
@@ -78,12 +96,15 @@ extern int g_map_width;
 extern int g_map_height;
 extern Camera2D g_camera;
 extern PlayerInput g_input;
+extern Viewport g_viewport;
 
 #include "ldtk.h"
 #include "resources.h"
 #include "data.h"
+#include "viewport.h"
 #include "input.h"
 #include "utils.h"
+#include "areas.h"
 #include "button.h"
 #include "sprite.h"
 #include "label.h"

@@ -248,7 +248,8 @@ obj/Debug/splashscene.o: src/game/scenes/splashscene.cpp \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/game/scenes/../../core/resources.h src/game/scenes/../../core/data.h \
- src/game/scenes/../../core/input.h src/game/scenes/../../core/utils.h \
+ src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
+ src/game/scenes/../../core/utils.h src/game/scenes/../../core/areas.h \
  src/game/scenes/../../core/button.h src/game/scenes/../../core/sprite.h \
  src/game/scenes/../../core/label.h \
  src/game/scenes/../../core/baseentity.h \
@@ -577,8 +578,10 @@ src/game/scenes/../../core/json.hpp:
 /usr/include/c++/13/any:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/data.h:
+src/game/scenes/../../core/viewport.h:
 src/game/scenes/../../core/input.h:
 src/game/scenes/../../core/utils.h:
+src/game/scenes/../../core/areas.h:
 src/game/scenes/../../core/button.h:
 src/game/scenes/../../core/sprite.h:
 src/game/scenes/../../core/label.h:

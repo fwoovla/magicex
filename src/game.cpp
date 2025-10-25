@@ -11,6 +11,7 @@ LDTKMaps g_ldtk_maps;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
 
+LevelData g_level_data;
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
@@ -35,6 +36,8 @@ int g_map_width;
 int g_map_height;
 Camera2D g_camera;
 PlayerInput g_input;
+
+Viewport g_viewport;
 
 
 void Game::StartGame() {

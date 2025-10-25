@@ -7,6 +7,9 @@
 
 
 ShelterScene::ShelterScene() {
+    ClearLevelData();
+    LoadLevelData();
+
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
    
@@ -25,7 +28,7 @@ ShelterScene::ShelterScene() {
     show_map_menu = false;
 
     DL_Add(active_entity_list, g_current_player );
-    g_current_player->position = {100, 100};
+    g_current_player->position = g_level_data.spawn_position;
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -33,6 +36,8 @@ ShelterScene::ShelterScene() {
     g_camera.rotation = 0.0f;
     g_camera.zoom = 1.5f; 
     g_world2screen = (g_scale * g_camera.zoom);
+
+    
 
 }
 
@@ -110,12 +115,13 @@ void ShelterScene::HandleCamera() {
         g_camera.zoom = MAX_ZOOM;
     }
 
-    float x_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
-    float y_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
+    CalculateViewport();
+
+    float x_offset_f = g_viewport.x_offset_f;
+    float y_offset_f = g_viewport.y_offset_f;
 
 
-
-    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset, y_offset} );
+    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 
 
 }

@@ -100,6 +100,33 @@ struct LDTKGridTile {
     int64_t a;
 };
 
+
+struct LDTKFieldInstance {
+    std::string identifier;
+    std::string type;
+    std::optional<bool> value;
+    nlohmann::json tile;
+    int64_t def_uid;
+};
+
+struct LDTKEntityInstance {
+    std::string identifier;
+    std::vector<int64_t> grid;
+    std::vector<int64_t> pivot;
+    std::vector<nlohmann::json> tags;
+    nlohmann::json tile;
+    std::string smart_color;
+    std::string iid;
+    int64_t width;
+    int64_t height;
+    int64_t def_uid;
+    std::vector<int64_t> px;
+    std::vector<LDTKFieldInstance> field_instances;
+    int64_t world_x;
+    int64_t world_y;
+};
+
+
 struct LDTKLayerInstance {
     std::string identifier;
     std::string type;
@@ -123,7 +150,7 @@ struct LDTKLayerInstance {
     int64_t seed;
     nlohmann::json override_tileset_uid;
     std::vector<LDTKGridTile> grid_tiles;
-    std::vector<nlohmann::json> entity_instances;
+    std::vector<LDTKEntityInstance> entity_instances;
 };
 
 struct LDTKLevel {
@@ -334,6 +361,7 @@ inline void LDTKLoadMaps (json &mj) {
 
                 LDTKLayerInstance this_layer;
 
+                this_layer.identifier = mj["levels"][level]["layerInstances"][layer]["__identifier"];
                 this_layer.type = mj["levels"][level]["layerInstances"][layer]["__type"];
 
                 if(this_layer.type == "IntGrid") {
@@ -374,7 +402,7 @@ inline void LDTKLoadMaps (json &mj) {
                         this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
                         this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
 
-                        int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
+                        //int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
                         this_layer.grid_tiles[tile] = this_tile;
                         //TraceLog(LOG_INFO, "tile loaded... index %i tile id %i  ", index, this_tile.t);
                     }
@@ -382,6 +410,30 @@ inline void LDTKLoadMaps (json &mj) {
                     TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
                 }
 
+                if(this_layer.type == "Entities") {
+
+                    this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
+                    this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
+                    this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
+
+                    for (int entity = 0; entity < mj["levels"][level]["layerInstances"][layer]["entityInstances"].size(); entity++) {
+                        LDTKEntityInstance new_entity;
+                        new_entity.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["__identifier"];
+                        new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][0]);
+                        new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][1]);
+                        new_entity.width = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
+                        new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
+
+                        for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                            LDTKFieldInstance new_field;
+                            new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
+                            new_entity.field_instances.push_back(new_field);
+                        }
+                        TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FOUND %s", new_entity.identifier.c_str());
+                        this_layer.entity_instances.push_back(new_entity);
+                        TraceLog(LOG_INFO, "++++++--------------------------------ENTITY ADDED %i", this_layer.entity_instances.size());
+                    }
+                }
                 this_level.layer_instances.push_back(this_layer);
                 TraceLog(LOG_INFO, "++++++LAYERS FOUND %i/%i", this_level.layer_instances.size(), mj["levels"][level]["layerInstances"].size());
             }
@@ -398,56 +450,10 @@ inline int LDTKDrawMap(Vector2 focus_position) {
 
     int tiles_drawn = 0;
 
-    int tile_size = g_ldtk_maps.default_grid_size ;
-    float inv_tile_size = 1.0f/(float)tile_size;
-    
-    int x_offset = ((g_resolution.x * 0.5f) / g_camera.zoom) * inv_tile_size;
-    //x_offset--;
-    int y_offset = ((g_resolution.y * 0.5f) / g_camera.zoom) * inv_tile_size;
-    //y_offset--;
-
-    float x_cam_offset = (g_resolution.x * 0.5f) / g_camera.zoom;
-    float y_cam_offset = (g_resolution.y * 0.5f) / g_camera.zoom;
-
-    //Vector2 center = {focus_position.x * inv_tile_size, focus_position.y * inv_tile_size};
-    Vector2 center = Vector2Add(g_camera.target, {x_cam_offset, y_cam_offset} ) * inv_tile_size;
-
-    //Vector2 center = {x_cam_offset * inv_tile_size, y_cam_offset * inv_tile_size};
-    //TraceLog(LOG_INFO, "offset x:%i  y:%i \n", x_offset, y_offset); 
-    //TraceLog(LOG_INFO, "center %0.2f  %0.2f \n", center.x, center.y); 
+    //invert layers for drawing
+    int tilesheet_id = 0;
 
     LDTKLevel *this_level = &g_ldtk_maps.levels[g_game_data.current_map_index];
-
-    int64_t map_width = this_level->px_wid * inv_tile_size;
-    int64_t map_height = this_level->px_hei * inv_tile_size;
-    
-    int x_min = center.x - (x_offset + 1);
-    if(x_min < 0) {
-        x_min = 0;
-    }
-        
-    int x_max = center.x + (x_offset + 2);
-    if(x_max > map_width) {
-        x_max = map_width;
-    } 
-            
-    int y_min = center.y - (y_offset + 1);
-    if(y_min < 0) {
-        y_min = 0;
-    }
-                
-    int y_max = center.y + (y_offset + 2);
-    if(y_max > map_height) {
-        y_max = map_height;
-    }
-
-    //TraceLog(LOG_INFO, "x min - x_max %i     y min - y_max %i", x_max-x_min, y_max-y_min);
-    //TraceLog(LOG_INFO, "x min: %i  x max %i", x_min, x_max); 
-    //TraceLog(LOG_INFO, "y min: %i  y max %i \n", y_min, y_max);         
-
-    //invert layers for drawing
-
-    int tilesheet_id = 0;
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         if(this_level->layer_instances[l].type == "IntGrid") {
@@ -462,8 +468,8 @@ inline int LDTKDrawMap(Vector2 focus_position) {
 
             int tile_id = this_tile->t;
 
-            int tile_x = this_tile->px[0] * inv_tile_size;
-            int tile_y = this_tile->px[1] * inv_tile_size;
+            int tile_x = this_tile->px[0] * g_viewport.inv_tile_size;
+            int tile_y = this_tile->px[1] * g_viewport.inv_tile_size;
 
             if(tile_id == -1) {
                 TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %i  y %i", tile_x, tile_y);
@@ -472,7 +478,7 @@ inline int LDTKDrawMap(Vector2 focus_position) {
 
             //TraceLog(LOG_INFO, "GRID TILES||| is valid tile.... x:  %i  y %i", tile_x, tile_y);
 
-            if((tile_x >= x_min) and (tile_x <= x_max) and (tile_y >= y_min) and (tile_y <= y_max)) {
+            if((tile_x >= g_viewport.x_min) and (tile_x <= g_viewport.x_max) and (tile_y >= g_viewport.y_min) and (tile_y <= g_viewport.y_max)) {
 
                 Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
                 Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
@@ -483,8 +489,8 @@ inline int LDTKDrawMap(Vector2 focus_position) {
 
                 DrawTexturePro(
                     g_ldtk_tilesheets[tilesheet_id].texture,
-                    {atlas_pos.x, atlas_pos.y, (float)tile_size, (float)tile_size},
-                    {(float)tile_pos.x, (float)tile_pos.y,(float)tile_size, (float )tile_size},
+                    {atlas_pos.x, atlas_pos.y, (float)g_viewport.tile_size, (float)g_viewport.tile_size},
+                    {(float)tile_pos.x, (float)tile_pos.y,(float)g_viewport.tile_size, (float )g_viewport.tile_size},
                     {0,0},
                     0.0,
                     color

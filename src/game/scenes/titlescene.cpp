@@ -63,6 +63,7 @@ void TitleScene::OnQuitPressed() {
 void TitleScene::OnContinuePressed() {
     LoadGame();
     g_current_player = new PlayerCharacter({0,0});
+    //DL_Add(active_entity_list, g_current_player );
     //g_game_data.is_new_player = false;
     return_scene = SHELTER_SCENE;
     g_game_data.current_map_index = g_game_data.shelter_map_index;

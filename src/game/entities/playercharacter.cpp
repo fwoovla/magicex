@@ -17,7 +17,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     rotation = 0.0f;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 24.0f, 0.10f);
-    collision_radius = (sprite.size.x + 1) /4;
+    collision_radius = 5;
     centered_offset = {0,5};
     collided = false;
 }
@@ -37,9 +37,22 @@ void PlayerCharacter::Update() {
         SetAmination(sprite, RUN);
 
         CollisionResult result;
+        result.collision_dir = {0,0};
+
         if(CheckCollisionWithLevel(this, result, 2) == true) {
-            //TraceLog(LOG_INFO, "COLLIDED");
-            position = previous_position;
+            TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
+
+            if(result.collision_dir.x != 0) {
+                position.x = previous_position.x;
+                velocity.x = 0.0f;
+            }
+            if(result.collision_dir.y != 0) {
+                position.y = previous_position.y;
+                velocity.y = 0.0f;
+            }
+
+            //position = previous_position;
+            //velocity = {0,0};
 
         }
 
@@ -53,7 +66,6 @@ void PlayerCharacter::Update() {
     else {
         SetAmination(sprite, IDLE);
     }
-
     sprite.position = position;
 }
 
@@ -63,7 +75,7 @@ void PlayerCharacter::Draw() {
     DrawSprite(sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
-        DrawCircleV(position, 1, WHITE);   
+        DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);   
     }
 }
 
@@ -95,20 +107,24 @@ void PlayerCharacter::CheckInput() {
     if(g_input.key_right) {
         input_dir.x = 1;
     }
+    
     input_dir = Vector2Normalize(input_dir);
 
     float speed = g_player_data.base_speed;
 
     if(g_input.key_sprint) {
-        speed = speed + (speed * 1.5);
+        speed = speed + (speed * 1.2);
     }
 
     //velocity = input_dir * speed;
     //TraceLog(LOG_INFO, "player speed : %0.04f", speed);
 
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
-    if(abs(velocity.x) < 4.0f and abs(velocity.y) < 4.0f) {
-        velocity = {0,0};
+    if(abs(velocity.x) < 4.0f) {
+        velocity.x = {0.0};
+    }
+    if (abs(velocity.y) < 4.0f) {
+        velocity.y = {0.0};
     }
 }
 

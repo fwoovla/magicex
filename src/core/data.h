@@ -44,6 +44,11 @@ extern PlayerData g_player_data;
 
 extern PlayerData g_save_data;
 
+struct LevelData {
+    Vector2 spawn_position;
+};
+
+extern LevelData g_level_data;
 
 
 inline void LoadGameData() {
@@ -162,3 +167,26 @@ inline void LoadGame() {
 }
 
 
+inline void ClearLevelData() {
+    g_level_data.spawn_position = {0,0};
+}
+
+inline void LoadLevelData() {
+    LDTKLevel this_level = g_ldtk_maps.levels[g_game_data.current_map_index];
+
+    TraceLog(LOG_INFO, "LOADING LEVEL DATA  %s", this_level.identifier.c_str());
+
+    for(int layer_index = 0; layer_index < this_level.layer_instances.size(); layer_index++) {
+        if(this_level.layer_instances[layer_index].type == "Entities") {
+            for(int entity_index = 0; entity_index < this_level.layer_instances[layer_index].entity_instances.size(); entity_index++) {
+                if(this_level.layer_instances[layer_index].entity_instances[entity_index].identifier == "SpawnPoint") {
+                    TraceLog(LOG_INFO, "SPAWN POINT FOUND");
+                    Vector2 sp = {};
+                    sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
+                    sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
+                    g_level_data.spawn_position = sp;
+                }
+            }
+        }
+    }
+}
