@@ -44,8 +44,16 @@ extern PlayerData g_player_data;
 
 extern PlayerData g_save_data;
 
+
+struct LevelTransitionData {
+    std::string dest_string;
+    Vector2 position_i;
+    Vector2 position_f;
+};
+
 struct LevelData {
     Vector2 spawn_position;
+    std::vector<LevelTransitionData> level_transitions;  //
 };
 
 extern LevelData g_level_data;
@@ -185,6 +193,14 @@ inline void LoadLevelData() {
                     sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
                     sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
                     g_level_data.spawn_position = sp;
+                }
+
+                if(this_level.layer_instances[layer_index].entity_instances[entity_index].identifier == "LevelTransition") {
+                    LevelTransitionData new_transition;
+                    TraceLog(LOG_INFO, "TRANSITION POINT FOUND");
+
+                    new_transition.dest_string = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_s;
+                    TraceLog(LOG_INFO, "TRANSITION DATA ADDED, %s", new_transition.dest_string.c_str());
                 }
             }
         }

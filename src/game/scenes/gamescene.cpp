@@ -14,7 +14,6 @@ GameScene::GameScene(int _map_index) {
     character_menu_visible = false;
 
     tile_layer = new TileLayer();
-    //tile_layer->SetTiles( g_tile_sheets[TS_FOREST], _map_index);
     
     ui_layer = new GameUILayer();
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
@@ -22,9 +21,7 @@ GameScene::GameScene(int _map_index) {
 
     character_menu = new CharacterMenu();
 
-    //DL_Add(active_entity_list, g_current_player );
     g_current_player->position = g_level_data.spawn_position;
-    //g_current_player->position = {100, 100};
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -32,8 +29,6 @@ GameScene::GameScene(int _map_index) {
     g_camera.rotation = 0.0f;
     g_camera.zoom = 1.5f; 
     g_world2screen = (g_scale * g_camera.zoom);
-    
-    //UnloadImage(level_image);
 }
 
 
@@ -46,10 +41,6 @@ SCENE_ID GameScene::Update() {
     ui_layer->Update();
     DL_Update(active_entity_list);
     HandleCamera();
-    
-/*     if(g_input.keys_pressed[0] == KEY_SPACE) {
-        return_scene = END_SCENE;
-    } */
     
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
@@ -106,7 +97,6 @@ void GameScene::HandleCamera() {
     float y_offset_f = g_viewport.y_offset_f;
 
 
-    //int tile_size = g_ldtk_maps.default_grid_size;
 
     g_camera.target =  Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 
@@ -139,8 +129,6 @@ void GameScene::HandleCamera() {
 GameScene::~GameScene() {
     delete ui_layer;
     delete tile_layer;
-    //delete level_data_array;
-    //UnloadTexture(ground_tiles);
     DL_Clear(active_entity_list);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }

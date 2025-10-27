@@ -103,10 +103,8 @@ struct LDTKGridTile {
 
 struct LDTKFieldInstance {
     std::string identifier;
-    std::string type;
-    std::optional<bool> value;
-    nlohmann::json tile;
-    int64_t def_uid;
+    std::string value_s;
+    
 };
 
 struct LDTKEntityInstance {
@@ -325,6 +323,10 @@ inline void LDTKLoadTileSets(json &mj) {
 
 inline void LDTKLoadMaps (json &mj) {
 
+    TraceLog(LOG_INFO, "loading maps data");
+
+
+ 
 
     g_ldtk_maps.default_grid_size = mj["defaultGridSize"];
 
@@ -424,10 +426,14 @@ inline void LDTKLoadMaps (json &mj) {
                         new_entity.width = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                         new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
 
-                        for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                        if(new_entity.identifier == "LevelTransition") {
                             LDTKFieldInstance new_field;
-                            new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
-                            new_entity.field_instances.push_back(new_field);
+
+                            for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                                new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
+                                new_field.value_s = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
+                                new_entity.field_instances.push_back(new_field);
+                            }
                         }
                         TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FOUND %s", new_entity.identifier.c_str());
                         this_layer.entity_instances.push_back(new_entity);
@@ -441,7 +447,7 @@ inline void LDTKLoadMaps (json &mj) {
             g_ldtk_maps.levels.push_back(this_level);
             TraceLog(LOG_INFO, "++++++LEVEL ADDED %i", g_ldtk_maps.levels.size());
         }
-    }
+    } 
 }
 
 

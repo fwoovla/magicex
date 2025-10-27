@@ -22,7 +22,7 @@ MapMenu::MapMenu() {
 
 
     for (int level = 0; level < level_count; level++) {
-        TraceLog(LOG_INFO, "map name: %s", g_ldtk_maps.levels[level].identifier.c_str()) ;//    g_maps_data[i].map_path.c_str());
+        //TraceLog(LOG_INFO, "map name: %s", g_ldtk_maps.levels[level].identifier.c_str()) ;//    g_maps_data[i].map_path.c_str());
 
         std::string level_name = g_ldtk_maps.levels[level].identifier.c_str();
 
