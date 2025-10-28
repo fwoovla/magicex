@@ -175,34 +175,8 @@ inline void LoadGame() {
 }
 
 
-inline void ClearLevelData() {
-    g_level_data.spawn_position = {0,0};
-}
+void ClearLevelData();
 
-inline void LoadLevelData() {
-    LDTKLevel this_level = g_ldtk_maps.levels[g_game_data.current_map_index];
+void LoadLevelData();
 
-    TraceLog(LOG_INFO, "LOADING LEVEL DATA  %s", this_level.identifier.c_str());
 
-    for(int layer_index = 0; layer_index < this_level.layer_instances.size(); layer_index++) {
-        if(this_level.layer_instances[layer_index].type == "Entities") {
-            for(int entity_index = 0; entity_index < this_level.layer_instances[layer_index].entity_instances.size(); entity_index++) {
-                if(this_level.layer_instances[layer_index].entity_instances[entity_index].identifier == "SpawnPoint") {
-                    TraceLog(LOG_INFO, "SPAWN POINT FOUND");
-                    Vector2 sp = {};
-                    sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
-                    sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
-                    g_level_data.spawn_position = sp;
-                }
-
-                if(this_level.layer_instances[layer_index].entity_instances[entity_index].identifier == "LevelTransition") {
-                    LevelTransitionData new_transition;
-                    TraceLog(LOG_INFO, "TRANSITION POINT FOUND");
-
-                    new_transition.dest_string = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_s;
-                    TraceLog(LOG_INFO, "TRANSITION DATA ADDED, %s", new_transition.dest_string.c_str());
-                }
-            }
-        }
-    }
-}

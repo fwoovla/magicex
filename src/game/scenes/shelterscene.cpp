@@ -9,6 +9,7 @@
 ShelterScene::ShelterScene() {
     ClearLevelData();
     LoadLevelData();
+    InstanceLevelObjects();
 
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
@@ -55,6 +56,7 @@ SCENE_ID ShelterScene::Update() {
 
     //DL_Update(active_entity_list);
     DL_Update(active_entity_list);
+    UpdateGameAreas();
     HandleCamera();
 
     return return_scene;
@@ -67,7 +69,8 @@ void ShelterScene::Draw() {
     BeginMode2D(g_camera);
     tile_layer->Draw();
     DL_Draw(active_entity_list);
-
+    
+    DrawGameAreas(BLUE);
     EndMode2D();
     
     if(show_map_menu == true) {

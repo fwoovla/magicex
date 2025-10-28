@@ -110,3 +110,22 @@ void SceneManager::OnBackToMenuPressed() {
     g_game_data.paused = false;
     ChangeSceneTo(TITLE_SCENE);
 }
+
+
+void InstanceLevelObjects() {
+    TraceLog(LOG_INFO, "instacing game objects");
+
+
+    for(int t_index = 0; t_index < g_level_data.level_transitions.size(); t_index++) {
+        Vector2 t_posisition = g_level_data.level_transitions[t_index].position_i;
+
+        Area new_area;
+        new_area.position = t_posisition;
+        new_area.size = g_ldtk_maps.default_grid_size;
+
+        g_game_areas.push_back(new_area);
+    }
+
+
+
+}

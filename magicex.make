@@ -78,8 +78,10 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/areas.o
 GENERATED += $(OBJDIR)/baseunit.o
 GENERATED += $(OBJDIR)/charactermenu.o
+GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/game.o
@@ -99,8 +101,10 @@ GENERATED += $(OBJDIR)/tilelayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/utils.o
+OBJECTS += $(OBJDIR)/areas.o
 OBJECTS += $(OBJDIR)/baseunit.o
 OBJECTS += $(OBJDIR)/charactermenu.o
+OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/game.o
@@ -187,6 +191,12 @@ $(OBJDIR)/utils.o: src/core/utils.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/game.o: src/game.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/areas.o: src/game/areas.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/data.o: src/game/data.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/baseunit.o: src/game/entities/baseunit.cpp

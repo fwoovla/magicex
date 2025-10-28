@@ -19,7 +19,7 @@ ShelterUILayer::ShelterUILayer() {
 ShelterUILayer::~ShelterUILayer() {
     //UnloadSound(button_sound);
     //delete map_menu;
-    TraceLog(LOG_INFO, "UI DESTRUCTOR:  GAME UI");
+    TraceLog(LOG_INFO, "UI DESTRUCTOR:  SHELTER UI");
 }
 
 void ShelterUILayer::Draw() {

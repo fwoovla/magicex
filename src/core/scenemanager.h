@@ -2,6 +2,10 @@
 
 #include "gamedefs.h"
 
+void InstanceLevelObjects();
+
+
+
 class SceneManager{
     public:
     void Init();
@@ -9,6 +13,8 @@ class SceneManager{
     void UpdateScene();
     void DrawScene();
     void ChangeSceneTo(SCENE_ID new_scene);
+
+    
     void OnPausePressed();
     void OnSavePressed();
     void OnBackToMenuPressed();
