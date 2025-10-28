@@ -28,6 +28,10 @@ void SceneManager::UpdateScene()
     if(g_input.keys_pressed[0] == KEY_P) {
         g_game_data.paused = !g_game_data.paused;    
     }
+
+    if(g_input.keys_pressed[0] == KEY_TAB) {
+        g_game_settings.show_debug = !g_game_settings.show_debug;
+    }
 }
 
 
@@ -80,7 +84,7 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
             break;
 
         case GAME_SCENE:
-            current_scene = new GameScene(g_game_data.current_map_index);
+            current_scene = new GameScene();
             break;
 
         case END_SCENE:
@@ -120,12 +124,12 @@ void InstanceLevelObjects() {
         Vector2 t_posisition = g_level_data.level_transitions[t_index].position_i;
 
         Area new_area;
+        new_area.identifier = g_level_data.level_transitions[t_index].identifier;
         new_area.position = t_posisition;
         new_area.size = g_ldtk_maps.default_grid_size;
+        new_area.payload_s = g_level_data.level_transitions[t_index].dest_string;
 
         g_game_areas.push_back(new_area);
     }
-
-
 
 }

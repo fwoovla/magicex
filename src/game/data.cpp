@@ -2,12 +2,22 @@
 
 void ClearLevelData() {
     g_level_data.spawn_position = {0,0};
+    g_game_areas.clear();
+    g_level_data.is_shelter = false;
+    g_level_data.level_transitions.clear();
     //clear transition data
 
 }
 
 void LoadLevelData() {
-    LDTKLevel this_level = g_ldtk_maps.levels[g_game_data.current_map_index];
+
+
+    int map_index = g_game_data.current_map_index;
+    if(g_game_data.is_in_sub_map) {
+        map_index = g_game_data.sub_map_index;
+    }
+
+    LDTKLevel this_level = g_ldtk_maps.levels[map_index];
 
     TraceLog(LOG_INFO, "LOADING LEVEL DATA  %s", this_level.identifier.c_str());
 
@@ -23,10 +33,13 @@ void LoadLevelData() {
                     g_level_data.spawn_position = sp;
                 }
 
-                if(this_level.layer_instances[layer_index].entity_instances[entity_index].identifier == "LevelTransition") {
+                std::string identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                //if(identifier == "LevelTransition" or identifier == "ShelterTransition") {
+                if(identifier == "LevelTransition" or identifier == "ShelterTransition" or identifier == "HouseTransition") {
                     LevelTransitionData new_transition;
                     TraceLog(LOG_INFO, "TRANSITION POINT FOUND");
-
+                    
+                    new_transition.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
                     new_transition.dest_string = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_s;
                     new_transition.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
                     new_transition.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];

@@ -46,12 +46,14 @@ extern PlayerData g_save_data;
 
 
 struct LevelTransitionData {
+    std::string identifier;
     std::string dest_string;
     Vector2 position_i;
     Vector2 position_f;
 };
 
 struct LevelData {
+    bool is_shelter;
     Vector2 spawn_position;
     std::vector<LevelTransitionData> level_transitions;  //
 };

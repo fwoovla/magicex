@@ -62,6 +62,7 @@ enum SCENE_ID {
     STAGING_SCENE,
     SHELTER_SCENE,
     GAME_SCENE,
+    SUB_SCENE,
     END_SCENE
 };
 

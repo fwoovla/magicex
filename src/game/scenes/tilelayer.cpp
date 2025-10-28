@@ -3,16 +3,12 @@
 
 TileLayer::TileLayer() {
 
-
 }
 
 TileLayer::~TileLayer() {
 
 }
 
-void TileLayer::SetTiles(Texture2D &_tilesheet, int _map_index) {
-
-}
 
 void TileLayer::Update() {
 
@@ -36,7 +32,12 @@ bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_res
     //================TILE COLLISION=========================
     bool collided = false;
 
-    LDTKLevel this_level = g_ldtk_maps.levels[g_game_data.current_map_index];
+    int map_index = g_game_data.current_map_index;
+    if(g_game_data.is_in_sub_map) {
+        map_index = g_game_data.sub_map_index;
+    }
+
+    LDTKLevel this_level = g_ldtk_maps.levels[map_index];
     LDTKLayerInstance *col_layer = nullptr;
 
     for (int l = 0; l < this_level.layer_instances.size(); l++) {

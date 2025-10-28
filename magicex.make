@@ -97,6 +97,7 @@ GENERATED += $(OBJDIR)/shelteruilayer.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
+GENERATED += $(OBJDIR)/subscene.o
 GENERATED += $(OBJDIR)/tilelayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
@@ -120,6 +121,7 @@ OBJECTS += $(OBJDIR)/shelteruilayer.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
+OBJECTS += $(OBJDIR)/subscene.o
 OBJECTS += $(OBJDIR)/tilelayer.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
@@ -242,6 +244,9 @@ $(OBJDIR)/stagingscene.o: src/game/scenes/stagingscene.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/staginguilayer.o: src/game/scenes/staginguilayer.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/subscene.o: src/game/scenes/subscene.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/tilelayer.o: src/game/scenes/tilelayer.cpp

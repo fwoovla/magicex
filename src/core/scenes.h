@@ -46,6 +46,7 @@ class StagingScene : public  BaseScene{
         void OnCharacterSelected();
         void OnPreviousCharacter();
         void OnNextCharacter();
+
         
         Sprite bg_sprite_1;
 
@@ -65,6 +66,9 @@ class ShelterScene : public  BaseScene{
         void OnStartPressed();
         void OnMapSelected();
 
+        void OnTransitionAreaEntityEntered();
+
+
         Sprite bg_sprite_1;
 
         ShelterUILayer *ui_layer;
@@ -77,17 +81,44 @@ class ShelterScene : public  BaseScene{
 
 };
 
+class SubScene : public  BaseScene{
+    public:
+        SubScene();
+        ~SubScene() override;
+        SCENE_ID Update() override;
+        void Draw() override;
+        void HandleCamera();
+
+        void OnQuitPressed();
+
+        void OnMapTransitionEntered();
+
+        Sprite bg_sprite_1;
+
+        GameUILayer *ui_layer;
+        TileLayer *tile_layer;
+
+        Signal sub_scene_exited;
+
+};
+
+
 class GameScene : public  BaseScene{
     public:
-        GameScene(int _map_index);
+        GameScene();
         ~GameScene() override;
         SCENE_ID Update() override;
         void Draw() override;
 
-        void DrawLevel();
         void HandleCamera();
 
         void OnQuitPressed();
+
+        void OnMapTransitionEntered();
+        void OnShelterTransitionEntered();
+        void OnHouseTransitionEntered();
+        void OnSubSceneExited();
+
 
         CharacterMenu *character_menu;
 
@@ -97,14 +128,12 @@ class GameScene : public  BaseScene{
 
         TileLayer *tile_layer;
 
-        //Texture2D ground_tiles;
+        SubScene *sub_scene;
 
-
-        //Camera2D camera;
-
-        //BaseUnit *unit1;
+        Vector2 saved_player_position;
 
 };
+
 
 class EndScene : public  BaseScene{
     public:

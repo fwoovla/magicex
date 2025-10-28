@@ -7,19 +7,27 @@
 
 
 ShelterScene::ShelterScene() {
+    scene_id = GAME_SCENE;
+    return_scene = NO_SCENE;
+
+
     ClearLevelData();
     LoadLevelData();
     InstanceLevelObjects();
 
-    scene_id = GAME_SCENE;
-    return_scene = NO_SCENE;
+    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
+        if(g_game_areas[area_index].identifier == "LevelTransition") {
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnTransitionAreaEntityEntered();} );
+
+        }
+    }
+
    
     ui_layer = new ShelterUILayer();
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
     ui_layer->start_pressed.Connect( [&](){OnStartPressed();} );
     
     tile_layer = new TileLayer();
-    //tile_layer->SetTiles( g_tile_sheets[TS_SHELTER], g_game_data.shelter_map_index);
 
     LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_SHELTER], {0,0});
     
@@ -28,7 +36,7 @@ ShelterScene::ShelterScene() {
 
     show_map_menu = false;
 
-    DL_Add(active_entity_list, g_current_player );
+    //DL_Add(active_entity_list, g_current_player );
     g_current_player->position = g_level_data.spawn_position;
 
     g_camera = { 0 };
@@ -54,8 +62,8 @@ SCENE_ID ShelterScene::Update() {
         ui_layer->Update();
     }
 
+    g_current_player->Update();
     //DL_Update(active_entity_list);
-    DL_Update(active_entity_list);
     UpdateGameAreas();
     HandleCamera();
 
@@ -68,9 +76,13 @@ void ShelterScene::Draw() {
     //DrawSprite(bg_sprite_1);
     BeginMode2D(g_camera);
     tile_layer->Draw();
-    DL_Draw(active_entity_list);
+    g_current_player->Draw();
+    //DL_Draw(active_entity_list);
     
-    DrawGameAreas(BLUE);
+    if(g_game_settings.show_debug) {
+        DrawGameAreas(BLUE);
+    }
+
     EndMode2D();
     
     if(show_map_menu == true) {
@@ -106,6 +118,15 @@ void ShelterScene::OnMapSelected() {
     TraceLog(LOG_INFO, "MAP SELECTED:  %i", g_game_data.current_map_index);
 }
 
+
+void ShelterScene::OnTransitionAreaEntityEntered() {
+
+    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    return_scene = GAME_SCENE;
+
+}
+
+
 void ShelterScene::HandleCamera() {
 
     Vector2 worldPosBeforeZoom = GetScreenToWorld2D(g_input.world_mouse_position, g_camera);
@@ -123,8 +144,6 @@ void ShelterScene::HandleCamera() {
     float x_offset_f = g_viewport.x_offset_f;
     float y_offset_f = g_viewport.y_offset_f;
 
-
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
-
 
 }

@@ -152,6 +152,7 @@ struct LDTKLayerInstance {
 };
 
 struct LDTKLevel {
+    bool is_shelter;
     std::string identifier;
     std::string iid;
     int64_t uid;
@@ -234,6 +235,8 @@ struct GameData {
     SCENE_ID current_scene_id;
     int current_map_index;
     int shelter_map_index;
+    int sub_map_index;
+    bool is_in_sub_map;
 };
 
 extern GameData g_game_data;
@@ -334,12 +337,15 @@ inline void LDTKLoadMaps (json &mj) {
         TraceLog(LOG_INFO, "(%i) LEVELS FOUND", mj["levels"].size());
         for(int level = 0; level < mj["levels"].size(); level++) {
 
+            LDTKLevel this_level;
+
             if(mj["levels"][level].contains("fieldInstances")) {
                 for (int field = 0; field < mj["levels"][level]["fieldInstances"].size(); field++) {
                     if(mj["levels"][level]["fieldInstances"][field]["__identifier"] == "is_shelter") {
                         if(mj["levels"][level]["fieldInstances"][field]["__value"] == true) {
                             g_game_data.shelter_map_index = level;
                             TraceLog(LOG_INFO, "SHELTER LEVEL FOUND %i", level);
+                            this_level.is_shelter = true;
                         }
                     }
                 }
@@ -348,7 +354,6 @@ inline void LDTKLoadMaps (json &mj) {
                 TraceLog(LOG_INFO, "(%i) is not SHELTER LEVEL", level);
             }
             
-            LDTKLevel this_level;
             
             this_level.identifier = mj["levels"][level]["identifier"];
             
@@ -426,8 +431,7 @@ inline void LDTKLoadMaps (json &mj) {
                         new_entity.width = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                         new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
 
-                        if(new_entity.identifier == "LevelTransition") {
-                            LDTKFieldInstance new_field;
+                        if(new_entity.identifier == "LevelTransition" or new_entity.identifier == "ShelterTransition" or new_entity.identifier == "HouseTransition") {                            LDTKFieldInstance new_field;
 
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
@@ -453,13 +457,17 @@ inline void LDTKLoadMaps (json &mj) {
 
 inline int LDTKDrawMap(Vector2 focus_position) {
 
+    int map_index = g_game_data.current_map_index;
+    if(g_game_data.is_in_sub_map) {
+        map_index = g_game_data.sub_map_index;
+    }
 
     int tiles_drawn = 0;
 
     //invert layers for drawing
     int tilesheet_id = 0;
 
-    LDTKLevel *this_level = &g_ldtk_maps.levels[g_game_data.current_map_index];
+    LDTKLevel *this_level = &g_ldtk_maps.levels[map_index];
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         if(this_level->layer_instances[l].type == "IntGrid") {

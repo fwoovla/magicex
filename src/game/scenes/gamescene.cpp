@@ -1,17 +1,37 @@
 #include "../../core/gamedefs.h"
 
 #define MAX_ZOOM 2.0f
-#define MIN_ZOOM 0.5f
+#define MIN_ZOOM 0.75f
 #define ZOOM_STEP 0.05f
 
 
-GameScene::GameScene(int _map_index) {
-    ClearLevelData();
-    LoadLevelData();
+GameScene::GameScene() {
 
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
+
+    sub_scene = nullptr;
+
+    ClearLevelData();
+    LoadLevelData();
+    InstanceLevelObjects();
+
+
+    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
+        if(g_game_areas[area_index].identifier == "LevelTransition") {
+            TraceLog(LOG_INFO, "+ connect map");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+        }
+        if(g_game_areas[area_index].identifier == "ShelterTransition") {
+            TraceLog(LOG_INFO, "+ connect shelter");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnShelterTransitionEntered();} );
+        }
+        if(g_game_areas[area_index].identifier == "HouseTransition") {
+            TraceLog(LOG_INFO, "+ connect house");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
+        }
+    }
 
     tile_layer = new TileLayer();
     
@@ -27,25 +47,34 @@ GameScene::GameScene(int _map_index) {
     g_camera.target = (Vector2){0,0};
     g_camera.offset = (Vector2){0,0};
     g_camera.rotation = 0.0f;
-    g_camera.zoom = 1.5f; 
+    g_camera.zoom = 1.0f; 
     g_world2screen = (g_scale * g_camera.zoom);
 }
 
 
 SCENE_ID GameScene::Update() {
     //GetInputFromPlayer();
-    if(character_menu_visible) {
-        character_menu->Update();
-    }
-
-    ui_layer->Update();
-    DL_Update(active_entity_list);
-    HandleCamera();
     
-    if(g_input.keys_pressed[0] == KEY_TAB) {
-        g_game_settings.show_debug = !g_game_settings.show_debug;
+    if(sub_scene != nullptr) {
+        sub_scene->Update();
+    }
+    else {
+        if(character_menu_visible) {
+            character_menu->Update();
+        }
+        else {
+
+            DL_Update(active_entity_list);
+            UpdateGameAreas();
+            g_current_player->Update();
+            HandleCamera();
+            ui_layer->Update();
+        }
+        
     }
 
+
+    
     if(g_input.keys_pressed[0] == KEY_E) {
         character_menu_visible = !character_menu_visible;
     }
@@ -55,27 +84,38 @@ SCENE_ID GameScene::Update() {
 
 void GameScene::Draw() {
 
-    //TraceLog(LOG_INFO, "game scene draw");
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
-    BeginMode2D(g_camera);
-    tile_layer->Draw();
-    //DrawLevel();
-    DL_Draw(active_entity_list);
-    
-    
-/*     if(g_input.selecting) {
+  
+    /*     if(g_input.selecting) {
         DrawRectangleLines(g_input.selected_rect.x, g_input.selected_rect.y, g_input.selected_rect.width, g_input.selected_rect.height, RAYWHITE);
-    } */
-    
-    EndMode2D();
-    
-    ui_layer->Draw();
-    if(character_menu_visible) {
-        character_menu->Draw();
+        } */
+       
+    if(sub_scene != nullptr) {
+        //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
+        sub_scene->Draw();
     }
-}
-
-void GameScene::DrawLevel() {
+    else {
+        //TraceLog(LOG_INFO, "GAME SCENE DRAW");
+        DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY );
+        if(character_menu_visible) {
+            character_menu->Draw();
+        }
+        else {
+            BeginMode2D(g_camera);
+            tile_layer->Draw();
+            DL_Draw(active_entity_list);
+            g_current_player->Draw();
+            
+            
+            
+            if(g_game_settings.show_debug) {
+                DrawGameAreas(BLUE);
+            }
+            EndMode2D();
+            ui_layer->Draw();
+        }
+    }
+    
+    
 
 }
 
@@ -129,10 +169,67 @@ void GameScene::HandleCamera() {
 GameScene::~GameScene() {
     delete ui_layer;
     delete tile_layer;
+
     DL_Clear(active_entity_list);
+    g_game_areas.clear();
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }
 
 void GameScene::OnQuitPressed() {
     g_game_data.paused = true;
+}
+
+
+void GameScene::OnMapTransitionEntered() {
+
+    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    return_scene = GAME_SCENE;
+
+}
+
+void GameScene::OnShelterTransitionEntered() {
+
+    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    return_scene = SHELTER_SCENE;
+
+}
+
+void GameScene::OnHouseTransitionEntered() {
+
+    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+
+    saved_player_position = g_current_player->position;
+    g_game_data.is_in_sub_map = true;
+    sub_scene = new SubScene();
+    sub_scene->sub_scene_exited.Connect( [&](){OnSubSceneExited();} );
+
+}
+
+void GameScene::OnSubSceneExited() {
+
+    TraceLog(LOG_INFO, "SUB MAP EXITED", g_game_data.current_map_index);
+    delete sub_scene;
+    sub_scene = nullptr;
+    g_game_data.is_in_sub_map = false;
+
+    ClearLevelData();
+    LoadLevelData();
+    InstanceLevelObjects();
+
+    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
+        if(g_game_areas[area_index].identifier == "LevelTransition") {
+            TraceLog(LOG_INFO, "+ connect map");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+        }
+        if(g_game_areas[area_index].identifier == "ShelterTransition") {
+            TraceLog(LOG_INFO, "+ connect shelter");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnShelterTransitionEntered();} );
+        }
+        if(g_game_areas[area_index].identifier == "HouseTransition") {
+            TraceLog(LOG_INFO, "+ connect house");
+            g_game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
+        }
+    }
+
+    g_current_player->position = saved_player_position;
 }
