@@ -39,6 +39,8 @@ inline void CalculateViewport() {
         g_viewport.y_max = map_height;
     }
 
+    g_world2screen = g_camera.zoom * g_scale;
+    g_screen2world = 1/g_world2screen;
 
 }
 

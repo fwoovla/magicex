@@ -93,7 +93,7 @@ void LDTKLoadMaps (json &mj) {
 
                         this_layer.int_grid.push_back( mj["levels"][level]["layerInstances"][layer]["intGridCsv"][_i].get<int>());
                     }
-                    TraceLog(LOG_INFO, "++++++COLLISION LAYER ADDED %i %i", this_layer.int_grid.size(),  mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
+                    TraceLog(LOG_INFO, "+++ void +++COLLISION LAYER ADDED %i %i", this_layer.int_grid.size(),  mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
                 }
 
                 if(this_layer.type == "Tiles") {
@@ -220,7 +220,6 @@ int LDTKDrawMap(Vector2 focus_position) {
                 Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
 
                 Color color = WHITE;
-
 
                 DrawTexturePro(
                     g_ldtk_tilesheets[tilesheet_id].texture,

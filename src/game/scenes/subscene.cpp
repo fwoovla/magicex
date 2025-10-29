@@ -1,8 +1,8 @@
 #include "../../core/gamedefs.h"
 
 #define MAX_ZOOM 2.0f
-#define MIN_ZOOM 0.5f
-#define ZOOM_STEP 0.05f
+#define MIN_ZOOM 0.80f
+#define ZOOM_STEP 0.20f
 
 
 
@@ -36,7 +36,6 @@ SubScene::SubScene() {
     g_camera.rotation = 0.0f;
     g_camera.zoom = 1.5f; 
     g_world2screen = (g_scale * g_camera.zoom);
-
 }
 
 

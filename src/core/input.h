@@ -8,6 +8,8 @@
 inline void GetInputFromPlayer() {
 
     //float screen2world = 1/g_world2screen;
+    //g_world2screen = g_camera.zoom * g_scale;
+
     Vector2 m_pos = GetMousePosition();
     
     g_input.screen_mouse_position =  m_pos;

@@ -92,6 +92,7 @@ GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapmenu.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
+GENERATED += $(OBJDIR)/resources.o
 GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/shelterscene.o
 GENERATED += $(OBJDIR)/shelteruilayer.o
@@ -117,6 +118,7 @@ OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapmenu.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
+OBJECTS += $(OBJDIR)/resources.o
 OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/shelterscene.o
 OBJECTS += $(OBJDIR)/shelteruilayer.o
@@ -210,6 +212,9 @@ $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ldtk.o: src/game/ldtk.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/resources.o: src/game/resources.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/scenemanager.o: src/game/scenemanager.cpp

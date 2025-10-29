@@ -16,9 +16,11 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     position = _position;
     rotation = 0.0f;
     velocity = {0,0};
-    LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 24.0f, 0.10f);
+    LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(crosshair_sprite, g_sprite_sheets[SPRITE_CROSSHAIR], position);
+    LoadSpriteCentered(wand_sprite, g_sprite_sheets[SPRITE_WAND], position);
     collision_radius = 5;
-    centered_offset = {0,5};
+    centered_offset = {0,0};
     collided = false;
 }
 
@@ -26,6 +28,11 @@ void PlayerCharacter::Update() {
     //TraceLog(LOG_INFO, "player update");
     //hovered = false;
     CheckInput();
+
+    crosshair_sprite.position = g_input.world_mouse_position;
+    //TraceLog(LOG_INFO, "crosshair position, %0.0f %0.0f \n", crosshair_sprite.position.x, crosshair_sprite.position.y);
+
+    wand_sprite.position = position;
 
     //move position
     collided = false;
@@ -68,6 +75,8 @@ void PlayerCharacter::Draw() {
     //TraceLog(LOG_INFO, "player draw");
 
     DrawSprite(sprite);
+    DrawSprite(crosshair_sprite);
+    DrawSprite(wand_sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
         DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);   
@@ -121,6 +130,12 @@ void PlayerCharacter::CheckInput() {
     if (abs(velocity.y) < 4.0f) {
         velocity.y = {0.0};
     }
+
+    Vector2 pp = GetWorldToScreen2D( position, g_camera);
+    pp = {pp.x * g_scale, pp.y*g_scale};
+
+    wand_sprite.roataion = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+
 }
 
 

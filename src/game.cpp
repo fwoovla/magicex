@@ -66,6 +66,9 @@ void Game::StartGame() {
     
     int offsetX = (GetScreenWidth() - (g_resolution.x*g_scale)) / 2;
     int offsetY = (GetScreenHeight() - (g_resolution.y*g_scale)) / 2;
+
+    g_world2screen = g_camera.zoom * g_scale;
+    g_screen2world = 1/g_world2screen;
       
     render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
 

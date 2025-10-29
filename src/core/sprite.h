@@ -146,6 +146,8 @@ inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
 }
 
 inline void DrawSprite(Sprite &_sprite) {
+    _sprite.dest.x = _sprite.position.x;
+    _sprite.dest.y = _sprite.position.y;
     DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, _sprite.modulate );       
 }
 
