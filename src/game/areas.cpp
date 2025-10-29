@@ -23,7 +23,9 @@ void UpdateGameAreas() {
                     }
                 }
                 if(g_game_areas[area_index].identifier == "HouseTransition") {
+                    TraceLog(LOG_INFO, "return position %0.0f %0.0f", g_game_areas[area_index].payload_v.x, g_game_areas[area_index].payload_v.y);
                     g_game_data.sub_map_index = dest_map_index;
+                    g_game_data.sub_return_position = g_game_areas[area_index].payload_v * g_ldtk_maps.default_grid_size;
                 }
                 else {
                     g_game_data.current_map_index = dest_map_index;

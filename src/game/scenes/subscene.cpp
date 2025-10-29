@@ -77,7 +77,7 @@ SubScene::~SubScene() {
     delete tile_layer;
 
     DL_Clear(active_entity_list);
-    g_game_areas.clear();
+    //g_game_areas.clear();
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SUB SCENE");
 }
 
@@ -89,7 +89,7 @@ void SubScene::OnQuitPressed() {
 void SubScene::OnMapTransitionEntered() {
 
 
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
     sub_scene_exited.EmitSignal();
     //return_scene = GAME_SCENE;
 

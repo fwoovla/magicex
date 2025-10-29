@@ -50,6 +50,7 @@ struct LevelTransitionData {
     std::string dest_string;
     Vector2 position_i;
     Vector2 position_f;
+    Vector2 return_position;
 };
 
 struct LevelData {

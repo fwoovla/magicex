@@ -13,6 +13,7 @@ void LoadLevelData() {
 
 
     int map_index = g_game_data.current_map_index;
+    
     if(g_game_data.is_in_sub_map) {
         map_index = g_game_data.sub_map_index;
     }
@@ -37,7 +38,7 @@ void LoadLevelData() {
                 //if(identifier == "LevelTransition" or identifier == "ShelterTransition") {
                 if(identifier == "LevelTransition" or identifier == "ShelterTransition" or identifier == "HouseTransition") {
                     LevelTransitionData new_transition;
-                    TraceLog(LOG_INFO, "TRANSITION POINT FOUND");
+                    TraceLog(LOG_INFO, "TRANSITION POINT FOUND %s", identifier.c_str());
                     
                     new_transition.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
                     new_transition.dest_string = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_s;
@@ -46,8 +47,13 @@ void LoadLevelData() {
                     new_transition.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
                     new_transition.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
 
+                    if(new_transition.identifier == "HouseTransition") {
+                        new_transition.return_position = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_v;
+                        TraceLog(LOG_INFO, "RETURN POSITION, %0.02f %0.02f", new_transition.return_position.x, new_transition.return_position.y);
+                    }
+
                     g_level_data.level_transitions.push_back(new_transition);
-                    TraceLog(LOG_INFO, "TRANSITION DATA ADDED, %s", new_transition.dest_string.c_str());
+                    TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
                 }
             }
         }

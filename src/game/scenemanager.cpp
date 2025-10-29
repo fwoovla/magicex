@@ -128,6 +128,10 @@ void InstanceLevelObjects() {
         new_area.position = t_posisition;
         new_area.size = g_ldtk_maps.default_grid_size;
         new_area.payload_s = g_level_data.level_transitions[t_index].dest_string;
+        
+        if(g_level_data.level_transitions[t_index].identifier == "HouseTransition") {
+            new_area.payload_v = g_level_data.level_transitions[t_index].return_position;
+        }
 
         g_game_areas.push_back(new_area);
     }

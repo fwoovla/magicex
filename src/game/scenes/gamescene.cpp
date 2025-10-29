@@ -54,8 +54,8 @@ GameScene::GameScene() {
 
 SCENE_ID GameScene::Update() {
     //GetInputFromPlayer();
-    
-    if(sub_scene != nullptr) {
+    //TraceLog(LOG_INFO, " UPDATE");
+    if(g_game_data.is_in_sub_map) {
         sub_scene->Update();
     }
     else {
@@ -63,7 +63,7 @@ SCENE_ID GameScene::Update() {
             character_menu->Update();
         }
         else {
-
+            //TraceLog(LOG_INFO, "GAME SCENE UPDATE");
             DL_Update(active_entity_list);
             UpdateGameAreas();
             g_current_player->Update();
@@ -89,7 +89,7 @@ void GameScene::Draw() {
         DrawRectangleLines(g_input.selected_rect.x, g_input.selected_rect.y, g_input.selected_rect.width, g_input.selected_rect.height, RAYWHITE);
         } */
        
-    if(sub_scene != nullptr) {
+    if(g_game_data.is_in_sub_map) {
         //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
         sub_scene->Draw();
     }
@@ -198,7 +198,6 @@ void GameScene::OnHouseTransitionEntered() {
 
     TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
-    saved_player_position = g_current_player->position;
     g_game_data.is_in_sub_map = true;
     sub_scene = new SubScene();
     sub_scene->sub_scene_exited.Connect( [&](){OnSubSceneExited();} );
@@ -207,10 +206,10 @@ void GameScene::OnHouseTransitionEntered() {
 
 void GameScene::OnSubSceneExited() {
 
-    TraceLog(LOG_INFO, "SUB MAP EXITED", g_game_data.current_map_index);
-    delete sub_scene;
-    sub_scene = nullptr;
+    TraceLog(LOG_INFO, "SUB MAP EXITED %i", g_game_data.current_map_index);
     g_game_data.is_in_sub_map = false;
+
+
 
     ClearLevelData();
     LoadLevelData();
@@ -230,6 +229,11 @@ void GameScene::OnSubSceneExited() {
             g_game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
         }
     }
+    g_current_player->position = g_game_data.sub_return_position;
+    TraceLog(LOG_INFO, "+ reset player position");
 
-    g_current_player->position = saved_player_position;
+    delete sub_scene;
+    sub_scene = nullptr;
+
+    
 }

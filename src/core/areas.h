@@ -10,6 +10,7 @@ struct Area {
         int size;
 
         std::string payload_s;
+        Vector2 payload_v;
         
 
         Signal mouse_entered;
