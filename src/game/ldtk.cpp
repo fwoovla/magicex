@@ -69,7 +69,6 @@ void LDTKLoadMaps (json &mj) {
                 TraceLog(LOG_INFO, "(%i) is not SHELTER LEVEL", level);
             }
             
-            
             this_level.identifier = mj["levels"][level]["identifier"];
             
             this_level.bg_color = mj["levels"][level]["__bgColor"];
@@ -93,7 +92,6 @@ void LDTKLoadMaps (json &mj) {
                     for (int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size(); _i++){
 
                         this_layer.int_grid.push_back( mj["levels"][level]["layerInstances"][layer]["intGridCsv"][_i].get<int>());
-                        //TraceLog(LOG_INFO,"int grid %i %i %i", this_layer.int_grid.size(), _i, this_layer.int_grid[_i]);
                     }
                     TraceLog(LOG_INFO, "++++++COLLISION LAYER ADDED %i %i", this_layer.int_grid.size(),  mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
                 }
@@ -123,10 +121,7 @@ void LDTKLoadMaps (json &mj) {
                         this_tile.a = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["a"];
                         this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
                         this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
-
-                        //int index = (this_tile.px[1] / this_layer.grid_size) * this_layer.c_wid + (this_tile.px[0] / this_layer.grid_size);
                         this_layer.grid_tiles[tile] = this_tile;
-                        //TraceLog(LOG_INFO, "tile loaded... index %i tile id %i  ", index, this_tile.t);
                     }
 
                     TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
@@ -139,8 +134,8 @@ void LDTKLoadMaps (json &mj) {
                     
                     for (int entity = 0; entity < mj["levels"][level]["layerInstances"][layer]["entityInstances"].size(); entity++) {
                         LDTKEntityInstance new_entity;
-                        new_entity.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["__identifier"];
 
+                        new_entity.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["__identifier"];
                         TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FOUND %s", new_entity.identifier.c_str());
 
                         new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][0]);
@@ -152,8 +147,10 @@ void LDTKLoadMaps (json &mj) {
                             LDTKFieldInstance new_field;
 
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
                                 TraceLog(LOG_INFO, "++++++--------------------------------ENTITY field %s", new_field.identifier.c_str());
+
                                 if(new_field.identifier == "DestMapString" ) {
                                     new_field.value_s = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
                                     TraceLog(LOG_INFO, "++++++entity dest string %s", new_field.value_s.c_str());
@@ -161,9 +158,7 @@ void LDTKLoadMaps (json &mj) {
 
                                 if(new_field.identifier == "ReturnPosition" ) {
                                     new_field.value_v.x = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"]["cx"];
-                                    //new_field.value_v.x = new_field.value_v.x *  mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                                     new_field.value_v.y = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"]["cy"];
-                                    //new_field.value_v.x = new_field.value_v.y *  mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                                     TraceLog(LOG_INFO, "++++++entity return position %0.2f %0.2f", new_field.value_v.x, new_field.value_v.y);
                                 }
                                 new_entity.field_instances.push_back(new_field);
@@ -208,7 +203,6 @@ int LDTKDrawMap(Vector2 focus_position) {
 
             LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];
 
-            //TraceLog(LOG_INFO, "GRID TILES||| tile index:  %i  id %i", tile, this_tile->t);
 
             int tile_id = this_tile->t;
 
@@ -220,8 +214,6 @@ int LDTKDrawMap(Vector2 focus_position) {
                 break;
             }
 
-            //TraceLog(LOG_INFO, "GRID TILES||| is valid tile.... x:  %i  y %i", tile_x, tile_y);
-
             if((tile_x >= g_viewport.x_min) and (tile_x <= g_viewport.x_max) and (tile_y >= g_viewport.y_min) and (tile_y <= g_viewport.y_max)) {
 
                 Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
@@ -229,7 +221,6 @@ int LDTKDrawMap(Vector2 focus_position) {
 
                 Color color = WHITE;
 
-                //TraceLog(LOG_INFO, "DRAWING TILE||| tile index:  %i  id %i", tile, this_tile->t);
 
                 DrawTexturePro(
                     g_ldtk_tilesheets[tilesheet_id].texture,
