@@ -84,6 +84,14 @@ struct Viewport {
 
 };
 
+#include "sprite.h"
+
+struct Cursor {
+    Vector2 poisition;
+    Sprite sprite;
+};
+
+extern Cursor g_cursor;
 
 extern GameSettings g_game_settings;
 //extern int *level_data_array;
@@ -107,7 +115,7 @@ extern Viewport g_viewport;
 #include "utils.h"
 #include "areas.h"
 #include "button.h"
-#include "sprite.h"
+
 #include "label.h"
 #include "baseentity.h"
 #include "playercharacter.h"

@@ -15,9 +15,9 @@ SubScene::SubScene() {
     LoadLevelData();
     InstanceLevelObjects();
 
-    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
-        if(g_game_areas[area_index].identifier == "LevelTransition") {
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+    for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
+        if(g_level_data.game_areas[area_index].identifier == "LevelTransition") {
+            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
         }
     }
 

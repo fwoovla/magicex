@@ -14,7 +14,7 @@ class PlayerCharacter : public AnimatedSpriteEntity {
 
     Sprite wand_sprite;
 
-    Sprite crosshair_sprite;
+    //Sprite crosshair_sprite;
 
 }; 
 

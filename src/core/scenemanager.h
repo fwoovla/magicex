@@ -23,7 +23,7 @@ class SceneManager{
     BaseScene *current_scene;
     PauseMenu *pause_menu;
 
-    //bool paused;
+        //bool paused;
 
     private:
 };

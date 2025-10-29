@@ -1,4 +1,5 @@
-#include "utils.h"
+#include "gamedefs.h"
+
 void Timer::Start(double _wait_time, bool _one_shot) {
 
     active = true;
@@ -104,4 +105,10 @@ float ShortestAngleDiffRad(float from, float to) {
     if (std::fabs(diff) <= 1e-4f) return target;
     if (std::fabs(diff) <= maxStep) return target;
     return current + (diff > 0 ? 1 : -1) * maxStep;
+}
+
+
+void SetCursorPosition(Vector2 _pos) {
+    g_cursor.poisition = _pos;
+    g_cursor.sprite.position = _pos;
 }

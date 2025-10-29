@@ -2,7 +2,7 @@
 
 void ClearLevelData() {
     g_level_data.spawn_position = {0,0};
-    g_game_areas.clear();
+    g_level_data.game_areas.clear();
     g_level_data.is_shelter = false;
     g_level_data.level_transitions.clear();
     //clear transition data

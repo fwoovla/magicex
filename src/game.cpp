@@ -39,6 +39,9 @@ PlayerInput g_input;
 
 Viewport g_viewport;
 
+Cursor g_cursor;
+
+
 
 void Game::StartGame() {
     g_game_data.save_available = false;

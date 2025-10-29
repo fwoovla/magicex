@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include <raylib.h>
 #include <cmath>
@@ -59,3 +58,6 @@ float ShortestAngleDiffRad(float from, float to);
 
 
 float RotateTowardsRad(float current, float target, float maxTurn, float dt);
+
+void SetCursorPosition(Vector2 _pos);
+

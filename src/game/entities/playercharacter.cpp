@@ -17,7 +17,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     rotation = 0.0f;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
-    LoadSpriteCentered(crosshair_sprite, g_sprite_sheets[SPRITE_CROSSHAIR], position);
+    //LoadSpriteCentered(crosshair_sprite, g_sprite_sheets[SPRITE_CROSSHAIR], position);
     LoadSpriteCentered(wand_sprite, g_sprite_sheets[SPRITE_WAND], position);
     collision_radius = 5;
     centered_offset = {0,0};
@@ -29,7 +29,7 @@ void PlayerCharacter::Update() {
     //hovered = false;
     CheckInput();
 
-    crosshair_sprite.position = g_input.world_mouse_position;
+    
     //TraceLog(LOG_INFO, "crosshair position, %0.0f %0.0f \n", crosshair_sprite.position.x, crosshair_sprite.position.y);
 
     wand_sprite.position = position;
@@ -75,7 +75,7 @@ void PlayerCharacter::Draw() {
     //TraceLog(LOG_INFO, "player draw");
 
     DrawSprite(sprite);
-    DrawSprite(crosshair_sprite);
+    //DrawSprite(crosshair_sprite);
     DrawSprite(wand_sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);

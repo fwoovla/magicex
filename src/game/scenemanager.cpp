@@ -32,6 +32,10 @@ void SceneManager::UpdateScene()
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
+
+
+    SetCursorPosition(g_input.world_mouse_position);
+    //g_cursor.sprite.position = g_cursor
 }
 
 
@@ -43,7 +47,10 @@ void SceneManager::Init() {
     pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
     pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
     pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
+
+    LoadSpriteCentered( g_cursor.sprite, g_sprite_sheets[SPRITE_CROSSHAIR], {0,0} );
 }
+
 
 void SceneManager::CleanUp() {
     delete current_scene;
@@ -59,6 +66,9 @@ void SceneManager::DrawScene() {
     if(g_game_data.paused == true) {
         pause_menu->Draw();
     }
+    BeginMode2D(g_camera);
+    DrawSprite(g_cursor.sprite);
+    EndMode2D();
 }
 
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
@@ -133,7 +143,7 @@ void InstanceLevelObjects() {
             new_area.payload_v = g_level_data.level_transitions[t_index].return_position;
         }
 
-        g_game_areas.push_back(new_area);
+        //g_game_areas.push_back(new_area);
+        g_level_data.game_areas.push_back(new_area);
     }
-
 }

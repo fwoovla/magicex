@@ -132,6 +132,8 @@ class GameScene : public  BaseScene{
 
         Vector2 saved_player_position;
 
+        LevelData return_level_data;
+
 };
 
 

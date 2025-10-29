@@ -8,6 +8,8 @@
 #include "json.hpp"
 
 #include "gamedefs.h"
+#include "utils.h"
+#include "areas.h"
 
 using json = nlohmann::json;
 
@@ -56,7 +58,8 @@ struct LevelTransitionData {
 struct LevelData {
     bool is_shelter;
     Vector2 spawn_position;
-    std::vector<LevelTransitionData> level_transitions;  //
+    std::vector<LevelTransitionData> level_transitions;
+    std::vector<Area> game_areas;
 };
 
 extern LevelData g_level_data;

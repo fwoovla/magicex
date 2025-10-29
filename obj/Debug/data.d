@@ -1,7 +1,7 @@
 obj/Debug/data.o: src/game/data.cpp /usr/include/stdc-predef.h \
  src/game/../core/gamedefs.h /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
- src/game/../core/ldtk.h /usr/local/include/raymath.h \
+ src/game/../core/sprite.h /usr/local/include/raymath.h \
  /usr/include/c++/13/math.h /usr/include/c++/13/cmath \
  /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -86,8 +86,8 @@ obj/Debug/data.o: src/game/data.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc /usr/include/c++/13/string \
- /usr/include/c++/13/bits/stringfwd.h \
+ /usr/include/c++/13/tr1/riemann_zeta.tcc src/game/../core/ldtk.h \
+ /usr/include/c++/13/string /usr/include/c++/13/bits/stringfwd.h \
  /usr/include/c++/13/bits/memoryfwd.h \
  /usr/include/c++/13/bits/char_traits.h \
  /usr/include/c++/13/bits/postypes.h /usr/include/c++/13/cwchar \
@@ -247,19 +247,18 @@ obj/Debug/data.o: src/game/data.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/game/../core/resources.h src/game/../core/data.h \
- src/game/../core/viewport.h src/game/../core/input.h \
  src/game/../core/utils.h src/game/../core/areas.h \
- src/game/../core/button.h src/game/../core/sprite.h \
- src/game/../core/label.h src/game/../core/baseentity.h \
- src/game/../core/playercharacter.h src/game/../core/tilelayer.h \
- src/game/../core/uilayers.h src/game/../core/scenes.h \
- src/game/../core/basescene.h src/game/../core/scenemanager.h \
- src/game/../core/game.h
+ src/game/../core/viewport.h src/game/../core/input.h \
+ src/game/../core/button.h src/game/../core/label.h \
+ src/game/../core/baseentity.h src/game/../core/playercharacter.h \
+ src/game/../core/tilelayer.h src/game/../core/uilayers.h \
+ src/game/../core/scenes.h src/game/../core/basescene.h \
+ src/game/../core/scenemanager.h src/game/../core/game.h
 /usr/include/stdc-predef.h:
 src/game/../core/gamedefs.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
-src/game/../core/ldtk.h:
+src/game/../core/sprite.h:
 /usr/local/include/raymath.h:
 /usr/include/c++/13/math.h:
 /usr/include/c++/13/cmath:
@@ -357,6 +356,7 @@ src/game/../core/ldtk.h:
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
+src/game/../core/ldtk.h:
 /usr/include/c++/13/string:
 /usr/include/c++/13/bits/stringfwd.h:
 /usr/include/c++/13/bits/memoryfwd.h:
@@ -573,12 +573,11 @@ src/game/../core/json.hpp:
 /usr/include/c++/13/any:
 src/game/../core/resources.h:
 src/game/../core/data.h:
-src/game/../core/viewport.h:
-src/game/../core/input.h:
 src/game/../core/utils.h:
 src/game/../core/areas.h:
+src/game/../core/viewport.h:
+src/game/../core/input.h:
 src/game/../core/button.h:
-src/game/../core/sprite.h:
 src/game/../core/label.h:
 src/game/../core/baseentity.h:
 src/game/../core/playercharacter.h:

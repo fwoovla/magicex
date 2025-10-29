@@ -13,23 +13,26 @@ GameScene::GameScene() {
 
     sub_scene = nullptr;
 
+
+
+
     ClearLevelData();
     LoadLevelData();
     InstanceLevelObjects();
 
 
-    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
-        if(g_game_areas[area_index].identifier == "LevelTransition") {
+    for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
+        if(g_level_data.game_areas[area_index].identifier == "LevelTransition") {
             TraceLog(LOG_INFO, "+ connect map");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
         }
-        if(g_game_areas[area_index].identifier == "ShelterTransition") {
+        if(g_level_data.game_areas[area_index].identifier == "ShelterTransition") {
             TraceLog(LOG_INFO, "+ connect shelter");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnShelterTransitionEntered();} );
+            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnShelterTransitionEntered();} );
         }
-        if(g_game_areas[area_index].identifier == "HouseTransition") {
+        if(g_level_data.game_areas[area_index].identifier == "HouseTransition") {
             TraceLog(LOG_INFO, "+ connect house");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
+            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
         }
     }
 
@@ -172,7 +175,7 @@ GameScene::~GameScene() {
     delete tile_layer;
 
     DL_Clear(active_entity_list);
-    g_game_areas.clear();
+    
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }
 
@@ -200,6 +203,7 @@ void GameScene::OnHouseTransitionEntered() {
     TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
     g_game_data.is_in_sub_map = true;
+    return_level_data = g_level_data;
     sub_scene = new SubScene();
     sub_scene->sub_scene_exited.Connect( [&](){OnSubSceneExited();} );
 
@@ -210,26 +214,9 @@ void GameScene::OnSubSceneExited() {
     TraceLog(LOG_INFO, "SUB MAP EXITED %i", g_game_data.current_map_index);
     g_game_data.is_in_sub_map = false;
 
-
-
     ClearLevelData();
-    LoadLevelData();
-    InstanceLevelObjects();
+    g_level_data = return_level_data;
 
-    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
-        if(g_game_areas[area_index].identifier == "LevelTransition") {
-            TraceLog(LOG_INFO, "+ connect map");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
-        }
-        if(g_game_areas[area_index].identifier == "ShelterTransition") {
-            TraceLog(LOG_INFO, "+ connect shelter");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnShelterTransitionEntered();} );
-        }
-        if(g_game_areas[area_index].identifier == "HouseTransition") {
-            TraceLog(LOG_INFO, "+ connect house");
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnHouseTransitionEntered();} );
-        }
-    }
     g_current_player->position = g_game_data.sub_return_position;
     TraceLog(LOG_INFO, "+ reset player position");
 

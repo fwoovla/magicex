@@ -14,10 +14,9 @@ ShelterScene::ShelterScene() {
     LoadLevelData();
     InstanceLevelObjects();
 
-    for(int area_index = 0; area_index < g_game_areas.size(); area_index++) {
-        if(g_game_areas[area_index].identifier == "LevelTransition") {
-            g_game_areas[area_index].entity_entered.Connect( [&](){OnTransitionAreaEntityEntered();} );
-
+    for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
+        if(g_level_data.game_areas[area_index].identifier == "LevelTransition") {
+            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnTransitionAreaEntityEntered();} );
         }
     }
 
@@ -72,6 +71,7 @@ SCENE_ID ShelterScene::Update() {
 void ShelterScene::Draw() {
 
     DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+    
     //DrawSprite(bg_sprite_1);
     BeginMode2D(g_camera);
     tile_layer->Draw();
@@ -81,7 +81,7 @@ void ShelterScene::Draw() {
     if(g_game_settings.show_debug) {
         DrawGameAreas(BLUE);
     }
-
+    //DrawSprite(g_cursor.sprite);
     EndMode2D();
     
     if(show_map_menu == true) {

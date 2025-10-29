@@ -18,7 +18,7 @@ struct Area {
 
 };
 
-extern std::vector<Area> g_game_areas;
+//extern std::vector<Area> g_game_areas;
 
 
 void UpdateGameAreas();
