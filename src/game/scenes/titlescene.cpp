@@ -66,5 +66,6 @@ void TitleScene::OnContinuePressed() {
     //DL_Add(active_entity_list, g_current_player );
     //g_game_data.is_new_player = false;
     return_scene = SHELTER_SCENE;
-    g_game_data.current_map_index = g_game_data.shelter_map_index;
+    g_game_data.next_map_index = g_game_data.shelter_map_index;
+    TraceLog(LOG_INFO, "SHELTER SCENE = %i", g_game_data.shelter_map_index);
 }

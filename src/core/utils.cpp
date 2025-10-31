@@ -71,6 +71,23 @@ void Signal::EmitSignal() {
 
 
 
+/* void AreaSignal::Connect(std::function<void(TransitionArea a)> const& callback) {
+    callbacks.push_back(callback);
+}
+
+void AreaSignal::EmitSignal(TransitionArea a) {
+    for(int i = 0; i < callbacks.size(); i++) {
+        callbacks[i](a);
+    }
+}    */
+
+
+
+
+
+
+
+
 
 Vector2 vClamp(Vector2 v, float maxLength) {
     float length = sqrtf(v.x * v.x + v.y * v.y);

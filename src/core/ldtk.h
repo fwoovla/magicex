@@ -235,6 +235,7 @@ struct GameData {
     bool paused = false;
     SCENE_ID current_scene_id;
     int current_map_index;
+    int next_map_index;
     int shelter_map_index;
     int sub_map_index;
     bool is_in_sub_map;

@@ -1,5 +1,28 @@
 #include "basescene.h"
 
+enum TrantitionType {
+
+};
+
+class FadeTransition{
+    public:
+        FadeTransition(float _durration);
+        ~FadeTransition();
+        void Update();
+        void Draw();
+
+        Label title_label;
+        Timer transition_timer;
+
+        float durration;
+        float alpha_value;
+        float alpha_step;
+        int phase;
+
+        Signal transition_ended;
+        Signal transition_midpoint;
+};
+
 class SplashScreen : public  BaseScene{
     public:
         SplashScreen();
@@ -7,13 +30,8 @@ class SplashScreen : public  BaseScene{
         SCENE_ID Update() override;
         void Draw() override;
 
-        void OnTimerTimeout();
-
         Label title_label;
-        Timer splash_timer;
 
-        float alpha_value;
-        float alpha_step;
 };
 
 class TitleScene : public  BaseScene{
@@ -66,7 +84,8 @@ class ShelterScene : public  BaseScene{
         void OnStartPressed();
         void OnMapSelected();
 
-        void OnTransitionAreaEntityEntered();
+        void OnTransitionAreaEntered();
+        void OnTransitionAreaActivated();
 
 
         Sprite bg_sprite_1;
@@ -92,6 +111,7 @@ class SubScene : public  BaseScene{
         void OnQuitPressed();
 
         void OnMapTransitionEntered();
+        void OnMapTransitionActivated();
 
         Sprite bg_sprite_1;
 
@@ -115,8 +135,15 @@ class GameScene : public  BaseScene{
         void OnQuitPressed();
 
         void OnMapTransitionEntered();
+        void OnMapTransitionActivated();
+
         void OnShelterTransitionEntered();
+        void OnShelterTransitionActivated();
+
+
         void OnHouseTransitionEntered();
+        void OnHouseTransitionActivated();
+
         void OnSubSceneExited();
 
 

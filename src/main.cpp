@@ -2,7 +2,7 @@
 
 GameSettings g_game_settings = {
     .window_size = {1280, 720},
-    .resolution = {640, 360},
+    .resolution = {640*1.5, 360*1.5},
     .show_debug = false
     
 };

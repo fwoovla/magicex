@@ -38,6 +38,8 @@ enum UIBackgroundID {
     BG_TITLE,
     BG_STAGING,
     BG_SHELTER,
+    BG_HOUSE_TRANS,
+    BG_OUTSIDE_TRANS,
     BG_NUM_SPRITES
 };
 

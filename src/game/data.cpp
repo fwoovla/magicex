@@ -20,7 +20,7 @@ void LoadLevelData() {
 
     LDTKLevel this_level = g_ldtk_maps.levels[map_index];
 
-    TraceLog(LOG_INFO, "LOADING LEVEL DATA  %s", this_level.identifier.c_str());
+    TraceLog(LOG_INFO, "LOADING LEVEL DATA %i  %s", map_index, this_level.identifier.c_str());
 
     for(int layer_index = 0; layer_index < this_level.layer_instances.size(); layer_index++) {
         if(this_level.layer_instances[layer_index].type == "Entities") {
@@ -39,7 +39,7 @@ void LoadLevelData() {
                 if(identifier == "LevelTransition" or identifier == "ShelterTransition" or identifier == "HouseTransition") {
                     LevelTransitionData new_transition;
                     TraceLog(LOG_INFO, "TRANSITION POINT FOUND %s", identifier.c_str());
-                    
+                    new_transition.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
                     new_transition.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
                     new_transition.dest_string = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_s;
                     new_transition.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];

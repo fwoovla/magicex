@@ -16,9 +16,15 @@ SubScene::SubScene() {
     InstanceLevelObjects();
 
     for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
-        if(g_level_data.game_areas[area_index].identifier == "LevelTransition") {
-            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+        if(g_level_data.game_areas[area_index]->identifier == "LevelTransition") {
+            TransitionArea* t_area = dynamic_cast<TransitionArea*>( g_level_data.game_areas[area_index]);
+            //TraceLog(LOG_INFO, "+ connect map");
+            t_area->area_entered.Connect( [&](){OnMapTransitionEntered();} );
+            t_area->area_activated.Connect( [&](){OnMapTransitionActivated();} );
         }
+/*         if(g_level_data.game_areas[area_index]->identifier == "LevelTransition") {
+            g_level_data.game_areas[area_index]->entity_entered.Connect( [&](){OnMapTransitionEntered();} );
+        } */
     }
 
     ui_layer = new GameUILayer();
@@ -34,7 +40,7 @@ SubScene::SubScene() {
     g_camera.target = (Vector2){0,0};
     g_camera.offset = (Vector2){0,0};
     g_camera.rotation = 0.0f;
-    g_camera.zoom = 1.5f; 
+    g_camera.zoom = 2.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 }
 
@@ -45,7 +51,9 @@ SCENE_ID SubScene::Update() {
     
     g_current_player->Update();
     //DL_Update(active_entity_list);
-    UpdateGameAreas();
+    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Update();
+    }
     HandleCamera();
 
     return return_scene;
@@ -61,8 +69,8 @@ void SubScene::Draw() {
     g_current_player->Draw();
     //DL_Draw(active_entity_list);
     
-    if(g_game_settings.show_debug) {
-        DrawGameAreas(BLUE);
+    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Draw();
     }
 
     EndMode2D();
@@ -86,6 +94,15 @@ void SubScene::OnQuitPressed() {
 
 
 void SubScene::OnMapTransitionEntered() {
+
+
+    TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    //sub_scene_exited.EmitSignal();
+    //return_scene = GAME_SCENE;
+
+}
+
+void SubScene::OnMapTransitionActivated() {
 
 
     TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);

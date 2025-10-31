@@ -187,6 +187,8 @@ int LDTKDrawMap(Vector2 focus_position) {
         map_index = g_game_data.sub_map_index;
     }
 
+    //TraceLog(LOG_INFO, "drawing map index:  %i ", map_index);
+
     int tiles_drawn = 0;
 
     //invert layers for drawing

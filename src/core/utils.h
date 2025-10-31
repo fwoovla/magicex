@@ -12,15 +12,24 @@ enum SIGNAL {
     TIMER_TIMEOUT,
     PLAY_PRESSED,
     SHOULD_DELETE,
-    CAN_FIRE,
+    CAN_FIRE
 };
 
 class Signal {
     public:
-    std::vector<std::function<void()>> callbacks;
     void Connect(std::function<void()> const& callback);
     void EmitSignal();    
+
+    std::vector<std::function<void()>> callbacks;
 };
+
+/* class AreaSignal {
+    public:
+    void Connect(std::function<void( TransitionArea a )> const& callback);
+    void EmitSignal(TransitionArea a);    
+
+    std::vector<std::function<void( TransitionArea a )>> callbacks;
+}; */
 
 
 class Timer{

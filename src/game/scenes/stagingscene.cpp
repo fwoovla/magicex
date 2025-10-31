@@ -58,7 +58,7 @@ StagingScene::~StagingScene() {
 }
 
 void StagingScene::OnPlayPressed() {
-    g_game_data.current_map_index = g_game_data.shelter_map_index;
+    g_game_data.next_map_index = g_game_data.shelter_map_index;
     return_scene = SHELTER_SCENE;
 }
 

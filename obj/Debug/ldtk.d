@@ -248,8 +248,8 @@ obj/Debug/ldtk.o: src/game/ldtk.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/game/../core/resources.h src/game/../core/data.h \
  src/game/../core/utils.h src/game/../core/areas.h \
- src/game/../core/viewport.h src/game/../core/input.h \
- src/game/../core/button.h src/game/../core/label.h \
+ src/game/../core/label.h src/game/../core/viewport.h \
+ src/game/../core/input.h src/game/../core/button.h \
  src/game/../core/baseentity.h src/game/../core/playercharacter.h \
  src/game/../core/tilelayer.h src/game/../core/uilayers.h \
  src/game/../core/scenes.h src/game/../core/basescene.h \
@@ -575,10 +575,10 @@ src/game/../core/resources.h:
 src/game/../core/data.h:
 src/game/../core/utils.h:
 src/game/../core/areas.h:
+src/game/../core/label.h:
 src/game/../core/viewport.h:
 src/game/../core/input.h:
 src/game/../core/button.h:
-src/game/../core/label.h:
 src/game/../core/baseentity.h:
 src/game/../core/playercharacter.h:
 src/game/../core/tilelayer.h:

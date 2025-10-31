@@ -1,24 +1,60 @@
 #pragma once
 #include "gamedefs.h"
+#include "label.h"
 
-struct Area {
+/* class AreaSignal {
     public:
-        ~Area() = default;
+    void Connect(std::function<void( TransitionArea a )> const& callback);
+    void EmitSignal(TransitionArea a);    
+
+    std::vector<std::function<void( TransitionArea a )>> callbacks;
+}; */
+
+class BaseArea {
+    public:
+        virtual ~BaseArea() = default;
+        virtual void Update() = 0;
+        virtual void Draw() = 0;
+        //virtual void Activate() = 0;
 
         std::string identifier;
         Vector2 position;
-        int size;
+        Vector2 size;
+        bool collided;
+        bool hovered;
+
+        float time_pressed;
+        
 
         std::string payload_s;
         Vector2 payload_v;
+        int payload_i;
         
 
         Signal mouse_entered;
         Signal entity_entered;
 
+
+        Label label;
 };
 
-//extern std::vector<Area> g_game_areas;
+
+class TransitionArea : public BaseArea {
+
+    public:
+        TransitionArea(){};
+        ~TransitionArea() override;
+        void Update() override;
+        void Draw() override;
+        //void Activate() override;
+
+        Signal area_entered;
+        Signal area_activated;
+
+        Label label;
+
+};
+
 
 
 void UpdateGameAreas();

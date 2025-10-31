@@ -19,9 +19,11 @@ void LoadResources() {
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
     g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg2.png");
     g_ui_backgrounds[BG_SHELTER] = LoadTexture("assets/staging_bg1.png");
+    g_ui_backgrounds[BG_HOUSE_TRANS] = LoadTexture("assets/house_trans.png");
+    g_ui_backgrounds[BG_OUTSIDE_TRANS] = LoadTexture("assets/outside_trans.png");
 
-    TraceLog(LOG_INFO, "LOADING SPRITESHEET");
-    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/ldtk/tilesheet.png");
+/*     TraceLog(LOG_INFO, "LOADING SPRITESHEET");
+    g_tile_sheets[TS_FOREST] = LoadTexture("assets/maps/ldtk/tilesheet.png"); */
 
 /*     TraceLog(LOG_INFO, "LOADING LDTK TILESHEETS");
     g_ldtk_tilesheets[TS_FOREST] = LoadTexture("assets/maps/forrest_spritesheet.png");

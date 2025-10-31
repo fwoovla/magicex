@@ -8,40 +8,52 @@ void SceneManager::UpdateScene()
     if(current_scene == nullptr){
         return;
     }
-    SCENE_ID new_scene = NO_SCENE;
-    
+
+
+    SetCursorPosition(g_input.screen_mouse_position / g_scale);
+
+
+
+    SCENE_ID new_scene_id = NO_SCENE;
+        
     if(g_game_data.paused == false) {
-        new_scene = current_scene->Update();
+        new_scene_id = current_scene->Update();
     }
     else {
         pause_menu->Update();
     }
+    if(!is_transitioning) {
+        switch (new_scene_id) {
+            case NO_SCENE:
+                break;
 
-    switch (new_scene) {
-        case NO_SCENE:
-            break;
+            default:
+            TransitionSceneTo(new_scene_id);
 
-        default:
-            ChangeSceneTo(new_scene);
+            //ChangeSceneTo(new_scene_id);
+        }
     }
 
     if(g_input.keys_pressed[0] == KEY_P) {
-        g_game_data.paused = !g_game_data.paused;    
-    }
+        g_game_data.paused = !g_game_data.paused;            }
 
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
     }
 
+    if(is_transitioning) {
+        fade_transition->Update();
+    }
 
-    SetCursorPosition(g_input.world_mouse_position);
-    //g_cursor.sprite.position = g_cursor
+
 }
 
 
 void SceneManager::Init() {
     current_scene = new SplashScreen();
     g_game_data.current_scene_id = SPLASH_SCENE;
+
+    is_transitioning = false;
 
     pause_menu = new PauseMenu();
     pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
@@ -66,17 +78,22 @@ void SceneManager::DrawScene() {
     if(g_game_data.paused == true) {
         pause_menu->Draw();
     }
-    BeginMode2D(g_camera);
     DrawSprite(g_cursor.sprite);
-    EndMode2D();
+    //BeginMode2D(g_camera);
+    //EndMode2D();
+
+    if(is_transitioning) {
+        fade_transition->Draw();
+    }
 }
 
-void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
+void SceneManager::ChangeSceneTo(SCENE_ID new_scene_id) {
     
     
     delete current_scene;
+    g_game_data.current_map_index = g_game_data.next_map_index;
 
-    switch (new_scene) {
+    switch (new_scene_id) {
         case SPLASH_SCENE:
             current_scene = new SplashScreen();
             break;
@@ -104,8 +121,19 @@ void SceneManager::ChangeSceneTo(SCENE_ID new_scene) {
         default:
             break;
     }
-    g_game_data.current_scene_id = new_scene;
+    g_game_data.current_scene_id = new_scene_id;
 }
+
+
+void SceneManager::TransitionSceneTo(SCENE_ID new_scene_id) {
+    next_scene_id = new_scene_id;
+    is_transitioning = true;
+    fade_transition = new FadeTransition(1);
+    fade_transition->transition_ended.Connect( [&](){OnTransitionEnded();} );
+    fade_transition->transition_midpoint.Connect( [&](){OnTransitionMidpoint();} );
+}
+
+
 
 void SceneManager::OnPausePressed() {
     g_game_data.paused = !g_game_data.paused;
@@ -122,8 +150,23 @@ void SceneManager::OnBackToMenuPressed() {
         delete g_current_player;
     }
     g_game_data.paused = false;
+    g_game_data.next_map_index = g_game_data.shelter_map_index;
+    g_game_data.is_in_sub_map = false;
     ChangeSceneTo(TITLE_SCENE);
 }
+
+
+void SceneManager::OnTransitionMidpoint() {
+    TraceLog(LOG_INFO, "trans midpoint ");
+    ChangeSceneTo(next_scene_id);
+}
+
+void SceneManager::OnTransitionEnded() {
+    delete fade_transition;
+    is_transitioning = false;
+    TraceLog(LOG_INFO, "trans destroy ");
+}
+
 
 
 void InstanceLevelObjects() {
@@ -133,17 +176,24 @@ void InstanceLevelObjects() {
     for(int t_index = 0; t_index < g_level_data.level_transitions.size(); t_index++) {
         Vector2 t_posisition = g_level_data.level_transitions[t_index].position_i;
 
-        Area new_area;
-        new_area.identifier = g_level_data.level_transitions[t_index].identifier;
-        new_area.position = t_posisition;
-        new_area.size = g_ldtk_maps.default_grid_size;
-        new_area.payload_s = g_level_data.level_transitions[t_index].dest_string;
+        TransitionArea *new_area = new TransitionArea();
+
+        new_area->identifier = g_level_data.level_transitions[t_index].identifier;
+        new_area->position = t_posisition;
+        new_area->size = {g_level_data.level_transitions[t_index].size.x, g_level_data.level_transitions[t_index].size.y};
+        new_area->payload_s = g_level_data.level_transitions[t_index].dest_string;
         
         if(g_level_data.level_transitions[t_index].identifier == "HouseTransition") {
-            new_area.payload_v = g_level_data.level_transitions[t_index].return_position;
+            new_area->payload_v = g_level_data.level_transitions[t_index].return_position;
+        }
+
+        for(int level_index = 0; level_index < g_ldtk_maps.levels.size(); level_index++) {
+            if(g_ldtk_maps.levels[level_index].identifier == new_area->payload_s) {
+                new_area->payload_i = level_index;
+            }
         }
 
         //g_game_areas.push_back(new_area);
         g_level_data.game_areas.push_back(new_area);
-    }
+    } 
 }

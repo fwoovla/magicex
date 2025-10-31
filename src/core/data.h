@@ -53,13 +53,14 @@ struct LevelTransitionData {
     Vector2 position_i;
     Vector2 position_f;
     Vector2 return_position;
+    Vector2 size;
 };
 
 struct LevelData {
     bool is_shelter;
     Vector2 spawn_position;
     std::vector<LevelTransitionData> level_transitions;
-    std::vector<Area> game_areas;
+    std::vector<BaseArea*> game_areas;
 };
 
 extern LevelData g_level_data;

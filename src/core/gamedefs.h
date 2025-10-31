@@ -52,6 +52,8 @@ struct PlayerInput {
 
     bool key_sprint;
 
+    bool key_use;
+
     KeyboardKey keys_pressed[10];
 };
 
@@ -110,10 +112,10 @@ extern Viewport g_viewport;
 #include "ldtk.h"
 #include "resources.h"
 #include "data.h"
-#include "viewport.h"
-#include "input.h"
 #include "utils.h"
+#include "viewport.h"
 #include "areas.h"
+#include "input.h"
 #include "button.h"
 
 #include "label.h"

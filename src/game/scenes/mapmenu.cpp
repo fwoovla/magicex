@@ -63,7 +63,7 @@ void MapMenu::Update() {
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if(i != g_game_data.shelter_map_index) {
                     TraceLog(LOG_INFO, "MAP BUTTON PRESSED %i", i);
-                    g_game_data.current_map_index = i;
+                    g_game_data.next_map_index = i;
                     //play_pressed.EmitSignal();
                     map_selected.EmitSignal();
                 }

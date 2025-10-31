@@ -117,7 +117,7 @@ void PlayerCharacter::CheckInput() {
     float speed = g_player_data.base_speed;
 
     if(g_input.key_sprint) {
-        speed = speed + (speed * 1.2);
+        speed = speed + (speed * 0.8f);
     }
 
     //velocity = input_dir * speed;

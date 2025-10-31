@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
-#define MAX_ZOOM 2.0f
-#define MIN_ZOOM 0.80f
+#define MAX_ZOOM 2.4f
+#define MIN_ZOOM 1.80f
 #define ZOOM_STEP 0.20f
 
 
@@ -15,8 +15,11 @@ ShelterScene::ShelterScene() {
     InstanceLevelObjects();
 
     for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
-        if(g_level_data.game_areas[area_index].identifier == "LevelTransition") {
-            g_level_data.game_areas[area_index].entity_entered.Connect( [&](){OnTransitionAreaEntityEntered();} );
+        if(g_level_data.game_areas[area_index]->identifier == "LevelTransition") {
+            TransitionArea* t_area = dynamic_cast<TransitionArea*>( g_level_data.game_areas[area_index]);
+
+            t_area->area_entered.Connect( [&](){OnTransitionAreaEntered();} );
+            t_area->area_activated.Connect( [&](){OnTransitionAreaActivated();} );
         }
     }
 
@@ -34,14 +37,13 @@ ShelterScene::ShelterScene() {
 
     show_map_menu = false;
 
-    //DL_Add(active_entity_list, g_current_player );
     g_current_player->position = g_level_data.spawn_position;
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
     g_camera.offset = (Vector2){0,0};
     g_camera.rotation = 0.0f;
-    g_camera.zoom = 1.5f; 
+    g_camera.zoom = 2.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 
     HideCursor();
@@ -61,8 +63,17 @@ SCENE_ID ShelterScene::Update() {
     }
 
     g_current_player->Update();
+
+
+    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Update();
+    }
+
+
+
+
     //DL_Update(active_entity_list);
-    UpdateGameAreas();
+    //UpdateGameAreas();
     HandleCamera();
 
     return return_scene;
@@ -78,9 +89,11 @@ void ShelterScene::Draw() {
     g_current_player->Draw();
     //DL_Draw(active_entity_list);
     
-    if(g_game_settings.show_debug) {
-        DrawGameAreas(BLUE);
+    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Draw();
     }
+
+
     //DrawSprite(g_cursor.sprite);
     EndMode2D();
     
@@ -92,8 +105,6 @@ void ShelterScene::Draw() {
     }
 
 }
-
-
 
 
 
@@ -118,8 +129,13 @@ void ShelterScene::OnMapSelected() {
 }
 
 
-void ShelterScene::OnTransitionAreaEntityEntered() {
+void ShelterScene::OnTransitionAreaEntered() {
+    TraceLog(LOG_INFO, "TRANSITION ENTERED:  %i", g_game_data.current_map_index);
+    //return_scene = GAME_SCENE;
 
+}
+
+void ShelterScene::OnTransitionAreaActivated() {
     TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     return_scene = GAME_SCENE;
 

@@ -12,16 +12,26 @@ class SceneManager{
     void CleanUp();
     void UpdateScene();
     void DrawScene();
-    void ChangeSceneTo(SCENE_ID new_scene);
+    void ChangeSceneTo(SCENE_ID new_scene_id);
+    void TransitionSceneTo(SCENE_ID new_scene_id);
 
     
     void OnPausePressed();
     void OnSavePressed();
     void OnBackToMenuPressed();
 
+    void OnTransitionEnded();
+    void OnTransitionMidpoint();
+
 
     BaseScene *current_scene;
     PauseMenu *pause_menu;
+
+    FadeTransition *fade_transition;
+
+    bool is_transitioning;
+
+    SCENE_ID next_scene_id;
 
         //bool paused;
 

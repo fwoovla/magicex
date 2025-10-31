@@ -103,6 +103,7 @@ GENERATED += $(OBJDIR)/subscene.o
 GENERATED += $(OBJDIR)/tilelayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
+GENERATED += $(OBJDIR)/transitions.o
 GENERATED += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/areas.o
 OBJECTS += $(OBJDIR)/baseunit.o
@@ -129,6 +130,7 @@ OBJECTS += $(OBJDIR)/subscene.o
 OBJECTS += $(OBJDIR)/tilelayer.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
+OBJECTS += $(OBJDIR)/transitions.o
 OBJECTS += $(OBJDIR)/utils.o
 
 # Rules
@@ -266,6 +268,9 @@ $(OBJDIR)/titlescene.o: src/game/scenes/titlescene.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/titleuilayer.o: src/game/scenes/titleuilayer.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/transitions.o: src/game/scenes/transitions.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.cpp
