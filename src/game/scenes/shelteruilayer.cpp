@@ -3,6 +3,8 @@
 ShelterUILayer::ShelterUILayer() {
 
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, RAYWHITE, "SHELTER");
+    CreateLabel(debug_label, {20 / g_scale}, 40/g_scale, RAYWHITE, "DEBUG");
+
 
     CreateButton(quit_button, {g_resolution.x - 10, 10}, {30/g_scale , 30/g_scale}, RED, "X");
     quit_button.default_color = DARKRED;
@@ -31,11 +33,19 @@ void ShelterUILayer::Draw() {
     if(!g_game_settings.show_debug){
         return;
     }
+    DrawLabel(debug_label);
 
 }
 
 void ShelterUILayer::Update() {
 
+    if(g_game_settings.show_debug) {
+        debug_label.text = TextFormat( "pf %0.2f %0.2f \n pc %i %i \n ct %i %i \n", 
+            g_current_player->position.x, g_current_player->position.y,
+            (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
+            (int)g_camera.target.x, (int)g_camera.target.y
+          );
+    }
 
     if(IsButtonHovered(quit_button, g_scale)){
         if(quit_button.already_hovered == false) {
@@ -45,7 +55,9 @@ void ShelterUILayer::Update() {
             TraceLog(LOG_INFO, "QUIT BUTTON PRESSED ");
             //play_pressed.EmitSignal();
             quit_pressed.EmitSignal();
-        }        
+        }
+
+       
     }
 
     if(IsButtonHovered(start_button, g_scale)){

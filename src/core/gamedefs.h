@@ -99,6 +99,7 @@ extern GameSettings g_game_settings;
 //extern int *level_data_array;
 //extern GameSettings g_game_settings;
 extern float g_scale;
+extern float g_inv_scale;
 extern float g_world2screen;
 extern float g_screen2world;
 extern Vector2 g_resolution;

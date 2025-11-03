@@ -24,6 +24,7 @@ PlayerCharacter *g_current_player;
 
 bool game_running;
 float g_scale;
+float g_inv_scale;
 float g_world2screen;
 float g_screen2world;
 
@@ -65,6 +66,7 @@ void Game::StartGame() {
     float scaleY = (float)GetScreenHeight() / g_game_settings.resolution.y;
     
     g_scale = (scaleX < scaleY) ? scaleX : scaleY;
+    g_inv_scale = 1/g_scale;
     g_resolution = g_game_settings.resolution;
     g_screen_center = { g_resolution.x/2, g_resolution.y/2 };
     

@@ -169,6 +169,7 @@ class ShelterUILayer : public BaseUILayer {
     Signal quit_pressed;
 
     Label title_label;
+    Label debug_label;
 
 };
 

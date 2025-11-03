@@ -87,6 +87,7 @@ GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
+GENERATED += $(OBJDIR)/label.o
 GENERATED += $(OBJDIR)/ldtk.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapmenu.o
@@ -114,6 +115,7 @@ OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
+OBJECTS += $(OBJDIR)/label.o
 OBJECTS += $(OBJDIR)/ldtk.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapmenu.o
@@ -211,6 +213,9 @@ $(OBJDIR)/baseunit.o: src/game/entities/baseunit.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/label.o: src/game/label.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ldtk.o: src/game/ldtk.cpp
