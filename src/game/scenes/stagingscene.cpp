@@ -51,6 +51,17 @@ void StagingScene::Draw() {
     ui_layer->Draw();
 }
 
+void StagingScene::DrawScene() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK);
+    DrawSprite(bg_sprite_1);
+    //DL_Draw(active_unit_list);
+}
+
+void StagingScene::DrawUI() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, {0,0,0,0});
+    ui_layer->Draw();
+}
+
 StagingScene::~StagingScene() {
     delete ui_layer;
     //UnloadTexture(bg_sprite_1.texture);

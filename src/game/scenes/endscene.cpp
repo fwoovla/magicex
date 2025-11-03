@@ -24,6 +24,17 @@ void EndScene::Draw() {
     ui_layer->Draw();
 }
 
+void EndScene::DrawScene() {
+    //DrawRectangle( 0,0, g_game_settings.resolution.x, g_game_settings.resolution.y, DARKERGRAY ); 
+    //ui_layer->Draw();
+}
+
+void EndScene::DrawUI() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK );
+    //DrawRectangle( 0,0, g_game_settings.resolution.x, g_game_settings.resolution.y, DARKERGRAY ); 
+    ui_layer->Draw();
+}
+
 EndScene::~EndScene() {
     delete ui_layer;
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  END");

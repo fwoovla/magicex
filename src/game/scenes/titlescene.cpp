@@ -41,6 +41,21 @@ void TitleScene::Draw() {
 
 }
 
+
+void TitleScene::DrawScene() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+    DrawSprite(bg_sprite_1);
+
+}
+
+
+void TitleScene::DrawUI() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+    ui_layer->Draw();
+
+}
+
+
 TitleScene::~TitleScene() {
     delete ui_layer;
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  TITLE");

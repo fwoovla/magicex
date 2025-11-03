@@ -11,6 +11,7 @@ void SceneManager::UpdateScene()
 
 
     SetCursorPosition(g_input.screen_mouse_position / g_scale);
+    //SetCursorPosition(g_input.screen_mouse_position);
 
 
 
@@ -73,7 +74,23 @@ void SceneManager::CleanUp() {
 
 void SceneManager::DrawScene() {
 
-    current_scene->Draw();
+    current_scene->DrawScene();
+
+/*     if(g_game_data.paused == true) {
+        pause_menu->Draw();
+    }
+    DrawSprite(g_cursor.sprite);
+    //BeginMode2D(g_camera);
+    //EndMode2D();
+
+    if(is_transitioning) {
+        fade_transition->Draw();
+    } */
+}
+
+void SceneManager::DrawUI() {
+
+    current_scene->DrawUI();
 
     if(g_game_data.paused == true) {
         pause_menu->Draw();
@@ -86,6 +103,7 @@ void SceneManager::DrawScene() {
         fade_transition->Draw();
     }
 }
+
 
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene_id) {
     

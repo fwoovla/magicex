@@ -20,7 +20,7 @@ PauseMenu::PauseMenu() {
 
 PauseMenu::~PauseMenu() {
     //UnloadSound(button_sound);
-    TraceLog(LOG_INFO, "UI DESTRUCTOR:  TITLE UI");
+    TraceLog(LOG_INFO, "UI DESTRUCTOR:  PAUSEMENU UI");
 }
 
 void PauseMenu::Draw() {

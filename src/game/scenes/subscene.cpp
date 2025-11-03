@@ -79,6 +79,50 @@ void SubScene::Draw() {
 }
 
 
+void SubScene::DrawScene() {
+    //TraceLog(LOG_INFO, "SUB SCENE DRAW");
+
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+    //DrawSprite(bg_sprite_1);
+    BeginMode2D(g_camera);
+    tile_layer->Draw();
+    g_current_player->Draw();
+    //DL_Draw(active_entity_list);
+    
+/*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Draw();
+    } */
+
+    EndMode2D();
+
+    //ui_layer->Draw();
+}
+
+
+void SubScene::DrawUI() {
+    //TraceLog(LOG_INFO, "SUB SCENE DRAW");
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+
+    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Draw();
+    }
+    ui_layer->Draw();
+
+    /*     
+
+    //DrawSprite(bg_sprite_1);
+    BeginMode2D(g_camera);
+    tile_layer->Draw();
+    g_current_player->Draw();
+    //DL_Draw(active_entity_list);
+    
+
+
+    EndMode2D(); */
+
+}
+
+
 SubScene::~SubScene() {
     delete ui_layer;
     delete tile_layer;

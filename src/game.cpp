@@ -58,7 +58,8 @@ void Game::StartGame() {
     
     game_running = true;
     
-    SetTextureFilter(render_texture.texture, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(scene_render_texture.texture, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(ui_render_texture.texture, TEXTURE_FILTER_BILINEAR);
     
     float scaleX = (float)GetScreenWidth() / g_game_settings.resolution.x;
     float scaleY = (float)GetScreenHeight() / g_game_settings.resolution.y;
@@ -73,8 +74,9 @@ void Game::StartGame() {
     g_world2screen = g_camera.zoom * g_scale;
     g_screen2world = 1/g_world2screen;
       
-    render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
-
+    scene_render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
+    ui_render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
+    //ui_render_texture = LoadRenderTexture(g_game_settings.window_size.x, g_game_settings.window_size.y);
 
     SetTargetFPS(60);
 
@@ -85,23 +87,41 @@ void Game::StartGame() {
 
         scene_manager.UpdateScene();
         
-        //draw everything to the render texture
-        BeginTextureMode(render_texture);
+        //draw scene
+        BeginTextureMode(scene_render_texture);
+        ClearBackground(BLANK);
         scene_manager.DrawScene();
-        
         EndTextureMode();
 
-        //do render stuff
+        //ui
+        BeginTextureMode(ui_render_texture);
+        ClearBackground(BLANK);
+        scene_manager.DrawUI();
+        EndTextureMode();
+
+
         BeginDrawing();
+
+
         ClearBackground(BLACK);
 
         
         DrawTexturePro(
-            render_texture.texture,
-            (Rectangle){ 0, 0, (float)render_texture.texture.width, -(float)render_texture.texture.height },
+            scene_render_texture.texture,
+            (Rectangle){ 0, 0, (float)scene_render_texture.texture.width, -(float)scene_render_texture.texture.height },
             (Rectangle){ (float)offsetX, (float)offsetY, g_resolution.x*g_scale, g_resolution.y*g_scale },
             (Vector2){0, 0}, 0.0f, WHITE
         );
+
+        //DrawRectangleRec( (Rectangle){ 0, 0, (float)ui_render_texture.texture.width, -(float)ui_render_texture.texture.height }, WHITE);
+        DrawTexturePro(
+            ui_render_texture.texture,
+            (Rectangle){ 0, 0, (float)ui_render_texture.texture.width, -(float)ui_render_texture.texture.height },
+            (Rectangle){ (float)offsetX, (float)offsetY, g_resolution.x*g_scale, g_resolution.y*g_scale },
+            (Vector2){0, 0}, 0.0f, WHITE
+        );
+
+
         EndDrawing();
 
         if(g_game_settings.show_debug == true) {

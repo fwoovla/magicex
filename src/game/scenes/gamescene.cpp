@@ -77,13 +77,13 @@ SCENE_ID GameScene::Update() {
         else {
             //TraceLog(LOG_INFO, "GAME SCENE UPDATE");
             DL_Update(active_entity_list);
+            ui_layer->Update();
             for(int i = 0; i < g_level_data.game_areas.size(); i++) {
                 g_level_data.game_areas[i]->Update();
             }
             //UpdateGameAreas();
             g_current_player->Update();
             HandleCamera();
-            ui_layer->Update();
         }
     }
 
@@ -120,10 +120,55 @@ void GameScene::Draw() {
             EndMode2D();
             ui_layer->Draw();
         }
-    }
-    
-    
+    }    
+}
 
+void GameScene::DrawScene() {
+
+    if(g_game_data.is_in_sub_map) {
+        //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
+        sub_scene->DrawScene();
+    }
+    else {
+        //TraceLog(LOG_INFO, "GAME SCENE DRAW");
+        //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY );
+        //if(character_menu_visible) {
+            //character_menu->Draw();
+        //}
+        //else {
+        BeginMode2D(g_camera);
+        tile_layer->Draw();
+        DL_Draw(active_entity_list);
+        g_current_player->Draw();
+            
+/*         for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+            g_level_data.game_areas[i]->Draw();
+        } */
+            
+        EndMode2D();
+        //ui_layer->Draw();
+        //}
+    }    
+}
+
+void GameScene::DrawUI() {
+
+    if(g_game_data.is_in_sub_map) {
+        //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
+        sub_scene->DrawUI();
+    }
+    else {
+        if(character_menu_visible) {
+            character_menu->Draw();
+        }
+        else {
+            for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+                g_level_data.game_areas[i]->Draw();
+            }
+
+            ui_layer->Draw();
+        }
+    }    
 }
 
 void GameScene::HandleCamera() {

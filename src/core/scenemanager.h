@@ -12,6 +12,7 @@ class SceneManager{
     void CleanUp();
     void UpdateScene();
     void DrawScene();
+    void DrawUI();
     void ChangeSceneTo(SCENE_ID new_scene_id);
     void TransitionSceneTo(SCENE_ID new_scene_id);
 

@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
 #define MAX_ZOOM 2.4f
-#define MIN_ZOOM 1.80f
+#define MIN_ZOOM 1.8f
 #define ZOOM_STEP 0.20f
 
 
@@ -23,7 +23,6 @@ ShelterScene::ShelterScene() {
         }
     }
 
-   
     ui_layer = new ShelterUILayer();
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
     ui_layer->start_pressed.Connect( [&](){OnStartPressed();} );
@@ -105,6 +104,37 @@ void ShelterScene::Draw() {
     }
 
 }
+
+
+
+
+void ShelterScene::DrawScene() {
+
+    BeginMode2D(g_camera);
+    tile_layer->Draw();
+    g_current_player->Draw();
+    EndMode2D();
+}
+
+
+
+
+void ShelterScene::DrawUI() {
+
+
+    if(show_map_menu == true) {
+        map_menu->Draw();
+    }
+    else {
+        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+            g_level_data.game_areas[i]->Draw();
+        }
+
+        ui_layer->Draw();
+    }
+
+}
+
 
 
 

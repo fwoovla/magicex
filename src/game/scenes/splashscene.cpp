@@ -22,6 +22,16 @@ void SplashScreen::Draw() {
     DrawLabelCentered(title_label);
 }
 
+void SplashScreen::DrawScene() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, DARKERGRAY ); 
+    //DrawLabelCentered(title_label);
+}
+
+void SplashScreen::DrawUI() {
+    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
+    DrawLabelCentered(title_label);
+}
+
 SplashScreen::~SplashScreen() {
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SPLASH");
 }

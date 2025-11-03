@@ -29,6 +29,8 @@ class SplashScreen : public  BaseScene{
         ~SplashScreen() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
 
         Label title_label;
 
@@ -40,6 +42,8 @@ class TitleScene : public  BaseScene{
         ~TitleScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
 
         void OnPlayPressed();
         void OnSettingsPressed();
@@ -57,6 +61,8 @@ class StagingScene : public  BaseScene{
         ~StagingScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
 
         void OnPlayPressed();
         void OnSettingsPressed();
@@ -78,6 +84,8 @@ class ShelterScene : public  BaseScene{
         ~ShelterScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
         void HandleCamera();
 
         void OnQuitPressed();
@@ -106,6 +114,8 @@ class SubScene : public  BaseScene{
         ~SubScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
         void HandleCamera();
 
         void OnQuitPressed();
@@ -129,6 +139,8 @@ class GameScene : public  BaseScene{
         ~GameScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
 
         void HandleCamera();
 
@@ -170,6 +182,8 @@ class EndScene : public  BaseScene{
         ~EndScene() override;
         SCENE_ID Update() override;
         void Draw() override;
+        void DrawScene() override;
+        void DrawUI() override;
 
         EndUILayer *ui_layer;
         
