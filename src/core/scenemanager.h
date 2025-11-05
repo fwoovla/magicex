@@ -34,6 +34,8 @@ class SceneManager{
 
     SCENE_ID next_scene_id;
 
+    Label debug_label;
+
         //bool paused;
 
     private:

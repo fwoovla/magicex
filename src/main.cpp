@@ -11,6 +11,7 @@ GameSettings g_game_settings = {
 int main(int argc, char *argv[]){
 
 
+    //SetWindowState(FLAG_WINDOW_RESIZABLE);
     InitWindow(g_game_settings.window_size.x, g_game_settings.window_size.y, "new window");
     Game game;
 

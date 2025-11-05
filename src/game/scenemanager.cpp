@@ -46,6 +46,14 @@ void SceneManager::UpdateScene()
         fade_transition->Update();
     }
 
+    if(g_game_settings.show_debug) {
+        debug_label.text = TextFormat( "pf %0.2f %0.2f \n pc %i %i \n ct %i %i \n", 
+        g_current_player->position.x, g_current_player->position.y,
+        (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
+        (int)g_camera.target.x, (int)g_camera.target.y
+    );
+    }
+
 
 }
 
@@ -62,6 +70,7 @@ void SceneManager::Init() {
     pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
 
     LoadSpriteCentered( g_cursor.sprite, g_sprite_sheets[SPRITE_CROSSHAIR], {0,0} );
+    CreateLabel(debug_label, {20 / g_scale}, 40/g_scale, RAYWHITE, "DEBUG");
 }
 
 
@@ -101,6 +110,9 @@ void SceneManager::DrawUI() {
 
     if(is_transitioning) {
         fade_transition->Draw();
+    }
+    if(g_game_settings.show_debug) {
+        DrawLabel(debug_label);
     }
 }
 

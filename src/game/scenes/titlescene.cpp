@@ -69,6 +69,7 @@ void TitleScene::OnPlayPressed() {
 }
 
 void TitleScene::OnSettingsPressed() {
+    ToggleFullscreen();
 }
 
 void TitleScene::OnQuitPressed() {

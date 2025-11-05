@@ -14,6 +14,23 @@ class BaseUILayer{
     virtual void Draw() = 0;
 };
 
+class ItemGrid {
+    public:
+    ItemGrid(int c, int r, int s, Vector2 p);
+    ~ItemGrid();
+    void Update();
+    void Draw();
+
+    int rows;
+    int cols;
+    int grid_size;
+    Vector2 position;
+
+    bool cell_hovered;
+    Vector2 hovered_cell;
+};
+
+
 
 class PauseMenu : public BaseUILayer {
 
@@ -53,8 +70,6 @@ class MapMenu : public BaseUILayer {
 
     Signal map_selected;
 
-    
-
 };
 
 class CharacterMenu : public BaseUILayer {
@@ -67,11 +82,30 @@ class CharacterMenu : public BaseUILayer {
 
     Label title_label;
 
-    //Button continue_button;
-    //Signal continue_pressed;
+    Rectangle panel_rect;
+    Texture2D panel_bg;
 
-    //Button save_button;
-    //Signal save_pressed;
+    Label ground_header_label;
+    Label character_header_label;
+    Label inventory_label_header;
+
+    
+    Vector2 gpo; // ground position offset
+    ItemGrid *ground_grid;
+    
+    Vector2 cpo;
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+    Label character_label;
+    Label character_stat_label;
+    ItemGrid *inventory_grid;
+    //Rectangle ground_bounding_rect;
+    //Sprite ground_panel_sprite;
+    //AnimatedSprite ground_sprite;
+    //Label character_label;
+    //Label character_stat_label;
+
+    Vector2 ipo;
 
 };
 
@@ -169,7 +203,7 @@ class ShelterUILayer : public BaseUILayer {
     Signal quit_pressed;
 
     Label title_label;
-    Label debug_label;
+    //Label debug_label;
 
 };
 

@@ -253,6 +253,7 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  src/game/entities/../../core/data.h src/game/entities/../../core/utils.h \
  src/game/entities/../../core/areas.h \
  src/game/entities/../../core/label.h \
+ src/game/entities/../../core/events.h \
  src/game/entities/../../core/viewport.h \
  src/game/entities/../../core/input.h \
  src/game/entities/../../core/button.h \
@@ -586,6 +587,7 @@ src/game/entities/../../core/data.h:
 src/game/entities/../../core/utils.h:
 src/game/entities/../../core/areas.h:
 src/game/entities/../../core/label.h:
+src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:
 src/game/entities/../../core/input.h:
 src/game/entities/../../core/button.h:

@@ -82,6 +82,8 @@ struct Viewport {
     float inv_tile_size;
     Vector2 center_i;
     Vector2 center_f;
+    Vector2 screen_size;
+    Vector2 resolution;
 
 
 };
@@ -114,11 +116,11 @@ extern Viewport g_viewport;
 #include "resources.h"
 #include "data.h"
 #include "utils.h"
+#include "events.h"
 #include "viewport.h"
 #include "areas.h"
 #include "input.h"
 #include "button.h"
-
 #include "label.h"
 #include "baseentity.h"
 #include "playercharacter.h"

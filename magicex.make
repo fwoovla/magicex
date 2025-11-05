@@ -84,9 +84,12 @@ GENERATED += $(OBJDIR)/charactermenu.o
 GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
+GENERATED += $(OBJDIR)/events.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
+GENERATED += $(OBJDIR)/input.o
+GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
 GENERATED += $(OBJDIR)/ldtk.o
 GENERATED += $(OBJDIR)/main.o
@@ -106,15 +109,19 @@ GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
 GENERATED += $(OBJDIR)/transitions.o
 GENERATED += $(OBJDIR)/utils.o
+GENERATED += $(OBJDIR)/viewport.o
 OBJECTS += $(OBJDIR)/areas.o
 OBJECTS += $(OBJDIR)/baseunit.o
 OBJECTS += $(OBJDIR)/charactermenu.o
 OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
+OBJECTS += $(OBJDIR)/events.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
+OBJECTS += $(OBJDIR)/input.o
+OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
 OBJECTS += $(OBJDIR)/ldtk.o
 OBJECTS += $(OBJDIR)/main.o
@@ -134,6 +141,7 @@ OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
 OBJECTS += $(OBJDIR)/transitions.o
 OBJECTS += $(OBJDIR)/utils.o
+OBJECTS += $(OBJDIR)/viewport.o
 
 # Rules
 # #############################################
@@ -215,6 +223,15 @@ $(OBJDIR)/baseunit.o: src/game/entities/baseunit.cpp
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/events.o: src/game/events.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/input.o: src/game/input.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/itemgrid.o: src/game/itemgrid.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/label.o: src/game/label.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -276,6 +293,9 @@ $(OBJDIR)/titleuilayer.o: src/game/scenes/titleuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/transitions.o: src/game/scenes/transitions.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/viewport.o: src/game/viewport.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.cpp

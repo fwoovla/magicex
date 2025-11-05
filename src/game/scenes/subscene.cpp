@@ -9,6 +9,7 @@
 SubScene::SubScene() {
     scene_id = SUB_SCENE;
     return_scene = NO_SCENE;
+    character_menu_visible = false;
 
 
     ClearLevelData();
@@ -32,7 +33,7 @@ SubScene::SubScene() {
     
     tile_layer = new TileLayer();
 
-    //LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_SHELTER], {0,0});
+    character_menu = new CharacterMenu();
     
     g_current_player->position = g_level_data.spawn_position;
 
@@ -56,69 +57,42 @@ SCENE_ID SubScene::Update() {
     }
     HandleCamera();
 
+    if(g_input.keys_pressed[0] == KEY_E) {
+        character_menu_visible = !character_menu_visible;
+    }
+    if(character_menu_visible) {
+        character_menu->Update();
+    }
+
     return return_scene;
 }
 
 void SubScene::Draw() {
-    //TraceLog(LOG_INFO, "SUB SCENE DRAW");
-
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
-    //DrawSprite(bg_sprite_1);
-    BeginMode2D(g_camera);
-    tile_layer->Draw();
-    g_current_player->Draw();
-    //DL_Draw(active_entity_list);
-    
-    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Draw();
-    }
-
-    EndMode2D();
-
-    ui_layer->Draw();
 }
 
 
 void SubScene::DrawScene() {
     //TraceLog(LOG_INFO, "SUB SCENE DRAW");
 
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
-    //DrawSprite(bg_sprite_1);
     BeginMode2D(g_camera);
     tile_layer->Draw();
     g_current_player->Draw();
-    //DL_Draw(active_entity_list);
-    
-/*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Draw();
-    } */
 
     EndMode2D();
 
-    //ui_layer->Draw();
 }
 
 
 void SubScene::DrawUI() {
     //TraceLog(LOG_INFO, "SUB SCENE DRAW");
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
 
     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
         g_level_data.game_areas[i]->Draw();
     }
     ui_layer->Draw();
-
-    /*     
-
-    //DrawSprite(bg_sprite_1);
-    BeginMode2D(g_camera);
-    tile_layer->Draw();
-    g_current_player->Draw();
-    //DL_Draw(active_entity_list);
-    
-
-
-    EndMode2D(); */
+    if(character_menu_visible) {
+            character_menu->Draw();
+    }
 
 }
 
@@ -126,6 +100,7 @@ void SubScene::DrawUI() {
 SubScene::~SubScene() {
     delete ui_layer;
     delete tile_layer;
+    delete character_menu;
 
     DL_Clear(active_entity_list);
     //g_game_areas.clear();

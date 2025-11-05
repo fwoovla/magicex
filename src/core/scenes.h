@@ -72,7 +72,9 @@ class StagingScene : public  BaseScene{
         void OnNextCharacter();
 
         
-        Sprite bg_sprite_1;
+        //Sprite bg_sprite_1;
+
+        Texture2D bg_texture;
 
         StagingUILayer *ui_layer;
 };
@@ -95,16 +97,17 @@ class ShelterScene : public  BaseScene{
         void OnTransitionAreaEntered();
         void OnTransitionAreaActivated();
 
-
-        Sprite bg_sprite_1;
-
         ShelterUILayer *ui_layer;
+
+        CharacterMenu *character_menu;
+        bool character_menu_visible;
+
+        MapMenu *map_menu;
+        bool show_map_menu;
 
         TileLayer *tile_layer;
 
-        MapMenu *map_menu;
 
-        bool show_map_menu;
 
 };
 
@@ -123,9 +126,11 @@ class SubScene : public  BaseScene{
         void OnMapTransitionEntered();
         void OnMapTransitionActivated();
 
-        Sprite bg_sprite_1;
+        CharacterMenu *character_menu;
+        bool character_menu_visible;
 
         GameUILayer *ui_layer;
+
         TileLayer *tile_layer;
 
         Signal sub_scene_exited;

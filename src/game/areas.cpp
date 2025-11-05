@@ -12,9 +12,7 @@ void TransitionArea::Update() {
         .width = (float)size.x,
         .height = (float)size.y
     };
-    
-    //collided = true;
-    //if(CheckCollisionPointRec( g_current_player->position, area_rect) ) {
+
     if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
             hovered = true;
             int grid_size = g_ldtk_maps.default_grid_size;
@@ -55,20 +53,7 @@ void TransitionArea::Update() {
 
 void TransitionArea::Draw() {
     if(hovered) {
-        if(g_game_settings.show_debug) {
-            int grid_size = g_ldtk_maps.default_grid_size;
-/* 
-            float lx = position.x;
-            float ly = position.y;
 
-            float rlx = (position.x * g_world2screen) + (g_camera.target.x * g_screen2world);
-            float rly = (position.y * g_world2screen) + (g_camera.target.y * g_screen2world);
-            //(m_pos.y * g_screen2world) + (g_camera.target.y);
-            DrawRectangleV( {lx, ly}, {(float)size.x * g_scale, (float)size.y * g_scale}, BLUE);
-            DrawRectangleV( {rlx, rly}, {(float)size.x * g_scale, (float)size.y * g_scale}, RED);
-        }
-         */
-        //DrawCircle( lx , ly, 100, WHITE  );
         DrawLabelCentered(label);
         DrawLabelCenteredWithBG(label, BLACK);
 
@@ -82,9 +67,7 @@ void TransitionArea::Draw() {
                 .height = 6
             };
             
-            //DrawRectangle(rect.x-1, rect.y-1, rect.width+2, rect.height+4, BLACK);
             DrawRectangleRec(rect, GOLD);
-            //DrawRectangleLines(rect.x-2, rect.y-2, rect.width+2, rect.height+2, BLACK);
         }
 
     }

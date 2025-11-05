@@ -8,7 +8,7 @@
 ShelterScene::ShelterScene() {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
-
+    character_menu_visible = false;
 
     ClearLevelData();
     LoadLevelData();
@@ -29,7 +29,7 @@ ShelterScene::ShelterScene() {
     
     tile_layer = new TileLayer();
 
-    LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_SHELTER], {0,0});
+    character_menu = new CharacterMenu();
     
     map_menu = new MapMenu();
     map_menu->map_selected.Connect( [&](){OnMapSelected();} );
@@ -46,14 +46,11 @@ ShelterScene::ShelterScene() {
     g_world2screen = (g_scale * g_camera.zoom);
 
     HideCursor();
-
 }
 
 
 SCENE_ID ShelterScene::Update() {
 
-
-    
     if(show_map_menu == true) {
         map_menu->Update();
     }
@@ -63,49 +60,24 @@ SCENE_ID ShelterScene::Update() {
 
     g_current_player->Update();
 
-
     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
         g_level_data.game_areas[i]->Update();
     }
 
-
-
-
-    //DL_Update(active_entity_list);
-    //UpdateGameAreas();
     HandleCamera();
+
+    if(g_input.keys_pressed[0] == KEY_E) {
+        character_menu_visible = !character_menu_visible;
+    }
+    if(character_menu_visible) {
+        character_menu->Update();
+    }
 
     return return_scene;
 }
 
 void ShelterScene::Draw() {
-
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
-    
-    //DrawSprite(bg_sprite_1);
-    BeginMode2D(g_camera);
-    tile_layer->Draw();
-    g_current_player->Draw();
-    //DL_Draw(active_entity_list);
-    
-    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Draw();
-    }
-
-
-    //DrawSprite(g_cursor.sprite);
-    EndMode2D();
-    
-    if(show_map_menu == true) {
-        map_menu->Draw();
-    }
-    else {
-        ui_layer->Draw();
-    }
-
 }
-
-
 
 
 void ShelterScene::DrawScene() {
@@ -131,15 +103,19 @@ void ShelterScene::DrawUI() {
         }
 
         ui_layer->Draw();
+
+        if(character_menu_visible) {
+            character_menu->Draw();
+        }
     }
-
 }
-
-
 
 
 ShelterScene::~ShelterScene() {
     delete ui_layer;
+    delete character_menu;
+    delete tile_layer;
+    delete map_menu;
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SHELTER");
 }

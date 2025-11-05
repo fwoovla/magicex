@@ -28,7 +28,8 @@ extern Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 enum UIPanelID {
     PANEL_GRAY,
     PANEL_WOOD_LARGE,
-    PANEL_NUM_SPRITES
+    PANEL_NUM_SPRITES,
+    PANEL_CHAR_SCREEN
 };
 
 extern Texture2D g_ui_panels[MAX_UI_PANELS];

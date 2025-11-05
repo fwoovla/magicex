@@ -1,12 +1,5 @@
 #include "../../core/gamedefs.h"
 
-
-
-//std::vector<BaseEntity *> recruit_unit_list;
-//BaseEntity *active_unit_list[DRAW_LIST_SIZE] = {nullptr};
-//BaseEntity *recruit_unit_list[DRAW_LIST_SIZE] = {nullptr};
-
-
 StagingScene::StagingScene() {
 
     scene_id = TITLE_SCENE;
@@ -21,15 +14,8 @@ StagingScene::StagingScene() {
 
     ui_layer->character_left_pressed.Connect( [&](){OnPreviousCharacter();} );
     ui_layer->character_right_pressed.Connect( [&](){OnNextCharacter();} );
-    //ui_layer->advertize_pressed.Connect( [&](){OnAdvertizePressed();} );
 
-
-    LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_STAGING], {0,0});
-
-    //active_unit_list.push_back(new BaseUnit({20,0}, units_data[0]));
-    //active_unit_list.push_back(new BaseUnit({20,50}, units_data[0]));
-    //active_unit_list.push_back(new BaseUnit({20,100}, units_data[0]));
-    //active_unit_list.push_back(new BaseUnit({20,150}, units_data[0]));
+    bg_texture = g_ui_backgrounds[BG_STAGING];
 
 
 }
@@ -45,16 +31,17 @@ SCENE_ID StagingScene::Update() {
 }
 
 void StagingScene::Draw() {
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK);
-    DrawSprite(bg_sprite_1);
-    //DL_Draw(active_unit_list);
-    ui_layer->Draw();
 }
 
 void StagingScene::DrawScene() {
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK);
-    DrawSprite(bg_sprite_1);
-    //DL_Draw(active_unit_list);
+        DrawTexturePro(
+        bg_texture,
+        {0,0,(float)bg_texture.width, (float)bg_texture.height},
+        {0,0,(float)g_resolution.x, (float)g_resolution.y},
+        {0,0},
+        0.0f,
+        WHITE
+    );
 }
 
 void StagingScene::DrawUI() {
@@ -64,7 +51,6 @@ void StagingScene::DrawUI() {
 
 StagingScene::~StagingScene() {
     delete ui_layer;
-    //UnloadTexture(bg_sprite_1.texture);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  STAGING");
 }
 
@@ -85,8 +71,6 @@ void StagingScene::OnCharacterSelected() {
     TraceLog(LOG_INFO, "CHARACTER SELECTED");
     g_player_data = g_class_data[ui_layer->select_index];
     g_current_player = new PlayerCharacter({0,0});
-    //DL_Add(active_entity_list, g_current_player );
-
 }
 
 
