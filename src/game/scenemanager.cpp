@@ -85,16 +85,6 @@ void SceneManager::DrawScene() {
 
     current_scene->DrawScene();
 
-/*     if(g_game_data.paused == true) {
-        pause_menu->Draw();
-    }
-    DrawSprite(g_cursor.sprite);
-    //BeginMode2D(g_camera);
-    //EndMode2D();
-
-    if(is_transitioning) {
-        fade_transition->Draw();
-    } */
 }
 
 void SceneManager::DrawUI() {

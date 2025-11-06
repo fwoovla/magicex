@@ -20,6 +20,7 @@ class ItemGrid {
     ~ItemGrid();
     void Update();
     void Draw();
+    void SetItems(std::vector<int> &list);
 
     int rows;
     int cols;
@@ -28,6 +29,8 @@ class ItemGrid {
 
     bool cell_hovered;
     Vector2 hovered_cell;
+
+    std::vector<Sprite> item_sprites;
 };
 
 
@@ -79,6 +82,8 @@ class CharacterMenu : public BaseUILayer {
     ~CharacterMenu() override;
     void Update() override;
     void Draw() override;
+    void Open();
+    void OpenWith(std::vector<int> &list);
 
     Label title_label;
 

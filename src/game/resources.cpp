@@ -9,6 +9,18 @@ void LoadResources() {
     g_sprite_sheets[SPRITE_CROSSHAIR] = LoadTexture("assets/crosshair.png");
     g_sprite_sheets[SPRITE_WAND] = LoadTexture("assets/wand.png");
 
+    g_item_sprites[SPRITE_ITEMS] = LoadTexture("assets/spritesheet.png");
+
+    Image image = LoadImageFromTexture(g_item_sprites[SPRITE_ITEMS]);
+    Vector2 index_pos = {0,0};
+    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
+    g_item_sprites[SPRITE_ITEM_BALL] = LoadTextureFromImage(image);
+
+    image = LoadImageFromTexture(g_item_sprites[SPRITE_ITEMS]);
+    index_pos = {1,0};
+    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
+    g_item_sprites[SPRITE_ITEM_CABBAGE] = LoadTextureFromImage(image);
+
     TraceLog(LOG_INFO, "LOADING PORTRAITS");
     g_portrait_sprites[PORTRAIT_BASE_CHAR] = LoadTexture("assets/portrait1.png");
 
@@ -31,6 +43,12 @@ void UnloadResources() {
     for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
         UnloadTexture(g_sprite_sheets[i]);
     }
+
+    TraceLog(LOG_INFO, "UNLOADING ITEM SPRITES");
+    for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
+        UnloadTexture(g_item_sprites[i]);
+    }
+
     TraceLog(LOG_INFO, "UNLOADING PORTRAITS");
     for(int i = 0; i < MAX_PORTRAIT_SPRITES; i++) {
         UnloadTexture(g_portrait_sprites[i]);

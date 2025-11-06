@@ -1,6 +1,7 @@
 #include "core/gamedefs.h"
 
 std::unordered_map<int, PlayerData> g_class_data;
+std::unordered_map<int, ItemData> g_item_data;
 
 GameData g_game_data;
 DebugData g_debug_data;
@@ -15,6 +16,7 @@ LevelData g_level_data;
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
+Texture2D g_item_sprites[MAX_SPRITE_SHEETS];
 Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 Texture2D g_ui_panels[MAX_UI_PANELS];
 Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];

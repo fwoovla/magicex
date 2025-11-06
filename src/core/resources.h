@@ -9,14 +9,24 @@
 #define MAX_TILE_SHEETS 10
 
 
-enum UnitSpriteID {
+enum SpriteSheetID {
     SPRITE_APPRENTICE,
     SPRITE_NERD,
     SPRITE_CROSSHAIR,
     SPRITE_WAND,
+    SPRITE_ITEMS,
     SPRITE_NUM_SPRITES
 };
+
 extern Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
+
+enum ItemSprites {
+    SPRITE_ITEM_BALL,
+    SPRITE_ITEM_CABBAGE,
+    SPRITE_ITEM_NUM_SPRITES
+};
+
+extern Texture2D g_item_sprites[MAX_SPRITE_SHEETS];
 
 enum PortraitSpriteID {
     PORTRAIT_BASE_CHAR,

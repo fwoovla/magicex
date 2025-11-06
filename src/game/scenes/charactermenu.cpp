@@ -17,7 +17,7 @@ CharacterMenu::CharacterMenu() {
     
     gpo = {panel_rect.x, panel_rect.y + 80};
     CreateLabel(ground_header_label, {gpo.x + 90, gpo.y - 30}, 30/g_scale, WHITE, "GROUND");
-    ground_grid = new ItemGrid(6, 7, 50, gpo);
+    ground_grid = new ItemGrid(5, 6, 50, {gpo.x + 25, gpo.y + 20});
     
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, 30/g_scale, WHITE, "CHARACTER");
@@ -31,7 +31,7 @@ CharacterMenu::CharacterMenu() {
     
     ipo = {panel_rect.x + 560, panel_rect.y + 80};
     CreateLabel(inventory_label_header, {ipo.x + 60, ipo.y - 30}, 30/g_scale, WHITE, "INVENTORY");
-    inventory_grid = new ItemGrid(6, 7, 50, ipo);
+    inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 25, ipo.y + 20});
 
 }
 
@@ -70,4 +70,13 @@ void CharacterMenu::Update() {
     ground_grid->Update();
     inventory_grid->Update();
 
+}
+
+void CharacterMenu::Open() {
+    inventory_grid->SetItems(g_player_data.inventory);
+}
+
+void CharacterMenu::OpenWith(std::vector<int> &list) {
+    inventory_grid->SetItems(g_player_data.inventory);
+    ground_grid->SetItems(list);
 }

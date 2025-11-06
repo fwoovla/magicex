@@ -13,14 +13,9 @@ ShelterUILayer::ShelterUILayer() {
     CreateButton(start_button, {g_screen_center.x, g_resolution.y - 40}, {200/g_scale , 100/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
     start_button.text_size = 40/g_scale;
-
-    //map_menu = new MapMenu();
-    //show_map_menu = false;
 }
 
 ShelterUILayer::~ShelterUILayer() {
-    //UnloadSound(button_sound);
-    
     TraceLog(LOG_INFO, "UI DESTRUCTOR:  SHELTER UI");
 }
 
@@ -33,19 +28,9 @@ void ShelterUILayer::Draw() {
     if(!g_game_settings.show_debug){
         return;
     }
-    //DrawLabel(debug_label);
-
 }
 
 void ShelterUILayer::Update() {
-
-/*     if(g_game_settings.show_debug) {
-        debug_label.text = TextFormat( "pf %0.2f %0.2f \n pc %i %i \n ct %i %i \n", 
-            g_current_player->position.x, g_current_player->position.y,
-            (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
-            (int)g_camera.target.x, (int)g_camera.target.y
-          );
-    } */
 
     if(IsButtonHovered(quit_button, g_scale)){
         if(quit_button.already_hovered == false) {
@@ -56,8 +41,6 @@ void ShelterUILayer::Update() {
             //play_pressed.EmitSignal();
             quit_pressed.EmitSignal();
         }
-
-       
     }
 
     if(IsButtonHovered(start_button, g_scale)){
@@ -68,8 +51,6 @@ void ShelterUILayer::Update() {
             TraceLog(LOG_INFO, "START BUTTON PRESSED ");
             //play_pressed.EmitSignal();
             start_pressed.EmitSignal();
-            //show_map_menu = true;
         }        
     }
-
 }

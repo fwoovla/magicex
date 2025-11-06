@@ -68,6 +68,19 @@ SCENE_ID ShelterScene::Update() {
 
     if(g_input.keys_pressed[0] == KEY_E) {
         character_menu_visible = !character_menu_visible;
+        if(character_menu_visible) {
+            std::vector<int> list;
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            list.push_back(1);
+            character_menu->OpenWith(list);
+        }
     }
     if(character_menu_visible) {
         character_menu->Update();
@@ -98,14 +111,15 @@ void ShelterScene::DrawUI() {
         map_menu->Draw();
     }
     else {
-        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-            g_level_data.game_areas[i]->Draw();
-        }
-
-        ui_layer->Draw();
-
         if(character_menu_visible) {
             character_menu->Draw();
+        }
+        else {
+            for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+                g_level_data.game_areas[i]->Draw();
+            }
+
+            ui_layer->Draw();
         }
     }
 }

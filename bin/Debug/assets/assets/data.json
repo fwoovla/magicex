@@ -15,5 +15,17 @@
             "portrait_id":0,
             "class_name": "Nerd"
         }
+    ],
+ "item_data": [
+        {
+            "item_name": "Ball",
+            "sprite_id":0
+
+        },
+        {
+            "item_name": "Cabbage",
+            "sprite_id":1
+
+        }
     ]
 }

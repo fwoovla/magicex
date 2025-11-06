@@ -1,5 +1,147 @@
 #include "../core/gamedefs.h"
 
+
+void LoadGameData() {
+    TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
+
+    std::ifstream cfile("assets/data.json");
+    if (!cfile.is_open()) {
+        TraceLog(LOG_INFO, "CANNOT OPEN DATA FILE");
+        return;
+    }
+    
+    json cj;
+    cfile>>cj;
+    //TraceLog(LOG_INFO, "==========LOADING GAME DATA FROM FILE================");
+    //TraceLog(LOG_INFO, "==========loading class data================");
+
+    for(int i = 0; i < cj["base_class"].size(); i++) {
+        int health = cj["base_class"][i]["health"];
+        int exp = 0;
+        float base_speed = cj["base_class"][i]["base_speed"];
+        int sprite_sheet_id = cj["base_class"][i]["sprite_sheet_id"];
+        int portrait_id = cj["base_class"][i]["portrait_id"];
+        std::string class_name = cj["base_class"][i]["class_name"];
+        std::vector<int> inv;
+        inv.push_back(0);
+        inv.push_back(1);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+        inv.push_back(0);
+
+
+        PlayerData this_class = {
+            .health = health,
+            .exp = exp,
+            .base_speed = base_speed,
+            .sprite_sheet_id = sprite_sheet_id,
+            .portrait_id = portrait_id,
+            .name = "not assigned",
+            .class_name = class_name,
+            .inventory = inv
+        };
+
+        g_class_data[i] = this_class;
+    }
+
+    for(int i = 0; i < cj["item_data"].size(); i++) {
+        int id = i;
+        int s_id = cj["item_data"][i]["sprite_id"];
+        std::string name = cj["item_data"][i]["item_name"];
+
+        ItemData new_item = {
+            .id = id,
+            .sprite_id = s_id,
+            .item_name = name
+        };
+
+        g_item_data[i] = new_item;
+    }
+
+    cfile.close();
+ 
+    //TraceLog(LOG_INFO, "==========end class data================");
+    //TraceLog(LOG_INFO, "==========check save data================");
+
+    std::string save_path = "assets/save.json";
+    if(std::filesystem::exists(save_path)) {
+        g_game_data.save_available = true;
+        TraceLog(LOG_INFO, "SAVE FILE FOUND");
+    }
+
+
+    TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
+
+    std::string ldtk_map_dir = "assets/maps/ldtk";
+    int num_maps = load_ldtk_maps();
+
+    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
+
+}
+
+
+void SaveGame() {
+    std::string save_path = "assets/save.json";
+    std::ofstream file(save_path);
+    if (!file.is_open()) {
+        TraceLog(LOG_INFO, "filed to open save file");
+        return;
+    }
+
+    json j;
+
+    j["health"] = g_player_data.health;
+    j["exp"] = g_player_data.exp;
+    j["base_speed"] = g_player_data.base_speed;
+    j["sprite_sheet_id"] = g_player_data.sprite_sheet_id;
+    j["portrait_id"] = g_player_data.portrait_id;
+    j["name"] = g_player_data.name;
+    j["class_name"] = g_player_data.class_name;
+    j["inventory"] = {};
+    for(int i = 0; i < g_player_data.inventory.size(); i++) {
+        j["inventory"][i] = g_player_data.inventory[i];
+    }
+
+    file<<j.dump(4);
+
+    file.close();
+
+}
+
+
+void LoadGame() {
+    TraceLog(LOG_INFO, "LOADING SAVED DATA....save.json");
+
+    std::string save_path = "assets/save.json";
+    std::ifstream file(save_path);
+    if (!file.is_open()) {
+        TraceLog(LOG_INFO, "CANNOT OPEN FILE");
+        return;
+    }
+    
+    json j;
+    file>>j;
+
+    g_player_data.health = j["health"];
+    g_player_data.exp = j["exp"];
+    g_player_data.base_speed = j["base_speed"];
+    g_player_data.sprite_sheet_id = j["sprite_sheet_id"];
+    g_player_data.portrait_id = j["portrait_id"];
+    g_player_data.name = j["name"];
+    g_player_data.class_name = j["class_name"];
+
+    file.close();
+
+}
+
+
+
+
 void ClearLevelData() {
     g_level_data.spawn_position = {0,0};
     g_level_data.game_areas.clear();
