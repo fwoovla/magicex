@@ -55,37 +55,37 @@ SCENE_ID ShelterScene::Update() {
         map_menu->Update();
     }
     else {
-        ui_layer->Update();
-    }
-
-    g_current_player->Update();
-
-    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Update();
-    }
-
-    HandleCamera();
-
-    if(g_input.keys_pressed[0] == KEY_E) {
-        character_menu_visible = !character_menu_visible;
-        if(character_menu_visible) {
-            std::vector<int> list;
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            list.push_back(1);
-            character_menu->OpenWith(list);
+        
+        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+            g_level_data.game_areas[i]->Update();
         }
-    }
-    if(character_menu_visible) {
-        character_menu->Update();
-    }
+        
+        g_current_player->Update();
+        HandleCamera();
+        
+        if(character_menu_visible) {
+            character_menu->Update();
+        }
+        else {
+            ui_layer->Update();
+        }
 
+        if(g_input.keys_pressed[0] == KEY_E) {
+            character_menu_visible = !character_menu_visible;
+            if(character_menu_visible) {
+                std::vector<int> list;
+                list.push_back(1);
+
+                character_menu->OpenWith(list);
+            }
+            if(!character_menu_visible) {
+    /*             for(int i = 0; i < g_player_data.inventory.size(); i++) {
+                    TraceLog(LOG_INFO, "inventory item index %i    id %i", i, g_player_data.inventory[i]);
+                } */
+            }
+        }
+
+    }
     return return_scene;
 }
 
@@ -100,8 +100,6 @@ void ShelterScene::DrawScene() {
     g_current_player->Draw();
     EndMode2D();
 }
-
-
 
 
 void ShelterScene::DrawUI() {
@@ -158,7 +156,6 @@ void ShelterScene::OnTransitionAreaEntered() {
 void ShelterScene::OnTransitionAreaActivated() {
     TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     return_scene = GAME_SCENE;
-
 }
 
 
@@ -180,5 +177,4 @@ void ShelterScene::HandleCamera() {
     float y_offset_f = g_viewport.y_offset_f;
 
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
-
 }

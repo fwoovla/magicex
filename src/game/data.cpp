@@ -24,15 +24,8 @@ void LoadGameData() {
         std::string class_name = cj["base_class"][i]["class_name"];
         std::vector<int> inv;
         inv.push_back(0);
-        inv.push_back(1);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
-        inv.push_back(0);
+        std::vector<int> hot;
+        hot.push_back(1);
 
 
         PlayerData this_class = {
@@ -43,7 +36,8 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = "not assigned",
             .class_name = class_name,
-            .inventory = inv
+            .inventory = inv,
+            .hotbar = hot
         };
 
         g_class_data[i] = this_class;

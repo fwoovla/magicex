@@ -45,6 +45,7 @@ struct PlayerData {
     std::string name;
     std::string class_name;
     std::vector<int> inventory;
+    std::vector<int> hotbar;
 
 };
 

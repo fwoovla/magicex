@@ -104,5 +104,9 @@ void GetInputFromPlayer() {
 
     if(g_input.mouse_left and !g_input.selecting) {
         g_input.selecting = true;
+        //TraceLog(LOG_INFO, "SELECTING ");
+    }
+    if(g_input.selecting) {
+        //TraceLog(LOG_INFO, "SELECTING ");
     }
 }

@@ -1,6 +1,13 @@
 #pragma once
 #include "gamedefs.h"
 
+enum INVENTORYGRIDS {
+    NONE,
+    GROUND,
+    INVENTORY,
+    HOTBAR
+};
+
 
 struct UnitPortrait{
     int id;
@@ -14,23 +21,54 @@ class BaseUILayer{
     virtual void Draw() = 0;
 };
 
+struct SharedItemData {
+    int item_id;
+    //std::vector<int> *source_list;
+    //std::vector<int> *dest_list;
+    INVENTORYGRIDS source_grid;
+    INVENTORYGRIDS dest_grid;
+    Vector2 source_cell;
+    Vector2 dest_cell;
+};
+
 class ItemGrid {
     public:
-    ItemGrid(int c, int r, int s, Vector2 p);
+    ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd);
     ~ItemGrid();
     void Update();
-    void Draw();
-    void SetItems(std::vector<int> &list);
+    void DrawGrid();
+    void DrawItems();
+    void SetItems(std::vector<int> *list);
+
+    bool CanAddItem(Vector2 dest_cell);
+    void AddItem(int item_id, Vector2 dest_cell);
+    bool CanRemoveItem(Vector2 source_cell);
+    void RemoveItem(Vector2 source_cell);
+
+    INVENTORYGRIDS this_grid;
+
+    SharedItemData *shared_data;
 
     int rows;
     int cols;
     int grid_size;
     Vector2 position;
 
+    bool can_select;
     bool cell_hovered;
+    bool cell_selected;
     Vector2 hovered_cell;
+    Vector2 selected_cell;
+    //Vector2 return_position;
 
     std::vector<Sprite> item_sprites;
+
+    std::vector<int> *item_list;
+
+    Label label;
+
+    Signal selecting;
+    Signal not_selecting;
 };
 
 
@@ -85,6 +123,20 @@ class CharacterMenu : public BaseUILayer {
     void Open();
     void OpenWith(std::vector<int> &list);
 
+    void OnGroundItemSelected();
+    void OnGroundItemDeselected();
+
+    void OnInvItemSelected();
+    void OnInvItemDeselected();
+
+    void OnHotbarItemSelected();
+    void OnHotbarItemDeselected();
+
+
+    SharedItemData shared_data;
+    INVENTORYGRIDS source_grid;
+    INVENTORYGRIDS dest_grid;
+
     Label title_label;
 
     Rectangle panel_rect;
@@ -97,20 +149,24 @@ class CharacterMenu : public BaseUILayer {
     
     Vector2 gpo; // ground position offset
     ItemGrid *ground_grid;
+    std::vector<int> g_item_list;
     
     Vector2 cpo;
     Sprite character_panel_sprite;
     AnimatedSprite character_sprite;
     Label character_label;
     Label character_stat_label;
-    ItemGrid *inventory_grid;
     //Rectangle ground_bounding_rect;
     //Sprite ground_panel_sprite;
     //AnimatedSprite ground_sprite;
     //Label character_label;
     //Label character_stat_label;
 
+    Vector2 hpo;
+    ItemGrid *hotbar_grid;
+    
     Vector2 ipo;
+    ItemGrid *inventory_grid;
 
 };
 
@@ -162,7 +218,6 @@ class StagingUILayer : public BaseUILayer {
     Button quit_button;
     Signal quit_pressed;
 
-    //Rectangle character_selection_rect;
 
     Vector2 spo; //select_panel_offest
     Button select_character_left_button;
@@ -184,8 +239,6 @@ class StagingUILayer : public BaseUILayer {
     AnimatedSprite character_sprite;
     Label character_label;
     Label character_stat_label;
-
-
 
     std::vector<UnitPortrait > portraits;
 
@@ -209,7 +262,6 @@ class ShelterUILayer : public BaseUILayer {
 
     Label title_label;
     //Label debug_label;
-
 };
 
 
@@ -230,8 +282,6 @@ class GameUILayer : public BaseUILayer {
 
     Label debug_zoom_level;
 
-
-
 };
 
 
@@ -247,39 +297,3 @@ class EndUILayer : public BaseUILayer {
     Label title_label;
 };
 
-
-
-/*  class GameMenu : public BaseUILayer {
-
-    public:
-    GameMenu();
-    ~GameMenu() override;
-    void Update() override;
-    void Draw() override;
-};
-
- class PartsMenu : public BaseUILayer {
-
-    public:
-    PartsMenu();
-    ~PartsMenu() override;
-    void Update() override;
-    void Draw() override;
-};
-
- class ShipyardMenu : public BaseUILayer {
-
-    public:
-    ShipyardMenu();
-    ~ShipyardMenu() override;
-    void Update() override;
-    void Draw() override;
-};
-
-
-
-
-
-
-
- */
