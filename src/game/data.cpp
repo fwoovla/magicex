@@ -100,6 +100,9 @@ void SaveGame() {
     for(int i = 0; i < g_player_data.inventory.size(); i++) {
         j["inventory"][i] = g_player_data.inventory[i];
     }
+    for(int i = 0; i < g_player_data.hotbar.size(); i++) {
+        j["hotbar"][i] = g_player_data.hotbar[i];
+    }
 
     file<<j.dump(4);
 
@@ -128,6 +131,20 @@ void LoadGame() {
     g_player_data.portrait_id = j["portrait_id"];
     g_player_data.name = j["name"];
     g_player_data.class_name = j["class_name"];
+
+    std::vector<int> inv;
+    for(int i = 0; i < j["inventory"].size(); i++) {
+        inv.push_back(j["inventory"][i]);
+    }
+
+    std::vector<int> hot;
+
+    for(int i = 0; i < j["hotbar"].size(); i++) {
+        hot.push_back(j["hotbar"][i]);
+    }
+
+    g_player_data.inventory = inv;
+    g_player_data.hotbar = hot;
 
     file.close();
 

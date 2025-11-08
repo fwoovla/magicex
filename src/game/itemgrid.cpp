@@ -62,21 +62,24 @@ void ItemGrid::Update() {
 
         if(cell_selected) {
             int index = selected_cell.y * cols + selected_cell.x;
-
-            if(hovered_cell == selected_cell) {
-                item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+            if(shared_data->dest_grid != this_grid) {
+                //item dropped in another grid
+                transfer_item.EmitSignal();
             }
-/*             else if (hovered_cell == Vector2{-1,-1} and shared_data->dest_cell != Vector2{-1,-1} ) {
-                //dropped in another grid
-            } */
             else {
-                int new_index = hovered_cell.y * cols + hovered_cell.x;
-                (*item_list)[new_index] = (*item_list)[index];
-                LoadSpriteCentered(item_sprites[new_index], g_item_sprites[g_item_data[ (*item_list)[new_index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
-                ScaleSprite(item_sprites[new_index], {2,2});
-               
-                (*item_list)[index] = -1;
-                item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+                //item dropped in this grid
+                if(hovered_cell == selected_cell) {
+                    item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+                }
+                else {
+                    int new_index = hovered_cell.y * cols + hovered_cell.x;
+                    (*item_list)[new_index] = (*item_list)[index];
+                    LoadSpriteCentered(item_sprites[new_index], g_item_sprites[g_item_data[ (*item_list)[new_index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+                    ScaleSprite(item_sprites[new_index], {2,2});
+                    
+                    (*item_list)[index] = -1;
+                    item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+                }
             }
             not_selecting.EmitSignal();
         }
@@ -161,7 +164,7 @@ bool ItemGrid::CanAddItem(Vector2 dest_cell) {
 
 void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
-    (*item_list)[index] == item_id;
+    (*item_list)[index] = item_id;
 
     LoadSpriteCentered(item_sprites[index], g_item_sprites[g_item_data[ (*item_list)[index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
     ScaleSprite(item_sprites[index], {2,2});
@@ -174,6 +177,6 @@ bool ItemGrid::CanRemoveItem(Vector2 source_cell) {
 
 void ItemGrid::RemoveItem(Vector2 source_cell) {
     int index = source_cell.y * cols + source_cell.x;
-    (*item_list)[index] == -1;
+    (*item_list)[index] = -1;
 
 }

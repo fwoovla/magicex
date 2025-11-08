@@ -2,10 +2,10 @@
 #include "gamedefs.h"
 
 enum INVENTORYGRIDS {
-    NONE,
-    GROUND,
-    INVENTORY,
-    HOTBAR
+    GRID_NONE,
+    GRID_GROUND,
+    GRID_INVENTORY,
+    GRID_HOTBAR
 };
 
 
@@ -69,6 +69,7 @@ class ItemGrid {
 
     Signal selecting;
     Signal not_selecting;
+    Signal transfer_item;
 };
 
 
@@ -132,10 +133,12 @@ class CharacterMenu : public BaseUILayer {
     void OnHotbarItemSelected();
     void OnHotbarItemDeselected();
 
+    void OnTransferItem();
+
 
     SharedItemData shared_data;
-    INVENTORYGRIDS source_grid;
-    INVENTORYGRIDS dest_grid;
+    //INVENTORYGRIDS source_grid;
+    //INVENTORYGRIDS dest_grid;
 
     Label title_label;
 
