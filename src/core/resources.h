@@ -28,6 +28,15 @@ enum ItemSprites {
 
 extern Texture2D g_item_sprites[MAX_SPRITE_SHEETS];
 
+
+enum ContainerSprites {
+    SPRITE_CONTAINER_CHEST,
+    SPRITE_CONTAINER_BARREL,
+    SPRITE_CONTAINER_NUM_SPRITES
+};
+
+extern Texture2D g_container_sprites[MAX_SPRITE_SHEETS];
+
 enum PortraitSpriteID {
     PORTRAIT_BASE_CHAR,
     PORTRAIT_NUM_SPRITES

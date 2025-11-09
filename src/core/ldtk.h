@@ -105,8 +105,10 @@ struct LDTKFieldInstance {
     std::string identifier;
     std::string value_s;
     Vector2 value_v;
-    
+    int value_i;
 };
+
+
 
 struct LDTKEntityInstance {
     std::string identifier;
@@ -244,22 +246,15 @@ struct GameData {
 
 extern GameData g_game_data;
 
-
 extern LDTKMaps g_ldtk_maps;
 
 extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 //extern std::vector<LDTKLevel> g_ldtk_levels;
 
 
-
-
-
 void LDTKLoadTileSets (json &mj);
 void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
-
-
-
 
 
 inline int load_ldtk_maps() {

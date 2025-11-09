@@ -246,10 +246,11 @@ obj/Debug/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/core/resources.h src/core/data.h src/core/utils.h src/core/areas.h \
- src/core/label.h src/core/events.h src/core/viewport.h src/core/input.h \
- src/core/button.h src/core/baseentity.h src/core/playercharacter.h \
- src/core/tilelayer.h src/core/uilayers.h src/core/scenes.h \
- src/core/basescene.h src/core/scenemanager.h src/core/game.h
+ src/core/label.h src/core/baseentity.h src/core/entities.h \
+ src/core/events.h src/core/viewport.h src/core/input.h src/core/button.h \
+ src/core/playercharacter.h src/core/tilelayer.h src/core/uilayers.h \
+ src/core/scenes.h src/core/basescene.h src/core/scenemanager.h \
+ src/core/game.h
 /usr/include/stdc-predef.h:
 src/core/gamedefs.h:
 /usr/local/include/raylib.h:
@@ -572,11 +573,12 @@ src/core/data.h:
 src/core/utils.h:
 src/core/areas.h:
 src/core/label.h:
+src/core/baseentity.h:
+src/core/entities.h:
 src/core/events.h:
 src/core/viewport.h:
 src/core/input.h:
 src/core/button.h:
-src/core/baseentity.h:
 src/core/playercharacter.h:
 src/core/tilelayer.h:
 src/core/uilayers.h:

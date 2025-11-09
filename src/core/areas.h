@@ -22,6 +22,7 @@ class BaseArea {
         Vector2 size;
         bool collided;
         bool hovered;
+        bool in_range;
 
         float time_pressed;
         
@@ -55,7 +56,18 @@ class TransitionArea : public BaseArea {
 
 };
 
+class ContainerArea : public BaseArea {
 
+    public:
+        ContainerArea(){};
+        ~ContainerArea() override;
+        void Update() override;
+        void Draw() override;
+        //void Activate() override;
 
-void UpdateGameAreas();
-void DrawGameAreas(Color color);
+        Signal area_entered;
+        Signal area_activated;
+
+        Label label;
+
+};

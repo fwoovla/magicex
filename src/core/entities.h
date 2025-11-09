@@ -1,11 +1,11 @@
 #pragma once 
 #include "gamedefs.h"
 
-/* class BaseUnit : public AnimatedSpriteEntity {
+class ContainerEntity : public SpriteEntity {
     public:
-    BaseUnit(Vector2 _position);
-    ~BaseUnit() override;
+    ContainerEntity(Vector2 _position);
+    ~ContainerEntity() override;
     void Update() override;
     void Draw() override;
 
-}; */
+};

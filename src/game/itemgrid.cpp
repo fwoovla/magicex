@@ -142,7 +142,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 LoadSpriteCentered(sp, g_item_sprites[g_item_data[ (*item_list)[i] ].sprite_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
                 ScaleSprite(sp, {2,2});
                 item_sprites.push_back(sp);
-                TraceLog(LOG_INFO, "item sprite %i:  %i %i  %i", i, x, y, (*item_list)[i]);
+                //TraceLog(LOG_INFO, "item sprite %i:  %i %i  %i", i, x, y, (*item_list)[i]);
             }
             else {
                 Sprite bs;

@@ -123,6 +123,7 @@ extern Viewport g_viewport;
 #include "button.h"
 #include "label.h"
 #include "baseentity.h"
+#include "entities.h"
 #include "playercharacter.h"
 //#include "units.h"
 #include "tilelayer.h"

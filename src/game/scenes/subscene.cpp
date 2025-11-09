@@ -34,6 +34,7 @@ SubScene::SubScene() {
     tile_layer = new TileLayer();
 
     character_menu = new CharacterMenu();
+    character_menu->Open();
     
     g_current_player->position = g_level_data.spawn_position;
 
@@ -48,21 +49,30 @@ SubScene::SubScene() {
 
 SCENE_ID SubScene::Update() {
     //TraceLog(LOG_INFO, "SUB SCENE UPDATE, %i", g_game_data.sub_map_index);
-    ui_layer->Update();
-    
-    g_current_player->Update();
-    //DL_Update(active_entity_list);
-    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Update();
-    }
-    HandleCamera();
 
-    if(g_input.keys_pressed[0] == KEY_E) {
-        character_menu_visible = !character_menu_visible;
-    }
     if(character_menu_visible) {
         character_menu->Update();
     }
+    else {
+        ui_layer->Update(); 
+        //DL_Update(active_entity_list);
+        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+            g_level_data.game_areas[i]->Update();
+        }
+        g_current_player->Update();
+        HandleCamera();
+    }
+
+    if(g_input.keys_pressed[0] == KEY_E) {
+        character_menu_visible = !character_menu_visible;
+        if(character_menu_visible) {
+                std::vector<int> list;
+                list.push_back(1);
+
+                character_menu->Open();
+            }
+    }
+
 
     return return_scene;
 }
@@ -86,12 +96,16 @@ void SubScene::DrawScene() {
 void SubScene::DrawUI() {
     //TraceLog(LOG_INFO, "SUB SCENE DRAW");
 
-    for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Draw();
-    }
-    ui_layer->Draw();
     if(character_menu_visible) {
-            character_menu->Draw();
+        character_menu->Draw();
+    }
+    else {
+        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+            g_level_data.game_areas[i]->Draw();
+        }
+
+        ui_layer->Draw();
+        character_menu->DrawHotBarOnly();
     }
 
 }

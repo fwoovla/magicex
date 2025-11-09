@@ -30,6 +30,7 @@ ShelterScene::ShelterScene() {
     tile_layer = new TileLayer();
 
     character_menu = new CharacterMenu();
+    character_menu->Open();
     
     map_menu = new MapMenu();
     map_menu->map_selected.Connect( [&](){OnMapSelected();} );
@@ -55,19 +56,16 @@ SCENE_ID ShelterScene::Update() {
         map_menu->Update();
     }
     else {
-        
-        for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-            g_level_data.game_areas[i]->Update();
-        }
-        
-        g_current_player->Update();
-        HandleCamera();
-        
         if(character_menu_visible) {
             character_menu->Update();
         }
         else {
             ui_layer->Update();
+            for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+                g_level_data.game_areas[i]->Update();
+            }  
+            g_current_player->Update();
+            HandleCamera();
         }
 
         if(g_input.keys_pressed[0] == KEY_E) {
@@ -76,15 +74,9 @@ SCENE_ID ShelterScene::Update() {
                 std::vector<int> list;
                 list.push_back(1);
 
-                character_menu->OpenWith(list);
-            }
-            if(!character_menu_visible) {
-    /*             for(int i = 0; i < g_player_data.inventory.size(); i++) {
-                    TraceLog(LOG_INFO, "inventory item index %i    id %i", i, g_player_data.inventory[i]);
-                } */
+                character_menu->Open();
             }
         }
-
     }
     return return_scene;
 }
@@ -118,6 +110,7 @@ void ShelterScene::DrawUI() {
             }
 
             ui_layer->Draw();
+            character_menu->DrawHotBarOnly();
         }
     }
 }

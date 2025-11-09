@@ -79,8 +79,8 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/areas.o
-GENERATED += $(OBJDIR)/baseunit.o
 GENERATED += $(OBJDIR)/charactermenu.o
+GENERATED += $(OBJDIR)/containerentity.o
 GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
@@ -111,8 +111,8 @@ GENERATED += $(OBJDIR)/transitions.o
 GENERATED += $(OBJDIR)/utils.o
 GENERATED += $(OBJDIR)/viewport.o
 OBJECTS += $(OBJDIR)/areas.o
-OBJECTS += $(OBJDIR)/baseunit.o
 OBJECTS += $(OBJDIR)/charactermenu.o
+OBJECTS += $(OBJDIR)/containerentity.o
 OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
@@ -217,7 +217,7 @@ $(OBJDIR)/areas.o: src/game/areas.cpp
 $(OBJDIR)/data.o: src/game/data.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/baseunit.o: src/game/entities/baseunit.cpp
+$(OBJDIR)/containerentity.o: src/game/entities/containerentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp

@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 48,
+	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -474,7 +474,7 @@
 			]
 		},
 		{
-			"identifier": "LootableEntity",
+			"identifier": "ContainerEntity",
 			"uid": 47,
 			"tags": [],
 			"exportToToc": false,
@@ -506,7 +506,82 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 0,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "sprite_id",
+					"doc": null,
+					"__type": "Int",
+					"uid": 48,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "loot_table_id",
+					"doc": null,
+					"__type": "Int",
+					"uid": 49,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -974,7 +1049,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "LootableEntity",
+							"__identifier": "ContainerEntity",
 							"__grid": [94,192],
 							"__pivot": [0,0],
 							"__tags": [],
@@ -985,13 +1060,16 @@
 							"height": 16,
 							"defUid": 47,
 							"px": [188,384],
-							"fieldInstances": [],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
+							],
 							"__worldX": 348,
 							"__worldY": 384
 						},
 						{
-							"__identifier": "LootableEntity",
-							"__grid": [109,174],
+							"__identifier": "ContainerEntity",
+							"__grid": [102,174],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -1000,9 +1078,12 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 47,
-							"px": [218,348],
-							"fieldInstances": [],
-							"__worldX": 378,
+							"px": [204,348],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
+							],
+							"__worldX": 364,
 							"__worldY": 348
 						},
 						{

@@ -1,5 +1,6 @@
 #include "../../core/gamedefs.h"
 
+static std::vector<int> blank_list;
 
 CharacterMenu::CharacterMenu() {
 
@@ -36,7 +37,7 @@ CharacterMenu::CharacterMenu() {
     inventory_grid->not_selecting.Connect( [&](){OnInvItemDeselected();} );
     inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
 
-    hpo = { 350, g_resolution.y - 50};
+    hpo = { 350, g_resolution.y - 80};
     hotbar_grid = new ItemGrid(5, 1, 50, {hpo.x, hpo.y}, &shared_data);
     hotbar_grid->this_grid = GRID_HOTBAR;
     hotbar_grid->selecting.Connect( [&](){OnHotbarItemSelected();} );
@@ -78,6 +79,12 @@ void CharacterMenu::Draw() {
     DrawCircleV(hpo, 2, RED);
 }
 
+void CharacterMenu::DrawHotBarOnly() {
+    hotbar_grid->DrawGrid();
+    hotbar_grid->DrawItems();
+}
+
+
 void CharacterMenu::Update() {
 
     ground_grid->Update();
@@ -89,6 +96,11 @@ void CharacterMenu::Update() {
 void CharacterMenu::Open() {
     inventory_grid->SetItems(&g_player_data.inventory);
     hotbar_grid->SetItems(&g_player_data.hotbar);
+
+    //std::vector<int> blank_list;
+    blank_list.clear();
+    blank_list.push_back(-1);
+    ground_grid->SetItems(&blank_list);
 }
 
 void CharacterMenu::OpenWith(std::vector<int> &list) {

@@ -10,6 +10,8 @@
 #include "gamedefs.h"
 #include "utils.h"
 #include "areas.h"
+#include "baseentity.h"
+#include "entities.h"
 
 using json = nlohmann::json;
 
@@ -35,6 +37,8 @@ struct ItemData {
 };
 
 extern std::unordered_map<int, ItemData> g_item_data;
+
+
 
 struct PlayerData {
     int health;
@@ -65,11 +69,22 @@ struct LevelTransitionData {
     Vector2 size;
 };
 
+struct ContainerData {
+    std::string identifier;
+    int loot_table_id;
+    int sprite_id;
+    Vector2 position_i;
+    Vector2 position_f;
+    Vector2 size;
+};
+
 struct LevelData {
     bool is_shelter;
     Vector2 spawn_position;
     std::vector<LevelTransitionData> level_transitions;
+    std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
+    std::vector<ContainerEntity> containers;
 };
 
 extern LevelData g_level_data;

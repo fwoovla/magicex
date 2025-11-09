@@ -144,9 +144,9 @@ void LDTKLoadMaps (json &mj) {
                         new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
 
                         if(new_entity.identifier == "LevelTransition" or new_entity.identifier == "ShelterTransition" or new_entity.identifier == "HouseTransition") {                            
-                            LDTKFieldInstance new_field;
-
+                            
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                                LDTKFieldInstance new_field;
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
                                 TraceLog(LOG_INFO, "++++++--------------------------------ENTITY field %s", new_field.identifier.c_str());
@@ -162,6 +162,27 @@ void LDTKLoadMaps (json &mj) {
                                     TraceLog(LOG_INFO, "++++++entity return position %0.2f %0.2f", new_field.value_v.x, new_field.value_v.y);
                                 }
                                 new_entity.field_instances.push_back(new_field);
+                            }
+                        }
+
+
+                        if(new_entity.identifier == "ContainerEntity") {
+                            TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY found");
+                            for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                                LDTKFieldInstance new_field;
+
+                                new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
+
+                                if(new_field.identifier == "loot_table_id" ) {
+                                    new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
+                                    TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER loot table id %i", new_field.value_i);
+                                }
+                                if(new_field.identifier == "sprite_id" ) {
+                                    new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
+                                    TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER sprite id id %i", new_field.value_i);
+                                }
+                                new_entity.field_instances.push_back(new_field);
+                                TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY added");
                             }
                         }
                         
@@ -186,9 +207,7 @@ int LDTKDrawMap(Vector2 focus_position) {
     if(g_game_data.is_in_sub_map) {
         map_index = g_game_data.sub_map_index;
     }
-
     //TraceLog(LOG_INFO, "drawing map index:  %i ", map_index);
-
     int tiles_drawn = 0;
 
     //invert layers for drawing

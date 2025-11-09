@@ -121,6 +121,8 @@ class CharacterMenu : public BaseUILayer {
     ~CharacterMenu() override;
     void Update() override;
     void Draw() override;
+    void DrawHotBarOnly();
+    //void UpdateHotBarOnly();
     void Open();
     void OpenWith(std::vector<int> &list);
 

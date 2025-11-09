@@ -250,10 +250,12 @@ obj/Debug/gameuilayer.o: src/game/scenes/gameuilayer.cpp \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/game/scenes/../../core/resources.h src/game/scenes/../../core/data.h \
  src/game/scenes/../../core/utils.h src/game/scenes/../../core/areas.h \
- src/game/scenes/../../core/label.h src/game/scenes/../../core/events.h \
+ src/game/scenes/../../core/label.h \
+ src/game/scenes/../../core/baseentity.h \
+ src/game/scenes/../../core/entities.h \
+ src/game/scenes/../../core/events.h \
  src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
  src/game/scenes/../../core/button.h \
- src/game/scenes/../../core/baseentity.h \
  src/game/scenes/../../core/playercharacter.h \
  src/game/scenes/../../core/tilelayer.h \
  src/game/scenes/../../core/uilayers.h \
@@ -583,11 +585,12 @@ src/game/scenes/../../core/data.h:
 src/game/scenes/../../core/utils.h:
 src/game/scenes/../../core/areas.h:
 src/game/scenes/../../core/label.h:
+src/game/scenes/../../core/baseentity.h:
+src/game/scenes/../../core/entities.h:
 src/game/scenes/../../core/events.h:
 src/game/scenes/../../core/viewport.h:
 src/game/scenes/../../core/input.h:
 src/game/scenes/../../core/button.h:
-src/game/scenes/../../core/baseentity.h:
 src/game/scenes/../../core/playercharacter.h:
 src/game/scenes/../../core/tilelayer.h:
 src/game/scenes/../../core/uilayers.h:

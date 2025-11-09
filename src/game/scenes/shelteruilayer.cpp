@@ -10,9 +10,9 @@ ShelterUILayer::ShelterUILayer() {
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-    CreateButton(start_button, {g_screen_center.x, g_resolution.y - 40}, {200/g_scale , 100/g_scale}, GREEN, "go!");
+    CreateButton(start_button, {g_screen_center.x, 20}, {100/g_scale , 50/g_scale}, GREEN, "go!");
     start_button.default_color = DARKGREEN;
-    start_button.text_size = 40/g_scale;
+    start_button.text_size = 30/g_scale;
 }
 
 ShelterUILayer::~ShelterUILayer() {

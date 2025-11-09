@@ -52,6 +52,7 @@ GameScene::GameScene() {
 
 
     character_menu = new CharacterMenu();
+    character_menu->Open();
 
     g_current_player->position = g_level_data.spawn_position;
 
@@ -81,7 +82,6 @@ SCENE_ID GameScene::Update() {
             for(int i = 0; i < g_level_data.game_areas.size(); i++) {
                 g_level_data.game_areas[i]->Update();
             }
-            //UpdateGameAreas();
             g_current_player->Update();
             HandleCamera();
         }
@@ -90,6 +90,12 @@ SCENE_ID GameScene::Update() {
 
     if(g_input.keys_pressed[0] == KEY_E) {
         character_menu_visible = !character_menu_visible;
+        if(character_menu_visible) {
+                std::vector<int> list;
+                list.push_back(1);
+
+                character_menu->Open();
+            }
     }
 
     return return_scene;
@@ -129,6 +135,7 @@ void GameScene::DrawUI() {
             }
 
             ui_layer->Draw();
+            character_menu->DrawHotBarOnly();
         }
     }    
 }
@@ -228,11 +235,6 @@ void GameScene::OnHouseTransitionEntered() {
 
     TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
-/*     g_game_data.is_in_sub_map = true;
-    return_level_data = g_level_data;
-    sub_scene = new SubScene();
-    sub_scene->sub_scene_exited.Connect( [&](){OnSubSceneExited();} ); */
-
 }
 
 void GameScene::OnHouseTransitionActivated() {
@@ -262,5 +264,5 @@ void GameScene::OnSubSceneExited() {
     delete sub_scene;
     sub_scene = nullptr;
 
-    
+    character_menu->Open();
 }
