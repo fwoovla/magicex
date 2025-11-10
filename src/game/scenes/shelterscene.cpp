@@ -6,26 +6,32 @@
 
 
 ShelterScene::ShelterScene() {
+    SaveGame();
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
 
-    ClearLevelData();
-    LoadLevelData();
-    InstanceLevelObjects();
+    //ClearLevelData(level_data);
+    LoadLevelData(level_data);
+    InstanceLevelObjects(level_data);
 
-    for(int area_index = 0; area_index < g_level_data.game_areas.size(); area_index++) {
-        if(g_level_data.game_areas[area_index]->identifier == "LevelTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>( g_level_data.game_areas[area_index]);
+    for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
+        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
+            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
 
-            t_area->area_entered.Connect( [&](){OnTransitionAreaEntered();} );
-            t_area->area_activated.Connect( [&](){OnTransitionAreaActivated();} );
+            t_area->area_entered.Connect( [this](){OnTransitionAreaEntered();} );
+            t_area->area_activated.Connect( [this](){OnTransitionAreaActivated();} );
+        }
+        if(level_data.game_areas[area_index]->identifier == "ContainerEntity") {
+            TraceLog(LOG_INFO, "container area identified");
+            ContainerArea* c_area = dynamic_cast<ContainerArea*>(level_data.game_areas[area_index]);
+            c_area->area_activated.Connect( [this](){OnContainerOpened();} );
         }
     }
 
     ui_layer = new ShelterUILayer();
-    ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
-    ui_layer->start_pressed.Connect( [&](){OnStartPressed();} );
+    ui_layer->quit_pressed.Connect( [this](){OnQuitPressed();} );
+    ui_layer->start_pressed.Connect( [this](){OnStartPressed();} );
     
     tile_layer = new TileLayer();
 
@@ -33,11 +39,11 @@ ShelterScene::ShelterScene() {
     character_menu->Open();
     
     map_menu = new MapMenu();
-    map_menu->map_selected.Connect( [&](){OnMapSelected();} );
+    map_menu->map_selected.Connect( [this](){OnMapSelected();} );
 
     show_map_menu = false;
 
-    g_current_player->position = g_level_data.spawn_position;
+    g_current_player->position = level_data.spawn_position;
 
     g_camera = { 0 };
     g_camera.target = (Vector2){0,0};
@@ -61,9 +67,10 @@ SCENE_ID ShelterScene::Update() {
         }
         else {
             ui_layer->Update();
-            for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-                g_level_data.game_areas[i]->Update();
-            }  
+            for(int i = 0; i < level_data.game_areas.size(); i++) {
+                level_data.game_areas[i]->Update();
+            } 
+            DL_Update(level_data.entity_list);
             g_current_player->Update();
             HandleCamera();
         }
@@ -89,6 +96,12 @@ void ShelterScene::DrawScene() {
 
     BeginMode2D(g_camera);
     tile_layer->Draw();
+
+/*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+        g_level_data.game_areas[i]->Draw();
+    } */
+    DL_Draw(level_data.entity_list);
+
     g_current_player->Draw();
     EndMode2D();
 }
@@ -105,10 +118,9 @@ void ShelterScene::DrawUI() {
             character_menu->Draw();
         }
         else {
-            for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-                g_level_data.game_areas[i]->Draw();
+            for(int i = 0; i < level_data.game_areas.size(); i++) {
+                level_data.game_areas[i]->Draw();
             }
-
             ui_layer->Draw();
             character_menu->DrawHotBarOnly();
         }
@@ -117,6 +129,7 @@ void ShelterScene::DrawUI() {
 
 
 ShelterScene::~ShelterScene() {
+    ClearLevelData(level_data);
     delete ui_layer;
     delete character_menu;
     delete tile_layer;
@@ -170,4 +183,14 @@ void ShelterScene::HandleCamera() {
     float y_offset_f = g_viewport.y_offset_f;
 
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
+}
+
+
+void ShelterScene::OnContainerOpened() {
+    if(character_menu_visible) {
+        return;
+    }
+    TraceLog(LOG_INFO, "CONTAINER OPEN:  %i", g_game_data.loot_table_id);
+    character_menu->OpenWith(*g_game_data.loot_table);
+    character_menu_visible = true;
 }

@@ -3,16 +3,16 @@
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
 
+std::vector<std::vector<int>> g_loot_tables;
+
 GameData g_game_data;
 DebugData g_debug_data;
-//std::vector<MapData> g_maps_data;
 
 LDTKMaps g_ldtk_maps;
-//std::vector<LDTKLevel> g_ldtk_levels;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
 
-LevelData g_level_data;
+//LevelData g_level_data;
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
@@ -34,8 +34,9 @@ float g_screen2world;
 Vector2 g_resolution;
 Vector2 g_screen_center;
 
-std::vector<BaseEntity *> active_entity_list;
-//int *level_data_array;
+//std::vector<BaseEntity *> active_entity_list;
+//std::vector<std::unique_ptr<BaseEntity>> entity_draw_list;
+
 int g_map_width;
 int g_map_height;
 Camera2D g_camera;
@@ -107,7 +108,7 @@ void Game::StartGame() {
         BeginDrawing();
 
 
-        ClearBackground(BLACK);
+        ClearBackground(BLANK);
 
         
         DrawTexturePro(

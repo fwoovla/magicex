@@ -1,4 +1,5 @@
 #include "../core/gamedefs.h"
+#include "../core/utils.h"
 
 
 void LoadGameData() {
@@ -46,15 +47,31 @@ void LoadGameData() {
     for(int i = 0; i < cj["item_data"].size(); i++) {
         int id = i;
         int s_id = cj["item_data"][i]["sprite_id"];
+        int value = cj["item_data"][i]["value"];
         std::string name = cj["item_data"][i]["item_name"];
 
         ItemData new_item = {
             .id = id,
             .sprite_id = s_id,
+            .value = value,
             .item_name = name
         };
 
         g_item_data[i] = new_item;
+    }
+
+    for(int i = 0; i < cj["loot_tables"].size(); i++) {
+        int id = i;
+
+        std::vector<int> new_table;
+        for(int t = 0; t < cj["loot_tables"][i]["table_data"].size(); t++) {
+            new_table.push_back(cj["loot_tables"][i]["table_data"][t]);
+        }
+
+        std::string name = cj["loot_tables"][i]["table_name"];
+
+
+        g_loot_tables.push_back(new_table);
     }
 
     cfile.close();
@@ -153,16 +170,34 @@ void LoadGame() {
 
 
 
-void ClearLevelData() {
-    g_level_data.spawn_position = {0,0};
-    g_level_data.game_areas.clear();
-    g_level_data.is_shelter = false;
-    g_level_data.level_transitions.clear();
+void ClearLevelData(LevelData &level_data) {
+/*     level_data.spawn_position = {0,0};
+    level_data.is_shelter = false;
+
+    for (int i = 0; i <level_data.game_areas.size(); i++) {
+        if(level_data.game_areas[i] != nullptr) {
+            delete level_data.game_areas[i];
+        }
+    }
+    level_data.game_areas.clear();
+
+    for (int i = 0; i <level_data.containers.size(); i++) {
+        if(level_data.containers[i] != nullptr) {
+            delete level_data.containers[i];
+        }
+    }
+    level_data.containers.clear();
+
+    level_data.level_transitions.clear();
+    level_data.container_data.clear();
+    DL_Clear(level_data.entity_list);
+
+ */
     //clear transition data
 
 }
 
-void LoadLevelData() {
+void LoadLevelData(LevelData &level_data) {
 
 
     int map_index = g_game_data.current_map_index;
@@ -184,7 +219,7 @@ void LoadLevelData() {
                     Vector2 sp = {};
                     sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
                     sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
-                    g_level_data.spawn_position = sp;
+                    level_data.spawn_position = sp;
                 }
 
                 std::string identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -208,7 +243,7 @@ void LoadLevelData() {
                         TraceLog(LOG_INFO, "RETURN POSITION, %0.02f %0.02f", new_transition.return_position.x, new_transition.return_position.y);
                     }
 
-                    g_level_data.level_transitions.push_back(new_transition);
+                    level_data.level_transitions.push_back(new_transition);
                     TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
                 }
                 if(identifier == "ContainerEntity") {
@@ -224,11 +259,24 @@ void LoadLevelData() {
 
                     new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
                     new_container.loot_table_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
-                    g_level_data.container_data.push_back(new_container);
+                    level_data.container_data.push_back(new_container);
                     TraceLog(LOG_INFO, "CONTAINER ADDED WITH LT %i SID %i", new_container.loot_table_id, new_container.sprite_id);
-
                 }
             }
         }
     }
+}
+
+
+
+void GenerateContainerItemList(int lti, std::vector<int> &list) {
+    //int max = GetRandomValue(1, 5);
+    int max = g_loot_tables[lti].size();
+
+    for(int i = 0; i < max; i++) {
+        //int choice = g_loot_tables[lti][GetRandomValue(0, g_loot_tables[lti].size()-1 )];
+        
+        list.push_back(g_loot_tables[lti][i]);
+    }
+
 }

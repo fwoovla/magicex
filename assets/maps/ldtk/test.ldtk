@@ -534,7 +534,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Int", "params": [0] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -715,7 +715,27 @@
 					"seed": 2290016,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "ContainerEntity",
+							"__grid": [46,8],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "6604fe10-ac70-11f0-8a1d-999ad7dffd83",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [92,16],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
+							],
+							"__worldX": 92,
+							"__worldY": 16
+						}
+					]
 				},
 				{
 					"__identifier": "Entities",
@@ -1061,8 +1081,8 @@
 							"defUid": 47,
 							"px": [188,384],
 							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }
 							],
 							"__worldX": 348,
 							"__worldY": 384
@@ -1080,8 +1100,8 @@
 							"defUid": 47,
 							"px": [204,348],
 							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [0] }] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
 							],
 							"__worldX": 364,
 							"__worldY": 348
@@ -3241,10 +3261,10 @@
 			"identifier": "House_1",
 			"iid": "71a8dbd0-ac70-11f0-ac9d-6d4d0af5afca",
 			"uid": 40,
-			"worldX": 48,
+			"worldX": 46,
 			"worldY": 128,
 			"worldDepth": 0,
-			"pxWid": 112,
+			"pxWid": 114,
 			"pxHei": 112,
 			"__bgColor": "#696A79",
 			"bgColor": null,
@@ -3261,7 +3281,7 @@
 				{
 					"__identifier": "Entities2",
 					"__type": "Entities",
-					"__cWid": 56,
+					"__cWid": 57,
 					"__cHei": 56,
 					"__gridSize": 2,
 					"__opacity": 1,
@@ -3290,14 +3310,14 @@
 					"__cHei": 7,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetX": 2,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
 					"iid": "71a8dbd1-ac70-11f0-ac9d-778b6ca7f21c",
 					"levelId": 40,
 					"layerDefUid": 23,
-					"pxOffsetX": 0,
+					"pxOffsetX": 2,
 					"pxOffsetY": 0,
 					"visible": true,
 					"optionalRules": [],
@@ -3323,7 +3343,7 @@
 								"id": "V_String",
 								"params": ["Forrest"]
 							}] }],
-							"__worldX": 80,
+							"__worldX": 78,
 							"__worldY": 224
 						},
 						{
@@ -3339,7 +3359,7 @@
 							"defUid": 21,
 							"px": [48,64],
 							"fieldInstances": [],
-							"__worldX": 96,
+							"__worldX": 94,
 							"__worldY": 192
 						}
 					]
@@ -3351,14 +3371,14 @@
 					"__cHei": 7,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetX": 2,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
 					"iid": "71a8dbd2-ac70-11f0-ac9d-c3b7d0dd9bff",
 					"levelId": 40,
 					"layerDefUid": 19,
-					"pxOffsetX": 0,
+					"pxOffsetX": 2,
 					"pxOffsetY": 0,
 					"visible": false,
 					"optionalRules": [],
@@ -3376,14 +3396,14 @@
 					"__cHei": 7,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetX": 2,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 27,
 					"__tilesetRelPath": "../../SourceCode/cpp/magicex/assets/maps/ldtk/spritesheet2.png",
 					"iid": "71a8dbd3-ac70-11f0-ac9d-75f247c11b69",
 					"levelId": 40,
 					"layerDefUid": 28,
-					"pxOffsetX": 0,
+					"pxOffsetX": 2,
 					"pxOffsetY": 0,
 					"visible": true,
 					"optionalRules": [],

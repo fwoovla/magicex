@@ -59,7 +59,8 @@ void SceneManager::UpdateScene()
 
 
 void SceneManager::Init() {
-    current_scene = new SplashScreen();
+    current_scene = std::make_unique<SplashScreen>();
+
     g_game_data.current_scene_id = SPLASH_SCENE;
 
     is_transitioning = false;
@@ -75,8 +76,8 @@ void SceneManager::Init() {
 
 
 void SceneManager::CleanUp() {
-    delete current_scene;
-    delete pause_menu;
+    //delete current_scene;
+    //delete pause_menu;
     TraceLog(LOG_INFO, "cleaning up scene manager");
 }
 
@@ -110,32 +111,32 @@ void SceneManager::DrawUI() {
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene_id) {
     
     
-    delete current_scene;
+    current_scene.reset();
     g_game_data.current_map_index = g_game_data.next_map_index;
 
     switch (new_scene_id) {
         case SPLASH_SCENE:
-            current_scene = new SplashScreen();
+            current_scene = std::make_unique<SplashScreen>();
             break;
 
         case TITLE_SCENE:
-            current_scene = new TitleScene();
+            current_scene = std::make_unique<TitleScene>();
             break;
 
         case STAGING_SCENE:
-            current_scene = new StagingScene();
+            current_scene = std::make_unique<StagingScene>();
             break;
 
         case SHELTER_SCENE:
-            current_scene = new ShelterScene();
+            current_scene = std::make_unique<ShelterScene>();
             break;
 
         case GAME_SCENE:
-            current_scene = new GameScene();
+            current_scene = std::make_unique<GameScene>();
             break;
 
         case END_SCENE:
-            current_scene = new EndScene();
+            current_scene = std::make_unique<EndScene>();
             break;
 
         default:
@@ -189,22 +190,22 @@ void SceneManager::OnTransitionEnded() {
 
 
 
-void InstanceLevelObjects() {
+void InstanceLevelObjects(LevelData &level_data) {
     TraceLog(LOG_INFO, "instacing game objects");
 
-
-    for(int t_index = 0; t_index < g_level_data.level_transitions.size(); t_index++) {
-        Vector2 t_posisition = g_level_data.level_transitions[t_index].position_i;
+//transition areas
+    for(int t_index = 0; t_index < level_data.level_transitions.size(); t_index++) {
+        Vector2 t_posisition = level_data.level_transitions[t_index].position_i;
 
         TransitionArea *new_area = new TransitionArea();
 
-        new_area->identifier = g_level_data.level_transitions[t_index].identifier;
+        new_area->identifier = level_data.level_transitions[t_index].identifier;
         new_area->position = t_posisition;
-        new_area->size = {g_level_data.level_transitions[t_index].size.x, g_level_data.level_transitions[t_index].size.y};
-        new_area->payload_s = g_level_data.level_transitions[t_index].dest_string;
+        new_area->size = {level_data.level_transitions[t_index].size.x, level_data.level_transitions[t_index].size.y};
+        new_area->payload_s = level_data.level_transitions[t_index].dest_string;
         
-        if(g_level_data.level_transitions[t_index].identifier == "HouseTransition") {
-            new_area->payload_v = g_level_data.level_transitions[t_index].return_position;
+        if(level_data.level_transitions[t_index].identifier == "HouseTransition") {
+            new_area->payload_v = level_data.level_transitions[t_index].return_position;
         }
 
         for(int level_index = 0; level_index < g_ldtk_maps.levels.size(); level_index++) {
@@ -214,6 +215,32 @@ void InstanceLevelObjects() {
         }
 
         //g_game_areas.push_back(new_area);
-        g_level_data.game_areas.push_back(new_area);
-    } 
+        //_draw_list.push_back(std::unique_ptr<BaseEntity>(new_entity));
+        level_data.game_areas.push_back(new_area);
+    }
+
+//containers
+    for(int c_index = 0; c_index < level_data.container_data.size(); c_index++) {
+
+        TraceLog(LOG_INFO, "instacing container");
+
+        Vector2 pos = level_data.container_data[c_index].position_i;
+        int lti = level_data.container_data[c_index].loot_table_id;
+        int spi = level_data.container_data[c_index].sprite_id;
+        
+        ContainerEntity *new_container = new ContainerEntity(pos, spi, lti);
+        //g_level_data.containers.push_back(new_container);
+        DL_Add(level_data.entity_list, new_container);
+
+        new_container->c_area.identifier = level_data.container_data[c_index].identifier;
+        new_container->c_area.position = pos;
+        new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
+        new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
+        GenerateContainerItemList(new_container->loot_table_id, new_container->c_area.item_list);
+        new_container->c_area.size = {level_data.level_transitions[c_index].size.x, level_data.level_transitions[c_index].size.y};
+
+        //g_level_data.game_areas.push_back(&new_container->c_area);
+        level_data.game_areas.push_back(&new_container->c_area);
+    }
+
 }

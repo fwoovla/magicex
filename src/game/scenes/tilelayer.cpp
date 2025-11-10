@@ -130,7 +130,6 @@ bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_res
             collided =  true;
         }
     }
-
     //TraceLog(LOG_INFO, "\n");
     return collided;
 }

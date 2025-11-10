@@ -2,7 +2,7 @@
 
 #include "gamedefs.h"
 
-void InstanceLevelObjects();
+void InstanceLevelObjects(LevelData &level_data);
 
 
 
@@ -24,8 +24,8 @@ class SceneManager{
     void OnTransitionEnded();
     void OnTransitionMidpoint();
 
-
-    BaseScene *current_scene;
+    std::unique_ptr<BaseScene> current_scene;
+    //BaseScene *current_scene;
     PauseMenu *pause_menu;
 
     FadeTransition *fade_transition;

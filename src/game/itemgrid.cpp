@@ -68,7 +68,7 @@ void ItemGrid::Update() {
             }
             else {
                 //item dropped in this grid
-                if(hovered_cell == selected_cell) {
+                if(hovered_cell == selected_cell or (*item_list)[index] != -1) {
                     item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
                 }
                 else {
@@ -166,7 +166,7 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
     (*item_list)[index] = item_id;
 
-    LoadSpriteCentered(item_sprites[index], g_item_sprites[g_item_data[ (*item_list)[index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+    LoadSpriteCentered(item_sprites[index], g_item_sprites[g_item_data[ (*item_list)[index] ].sprite_id], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
     ScaleSprite(item_sprites[index], {2,2});
 }
 

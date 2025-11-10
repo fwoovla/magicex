@@ -63,6 +63,10 @@ void Signal::Connect(std::function<void()> const& callback) {
     callbacks.push_back(callback);
 }
 
+void Signal::DisconnectAll() {
+    callbacks.clear();
+}
+
 void Signal::EmitSignal() {
     for(int i = 0; i < callbacks.size(); i++) {
         callbacks[i]();
@@ -128,4 +132,59 @@ float ShortestAngleDiffRad(float from, float to) {
 void SetCursorPosition(Vector2 _pos) {
     g_cursor.poisition = _pos;
     g_cursor.sprite.position = _pos;
+}
+
+
+
+void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
+
+
+    _draw_list.push_back(new_entity);
+    //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
+
+   //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
+}
+
+
+void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
+    for(int i = 0; i < _draw_list.size(); i++) {
+        if(_draw_list[i] != nullptr){
+            _draw_list[i]->Draw();
+        }
+    }
+}
+
+
+void DL_Update(std::vector<BaseEntity *> &_draw_list) {
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE update %i", _draw_list.size());
+
+    for(int i = 0; i < _draw_list.size(); i++) {
+        if(_draw_list[i] != nullptr){
+            _draw_list[i]->Update();
+            if(_draw_list[i]->should_delete) {
+                TraceLog(LOG_INFO, "DELETING ENTITY");
+                delete _draw_list[i];
+                _draw_list.erase(_draw_list.begin() + i);
+                //_draw_list[i] = nullptr;
+                --i;
+            }
+        }
+    }
+}
+
+void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
+
+    for(int i = 0; i < _draw_list.size(); i++) {
+        if(_draw_list[i] != nullptr){
+            TraceLog(LOG_INFO, "DELETING ENTITY");
+             delete _draw_list[i];
+            _draw_list.erase(_draw_list.begin() + i);
+                //_draw_list[i] = nullptr;
+            --i;
+        }
+    }
+    
+    _draw_list.clear();
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }

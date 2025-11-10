@@ -18,6 +18,7 @@ enum SIGNAL {
 class Signal {
     public:
     void Connect(std::function<void()> const& callback);
+    void DisconnectAll();
     void EmitSignal();    
 
     std::vector<std::function<void()>> callbacks;

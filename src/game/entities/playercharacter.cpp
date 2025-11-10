@@ -22,6 +22,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
+    should_delete = false;
 }
 
 void PlayerCharacter::Update() {

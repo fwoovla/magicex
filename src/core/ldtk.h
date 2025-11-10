@@ -242,6 +242,8 @@ struct GameData {
     int sub_map_index;
     bool is_in_sub_map;
     Vector2 sub_return_position;
+    int loot_table_id;
+    std::vector<int> *loot_table;
 };
 
 extern GameData g_game_data;

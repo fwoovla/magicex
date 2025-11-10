@@ -104,9 +104,9 @@ void CharacterMenu::Open() {
 }
 
 void CharacterMenu::OpenWith(std::vector<int> &list) {
-    g_item_list = list;
+    //g_item_list = list;
     inventory_grid->SetItems(&g_player_data.inventory);
-    ground_grid->SetItems(&g_item_list);
+    ground_grid->SetItems(&list);
     hotbar_grid->SetItems(&g_player_data.hotbar);
 }
 
@@ -150,8 +150,8 @@ void CharacterMenu::OnHotbarItemDeselected() {
 }
 
 void CharacterMenu::OnTransferItem() {
-    TraceLog(LOG_INFO, "\ntransfer items \nhp %0.0f %0.0f", shared_data.dest_cell.x, shared_data.dest_cell.y);
-    TraceLog(LOG_INFO, "sp %0.0f %0.0f", shared_data.source_cell.x, shared_data.source_cell.y);
+    TraceLog(LOG_INFO, "\ntransfer items \ndest %0.0f %0.0f", shared_data.dest_cell.x, shared_data.dest_cell.y);
+    TraceLog(LOG_INFO, "source %0.0f %0.0f", shared_data.source_cell.x, shared_data.source_cell.y);
     TraceLog(LOG_INFO, "move %i  from %i %i\n", shared_data.item_id, shared_data.source_grid, shared_data.dest_grid);
 
     if(shared_data.source_grid == GRID_GROUND) {
@@ -234,6 +234,8 @@ void CharacterMenu::OnTransferItem() {
             }
             else {
                 //not a free cell
+                TraceLog(LOG_INFO, "\nnot a fre cell \nsource %0.0f %0.0f", shared_data.source_cell.x, shared_data.source_cell.y);
+
                 hotbar_grid->AddItem(shared_data.item_id, shared_data.source_cell);
             }
         }

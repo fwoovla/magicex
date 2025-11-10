@@ -58,53 +58,27 @@ struct  RayCast {
 };
 
 
-extern std::vector<BaseEntity *> active_entity_list;
+//extern std::vector<BaseEntity *> active_entity_list;
+//extern std::vector<std::unique_ptr<BaseEntity>> entity_draw_list;
 
 
 //extern int* level_array_data;
 
 
-inline void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
+void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity);
 
-
-    _draw_list.push_back(new_entity);
-    //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
-
-   //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
-}
 
 
 //inline void DL_Draw(BaseEntity *_draw_list[DRAW_LIST_SIZE]) {
-inline void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
-    for(int i = 0; i < _draw_list.size(); i++) {
-        if(_draw_list[i] != nullptr){
-            _draw_list[i]->Draw();
-        }
-    }
-}
+void DL_Draw(std::vector<BaseEntity *> &_draw_list);
 
 
-inline void DL_Update(std::vector<BaseEntity *> &_draw_list) {
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE update %i", _draw_list.size());
 
-    for(int i = 0; i < _draw_list.size(); i++) {
-        if(_draw_list[i] != nullptr){
-            _draw_list[i]->Update();
-            if(_draw_list[i]->should_delete) {
+void DL_Update(std::vector<BaseEntity *> &_draw_list);
 
-                TraceLog(LOG_INFO, "DELETING ENTITY");
-                _draw_list.erase(_draw_list.begin() + i);
-            }
-        }
-    }
-}
 
-inline void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
-    
-    _draw_list.clear();
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
-}
+void DL_Clear(std::vector<BaseEntity *> &_draw_list);
+
 
 
 

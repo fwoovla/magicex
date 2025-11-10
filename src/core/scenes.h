@@ -94,6 +94,8 @@ class ShelterScene : public  BaseScene{
         void OnStartPressed();
         void OnMapSelected();
 
+        void OnContainerOpened();
+
         void OnTransitionAreaEntered();
         void OnTransitionAreaActivated();
 
@@ -107,7 +109,7 @@ class ShelterScene : public  BaseScene{
 
         TileLayer *tile_layer;
 
-
+        LevelData level_data;
 
 };
 
@@ -123,6 +125,8 @@ class SubScene : public  BaseScene{
 
         void OnQuitPressed();
 
+        void OnContainerOpened();
+
         void OnMapTransitionEntered();
         void OnMapTransitionActivated();
 
@@ -134,6 +138,8 @@ class SubScene : public  BaseScene{
         TileLayer *tile_layer;
 
         Signal sub_scene_exited;
+
+        LevelData level_data;
 
 };
 
@@ -151,6 +157,8 @@ class GameScene : public  BaseScene{
 
         void OnQuitPressed();
 
+        void OnContainerOpened();
+        
         void OnMapTransitionEntered();
         void OnMapTransitionActivated();
 
@@ -173,10 +181,11 @@ class GameScene : public  BaseScene{
         TileLayer *tile_layer;
 
         SubScene *sub_scene;
+        bool can_delete_sub;
 
         Vector2 saved_player_position;
 
-        LevelData return_level_data;
+        LevelData level_data;;
 
 };
 

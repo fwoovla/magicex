@@ -15,8 +15,6 @@
 
 using json = nlohmann::json;
 
-
-
 inline std::string unit_names[10] = {
     "blerfy",
     "toyf",
@@ -33,11 +31,11 @@ inline std::string unit_names[10] = {
 struct ItemData {
     int id;
     int sprite_id;
+    int value;
     std::string item_name;
 };
 
 extern std::unordered_map<int, ItemData> g_item_data;
-
 
 
 struct PlayerData {
@@ -84,10 +82,16 @@ struct LevelData {
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
-    std::vector<ContainerEntity> containers;
+    std::vector<ContainerEntity*> containers;
+    std::vector<BaseEntity*> entity_list;
+
+
 };
 
-extern LevelData g_level_data;
+
+
+extern std::vector<std::vector<int>> g_loot_tables;
+
 
 
 void LoadGameData();
@@ -97,8 +101,10 @@ void SaveGame();
 void LoadGame();
 
 
-void ClearLevelData();
+void ClearLevelData(LevelData &level_data);
 
-void LoadLevelData();
+void LoadLevelData(LevelData &level_data);
 
+
+void GenerateContainerItemList(int lti, std::vector<int> &list);
 
