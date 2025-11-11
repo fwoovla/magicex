@@ -23,10 +23,33 @@ void LoadGameData() {
         int sprite_sheet_id = cj["base_class"][i]["sprite_sheet_id"];
         int portrait_id = cj["base_class"][i]["portrait_id"];
         std::string class_name = cj["base_class"][i]["class_name"];
+        
         std::vector<int> inv;
         inv.push_back(0);
+        
         std::vector<int> hot;
-        hot.push_back(1);
+        hot.push_back(0);
+
+        std::vector<int> p;
+        p.push_back(0);
+
+        std::vector<int> s;
+        s.push_back(0);
+
+        std::vector<int> hd;
+        hd.push_back(0);
+
+        std::vector<int> bd;
+        bd.push_back(0);
+
+        std::vector<int> lg;
+        lg.push_back(0);
+
+        std::vector<int> ft;
+        ft.push_back(0);
+
+        std::vector<int> hs;
+        hs.push_back(0);
 
 
         PlayerData this_class = {
@@ -38,7 +61,15 @@ void LoadGameData() {
             .name = "not assigned",
             .class_name = class_name,
             .inventory = inv,
-            .hotbar = hot
+            .hotbar = hot,
+
+            .primary = p,
+            .secondary = s,
+            .head = hd,
+            .body = bd,
+            .legs = lg,
+            .feet = ft,
+            .hands = hs
         };
 
         g_class_data[i] = this_class;
@@ -49,12 +80,15 @@ void LoadGameData() {
         int s_id = cj["item_data"][i]["sprite_id"];
         int value = cj["item_data"][i]["value"];
         std::string name = cj["item_data"][i]["item_name"];
+        ItemType type = cj["item_data"][i]["item_type"];
 
         ItemData new_item = {
             .id = id,
             .sprite_id = s_id,
             .value = value,
+            .type = type,
             .item_name = name
+            
         };
 
         g_item_data[i] = new_item;
@@ -113,13 +147,37 @@ void SaveGame() {
     j["portrait_id"] = g_player_data.portrait_id;
     j["name"] = g_player_data.name;
     j["class_name"] = g_player_data.class_name;
-    j["inventory"] = {};
+
+    //j["inventory"] = {};
     for(int i = 0; i < g_player_data.inventory.size(); i++) {
         j["inventory"][i] = g_player_data.inventory[i];
     }
     for(int i = 0; i < g_player_data.hotbar.size(); i++) {
         j["hotbar"][i] = g_player_data.hotbar[i];
     }
+
+    for(int i = 0; i < g_player_data.primary.size(); i++) {
+        j["primary"][i] = g_player_data.primary[i];
+    }
+    for(int i = 0; i < g_player_data.secondary.size(); i++) {
+        j["secondary"][i] = g_player_data.secondary[i];
+    }
+    for(int i = 0; i < g_player_data.head.size(); i++) {
+        j["head"][i] = g_player_data.head[i];
+    }
+    for(int i = 0; i < g_player_data.body.size(); i++) {
+        j["body"][i] = g_player_data.body[i];
+    }
+    for(int i = 0; i < g_player_data.legs.size(); i++) {
+        j["legs"][i] = g_player_data.legs[i];
+    }
+    for(int i = 0; i < g_player_data.feet.size(); i++) {
+        j["feet"][i] = g_player_data.feet[i];
+    }
+    for(int i = 0; i < g_player_data.hands.size(); i++) {
+        j["hands"][i] = g_player_data.hands[i];
+    }
+
 
     file<<j.dump(4);
 
@@ -155,13 +213,57 @@ void LoadGame() {
     }
 
     std::vector<int> hot;
-
     for(int i = 0; i < j["hotbar"].size(); i++) {
         hot.push_back(j["hotbar"][i]);
     }
 
+    std::vector<int> p;
+    for(int i = 0; i < j["primary"].size(); i++) {
+        p.push_back(j["primary"][i]);
+    }
+///
+    std::vector<int> s;
+    for(int i = 0; i < j["secondary"].size(); i++) {
+        s.push_back(j["secondary"][i]);
+    }
+
+    std::vector<int> hd;
+    for(int i = 0; i < j["head"].size(); i++) {
+        hd.push_back(j["head"][i]);
+    }
+
+    std::vector<int> bd;
+    for(int i = 0; i < j["body"].size(); i++) {
+        bd.push_back(j["body"][i]);
+    }
+
+    std::vector<int> lg;
+    for(int i = 0; i < j["legs"].size(); i++) {
+        lg.push_back(j["legs"][i]);
+    }
+
+    std::vector<int> ft;
+    for(int i = 0; i < j["feet"].size(); i++) {
+        ft.push_back(j["feet"][i]);
+    }
+
+    std::vector<int> hs;
+    for(int i = 0; i < j["hands"].size(); i++) {
+        hs.push_back(j["hands"][i]);
+    }
+
+
+
     g_player_data.inventory = inv;
     g_player_data.hotbar = hot;
+
+    g_player_data.primary = p;
+    g_player_data.secondary = s;
+    g_player_data.head = hd;
+    g_player_data.body = bd;
+    g_player_data.legs = lg;
+    g_player_data.feet = ft;
+    g_player_data.hands = hs;
 
     file.close();
 
@@ -171,29 +273,7 @@ void LoadGame() {
 
 
 void ClearLevelData(LevelData &level_data) {
-/*     level_data.spawn_position = {0,0};
-    level_data.is_shelter = false;
 
-    for (int i = 0; i <level_data.game_areas.size(); i++) {
-        if(level_data.game_areas[i] != nullptr) {
-            delete level_data.game_areas[i];
-        }
-    }
-    level_data.game_areas.clear();
-
-    for (int i = 0; i <level_data.containers.size(); i++) {
-        if(level_data.containers[i] != nullptr) {
-            delete level_data.containers[i];
-        }
-    }
-    level_data.containers.clear();
-
-    level_data.level_transitions.clear();
-    level_data.container_data.clear();
-    DL_Clear(level_data.entity_list);
-
- */
-    //clear transition data
 
 }
 

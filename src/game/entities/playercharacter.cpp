@@ -58,8 +58,10 @@ void PlayerCharacter::Update() {
                 velocity.y = 0.0f;
             }
         }
+        //position.x = (int)position.x;
+        //position.y = (int)position.y;
 
-       if(velocity.x < -1) {
+        if(velocity.x < -1) {
             sprite.source.width = -sprite.size.x;
         }
         else if(velocity.x > 1){
@@ -69,7 +71,9 @@ void PlayerCharacter::Update() {
     else {
         SetAmination(sprite, IDLE);
     }
-    sprite.position = position;
+    sprite.position = {position.x, position.y};
+    //sprite.position.x = (int)sprite.position.x;
+    //sprite.position.y = (int)sprite.position.y;
 }
 
 void PlayerCharacter::Draw() {
@@ -134,9 +138,7 @@ void PlayerCharacter::CheckInput() {
 
     Vector2 pp = GetWorldToScreen2D( position, g_camera);
     pp = {pp.x * g_scale, pp.y*g_scale};
-
     wand_sprite.roataion = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
-
 }
 
 

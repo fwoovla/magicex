@@ -28,10 +28,23 @@ inline std::string unit_names[10] = {
     "skort mc dort"
 };
 
+enum ItemType {
+    TYPE_WEAPON,
+    TYPE_HEAD_ARMOR,
+    TYPE_BODY_ARMOR,
+    TYPE_LEG_ARMOR,
+    TYPE_FEET_ARMOR,
+    TYPE_HAND_ARMOR,
+    TYPE_CONSUMEABLE,
+    TYPE_RESOURCE,
+    TYPE_ALL,
+};
+
 struct ItemData {
     int id;
     int sprite_id;
     int value;
+    ItemType type;
     std::string item_name;
 };
 
@@ -49,6 +62,13 @@ struct PlayerData {
     std::vector<int> inventory;
     std::vector<int> hotbar;
 
+    std::vector<int> primary;
+    std::vector<int> secondary;
+    std::vector<int> head;
+    std::vector<int> body;
+    std::vector<int> legs;
+    std::vector<int> feet;
+    std::vector<int> hands;
 };
 
 extern std::unordered_map<int, PlayerData> g_class_data;

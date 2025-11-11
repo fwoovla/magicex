@@ -20,79 +20,93 @@
         {
             "item_name": "Ball",
             "sprite_id":0,
-            "value":0
-
+            "value":0,
+            "item_type":7
         },
         {
             "item_name": "Cabbage",
             "sprite_id":1,
-            "value":0
-
+            "value":0,
+            "item_type":6
         },
         {
             "item_name": "Small Bow",
             "sprite_id":2,
-            "value":0
-
+            "value":0,
+            "item_type":0
         },
         {
             "item_name": "Leather Glove",
             "sprite_id":3,
-            "value":0
-
+            "value":0,
+            "item_type":5
         },
         {
             "item_name": "Apple",
             "sprite_id":4,
-            "value":0
-
+            "value":0,
+            "item_type":6
         },
         {
             "item_name": "Cheese",
             "sprite_id":5,
-            "value":0
-
+            "value":0,
+            "item_type":6
         },
         {
             "item_name": "Bread",
             "sprite_id":6,
-            "value":0
-
+            "value":0,
+            "item_type":6
         },
         {
             "item_name": "Knife",
             "sprite_id":7,
-            "value":0
-
+            "value":0,
+            "item_type":0
         },
         {
             "item_name": "Dagger",
             "sprite_id":8,
-            "value":0
-
+            "value":0,
+            "item_type":0
         },
         {
             "item_name": "Wand",
             "sprite_id":9,
-            "value":0
-
+            "value":0,
+            "item_type":0
         },
         {
             "item_name": "Leather Boots",
             "sprite_id":10,
-            "value":0
+            "value":0,
+            "item_type":4
         },
         {
             "item_name": "Healing Vial",
             "sprite_id":11,
-            "value":0
+            "value":0,
+            "item_type":6
+        },
+        {
+            "item_name": "Helmet",
+            "sprite_id":12,
+            "value":0,
+            "item_type":1
+        },
+        {
+            "item_name": "Leather Vest",
+            "sprite_id":13,
+            "value":0,
+            "item_type":2
         }
         
     ],
     "loot_tables": [
         {
             "table_name":"LT1.0",
-            "table_data":[0,1,2,3,4,5,6,7,8,9,10,11]
+            "table_data":[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
         },
         {
             "table_name":"LT1.1",

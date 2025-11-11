@@ -165,31 +165,32 @@ void GameScene::HandleCamera() {
     float x_offset_f = g_viewport.x_offset_f;
     float y_offset_f = g_viewport.y_offset_f;
 
-
-    g_camera.target =  Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
+    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 
     if(g_current_player->position.x - x_offset_f < 0) {
         float x_dif = x_offset_f - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
-        g_camera.target.x = (int)g_camera.target.x;
+        //g_camera.target.x = (int)g_camera.target.x;
     }
     else if(g_current_player->position.x + x_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid) {
         float x_dif = (x_offset_f + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
-        g_camera.target.x = (int)g_camera.target.x;
+         g_camera.target.x = g_camera.target.x - x_dif;
+        //g_camera.target.x = (int)g_camera.target.x;
     }
 
     if(g_current_player->position.y - y_offset_f < 0) {
         float y_dif = y_offset_f - g_current_player->position.y;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
-        g_camera.target.y = g_camera.target.y + y_dif;
+        g_camera.target.y = (int)g_camera.target.y + y_dif;
+        //g_camera.target.y = (int)g_camera.target.y;
     }
     else if(g_current_player->position.y + y_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei) {
         float y_dif = (y_offset_f + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
-        g_camera.target.y = (int)g_camera.target.y;
+        //g_camera.target.y = (int)g_camera.target.y;
 
     }
 

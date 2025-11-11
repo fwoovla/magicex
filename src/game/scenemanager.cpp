@@ -47,10 +47,11 @@ void SceneManager::UpdateScene()
     }
 
     if(g_game_settings.show_debug) {
-        debug_label.text = TextFormat( "pf %0.2f %0.2f \n pc %i %i \n ct %i %i \n", 
+        debug_label.text = TextFormat( "player pos ff %0.2f %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f", 
         g_current_player->position.x, g_current_player->position.y,
         (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
-        (int)g_camera.target.x, (int)g_camera.target.y
+        (int)g_camera.target.x, (int)g_camera.target.y,
+        g_camera.target.x, g_camera.target.y
     );
     }
 

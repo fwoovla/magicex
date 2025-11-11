@@ -47,7 +47,6 @@ void ItemGrid::Update() {
                     if(g_input.selecting and can_select) {
                         cell_selected = true;
                         selected_cell = hovered_cell;
-                        //shared_data->source_list = *item_list;
                         shared_data->source_grid = this_grid;
                         shared_data->source_cell = selected_cell;
                         shared_data->item_id = item_id;
@@ -60,25 +59,29 @@ void ItemGrid::Update() {
 
     if(!g_input.selecting) {
 
+        int source_index = selected_cell.y * cols + selected_cell.x;
+        int dest_index = hovered_cell.y * cols + hovered_cell.x;
+
         if(cell_selected) {
-            int index = selected_cell.y * cols + selected_cell.x;
             if(shared_data->dest_grid != this_grid) {
                 //item dropped in another grid
                 transfer_item.EmitSignal();
             }
             else {
                 //item dropped in this grid
-                if(hovered_cell == selected_cell or (*item_list)[index] != -1) {
-                    item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+                //TraceLog(LOG_INFO, "DROPPED IN CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                if(hovered_cell == Vector2{-1,-1} or (*item_list)[dest_index] != -1) {
+                    //TraceLog(LOG_INFO, "DROPPED IN invalid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                    item_sprites[source_index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
                 }
                 else {
-                    int new_index = hovered_cell.y * cols + hovered_cell.x;
-                    (*item_list)[new_index] = (*item_list)[index];
-                    LoadSpriteCentered(item_sprites[new_index], g_item_sprites[g_item_data[ (*item_list)[new_index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
-                    ScaleSprite(item_sprites[new_index], {2,2});
+                    //TraceLog(LOG_INFO, "DROPPED IN valid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                    (*item_list)[dest_index] = (*item_list)[source_index];
+                    LoadSpriteCentered(item_sprites[dest_index], g_item_sprites[g_item_data[ (*item_list)[dest_index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+                    ScaleSprite(item_sprites[dest_index], {2,2});
                     
-                    (*item_list)[index] = -1;
-                    item_sprites[index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
+                    (*item_list)[source_index] = -1;
+                    item_sprites[source_index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
                 }
             }
             not_selecting.EmitSignal();
@@ -157,9 +160,19 @@ void ItemGrid::SetItems(std::vector<int> *list) {
     }
 }
 
-bool ItemGrid::CanAddItem(Vector2 dest_cell) {
+bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
-    return (*item_list)[index] == -1;
+    if((*item_list)[index] != -1) {
+        return false;
+    }
+
+    if(accepted_type != TYPE_ALL) {
+        TraceLog(LOG_INFO, "checking %i %i", accepted_type, g_item_data[item_id].type);
+        if(accepted_type !=  g_item_data[item_id].type) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {

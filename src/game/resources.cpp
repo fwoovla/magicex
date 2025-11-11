@@ -11,6 +11,7 @@ void LoadResources() {
 
     g_sprite_sheets[SPRITE_ITEMS] = LoadTexture("assets/spritesheet.png");
 
+//items
     TraceLog(LOG_INFO, "LOADING IMAGE SPRITES");
     Image image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
     Vector2 index_pos = {0,0};
@@ -72,6 +73,18 @@ void LoadResources() {
     ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
     g_item_sprites[SPRITE_ITEM_HEALINGVIAL] = LoadTextureFromImage(image);
 
+    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
+    index_pos = {4,6};
+    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
+    g_item_sprites[SPRITE_ITEM_HELMET] = LoadTextureFromImage(image);
+
+    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
+    index_pos = {0,19};
+    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
+    g_item_sprites[SPRITE_ITEM_LEATHER_VEST] = LoadTextureFromImage(image);
+
+
+//containers
     TraceLog(LOG_INFO, "LOADING CONTAINER SPRITES");
     image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
     index_pos = {2,0};
@@ -82,6 +95,7 @@ void LoadResources() {
     index_pos = {3,0};
     ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
     g_container_sprites[SPRITE_CONTAINER_BARREL] = LoadTextureFromImage(image);
+
 
     //UnloadTexture()
 

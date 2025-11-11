@@ -245,7 +245,7 @@ int LDTKDrawMap(Vector2 focus_position) {
                 DrawTexturePro(
                     g_ldtk_tilesheets[tilesheet_id].texture,
                     {atlas_pos.x, atlas_pos.y, (float)g_viewport.tile_size, (float)g_viewport.tile_size},
-                    {(float)tile_pos.x, (float)tile_pos.y,(float)g_viewport.tile_size, (float )g_viewport.tile_size},
+                    {(float)tile_pos.x, (float)tile_pos.y,(float)g_viewport.tile_size+.1f, (float )g_viewport.tile_size +.1f},
                     {0,0},
                     0.0,
                     color

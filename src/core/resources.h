@@ -33,10 +33,12 @@ enum ItemSprites {
     SPRITE_ITEM_WAND,
     SPRITE_ITEM_LEATHERBOOTS,
     SPRITE_ITEM_HEALINGVIAL,
+    SPRITE_ITEM_HELMET,
+    SPRITE_ITEM_LEATHER_VEST,
     SPRITE_ITEM_NUM_SPRITES
 };
 
-extern Texture2D g_item_sprites[MAX_SPRITE_SHEETS];
+extern Texture2D g_item_sprites[1000];
 
 
 enum ContainerSprites {

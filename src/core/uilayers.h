@@ -5,7 +5,15 @@ enum INVENTORYGRIDS {
     GRID_NONE,
     GRID_GROUND,
     GRID_INVENTORY,
-    GRID_HOTBAR
+    GRID_HOTBAR,
+    GRID_PRIMARY,
+    GRID_SECONDARY,
+    GRID_HEAD,
+    GRID_BODY,
+    GRID_LEGS,
+    GRID_FEET,
+    GRID_HANDS,
+    GRID_NUM_GRIDS
 };
 
 
@@ -29,6 +37,7 @@ struct SharedItemData {
     INVENTORYGRIDS dest_grid;
     Vector2 source_cell;
     Vector2 dest_cell;
+    //int source_index
 };
 
 class ItemGrid {
@@ -40,12 +49,13 @@ class ItemGrid {
     void DrawItems();
     void SetItems(std::vector<int> *list);
 
-    bool CanAddItem(Vector2 dest_cell);
+    bool CanAddItem(int item_id, Vector2 dest_cell);
     void AddItem(int item_id, Vector2 dest_cell);
     bool CanRemoveItem(Vector2 source_cell);
     void RemoveItem(Vector2 source_cell);
 
     INVENTORYGRIDS this_grid;
+    ItemType accepted_type;
 
     SharedItemData *shared_data;
 
@@ -126,19 +136,14 @@ class CharacterMenu : public BaseUILayer {
     void Open();
     void OpenWith(std::vector<int> &list);
 
-    void OnGroundItemSelected();
-    void OnGroundItemDeselected();
-
-    void OnInvItemSelected();
-    void OnInvItemDeselected();
-
-    void OnHotbarItemSelected();
-    void OnHotbarItemDeselected();
+    void OnItemSelected();
+    void OnItemDeselected();
 
     void OnTransferItem();
 
 
     SharedItemData shared_data;
+    std::vector<ItemGrid *> grid_list;
     //INVENTORYGRIDS source_grid;
     //INVENTORYGRIDS dest_grid;
 
@@ -157,15 +162,26 @@ class CharacterMenu : public BaseUILayer {
     std::vector<int> g_item_list;
     
     Vector2 cpo;
+    Vector2 ppo; //portrait offset
     Sprite character_panel_sprite;
     AnimatedSprite character_sprite;
     Label character_label;
     Label character_stat_label;
-    //Rectangle ground_bounding_rect;
-    //Sprite ground_panel_sprite;
-    //AnimatedSprite ground_sprite;
-    //Label character_label;
-    //Label character_stat_label;
+
+    Label primary_header_label;
+    ItemGrid *primary_grid;
+    Label secondary_header_label;
+    ItemGrid *secondary_grid;
+    Label head_header_label;
+    ItemGrid *head_grid;
+    Label body_header_label;
+    ItemGrid *body_grid;
+    Label legs_header_label;
+    ItemGrid *legs_grid;
+    Label hands_header_label;
+    ItemGrid *hands_grid;
+    Label feet_header_label;
+    ItemGrid *feet_grid;
 
     Vector2 hpo;
     ItemGrid *hotbar_grid;

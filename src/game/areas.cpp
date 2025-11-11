@@ -29,14 +29,14 @@ void TransitionArea::Update() {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                     g_game_data.sub_return_position = payload_v * g_ldtk_maps.default_grid_size;
                     g_game_data.sub_map_index = payload_i;
-                    label.text += "\n\n\nopen";
+                    //label.text += "\n\n\nopen";
                     in_range = true;
                 }
             }
             else {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                         g_game_data.next_map_index = payload_i;
-                        label.text += "\n\n\nopen";
+                        label.text += "\n\n\n'space'";
                         in_range = true;
                 }
             }
@@ -107,7 +107,7 @@ void ContainerArea::Update() {
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
-            label.text += "\n\n\nopen";
+            label.text += "\n\n\n'space'";
         }
     }
     else {

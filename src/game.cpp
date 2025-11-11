@@ -16,7 +16,7 @@ std::vector<LDTKTileset> g_ldtk_tilesets;
 
 Texture2D g_tile_sheets[MAX_TILE_SHEETS];
 Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
-Texture2D g_item_sprites[MAX_SPRITE_SHEETS];
+Texture2D g_item_sprites[1000];
 Texture2D g_container_sprites[MAX_SPRITE_SHEETS];
 Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
 Texture2D g_ui_panels[MAX_UI_PANELS];
@@ -145,4 +145,7 @@ void Game::CleanUp() {
     scene_manager.CleanUp();
     UnloadResources();
     TraceLog(LOG_INFO, "cleaning up game.");
+    if(IsWindowFullscreen()) {  
+        ToggleFullscreen();
+    } 
 }
