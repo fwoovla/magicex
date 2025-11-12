@@ -52,6 +52,14 @@ void ItemGrid::Update() {
                         shared_data->item_id = item_id;
                         selecting.EmitSignal();
                     }
+                    if(g_input.mouse_right and can_select) {
+                        //cell_selected = true;
+                        selected_cell = hovered_cell;
+                        shared_data->source_grid = this_grid;
+                        shared_data->source_cell = selected_cell;
+                        shared_data->item_id = item_id;
+                        pickup.EmitSignal();
+                    }
                 }
             }
         }
@@ -160,6 +168,22 @@ void ItemGrid::SetItems(std::vector<int> *list) {
     }
 }
 
+bool ItemGrid::HasRoom() {
+    int count = 0;
+
+    for(int i = 0; i < item_list->size(); i++) {
+        if((*item_list)[i] != -1) {
+            count++;
+        }
+    }
+    if(count >= cols * rows) {
+        return false;
+    }
+    return true;
+}
+
+
+
 bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
     if((*item_list)[index] != -1) {
@@ -173,6 +197,20 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
         }
     }
     return true;
+}
+
+void ItemGrid::AddItem(int item_id) {
+    for(int i = 0; i < item_list->size(); i++) {
+        if((*item_list)[i] == -1) {
+            int x = i%(cols);
+            int y = i/(cols);
+            (*item_list)[i] = item_id;
+
+            LoadSpriteCentered(item_sprites[i], g_item_sprites[g_item_data[ (*item_list)[i] ].sprite_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+            ScaleSprite(item_sprites[i], {2,2});
+            break;
+        }
+    }
 }
 
 void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {

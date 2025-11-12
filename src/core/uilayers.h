@@ -2,7 +2,7 @@
 #include "gamedefs.h"
 
 enum INVENTORYGRIDS {
-    GRID_NONE,
+    GRID_NONE = -1,
     GRID_GROUND,
     GRID_INVENTORY,
     GRID_HOTBAR,
@@ -50,7 +50,9 @@ class ItemGrid {
     void SetItems(std::vector<int> *list);
 
     bool CanAddItem(int item_id, Vector2 dest_cell);
+    bool HasRoom();
     void AddItem(int item_id, Vector2 dest_cell);
+    void AddItem(int item_id);
     bool CanRemoveItem(Vector2 source_cell);
     void RemoveItem(Vector2 source_cell);
 
@@ -80,6 +82,7 @@ class ItemGrid {
     Signal selecting;
     Signal not_selecting;
     Signal transfer_item;
+    Signal pickup;
 };
 
 
@@ -140,6 +143,8 @@ class CharacterMenu : public BaseUILayer {
     void OnItemDeselected();
 
     void OnTransferItem();
+
+    void OnPickup();
 
 
     SharedItemData shared_data;

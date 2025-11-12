@@ -21,6 +21,7 @@ CharacterMenu::CharacterMenu() {
     ground_grid->selecting.Connect( [&](){OnItemSelected();} );
     ground_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     ground_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    ground_grid->pickup.Connect( [&](){OnPickup();} );
 
     grid_list.push_back(ground_grid);
     
@@ -281,6 +282,27 @@ void CharacterMenu::OnItemDeselected() {
     hands_grid->can_select = true;
 }
 
+
+void CharacterMenu::OnPickup() {
+    TraceLog(LOG_INFO, "pickup");
+    int source_index = -1;
+    int dest_index = -1;
+
+    for(int i = 0; i < grid_list.size(); i++) {
+        if(grid_list[i]->this_grid == shared_data.source_grid) {
+            source_index = i;
+        }
+    }
+
+    if(inventory_grid->HasRoom()) {
+        TraceLog(LOG_INFO, "pickup %i", source_index);
+        inventory_grid->AddItem(shared_data.item_id);
+        grid_list[source_index]->RemoveItem(shared_data.source_cell);
+    }
+    else {
+        //grid_list[source_index]->AddItem(shared_data.item_id, shared_data.source_cell);
+    }
+}
 
 void CharacterMenu::OnTransferItem() {
 
