@@ -18,24 +18,19 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
     //LoadSpriteCentered(crosshair_sprite, g_sprite_sheets[SPRITE_CROSSHAIR], position);
-    LoadSpriteCentered(wand_sprite, g_sprite_sheets[SPRITE_WAND], position);
+    LoadSpriteCentered(weapon_sprite, g_item_sprites[g_player_data.primary[0]], position);
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
     should_delete = false;
+    can_switch = true;
 }
 
 void PlayerCharacter::Update() {
     //TraceLog(LOG_INFO, "player update");
-    //hovered = false;
     CheckInput();
 
     
-    //TraceLog(LOG_INFO, "crosshair position, %0.0f %0.0f \n", crosshair_sprite.position.x, crosshair_sprite.position.y);
-
-    wand_sprite.position = position;
-
-    //move position
     collided = false;
     
     Vector2 previous_position = position;
@@ -58,8 +53,6 @@ void PlayerCharacter::Update() {
                 velocity.y = 0.0f;
             }
         }
-        //position.x = (int)position.x;
-        //position.y = (int)position.y;
 
         if(velocity.x < -1) {
             sprite.source.width = -sprite.size.x;
@@ -71,17 +64,15 @@ void PlayerCharacter::Update() {
     else {
         SetAmination(sprite, IDLE);
     }
-    sprite.position = {position.x, position.y};
-    //sprite.position.x = (int)sprite.position.x;
-    //sprite.position.y = (int)sprite.position.y;
+    sprite.position = position;
+    weapon_sprite.position = position;
 }
 
 void PlayerCharacter::Draw() {
     //TraceLog(LOG_INFO, "player draw");
 
     DrawSprite(sprite);
-    //DrawSprite(crosshair_sprite);
-    DrawSprite(wand_sprite);
+    DrawSprite(weapon_sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
         DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);   
@@ -125,7 +116,6 @@ void PlayerCharacter::CheckInput() {
         speed = speed + (speed * 0.8f);
     }
 
-    //velocity = input_dir * speed;
     //TraceLog(LOG_INFO, "player speed : %0.04f", speed);
 
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
@@ -138,13 +128,39 @@ void PlayerCharacter::CheckInput() {
 
     Vector2 pp = GetWorldToScreen2D( position, g_camera);
     pp = {pp.x * g_scale, pp.y*g_scale};
-    wand_sprite.roataion = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+    weapon_sprite.roataion = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+
+    if(g_input.key_switch_weapon and can_switch == true) {
+        TraceLog(LOG_INFO, "switching primary weapon");
+        int temp_primary = g_player_data.primary[0];
+        g_player_data.primary[0] = g_player_data.secondary[0];
+        g_player_data.secondary[0] = temp_primary;
+        Equip(g_player_data.primary[0]);
+        can_switch = false;
+    }
+    if(!g_input.key_switch_weapon) {
+        can_switch = true;
+    }
+}
+
+
+bool PlayerCharacter::CanEquip(int item_id) {
+    return true;
+}
+
+
+void PlayerCharacter::Equip(int item_id) {
+    if(g_item_data[item_id].type == 0) {
+        if(g_player_data.primary[0] == item_id) {
+            TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
+            LoadSpriteCentered(weapon_sprite, g_item_sprites[item_id], position);
+        }
+    }
 }
 
 
 PlayerCharacter::~PlayerCharacter()
 {
     TraceLog(LOG_INFO, "deleting player!!!!!!!!!!!!!!!!!!!!");
-    //UnloadTexture(sprite.texture);
 }
 

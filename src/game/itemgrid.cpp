@@ -100,7 +100,7 @@ void ItemGrid::DrawGrid() {
                 DrawRectangle(position.x + (c * grid_size), position.y  + (r * grid_size), (float)grid_size, (float)grid_size, DARKGRAY);
             }
             else if( r < rows and c < cols ) {
-                DrawRectangle(position.x + (c * grid_size), position.y  + (r * grid_size), (float)grid_size - 1, (float)grid_size - 1, BLACK);
+                DrawRectangle(position.x + (c * grid_size), position.y  + (r * grid_size), (float)grid_size - 1, (float)grid_size - 1, DARKERGRAY);
             }
         }
     }

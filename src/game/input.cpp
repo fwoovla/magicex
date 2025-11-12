@@ -68,6 +68,7 @@ void GetInputFromPlayer() {
 
     g_input.key_use = IsKeyDown(KEY_SPACE);
 
+    g_input.key_switch_weapon = IsKeyDown(KEY_Q);
 
     if(g_input.selecting) {
         

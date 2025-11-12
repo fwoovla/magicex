@@ -9,12 +9,16 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     void Draw() override;
     void CheckInput();
 
+    bool CanEquip(int item_id);
+    void Equip(int item_id);
+
 
     Vector2 velocity;
 
-    Sprite wand_sprite;
+    Sprite weapon_sprite;
 
     //Sprite crosshair_sprite;
+    bool can_switch;
 
 }; 
 

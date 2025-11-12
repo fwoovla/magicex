@@ -188,11 +188,11 @@ void CharacterMenu::Draw() {
     DrawLabel(character_header_label);
     DrawSprite(character_sprite);
 
-    DrawCircleV(gpo, 2, RED);
+/*     DrawCircleV(gpo, 2, RED);
     DrawCircleV(ipo, 2, RED);
     DrawCircleV(cpo, 2, RED);
     DrawCircleV(hpo, 2, RED);
-    DrawCircleV(ppo, 2, RED);
+    DrawCircleV(ppo, 2, RED); */
 }
 
 void CharacterMenu::DrawHotBarOnly() {
@@ -202,6 +202,7 @@ void CharacterMenu::DrawHotBarOnly() {
 
 
 void CharacterMenu::Update() {
+    
 
     ground_grid->Update();
     inventory_grid->Update();
@@ -214,6 +215,7 @@ void CharacterMenu::Update() {
     legs_grid->Update();
     feet_grid->Update();
     hands_grid->Update();
+
 }
 
 void CharacterMenu::Open() {
@@ -310,6 +312,19 @@ void CharacterMenu::OnTransferItem() {
         }
     }
 
+    if(shared_data.dest_grid == GRID_PRIMARY or
+       shared_data.dest_grid == GRID_SECONDARY or
+       shared_data.dest_grid == GRID_HEAD or
+       shared_data.dest_grid == GRID_BODY or
+       shared_data.dest_grid == GRID_LEGS or
+       shared_data.dest_grid == GRID_FEET or 
+       shared_data.dest_grid == GRID_HANDS
+    ) {
+        if(g_current_player->CanEquip(shared_data.item_id)) {
+            
+            g_current_player->Equip(shared_data.item_id);
+        }
+    }
 
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;

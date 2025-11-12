@@ -25,31 +25,31 @@ void LoadGameData() {
         std::string class_name = cj["base_class"][i]["class_name"];
         
         std::vector<int> inv;
-        inv.push_back(0);
+        inv.push_back(-1);
         
         std::vector<int> hot;
-        hot.push_back(0);
+        hot.push_back(-1);
 
         std::vector<int> p;
-        p.push_back(0);
+        p.push_back(-1);
 
         std::vector<int> s;
-        s.push_back(0);
+        s.push_back(-1);
 
         std::vector<int> hd;
-        hd.push_back(0);
+        hd.push_back(-1);
 
         std::vector<int> bd;
-        bd.push_back(0);
+        bd.push_back(-1);
 
         std::vector<int> lg;
-        lg.push_back(0);
+        lg.push_back(-1);
 
         std::vector<int> ft;
-        ft.push_back(0);
+        ft.push_back(-1);
 
         std::vector<int> hs;
-        hs.push_back(0);
+        hs.push_back(-1);
 
 
         PlayerData this_class = {
