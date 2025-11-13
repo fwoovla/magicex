@@ -3,14 +3,12 @@
 #include "baseentity.h"
 
 
-class ContainerEntity : public SpriteEntity {
+class BaseContainerEntity : public SpriteEntity {
     public:
-    ContainerEntity(Vector2 _position, int _s_id, int _lt_id);
-    ~ContainerEntity() override;
-    void Update() override;
-    void Draw() override;
 
-    void OnContainerOpened();
+    ~BaseContainerEntity() = default;
+    virtual void OnContainerOpened() = 0;
+    virtual bool IsEmpty() = 0;
 
     int loot_table_id;
     int sprite_id;
@@ -19,24 +17,35 @@ class ContainerEntity : public SpriteEntity {
     ContainerArea c_area;
 
     Signal open_container;
+
 
 };
 
-class GroundItemEntity : public SpriteEntity {
+
+class PermContainerEntity : public BaseContainerEntity {
     public:
-    GroundItemEntity(Vector2 _position, int _s_id, int _lt_id);
-    ~GroundItemEntity() override;
+    PermContainerEntity(Vector2 _position, int _s_id, int _lt_id);
+    ~PermContainerEntity() override;
     void Update() override;
     void Draw() override;
+    void DrawUI() override;
+    bool IsEmpty() override;
+    void OnContainerOpened() override;
 
-    void OnContainerOpened();
 
-    int loot_table_id;
-    int sprite_id;
-    bool is_open;
-    
-    ContainerArea c_area;
+};
 
-    Signal open_container;
+class GroundContainerEntity : public BaseContainerEntity {
+    public:
+    GroundContainerEntity(Vector2 _position, int _s_id);
+    ~GroundContainerEntity() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    void OnContainerOpened() override;
+    bool IsEmpty() override;
+    void OnListChanged();
+    void OnListEmpty();
+
 
 };

@@ -94,6 +94,7 @@ struct ContainerData {
     Vector2 position_i;
     Vector2 position_f;
     Vector2 size;
+    std::vector<int> item_list;
 };
 
 struct LevelData {
@@ -102,8 +103,12 @@ struct LevelData {
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
-    std::vector<ContainerEntity*> containers;
+    //std::vector<ContainerEntity*> containers;
     std::vector<BaseEntity*> entity_list;
+
+    //BaseContainerEntity *return_container;
+
+    
 
 
 };

@@ -79,6 +79,10 @@ void PlayerCharacter::Draw() {
     }
 }
 
+void PlayerCharacter::DrawUI() {
+
+}
+
 void PlayerCharacter::CheckInput() {
 
     Rectangle screen_rect = {

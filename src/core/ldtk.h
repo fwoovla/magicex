@@ -5,6 +5,10 @@
 #include <fstream>
 
 #include "json.hpp"
+#include "utils.h"
+#include "areas.h"
+#include "entities.h"
+
 
 
 #define MAX_TILE_SHEETS 10
@@ -106,6 +110,7 @@ struct LDTKFieldInstance {
     std::string value_s;
     Vector2 value_v;
     int value_i;
+    std::vector<int> i_list;
 };
 
 
@@ -244,6 +249,7 @@ struct GameData {
     Vector2 sub_return_position;
     int loot_table_id;
     std::vector<int> *loot_table;
+    BaseContainerEntity *return_container;
 };
 
 extern GameData g_game_data;

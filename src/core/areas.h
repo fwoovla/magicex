@@ -67,7 +67,11 @@ class ContainerArea : public BaseArea {
 
         Signal area_entered;
         Signal area_activated;
+        Signal list_changed;
+        Signal list_empty;
 
+        bool is_empty;
+        bool is_ground;
         int loot_table_id;
         std::vector<int> item_list;
 

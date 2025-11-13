@@ -1,4 +1,5 @@
 #pragma once
+#include "baseentity.h"
 #include <vector>
 #include <raylib.h>
 #include <cmath>
@@ -23,14 +24,6 @@ class Signal {
 
     std::vector<std::function<void()>> callbacks;
 };
-
-/* class AreaSignal {
-    public:
-    void Connect(std::function<void( TransitionArea a )> const& callback);
-    void EmitSignal(TransitionArea a);    
-
-    std::vector<std::function<void( TransitionArea a )>> callbacks;
-}; */
 
 
 class Timer{
@@ -71,3 +64,14 @@ float RotateTowardsRad(float current, float target, float maxTurn, float dt);
 
 void SetCursorPosition(Vector2 _pos);
 
+
+
+void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity);
+
+void DL_Draw(std::vector<BaseEntity *> &_draw_list);
+
+void DL_DrawUI(std::vector<BaseEntity *> &_draw_list);
+
+void DL_Update(std::vector<BaseEntity *> &_draw_list);
+
+void DL_Clear(std::vector<BaseEntity *> &_draw_list);

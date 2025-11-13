@@ -249,12 +249,13 @@ obj/Debug/playercharacter.o: src/game/entities/playercharacter.cpp \
  /usr/include/c++/13/optional /usr/include/c++/13/numeric \
  /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
- src/game/entities/../../core/resources.h \
- src/game/entities/../../core/data.h src/game/entities/../../core/utils.h \
+ src/game/entities/../../core/utils.h \
+ src/game/entities/../../core/baseentity.h \
  src/game/entities/../../core/areas.h \
  src/game/entities/../../core/label.h \
- src/game/entities/../../core/baseentity.h \
  src/game/entities/../../core/entities.h \
+ src/game/entities/../../core/resources.h \
+ src/game/entities/../../core/data.h \
  src/game/entities/../../core/events.h \
  src/game/entities/../../core/viewport.h \
  src/game/entities/../../core/input.h \
@@ -583,13 +584,13 @@ src/game/entities/../../core/json.hpp:
 /usr/include/c++/13/bits/stl_numeric.h:
 /usr/include/c++/13/pstl/glue_numeric_defs.h:
 /usr/include/c++/13/any:
-src/game/entities/../../core/resources.h:
-src/game/entities/../../core/data.h:
 src/game/entities/../../core/utils.h:
+src/game/entities/../../core/baseentity.h:
 src/game/entities/../../core/areas.h:
 src/game/entities/../../core/label.h:
-src/game/entities/../../core/baseentity.h:
 src/game/entities/../../core/entities.h:
+src/game/entities/../../core/resources.h:
+src/game/entities/../../core/data.h:
 src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:
 src/game/entities/../../core/input.h:

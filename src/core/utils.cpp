@@ -156,6 +156,15 @@ void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
 }
 
 
+void DL_DrawUI(std::vector<BaseEntity *> &_draw_list) {
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
+    for(int i = 0; i < _draw_list.size(); i++) {
+        if(_draw_list[i] != nullptr){
+            _draw_list[i]->DrawUI();
+        }
+    }
+}
+
 void DL_Update(std::vector<BaseEntity *> &_draw_list) {
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE update %i", _draw_list.size());
 
@@ -179,9 +188,9 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
         if(_draw_list[i] != nullptr){
             TraceLog(LOG_INFO, "DELETING ENTITY");
              delete _draw_list[i];
-            _draw_list.erase(_draw_list.begin() + i);
+            //_draw_list.erase(_draw_list.begin() + i);
                 //_draw_list[i] = nullptr;
-            --i;
+            //--i;
         }
     }
     

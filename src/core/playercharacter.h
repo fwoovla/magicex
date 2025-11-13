@@ -7,6 +7,7 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     ~PlayerCharacter() override;
     void Update() override;
     void Draw() override;
+    void DrawUI()override;
     void CheckInput();
 
     bool CanEquip(int item_id);

@@ -137,6 +137,7 @@ class CharacterMenu : public BaseUILayer {
     void DrawHotBarOnly();
     //void UpdateHotBarOnly();
     void Open();
+    void OpenWith(BaseContainerEntity *container);
     void OpenWith(std::vector<int> &list);
 
     void OnItemSelected();
@@ -146,6 +147,11 @@ class CharacterMenu : public BaseUILayer {
 
     void OnPickup();
 
+
+    bool use_ground;
+    std::vector<int> blank_list;
+
+    //BaseContainerEntity *return_container;
 
     SharedItemData shared_data;
     std::vector<ItemGrid *> grid_list;

@@ -1,6 +1,6 @@
 #include "../core/gamedefs.h"
 
-
+static std::string text = "CHEST";
 /////TRANSITION AREA
 
 TransitionArea::~TransitionArea() {
@@ -86,15 +86,17 @@ ContainerArea::~ContainerArea() {
 }
 
 void ContainerArea::Update() {
-    //TraceLog(LOG_INFO, "CONTAINER update");
+    
+
     Rectangle area_rect = {
         .x = position.x,
         .y = position.y,
         .width = (float)size.x,
         .height = (float)size.y
     };
-
+    //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
     if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
         hovered = true;
         in_range = false;
 
@@ -103,7 +105,26 @@ void ContainerArea::Update() {
         float lx = g_input.screen_mouse_position.x * g_inv_scale;
         float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
-        CreateLabel(label, {lx, ly}, 20, WHITE, "CHEST");
+        if(identifier == "GroundContainerEntity") {
+            //TraceLog(LOG_INFO, "CONTAINER AREA update");
+            int count = 0;
+            for(int i = 0; i < item_list.size(); i++) {
+                if(item_list[i] != -1) {
+                    count++;
+                }
+            }
+            if(count == 0) {
+                //list_empty.EmitSignal();
+                is_empty = true;
+                return;
+            }
+            text = "loot";
+        }
+        else {
+            //TraceLog(LOG_INFO, "CONTAINER AREA update");
+            text = "open";
+        }
+        CreateLabel(label, {lx, ly}, 20, WHITE, text.c_str());
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
@@ -118,8 +139,8 @@ void ContainerArea::Update() {
         time_pressed += 1.0f * GetFrameTime();
         if(time_pressed > 1.0f) {
             time_pressed = 1.0f;
-            g_game_data.loot_table_id = loot_table_id;
-            g_game_data.loot_table = &item_list;
+            //g_game_data.loot_table_id = loot_table_id;
+            //g_game_data.loot_table = &item_list;
             area_activated.EmitSignal();
         }
     }
@@ -133,7 +154,7 @@ void ContainerArea::Draw() {
 
     if(hovered) {
         //TraceLog(LOG_INFO, "CONTAINER DRAW");
-        DrawLabelCentered(label);
+        //DrawLabelCentered(label);
         DrawLabelCenteredWithBG(label, BLACK);
 
 

@@ -1,9 +1,10 @@
 #include "../../core/gamedefs.h"
 
-static std::vector<int> blank_list;
+//static std::vector<int> blank_list;
 
 CharacterMenu::CharacterMenu() {
 
+    use_ground = false;
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 30/g_scale, BLACK, "CHARACTER MENU");
     panel_bg = g_ui_panels[PANEL_CHAR_SCREEN];
     panel_rect = {
@@ -232,6 +233,7 @@ void CharacterMenu::Open() {
     hands_grid->SetItems(&g_player_data.hands);
 
     //std::vector<int> blank_list;
+    use_ground = true;
     blank_list.clear();
     blank_list.push_back(-1);
     ground_grid->SetItems(&blank_list);
@@ -250,7 +252,27 @@ void CharacterMenu::OpenWith(std::vector<int> &list) {
     feet_grid->SetItems(&g_player_data.feet);
     hands_grid->SetItems(&g_player_data.hands);
 
+    use_ground = false;
     ground_grid->SetItems(&list);
+}
+
+
+void CharacterMenu::OpenWith(BaseContainerEntity *container) {
+    
+    inventory_grid->SetItems(&g_player_data.inventory);
+    hotbar_grid->SetItems(&g_player_data.hotbar);
+
+    primary_grid->SetItems(&g_player_data.primary);
+    secondary_grid->SetItems(&g_player_data.secondary);
+    head_grid->SetItems(&g_player_data.head);
+    body_grid->SetItems(&g_player_data.body);
+    legs_grid->SetItems(&g_player_data.legs);
+    feet_grid->SetItems(&g_player_data.feet);
+    hands_grid->SetItems(&g_player_data.hands);
+
+    use_ground = false;
+    ground_grid->SetItems(&container->c_area.item_list);
+
 }
 
 

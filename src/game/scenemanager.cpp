@@ -223,25 +223,45 @@ void InstanceLevelObjects(LevelData &level_data) {
 //containers
     for(int c_index = 0; c_index < level_data.container_data.size(); c_index++) {
 
-        TraceLog(LOG_INFO, "instacing container");
-
-        Vector2 pos = level_data.container_data[c_index].position_i;
-        int lti = level_data.container_data[c_index].loot_table_id;
-        int spi = level_data.container_data[c_index].sprite_id;
         
-        ContainerEntity *new_container = new ContainerEntity(pos, spi, lti);
-        //g_level_data.containers.push_back(new_container);
-        DL_Add(level_data.entity_list, new_container);
 
-        new_container->c_area.identifier = level_data.container_data[c_index].identifier;
-        new_container->c_area.position = pos;
-        new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
-        new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
-        GenerateContainerItemList(new_container->loot_table_id, new_container->c_area.item_list);
-        new_container->c_area.size = {level_data.level_transitions[c_index].size.x, level_data.level_transitions[c_index].size.y};
+        Vector2 pos = level_data.container_data[c_index].position_i;        
+        
+        if(level_data.container_data[c_index].identifier == "PermContainerEntity") {
+            TraceLog(LOG_INFO, "instacing container");
+            int spi = level_data.container_data[c_index].sprite_id;
+            int lti = level_data.container_data[c_index].loot_table_id;
+            PermContainerEntity *new_container = new PermContainerEntity(pos, spi, lti);
+            //g_level_data.containers.push_back(new_container);
+            DL_Add(level_data.entity_list, new_container);
+            
+            new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.position = pos;
+            new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
+            new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
+            GenerateContainerItemList(new_container->loot_table_id, new_container->c_area.item_list);
+            new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
+            
+            //level_data.game_areas.push_back(&new_container->c_area);
+        }
 
-        //g_level_data.game_areas.push_back(&new_container->c_area);
-        level_data.game_areas.push_back(&new_container->c_area);
+
+        if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
+            int spi = g_item_data[ level_data.container_data[c_index].item_list[0]].sprite_id;
+            GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
+            //g_level_data.containers.push_back(new_container);
+            DL_Add(level_data.entity_list, new_container);
+            
+            new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.position = pos;
+            new_container->c_area.item_list = level_data.container_data[c_index].item_list;
+            new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
+            
+            TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
+            //level_data.game_areas.push_back(&new_container->c_area);
+        }
     }
 
 }

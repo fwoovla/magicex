@@ -14,6 +14,7 @@ class BaseEntity  {
     virtual ~BaseEntity() = default;
     virtual void Update() = 0;   
     virtual void Draw() = 0; 
+    virtual void DrawUI() = 0;
 
     bool should_delete;
     Rectangle collision_rect;
@@ -22,6 +23,7 @@ class BaseEntity  {
     float rotation;
     Vector2 centered_offset;
     float collision_radius;
+    std::string identifier;
 };
 
 class SpriteEntity : public BaseEntity {
@@ -32,6 +34,7 @@ class SpriteEntity : public BaseEntity {
     virtual ~SpriteEntity() = default;
     virtual void Update() = 0;
     virtual void Draw() = 0;
+    virtual void DrawUI() = 0;
 };
 
 class AnimatedSpriteEntity : public BaseEntity {
@@ -41,6 +44,7 @@ class AnimatedSpriteEntity : public BaseEntity {
     virtual ~AnimatedSpriteEntity() = default;
     virtual void Update() = 0;
     virtual void Draw() = 0;
+    virtual void DrawUI() = 0;
 };
 
 

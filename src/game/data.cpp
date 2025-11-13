@@ -274,6 +274,10 @@ void LoadGame() {
 
 void ClearLevelData(LevelData &level_data) {
 
+    DL_Clear(level_data.entity_list);
+    level_data.level_transitions.clear();
+    level_data.container_data.clear();
+    level_data.game_areas.clear();
 
 }
 
@@ -326,7 +330,7 @@ void LoadLevelData(LevelData &level_data) {
                     level_data.level_transitions.push_back(new_transition);
                     TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
                 }
-                if(identifier == "ContainerEntity") {
+                if(identifier == "PermContainerEntity") {
                     ContainerData new_container;
                     TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
 
@@ -341,6 +345,24 @@ void LoadLevelData(LevelData &level_data) {
                     new_container.loot_table_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
                     level_data.container_data.push_back(new_container);
                     TraceLog(LOG_INFO, "CONTAINER ADDED WITH LT %i SID %i", new_container.loot_table_id, new_container.sprite_id);
+                }
+
+                if(identifier == "GroundContainerEntity") {
+                    ContainerData new_container;
+                    TraceLog(LOG_INFO, "GROUND CONTAINER FOUND %s %i", identifier.c_str(), this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size());
+                    new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
+                    new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                    new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                    new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+                    new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
+                    new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+
+                    for(int item = 0; item < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size(); item++) {
+                        TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED %i", this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
+                        new_container.item_list.push_back(this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
+                    } 
+                    //new_container.item_list = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].i_list;
+                    level_data.container_data.push_back(new_container);
                 }
             }
         }

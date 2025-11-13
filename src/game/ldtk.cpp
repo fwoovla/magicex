@@ -166,7 +166,7 @@ void LDTKLoadMaps (json &mj) {
                         }
 
 
-                        if(new_entity.identifier == "ContainerEntity") {
+                        if(new_entity.identifier == "PermContainerEntity") {
                             TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY found");
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 LDTKFieldInstance new_field;
@@ -184,6 +184,26 @@ void LDTKLoadMaps (json &mj) {
                                 new_entity.field_instances.push_back(new_field);
                                 TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY added");
                             }
+                        }
+
+                        if(new_entity.identifier == "GroundContainerEntity") {
+                            TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER ENTITY found");
+                            for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                                LDTKFieldInstance new_field;
+
+                                new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
+
+                                if(new_field.identifier == "item_list" ) {
+                                    for(int j = 0; j < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"].size(); j++) {
+                                        new_field.i_list.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                        TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER data added %i", mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                    }
+                                }
+                                
+                                new_entity.field_instances.push_back(new_field);
+                                TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER ENTITY FIELD added");
+                            }
+
                         }
                         
                         this_layer.entity_instances.push_back(new_entity);
