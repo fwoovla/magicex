@@ -277,3 +277,5 @@ int LDTKDrawMap(Vector2 focus_position) {
     }
     return tiles_drawn;
 }
+
+

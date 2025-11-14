@@ -76,28 +76,27 @@ void LoadGameData() {
     }
 
     for(int i = 0; i < cj["item_data"].size(); i++) {
-        int id = i;
-        int s_id = cj["item_data"][i]["sprite_id"];
+        std::string id_s = cj["item_data"][i]["item_id"];
+        ItemID id = StrToItemId(id_s);
         int value = cj["item_data"][i]["value"];
         std::string name = cj["item_data"][i]["item_name"];
         ItemType type = cj["item_data"][i]["item_type"];
 
         ItemData new_item = {
             .id = id,
-            .sprite_id = s_id,
             .value = value,
             .type = type,
             .item_name = name
             
         };
 
-        g_item_data[i] = new_item;
+        g_item_data[(int)id] = new_item;
     }
 
     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
 
-        std::vector<int> new_table;
+        std::vector<ItemID> new_table;
         for(int t = 0; t < cj["loot_tables"][i]["table_data"].size(); t++) {
             new_table.push_back(cj["loot_tables"][i]["table_data"][t]);
         }
@@ -361,7 +360,6 @@ void LoadLevelData(LevelData &level_data) {
                         TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED %i", this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
                         new_container.item_list.push_back(this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
                     } 
-                    //new_container.item_list = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].i_list;
                     level_data.container_data.push_back(new_container);
                 }
             }
@@ -372,13 +370,41 @@ void LoadLevelData(LevelData &level_data) {
 
 
 void GenerateContainerItemList(int lti, std::vector<int> &list) {
-    //int max = GetRandomValue(1, 5);
     int max = g_loot_tables[lti].size();
 
-    for(int i = 0; i < max; i++) {
-        //int choice = g_loot_tables[lti][GetRandomValue(0, g_loot_tables[lti].size()-1 )];
-        
+    for(int i = 0; i < max; i++) {        
         list.push_back(g_loot_tables[lti][i]);
     }
+}
 
+
+
+ItemID StrToItemId(const std::string& s) {
+
+    static const std::unordered_map<std::string, ItemID> lookup_table = {
+        {"None",                    ItemID::ITEM_ID_NONE},
+        {"ITEM_ID_DAGGER",          ItemID::ITEM_ID_DAGGER},
+        {"ITEM_ID_SWORD",           ItemID::ITEM_ID_SWORD},
+        {"ITEM_ID_SPEAR",           ItemID::ITEM_ID_SPEAR},
+        {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
+        {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
+        {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
+        {"ITEM_ID_LEATHERBOOTS",    ItemID::ITEM_ID_LEATHERBOOTS},
+        {"ITEM_ID_LEATHERVEST",     ItemID::ITEM_ID_LEATHERVEST},
+        {"ITEM_ID_LEATHERGLOVES",   ItemID::ITEM_ID_LEATHERGLOVES},
+        {"ITEM_ID_WIZARDHAT",       ItemID::ITEM_ID_WIZARDHAT},
+        {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
+        {"ITEM_ID_APPLE",           ItemID::ITEM_ID_APPLE},
+        {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
+        {"ITEM_ID_BREAD",           ItemID::ITEM_ID_BREAD},
+        {"ITEM_ID_MEAT",            ItemID::ITEM_ID_MEAT},
+        {"ITEM_ID_RING",            ItemID::ITEM_ID_RING},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        TraceLog(LOG_INFO, "Item ID  %i", it->second);
+        return it->second;
+    }
+
+    return ItemID::ITEM_ID_NONE;
 }

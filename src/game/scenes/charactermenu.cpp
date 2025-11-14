@@ -102,7 +102,6 @@ CharacterMenu::CharacterMenu() {
 
 //end character
 
-
     ipo = {panel_rect.x + 560, panel_rect.y + 80};
     CreateLabel(inventory_label_header, {ipo.x + 60, ipo.y - 30}, 30/g_scale, WHITE, "INVENTORY");
 
@@ -322,12 +321,10 @@ void CharacterMenu::OnPickup() {
         grid_list[source_index]->RemoveItem(shared_data.source_cell);
     }
     else {
-        //grid_list[source_index]->AddItem(shared_data.item_id, shared_data.source_cell);
     }
 }
 
 void CharacterMenu::OnTransferItem() {
-
 
     int source_index = -1;
     int dest_index = -1;
@@ -349,6 +346,25 @@ void CharacterMenu::OnTransferItem() {
     if(source_index != -1 and dest_index != -1) {
         if(grid_list[dest_index]->CanAddItem(shared_data.item_id, shared_data.dest_cell)) {
             grid_list[dest_index]->AddItem(shared_data.item_id, shared_data.dest_cell);
+
+            if(shared_data.dest_grid == GRID_PRIMARY or
+                shared_data.dest_grid == GRID_SECONDARY or
+                shared_data.dest_grid == GRID_HEAD or
+                shared_data.dest_grid == GRID_BODY or
+                shared_data.dest_grid == GRID_LEGS or
+                shared_data.dest_grid == GRID_FEET or 
+                shared_data.dest_grid == GRID_HANDS) {
+                if(g_current_player->CanEquip(shared_data.item_id)) {g_current_player->Equip(shared_data.item_id);}}
+
+            if(shared_data.source_grid == GRID_PRIMARY or
+                shared_data.source_grid == GRID_SECONDARY or
+                shared_data.source_grid == GRID_HEAD or
+                shared_data.source_grid == GRID_BODY or
+                shared_data.source_grid == GRID_LEGS or
+                shared_data.source_grid == GRID_FEET or 
+                shared_data.source_grid == GRID_HANDS) {
+                if(g_current_player->CanUnEquip(shared_data.item_id)) {g_current_player->UnEquip(shared_data.item_id);}}
+
             grid_list[source_index]->RemoveItem(shared_data.source_cell);
         }
         else {

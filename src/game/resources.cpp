@@ -6,103 +6,202 @@ void LoadResources() {
 
     g_sprite_sheets[SPRITE_APPRENTICE] = LoadTexture("assets/bandit.png");
     g_sprite_sheets[SPRITE_NERD] = LoadTexture("assets/hero.png");
-    g_sprite_sheets[SPRITE_CROSSHAIR] = LoadTexture("assets/crosshair.png");
-    g_sprite_sheets[SPRITE_WAND] = LoadTexture("assets/wand.png");
+    //g_sprite_sheets[SPRITE_CROSSHAIR] = LoadTexture("assets/crosshair.png");
+    //g_sprite_sheets[SPRITE_WAND] = LoadTexture("assets/wand.png");
 
-    g_sprite_sheets[SPRITE_ITEMS] = LoadTexture("assets/spritesheet.png");
 
-//items
-    TraceLog(LOG_INFO, "LOADING IMAGE SPRITES");
-    Image image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    Vector2 index_pos = {0,0};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_BALL] = LoadTextureFromImage(image);
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {1,0};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_CABBAGE] = LoadTextureFromImage(image);
+    g_sprite_sheets[SPRITE_MAIN] = LoadTexture("assets/main_spritesheet.png");
+    TraceLog(LOG_INFO, "LOADING ITEM and ICON SPRITES");
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,3};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_SMALLBOW] = LoadTextureFromImage(image);
+    Image icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    Image item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    Vector2 icon_pos = {1,1};
+    Vector2 item_pos = {10,1};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {5,8};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_LEATHERGLOVE] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_DAGGER] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_DAGGER] = LoadTextureFromImage(item_image);
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,9};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_APPLE] = LoadTextureFromImage(image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,2};
+    item_pos = {10,2};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {1,9};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_CHEESE] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_SWORD] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_SWORD] = LoadTextureFromImage(item_image);
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {1,17};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_BREAD] = LoadTextureFromImage(image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,3};
+    item_pos = {10,3};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,10};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_KNIFE] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_SPEAR] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_SPEAR] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,4};
+    item_pos = {10,4};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,11};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_DAGGER] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_AXE] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_AXE] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,5};
+    item_pos = {10,5};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {4,3};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_WAND] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_BOW] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_BOW] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,6};
+    item_pos = {10,6};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,7};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_LEATHERBOOTS] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_WAND] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_WAND] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,1};
+    item_pos = {15,1};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {4,4};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_HEALINGVIAL] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_LEATHERBOOTS] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LEATHERBOOTS] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,2};
+    item_pos = {15,2};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {4,6};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_HELMET] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_LEATHERVEST] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LEATHERVEST] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,3};
+    item_pos = {15,3};
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {0,19};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_item_sprites[SPRITE_ITEM_LEATHER_VEST] = LoadTextureFromImage(image);
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_LEATHERGLOVES] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LEATHERGLOVES] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,5};
+    item_pos = {15,5};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_WIZARDHAT] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_WIZARDHAT] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,10};
+    item_pos = {10,10};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_SCROLL] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_SCROLL] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,10};
+    item_pos = {15,10};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_APPLE] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_APPLE] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,11};
+    item_pos = {15,11};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_CHEESE] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_CHEESE] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,12};
+    item_pos = {15,12};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_BREAD] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_BREAD] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,13};
+    item_pos = {15,13};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_MEAT] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_MEAT] = LoadTextureFromImage(item_image);
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,15};
+    item_pos = {10,15};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_RING] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_RING] = LoadTextureFromImage(item_image);
 
 
 //containers
     TraceLog(LOG_INFO, "LOADING CONTAINER SPRITES");
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {2,0};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_container_sprites[SPRITE_CONTAINER_CHEST] = LoadTextureFromImage(image);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {1,20};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_container_sprites[SPRITE_CONTAINER_CHEST] = LoadTextureFromImage(item_image);
 
-    image = LoadImageFromTexture(g_sprite_sheets[SPRITE_ITEMS]);
-    index_pos = {3,0};
-    ImageCrop(&image, {index_pos.x * 16, index_pos.y * 16, 16, 16});
-    g_container_sprites[SPRITE_CONTAINER_BARREL] = LoadTextureFromImage(image);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {2,20};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_container_sprites[SPRITE_CONTAINER_BARREL] = LoadTextureFromImage(item_image);
 
+//UI sprites
+    TraceLog(LOG_INFO, "LOADING UI SPRITES");
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {1,22};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 32, 32});
+    g_ui_sprites[UI_ID_CROSSHAIR] = LoadTextureFromImage(item_image);
 
     //UnloadTexture()
 
     TraceLog(LOG_INFO, "LOADING PORTRAITS");
     g_portrait_sprites[PORTRAIT_BASE_CHAR] = LoadTexture("assets/portrait1.png");
 
-    TraceLog(LOG_INFO, "LOADING UI");
+    TraceLog(LOG_INFO, "LOADING UI PANELS");
     g_ui_panels[PANEL_GRAY] = LoadTexture("assets/graypanel1.png");
     g_ui_panels[PANEL_WOOD_LARGE] = LoadTexture("assets/largepanel1.png");
     g_ui_panels[PANEL_CHAR_SCREEN] = LoadTexture("assets/characterpanelbg.png");
@@ -117,32 +216,42 @@ void LoadResources() {
 
 void UnloadResources() {
     TraceLog(LOG_INFO, "UNLOADING SPRITE SHEETS");
-    for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_sprite_sheets[i]);
     }
 
     TraceLog(LOG_INFO, "UNLOADING ITEM SPRITES");
-    for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_item_sprites[i]);
     }
 
+    TraceLog(LOG_INFO, "UNLOADING ICON SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_icon_sprites[i]);
+    }
+
     TraceLog(LOG_INFO, "UNLOADING CONTAINER SPRITES");
-    for(int i = 0; i < MAX_SPRITE_SHEETS; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_container_sprites[i]);
     }
 
+    TraceLog(LOG_INFO, "UNLOADING UI SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_ui_sprites[i]);
+    }
+
     TraceLog(LOG_INFO, "UNLOADING PORTRAITS");
-    for(int i = 0; i < MAX_PORTRAIT_SPRITES; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_portrait_sprites[i]);
     }
 
     TraceLog(LOG_INFO, "UNLOADING UI");
-    for(int i = 0; i < MAX_UI_PANELS; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_ui_panels[i]);
     }
 
     TraceLog(LOG_INFO, "UNLOADING UI BACKGROUNDS");
-    for(int i = 0; i < MAX_UI_BACKGROUNDS; i++) {
+    for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_ui_backgrounds[i]);
     }
 }

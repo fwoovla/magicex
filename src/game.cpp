@@ -3,7 +3,7 @@
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
 
-std::vector<std::vector<int>> g_loot_tables;
+std::vector<std::vector<ItemID>> g_loot_tables;
 
 GameData g_game_data;
 DebugData g_debug_data;
@@ -14,13 +14,15 @@ std::vector<LDTKTileset> g_ldtk_tilesets;
 
 //LevelData g_level_data;
 
-Texture2D g_tile_sheets[MAX_TILE_SHEETS];
-Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
-Texture2D g_item_sprites[1000];
-Texture2D g_container_sprites[MAX_SPRITE_SHEETS];
-Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
-Texture2D g_ui_panels[MAX_UI_PANELS];
-Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];
+Texture2D g_tile_sheets[MAX_SPRITES];
+Texture2D g_sprite_sheets[MAX_SPRITES];
+Texture2D g_item_sprites[MAX_SPRITES];
+Texture2D g_icon_sprites[MAX_SPRITES];
+Texture2D g_ui_sprites[MAX_SPRITES];
+Texture2D g_container_sprites[MAX_SPRITES];
+Texture2D g_portrait_sprites[MAX_SPRITES];
+Texture2D g_ui_panels[MAX_SPRITES];
+Texture2D g_ui_backgrounds[MAX_SPRITES];
 PlayerData g_player_data;
 
 PlayerCharacter *g_current_player;

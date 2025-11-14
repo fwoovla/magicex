@@ -265,6 +265,7 @@ void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
 
 
+
 inline int load_ldtk_maps() {
 
     TraceLog(LOG_INFO, "++++++++++++++++++++++++++++++++ LOADING LDTK DATA....  (*.ldtk) ++++++++++++++++++++++++++\n");
@@ -289,9 +290,8 @@ inline int load_ldtk_maps() {
 }
 
 
-/* void LDTKLoadTileSets(json &mj);
 
-void LDTKLoadMaps (json &mj); */
+
 
 
 

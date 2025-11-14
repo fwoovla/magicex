@@ -71,7 +71,7 @@ void SceneManager::Init() {
     pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
     pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
 
-    LoadSpriteCentered( g_cursor.sprite, g_sprite_sheets[SPRITE_CROSSHAIR], {0,0} );
+    LoadSpriteCentered( g_cursor.sprite, g_ui_sprites[UI_ID_CROSSHAIR], {0,0} );
     CreateLabel(debug_label, {20 / g_scale}, 40/g_scale, RAYWHITE, "DEBUG");
 }
 
@@ -214,9 +214,7 @@ void InstanceLevelObjects(LevelData &level_data) {
                 new_area->payload_i = level_index;
             }
         }
-
-        //g_game_areas.push_back(new_area);
-        //_draw_list.push_back(std::unique_ptr<BaseEntity>(new_entity));
+        TraceLog(LOG_INFO, "instacing transition %s", new_area->identifier.c_str());
         level_data.game_areas.push_back(new_area);
     }
 
@@ -232,7 +230,6 @@ void InstanceLevelObjects(LevelData &level_data) {
             int spi = level_data.container_data[c_index].sprite_id;
             int lti = level_data.container_data[c_index].loot_table_id;
             PermContainerEntity *new_container = new PermContainerEntity(pos, spi, lti);
-            //g_level_data.containers.push_back(new_container);
             DL_Add(level_data.entity_list, new_container);
             
             new_container->identifier = level_data.container_data[c_index].identifier;
@@ -242,15 +239,12 @@ void InstanceLevelObjects(LevelData &level_data) {
             new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
             GenerateContainerItemList(new_container->loot_table_id, new_container->c_area.item_list);
             new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
-            
-            //level_data.game_areas.push_back(&new_container->c_area);
         }
 
 
         if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
-            int spi = g_item_data[ level_data.container_data[c_index].item_list[0]].sprite_id;
+            int spi = g_item_data[ level_data.container_data[c_index].item_list[0]].id;
             GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
-            //g_level_data.containers.push_back(new_container);
             DL_Add(level_data.entity_list, new_container);
             
             new_container->identifier = level_data.container_data[c_index].identifier;

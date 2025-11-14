@@ -2,11 +2,8 @@
 
 #include "gamedefs.h"
 
-#define MAX_SPRITE_SHEETS 10
-#define MAX_PORTRAIT_SPRITES 10
-#define MAX_UI_PANELS 10
-#define MAX_UI_BACKGROUNDS 10
-#define MAX_TILE_SHEETS 10
+#define MAX_SPRITES 1000
+
 
 
 enum SpriteSheetID {
@@ -14,31 +11,45 @@ enum SpriteSheetID {
     SPRITE_NERD,
     SPRITE_CROSSHAIR,
     SPRITE_WAND,
-    SPRITE_ITEMS,
+    SPRITE_MAIN,
     SPRITE_NUM_SPRITES
 };
 
-extern Texture2D g_sprite_sheets[MAX_SPRITE_SHEETS];
+extern Texture2D g_sprite_sheets[MAX_SPRITES];
 
-enum ItemSprites {
-    SPRITE_ITEM_BALL,
-    SPRITE_ITEM_CABBAGE,
-    SPRITE_ITEM_SMALLBOW,
-    SPRITE_ITEM_LEATHERGLOVE,
-    SPRITE_ITEM_APPLE,
-    SPRITE_ITEM_CHEESE,
-    SPRITE_ITEM_BREAD,
-    SPRITE_ITEM_KNIFE,
-    SPRITE_ITEM_DAGGER,
-    SPRITE_ITEM_WAND,
-    SPRITE_ITEM_LEATHERBOOTS,
-    SPRITE_ITEM_HEALINGVIAL,
-    SPRITE_ITEM_HELMET,
-    SPRITE_ITEM_LEATHER_VEST,
-    SPRITE_ITEM_NUM_SPRITES
+enum UISpriteID {
+    UI_ID_CROSSHAIR,
 };
 
-extern Texture2D g_item_sprites[1000];
+extern Texture2D g_ui_sprites[MAX_SPRITES];
+
+enum ItemID {
+    ITEM_ID_NONE = -1,
+//0
+    ITEM_ID_DAGGER,         
+    ITEM_ID_SWORD,
+    ITEM_ID_SPEAR,
+    ITEM_ID_AXE,
+    ITEM_ID_BOW,
+//5
+    ITEM_ID_WAND,           
+    ITEM_ID_LEATHERBOOTS,
+    ITEM_ID_LEATHERVEST,
+    ITEM_ID_LEATHERGLOVES,
+    ITEM_ID_WIZARDHAT,
+//10
+    ITEM_ID_SCROLL,         
+    ITEM_ID_APPLE,
+    ITEM_ID_CHEESE,
+    ITEM_ID_BREAD,
+    ITEM_ID_MEAT,
+//15
+    ITEM_ID_RING,
+    ITEM_ID_MAX
+};
+
+extern Texture2D g_item_sprites[MAX_SPRITES];
+extern Texture2D g_icon_sprites[MAX_SPRITES];
 
 
 enum ContainerSprites {
@@ -47,14 +58,14 @@ enum ContainerSprites {
     SPRITE_CONTAINER_NUM_SPRITES
 };
 
-extern Texture2D g_container_sprites[MAX_SPRITE_SHEETS];
+extern Texture2D g_container_sprites[MAX_SPRITES];
 
 enum PortraitSpriteID {
     PORTRAIT_BASE_CHAR,
     PORTRAIT_NUM_SPRITES
 };
 
-extern Texture2D g_portrait_sprites[MAX_PORTRAIT_SPRITES];
+extern Texture2D g_portrait_sprites[MAX_SPRITES];
 
 enum UIPanelID {
     PANEL_GRAY,
@@ -63,7 +74,7 @@ enum UIPanelID {
     PANEL_CHAR_SCREEN
 };
 
-extern Texture2D g_ui_panels[MAX_UI_PANELS];
+extern Texture2D g_ui_panels[MAX_SPRITES];
 
 enum UIBackgroundID {
     BG_SPLASH,
@@ -75,7 +86,7 @@ enum UIBackgroundID {
     BG_NUM_SPRITES
 };
 
-extern Texture2D g_ui_backgrounds[MAX_UI_BACKGROUNDS];
+extern Texture2D g_ui_backgrounds[MAX_SPRITES];
 
 
 enum TileSheetID {
@@ -84,7 +95,7 @@ enum TileSheetID {
     TS_NUM_SHEETS
 };
 
-extern Texture2D g_tile_sheets[MAX_TILE_SHEETS];
+extern Texture2D g_tile_sheets[MAX_SPRITES];
 
 void LoadResources();
 

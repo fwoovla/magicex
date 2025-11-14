@@ -82,7 +82,7 @@ SCENE_ID SubScene::Update() {
                     Vector2 pos = g_current_player->position;
                     for(int item = 0; item < character_menu->blank_list.size(); item++) {
                         if(character_menu->blank_list[item] != -1) {
-                            spi = g_item_data[ character_menu->blank_list[item]].sprite_id;
+                            spi = g_item_data[ character_menu->blank_list[item]].id;
                             break;
                         }
                     }
@@ -95,11 +95,9 @@ SCENE_ID SubScene::Update() {
                         new_container->c_area.position = pos;
                         new_container->c_area.item_list = character_menu->blank_list;
                         new_container->c_area.size = {8, 8};    
-                        //level_data.game_areas.push_back(&new_container->c_area);
                     }
                 }
                 else { //was existing container
-
                     //if ground container
                     if(g_game_data.return_container != nullptr) {
                         if(g_game_data.return_container->identifier == "GroundContainerEntity") {
@@ -112,8 +110,6 @@ SCENE_ID SubScene::Update() {
                 }
             }
         }
-
-
     return return_scene;
 }
 
@@ -122,21 +118,16 @@ void SubScene::Draw() {
 
 
 void SubScene::DrawScene() {
-    //TraceLog(LOG_INFO, "SUB SCENE DRAW");
-
     BeginMode2D(g_camera);
     tile_layer->Draw();
     DL_Draw(level_data.entity_list);
     g_current_player->Draw();
-
     EndMode2D();
 
 }
 
 
 void SubScene::DrawUI() {
-    //TraceLog(LOG_INFO, "SUB SCENE DRAW");
-
     if(character_menu_visible) {
         character_menu->Draw();
     }
@@ -164,19 +155,13 @@ void SubScene::OnQuitPressed() {
     g_game_data.paused = true;
 }
 
-
 void SubScene::OnMapTransitionEntered() {
 
 
     TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
-    //sub_scene_exited.EmitSignal();
-    //return_scene = GAME_SCENE;
-
 }
 
 void SubScene::OnMapTransitionActivated() {
-
-
     TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
     sub_scene_exited.EmitSignal();
 }
@@ -185,7 +170,6 @@ void SubScene::OnMapTransitionActivated() {
 void SubScene::HandleCamera() {
 
     Vector2 worldPosBeforeZoom = GetScreenToWorld2D(g_input.world_mouse_position, g_camera);
-
     g_camera.zoom += g_input.mouse_wheel * ZOOM_STEP;
     if(g_camera.zoom < MIN_ZOOM) {
         g_camera.zoom = MIN_ZOOM;
@@ -200,7 +184,6 @@ void SubScene::HandleCamera() {
     float y_offset_f = g_viewport.y_offset_f;
 
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
-
 }
 
 

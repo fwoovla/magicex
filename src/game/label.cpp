@@ -22,13 +22,23 @@ void DrawLabel(Label &_label) {
 
 void DrawLabelWithBG(Label &_label, Color color) {
     int tw = MeasureText(_label.text.c_str(), _label.text_size);
-    DrawRectangle( _label.position.x, _label.position.y - (_label.text_size *0.5f), tw, _label.text_size, color );
+    int lines = 1;
+    for (char c : _label.text) {
+        if (c == '\n') lines++;
+    }
+
+    DrawRectangle( _label.position.x, _label.position.y - (_label.text_size *0.5f), tw, _label.text_size* lines, color );
     DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x, _label.position.y, _label.text_size, _label.default_color);
 }
 
 void DrawLabelCenteredWithBG(Label &_label, Color color) {
     //TraceLog(LOG_INFO, "text size %i", _label.text_size);
     int tw = MeasureText(_label.text.c_str(), _label.text_size);
-    DrawRectangle( _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), tw, _label.text_size, color );
+    int lines = 1;
+    for (char c : _label.text) {
+        if (c == '\n') lines++;
+    }
+
+    DrawRectangle( _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), tw, _label.text_size * lines, color );
     DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), _label.text_size, _label.default_color);
 }

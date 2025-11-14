@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
 #define MAX_ZOOM 2.4f
-#define MIN_ZOOM 1.80f
+#define MIN_ZOOM 0.50f
 #define ZOOM_STEP 0.20f
 
 
@@ -111,7 +111,7 @@ SCENE_ID GameScene::Update() {
                     Vector2 pos = g_current_player->position;
                     for(int item = 0; item < character_menu->blank_list.size(); item++) {
                         if(character_menu->blank_list[item] != -1) {
-                            spi = g_item_data[ character_menu->blank_list[item]].sprite_id;
+                            spi = g_item_data[ character_menu->blank_list[item]].id;
                             break;
                         }
                     }

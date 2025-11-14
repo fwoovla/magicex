@@ -18,95 +18,107 @@
     ],
  "item_data": [
         {
-            "item_name": "Ball",
-            "sprite_id":0,
-            "value":0,
-            "item_type":7
-        },
-        {
-            "item_name": "Cabbage",
-            "sprite_id":1,
-            "value":0,
-            "item_type":6
-        },
-        {
-            "item_name": "Small Bow",
-            "sprite_id":2,
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "Leather Glove",
-            "sprite_id":3,
-            "value":0,
-            "item_type":5
-        },
-        {
-            "item_name": "Apple",
-            "sprite_id":4,
-            "value":0,
-            "item_type":6
-        },
-        {
-            "item_name": "Cheese",
-            "sprite_id":5,
-            "value":0,
-            "item_type":6
-        },
-        {
-            "item_name": "Bread",
-            "sprite_id":6,
-            "value":0,
-            "item_type":6
-        },
-        {
-            "item_name": "Knife",
-            "sprite_id":7,
-            "value":0,
-            "item_type":0
-        },
-        {
             "item_name": "Dagger",
-            "sprite_id":8,
+            "item_id":"ITEM_ID_DAGGER",
+            "value":0,
+            "item_type":0
+        },
+        {
+            "item_name": "Sword",
+            "item_id":"ITEM_ID_SWORD",
+            "value":0,
+            "item_type":0
+        },
+        {
+            "item_name": "Spear",
+            "item_id":"ITEM_ID_SPEAR",
+            "value":0,
+            "item_type":0
+        },
+        {
+            "item_name": "Axe",
+            "item_id":"ITEM_ID_AXE",
+            "value":0,
+            "item_type":0
+        },
+        {
+            "item_name": "Bow",
+            "item_id":"ITEM_ID_BOW",
             "value":0,
             "item_type":0
         },
         {
             "item_name": "Wand",
-            "sprite_id":9,
+            "item_id":"ITEM_ID_WAND",
             "value":0,
             "item_type":0
         },
         {
             "item_name": "Leather Boots",
-            "sprite_id":10,
+            "item_id":"ITEM_ID_LEATHERBOOTS",
             "value":0,
             "item_type":4
         },
         {
-            "item_name": "Healing Vial",
-            "sprite_id":11,
+            "item_name": "LEATHERVEST",
+            "item_id":"ITEM_ID_LEATHERVEST",
             "value":0,
-            "item_type":6
+            "item_type":2
         },
         {
-            "item_name": "Helmet",
-            "sprite_id":12,
+            "item_name": "LEATHERGLOVES",
+            "item_id":"ITEM_ID_LEATHERGLOVES",
+            "value":0,
+            "item_type":5
+        },
+        {
+            "item_name": "WIZARDHAT",
+            "item_id":"ITEM_ID_WIZARDHAT",
             "value":0,
             "item_type":1
         },
         {
-            "item_name": "Leather Vest",
-            "sprite_id":13,
+            "item_name": "SCROLL",
+            "item_id":"ITEM_ID_SCROLL",
             "value":0,
-            "item_type":2
+            "item_type":6
+        },
+        {
+            "item_name": "APPLE",
+            "item_id":"ITEM_ID_APPLE",
+            "value":0,
+            "item_type":6
+        },
+        {
+            "item_name": "CHEESE",
+            "item_id":"ITEM_ID_CHEESE",
+            "value":0,
+            "item_type":6
+        },
+        {
+            "item_name": "BREAD",
+            "item_id":"ITEM_ID_BREAD",
+            "value":0,
+            "item_type":6
+        },
+        {
+            "item_name": "MEAT",
+            "item_id":"ITEM_ID_MEAT",
+            "value":0,
+            "item_type":6
+        },
+        {
+            "item_name": "RING",
+            "item_id":"ITEM_ID_RING",
+            "value":0,
+            "item_type":7
         }
-        
+
     ],
     "loot_tables": [
         {
             "table_name":"LT1.0",
-            "table_data":[0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+            "table_data":[0,1,2,3,4,5,6,7,8,9,10,11,12,13.14,15]
         },
         {
             "table_name":"LT1.1",
@@ -114,3 +126,4 @@
         }
     ]
 }
+

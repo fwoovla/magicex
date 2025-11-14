@@ -13,6 +13,9 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     bool CanEquip(int item_id);
     void Equip(int item_id);
 
+    bool CanUnEquip(int item_id);
+    void UnEquip(int item_id);
+
 
     Vector2 velocity;
 

@@ -4,7 +4,7 @@ static std::string text = "CHEST";
 /////TRANSITION AREA
 
 TransitionArea::~TransitionArea() {
-    
+    TraceLog(LOG_INFO, "TransitionArea AREA DESTROYED, %s", identifier.c_str());
 }
 
 void TransitionArea::Update() {
@@ -24,7 +24,7 @@ void TransitionArea::Update() {
             float lx = g_input.screen_mouse_position.x * g_inv_scale;
             float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
-            CreateLabel(label, {lx, ly}, 20, WHITE, "DOOR");
+            CreateLabel(label, {lx, ly}, 20, WHITE, "open");
             if(identifier == "HouseTransition") {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                     g_game_data.sub_return_position = payload_v * g_ldtk_maps.default_grid_size;
@@ -36,7 +36,7 @@ void TransitionArea::Update() {
             else {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                         g_game_data.next_map_index = payload_i;
-                        label.text += "\n\n\n'space'";
+                        //label.text += "\n\n\n'space'";
                         in_range = true;
                 }
             }
@@ -59,22 +59,24 @@ void TransitionArea::Update() {
 
 void TransitionArea::Draw() {
     if(hovered) {
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
         DrawLabelCentered(label);
-        DrawLabelCenteredWithBG(label, BLACK);
-
+        DrawLabelCenteredWithBG(label, TRANSDARKERGRAY);
 
         if(time_pressed > 0) {
-
             Rectangle rect = {
-                .x = label.position.x - size.x,
-                .y = label.position.y + size.y,
-                .width = (size.x * 2) * time_pressed,
-                .height = 6
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
             };
-            
             DrawRectangleRec(rect, RED);
         }
-
     }
 }
 
@@ -82,12 +84,12 @@ void TransitionArea::Draw() {
 ////CONTAINER AREA
 
 ContainerArea::~ContainerArea() {
-    
+    TraceLog(LOG_INFO, "ContainerArea AREA DESTROYED, %s", identifier.c_str());
 }
 
 void ContainerArea::Update() {
     
-
+    float max_time_to_press = 1.0f;
     Rectangle area_rect = {
         .x = position.x,
         .y = position.y,
@@ -105,20 +107,18 @@ void ContainerArea::Update() {
         float lx = g_input.screen_mouse_position.x * g_inv_scale;
         float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
+        text = "";
+        
         if(identifier == "GroundContainerEntity") {
             //TraceLog(LOG_INFO, "CONTAINER AREA update");
             int count = 0;
             for(int i = 0; i < item_list.size(); i++) {
                 if(item_list[i] != -1) {
-                    count++;
+                    text += g_item_data[item_list[i]].item_name + "\n";
                 }
             }
-            if(count == 0) {
-                //list_empty.EmitSignal();
-                is_empty = true;
-                return;
-            }
-            text = "loot";
+            text.pop_back();
+            max_time_to_press = 0.5f;
         }
         else {
             //TraceLog(LOG_INFO, "CONTAINER AREA update");
@@ -128,7 +128,7 @@ void ContainerArea::Update() {
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
-            label.text += "\n\n\n'space'";
+            //label.text += "\n'space'";
         }
     }
     else {
@@ -137,8 +137,8 @@ void ContainerArea::Update() {
     }
     if(hovered and g_input.key_use and in_range) {
         time_pressed += 1.0f * GetFrameTime();
-        if(time_pressed > 1.0f) {
-            time_pressed = 1.0f;
+        if(time_pressed > max_time_to_press) {
+            time_pressed = 0.0f;
             //g_game_data.loot_table_id = loot_table_id;
             //g_game_data.loot_table = &item_list;
             area_activated.EmitSignal();
@@ -153,22 +153,23 @@ void ContainerArea::Draw() {
     
 
     if(hovered) {
-        //TraceLog(LOG_INFO, "CONTAINER DRAW");
-        //DrawLabelCentered(label);
-        DrawLabelCenteredWithBG(label, BLACK);
-
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        DrawLabelCenteredWithBG(label, TRANSDARKERGRAY);
 
         if(time_pressed > 0) {
 
             Rectangle rect = {
-                .x = label.position.x - size.x,
-                .y = label.position.y + size.y,
-                .width = (size.x * 2) * time_pressed,
-                .height = 6
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
             };
-            
             DrawRectangleRec(rect, RED);
         }
-
     }
 }

@@ -85,7 +85,7 @@ void ItemGrid::Update() {
                 else {
                     //TraceLog(LOG_INFO, "DROPPED IN valid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
                     (*item_list)[dest_index] = (*item_list)[source_index];
-                    LoadSpriteCentered(item_sprites[dest_index], g_item_sprites[g_item_data[ (*item_list)[dest_index] ].sprite_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+                    LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[g_item_data[ (*item_list)[dest_index] ].id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
                     ScaleSprite(item_sprites[dest_index], {2,2});
                     
                     (*item_list)[source_index] = -1;
@@ -150,7 +150,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 Sprite sp;
                 int x = i%(cols);
                 int y = i/(cols);
-                LoadSpriteCentered(sp, g_item_sprites[g_item_data[ (*item_list)[i] ].sprite_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                LoadSpriteCentered(sp, g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
                 ScaleSprite(sp, {2,2});
                 item_sprites.push_back(sp);
                 //TraceLog(LOG_INFO, "item sprite %i:  %i %i  %i", i, x, y, (*item_list)[i]);
@@ -206,7 +206,7 @@ void ItemGrid::AddItem(int item_id) {
             int y = i/(cols);
             (*item_list)[i] = item_id;
 
-            LoadSpriteCentered(item_sprites[i], g_item_sprites[g_item_data[ (*item_list)[i] ].sprite_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+            LoadSpriteCentered(item_sprites[i], g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
             ScaleSprite(item_sprites[i], {2,2});
             break;
         }
@@ -217,7 +217,7 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
     (*item_list)[index] = item_id;
 
-    LoadSpriteCentered(item_sprites[index], g_item_sprites[g_item_data[ (*item_list)[index] ].sprite_id], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
+    LoadSpriteCentered(item_sprites[index], g_icon_sprites[g_item_data[ (*item_list)[index] ].id], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
     ScaleSprite(item_sprites[index], {2,2});
 }
 

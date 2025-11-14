@@ -154,13 +154,31 @@ bool PlayerCharacter::CanEquip(int item_id) {
 
 
 void PlayerCharacter::Equip(int item_id) {
-    if(g_item_data[item_id].type == 0) {
+    if(g_item_data[item_id].type == TYPE_WEAPON) {
         if(g_player_data.primary[0] == item_id) {
             TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
             LoadSpriteCentered(weapon_sprite, g_item_sprites[item_id], position);
         }
     }
 }
+
+
+
+bool PlayerCharacter::CanUnEquip(int item_id) {
+    return true;
+}
+
+
+void PlayerCharacter::UnEquip(int item_id) {
+    if(g_item_data[item_id].type == TYPE_WEAPON) {
+        if(g_player_data.primary[0] == item_id) {
+            TraceLog(LOG_INFO, "unequiping primary weapon %i", item_id);
+            Texture2D t;
+            LoadSpriteCentered(weapon_sprite, t, position);
+        }
+    }
+}
+
 
 
 PlayerCharacter::~PlayerCharacter()

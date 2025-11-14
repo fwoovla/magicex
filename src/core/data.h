@@ -8,6 +8,8 @@
 #include "json.hpp"
 
 #include "gamedefs.h"
+#include "resources.h"
+
 #include "utils.h"
 #include "areas.h"
 #include "baseentity.h"
@@ -41,8 +43,7 @@ enum ItemType {
 };
 
 struct ItemData {
-    int id;
-    int sprite_id;
+    ItemID id;
     int value;
     ItemType type;
     std::string item_name;
@@ -103,21 +104,10 @@ struct LevelData {
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
-    //std::vector<ContainerEntity*> containers;
     std::vector<BaseEntity*> entity_list;
-
-    //BaseContainerEntity *return_container;
-
-    
-
-
 };
 
-
-
-extern std::vector<std::vector<int>> g_loot_tables;
-
-
+extern std::vector<std::vector<ItemID>> g_loot_tables;
 
 void LoadGameData();
 
@@ -133,3 +123,4 @@ void LoadLevelData(LevelData &level_data);
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);
 
+ItemID StrToItemId(const std::string& s);
