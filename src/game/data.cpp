@@ -76,8 +76,10 @@ void LoadGameData() {
     }
 
     for(int i = 0; i < cj["item_data"].size(); i++) {
+
         std::string id_s = cj["item_data"][i]["item_id"];
         ItemID id = StrToItemId(id_s);
+
         int value = cj["item_data"][i]["value"];
         std::string name = cj["item_data"][i]["item_name"];
         ItemType type = cj["item_data"][i]["item_type"];
@@ -89,7 +91,7 @@ void LoadGameData() {
             .item_name = name
             
         };
-
+        TraceLog(LOG_INFO, "Item Data Loaded  id: %i  %s", id, name.c_str());
         g_item_data[(int)id] = new_item;
     }
 
@@ -386,14 +388,44 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_DAGGER",          ItemID::ITEM_ID_DAGGER},
         {"ITEM_ID_SWORD",           ItemID::ITEM_ID_SWORD},
         {"ITEM_ID_SPEAR",           ItemID::ITEM_ID_SPEAR},
-        {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
-        {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
-        {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
+        {"ITEM_ID_AXE",                         ItemID::ITEM_ID_AXE},
+        {"ITEM_ID_BOW",                         ItemID::ITEM_ID_BOW},
+
+        {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
+        {"ITEM_ID_MAGICMISSLE_WAND_2",         ItemID::ITEM_ID_MAGICMISSLE_WAND_2},
+        {"ITEM_ID_MAGICMISSLE_WAND_3",         ItemID::ITEM_ID_MAGICMISSLE_WAND_3},
+        {"ITEM_ID_FIREBALL_WAND_1",         ItemID::ITEM_ID_FIREBALL_WAND_1},
+        {"ITEM_ID_FIREBALL_WAND_2",         ItemID::ITEM_ID_FIREBALL_WAND_2},
+        {"ITEM_ID_FIREBALL_WAND_3",         ItemID::ITEM_ID_FIREBALL_WAND_3},
+        {"ITEM_ID_LIGHTNING_WAND_1",         ItemID::ITEM_ID_LIGHTNING_WAND_1},
+        {"ITEM_ID_LIGHTNING_WAND_2",         ItemID::ITEM_ID_LIGHTNING_WAND_2},
+        {"ITEM_ID_LIGHTNING_WAND_3",         ItemID::ITEM_ID_LIGHTNING_WAND_3},
+
+
+        {"ITEM_ID_MAGICMISSLE_STAFF_1",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_1},
+        {"ITEM_ID_MAGICMISSLE_STAFF_2",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_2},
+        {"ITEM_ID_MAGICMISSLE_STAFF_3",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_3},
+        {"ITEM_ID_FIREBALL_STAFF_1",         ItemID::ITEM_ID_FIREBALL_STAFF_1},
+        {"ITEM_ID_FIREBALL_STAFF_2",         ItemID::ITEM_ID_FIREBALL_STAFF_2},
+        {"ITEM_ID_FIREBALL_STAFF_3",         ItemID::ITEM_ID_FIREBALL_STAFF_3},
+        {"ITEM_ID_LIGHTNING_STAFF_1",         ItemID::ITEM_ID_LIGHTNING_STAFF_1},
+        {"ITEM_ID_LIGHTNING_STAFF_2",         ItemID::ITEM_ID_LIGHTNING_STAFF_2},
+        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3},
+
+        {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
+        {"ITEM_ID_MUSHROOM_JUICE",     ItemID::ITEM_ID_MUSHROOM_JUICE},
+
+
         {"ITEM_ID_LEATHERBOOTS",    ItemID::ITEM_ID_LEATHERBOOTS},
         {"ITEM_ID_LEATHERVEST",     ItemID::ITEM_ID_LEATHERVEST},
         {"ITEM_ID_LEATHERGLOVES",   ItemID::ITEM_ID_LEATHERGLOVES},
-        {"ITEM_ID_WIZARDHAT",       ItemID::ITEM_ID_WIZARDHAT},
-        {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
+        {"ITEM_ID_LEATHERLEGGINGS",   ItemID::ITEM_ID_LEATHERLEGGINGS},
+
+
+        {"ITEM_ID_MAGICMMISSLE_SCROLL",          ItemID::ITEM_ID_MAGICMMISSLE_SCROLL},
+        {"ITEM_ID_FIREBALL_SCROLL",          ItemID::ITEM_ID_FIREBALL_SCROLL},
+        {"ITEM_ID_LIGHTNING_SCROLL",          ItemID::ITEM_ID_LIGHTNING_SCROLL},
+
         {"ITEM_ID_APPLE",           ItemID::ITEM_ID_APPLE},
         {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
         {"ITEM_ID_BREAD",           ItemID::ITEM_ID_BREAD},
@@ -402,9 +434,8 @@ ItemID StrToItemId(const std::string& s) {
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
-        TraceLog(LOG_INFO, "Item ID  %i", it->second);
         return it->second;
     }
-
+    TraceLog(LOG_INFO, "Item ID not found ");
     return ItemID::ITEM_ID_NONE;
 }

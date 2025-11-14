@@ -53,7 +53,7 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     position = _position;
     sprite_id = _s_id;
     rotation = 0.0f;
-    LoadSprite(sprite, g_item_sprites[sprite_id], position);
+    LoadSprite(sprite, g_item_sprites[sprite_id], Vector2Add(position, {4,4}));
     ScaleSprite(sprite, {0.5f, 0.5f});
     collision_radius = 5;
     centered_offset = {0,0};

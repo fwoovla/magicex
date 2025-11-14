@@ -1,18 +1,18 @@
 {
     "base_speed": 45.0,
     "body": [
-        7
+        26
     ],
     "class_name": "Apprentice",
     "exp": 0,
     "feet": [
-        6
+        25
     ],
     "hands": [
-        -1
+        27
     ],
     "head": [
-        9
+        -1
     ],
     "health": 15,
     "hotbar": [
@@ -24,18 +24,18 @@
     ],
     "inventory": [
         -1,
+        20,
         -1,
-        9,
-        10,
-        11,
-        12,
         8,
+        11,
         -1,
         -1,
         -1,
         -1,
         -1,
-        7,
+        -1,
+        -1,
+        -1,
         -1,
         -1,
         -1,
@@ -55,15 +55,15 @@
         -1
     ],
     "legs": [
-        -1
+        28
     ],
     "name": "not assigned",
     "portrait_id": 0,
     "primary": [
-        3
+        0
     ],
     "secondary": [
-        2
+        5
     ],
     "sprite_sheet_id": 0
 }

@@ -790,25 +790,6 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [46,8],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "6604fe10-ac70-11f0-8a1d-999ad7dffd83",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [92,16],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [] }
-							],
-							"__worldX": 92,
-							"__worldY": 16
-						},
-						{
 							"__identifier": "GroundContainerEntity",
 							"__grid": [31,27],
 							"__pivot": [0,0],
@@ -884,6 +865,120 @@
 							"fieldInstances": [],
 							"__worldX": 128,
 							"__worldY": 64
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [7,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "c9c00d60-ac70-11f0-a97d-af1f270761dc",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [112,16],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }
+							],
+							"__worldX": 112,
+							"__worldY": 16
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [5,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "cd4bcc30-ac70-11f0-a97d-2350ede5bf2b",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [80,16],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
+							],
+							"__worldX": 80,
+							"__worldY": 16
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [3,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "ceaae700-ac70-11f0-a97d-bf640f58ae8b",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [48,16],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 2, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+							],
+							"__worldX": 48,
+							"__worldY": 16
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [7,6],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [112,96],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 3, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
+							],
+							"__worldX": 112,
+							"__worldY": 96
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [5,6],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "d5e3f660-ac70-11f0-a97d-9169c59964e9",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [80,96],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 4, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [4] }] }
+							],
+							"__worldX": 80,
+							"__worldY": 96
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [3,6],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "dc8e0c30-ac70-11f0-a97d-853b0e768cd5",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [48,96],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 5, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
+							],
+							"__worldX": 48,
+							"__worldY": 96
 						}
 					]
 				},

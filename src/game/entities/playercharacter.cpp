@@ -54,16 +54,19 @@ void PlayerCharacter::Update() {
             }
         }
 
-        if(velocity.x < -1) {
-            sprite.source.width = -sprite.size.x;
-        }
-        else if(velocity.x > 1){
-            sprite.source.width = sprite.size.x;
-        }
     }
     else {
         SetAmination(sprite, IDLE);
     }
+    if(g_input.world_mouse_position.x  < position.x){
+        //if(velocity.x < -1) {
+        sprite.source.width = -sprite.size.x;
+    }
+    else {
+        //else if(velocity.x > 1){
+        sprite.source.width = sprite.size.x;
+    }
+
     sprite.position = position;
     weapon_sprite.position = position;
 }
