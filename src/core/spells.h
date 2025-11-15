@@ -10,7 +10,7 @@ struct SpellData {
     float lifetime;
 };
 
-extern SpellData g_spell_data[SPELL_ID_MAX];
+extern std::unordered_map<int, SpellData> g_spell_data;
 
 struct NewSpellPayload {
     Vector2 position;

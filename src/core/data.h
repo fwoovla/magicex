@@ -54,6 +54,15 @@ struct ItemData {
 
 extern std::unordered_map<int, ItemData> g_item_data;
 
+struct WeaponData {
+    std::string weapon_name;
+    ItemID weapon_id;
+    float cooldown;
+    SpellID spell_id;
+};
+
+extern std::unordered_map<int, WeaponData> g_weapon_data;
+
 
 struct PlayerData {
     int health;
@@ -129,5 +138,9 @@ void GenerateContainerItemList(int lti, std::vector<int> &list);
 
 
 SpellID StrToSpellId(const std::string& s);
+
+
+//SpellID StrToWeaponID(const std::string& s);
+
 
 ItemID StrToItemId(const std::string& s);

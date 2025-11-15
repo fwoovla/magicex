@@ -16,6 +16,8 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     bool CanUnEquip(int item_id);
     void UnEquip(int item_id);
 
+    void OnShotTimerTimeout();
+
 
     Vector2 velocity;
 
@@ -23,6 +25,11 @@ class PlayerCharacter : public AnimatedSpriteEntity {
 
     //Sprite crosshair_sprite;
     bool can_switch;
+    bool can_shoot;
+
+    Timer shot_timer;
+
+    WeaponData current_weapon_data;
 
 }; 
 

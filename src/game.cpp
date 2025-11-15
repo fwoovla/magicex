@@ -4,7 +4,8 @@ std::unique_ptr<BaseScene> g_current_scene;
 
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
-SpellData g_spell_data[SPELL_ID_MAX];
+std::unordered_map<int, WeaponData> g_weapon_data;
+std::unordered_map<int, SpellData> g_spell_data;
 
 std::vector<std::vector<ItemID>> g_loot_tables;
 

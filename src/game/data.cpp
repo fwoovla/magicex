@@ -75,6 +75,7 @@ void LoadGameData() {
         g_class_data[i] = this_class;
     }
 
+//------------------item data
     for(int i = 0; i < cj["item_data"].size(); i++) {
 
         std::string id_s = cj["item_data"][i]["item_id"];
@@ -84,19 +85,19 @@ void LoadGameData() {
         std::string name = cj["item_data"][i]["item_name"];
         ItemType type = cj["item_data"][i]["item_type"];
 
-        SpellID spell_id = SPELL_ID_NONE;
+/*         SpellID spell_id = SPELL_ID_NONE;
 
         if(type == TYPE_WEAPON) {
             std::string sp_id = cj["item_data"][i]["spell_id"];
             spell_id = StrToSpellId(sp_id);
-        }
+        } */
 
         ItemData new_item = {
             .id = id,
             .value = value,
             .type = type,
-            .item_name = name,
-            .spell_id = spell_id
+            .item_name = name
+            //.spell_id = spell_id
             
         };
 
@@ -104,7 +105,7 @@ void LoadGameData() {
         g_item_data[(int)id] = new_item;
     }
 
-
+//---------------------spell data
     for(int i = 0; i < cj["spell_data"].size(); i++) {
         SpellData new_spell;
 
@@ -123,9 +124,37 @@ void LoadGameData() {
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
+    }
+
+//------------------------------------weapon data
+    for(int i = 0; i < cj["weapon_data"].size(); i++) {
+
+        std::string w_id_s = cj["weapon_data"][i]["weapon_id"];
+        ItemID w_id = StrToItemId(w_id_s);
+
+        std::string name = cj["weapon_data"][i]["weapon_name"];
+        float cooldown = cj["weapon_data"][i]["cooldown"];
+
+        SpellID spell_id = SPELL_ID_NONE;
+
+        std::string sp_id = cj["weapon_data"][i]["spell_id"];
+        spell_id = StrToSpellId(sp_id);
+
+
+        WeaponData new_weapon = {
+            .weapon_name = name,
+            .weapon_id = w_id,
+            .cooldown = cooldown,
+            .spell_id = spell_id            
+        };
+
+        TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s", w_id, name.c_str());
+        g_weapon_data[(int)w_id] = new_weapon;
 
     }
 
+
+    //--------------------loot tables
     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
 
@@ -142,7 +171,6 @@ void LoadGameData() {
 
     cfile.close();
  
-    //TraceLog(LOG_INFO, "==========end class data================");
     //TraceLog(LOG_INFO, "==========check save data================");
 
     std::string save_path = "assets/save.json";
@@ -436,6 +464,39 @@ SpellID StrToSpellId(const std::string& s) {
 
 }
 
+
+/* ItemID StrToWeaponID(const std::string& s) {
+
+    static const std::unordered_map<std::string, ItemID> lookup_table = {
+        {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
+        {"ITEM_ID_MAGICMISSLE_WAND_2",         ItemID::ITEM_ID_MAGICMISSLE_WAND_2},
+        {"ITEM_ID_MAGICMISSLE_WAND_3",         ItemID::ITEM_ID_MAGICMISSLE_WAND_3},
+        {"ITEM_ID_FIREBALL_WAND_1",         ItemID::ITEM_ID_FIREBALL_WAND_1},
+        {"ITEM_ID_FIREBALL_WAND_2",         ItemID::ITEM_ID_FIREBALL_WAND_2},
+        {"ITEM_ID_FIREBALL_WAND_3",         ItemID::ITEM_ID_FIREBALL_WAND_3},
+        {"ITEM_ID_LIGHTNING_WAND_1",         ItemID::ITEM_ID_LIGHTNING_WAND_1},
+        {"ITEM_ID_LIGHTNING_WAND_2",         ItemID::ITEM_ID_LIGHTNING_WAND_2},
+        {"ITEM_ID_LIGHTNING_WAND_3",         ItemID::ITEM_ID_LIGHTNING_WAND_3},
+
+
+        {"ITEM_ID_MAGICMISSLE_STAFF_1",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_1},
+        {"ITEM_ID_MAGICMISSLE_STAFF_2",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_2},
+        {"ITEM_ID_MAGICMISSLE_STAFF_3",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_3},
+        {"ITEM_ID_FIREBALL_STAFF_1",         ItemID::ITEM_ID_FIREBALL_STAFF_1},
+        {"ITEM_ID_FIREBALL_STAFF_2",         ItemID::ITEM_ID_FIREBALL_STAFF_2},
+        {"ITEM_ID_FIREBALL_STAFF_3",         ItemID::ITEM_ID_FIREBALL_STAFF_3},
+        {"ITEM_ID_LIGHTNING_STAFF_1",         ItemID::ITEM_ID_LIGHTNING_STAFF_1},
+        {"ITEM_ID_LIGHTNING_STAFF_2",         ItemID::ITEM_ID_LIGHTNING_STAFF_2},
+        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "Item ID not found ");
+    return ItemID::ITEM_ID_NONE;
+
+} */
 
 ItemID StrToItemId(const std::string& s) {
 

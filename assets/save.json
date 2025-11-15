@@ -60,10 +60,10 @@
     "name": "not assigned",
     "portrait_id": 0,
     "primary": [
-        0
+        5
     ],
     "secondary": [
-        5
+        0
     ],
     "sprite_sheet_id": 0
 }

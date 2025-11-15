@@ -23,6 +23,9 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     collided = false;
     should_delete = false;
     can_switch = true;
+    shot_timer.wait_time = 0.5f;
+    shot_timer.timer_timeout.Connect( [&](){OnShotTimerTimeout();} );
+    can_shoot = true;
 }
 
 void PlayerCharacter::Update() {
@@ -68,6 +71,10 @@ void PlayerCharacter::Update() {
 
     sprite.position = position;
     weapon_sprite.position = position;
+
+    if(!can_shoot) {
+        shot_timer.Update();
+    }
 }
 
 void PlayerCharacter::Draw() {
@@ -148,12 +155,15 @@ void PlayerCharacter::CheckInput() {
         can_switch = true;
     }
 
-    if(g_input.mouse_left_down) {
-        //TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
-        //TraceLog(LOG_INFO, "using spell %i",  g_item_data[g_player_data.primary[0]].spell_id );
-        int spell_id = g_item_data[g_player_data.primary[0]].spell_id;
+    if(g_input.mouse_left_down and can_shoot) {
+        shot_timer.Start(g_weapon_data[g_player_data.primary[0]].cooldown, true);
+        can_shoot = false;
+        TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
+        //int value = m.at("banana");
+        int key = g_player_data.primary[0];
+        int spell_id = g_weapon_data[g_player_data.primary[0]].spell_id;
+        TraceLog(LOG_INFO, "using spell %i",  spell_id );
         if(spell_id != -1) {
-            //DL_Add(g_current_scene->level_data.entity_list, new MagicMissle(position, weapon_sprite.roataion, 0, g_spell_data[spell_id]));
             SpawnSpell(g_spell_data[spell_id] , *g_current_scene, {.position = position,.rotation = weapon_sprite.roataion,.shooter_id = 0});
         }
         
@@ -169,6 +179,8 @@ bool PlayerCharacter::CanEquip(int item_id) {
 void PlayerCharacter::Equip(int item_id) {
     if(g_item_data[item_id].type == TYPE_WEAPON) {
         if(g_player_data.primary[0] == item_id) {
+
+            //current_weapon_data = g_weapon_data[g_player_data.primary[0]];
             TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
             LoadSpriteCentered(weapon_sprite, g_item_sprites[item_id], position);
         }
@@ -192,6 +204,10 @@ void PlayerCharacter::UnEquip(int item_id) {
     }
 }
 
+
+void PlayerCharacter::OnShotTimerTimeout() {
+    can_shoot = true;
+}
 
 
 PlayerCharacter::~PlayerCharacter()
