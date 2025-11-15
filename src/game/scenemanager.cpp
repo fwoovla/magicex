@@ -5,7 +5,7 @@ char level1_data[] = "assets/map4.png";
 void SceneManager::UpdateScene()
 {
     GetInputFromPlayer();
-    if(current_scene == nullptr){
+    if(g_current_scene == nullptr){
         return;
     }
 
@@ -18,7 +18,7 @@ void SceneManager::UpdateScene()
     SCENE_ID new_scene_id = NO_SCENE;
         
     if(g_game_data.paused == false) {
-        new_scene_id = current_scene->Update();
+        new_scene_id = g_current_scene->Update();
     }
     else {
         pause_menu->Update();
@@ -30,13 +30,12 @@ void SceneManager::UpdateScene()
 
             default:
             TransitionSceneTo(new_scene_id);
-
-            //ChangeSceneTo(new_scene_id);
         }
     }
 
     if(g_input.keys_pressed[0] == KEY_P) {
-        g_game_data.paused = !g_game_data.paused;            }
+        g_game_data.paused = !g_game_data.paused;
+    }
 
     if(g_input.keys_pressed[0] == KEY_TAB) {
         g_game_settings.show_debug = !g_game_settings.show_debug;
@@ -60,7 +59,7 @@ void SceneManager::UpdateScene()
 
 
 void SceneManager::Init() {
-    current_scene = std::make_unique<SplashScreen>();
+    g_current_scene = std::make_unique<SplashScreen>();
 
     g_game_data.current_scene_id = SPLASH_SCENE;
 
@@ -85,13 +84,13 @@ void SceneManager::CleanUp() {
 
 void SceneManager::DrawScene() {
 
-    current_scene->DrawScene();
+    g_current_scene->DrawScene();
 
 }
 
 void SceneManager::DrawUI() {
 
-    current_scene->DrawUI();
+    g_current_scene->DrawUI();
 
     if(g_game_data.paused == true) {
         pause_menu->Draw();
@@ -112,32 +111,32 @@ void SceneManager::DrawUI() {
 void SceneManager::ChangeSceneTo(SCENE_ID new_scene_id) {
     
     
-    current_scene.reset();
+    g_current_scene.reset();
     g_game_data.current_map_index = g_game_data.next_map_index;
 
     switch (new_scene_id) {
         case SPLASH_SCENE:
-            current_scene = std::make_unique<SplashScreen>();
+            g_current_scene = std::make_unique<SplashScreen>();
             break;
 
         case TITLE_SCENE:
-            current_scene = std::make_unique<TitleScene>();
+            g_current_scene = std::make_unique<TitleScene>();
             break;
 
         case STAGING_SCENE:
-            current_scene = std::make_unique<StagingScene>();
+            g_current_scene = std::make_unique<StagingScene>();
             break;
 
         case SHELTER_SCENE:
-            current_scene = std::make_unique<ShelterScene>();
+            g_current_scene = std::make_unique<ShelterScene>();
             break;
 
         case GAME_SCENE:
-            current_scene = std::make_unique<GameScene>();
+            g_current_scene = std::make_unique<GameScene>();
             break;
 
         case END_SCENE:
-            current_scene = std::make_unique<EndScene>();
+            g_current_scene = std::make_unique<EndScene>();
             break;
 
         default:

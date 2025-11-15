@@ -1,0 +1,71 @@
+#include "../../core/gamedefs.h"
+
+
+MagicMissle::MagicMissle(Vector2 _position, float _rotation, int _shooter_id, SpellData _data){
+
+    data = _data;
+    should_delete = false;
+
+    lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
+    lifetime_timer.Start(data.lifetime, true);
+
+    position = _position;
+    rotation = _rotation;
+    centered_offset = {0,0};
+    collision_radius = 5;
+    collided = false;
+
+
+    velocity = {100, 0};
+    velocity = Vector2Rotate(velocity, rotation * DEG2RAD);
+
+    collided = false;
+    //id = GetRandomValue(0, 10000);
+     
+    shooter_id = _shooter_id;
+    
+    centered_offset = {0, 0};
+    collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
+    
+    LoadSpriteCentered(sprite, g_spell_sprites[SPELL_ID_MAGICMISSLE_1 + (data.level - 1)], position);
+    sprite.roataion = rotation;
+}
+
+MagicMissle::~MagicMissle() {
+
+}
+
+void MagicMissle::Update() {
+    if(should_delete) {
+        return;
+    }
+
+    Vector2 previous_position = position;
+    float dt = GetFrameTime();
+
+    position = Vector2Add(position, velocity * GetFrameTime());
+
+    CollisionResult result;
+     if(CheckCollisionWithLevel(this, result, 0)){ //performance hit!!!!!!!!
+        should_delete = true;
+    }
+    //position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
+    //TraceLog(LOG_INFO, "position  %f  %f   %f", position.x, position.y, rotation);
+    
+    sprite.position = position;
+
+    lifetime_timer.Update(); 
+
+}
+
+void MagicMissle::Draw() {
+    DrawSprite(sprite);
+}
+
+void MagicMissle::DrawUI() {
+
+}
+
+void MagicMissle::OnLifetimeTimeout() {
+    should_delete = true;
+}

@@ -84,7 +84,9 @@ GENERATED += $(OBJDIR)/containerentity.o
 GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
+GENERATED += $(OBJDIR)/entityspawner.o
 GENERATED += $(OBJDIR)/events.o
+GENERATED += $(OBJDIR)/fireball.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
@@ -92,6 +94,8 @@ GENERATED += $(OBJDIR)/input.o
 GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
 GENERATED += $(OBJDIR)/ldtk.o
+GENERATED += $(OBJDIR)/lightning.o
+GENERATED += $(OBJDIR)/magicmissle.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapmenu.o
 GENERATED += $(OBJDIR)/pausemenu.o
@@ -116,7 +120,9 @@ OBJECTS += $(OBJDIR)/containerentity.o
 OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
+OBJECTS += $(OBJDIR)/entityspawner.o
 OBJECTS += $(OBJDIR)/events.o
+OBJECTS += $(OBJDIR)/fireball.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
@@ -124,6 +130,8 @@ OBJECTS += $(OBJDIR)/input.o
 OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
 OBJECTS += $(OBJDIR)/ldtk.o
+OBJECTS += $(OBJDIR)/lightning.o
+OBJECTS += $(OBJDIR)/magicmissle.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapmenu.o
 OBJECTS += $(OBJDIR)/pausemenu.o
@@ -220,6 +228,9 @@ $(OBJDIR)/data.o: src/game/data.cpp
 $(OBJDIR)/containerentity.o: src/game/entities/containerentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/entityspawner.o: src/game/entities/entityspawner.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -293,6 +304,15 @@ $(OBJDIR)/titleuilayer.o: src/game/scenes/titleuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/transitions.o: src/game/scenes/transitions.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/fireball.o: src/game/spells/fireball.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/lightning.o: src/game/spells/lightning.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/magicmissle.o: src/game/spells/magicmissle.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/viewport.o: src/game/viewport.cpp

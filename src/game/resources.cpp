@@ -19,6 +19,45 @@ void LoadResources() {
     g_sprite_sheets[SPRITE_APPRENTICE] = LoadTextureFromImage(sheet_image);
     TraceLog(LOG_INFO, "SHEETS   SPRITE_APPRENTICE");
 
+
+    
+    TraceLog(LOG_INFO, "LOADING SPELL SPRITES");
+
+    Image spell_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    Vector2 spell_pos = {20,15};
+
+    ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 16, 16});
+    g_spell_sprites[SPELL_ID_MAGICMISSLE_1] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_MAGICMISSLE_2] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_MAGICMISSLE_3] = LoadTextureFromImage(spell_image);
+    TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_MAGICMISSLE");
+
+
+//---------------------------------------------------------------------------------------
+
+    spell_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    spell_pos = {21,15};
+
+    ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 16, 16});
+    g_spell_sprites[SPELL_ID_FIREBALL_1] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_FIREBALL_2] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_FIREBALL_3] = LoadTextureFromImage(spell_image);
+    TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_FIREBALL");
+
+//---------------------------------------------------------------------------------------
+    spell_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    spell_pos = {22,15};
+
+    ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 16, 16});
+    g_spell_sprites[SPELL_ID_LIGHTNING_1] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_LIGHTNING_2] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_LIGHTNING_3] = LoadTextureFromImage(spell_image);
+    TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_LIGHTNING");
+
+//---------------------------------------------------------------------------------------
+
+
+
     TraceLog(LOG_INFO, "LOADING ITEM and ICON SPRITES");
 
     Image icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);

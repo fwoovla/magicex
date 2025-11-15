@@ -17,7 +17,6 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     rotation = 0.0f;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
-    //LoadSpriteCentered(crosshair_sprite, g_sprite_sheets[SPRITE_CROSSHAIR], position);
     LoadSpriteCentered(weapon_sprite, g_item_sprites[g_player_data.primary[0]], position);
     collision_radius = 5;
     centered_offset = {0,0};
@@ -147,6 +146,17 @@ void PlayerCharacter::CheckInput() {
     }
     if(!g_input.key_switch_weapon) {
         can_switch = true;
+    }
+
+    if(g_input.mouse_left_down) {
+        //TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
+        //TraceLog(LOG_INFO, "using spell %i",  g_item_data[g_player_data.primary[0]].spell_id );
+        int spell_id = g_item_data[g_player_data.primary[0]].spell_id;
+        if(spell_id != -1) {
+            //DL_Add(g_current_scene->level_data.entity_list, new MagicMissle(position, weapon_sprite.roataion, 0, g_spell_data[spell_id]));
+            SpawnSpell(g_spell_data[spell_id] , *g_current_scene, {.position = position,.rotation = weapon_sprite.roataion,.shooter_id = 0});
+        }
+        
     }
 }
 

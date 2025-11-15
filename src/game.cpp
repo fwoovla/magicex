@@ -1,7 +1,10 @@
 #include "core/gamedefs.h"
 
+std::unique_ptr<BaseScene> g_current_scene;
+
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
+SpellData g_spell_data[SPELL_ID_MAX];
 
 std::vector<std::vector<ItemID>> g_loot_tables;
 
@@ -23,6 +26,7 @@ Texture2D g_container_sprites[MAX_SPRITES];
 Texture2D g_portrait_sprites[MAX_SPRITES];
 Texture2D g_ui_panels[MAX_SPRITES];
 Texture2D g_ui_backgrounds[MAX_SPRITES];
+Texture2D g_spell_sprites[MAX_SPRITES];
 PlayerData g_player_data;
 
 PlayerCharacter *g_current_player;

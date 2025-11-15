@@ -11,7 +11,9 @@
 #include "resources.h"
 
 #include "utils.h"
+#include "spells.h"
 #include "areas.h"
+#include "spells.h"
 #include "baseentity.h"
 #include "entities.h"
 
@@ -47,6 +49,7 @@ struct ItemData {
     int value;
     ItemType type;
     std::string item_name;
+    SpellID spell_id;
 };
 
 extern std::unordered_map<int, ItemData> g_item_data;
@@ -105,6 +108,7 @@ struct LevelData {
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
+    std::vector<BaseEntity*> spell_list;
 };
 
 extern std::vector<std::vector<ItemID>> g_loot_tables;
@@ -122,5 +126,8 @@ void LoadLevelData(LevelData &level_data);
 
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);
+
+
+SpellID StrToSpellId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);

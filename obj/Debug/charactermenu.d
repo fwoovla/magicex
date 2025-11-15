@@ -253,14 +253,15 @@ obj/Debug/charactermenu.o: src/game/scenes/charactermenu.cpp \
  src/game/scenes/../../core/areas.h src/game/scenes/../../core/label.h \
  src/game/scenes/../../core/entities.h \
  src/game/scenes/../../core/resources.h src/game/scenes/../../core/data.h \
- src/game/scenes/../../core/events.h \
+ src/game/scenes/../../core/spells.h src/game/scenes/../../core/events.h \
  src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
  src/game/scenes/../../core/button.h \
  src/game/scenes/../../core/playercharacter.h \
+ src/game/scenes/../../core/entityspawner.h \
+ src/game/scenes/../../core/basescene.h \
  src/game/scenes/../../core/tilelayer.h \
  src/game/scenes/../../core/uilayers.h \
  src/game/scenes/../../core/scenes.h \
- src/game/scenes/../../core/basescene.h \
  src/game/scenes/../../core/scenemanager.h \
  src/game/scenes/../../core/game.h
 /usr/include/stdc-predef.h:
@@ -587,14 +588,16 @@ src/game/scenes/../../core/label.h:
 src/game/scenes/../../core/entities.h:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/data.h:
+src/game/scenes/../../core/spells.h:
 src/game/scenes/../../core/events.h:
 src/game/scenes/../../core/viewport.h:
 src/game/scenes/../../core/input.h:
 src/game/scenes/../../core/button.h:
 src/game/scenes/../../core/playercharacter.h:
+src/game/scenes/../../core/entityspawner.h:
+src/game/scenes/../../core/basescene.h:
 src/game/scenes/../../core/tilelayer.h:
 src/game/scenes/../../core/uilayers.h:
 src/game/scenes/../../core/scenes.h:
-src/game/scenes/../../core/basescene.h:
 src/game/scenes/../../core/scenemanager.h:
 src/game/scenes/../../core/game.h:

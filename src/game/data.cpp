@@ -84,15 +84,46 @@ void LoadGameData() {
         std::string name = cj["item_data"][i]["item_name"];
         ItemType type = cj["item_data"][i]["item_type"];
 
+        SpellID spell_id = SPELL_ID_NONE;
+
+        if(type == TYPE_WEAPON) {
+            std::string sp_id = cj["item_data"][i]["spell_id"];
+            spell_id = StrToSpellId(sp_id);
+        }
+
         ItemData new_item = {
             .id = id,
             .value = value,
             .type = type,
-            .item_name = name
+            .item_name = name,
+            .spell_id = spell_id
             
         };
+
         TraceLog(LOG_INFO, "Item Data Loaded  id: %i  %s", id, name.c_str());
         g_item_data[(int)id] = new_item;
+    }
+
+
+    for(int i = 0; i < cj["spell_data"].size(); i++) {
+        SpellData new_spell;
+
+        std::string sp_id = cj["spell_data"][i]["spell_id"];
+        SpellID spell_id = StrToSpellId(sp_id);
+
+        float lifetime = cj["spell_data"][i]["lifetime"];
+        float damage = cj["spell_data"][i]["damage"];
+        int speed = cj["spell_data"][i]["speed"];
+        int level = cj["spell_data"][i]["level"];
+
+        new_spell.lifetime = lifetime;
+        new_spell.damage = damage;
+        new_spell.level = level;
+        new_spell.spell_id = spell_id;
+        
+        g_spell_data[spell_id] = new_spell;
+        TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
+
     }
 
     for(int i = 0; i < cj["loot_tables"].size(); i++) {
@@ -379,6 +410,31 @@ void GenerateContainerItemList(int lti, std::vector<int> &list) {
     }
 }
 
+
+
+SpellID StrToSpellId(const std::string& s) {
+
+    static const std::unordered_map<std::string, SpellID> lookup_table = {
+        {"None",                        SpellID::SPELL_ID_NONE},
+        {"SPELL_ID_MAGICMISSLE_1",        SpellID::SPELL_ID_MAGICMISSLE_1},
+        {"SPELL_ID_MAGICMISSLE_2",        SpellID::SPELL_ID_MAGICMISSLE_2},
+        {"SPELL_ID_MAGICMISSLE_3",        SpellID::SPELL_ID_MAGICMISSLE_3},
+        {"SPELL_ID_FIREBALL_1",           SpellID::SPELL_ID_FIREBALL_1},
+        {"SPELL_ID_FIREBALL_2",           SpellID::SPELL_ID_FIREBALL_2},
+        {"SPELL_ID_FIREBALL_3",           SpellID::SPELL_ID_FIREBALL_3},
+        {"SPELL_ID_LIGHTNING_1",          SpellID::SPELL_ID_LIGHTNING_1},
+        {"SPELL_ID_LIGHTNING_2",          SpellID::SPELL_ID_LIGHTNING_2},
+        {"SPELL_ID_LIGHTNING_3",          SpellID::SPELL_ID_LIGHTNING_3},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "Spell ID not found ");
+    return SpellID::SPELL_ID_NONE;
+
+}
 
 
 ItemID StrToItemId(const std::string& s) {

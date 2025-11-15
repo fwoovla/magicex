@@ -12,8 +12,8 @@ SplashScreen::SplashScreen() {
 SCENE_ID SplashScreen::Update() {
 
     return_scene = TITLE_SCENE;
-    if(IsKeyPressed(KEY_SPACE)) {
-    }
+/*     if(IsKeyPressed(KEY_SPACE)) {
+    } */
     return return_scene;
 }
 

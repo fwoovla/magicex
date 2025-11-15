@@ -21,31 +21,36 @@
             "item_name": "Dagger",
             "item_id":"ITEM_ID_DAGGER",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_NONE"
         },
         {
             "item_name": "Sword",
             "item_id":"ITEM_ID_SWORD",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_NONE"
         },
         {
             "item_name": "Spear",
             "item_id":"ITEM_ID_SPEAR",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_NONE"
         },
         {
             "item_name": "Axe",
             "item_id":"ITEM_ID_AXE",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_NONE"
         },
         {
             "item_name": "Bow",
             "item_id":"ITEM_ID_BOW",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_NONE"
         },
         
 
@@ -54,55 +59,64 @@
             "item_name": "MAGICMISSLE_WAND 1",
             "item_id":"ITEM_ID_MAGICMISSLE_WAND_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_1"
         },
         {
             "item_name": "MAGICMISSLE_WAND 2",
             "item_id":"ITEM_ID_MAGICMISSLE_WAND_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_2"
         },
         {
             "item_name": "MAGICMISSLE_WAND 3",
             "item_id":"ITEM_ID_MAGICMISSLE_WAND_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_3"
         },
         {
             "item_name": "FIREBALL_WAND 1",
             "item_id":"ITEM_ID_FIREBALL_WAND_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_1"
         },
         {
             "item_name": "FIREBALL_WAND 2",
             "item_id":"ITEM_ID_FIREBALL_WAND_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_2"
         },
         {
             "item_name": "FIREBALL_WAND 3",
             "item_id":"ITEM_ID_FIREBALL_WAND_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_3"
         },
         {
             "item_name": "LIGHTNING_WAND 1",
             "item_id":"ITEM_ID_LIGHTNING_WAND_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_1"
         },
         {
             "item_name": "LIGHTNING_WAND 2",
             "item_id":"ITEM_ID_LIGHTNING_WAND_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_2"
         },
         {
             "item_name": "LIGHTNING_WAND 3",
             "item_id":"ITEM_ID_LIGHTNING_WAND_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_3"
         },
 
 
@@ -112,55 +126,64 @@
             "item_name": "MAGICMISSLE_STAFF 1",
             "item_id":"ITEM_ID_MAGICMISSLE_STAFF_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_1"
         },
         {
             "item_name": "MAGICMISSLE_STAFF 2",
             "item_id":"ITEM_ID_MAGICMISSLE_STAFF_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_2"
         },
         {
             "item_name": "MAGICMISSLE_STAFF 3",
             "item_id":"ITEM_ID_MAGICMISSLE_STAFF_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_MAGICMISSLE_3"
         },
         {
             "item_name": "FIREBALL_STAFF 1",
             "item_id":"ITEM_ID_FIREBALL_STAFF_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_1"
         },
         {
             "item_name": "FIREBALL_STAFF 2",
             "item_id":"ITEM_ID_FIREBALL_STAFF_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_2"
         },
         {
             "item_name": "FIREBALL_STAFF 3",
             "item_id":"ITEM_ID_FIREBALL_STAFF_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_FIREBALL_3"
         },
         {
             "item_name": "LIGHTNING_STAFF 1",
             "item_id":"ITEM_ID_LIGHTNING_STAFF_1",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_1"
         },
         {
             "item_name": "LIGHTNING_STAFF 2",
             "item_id":"ITEM_ID_LIGHTNING_STAFF_2",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_2"
         },
         {
             "item_name": "LIGHTNING_STAFF 3",
             "item_id":"ITEM_ID_LIGHTNING_STAFF_3",
             "value":0,
-            "item_type":0
+            "item_type":0,
+            "spell_id":"SPELL_ID_LIGHTNING_3"
         },
 
 
@@ -290,6 +313,74 @@
             "table_name":"scrolls",
             "table_data":[29,30,31, 23, 24]
         }
+    ],
+    "spell_data": [
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "level":2,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "level":3,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+
+        {
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "level":2,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "level":3,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "level":2,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "level":3,
+            "lifetime":1.0,
+            "speed": 100,
+            "damage":1
+        }
+
     ]
 }
 

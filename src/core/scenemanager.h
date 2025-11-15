@@ -4,7 +4,7 @@
 
 void InstanceLevelObjects(LevelData &level_data);
 
-
+extern std::unique_ptr<BaseScene> g_current_scene;
 
 class SceneManager{
     public:
@@ -24,7 +24,7 @@ class SceneManager{
     void OnTransitionEnded();
     void OnTransitionMidpoint();
 
-    std::unique_ptr<BaseScene> current_scene;
+    /* std::unique_ptr<BaseScene> current_scene; */
     //BaseScene *current_scene;
     PauseMenu *pause_menu;
 

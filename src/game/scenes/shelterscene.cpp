@@ -22,16 +22,6 @@ ShelterScene::ShelterScene() {
             t_area->area_entered.Connect( [this](){OnTransitionAreaEntered();} );
             t_area->area_activated.Connect( [this](){OnTransitionAreaActivated();} );
         }
-/*         if(level_data.game_areas[area_index]->identifier == "ContainerEntity") {
-            TraceLog(LOG_INFO, "container area identified");
-            ContainerArea* c_area = dynamic_cast<ContainerArea*>(level_data.game_areas[area_index]);
-            c_area->area_activated.Connect( [this](){OnContainerOpened();} );
-        }
-        if(level_data.game_areas[area_index]->identifier == "GroundContainerEntity") {
-            TraceLog(LOG_INFO, "ground container area identified");
-            ContainerArea* c_area = dynamic_cast<ContainerArea*>(level_data.game_areas[area_index]);
-            c_area->area_activated.Connect( [this](){OnContainerOpened();} );
-        } */
     }
 
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {

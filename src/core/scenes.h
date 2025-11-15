@@ -109,8 +109,6 @@ class ShelterScene : public  BaseScene{
 
         TileLayer *tile_layer;
 
-        LevelData level_data;
-
 };
 
 class SubScene : public  BaseScene{
@@ -138,8 +136,6 @@ class SubScene : public  BaseScene{
         TileLayer *tile_layer;
 
         Signal sub_scene_exited;
-
-        LevelData level_data;
 
 };
 
@@ -184,8 +180,6 @@ class GameScene : public  BaseScene{
         bool can_delete_sub;
 
         Vector2 saved_player_position;
-
-        LevelData level_data;;
 
 };
 

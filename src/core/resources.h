@@ -77,6 +77,24 @@ extern Texture2D g_item_sprites[MAX_SPRITES];
 extern Texture2D g_icon_sprites[MAX_SPRITES];
 
 
+enum SpellID {
+    SPELL_ID_NONE = -1,
+    SPELL_ID_MAGICMISSLE_1,
+    SPELL_ID_MAGICMISSLE_2,
+    SPELL_ID_MAGICMISSLE_3,
+    SPELL_ID_FIREBALL_1,
+    SPELL_ID_FIREBALL_2,
+    SPELL_ID_FIREBALL_3,
+    SPELL_ID_LIGHTNING_1,
+    SPELL_ID_LIGHTNING_2,
+    SPELL_ID_LIGHTNING_3,
+    SPELL_ID_MAX
+};
+
+extern Texture2D g_spell_sprites[MAX_SPRITES];
+
+
+
 enum ContainerSprites {
     SPRITE_CONTAINER_CHEST,
     SPRITE_CONTAINER_BARREL,
