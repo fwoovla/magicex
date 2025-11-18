@@ -9,14 +9,14 @@ class TileLayer {
     void Update();
     void Draw();
 
-    bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_result, int _range);
+    //bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int _range);
 
 
     int map_index;
 
-
-
 };
 
-bool CheckCollisionWithLevel(BaseEntity *checker, CollisionResult &collision_result, int _range);
+bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int _range);
+
+bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result);
 

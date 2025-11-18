@@ -136,11 +136,11 @@ void Game::StartGame() {
 
         EndDrawing();
 
-        if(g_game_settings.show_debug == true) {
+/*         if(g_game_settings.show_debug == true) {
             TraceLog(LOG_INFO, "dt %f", GetFrameTime());
             TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
             TraceLog(LOG_INFO, "fps %i\n", GetFPS());
-        }
+        } */
 
         if(WindowShouldClose()) {
             game_running = false;

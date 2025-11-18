@@ -13,6 +13,7 @@ ShelterScene::ShelterScene() {
 
     //ClearLevelData(level_data);
     LoadLevelData(level_data);
+    
     InstanceLevelObjects(level_data);
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {

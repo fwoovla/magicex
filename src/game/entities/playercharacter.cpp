@@ -44,7 +44,7 @@ void PlayerCharacter::Update() {
         CollisionResult result;
         result.collision_dir = {0,0};
 
-        if(CheckCollisionWithLevel(this, result, 2) == true) {
+        if(CollideAndSlide(this, result, 2) == true) {
             //TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
             if(result.collision_dir.x != 0) {
                 position.x = previous_position.x;
@@ -158,11 +158,11 @@ void PlayerCharacter::CheckInput() {
     if(g_input.mouse_left_down and can_shoot) {
         shot_timer.Start(g_weapon_data[g_player_data.primary[0]].cooldown, true);
         can_shoot = false;
-        TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
+        //TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
         //int value = m.at("banana");
         int key = g_player_data.primary[0];
         int spell_id = g_weapon_data[g_player_data.primary[0]].spell_id;
-        TraceLog(LOG_INFO, "using spell %i",  spell_id );
+        //TraceLog(LOG_INFO, "using spell %i",  spell_id );
         if(spell_id != -1) {
             SpawnSpell(g_spell_data[spell_id] , *g_current_scene, {.position = position,.rotation = weapon_sprite.roataion,.shooter_id = 0});
         }

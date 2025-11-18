@@ -46,11 +46,10 @@ void MagicMissle::Update() {
     position = Vector2Add(position, velocity * GetFrameTime());
 
     CollisionResult result;
-     if(CheckCollisionWithLevel(this, result, 0)){ //performance hit!!!!!!!!
+
+    if(CollideWithTile(this, result)) {
         should_delete = true;
     }
-    //position = {collision_rect.x +centered_offset.x, collision_rect.y +centered_offset.y};
-    //TraceLog(LOG_INFO, "position  %f  %f   %f", position.x, position.y, rotation);
     
     sprite.position = position;
 

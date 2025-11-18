@@ -344,6 +344,9 @@ void ClearLevelData(LevelData &level_data) {
 void LoadLevelData(LevelData &level_data) {
 
 
+    PrecalculateTileCollisionData(level_data);
+
+
     int map_index = g_game_data.current_map_index;
     
     if(g_game_data.is_in_sub_map) {
@@ -426,6 +429,47 @@ void LoadLevelData(LevelData &level_data) {
             }
         }
     }
+}
+
+
+
+void PrecalculateTileCollisionData(LevelData &level_data) {
+    TraceLog(LOG_INFO, " PRECALCULATING TILE COLLISION DATA ");
+
+    level_data.precalc.map_index = g_game_data.current_map_index;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data.precalc.map_index = g_game_data.sub_map_index;
+        TraceLog(LOG_INFO, "            map index sub map -- %i",level_data.precalc.map_index  );
+    }
+    TraceLog(LOG_INFO, "            map index -- %i",level_data.precalc.map_index  );
+
+    LDTKLevel this_level = g_ldtk_maps.levels[level_data.precalc.map_index];
+    LDTKLayerInstance *col_layer = nullptr;
+
+    for (int l = 0; l < this_level.layer_instances.size(); l++) {
+        if(this_level.layer_instances[l].type == "IntGrid") {
+            level_data.precalc.collision_layer_index = l;
+            TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+            col_layer = &this_level.layer_instances[l];
+        }
+    }
+
+    if(col_layer == nullptr) {
+        TraceLog(LOG_INFO, "no collision layer");
+        //level_data.tile_precalc.collision_layer_index = -1;
+    }
+
+    level_data.precalc.tile_size = col_layer->grid_size;
+    TraceLog(LOG_INFO, "            tile size -- %i",level_data.precalc.tile_size  );
+
+    level_data.precalc.inv_tile_size = 1/(float)level_data.precalc.tile_size;
+    TraceLog(LOG_INFO, "            inv tilesize -- %i",level_data.precalc.collision_layer_index  );
+
+    level_data.precalc.map_width = col_layer->c_wid;
+    TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+
+    TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
 }
 
 

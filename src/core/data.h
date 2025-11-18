@@ -110,9 +110,19 @@ struct ContainerData {
     std::vector<int> item_list;
 };
 
+
+struct LevelPrecalcData {
+    int collision_layer_index;
+    int map_index;
+    int map_width;
+    int tile_size;
+    float inv_tile_size;
+};
+
 struct LevelData {
     bool is_shelter;
     Vector2 spawn_position;
+    LevelPrecalcData precalc;
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
@@ -132,6 +142,9 @@ void LoadGame();
 void ClearLevelData(LevelData &level_data);
 
 void LoadLevelData(LevelData &level_data);
+
+
+void PrecalculateTileCollisionData(LevelData &level_data);
 
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);

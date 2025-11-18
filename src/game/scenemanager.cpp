@@ -46,11 +46,12 @@ void SceneManager::UpdateScene()
     }
 
     if(g_game_settings.show_debug) {
-        debug_label.text = TextFormat( "player pos ff %0.2f %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f", 
+        debug_label.text = TextFormat( "player pos ff %0.2f %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i", 
         g_current_player->position.x, g_current_player->position.y,
         (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
         (int)g_camera.target.x, (int)g_camera.target.y,
-        g_camera.target.x, g_camera.target.y
+        g_camera.target.x, g_camera.target.y,
+        GetFPS()
     );
     }
 
@@ -191,6 +192,8 @@ void SceneManager::OnTransitionEnded() {
 
 
 void InstanceLevelObjects(LevelData &level_data) {
+
+
     TraceLog(LOG_INFO, "instacing game objects");
 
 //transition areas
@@ -258,3 +261,5 @@ void InstanceLevelObjects(LevelData &level_data) {
     }
 
 }
+
+

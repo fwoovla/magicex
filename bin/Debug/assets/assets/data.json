@@ -441,7 +441,7 @@
         {
             "weapon_id": "ITEM_ID_LIGHTNING_WAND_3",
             "weapon_name": "LIGHTNING WAND 3",
-            "cooldown": 0.1,
+            "cooldown": 0.05,
             "spell_id":"SPELL_ID_LIGHTNING_3"
         },
 
@@ -450,7 +450,7 @@
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_1",
             "weapon_name": "MAGICMISSLE STAFF 1",
-            "cooldown": 0.4,
+            "cooldown": 0.01,
             "spell_id":"SPELL_ID_MAGICMISSLE_1"
         },
         {
@@ -500,7 +500,7 @@
         {
             "weapon_id": "ITEM_ID_LIGHTNING_STAFF_3",
             "weapon_name": "LIGHTNING STAFF 3",
-            "cooldown": 0.4,
+            "cooldown": 0.01,
             "spell_id":"SPELL_ID_LIGHTNING_3"
         }
 

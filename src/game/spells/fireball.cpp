@@ -46,10 +46,9 @@ void FireBall::Update() {
     position = Vector2Add(position, velocity * GetFrameTime());
 
     CollisionResult result;
-    if(CheckCollisionWithLevel(this, result, 2)) {
+    if(CollideWithTile(this, result)) {
         should_delete = true;
     }
-    //TraceLog(LOG_INFO, "position  %f  %f   %f", position.x, position.y, rotation);
     
     sprite.position = position;
 
