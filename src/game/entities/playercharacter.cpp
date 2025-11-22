@@ -17,7 +17,14 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     rotation = 0.0f;
     velocity = {0,0};
     LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
-    LoadSpriteCentered(weapon_sprite, g_item_sprites[g_player_data.primary[0]], position);
+
+    int _id = ITEM_ID_ERROR;
+    auto item_it = g_item_instances.find(g_player_data.primary[0]);
+    if(item_it != g_item_instances.end()) {
+        _id = item_it->second.item_id;
+    }
+    
+    LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
@@ -141,7 +148,7 @@ void PlayerCharacter::CheckInput() {
 
     Vector2 pp = GetWorldToScreen2D( position, g_camera);
     pp = {pp.x * g_scale, pp.y*g_scale};
-    weapon_sprite.roataion = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+    weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
 
     if(g_input.key_switch_weapon and can_switch == true) {
         TraceLog(LOG_INFO, "switching primary weapon");
@@ -156,15 +163,27 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(g_input.mouse_left_down and can_shoot) {
-        shot_timer.Start(g_weapon_data[g_player_data.primary[0]].cooldown, true);
-        can_shoot = false;
-        //TraceLog(LOG_INFO, "using primary weapon %i", g_player_data.primary[0]);
-        //int value = m.at("banana");
-        int key = g_player_data.primary[0];
-        int spell_id = g_weapon_data[g_player_data.primary[0]].spell_id;
-        //TraceLog(LOG_INFO, "using spell %i",  spell_id );
-        if(spell_id != -1) {
-            SpawnSpell(g_spell_data[spell_id] , *g_current_scene, {.position = position,.rotation = weapon_sprite.roataion,.shooter_id = 0});
+
+        int item_id = -1;
+        auto item_it = g_item_instances.find(g_player_data.primary[0]);
+        if(item_it != g_item_instances.end()) {
+            item_id = item_it->second.item_id;
+        }
+
+        if(item_id == -1) {
+            return;
+        }
+
+        auto weapon_it = g_weapon_data.find(item_id);
+        if(weapon_it != g_weapon_data.end()) {
+            shot_timer.Start(weapon_it->second.cooldown, true);
+            can_shoot = false;
+
+            auto spell_it = g_spell_data.find(weapon_it->second.spell_id);
+            if(spell_it != g_spell_data.end()) {
+
+                SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
+            }
         }
         
     }
@@ -181,8 +200,22 @@ void PlayerCharacter::Equip(int item_id) {
         if(g_player_data.primary[0] == item_id) {
 
             //current_weapon_data = g_weapon_data[g_player_data.primary[0]];
-            TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
-            LoadSpriteCentered(weapon_sprite, g_item_sprites[item_id], position);
+            if(item_id != -1) {
+                TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
+
+                int _id = ITEM_ID_ERROR;
+                auto item_it = g_item_instances.find(item_id);
+                if(item_it != g_item_instances.end()) {
+                    _id = item_it->second.item_id;
+                }
+                
+                LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
+            }
+            else {
+                TraceLog(LOG_INFO, "nothing to equip %i", item_id);
+                Texture2D t;
+                LoadSpriteCentered(weapon_sprite, t, position);
+            }
         }
     }
 }

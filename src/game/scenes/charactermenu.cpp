@@ -220,6 +220,7 @@ void CharacterMenu::Update() {
 }
 
 void CharacterMenu::Open() {
+     TraceLog(LOG_INFO, "opening character menu with no container");
     inventory_grid->SetItems(&g_player_data.inventory);
     hotbar_grid->SetItems(&g_player_data.hotbar);
 
@@ -238,26 +239,9 @@ void CharacterMenu::Open() {
     ground_grid->SetItems(&blank_list);
 }
 
-void CharacterMenu::OpenWith(std::vector<int> &list) {
-    //g_item_list = list;
-    inventory_grid->SetItems(&g_player_data.inventory);
-    hotbar_grid->SetItems(&g_player_data.hotbar);
-
-    primary_grid->SetItems(&g_player_data.primary);
-    secondary_grid->SetItems(&g_player_data.secondary);
-    head_grid->SetItems(&g_player_data.head);
-    body_grid->SetItems(&g_player_data.body);
-    legs_grid->SetItems(&g_player_data.legs);
-    feet_grid->SetItems(&g_player_data.feet);
-    hands_grid->SetItems(&g_player_data.hands);
-
-    use_ground = false;
-    ground_grid->SetItems(&list);
-}
-
 
 void CharacterMenu::OpenWith(BaseContainerEntity *container) {
-    
+    TraceLog(LOG_INFO, "OPENING CONTAINER");
     inventory_grid->SetItems(&g_player_data.inventory);
     hotbar_grid->SetItems(&g_player_data.hotbar);
 

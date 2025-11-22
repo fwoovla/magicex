@@ -10,6 +10,7 @@ class BaseContainerEntity : public SpriteEntity {
     virtual void OnContainerOpened() = 0;
     virtual bool IsEmpty() = 0;
 
+    int instance_id;
     int loot_table_id;
     int sprite_id;
     bool is_open;
@@ -17,7 +18,6 @@ class BaseContainerEntity : public SpriteEntity {
     ContainerArea c_area;
 
     Signal open_container;
-
 
 };
 
@@ -29,10 +29,8 @@ class PermContainerEntity : public BaseContainerEntity {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
-    bool IsEmpty() override;
     void OnContainerOpened() override;
-
-
+    bool IsEmpty() override;
 };
 
 class GroundContainerEntity : public BaseContainerEntity {
@@ -44,8 +42,17 @@ class GroundContainerEntity : public BaseContainerEntity {
     void DrawUI() override;
     void OnContainerOpened() override;
     bool IsEmpty() override;
+
     void OnListChanged();
-    void OnListEmpty();
+};
 
-
+class MushroomEntity : public BaseContainerEntity {
+    public:
+    MushroomEntity(Vector2 _position);
+    ~MushroomEntity() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    void OnContainerOpened() override;
+    bool IsEmpty() override;
 };

@@ -7,7 +7,6 @@ TitleScene::TitleScene() {
     return_scene = NO_SCENE;
 
     LoadSprite(bg_sprite_1, g_ldtk_tilesheets[3].texture, {0,0});
-    //LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_SHELTER], {0,0});
 
     auto sheet = g_ldtk_tilesheets.find(3);
     if( sheet != g_ldtk_tilesheets.end() ) {
@@ -22,6 +21,8 @@ TitleScene::TitleScene() {
     ui_layer->settings_pressed.Connect( [&](){OnSettingsPressed();} );
     ui_layer->quit_pressed.Connect( [&](){OnQuitPressed();} );
     ui_layer->continue_pressed.Connect( [&](){OnContinuePressed();} );
+
+    HideCursor();
 }
 
 
@@ -43,14 +44,12 @@ void TitleScene::Draw() {
 
 
 void TitleScene::DrawScene() {
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
     DrawSprite(bg_sprite_1);
 
 }
 
 
 void TitleScene::DrawUI() {
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
     ui_layer->Draw();
 
 }
@@ -64,8 +63,6 @@ TitleScene::~TitleScene() {
 void TitleScene::OnPlayPressed() {
 
     return_scene = STAGING_SCENE;
-    //g_game_data.current_map_index = 0;
-
 }
 
 void TitleScene::OnSettingsPressed() {
@@ -79,8 +76,6 @@ void TitleScene::OnQuitPressed() {
 void TitleScene::OnContinuePressed() {
     LoadGame();
     g_current_player = new PlayerCharacter({0,0});
-    //DL_Add(active_entity_list, g_current_player );
-    //g_game_data.is_new_player = false;
     return_scene = SHELTER_SCENE;
     g_game_data.next_map_index = g_game_data.shelter_map_index;
     TraceLog(LOG_INFO, "SHELTER SCENE = %i", g_game_data.shelter_map_index);

@@ -12,10 +12,22 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     c_area.area_activated.Connect( [&](){OnContainerOpened();} );
     
     should_delete = false;
+    is_persistant = false;
+    instance_id = GetRandomValue(1000, 1000000);
 }
 
 PermContainerEntity::~PermContainerEntity() {
-    TraceLog(LOG_INFO, "CONTAINER DESTROYED");    
+
+    if(!is_persistant) {
+        for(int i = 0; i < c_area.item_list.size(); i++) {
+            g_item_instances.erase(c_area.item_list[i]);
+            TraceLog(LOG_INFO, "pc instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
+        }
+    }
+
+    TraceLog(LOG_INFO, "CONTAINER DESTROYED");
+
+
 }
 
 void PermContainerEntity::Update() {
@@ -61,11 +73,21 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
 
     c_area.area_activated.Connect( [&](){OnContainerOpened();} );
     c_area.list_changed.Connect( [&](){OnListChanged();} );
-    c_area.list_empty.Connect( [&](){OnListEmpty();} );
+
     should_delete = false;
+    is_persistant = false; //set this in scenemanager 
+    instance_id = GetRandomValue(1000, 1000000);
 }
 
 GroundContainerEntity::~GroundContainerEntity() {
+
+    if(!is_persistant) {
+        for(int i = 0; i < c_area.item_list.size(); i++) {
+            g_item_instances.erase(c_area.item_list[i]);
+            TraceLog(LOG_INFO, "gc instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
+        }
+    }
+
     TraceLog(LOG_INFO, "GroundContainerEntity DESTROYED");
 }
 
@@ -102,10 +124,6 @@ void GroundContainerEntity::OnListChanged() {
         }
     }
     sprite.texture = g_item_sprites[index]; */
-}
-
-void GroundContainerEntity::OnListEmpty() {
-    should_delete = true;
 }
 
 

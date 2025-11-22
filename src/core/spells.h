@@ -8,6 +8,8 @@ struct SpellData {
     int shooter_id;
     float damage;
     float lifetime;
+    float radius;
+    float speed;
 };
 
 extern std::unordered_map<int, SpellData> g_spell_data;
@@ -28,17 +30,22 @@ class BaseSpell : public AnimatedSpriteEntity {
     virtual void DrawUI() = 0;
     virtual void OnLifetimeTimeout() = 0;
 
+    int shooter_id;
+    float target_dist;
+    float target_rotation;
+    float dist_scale;
+
     SpellData data;
     Timer lifetime_timer;
     Vector2 velocity;
-    int shooter_id;
+    Vector2 target_position;
 
 };
 
 class MagicMissle : public BaseSpell {
     public:
 
-    MagicMissle(Vector2 _position, float _rotation, int _shooter_id, SpellData _data);
+    MagicMissle(Vector2 _position, int _shooter_id, SpellData _data);
     ~MagicMissle() override;
     void Update() override;
     void Draw() override;
@@ -50,7 +57,7 @@ class MagicMissle : public BaseSpell {
 class FireBall : public BaseSpell {
     public:
 
-    FireBall(Vector2 _position, float _rotation, int _shooter_id, SpellData _data);
+    FireBall(Vector2 _position, int _shooter_id, SpellData _data);
     ~FireBall() override;
     void Update() override;
     void Draw() override;
@@ -62,7 +69,7 @@ class FireBall : public BaseSpell {
 class Lightning : public BaseSpell {
     public:
 
-    Lightning(Vector2 _position, float _rotation, int _shooter_id, SpellData _data);
+    Lightning(Vector2 _position, int _shooter_id, SpellData _data);
     ~Lightning() override;
     void Update() override;
     void Draw() override;

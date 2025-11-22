@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 52,
+	"nextUid": 54,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -655,6 +655,79 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "MushroomZone",
+			"uid": 52,
+			"tags": [],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"minWidth": 16,
+			"maxWidth": null,
+			"minHeight": 16,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#EFC19A",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "max_mushrooms",
+					"doc": null,
+					"__type": "Int",
+					"uid": 53,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Int", "params": [0] },
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -788,24 +861,7 @@
 					"seed": 2290016,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "GroundContainerEntity",
-							"__grid": [31,27],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#EAD4AA",
-							"iid": "6a74d820-ac70-11f0-bde2-d38ce73ac6c0",
-							"width": 8,
-							"height": 8,
-							"defUid": 50,
-							"px": [62,54],
-							"fieldInstances": [{ "__identifier": "item_list", "__type": "Array<Int>", "__value": [3,7,9], "__tile": null, "defUid": 51, "realEditorValues": [ { "id": "V_Int", "params": [3] }, { "id": "V_Int", "params": [7] }, { "id": "V_Int", "params": [9] } ] }],
-							"__worldX": 62,
-							"__worldY": 54
-						}
-					]
+					"entityInstances": []
 				},
 				{
 					"__identifier": "Entities",
@@ -868,63 +924,6 @@
 						},
 						{
 							"__identifier": "PermContainerEntity",
-							"__grid": [7,1],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "c9c00d60-ac70-11f0-a97d-af1f270761dc",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [112,16],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }
-							],
-							"__worldX": 112,
-							"__worldY": 16
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [5,1],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "cd4bcc30-ac70-11f0-a97d-2350ede5bf2b",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [80,16],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
-							],
-							"__worldX": 80,
-							"__worldY": 16
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [3,1],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "ceaae700-ac70-11f0-a97d-bf640f58ae8b",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [48,16],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 2, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
-							],
-							"__worldX": 48,
-							"__worldY": 16
-						},
-						{
-							"__identifier": "PermContainerEntity",
 							"__grid": [7,6],
 							"__pivot": [0,0],
 							"__tags": [],
@@ -937,47 +936,9 @@
 							"px": [112,96],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 3, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 6, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [6] }] }
 							],
 							"__worldX": 112,
-							"__worldY": 96
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [5,6],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "d5e3f660-ac70-11f0-a97d-9169c59964e9",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [80,96],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 4, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [4] }] }
-							],
-							"__worldX": 80,
-							"__worldY": 96
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [3,6],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "dc8e0c30-ac70-11f0-a97d-853b0e768cd5",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [48,96],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 5, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
-							],
-							"__worldX": 48,
 							"__worldY": 96
 						}
 					]
@@ -1254,25 +1215,6 @@
 					"entityInstances": [
 						{
 							"__identifier": "PermContainerEntity",
-							"__grid": [94,192],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "f425ddb0-ac70-11f0-8933-1d65a62ceb5e",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [188,384],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }
-							],
-							"__worldX": 348,
-							"__worldY": 384
-						},
-						{
-							"__identifier": "PermContainerEntity",
 							"__grid": [102,174],
 							"__pivot": [0,0],
 							"__tags": [],
@@ -1285,7 +1227,7 @@
 							"px": [204,348],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [0] }] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 6, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [6] }] }
 							],
 							"__worldX": 364,
 							"__worldY": 348

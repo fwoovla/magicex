@@ -172,7 +172,7 @@ void DL_Update(std::vector<BaseEntity *> &_draw_list) {
         if(_draw_list[i] != nullptr){
             _draw_list[i]->Update();
             if(_draw_list[i]->should_delete) {
-                TraceLog(LOG_INFO, "DELETING ENTITY");
+                //TraceLog(LOG_INFO, "DELETING ENTITY");
                 delete _draw_list[i];
                 _draw_list.erase(_draw_list.begin() + i);
                 //_draw_list[i] = nullptr;
@@ -186,7 +186,7 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
 
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
-            TraceLog(LOG_INFO, "DELETING ENTITY");
+            //TraceLog(LOG_INFO, "DELETING ENTITY");
              delete _draw_list[i];
             //_draw_list.erase(_draw_list.begin() + i);
                 //_draw_list[i] = nullptr;

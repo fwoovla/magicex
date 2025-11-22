@@ -10,7 +10,7 @@ struct Sprite {
     Rectangle source;
     Rectangle dest;
     Vector2 scale;
-    float roataion;
+    float rotation;
     Color modulate;
     
 };
@@ -44,7 +44,7 @@ inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _pos
         _sprite.size.x,
         _sprite.size.y  
     };
-    _sprite.roataion = 0.0;
+    _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
         
 }
@@ -67,7 +67,7 @@ inline void LoadSpriteCentered(AnimatedSprite &_sprite, Texture2D _texture, Vect
         _sprite.size.x,
         _sprite.size.y  
     };
-    _sprite.roataion = 0.0;
+    _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
 
     _sprite.max_frames = _max_frames;
@@ -96,7 +96,7 @@ inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
         _sprite.size.x,
         _sprite.size.y  
     };
-    _sprite.roataion = 0.0;
+    _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
 }
 
@@ -117,7 +117,7 @@ inline void LoadSprite(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _pos
         _sprite.size.x,
         _sprite.size.y  
     };
-    _sprite.roataion = 0.0;
+    _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
 
     _sprite.max_frames = _max_frames;
@@ -148,7 +148,7 @@ inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
 inline void DrawSprite(Sprite &_sprite) {
     _sprite.dest.x = _sprite.position.x;
     _sprite.dest.y = _sprite.position.y;
-    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, _sprite.modulate );       
+    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.rotation, _sprite.modulate );       
 }
 
 inline void DrawSprite(AnimatedSprite &_sprite) {
@@ -167,7 +167,7 @@ inline void DrawSprite(AnimatedSprite &_sprite) {
         _sprite.source.y = _sprite.y_index * _sprite.size.y;
     }
     
-    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.roataion, _sprite.modulate );       
+    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.rotation, _sprite.modulate );       
 }
 
 inline void SetAmination(AnimatedSprite &_sprite, int _y_index) {

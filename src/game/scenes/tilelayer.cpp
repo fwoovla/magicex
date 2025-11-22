@@ -135,6 +135,7 @@ bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result) {
 
     if(value == 1) {
         //if(CheckCollisionCircleRec( {1,1}, 0.1, {10,10,1,1})) {
+        TraceLog(LOG_INFO, "radius %f", checker->collision_radius);
         if(CheckCollisionCircleRec( checker_pos, checker->collision_radius, { (float)cell_pos_x_i * tile_size, (float)cell_pos_y_i * tile_size, (float)tile_size, (float)tile_size } )) {
             collided =  true;
         }

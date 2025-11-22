@@ -69,7 +69,7 @@ enum ItemID {
     ITEM_ID_MEAT,
 
     ITEM_ID_RING,
-    
+    ITEM_ID_ERROR,
     ITEM_ID_MAX
 };
 

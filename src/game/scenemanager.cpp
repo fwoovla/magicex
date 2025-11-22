@@ -162,7 +162,7 @@ void SceneManager::OnPausePressed() {
 }
 
 void SceneManager::OnSavePressed() {
-    SaveGame();
+    SaveGame(g_current_scene->level_data);
     TraceLog(LOG_INFO, "GAME SAVED ");
 }
 
@@ -179,14 +179,14 @@ void SceneManager::OnBackToMenuPressed() {
 
 
 void SceneManager::OnTransitionMidpoint() {
-    TraceLog(LOG_INFO, "trans midpoint ");
+    //TraceLog(LOG_INFO, "trans midpoint ");
     ChangeSceneTo(next_scene_id);
 }
 
 void SceneManager::OnTransitionEnded() {
     delete fade_transition;
     is_transitioning = false;
-    TraceLog(LOG_INFO, "trans destroy ");
+    //TraceLog(LOG_INFO, "trans destroy ");
 }
 
 
@@ -195,6 +195,12 @@ void InstanceLevelObjects(LevelData &level_data) {
 
 
     TraceLog(LOG_INFO, "instacing game objects");
+
+    TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
+/*     TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
+    for (const auto& [key, value] : g_item_instances) {
+        TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
+    } */
 
 //transition areas
     for(int t_index = 0; t_index < level_data.level_transitions.size(); t_index++) {
@@ -216,19 +222,16 @@ void InstanceLevelObjects(LevelData &level_data) {
                 new_area->payload_i = level_index;
             }
         }
-        TraceLog(LOG_INFO, "instacing transition %s", new_area->identifier.c_str());
+        //TraceLog(LOG_INFO, "instacing transition %s", new_area->identifier.c_str());
         level_data.game_areas.push_back(new_area);
     }
 
 //containers
     for(int c_index = 0; c_index < level_data.container_data.size(); c_index++) {
-
-        
-
         Vector2 pos = level_data.container_data[c_index].position_i;        
         
         if(level_data.container_data[c_index].identifier == "PermContainerEntity") {
-            TraceLog(LOG_INFO, "instacing container");
+            TraceLog(LOG_INFO, "instacing perm container");
             int spi = level_data.container_data[c_index].sprite_id;
             int lti = level_data.container_data[c_index].loot_table_id;
             PermContainerEntity *new_container = new PermContainerEntity(pos, spi, lti);
@@ -239,12 +242,14 @@ void InstanceLevelObjects(LevelData &level_data) {
             new_container->c_area.position = pos;
             new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
             new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
-            GenerateContainerItemList(new_container->loot_table_id, new_container->c_area.item_list);
+            //GenerateContainerItemList(lti, new_container->c_area.item_list);
+            InstanceItemList(g_loot_tables[new_container->loot_table_id], new_container->c_area.item_list);
             new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
         }
 
 
         if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
+            TraceLog(LOG_INFO, "instacing ground container");
             int spi = g_item_data[ level_data.container_data[c_index].item_list[0]].id;
             GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
             DL_Add(level_data.entity_list, new_container);
@@ -252,14 +257,54 @@ void InstanceLevelObjects(LevelData &level_data) {
             new_container->identifier = level_data.container_data[c_index].identifier;
             new_container->c_area.identifier = level_data.container_data[c_index].identifier;
             new_container->c_area.position = pos;
-            new_container->c_area.item_list = level_data.container_data[c_index].item_list;
+            InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list);
+            //new_container->c_area.item_list = level_data.container_data[c_index].item_list;
             new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
             
-            TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
-            //level_data.game_areas.push_back(&new_container->c_area);
+            //TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
         }
     }
 
+//mushroom zones
+    for(int zone = 0; zone < level_data.mushroom_zones.size(); zone++) {
+        Vector2 zone_pos = level_data.mushroom_zones[zone].position_i;
+
+        int num_mushrooms = GetRandomValue(1, level_data.mushroom_zones[zone].max_mushrooms);
+
+        int min_x = level_data.mushroom_zones[zone].position_i.x;
+        int min_y = level_data.mushroom_zones[zone].position_i.y;
+        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x;
+        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y;
+
+
+        for(int i = 0; i < num_mushrooms; i++) {
+            int x = GetRandomValue(min_x, max_x);
+            int y = GetRandomValue(min_y, max_y);
+            Vector2 pos = {(float)x,(float)y};
+
+            MushroomEntity *new_mushroom = new MushroomEntity(pos);
+
+            new_mushroom->identifier = "Mushroom";
+            new_mushroom->c_area.identifier = "Mushroom";
+            new_mushroom->c_area.position = Vector2Add(pos, {4,4});
+            new_mushroom->c_area.size = {8,8};
+
+            std::vector<int> temp_list;
+            temp_list.push_back(ITEM_ID_MUSHROOM);
+            InstanceItemList(temp_list ,new_mushroom->c_area.item_list);
+
+            DL_Add(level_data.entity_list, new_mushroom);
+            TraceLog(LOG_INFO, "instacing mushroom");
+
+        }
+
+    }
+
+    TraceLog(LOG_INFO, "|||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
+/*     TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
+    for (const auto& [key, value] : g_item_instances) {
+        TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
+    } */
 }
 
 

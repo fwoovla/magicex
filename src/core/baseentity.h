@@ -24,12 +24,13 @@ class BaseEntity  {
     Vector2 centered_offset;
     float collision_radius;
     std::string identifier;
+
+    bool is_persistant;
 };
 
 class SpriteEntity : public BaseEntity {
     public:
     Sprite sprite;
-
 
     virtual ~SpriteEntity() = default;
     virtual void Update() = 0;

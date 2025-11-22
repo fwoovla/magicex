@@ -6,15 +6,14 @@
 
 
 ShelterScene::ShelterScene() {
-    SaveGame();
+
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
-
-    //ClearLevelData(level_data);
-    LoadLevelData(level_data);
     
+    LoadLevelData(level_data);
     InstanceLevelObjects(level_data);
+    
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
         if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
@@ -24,11 +23,15 @@ ShelterScene::ShelterScene() {
             t_area->area_activated.Connect( [this](){OnTransitionAreaActivated();} );
         }
     }
-
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or level_data.entity_list[entity_index]->identifier == "GroundContainerEntity") {
-             TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
+        std::string identifier = level_data.entity_list[entity_index]->identifier;
+        if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity" or identifier == "Mushroom") {
+            TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
+
+            if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity") {
+                p_entity->is_persistant = true;
+            }
             if(p_entity) {
                 TraceLog(LOG_INFO, "container connected");
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
@@ -43,7 +46,7 @@ ShelterScene::ShelterScene() {
     tile_layer = new TileLayer();
 
     character_menu = new CharacterMenu();
-    character_menu->Open();
+    //character_menu->Open();
     
     map_menu = new MapMenu();
     map_menu->map_selected.Connect( [this](){OnMapSelected();} );
@@ -59,7 +62,8 @@ ShelterScene::ShelterScene() {
     g_camera.zoom = 2.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 
-    HideCursor();
+    SaveGame(level_data);
+
 }
 
 
@@ -94,7 +98,14 @@ SCENE_ID ShelterScene::Update() {
                     Vector2 pos = g_current_player->position;
                     for(int item = 0; item < character_menu->blank_list.size(); item++) {
                         if(character_menu->blank_list[item] != -1) {
-                            spi = g_item_data[ character_menu->blank_list[item]].id;
+
+                            //dfgg
+
+                            auto item_it = g_item_instances.find(character_menu->blank_list[item]);
+                            if(item_it != g_item_instances.end()) {
+                                spi = item_it->second.item_id;
+                            }
+
                             break;
                         }
                     }
@@ -114,7 +125,7 @@ SCENE_ID ShelterScene::Update() {
 
                     //if ground container
                     if(g_game_data.return_container != nullptr) {
-                        if(g_game_data.return_container->identifier == "GroundContainerEntity") {
+                        if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {
                             //if empty
                             if(g_game_data.return_container->IsEmpty()) {
                                 g_game_data.return_container->should_delete = true;
@@ -170,6 +181,7 @@ void ShelterScene::DrawUI() {
 
 
 ShelterScene::~ShelterScene() {
+    //SaveGame();
     ClearLevelData(level_data);
     delete ui_layer;
     delete character_menu;
@@ -201,8 +213,11 @@ void ShelterScene::OnTransitionAreaEntered() {
 }
 
 void ShelterScene::OnTransitionAreaActivated() {
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
-    return_scene = GAME_SCENE;
+    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    if(return_scene != GAME_SCENE) {
+        SaveGame(level_data);
+        return_scene = GAME_SCENE;
+    }
 }
 
 
@@ -231,7 +246,7 @@ void ShelterScene::OnContainerOpened() {
     if(character_menu_visible) {
         return;
     }
-    TraceLog(LOG_INFO, "OPENNING CONTAINER");
+    //TraceLog(LOG_INFO, "OPENNING CONTAINER");
 
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;

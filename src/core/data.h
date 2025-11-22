@@ -52,13 +52,30 @@ struct ItemData {
     SpellID spell_id;
 };
 
+
+struct ItemInstanceData {
+    ItemID item_id;
+    int instance_id;
+    int value;
+    ItemType type;
+    std::string item_name;
+    SpellID spell_id;
+    int clip_size;
+    int ammo_count;
+    float cooldown;
+};
+
 extern std::unordered_map<int, ItemData> g_item_data;
+
+extern std::unordered_map<int, ItemInstanceData> g_item_instances;
 
 struct WeaponData {
     std::string weapon_name;
     ItemID weapon_id;
     float cooldown;
     SpellID spell_id;
+    int clip_size;
+    int ammo_count;
 };
 
 extern std::unordered_map<int, WeaponData> g_weapon_data;
@@ -90,6 +107,12 @@ extern PlayerData g_player_data;
 
 extern PlayerData g_save_data;
 
+
+struct MushroomZoneData {
+    int max_mushrooms;
+    Vector2 position_i;
+    Vector2 size;
+};
 
 struct LevelTransitionData {
     std::string identifier;
@@ -123,18 +146,23 @@ struct LevelData {
     bool is_shelter;
     Vector2 spawn_position;
     LevelPrecalcData precalc;
+
+    std::vector<MushroomZoneData> mushroom_zones;
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
+
+
     std::vector<BaseEntity*> spell_list;
+
 };
 
-extern std::vector<std::vector<ItemID>> g_loot_tables;
+extern std::vector<std::vector<int>> g_loot_tables;
 
 void LoadGameData();
 
-void SaveGame();
+void SaveGame(LevelData &level_data);
 
 void LoadGame();
 
@@ -146,14 +174,14 @@ void LoadLevelData(LevelData &level_data);
 
 void PrecalculateTileCollisionData(LevelData &level_data);
 
+void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list);
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);
 
 
 SpellID StrToSpellId(const std::string& s);
 
-
-//SpellID StrToWeaponID(const std::string& s);
-
-
 ItemID StrToItemId(const std::string& s);
+
+
+void from_json(const json &j, ItemInstanceData &i);

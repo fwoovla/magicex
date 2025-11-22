@@ -1,33 +1,36 @@
 #include "../../core/gamedefs.h"
 
 
-FireBall::FireBall(Vector2 _position, float _rotation, int _shooter_id, SpellData _data) {
+FireBall::FireBall(Vector2 _position, int _shooter_id, SpellData _data) {
 
     data = _data;
     should_delete = false;
 
-    lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
-    lifetime_timer.Start(data.lifetime, true);
-
     position = _position;
-    rotation = _rotation;
     centered_offset = {0,0};
-    collision_radius = 5;
+    collision_radius = data.radius;
     collided = false;
-
-
-    velocity = {100, 0};
-    velocity = Vector2Rotate(velocity, rotation * DEG2RAD);
-
-    collided = false;
-
-    shooter_id = _shooter_id;
-    
-    centered_offset = {0, 0};
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
-
+             
     LoadSpriteCentered(sprite, g_spell_sprites[SPELL_ID_FIREBALL_1 + (data.level - 1)], position);
-    sprite.roataion = rotation;
+    sprite.rotation = target_rotation;
+    
+    shooter_id = _shooter_id;
+
+
+
+    target_position = g_input.world_mouse_position;
+    
+    target_rotation = GetAngleFromTo(position, target_position);
+    rotation = (target_rotation * RAD2DEG);
+    velocity = Vector2Rotate({data.speed, 0}, rotation * DEG2RAD );
+    
+    target_dist = Vector2Distance(position, target_position);
+    dist_scale = target_dist/data.speed;
+    //TraceLog(LOG_INFO, "scale %f", dist_scale);
+
+    lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
+    lifetime_timer.Start(data.lifetime * dist_scale, true);
 
 }
 

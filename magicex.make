@@ -98,6 +98,7 @@ GENERATED += $(OBJDIR)/lightning.o
 GENERATED += $(OBJDIR)/magicmissle.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapmenu.o
+GENERATED += $(OBJDIR)/mushroomentity.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
 GENERATED += $(OBJDIR)/resources.o
@@ -134,6 +135,7 @@ OBJECTS += $(OBJDIR)/lightning.o
 OBJECTS += $(OBJDIR)/magicmissle.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapmenu.o
+OBJECTS += $(OBJDIR)/mushroomentity.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
 OBJECTS += $(OBJDIR)/resources.o
@@ -229,6 +231,9 @@ $(OBJDIR)/containerentity.o: src/game/entities/containerentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/entityspawner.o: src/game/entities/entityspawner.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/mushroomentity.o: src/game/entities/mushroomentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp

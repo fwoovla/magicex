@@ -287,6 +287,11 @@
             "index":5,
             "table_name":"scrolls",
             "table_data":[29,30,31, 23, 24]
+        },
+        {
+            "index":6,
+            "table_name":"test",
+            "table_data":[14]
         }
     ],
     "spell_data": [
@@ -294,22 +299,25 @@
             "spell_id":"SPELL_ID_MAGICMISSLE_1",
             "level":1,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 200,
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_MAGICMISSLE_2",
             "level":2,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 200,
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_MAGICMISSLE_3",
             "level":3,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 200,
+            "damage":1,
+            "radius":2
         },
 
         {
@@ -317,43 +325,49 @@
             "level":1,
             "lifetime":1.0,
             "speed": 100,
-            "damage":1
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_FIREBALL_2",
             "level":2,
             "lifetime":1.0,
             "speed": 100,
-            "damage":1
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_FIREBALL_3",
             "level":3,
             "lifetime":1.0,
             "speed": 100,
-            "damage":1
+            "damage":1,
+            "radius":2
         },
 
         {
             "spell_id":"SPELL_ID_LIGHTNING_1",
             "level":1,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 700,
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_2",
             "level":2,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 700,
+            "damage":1,
+            "radius":2
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_3",
             "level":3,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":1
+            "speed": 700,
+            "damage":1,
+            "radius":2
         }
     ],
     "weapon_data": [
@@ -361,88 +375,103 @@
             "weapon_id": "ITEM_ID_DAGGER",
             "weapon_name": "ITEM_ID_DAGGER",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_NONE"
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":0
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
             "weapon_name": "ITEM_ID_SWORD",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_NONE"
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":0
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
             "weapon_name": "ITEM_ID_SPEAR",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_NONE"
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":0
         },
         {
             "weapon_id": "ITEM_ID_AXE",
             "weapon_name": "ITEM_ID_AXE",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_NONE"
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":0
         },
         {
             "weapon_id": "ITEM_ID_BOW",
             "weapon_name": "ITEM_ID_BOW",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_NONE"
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":0
         },
 
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_1",
             "weapon_name": "MAGICMISSLE WAND 1",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1"
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_2",
             "weapon_name": "MAGICMISSLE WAND 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2"
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_3",
             "weapon_name": "MAGICMISSLE WAND 3",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3"
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "clip_size":10
         },
 
         {
             "weapon_id": "ITEM_ID_FIREBALL_WAND_1",
             "weapon_name": "FIREBALL WAND 1",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1"
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_FIREBALL_WAND_2",
             "weapon_name": "FIREBALL WAND 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2"
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_FIREBALL_WAND_3",
             "weapon_name": "FIREBALL WAND 3",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3"
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "clip_size":10
         },
 
+        
         {
             "weapon_id": "ITEM_ID_LIGHTNING_WAND_1",
             "weapon_name": "LIGHTNING WAND 1",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1"
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_LIGHTNING_WAND_2",
             "weapon_name": "LIGHTNING WAND 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2"
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_LIGHTNING_WAND_3",
             "weapon_name": "LIGHTNING WAND 3",
-            "cooldown": 0.05,
-            "spell_id":"SPELL_ID_LIGHTNING_3"
+            "cooldown": 0.4,
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "clip_size":10
         },
 
 
@@ -450,58 +479,67 @@
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_1",
             "weapon_name": "MAGICMISSLE STAFF 1",
-            "cooldown": 0.01,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1"
+            "cooldown": 0.1,
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_2",
             "weapon_name": "MAGICMISSLE STAFF 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2"
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_3",
             "weapon_name": "MAGICMISSLE STAFF 3",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3"
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "clip_size":10
         },
 
         {
             "weapon_id": "ITEM_ID_FIREBALL_STAFF_1",
             "weapon_name": "FIREBALL STAFF 1",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1"
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_FIREBALL_STAFF_2",
             "weapon_name": "FIREBALL STAFF 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2"
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_FIREBALL_STAFF_3",
             "weapon_name": "FIREBALL STAFF 3",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3"
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "clip_size":10
         },
 
         {
             "weapon_id": "ITEM_ID_LIGHTNING_STAFF_1",
             "weapon_name": "LIGHTNING STAFF 1",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1"
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_LIGHTNING_STAFF_2",
             "weapon_name": "LIGHTNING STAFF 2",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2"
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "clip_size":10
         },
         {
             "weapon_id": "ITEM_ID_LIGHTNING_STAFF_3",
             "weapon_name": "LIGHTNING STAFF 3",
             "cooldown": 0.01,
-            "spell_id":"SPELL_ID_LIGHTNING_3"
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "clip_size":10
         }
 
         

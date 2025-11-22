@@ -110,25 +110,27 @@ void ContainerArea::Update() {
         text = "";
         
         if(identifier == "GroundContainerEntity") {
-            //TraceLog(LOG_INFO, "CONTAINER AREA update");
             int count = 0;
             for(int i = 0; i < item_list.size(); i++) {
                 if(item_list[i] != -1) {
-                    text += g_item_data[item_list[i]].item_name + "\n";
+                    //text = "ground";
+                    text += g_item_instances[item_list[i]].item_name + "\n";
+                    //text += g_item_instances[item_list[i]].item_name + "\n";
                 }
             }
             text.pop_back();
             max_time_to_press = 0.5f;
         }
+        else if(identifier == "Mushroom") { 
+            text = "mushroom";
+        }
         else {
-            //TraceLog(LOG_INFO, "CONTAINER AREA update");
             text = "open";
         }
         CreateLabel(label, {lx, ly}, 20, WHITE, text.c_str());
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
-            //label.text += "\n'space'";
         }
     }
     else {
@@ -139,8 +141,6 @@ void ContainerArea::Update() {
         time_pressed += 1.0f * GetFrameTime();
         if(time_pressed > max_time_to_press) {
             time_pressed = 0.0f;
-            //g_game_data.loot_table_id = loot_table_id;
-            //g_game_data.loot_table = &item_list;
             area_activated.EmitSignal();
         }
     }
@@ -173,3 +173,5 @@ void ContainerArea::Draw() {
         }
     }
 }
+
+

@@ -138,7 +138,7 @@ class CharacterMenu : public BaseUILayer {
     //void UpdateHotBarOnly();
     void Open();
     void OpenWith(BaseContainerEntity *container);
-    void OpenWith(std::vector<int> &list);
+    //void OpenWith(std::vector<int> &list);
 
     void OnItemSelected();
     void OnItemDeselected();

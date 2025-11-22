@@ -59,7 +59,7 @@ void LDTKLoadMaps (json &mj) {
                     if(mj["levels"][level]["fieldInstances"][field]["__identifier"] == "is_shelter") {
                         if(mj["levels"][level]["fieldInstances"][field]["__value"] == true) {
                             g_game_data.shelter_map_index = level;
-                            TraceLog(LOG_INFO, "SHELTER LEVEL FOUND %i", level);
+                            TraceLog(LOG_INFO, "SHELTER LEVEL FOUND at index: %i", level);
                             this_level.is_shelter = true;
                         }
                     }
@@ -77,15 +77,26 @@ void LDTKLoadMaps (json &mj) {
             this_level.uid = mj["levels"][level]["uid"];
             this_level.px_wid = mj["levels"][level]["pxWid"];
             this_level.px_hei = mj["levels"][level]["pxHei"];
+
+            TraceLog(LOG_INFO, "==================================================================");
+            TraceLog(LOG_INFO, "                          NEW LEVEL");
+            TraceLog(LOG_INFO, "                          %s", this_level.identifier.c_str());
+            TraceLog(LOG_INFO, "==================================================================");
             
             for(int layer = 0; layer < mj["levels"][level]["layerInstances"].size(); layer++) {
-
+                TraceLog(LOG_INFO, "                          ---------");
+                
                 LDTKLayerInstance this_layer;
-
+                
                 this_layer.identifier = mj["levels"][level]["layerInstances"][layer]["__identifier"];
                 this_layer.type = mj["levels"][level]["layerInstances"][layer]["__type"];
+                
+                TraceLog(LOG_INFO, "--------------------------NEW LAYER------------------------------");
+                TraceLog(LOG_INFO, "--------------------------%s------------------------------", this_layer.identifier.c_str());
+
 
                 if(this_layer.type == "IntGrid") {
+                    TraceLog(LOG_INFO, "++++++------------COLLISION LAYER FOUND %s", this_layer.identifier.c_str());
                     this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
                     this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
                     this_layer.c_wid = mj["levels"][level]["layerInstances"][layer]["__cWid"];
@@ -93,11 +104,11 @@ void LDTKLoadMaps (json &mj) {
 
                         this_layer.int_grid.push_back( mj["levels"][level]["layerInstances"][layer]["intGridCsv"][_i].get<int>());
                     }
-                    TraceLog(LOG_INFO, "+++ void +++COLLISION LAYER ADDED %i %i", this_layer.int_grid.size(),  mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
+                    TraceLog(LOG_INFO, "++++++--------------------------------COLLISION LAYER ADDED %i", mj["levels"][level]["layerInstances"][layer]["intGridCsv"].size());
                 }
 
                 if(this_layer.type == "Tiles") {
-
+                    TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES FOUND %s", this_layer.identifier.c_str());
                     this_layer.grid_size = mj["levels"][level]["layerInstances"][layer]["__gridSize"];
                     this_layer.tileset_def_uid = mj["levels"][level]["layerInstances"][layer]["__tilesetDefUid"];
                     this_layer.c_hei = mj["levels"][level]["layerInstances"][layer]["__cHei"];
@@ -124,7 +135,7 @@ void LDTKLoadMaps (json &mj) {
                         this_layer.grid_tiles[tile] = this_tile;
                     }
 
-                    TraceLog(LOG_INFO, "++++++TILES ADDED %i", this_layer.grid_tiles.size());
+                    TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES ADDED %i", this_layer.grid_tiles.size());
                 }
 
                 if(this_layer.type == "Entities") {
@@ -136,12 +147,15 @@ void LDTKLoadMaps (json &mj) {
                         LDTKEntityInstance new_entity;
 
                         new_entity.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["__identifier"];
-                        TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FOUND %s", new_entity.identifier.c_str());
+                        TraceLog(LOG_INFO, "++++++------------NEW ENTITY FOUND %s", new_entity.identifier.c_str());
 
                         new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][0]);
                         new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][1]);
                         new_entity.width = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                         new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
+
+                        TraceLog(LOG_INFO, "++++++---------------------------ENTITY POSITION %i %i", new_entity.px[0], new_entity.px[1]);
+                        TraceLog(LOG_INFO, "++++++---------------------------ENTITY SIZE %i x %i", new_entity.width, new_entity.height);
 
                         if(new_entity.identifier == "LevelTransition" or new_entity.identifier == "ShelterTransition" or new_entity.identifier == "HouseTransition") {                            
                             
@@ -149,17 +163,17 @@ void LDTKLoadMaps (json &mj) {
                                 LDTKFieldInstance new_field;
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
-                                TraceLog(LOG_INFO, "++++++--------------------------------ENTITY field %s", new_field.identifier.c_str());
+                                TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
 
                                 if(new_field.identifier == "DestMapString" ) {
                                     new_field.value_s = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    TraceLog(LOG_INFO, "++++++entity dest string %s", new_field.value_s.c_str());
+                                    TraceLog(LOG_INFO, "++++++--------------------------------transition dest string %s", new_field.value_s.c_str());
                                 }
 
                                 if(new_field.identifier == "ReturnPosition" ) {
                                     new_field.value_v.x = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"]["cx"];
                                     new_field.value_v.y = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"]["cy"];
-                                    TraceLog(LOG_INFO, "++++++entity return position %0.2f %0.2f", new_field.value_v.x, new_field.value_v.y);
+                                    TraceLog(LOG_INFO, "++++++--------------------------------transition return position %0.2f %0.2f", new_field.value_v.x, new_field.value_v.y);
                                 }
                                 new_entity.field_instances.push_back(new_field);
                             }
@@ -167,55 +181,69 @@ void LDTKLoadMaps (json &mj) {
 
 
                         if(new_entity.identifier == "PermContainerEntity") {
-                            TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY found");
+                            TraceLog(LOG_INFO, "++++++--------------------------------PERM CONTAINER ENTITY found");
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 LDTKFieldInstance new_field;
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
-
+                                TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
                                 if(new_field.identifier == "loot_table_id" ) {
                                     new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER loot table id %i", new_field.value_i);
+                                    TraceLog(LOG_INFO, "++++++--------------------------------loot table id %i", new_field.value_i);
                                 }
                                 if(new_field.identifier == "sprite_id" ) {
                                     new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER sprite id id %i", new_field.value_i);
+                                    TraceLog(LOG_INFO, "++++++--------------------------------sprite id id %i", new_field.value_i);
                                 }
                                 new_entity.field_instances.push_back(new_field);
-                                TraceLog(LOG_INFO, "++++++--------------------------------CONTAINER ENTITY added");
                             }
                         }
 
                         if(new_entity.identifier == "GroundContainerEntity") {
-                            TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER ENTITY found");
+                            TraceLog(LOG_INFO, "++++++----------------------GROUND CONTAINER ENTITY found");
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 LDTKFieldInstance new_field;
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
-
+                                TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
                                 if(new_field.identifier == "item_list" ) {
                                     for(int j = 0; j < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"].size(); j++) {
                                         new_field.i_list.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
-                                        TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER data added %i", mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                        TraceLog(LOG_INFO, "++++++--------------------------------item added %i", mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
                                     }
                                 }
                                 
                                 new_entity.field_instances.push_back(new_field);
-                                TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER ENTITY FIELD added");
+                                //TraceLog(LOG_INFO, "++++++--------------------------------GROUND CONTAINER ENTITY FIELD added");
                             }
 
                         }
+
+                        if(new_entity.identifier == "MushroomZone") {
+                            //new_entity.field_instances.push_back(new_field);
+                            TraceLog(LOG_INFO, "++++++----------------------MUSHROOM ZONE FOUND");
+                            LDTKFieldInstance new_field;
+
+                            new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__identifier"];
+                            TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
+                            new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__value"];
+                            TraceLog(LOG_INFO, "++++++--------------------------------max mushrooms %i", new_field.value_i);
+
+                            new_entity.field_instances.push_back(new_field);
+                        }
+                        
                         
                         this_layer.entity_instances.push_back(new_entity);
                         TraceLog(LOG_INFO, "++++++--------------------------------ENTITY ADDED %i", this_layer.entity_instances.size());
                     }
                 }
                 this_level.layer_instances.push_back(this_layer);
-                TraceLog(LOG_INFO, "++++++LAYERS FOUND %i/%i", this_level.layer_instances.size(), mj["levels"][level]["layerInstances"].size());
+                TraceLog(LOG_INFO, "                    ++++++LAYER ADDED: %i ++++++", g_ldtk_maps.levels.size());
+                TraceLog(LOG_INFO, "                          LAYERS: %i/%i\n\n", this_level.layer_instances.size(), mj["levels"][level]["layerInstances"].size());
             }
 
             g_ldtk_maps.levels.push_back(this_level);
-            TraceLog(LOG_INFO, "++++++LEVEL ADDED %i", g_ldtk_maps.levels.size());
+            TraceLog(LOG_INFO, "                    ++++++LEVEL ADDED: %i ++++++\n\n", g_ldtk_maps.levels.size());
         }
     } 
 }

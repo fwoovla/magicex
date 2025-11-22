@@ -27,5 +27,5 @@ void FadeTransition::Draw() {
 }
 
 FadeTransition::~FadeTransition() {
-    TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  TRANSITION");
+    //TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  TRANSITION");
 }

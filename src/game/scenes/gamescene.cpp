@@ -44,7 +44,9 @@ GameScene::GameScene() {
 
     }
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or level_data.entity_list[entity_index]->identifier == "GroundContainerEntity") {
+        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
+            level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
+            level_data.entity_list[entity_index]->identifier == "Mushroom") {
              TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
             if(p_entity) {
@@ -131,7 +133,7 @@ SCENE_ID GameScene::Update() {
 
                     //if ground container
                     if(g_game_data.return_container != nullptr) {
-                        if(g_game_data.return_container->identifier == "GroundContainerEntity") {
+                        if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {
                             //if empty
                             if(g_game_data.return_container->IsEmpty()) {
                                 g_game_data.return_container->should_delete = true;
@@ -238,9 +240,11 @@ void GameScene::HandleCamera() {
 
 
 GameScene::~GameScene() {
-    delete ui_layer;
-    delete tile_layer;
 
+    ClearLevelData(level_data);
+    delete ui_layer;
+    delete character_menu;
+    delete tile_layer;
     //DL_Clear(entity_draw_list);
     
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
@@ -253,41 +257,41 @@ void GameScene::OnQuitPressed() {
 
 void GameScene::OnMapTransitionEntered() {
 
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     //return_scene = GAME_SCENE;
 
 }
 
 void GameScene::OnMapTransitionActivated() {
 
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     return_scene = GAME_SCENE;
 
 }
 
 void GameScene::OnShelterTransitionEntered() {
 
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     //return_scene = SHELTER_SCENE;
 
 }
 
 void GameScene::OnShelterTransitionActivated() {
 
-    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     return_scene = SHELTER_SCENE;
 
 }
 
 void GameScene::OnHouseTransitionEntered() {
 
-    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    //TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
 }
 
 void GameScene::OnHouseTransitionActivated() {
 
-    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    //TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
     g_game_data.is_in_sub_map = true;
     sub_scene = new SubScene();
