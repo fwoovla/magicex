@@ -1,0 +1,71 @@
+{
+    "base_speed": 45.0,
+    "body": [
+        -1
+    ],
+    "class_name": "Apprentice",
+    "exp": 0,
+    "feet": [
+        -1
+    ],
+    "hands": [
+        -1
+    ],
+    "head": [
+        -1
+    ],
+    "health": 15,
+    "hotbar": [
+        -1
+    ],
+    "inventory": [
+        -1
+    ],
+    "item_instances": [
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": 512148,
+            "instance_id": 521861686,
+            "item_id": 14,
+            "item_name": "MAGICMISSLE_STAFF 1",
+            "spell_id": 1151336448,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": 113539,
+            "instance_id": 345800621,
+            "item_id": 14,
+            "item_name": "MAGICMISSLE_STAFF 1",
+            "spell_id": 1151336448,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": 793458,
+            "instance_id": 435561689,
+            "item_id": 14,
+            "item_name": "MAGICMISSLE_STAFF 1",
+            "spell_id": 1151336448,
+            "type": 0,
+            "value": 0
+        }
+    ],
+    "legs": [
+        -1
+    ],
+    "name": "not assigned",
+    "portrait_id": 0,
+    "primary": [
+        -1
+    ],
+    "secondary": [
+        -1
+    ],
+    "sprite_sheet_id": 0
+}

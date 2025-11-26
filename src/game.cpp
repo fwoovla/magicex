@@ -5,6 +5,7 @@ std::unique_ptr<BaseScene> g_current_scene;
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
 std::unordered_map<int, ItemInstanceData> g_item_instances;
+std::unordered_map<std::string, ContainerData> g_persistant_containers;
 std::unordered_map<int, WeaponData> g_weapon_data;
 std::unordered_map<int, SpellData> g_spell_data;
 
@@ -61,6 +62,7 @@ void Game::StartGame() {
     g_game_data.current_scene_id = NO_SCENE;
     g_game_data.current_map_index = -1;
     g_game_settings.show_debug = false;
+    g_game_data.using_saved_data = false;
 
     LoadResources();
     LoadGameData();

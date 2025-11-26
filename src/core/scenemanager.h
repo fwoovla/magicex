@@ -40,3 +40,8 @@ class SceneManager{
 
     private:
 };
+
+
+/* void InstanceSavedObjects(LevelData &level_data);
+
+void InstanceNewObjects(LevelData &level_data); */

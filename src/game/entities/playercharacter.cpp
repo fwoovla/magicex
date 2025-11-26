@@ -22,9 +22,13 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     auto item_it = g_item_instances.find(g_player_data.primary[0]);
     if(item_it != g_item_instances.end()) {
         _id = item_it->second.item_id;
+        LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
+    }
+    else {
+        Texture2D blank;
+        LoadSpriteCentered(weapon_sprite, blank, position);
     }
     
-    LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;

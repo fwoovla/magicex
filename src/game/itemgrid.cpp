@@ -14,12 +14,14 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) : shared_
 
 ItemGrid::~ItemGrid() {
     //TraceLog(LOG_INFO, "DESTRUCTOR ITEMGRID");
+    container_iid = "n/a";
 }
 
 void ItemGrid::Update() {
 
     cell_hovered = false;
     hovered_cell = {-1,-1};
+    
 
     for (int c = 0; c < cols; c++) { 
         for(int r = 0; r < rows; r++) {
@@ -40,16 +42,11 @@ void ItemGrid::Update() {
 
                     if(can_select){
 
-/*                         //TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
-                        for (const auto& [key, value] : g_item_instances) {
-                            //TraceLog(LOG_INFO, "----item uid %i  item id %i  target instanceid %i", key, value.item_id, item_id);
-                        } */
-
                         std::string i_name = "no item found";
                         auto itter = g_item_instances.find(item_id);
                         if(itter != g_item_instances.end()) {
                             //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
-                            i_name = itter->second.item_name + "  " + TextFormat("%i", itter->second.instance_id);
+                            i_name = itter->second.item_name;
 
                         }
                         CreateLabel(label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, WHITE, i_name.c_str());
@@ -156,7 +153,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
     item_sprites.clear();
     int item_count = item_list->size();
 
-    //TraceLog(LOG_INFO, "setting items --list size %i", item_list->size());
+    TraceLog(LOG_INFO, "setting items --list size %i  %s", item_list->size(), container_iid.c_str());
 
     for(int i = 0; i < cols*rows; i++) {
         if(i < item_count) {
@@ -223,9 +220,9 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
         auto itter = g_item_instances.find((*item_list)[index]);
         if(itter != g_item_instances.end()) {
             _type = itter->second.type;
-            TraceLog(LOG_INFO, "checking     accepted:%i  type:%i", accepted_type, _type);
+            //TraceLog(LOG_INFO, "checking     accepted:%i  type:%i", accepted_type, _type);
             if(accepted_type !=  _type) {
-                TraceLog(LOG_INFO, "rejecting item      accepted:%i  type:%i", accepted_type, _type);
+                //TraceLog(LOG_INFO, "rejecting item      accepted:%i  type:%i", accepted_type, _type);
                 return false;
             }
         }
@@ -234,6 +231,7 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
 }
 
 void ItemGrid::AddItem(int item_id) {
+    //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
     for(int i = 0; i < item_list->size(); i++) {
         if((*item_list)[i] == -1) {
             int x = i%(cols);
@@ -245,6 +243,8 @@ void ItemGrid::AddItem(int item_id) {
             auto itter = g_item_instances.find(item_id);
             if(itter != g_item_instances.end()) {
                 _id = itter->second.item_id;
+                itter->second.container_id = container_iid;
+                //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
             }
 
             LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
@@ -263,6 +263,8 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
     auto itter = g_item_instances.find(item_id);
     if(itter != g_item_instances.end()) {
         _id = itter->second.item_id;
+        itter->second.container_id = container_iid;
+        //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
     }
 
     LoadSpriteCentered(item_sprites[index], g_icon_sprites[_id ], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });

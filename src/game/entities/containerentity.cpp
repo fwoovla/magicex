@@ -13,7 +13,7 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     
     should_delete = false;
     is_persistant = false;
-    instance_id = GetRandomValue(1000, 1000000);
+    //instance_id = GetRandomValue(1000, 1000000);
 }
 
 PermContainerEntity::~PermContainerEntity() {
@@ -75,8 +75,7 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     c_area.list_changed.Connect( [&](){OnListChanged();} );
 
     should_delete = false;
-    is_persistant = false; //set this in scenemanager 
-    instance_id = GetRandomValue(1000, 1000000);
+    is_persistant = false;
 }
 
 GroundContainerEntity::~GroundContainerEntity() {
@@ -113,17 +112,7 @@ void GroundContainerEntity::OnContainerOpened() {
 }
 
 void GroundContainerEntity::OnListChanged() {
-/*     int index = 0;
-    for(int item = 0; item < c_area.item_list.size(); item++) {
-        //TraceLog(LOG_INFO, "looking for item %i index %i", character_menu->blank_list[item], item);
-        if(c_area.item_list[item] != -1) {
-            //TraceLog(LOG_INFO, "found item at index %i", i);
-            index = g_item_data[ c_area.item_list[item]].sprite_id;
-            TraceLog(LOG_INFO, "found item id %i", index);
-            break;
-        }
-    }
-    sprite.texture = g_item_sprites[index]; */
+
 }
 
 
@@ -134,4 +123,9 @@ bool GroundContainerEntity::IsEmpty() {
         }
     }
     return true;
+}
+
+void GroundContainerEntity::SetSprite(int sprite_id) {
+    LoadSprite(sprite, g_item_sprites[sprite_id], position);
+    ScaleSprite(sprite, {0.5f, 0.5f});
 }

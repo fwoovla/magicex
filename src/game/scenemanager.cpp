@@ -193,10 +193,15 @@ void SceneManager::OnTransitionEnded() {
 
 void InstanceLevelObjects(LevelData &level_data) {
 
+     bool is_shelter = false;
+    if(g_game_data.current_map_index ==  g_game_data.shelter_map_index) {
+        is_shelter = true;
+    }
 
     TraceLog(LOG_INFO, "instacing game objects");
 
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
+    
 /*     TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
     for (const auto& [key, value] : g_item_instances) {
         TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
@@ -228,7 +233,7 @@ void InstanceLevelObjects(LevelData &level_data) {
 
 //containers
     for(int c_index = 0; c_index < level_data.container_data.size(); c_index++) {
-        Vector2 pos = level_data.container_data[c_index].position_i;        
+        Vector2 pos = level_data.container_data[c_index].position_i;
         
         if(level_data.container_data[c_index].identifier == "PermContainerEntity") {
             TraceLog(LOG_INFO, "instacing perm container");
@@ -237,30 +242,64 @@ void InstanceLevelObjects(LevelData &level_data) {
             PermContainerEntity *new_container = new PermContainerEntity(pos, spi, lti);
             DL_Add(level_data.entity_list, new_container);
             
+            new_container->is_persistant = is_shelter;
             new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->iid = level_data.container_data[c_index].iid;
+            new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
+            new_container->level_index = g_game_data.current_map_index;
+
             new_container->c_area.identifier = level_data.container_data[c_index].identifier;
             new_container->c_area.position = pos;
-            new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
             new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
-            //GenerateContainerItemList(lti, new_container->c_area.item_list);
-            InstanceItemList(g_loot_tables[new_container->loot_table_id], new_container->c_area.item_list);
             new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
+            //GenerateContainerItemList(lti, new_container->c_area.item_list);
+
+            if(g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) {
+                for (auto& [key, value] : g_item_instances) {
+                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    if(key, value.container_id == new_container->iid) {
+                        //TraceLog(LOG_INFO, "ITEM FOUND");
+                        new_container->c_area.item_list.push_back(value.instance_id);
+                    }
+                    //std::cout << key << " = " << value << "\n";
+                }
+
+            }
+            else {
+                InstanceItemList(g_loot_tables[new_container->loot_table_id], new_container->c_area.item_list, new_container->iid);
+            }
         }
 
 
         if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
             TraceLog(LOG_INFO, "instacing ground container");
-            int spi = g_item_data[ level_data.container_data[c_index].item_list[0]].id;
+            int spi = ITEM_ID_ERROR;// g_item_data[ level_data.container_data[c_index].item_list[0]].id;
+
             GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
             DL_Add(level_data.entity_list, new_container);
             
+            new_container->is_persistant = is_shelter;
             new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->iid = level_data.container_data[c_index].iid;
+            new_container->level_index = g_game_data.current_map_index;
+
             new_container->c_area.identifier = level_data.container_data[c_index].identifier;
             new_container->c_area.position = pos;
-            InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list);
-            //new_container->c_area.item_list = level_data.container_data[c_index].item_list;
             new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
             
+            if(g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) {
+                for (auto& [key, value] : g_item_instances) {
+                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    if(key, value.container_id == new_container->iid) {
+                        //TraceLog(LOG_INFO, "ITEM FOUND");
+                        new_container->c_area.item_list.push_back(value.instance_id);
+                        new_container->SetSprite(value.item_id);
+                    }
+                }
+            }
+            else {
+                InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid);
+            }
             //TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
         }
     }
@@ -276,7 +315,6 @@ void InstanceLevelObjects(LevelData &level_data) {
         int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x;
         int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y;
 
-
         for(int i = 0; i < num_mushrooms; i++) {
             int x = GetRandomValue(min_x, max_x);
             int y = GetRandomValue(min_y, max_y);
@@ -291,13 +329,11 @@ void InstanceLevelObjects(LevelData &level_data) {
 
             std::vector<int> temp_list;
             temp_list.push_back(ITEM_ID_MUSHROOM);
-            InstanceItemList(temp_list ,new_mushroom->c_area.item_list);
+            InstanceItemList(temp_list, new_mushroom->c_area.item_list, "none");
 
             DL_Add(level_data.entity_list, new_mushroom);
             TraceLog(LOG_INFO, "instacing mushroom");
-
         }
-
     }
 
     TraceLog(LOG_INFO, "|||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
@@ -306,5 +342,4 @@ void InstanceLevelObjects(LevelData &level_data) {
         TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
     } */
 }
-
 

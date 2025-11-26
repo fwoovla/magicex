@@ -71,6 +71,8 @@ class ItemGrid {
     bool cell_selected;
     Vector2 hovered_cell;
     Vector2 selected_cell;
+
+    std::string container_iid;
     //Vector2 return_position;
 
     std::vector<Sprite> item_sprites;
@@ -150,6 +152,7 @@ class CharacterMenu : public BaseUILayer {
 
     bool use_ground;
     std::vector<int> blank_list;
+    std::string default_iid;
 
     //BaseContainerEntity *return_container;
 

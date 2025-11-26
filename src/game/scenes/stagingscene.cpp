@@ -55,6 +55,14 @@ StagingScene::~StagingScene() {
 }
 
 void StagingScene::OnPlayPressed() {
+
+    TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
+
+    std::string ldtk_map_path = "assets/maps/ldtk/test.ldtk";
+    int num_maps = load_ldtk_maps(ldtk_map_path);
+
+    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
+
     g_game_data.next_map_index = g_game_data.shelter_map_index;
     return_scene = SHELTER_SCENE;
 }

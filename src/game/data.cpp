@@ -1,6 +1,8 @@
 #include "../core/gamedefs.h"
 #include "../core/utils.h"
 
+static const std::string save_path = "saves/save.json";
+
 
 void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
@@ -177,19 +179,18 @@ void LoadGameData() {
  
     //TraceLog(LOG_INFO, "==========check save data================");
 
-    std::string save_path = "assets/save.json";
     if(std::filesystem::exists(save_path)) {
         g_game_data.save_available = true;
         TraceLog(LOG_INFO, "SAVE FILE FOUND");
     }
 
 
-    TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
+  /*   TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
 
     std::string ldtk_map_dir = "assets/maps/ldtk";
     int num_maps = load_ldtk_maps();
 
-    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
+    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps); */
 
 }
 
@@ -198,7 +199,6 @@ void SaveGame(LevelData &level_data) {
 
     TraceLog(LOG_INFO, "----------------------SAVING GAME------------------------" );
 
-    std::string save_path = "assets/save.json";
     std::ofstream file(save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "filed to open save file");
@@ -217,10 +217,7 @@ void SaveGame(LevelData &level_data) {
 
     //j["inventory"] = {};
     for(int i = 0; i < g_player_data.inventory.size(); i++) {
-        //if(g_player_data.inventory[i] != -1) {
         j["inventory"][i] = g_player_data.inventory[i];
-            //j["instanced_items"][i] = g_player_data.inventory[i];
-        //}
     }
     for(int i = 0; i < g_player_data.hotbar.size(); i++) {
         j["hotbar"][i] = g_player_data.hotbar[i];
@@ -248,8 +245,7 @@ void SaveGame(LevelData &level_data) {
         j["hands"][i] = g_player_data.hands[i];
     }
 
-
-    json json_instances = json::array();
+    json json_item_instances = json::array();
 
     TraceLog(LOG_INFO, "# g_item_instances %i  ", g_item_instances.size());
     for (auto& [key, inst] : g_item_instances) {
@@ -262,48 +258,61 @@ void SaveGame(LevelData &level_data) {
             {"spell_id", inst.spell_id},
             {"clip_size", inst.clip_size},
             {"ammo_count", inst.ammo_count},
+            {"container_id", inst.container_id},
         };
-        json_instances.push_back(instance);
-        TraceLog(LOG_INFO, "saving item %i   instance id: %i sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, json_instances.size(), g_item_instances.size());
+        json_item_instances.push_back(instance);
+        TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
     }
 
-    TraceLog(LOG_INFO, "saved instances size %i", json_instances.size());
-    j["item_instances"] = json_instances;    
+    TraceLog(LOG_INFO, "saved instances size %i", json_item_instances.size());
+    j["item_instances"] = json_item_instances;    
 
 
 
-    //json j_containers = json::array();
-    //TraceLog(LOG_INFO, "is this a container? %i", level_data.is_shelter);
-/*     for(int c = 0; c < g_current_scene->level_data.entity_list.size(); c++ ) {
 
-    } */
-        //std::string identifier = g_current_scene->level_data.entity_list[c]->identifier;
-        //json j_array = json::array();
-        // instance_id = -1;
-        //if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity") {
-            //TraceLog(LOG_INFO, "yes. ");
-/*             if(g_current_scene->level_data.entity_list[c]->is_persistant) {
-                BaseContainerEntity* c_entity = dynamic_cast<BaseContainerEntity*>(g_current_scene->level_data.entity_list[c]);
-                if(c_entity) {
-                    instance_id = c_entity->instance_id;
-                    for(int i = 0; i < c_entity->c_area.item_list.size(); i++) {
-                        //j_array.push_back(c_entity->c_area.item_list[i]);
-                    }
-                }
-            } */
-        //}
-       // else {
-        //    TraceLog(LOG_INFO, "no. ");
-        //}
-/*         if(instance_id != -1) {
-            j_containers[instance_id] = j_array;
-        } */
-    //}
 
-    //j["saved_containers"] = j_containers;
+    json json_persistant_containers = json::array();
+
+    for(int entity = 0; entity < level_data.entity_list.size(); entity++) {
+        if(level_data.entity_list[entity]->identifier == "PermContainerEntity" or level_data.entity_list[entity]->identifier == "GroundContainerEntity") {
+
+            if (level_data.entity_list[entity]->is_persistant) {
+                BaseContainerEntity* c_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity]);
+                
+                json container = {
+                    {"iid", c_entity->iid},
+                    {"is_persistant", c_entity->is_persistant},
+                    {"identifier", c_entity->identifier},
+                    {"loot_table_id", c_entity->loot_table_id},
+                    {"position_x", c_entity->position.x},
+                    {"position_y", c_entity->position.y},
+                    {"size_x", c_entity->c_area.size.x},
+                    {"size_y", c_entity->c_area.size.y},
+                    {"sprite_id", c_entity->sprite_id},
+                    {"level_index", c_entity->level_index},
+                };
+
+                json_persistant_containers.push_back(container);
+                TraceLog(LOG_INFO, "saving container  iid %s", c_entity->iid.c_str());
+ 
+            }
+        }
+    }
+
+    j["persistant_containers"] = json_persistant_containers;
+
+
+
+
 
     file<<j.dump(4);
     file.close();
+
+    //save map file
+    std::ifstream src("assets/maps/ldtk/test.ldtk", std::ios::binary);
+    std::ofstream dst("saves/saved_map.ldtk", std::ios::binary);
+
+    dst << src.rdbuf();
 
 }
 
@@ -311,7 +320,8 @@ void SaveGame(LevelData &level_data) {
 void LoadGame() {
     TraceLog(LOG_INFO, "LOADING SAVED DATA....save.json");
 
-    std::string save_path = "assets/save.json";
+    g_game_data.using_saved_data = true;
+
     std::ifstream file(save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "CANNOT OPEN FILE");
@@ -394,7 +404,21 @@ void LoadGame() {
         g_item_instances[instance.instance_id] = instance;
     }
 
+    g_persistant_containers.clear();
+    for(const auto & container : j["persistant_containers"]) {
+        ContainerData c_data = container.get<ContainerData>();
+        g_persistant_containers[c_data.iid] = c_data;
+    }
+
     file.close();
+
+
+    TraceLog(LOG_INFO, "==========LOADING SAVED LDTK MAPS================");
+
+    std::string ldtk_map_path = "saves/saved_map.ldtk";
+    int num_maps = load_ldtk_maps(ldtk_map_path);
+
+    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
 
 }
 
@@ -435,9 +459,10 @@ void LoadLevelData(LevelData &level_data) {
                     sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
                     sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
                     level_data.spawn_position = sp;
+                    TraceLog(LOG_INFO, "SPAWN POINT FOUND");
                 }
                 else {
-                    TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
+                    //TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
                 }
 
                 std::string identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -465,38 +490,49 @@ void LoadLevelData(LevelData &level_data) {
                     level_data.level_transitions.push_back(new_transition);
                     //TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
                 }
-                if(identifier == "PermContainerEntity") {
-                    ContainerData new_container;
-                    //TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
+                if(identifier == "PermContainerEntity"){
 
-                    new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
-                    new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
-                    new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
-                    new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
-                    new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
-                    new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+                    if(!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index ) {
 
-                    new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
-                    new_container.loot_table_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
-                    level_data.container_data.push_back(new_container);
+                        
+                        ContainerData new_container;
+                        //TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
+                        
+                        new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
+                        new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                        new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                        new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+                        new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
+                        new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+                        new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+                        
+                        new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
+                        new_container.loot_table_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
+                        //TraceLog(LOG_INFO, "PERM CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
+                        level_data.container_data.push_back(new_container);
+                    }
                     //TraceLog(LOG_INFO, "CONTAINER ADDED WITH LT %i SID %i", new_container.loot_table_id, new_container.sprite_id);
                 }
 
-                if(identifier == "GroundContainerEntity") {
-                    ContainerData new_container;
-                    //TraceLog(LOG_INFO, "GROUND CONTAINER FOUND %s %i", identifier.c_str(), this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size());
-                    new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
-                    new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
-                    new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
-                    new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
-                    new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
-                    new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
-
-                    for(int item = 0; item < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size(); item++) {
-                        //TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED %i", this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
-                        new_container.item_list.push_back(this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
-                    } 
-                    level_data.container_data.push_back(new_container);
+                if(identifier == "GroundContainerEntity" and !g_game_data.using_saved_data) {
+                    if(!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index ) {
+                        ContainerData new_container;
+                        //TraceLog(LOG_INFO, "GROUND CONTAINER FOUND %s %i", identifier.c_str(), this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size());
+                        new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
+                        new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                        new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                        new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+                        new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
+                        new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+                        new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+                        
+                        for(int item = 0; item < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size(); item++) {
+                            //TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED %i", this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
+                            new_container.item_list.push_back(this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);
+                        } 
+                        //TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
+                        level_data.container_data.push_back(new_container);
+                    }
                 }
 
                 if(identifier == "MushroomZone") {
@@ -511,7 +547,16 @@ void LoadLevelData(LevelData &level_data) {
 
                    level_data.mushroom_zones.push_back(new_zone);
                 }
+       
             }
+        }
+    }
+    for(const auto & container : g_persistant_containers) {
+         if(container.second.level_index == g_game_data.current_map_index) {
+            //TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND %s", container.second.iid.c_str());
+            ContainerData new_container = container.second;
+
+            level_data.container_data.push_back(new_container);
         }
     }
 }
@@ -541,7 +586,7 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
     }
 
     if(col_layer == nullptr) {
-        TraceLog(LOG_INFO, "no collision layer");
+        TraceLog(LOG_INFO, "no collision layer in map data");
         //level_data.tile_precalc.collision_layer_index = -1;
     }
 
@@ -558,9 +603,9 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 }
 
 
-void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list) {
+void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id) {
 
-    //TraceLog(LOG_INFO, "instancing item list   size: %i ", source_list.size());
+    //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
     for(int item = 0; item < source_list.size(); item++) {
         int uid = GetRandomValue(1000, 1000000000);
 
@@ -575,14 +620,13 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
             new_instance.value = item_it->second.value;
             new_instance.clip_size = 0;
             new_instance.ammo_count = 0;
-            //new_instance.spell_id = g_item_data[source_list[item]].spell_id;
+            new_instance.container_id = container_id;
             
             g_item_instances[uid] = new_instance;
-            //TraceLog(LOG_INFO, "item uid %i ", uid);
             dest_list.push_back(uid);
+            TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
         }
     }
-
 }
 
 
@@ -747,6 +791,10 @@ ItemID StrToItemId(const std::string& s) {
     return ItemID::ITEM_ID_NONE;
 }
 
+
+
+
+
 void from_json(const json &j, ItemInstanceData &i) {
     j.at("item_id").get_to(i.item_id);
     j.at("instance_id").get_to(i.instance_id);
@@ -756,4 +804,24 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("spell_id").get_to(i.spell_id);
     j.at("clip_size").get_to(i.clip_size);
     j.at("ammo_count").get_to(i.ammo_count);
+    j.at("container_id").get_to(i.container_id);
+
+     TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
+}
+
+
+void from_json(const json &j, ContainerData &i) {
+
+
+    j.at("identifier").get_to(i.identifier);
+    j.at("iid").get_to(i.iid);
+    j.at("loot_table_id").get_to(i.loot_table_id);
+    j.at("sprite_id").get_to(i.sprite_id);
+    j.at("position_x").get_to(i.position_i.x);
+    j.at("position_y").get_to(i.position_i.y);
+    j.at("size_x").get_to(i.size.x);
+    j.at("size_y").get_to(i.size.y);
+    j.at("level_index").get_to(i.level_index);
+
+     TraceLog(LOG_INFO, "container loaded  %s", i.iid.c_str());
 }

@@ -54,6 +54,7 @@ struct ItemData {
 
 
 struct ItemInstanceData {
+    std::string container_id;
     ItemID item_id;
     int instance_id;
     int value;
@@ -125,6 +126,8 @@ struct LevelTransitionData {
 
 struct ContainerData {
     std::string identifier;
+    std::string iid;
+    int level_index;
     int loot_table_id;
     int sprite_id;
     Vector2 position_i;
@@ -133,6 +136,7 @@ struct ContainerData {
     std::vector<int> item_list;
 };
 
+extern std::unordered_map<std::string, ContainerData> g_persistant_containers;
 
 struct LevelPrecalcData {
     int collision_layer_index;
@@ -174,7 +178,7 @@ void LoadLevelData(LevelData &level_data);
 
 void PrecalculateTileCollisionData(LevelData &level_data);
 
-void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list);
+void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id);
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);
 
@@ -185,3 +189,5 @@ ItemID StrToItemId(const std::string& s);
 
 
 void from_json(const json &j, ItemInstanceData &i);
+
+void from_json(const json &j, ContainerData &i);

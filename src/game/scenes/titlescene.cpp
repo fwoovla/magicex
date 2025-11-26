@@ -74,9 +74,11 @@ void TitleScene::OnQuitPressed() {
 }
 
 void TitleScene::OnContinuePressed() {
+
     LoadGame();
+
     g_current_player = new PlayerCharacter({0,0});
     return_scene = SHELTER_SCENE;
     g_game_data.next_map_index = g_game_data.shelter_map_index;
-    TraceLog(LOG_INFO, "SHELTER SCENE = %i", g_game_data.shelter_map_index);
+    //TraceLog(LOG_INFO, "SHELTER SCENE = %i", g_game_data.shelter_map_index);
 }

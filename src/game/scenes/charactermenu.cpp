@@ -236,12 +236,14 @@ void CharacterMenu::Open() {
     use_ground = true;
     blank_list.clear();
     blank_list.push_back(-1);
+    default_iid = "ground" + std::to_string(GetRandomValue(1000, 1000000));
+    ground_grid->container_iid = default_iid;
     ground_grid->SetItems(&blank_list);
 }
 
 
 void CharacterMenu::OpenWith(BaseContainerEntity *container) {
-    TraceLog(LOG_INFO, "OPENING CONTAINER");
+    TraceLog(LOG_INFO, "OPENING CONTAINER %s", container->iid.c_str());
     inventory_grid->SetItems(&g_player_data.inventory);
     hotbar_grid->SetItems(&g_player_data.hotbar);
 
@@ -254,6 +256,7 @@ void CharacterMenu::OpenWith(BaseContainerEntity *container) {
     hands_grid->SetItems(&g_player_data.hands);
 
     use_ground = false;
+    ground_grid->container_iid = container->iid;
     ground_grid->SetItems(&container->c_area.item_list);
 
 }
@@ -325,7 +328,7 @@ void CharacterMenu::OnTransferItem() {
     TraceLog(LOG_INFO, "\ntransfer items \ndest %0.0f %0.0f", shared_data.dest_cell.x, shared_data.dest_cell.y);
     TraceLog(LOG_INFO, "source %0.0f %0.0f", shared_data.source_cell.x, shared_data.source_cell.y);
     TraceLog(LOG_INFO, "move %i  from %i %i", shared_data.item_id, shared_data.source_grid, shared_data.dest_grid);
-    TraceLog(LOG_INFO, "source index %i dest index %i\n", source_index, dest_index);
+    TraceLog(LOG_INFO, "source index %i dest index %i", source_index, dest_index);
 
     if(source_index != -1 and dest_index != -1) {
         if(grid_list[dest_index]->CanAddItem(shared_data.item_id, shared_data.dest_cell)) {
@@ -374,4 +377,6 @@ void CharacterMenu::OnTransferItem() {
     shared_data.dest_grid = GRID_NONE;
     shared_data.source_cell = {-1,-1};
     shared_data.source_grid = GRID_NONE;
+
+    TraceLog(LOG_INFO, "---------------------------------");
 }

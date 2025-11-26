@@ -29,9 +29,9 @@ ShelterScene::ShelterScene() {
             TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
 
-            if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity") {
+/*             if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity") {
                 p_entity->is_persistant = true;
-            }
+            } */
             if(p_entity) {
                 TraceLog(LOG_INFO, "container connected");
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
@@ -117,12 +117,13 @@ SCENE_ID ShelterScene::Update() {
                         new_container->c_area.identifier = "GroundContainerEntity";
                         new_container->c_area.position = pos;
                         new_container->c_area.item_list = character_menu->blank_list;
-                        new_container->c_area.size = {8, 8};    
-                        //level_data.game_areas.push_back(&new_container->c_area);
+                        new_container->c_area.size = {8, 8};
+                        new_container->iid = character_menu->default_iid;
+                        new_container->is_persistant = true;
+                        new_container->level_index = g_game_data.current_map_index;
                     }
                 }
                 else { //was existing container
-
                     //if ground container
                     if(g_game_data.return_container != nullptr) {
                         if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {

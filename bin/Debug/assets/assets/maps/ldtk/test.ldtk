@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 54,
+	"nextUid": 56,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -936,7 +936,7 @@
 							"px": [112,96],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 6, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [6] }] }
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 2, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							],
 							"__worldX": 112,
 							"__worldY": 96
@@ -1227,26 +1227,10 @@
 							"px": [204,348],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [0] }] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 6, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [6] }] }
+								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 3, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
 							],
 							"__worldX": 364,
 							"__worldY": 348
-						},
-						{
-							"__identifier": "SpawnPoint",
-							"__grid": [68,187],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#BE4A2F",
-							"iid": "e1845560-ac70-11f0-a66a-0bf8e778458f",
-							"width": 16,
-							"height": 16,
-							"defUid": 21,
-							"px": [136,374],
-							"fieldInstances": [],
-							"__worldX": 296,
-							"__worldY": 374
 						}
 					]
 				},
@@ -1316,6 +1300,22 @@
 								}] }
 							],
 							"__worldX": 480,
+							"__worldY": 384
+						},
+						{
+							"__identifier": "SpawnPoint",
+							"__grid": [8,24],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "082f29a0-ac70-11f0-9162-b7d71c9bc944",
+							"width": 16,
+							"height": 16,
+							"defUid": 21,
+							"px": [128,384],
+							"fieldInstances": [],
+							"__worldX": 288,
 							"__worldY": 384
 						}
 					]
