@@ -33,6 +33,7 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int
     if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
         return false;
     }
+    
     LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
 
     int tile_size = g_current_scene->level_data.precalc.tile_size;

@@ -249,7 +249,7 @@ void LDTKLoadMaps (json &mj) {
             g_ldtk_maps.levels.push_back(this_level);
             TraceLog(LOG_INFO, "                    ++++++LEVEL ADDED: %i ++++++\n\n", g_ldtk_maps.levels.size());
         }
-    } 
+    }
 }
 
 
@@ -311,3 +311,85 @@ int LDTKDrawMap(Vector2 focus_position) {
 }
 
 
+
+void LDTKDrawShadows(Vector2 focus_position) {
+        LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+
+    if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
+        return;
+    }
+    LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
+
+    int tile_size = g_current_scene->level_data.precalc.tile_size;
+    float inv_tile_size = g_current_scene->level_data.precalc.inv_tile_size;
+    int map_width = g_current_scene->level_data.precalc.map_width;
+
+
+    for(auto &poly : g_current_scene->level_data.collision_polys) {
+
+
+        if(g_game_settings.show_debug) { //Draw Polys
+
+            int p_n = poly.points.size();
+            if(p_n >= 3) {
+                for(int i = 1; i < p_n - 1; ++i) {
+                    DrawTriangle(
+                        poly.points[0],
+                        poly.points[i+1],
+                        poly.points[i],
+                        RED
+                    );
+                    
+/*                     TraceLog(LOG_INFO, "drawing triangle.... ");
+                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f", poly.points[0].x, poly.points[0].y);
+                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f", poly.points[i].x, poly.points[i].y );
+                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f\n", poly.points[i+1].x, poly.points[i+1].y ); */
+                } 
+            }
+        }
+    }
+
+    float extrudeDist = 500.0f;
+    Color shadowColor = {0, 0, 0, 10};
+    //Color shadowColor = DARKERGRAY;
+    for (auto &poly : g_current_scene->level_data.collision_polys) {
+        int p_n = poly.points.size();
+         if(p_n > 2) {
+
+            for (int i = 0; i < p_n; ++i) {
+                 Vector2 v1 = poly.points[i];
+                Vector2 v2 = poly.points[(i+1) % p_n];
+
+                Vector2 edge = v2 - v1;
+
+                Vector2 normal = { -edge.y, edge.x };
+
+                //DrawLineV(v1, v2, shadowColor);
+
+                float facing = Vector2DotProduct( normal, v1 - focus_position );
+
+                if (facing > 0.0f) {
+                    //TraceLog(LOG_INFO, "drawing triangle.... ");
+                    Vector2 dir1 = Vector2Normalize(v1 - focus_position);
+                    Vector2 dir2 = Vector2Normalize(v2 - focus_position);
+                    Vector2 v1_ext = v1 + dir1 * extrudeDist;
+                    Vector2 v2_ext = v2 + dir2 * extrudeDist;
+
+                    //DrawLineV(v2, dir2, shadowColor);
+                    if(g_game_settings.show_debug) {
+
+                        DrawLineV(v1, v2, RED);
+                        DrawLineV(v1, v1_ext, shadowColor);
+                        DrawLineV(v2, v2_ext, shadowColor);
+                    }
+
+                    DrawTriangle({v1.x, v1.y}, {v2_ext.x, v2_ext.y}, {v2.x, v2.y}, shadowColor);
+                    DrawTriangle({v1.x, v1.y}, {v1_ext.x, v1_ext.y}, {v2_ext.x, v2_ext.y}, shadowColor); 
+
+
+                }
+
+            }
+        }
+    }
+}

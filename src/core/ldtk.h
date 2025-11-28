@@ -10,7 +10,6 @@
 #include "entities.h"
 
 
-
 #define MAX_TILE_SHEETS 10
 
 using json = nlohmann::json;
@@ -265,7 +264,7 @@ void LDTKLoadTileSets (json &mj);
 void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
 
-
+void LDTKDrawShadows(Vector2 focus_position);
 
 inline int load_ldtk_maps(std::string ldtk_map_path) {
 

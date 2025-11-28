@@ -437,7 +437,7 @@ void LoadLevelData(LevelData &level_data) {
 
 
     PrecalculateTileCollisionData(level_data);
-
+    PrecalculateShadowData(level_data);
 
     int map_index = g_game_data.current_map_index;
     
@@ -538,7 +538,7 @@ void LoadLevelData(LevelData &level_data) {
                 if(identifier == "MushroomZone") {
                     MushroomZoneData new_zone;
                      
-                    //TraceLog(LOG_INFO, "MUSHROOM ZONE FOUND %s  ", identifier.c_str());
+                    TraceLog(LOG_INFO, "MUSHROOM ZONE FOUND %s  ", identifier.c_str());
                     new_zone.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
                     new_zone.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
                     new_zone.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
@@ -603,6 +603,65 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 }
 
 
+void PrecalculateShadowData(LevelData &level_data) {
+    TraceLog(LOG_INFO, "CALCULATING SHADOW DATA ");
+
+    level_data.collision_polys.clear();
+
+    LDTKLevel this_level = g_ldtk_maps.levels[level_data.precalc.map_index];
+    LDTKLayerInstance *col_layer = nullptr;
+
+    for (int l = 0; l < this_level.layer_instances.size(); l++) {
+        if(this_level.layer_instances[l].type == "IntGrid") {
+            //TraceLog(LOG_INFO, "            collision layer -- %i", level_data.precalc.collision_layer_index  );
+            col_layer = &this_level.layer_instances[l];
+        }
+    }
+
+    if(col_layer == nullptr) {
+        //TraceLog(LOG_INFO, "no collision layer in map data");
+        return;
+    }
+
+    int tile_size = level_data.precalc.tile_size;
+    float inv_tile_size = level_data.precalc.inv_tile_size;
+    int map_width = level_data.precalc.map_width;
+
+    //Vector2 checker_pos = Vector2Add(focus_position, checker->centered_offset);
+
+    for(int tile = 0; tile < col_layer->int_grid.size(); tile++) {
+        if(col_layer->int_grid[tile] == 1) {
+            //TraceLog(LOG_INFO, "tile data %i", col_layer->int_grid[tile]);
+
+            float x = (tile%level_data.precalc.map_width) * level_data.precalc.tile_size;
+            float y = (tile/level_data.precalc.map_width) * level_data.precalc.tile_size;
+
+            //TraceLog(LOG_INFO, "tile position %0.2f %0.2f", x, y);
+
+            Polygon new_poly;
+
+            Vector2 first = {x,y};
+            new_poly.points.push_back(first);
+
+            Vector2 seccond = {x + level_data.precalc.tile_size, y};
+            new_poly.points.push_back(seccond);
+
+            Vector2 third = {x+ level_data.precalc.tile_size, y + level_data.precalc.tile_size};
+            new_poly.points.push_back(third);
+
+            Vector2 fourth = {x, y + level_data.precalc.tile_size};
+            new_poly.points.push_back(fourth);
+
+            level_data.collision_polys.push_back(new_poly);
+
+        }
+    }
+
+    TraceLog(LOG_INFO, "FINISHED CALCULATING SHADOW DATA  # polygons %i", level_data.collision_polys.size());
+}
+
+
+
 void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
@@ -624,7 +683,7 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
             
             g_item_instances[uid] = new_instance;
             dest_list.push_back(uid);
-            TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
+            //TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
         }
     }
 }
@@ -637,10 +696,6 @@ void GenerateContainerItemList(int lti, std::vector<int> &list) {
     int max = g_loot_tables[lti].size();
 
     for(int i = 0; i < max; i++) {        
-
-/*         list.push_back(g_loot_tables[lti][i]);
-        TraceLog(LOG_INFO, "----item id %i ", g_loot_tables[lti][i]); */
-
 
         int uid = GetRandomValue(1000, 100000000);
 
@@ -664,12 +719,6 @@ void GenerateContainerItemList(int lti, std::vector<int> &list) {
         }
  
     }
-
-    //TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
-/*      for (const auto& [key, value] : g_item_instances) {
-        TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
-    } */
-    TraceLog(LOG_INFO, "               -----\n\n");
 }
 
 
@@ -693,44 +742,10 @@ SpellID StrToSpellId(const std::string& s) {
         //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
         return it->second;
     }
-    TraceLog(LOG_INFO, "Spell ID not found ");
+    //TraceLog(LOG_INFO, "Spell ID not found ");
     return SpellID::SPELL_ID_NONE;
 
 }
-
-
-/* ItemID StrToWeaponID(const std::string& s) {
-
-    static const std::unordered_map<std::string, ItemID> lookup_table = {
-        {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
-        {"ITEM_ID_MAGICMISSLE_WAND_2",         ItemID::ITEM_ID_MAGICMISSLE_WAND_2},
-        {"ITEM_ID_MAGICMISSLE_WAND_3",         ItemID::ITEM_ID_MAGICMISSLE_WAND_3},
-        {"ITEM_ID_FIREBALL_WAND_1",         ItemID::ITEM_ID_FIREBALL_WAND_1},
-        {"ITEM_ID_FIREBALL_WAND_2",         ItemID::ITEM_ID_FIREBALL_WAND_2},
-        {"ITEM_ID_FIREBALL_WAND_3",         ItemID::ITEM_ID_FIREBALL_WAND_3},
-        {"ITEM_ID_LIGHTNING_WAND_1",         ItemID::ITEM_ID_LIGHTNING_WAND_1},
-        {"ITEM_ID_LIGHTNING_WAND_2",         ItemID::ITEM_ID_LIGHTNING_WAND_2},
-        {"ITEM_ID_LIGHTNING_WAND_3",         ItemID::ITEM_ID_LIGHTNING_WAND_3},
-
-
-        {"ITEM_ID_MAGICMISSLE_STAFF_1",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_1},
-        {"ITEM_ID_MAGICMISSLE_STAFF_2",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_2},
-        {"ITEM_ID_MAGICMISSLE_STAFF_3",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_3},
-        {"ITEM_ID_FIREBALL_STAFF_1",         ItemID::ITEM_ID_FIREBALL_STAFF_1},
-        {"ITEM_ID_FIREBALL_STAFF_2",         ItemID::ITEM_ID_FIREBALL_STAFF_2},
-        {"ITEM_ID_FIREBALL_STAFF_3",         ItemID::ITEM_ID_FIREBALL_STAFF_3},
-        {"ITEM_ID_LIGHTNING_STAFF_1",         ItemID::ITEM_ID_LIGHTNING_STAFF_1},
-        {"ITEM_ID_LIGHTNING_STAFF_2",         ItemID::ITEM_ID_LIGHTNING_STAFF_2},
-        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3},
-    };
-
-    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
-        return it->second;
-    }
-    TraceLog(LOG_INFO, "Item ID not found ");
-    return ItemID::ITEM_ID_NONE;
-
-} */
 
 ItemID StrToItemId(const std::string& s) {
 
@@ -793,8 +808,6 @@ ItemID StrToItemId(const std::string& s) {
 
 
 
-
-
 void from_json(const json &j, ItemInstanceData &i) {
     j.at("item_id").get_to(i.item_id);
     j.at("instance_id").get_to(i.instance_id);
@@ -806,7 +819,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("ammo_count").get_to(i.ammo_count);
     j.at("container_id").get_to(i.container_id);
 
-     TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
+    //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }
 
 
@@ -823,5 +836,5 @@ void from_json(const json &j, ContainerData &i) {
     j.at("size_y").get_to(i.size.y);
     j.at("level_index").get_to(i.level_index);
 
-     TraceLog(LOG_INFO, "container loaded  %s", i.iid.c_str());
+    //TraceLog(LOG_INFO, "container loaded  %s", i.iid.c_str());
 }

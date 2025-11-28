@@ -197,3 +197,39 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
     _draw_list.clear();
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
+
+
+bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
+    Vector2 end = Vector2Add(_ray.position, _ray.direction);
+    Vector2 step = _ray.direction * 0.1;
+
+    LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+
+    if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
+        return false;
+    }
+    
+    LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
+
+    int tile_size = g_current_scene->level_data.precalc.tile_size;
+    float inv_tile_size = g_current_scene->level_data.precalc.inv_tile_size;
+    int map_width = g_current_scene->level_data.precalc.map_width;
+
+    //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
+
+    for (int i = 1; i <= 10; i++) {
+
+        int ix = ( ((step.x * i) + _ray.position.x) * g_current_scene->level_data.precalc.inv_tile_size);
+        int iy = ( ((step.y * i) + _ray.position.y) * g_current_scene->level_data.precalc.inv_tile_size);
+
+        int index = iy * g_current_scene->level_data.precalc.map_width + ix;
+        int value = col_layer.int_grid[index];
+
+        //TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
+
+        if(value == 1) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -18,5 +18,5 @@ void SpawnSpell(SpellData _data, BaseScene &_scene, NewSpellPayload nsp) {
         //TraceLog(LOG_INFO, "lightning spell cast"); 
         DL_Add( _scene.level_data.entity_list, mm);
     }
-    //TraceLog(LOG_INFO, "entity list size  %i", _scene.level_data.entity_list.size()); 
+    TraceLog(LOG_INFO, "entity list size  %i", _scene.level_data.entity_list.size()); 
 }

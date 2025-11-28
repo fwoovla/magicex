@@ -148,13 +148,15 @@ void ShelterScene::DrawScene() {
 
     BeginMode2D(g_camera);
     tile_layer->Draw();
-
-/*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
+    
+    /*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
         g_level_data.game_areas[i]->Draw();
-    } */
-    DL_Draw(level_data.entity_list);
-
-    g_current_player->Draw();
+        } */
+       
+       DL_Draw(level_data.entity_list);
+       
+       g_current_player->Draw();
+       LDTKDrawShadows(g_current_player->position);
     EndMode2D();
 }
 

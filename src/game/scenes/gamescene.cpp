@@ -1,8 +1,8 @@
 #include "../../core/gamedefs.h"
 
-#define MAX_ZOOM 2.4f
-#define MIN_ZOOM 0.50f
-#define ZOOM_STEP 0.20f
+#define MAX_ZOOM 1.8f
+#define MIN_ZOOM 1.5f
+#define ZOOM_STEP 0.05f
 
 
 GameScene::GameScene() {
@@ -164,6 +164,7 @@ void GameScene::DrawScene() {
         tile_layer->Draw();
         DL_Draw(level_data.entity_list);
         g_current_player->Draw();
+        LDTKDrawShadows(g_current_player->position);
         EndMode2D();
     }    
 }

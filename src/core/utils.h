@@ -48,6 +48,22 @@ class Timer{
 };
 
 
+struct  CollisionResult {
+    Vector2 collision_dir;
+    BaseEntity *collider;
+    
+};
+
+struct  RayCast {
+    Vector2 position;
+    Vector2 direction;
+};
+
+struct Polygon {
+    std::vector<Vector2> points;
+    Color color;
+};
+
 Vector2 vClamp(Vector2 v, float maxLength);
 
 
@@ -75,3 +91,5 @@ void DL_DrawUI(std::vector<BaseEntity *> &_draw_list);
 void DL_Update(std::vector<BaseEntity *> &_draw_list);
 
 void DL_Clear(std::vector<BaseEntity *> &_draw_list);
+
+bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range);

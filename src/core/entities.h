@@ -20,6 +20,8 @@ class BaseContainerEntity : public SpriteEntity {
 
     Signal open_container;
 
+    RayCast raycast;
+
 };
 
 

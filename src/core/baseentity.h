@@ -26,6 +26,8 @@ class BaseEntity  {
     std::string identifier;
 
     bool is_persistant;
+    bool is_obstructable;
+    bool is_obstructed;
 };
 
 class SpriteEntity : public BaseEntity {
@@ -46,20 +48,6 @@ class AnimatedSpriteEntity : public BaseEntity {
     virtual void Update() = 0;
     virtual void Draw() = 0;
     virtual void DrawUI() = 0;
-};
-
-
-
-struct  CollisionResult {
-    Vector2 collision_dir;
-    BaseEntity *collider;
-    
-};
-
-struct  RayCast {
-    Vector2 position;
-    Vector2 direction;
-    
 };
 
 
@@ -149,21 +137,4 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list);
     return false;
 } */
 
-/* inline bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
-    Vector2 end = Vector2Add(_ray.position, _ray.direction);
-    Vector2 step = _ray.direction * 0.1;
-    //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
-
-    for (int i = 1; i <= 10; i++) {
-
-        int ix = ( ((step.x * i) + _ray.position.x) * INV_TILE_SIZE);
-        int iy = ( ((step.y * i) + _ray.position.y) * INV_TILE_SIZE);
-
-        //TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
-
-        if(level_array_data[(iy * g_map_width + ix)] == 1) {
-            return true;
-        }
-    }
-    return false;
-} */
+//bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range);

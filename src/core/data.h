@@ -156,6 +156,7 @@ struct LevelData {
     std::vector<ContainerData> container_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
+    std::vector<Polygon> collision_polys;
 
 
     std::vector<BaseEntity*> spell_list;
@@ -177,6 +178,8 @@ void LoadLevelData(LevelData &level_data);
 
 
 void PrecalculateTileCollisionData(LevelData &level_data);
+
+void PrecalculateShadowData(LevelData &level_data);
 
 void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id);
 

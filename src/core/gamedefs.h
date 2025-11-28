@@ -13,6 +13,7 @@ inline const Color TRANSDARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 150};
 //inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;
 
 
+
 struct GameSettings {
     Vector2 window_size;
     Vector2 resolution;
