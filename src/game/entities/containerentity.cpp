@@ -27,8 +27,6 @@ PermContainerEntity::~PermContainerEntity() {
     }
 
     TraceLog(LOG_INFO, "CONTAINER DESTROYED");
-
-
 }
 
 void PermContainerEntity::Update() {
@@ -47,7 +45,6 @@ void PermContainerEntity::Update() {
     }
 
     c_area.Update();
-
 
     raycast.position = {position.x + (sprite.size.x * 0.5f), position.y + (sprite.size.y * 0.5f)};
     float rot = GetAngleFromTo(raycast.position, g_current_player->position);

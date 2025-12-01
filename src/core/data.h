@@ -16,6 +16,7 @@
 #include "spells.h"
 #include "baseentity.h"
 #include "entities.h"
+#include "sprite.h"
 
 using json = nlohmann::json;
 
@@ -140,6 +141,7 @@ extern std::unordered_map<std::string, ContainerData> g_persistant_containers;
 
 struct LevelPrecalcData {
     int collision_layer_index;
+    int foreground_layer_index;
     int map_index;
     int map_width;
     int tile_size;
@@ -157,9 +159,7 @@ struct LevelData {
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
     std::vector<Polygon> collision_polys;
-
-
-    std::vector<BaseEntity*> spell_list;
+    std::vector<Sprite> environment_sprites;
 
 };
 

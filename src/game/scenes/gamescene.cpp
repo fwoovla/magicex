@@ -71,7 +71,7 @@ GameScene::GameScene() {
     g_camera.target = (Vector2){0,0};
     g_camera.offset = (Vector2){0,0};
     g_camera.rotation = 0.0f;
-    g_camera.zoom = 2.0f; 
+    g_camera.zoom = 1.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 }
 
@@ -145,8 +145,6 @@ SCENE_ID GameScene::Update() {
         }
     }
 
-
-
     return return_scene;
 }
 
@@ -165,6 +163,7 @@ void GameScene::DrawScene() {
         DL_Draw(level_data.entity_list);
         g_current_player->Draw();
         LDTKDrawShadows(g_current_player->position);
+        LDTKDrawForegroundLayer(g_current_player->position);
         EndMode2D();
     }    
 }

@@ -30,6 +30,7 @@ Texture2D g_portrait_sprites[MAX_SPRITES];
 Texture2D g_ui_panels[MAX_SPRITES];
 Texture2D g_ui_backgrounds[MAX_SPRITES];
 Texture2D g_spell_sprites[MAX_SPRITES];
+Texture2D g_environment_sprites[MAX_SPRITES];
 PlayerData g_player_data;
 
 PlayerCharacter *g_current_player;

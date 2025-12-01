@@ -55,6 +55,11 @@ struct LDTKCachedPixelData {
     std::string average_colors;
 };
 
+struct LDTKEnumTag {
+    std::string value_string;
+    std::vector<int> tile_ids;
+};
+
 struct LDTKTileset {
     int64_t c_wid;
     int64_t c_hei;
@@ -69,7 +74,7 @@ struct LDTKTileset {
     int64_t padding;
     std::vector<nlohmann::json> tags;
     nlohmann::json tags_source_enum_uid;
-    std::vector<nlohmann::json> enum_tags;
+    std::vector<LDTKEnumTag> enum_tags;
     std::vector<nlohmann::json> custom_data;
     std::vector<nlohmann::json> saved_selections;
     LDTKCachedPixelData cached_pixel_data;
@@ -158,6 +163,11 @@ struct LDTKLayerInstance {
     std::vector<LDTKEntityInstance> entity_instances;
 };
 
+struct LDTKEnvironmentData {
+    Vector2 position;
+    std::string item_string;
+};
+
 struct LDTKLevel {
     bool is_shelter;
     std::string identifier;
@@ -180,7 +190,7 @@ struct LDTKLevel {
     //nlohmann::json external_rel_path;
     std::vector<nlohmann::json> field_instances;
     std::vector<LDTKLayerInstance> layer_instances;
-    //std::vector<nlohmann::json> neighbours;
+    std::vector<LDTKEnvironmentData> environment_data;
 };
 
 struct LDTKMaps {
@@ -263,6 +273,8 @@ extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 void LDTKLoadTileSets (json &mj);
 void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
+
+void LDTKDrawForegroundLayer(Vector2 focus_position);
 
 void LDTKDrawShadows(Vector2 focus_position);
 

@@ -31,6 +31,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     
     collision_radius = 5;
     centered_offset = {0,0};
+    ground_point_offset = {0, sprite.frame_size/2};
     collided = false;
     should_delete = false;
     can_switch = true;
@@ -43,7 +44,6 @@ void PlayerCharacter::Update() {
     //TraceLog(LOG_INFO, "player update");
     CheckInput();
 
-    
     collided = false;
     
     Vector2 previous_position = position;
@@ -95,7 +95,8 @@ void PlayerCharacter::Draw() {
     DrawSprite(weapon_sprite);
     if(g_game_settings.show_debug == true) {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
-        DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);   
+        DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);
+        DrawCircleV(Vector2Add(position, ground_point_offset), 1, BLUE); 
     }
 }
 

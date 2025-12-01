@@ -551,6 +551,16 @@ void LoadLevelData(LevelData &level_data) {
             }
         }
     }
+
+    for(int thing = 0; thing < this_level.environment_data.size(); thing++) {
+        
+/*      which thing?
+        instance Sprite with proper texture
+        place at location
+        add to level data environment_sprites */
+
+    }
+
     for(const auto & container : g_persistant_containers) {
          if(container.second.level_index == g_game_data.current_map_index) {
             //TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND %s", container.second.iid.c_str());
@@ -582,6 +592,9 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
             level_data.precalc.collision_layer_index = l;
             //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
             col_layer = &this_level.layer_instances[l];
+        }
+        if(this_level.layer_instances[l].identifier == "Foreground") {
+            level_data.precalc.foreground_layer_index = l;
         }
     }
 

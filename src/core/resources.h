@@ -140,6 +140,21 @@ enum TileSheetID {
 
 extern Texture2D g_tile_sheets[MAX_SPRITES];
 
+
+
+
+
+enum EnvironmentSpriteID {
+    SPRITE_ENVIRO_TREE,
+    SPRITE_ENVIRO_NUM_SPRITES
+};
+
+extern Texture2D g_environment_sprites[MAX_SPRITES];
+
+
+
+
+
 void LoadResources();
 
 

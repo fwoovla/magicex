@@ -569,7 +569,6 @@ void LoadResources() {
     g_ui_sprites[UI_ID_CROSSHAIR] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   UI_ID_CROSSHAIR");
 
-    //UnloadTexture()
 
     TraceLog(LOG_INFO, "LOADING PORTRAITS");
     g_portrait_sprites[PORTRAIT_BASE_CHAR] = LoadTexture("assets/portrait1.png");
@@ -626,5 +625,10 @@ void UnloadResources() {
     TraceLog(LOG_INFO, "UNLOADING UI BACKGROUNDS");
     for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_ui_backgrounds[i]);
+    }
+
+    TraceLog(LOG_INFO, "UNLOADING ENVIRONMENT SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_environment_sprites[i]);
     }
 }

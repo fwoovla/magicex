@@ -22,6 +22,7 @@ class BaseEntity  {
     Vector2 position;
     float rotation;
     Vector2 centered_offset;
+    Vector2 ground_point_offset;
     float collision_radius;
     std::string identifier;
 

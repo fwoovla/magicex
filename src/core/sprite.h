@@ -12,6 +12,7 @@ struct Sprite {
     Vector2 scale;
     float rotation;
     Color modulate;
+    float frame_size;
     
 };
 
@@ -22,7 +23,7 @@ struct AnimatedSprite : public Sprite {
     int y_index;
     float frame_delay;
     double last_frame_time;
-    float frame_size;
+    
 };
 
 
@@ -30,6 +31,8 @@ struct AnimatedSprite : public Sprite {
 inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
     _sprite.texture = _texture;
     _sprite.size = {(float)_texture.width, (float)_texture.height};
+    _sprite.frame_size = _sprite.size.x;
+    //_sprite.frame_size = _sprite.size;
     _sprite.position = _position;
     _sprite.center = { _sprite.size.x/2, _sprite.size.y /2 };
     _sprite.source = {
@@ -53,6 +56,7 @@ inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _pos
 inline void LoadSpriteCentered(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _position, int _max_frames, float _frame_size, float _frame_delay) {
     _sprite.texture = _texture;
     _sprite.size = {_frame_size, _frame_size};
+    _sprite.frame_size = _frame_size;
     _sprite.position = _position;
     _sprite.center = { _sprite.size.x/2, _sprite.size.y /2 };
     _sprite.source = {
@@ -75,13 +79,13 @@ inline void LoadSpriteCentered(AnimatedSprite &_sprite, Texture2D _texture, Vect
     _sprite.last_frame_time = GetTime();
     _sprite.frame = 0;
     _sprite.y_index = 0;
-        
 }
 
 
 inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
     _sprite.texture = _texture;
     _sprite.size = {(float)_texture.width, (float)_texture.height};
+    _sprite.frame_size = _sprite.size.x;
     _sprite.position = _position;
      _sprite.center = {0,0};
     _sprite.source = {
@@ -103,6 +107,7 @@ inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
 inline void LoadSprite(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _position, int _max_frames, float _frame_size, float _frame_delay) {
     _sprite.texture = _texture;
     _sprite.size = {_frame_size, _frame_size};
+    _sprite.frame_size = _frame_size;
     _sprite.position = _position;
     _sprite.center = {0,0};
     _sprite.source = {

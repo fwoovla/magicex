@@ -31,7 +31,20 @@ void LDTKLoadTileSets(json &mj) {
                     .px_wid = mj["defs"]["tilesets"][i]["pxWid"],
                     .px_hei = mj["defs"]["tilesets"][i]["pxHei"],
                     .tile_grid_size = mj["defs"]["tilesets"][i]["tileGridSize"]  
+                    
                 };
+                for(int tag = 0; tag < mj["defs"]["tilesets"][i]["enumTags"].size(); tag++) {
+                    LDTKEnumTag new_tag;
+                    new_tag.value_string = mj["defs"]["tilesets"][i]["enumTags"][tag]["enumValueId"];
+                    TraceLog(LOG_INFO, "====enum tag           ______________----------- %s", new_tag.value_string.c_str());
+                    for(int tid = 0; tid <  mj["defs"]["tilesets"][i]["enumTags"][tag]["tileIds"].size(); tid++) {
+                        int id = mj["defs"]["tilesets"][i]["enumTags"][tag]["tileIds"][tid];
+                        new_tag.tile_ids.push_back(id);
+                        TraceLog(LOG_INFO, "====enum tag    tileid       ______________----------- %i", id);
+
+                    }
+                    this_tileset.enum_tags.push_back(new_tag);
+                    }
                 
                 g_ldtk_maps.tilesets.push_back(this_tileset);
 
@@ -133,8 +146,30 @@ void LDTKLoadMaps (json &mj) {
                         this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
                         this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
                         this_layer.grid_tiles[tile] = this_tile;
-                    }
 
+                        for(int ts = 0; ts < g_ldtk_maps.tilesets.size(); ts++) {
+                            if(g_ldtk_maps.tilesets[ts].uid == this_layer.tileset_def_uid) {
+                                for(int tag = 0; tag < g_ldtk_maps.tilesets[ts].enum_tags.size(); tag++) {
+                                    std::string value_s = g_ldtk_maps.tilesets[ts].enum_tags[tag].value_string;
+                                    //TraceLog(LOG_INFO, "          |||||||enum %s||||||", value_s.c_str());
+
+                                    for(int tile = 0; tile < g_ldtk_maps.tilesets[ts].enum_tags[tag].tile_ids.size(); tile++) {
+                                        if(this_tile.t == g_ldtk_maps.tilesets[ts].enum_tags[tag].tile_ids[tile]) {
+                                            //TraceLog(LOG_INFO, "          |||||||tile id: %i has enum %s||||||", this_tile.t, value_s.c_str());
+                                            LDTKEnvironmentData new_data;
+                                            new_data.item_string = value_s;
+                                            new_data.position = {(float)this_tile.px[0] + (g_ldtk_maps.default_grid_size/2), (float)this_tile.px[1] + (g_ldtk_maps.default_grid_size)};
+                                            this_level.environment_data.push_back(new_data);
+                                            TraceLog(LOG_INFO, "          |||||||tile id: %i has enum %s||||||", this_tile.t, new_data.item_string.c_str());
+                                            TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", (float)this_tile.px[0], (float)this_tile.px[1]);
+                                            TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", new_data.position.x, new_data.position.y); 
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     //TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES ADDED %i", this_layer.grid_tiles.size());
                 }
 
@@ -255,20 +290,23 @@ void LDTKLoadMaps (json &mj) {
 
 int LDTKDrawMap(Vector2 focus_position) {
 
-    int map_index = g_game_data.current_map_index;
+/*     int map_index = g_game_data.current_map_index;
     if(g_game_data.is_in_sub_map) {
         map_index = g_game_data.sub_map_index;
-    }
+    } */
     //TraceLog(LOG_INFO, "drawing map index:  %i ", map_index);
     int tiles_drawn = 0;
 
     //invert layers for drawing
     int tilesheet_id = 0;
 
-    LDTKLevel *this_level = &g_ldtk_maps.levels[map_index];
+    LDTKLevel *this_level = &g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         if(this_level->layer_instances[l].type == "IntGrid") {
+            break;
+        }
+        if(g_current_scene->level_data.precalc.foreground_layer_index == l) {
             break;
         }
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
@@ -307,9 +345,50 @@ int LDTKDrawMap(Vector2 focus_position) {
 
         }
     }
+
+
     return tiles_drawn;
 }
 
+
+void LDTKDrawForegroundLayer(Vector2 focus_position) {
+    LDTKLevel *this_level = &g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+    int layer = g_current_scene->level_data.precalc.foreground_layer_index;
+
+    int tilesheet_id = this_level->layer_instances[layer].tileset_def_uid;
+
+    for(int tile = 0; tile < this_level->layer_instances[layer].grid_tiles.size(); tile++) {
+        LDTKGridTile *this_tile = &this_level->layer_instances[layer].grid_tiles[tile];
+
+        int tile_id = this_tile->t;
+
+        int tile_x = this_tile->px[0] * g_viewport.inv_tile_size;
+        int tile_y = this_tile->px[1] * g_viewport.inv_tile_size;
+
+        if(tile_id == -1) {
+            TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %i  y %i", tile_x, tile_y);
+            break;
+        } 
+
+        if((tile_x >= g_viewport.x_min) and (tile_x <= g_viewport.x_max) and (tile_y >= g_viewport.y_min) and (tile_y <= g_viewport.y_max)) {
+
+            Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
+            Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
+
+            Color color = WHITE;
+
+            DrawTexturePro(
+                g_ldtk_tilesheets[tilesheet_id].texture,
+                {atlas_pos.x, atlas_pos.y, (float)g_viewport.tile_size, (float)g_viewport.tile_size},
+                {(float)tile_pos.x, (float)tile_pos.y,(float)g_viewport.tile_size+.1f, (float )g_viewport.tile_size +.1f},
+                {0,0},
+                0.0,
+                color
+            );
+        }
+        
+    }
+}
 
 
 void LDTKDrawShadows(Vector2 focus_position) {
