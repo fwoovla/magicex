@@ -190,6 +190,7 @@ SpellID StrToSpellId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);
 
+EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 
 void from_json(const json &j, ItemInstanceData &i);
 

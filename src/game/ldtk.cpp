@@ -170,6 +170,7 @@ void LDTKLoadMaps (json &mj) {
                             }
                         }
                     }
+                    TraceLog(LOG_INFO, "      |||||||# of enviro sprites: %i", this_level.environment_data.size());
                     //TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES ADDED %i", this_layer.grid_tiles.size());
                 }
 
@@ -472,3 +473,5 @@ void LDTKDrawShadows(Vector2 focus_position) {
         }
     }
 }
+
+

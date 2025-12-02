@@ -145,7 +145,8 @@ extern Texture2D g_tile_sheets[MAX_SPRITES];
 
 
 enum EnvironmentSpriteID {
-    SPRITE_ENVIRO_TREE,
+    SPRITE_ENVIRO_ERROR,
+    SPRITE_ENVIRO_TREE1,
     SPRITE_ENVIRO_NUM_SPRITES
 };
 

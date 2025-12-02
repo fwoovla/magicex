@@ -13,7 +13,7 @@ struct Sprite {
     float rotation;
     Color modulate;
     float frame_size;
-    
+    Vector2 pivot;
 };
 
 struct AnimatedSprite : public Sprite {
@@ -49,6 +49,7 @@ inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _pos
     };
     _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
+    _sprite.pivot = _sprite.center;
         
 }
 
@@ -73,6 +74,7 @@ inline void LoadSpriteCentered(AnimatedSprite &_sprite, Texture2D _texture, Vect
     };
     _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
+    _sprite.pivot = _sprite.center;
 
     _sprite.max_frames = _max_frames;
     _sprite.frame_delay = _frame_delay;
@@ -102,6 +104,7 @@ inline void LoadSprite(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
     };
     _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
+    _sprite.pivot = _sprite.center;
 }
 
 inline void LoadSprite(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _position, int _max_frames, float _frame_size, float _frame_delay) {
@@ -124,6 +127,7 @@ inline void LoadSprite(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _pos
     };
     _sprite.rotation = 0.0;
     _sprite.modulate = WHITE;
+    _sprite.pivot = _sprite.center;
 
     _sprite.max_frames = _max_frames;
     _sprite.frame_delay = _frame_delay;

@@ -160,10 +160,42 @@ void GameScene::DrawScene() {
     else {
         BeginMode2D(g_camera);
         tile_layer->Draw();
+
         DL_Draw(level_data.entity_list);
-        g_current_player->Draw();
+
         LDTKDrawShadows(g_current_player->position);
-        LDTKDrawForegroundLayer(g_current_player->position);
+        for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
+            if(g_current_player->position.y + g_current_player->ground_point_offset.y > level_data.environment_sprites[thing].position.y) {
+                float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.05f );
+                level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
+                DrawSprite(level_data.environment_sprites[thing]);
+            }
+        }
+
+        g_current_player->Draw();
+
+        for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
+            if(g_current_player->position.y + g_current_player->ground_point_offset.y < level_data.environment_sprites[thing].position.y) {
+                //level_data.environment_sprites[thing].modulate = WHITE;
+                Rectangle rect = {
+                    level_data.environment_sprites[thing].position.x - level_data.environment_sprites[thing].center.x,
+                    level_data.environment_sprites[thing].position.y - level_data.environment_sprites[thing].center.y,
+                    level_data.environment_sprites[thing].size.x,
+                    level_data.environment_sprites[thing].size.y,
+                };
+
+                if( CheckCollisionPointRec(g_current_player->position, rect ) ) {
+                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 30.0f, 0.05f );
+                    level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
+                }
+                else {
+                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.05f );
+                    level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
+                }
+                DrawSprite(level_data.environment_sprites[thing]);
+            }
+        }
+
         EndMode2D();
     }    
 }

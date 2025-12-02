@@ -16,50 +16,50 @@
     ],
     "health": 15,
     "hotbar": [
+        -1,
+        -1,
+        -1,
+        -1,
         -1
     ],
     "inventory": [
+        238445175,
+        605662809,
+        960430531,
+        331649551,
+        911020563,
+        -1,
+        621413749,
+        771703673,
+        -1,
+        192003140,
+        117697957,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
         -1
     ],
     "item_instances": [
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 148029533,
-            "item_id": 24,
-            "item_name": "MUSHROOM_JUICE",
-            "spell_id": 36,
-            "type": 6,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 149559907,
-            "item_id": 13,
-            "item_name": "LIGHTNING_WAND 3",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 4177808,
-            "item_id": 12,
-            "item_name": "LIGHTNING_WAND 2",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 791163014,
+            "container_id": "",
+            "instance_id": 117697957,
             "item_id": 23,
             "item_name": "MUSHROOM",
             "spell_id": 36,
@@ -69,8 +69,8 @@
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 539668576,
+            "container_id": "",
+            "instance_id": 771703673,
             "item_id": 11,
             "item_name": "LIGHTNING_WAND 1",
             "spell_id": 36,
@@ -80,52 +80,8 @@
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 662243131,
-            "item_id": 10,
-            "item_name": "FIREBALL_WAND 3",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 515705197,
-            "item_id": 9,
-            "item_name": "FIREBALL_WAND 2",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 19929363,
-            "item_id": 7,
-            "item_name": "MAGICMISSLE_WAND 3",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 103425023,
-            "item_id": 6,
-            "item_name": "MAGICMISSLE_WAND 2",
-            "spell_id": 36,
-            "type": 0,
-            "value": 0
-        },
-        {
-            "ammo_count": 0,
-            "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 874564424,
+            "container_id": "",
+            "instance_id": 621413749,
             "item_id": 8,
             "item_name": "FIREBALL_WAND 1",
             "spell_id": 36,
@@ -136,11 +92,132 @@
             "ammo_count": 0,
             "clip_size": 0,
             "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 241011530,
+            "instance_id": 449872192,
+            "item_id": 13,
+            "item_name": "LIGHTNING_WAND 3",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
+            "instance_id": 787295892,
+            "item_id": 12,
+            "item_name": "LIGHTNING_WAND 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 232196789,
+            "item_id": 7,
+            "item_name": "MAGICMISSLE_WAND 3",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 192003140,
+            "item_id": 24,
+            "item_name": "MUSHROOM_JUICE",
+            "spell_id": 36,
+            "type": 6,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 852282767,
+            "item_id": 9,
+            "item_name": "FIREBALL_WAND 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 960430531,
+            "item_id": 28,
+            "item_name": "LEATHER LEGGINGS",
+            "spell_id": 36,
+            "type": 3,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 911020563,
+            "item_id": 6,
+            "item_name": "MAGICMISSLE_WAND 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 605662809,
+            "item_id": 26,
+            "item_name": "LEATHERVEST",
+            "spell_id": 36,
+            "type": 2,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
+            "instance_id": 43106647,
+            "item_id": 10,
+            "item_name": "FIREBALL_WAND 3",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
+            "instance_id": 770147364,
             "item_id": 5,
             "item_name": "MAGICMISSLE_WAND 1",
             "spell_id": 36,
             "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 238445175,
+            "item_id": 27,
+            "item_name": "LEATHERGLOVES",
+            "spell_id": 36,
+            "type": 5,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 331649551,
+            "item_id": 25,
+            "item_name": "Leather Boots",
+            "spell_id": 36,
+            "type": 4,
             "value": 0
         }
     ],
@@ -164,10 +241,10 @@
     ],
     "portrait_id": 0,
     "primary": [
-        -1
+        852282767
     ],
     "secondary": [
-        -1
+        232196789
     ],
     "sprite_sheet_id": 0
 }

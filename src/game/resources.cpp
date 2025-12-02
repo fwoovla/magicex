@@ -547,6 +547,21 @@ void LoadResources() {
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_ERROR");
 
 
+//environmental sprites
+    //icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    //icon_pos = {0,0};
+    item_pos = {43,1};
+
+    //ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 5, 16 * 5});
+    //g_icon_sprites[ITEM_ID_ERROR] = LoadTextureFromImage(icon_image);
+    g_environment_sprites[SPRITE_ENVIRO_TREE1] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_TREE");
+
+
+
+
 //containers
     TraceLog(LOG_INFO, "LOADING CONTAINER SPRITES");
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
