@@ -3,6 +3,23 @@
 #include "baseentity.h"
 
 
+
+class EnvironmentalEntity : public SpriteEntity {
+    public:
+    Sprite sprite;
+
+    EnvironmentalEntity(Vector2 _position, int _sprite_id, bool _fadeable);
+    ~EnvironmentalEntity() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+
+    bool fadeable;
+};
+
+
+
 class BaseContainerEntity : public SpriteEntity {
     public:
 
@@ -34,6 +51,7 @@ class PermContainerEntity : public BaseContainerEntity {
     void DrawUI() override;
     void OnContainerOpened() override;
     bool IsEmpty() override;
+    float GetYSort() override;
 };
 
 class GroundContainerEntity : public BaseContainerEntity {
@@ -45,6 +63,7 @@ class GroundContainerEntity : public BaseContainerEntity {
     void DrawUI() override;
     void OnContainerOpened() override;
     bool IsEmpty() override;
+    float GetYSort() override;
     void SetSprite(int sprite_id);
 
     void OnListChanged();
@@ -59,4 +78,6 @@ class MushroomEntity : public BaseContainerEntity {
     void DrawUI() override;
     void OnContainerOpened() override;
     bool IsEmpty() override;
+    float GetYSort() override;
 };
+

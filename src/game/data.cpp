@@ -552,23 +552,21 @@ void LoadLevelData(LevelData &level_data) {
         }
     }
 
-    TraceLog(LOG_INFO, "-----environment sprites %i", this_level.environment_data.size());
 
     for(int thing = 0; thing < this_level.environment_data.size(); thing++) {
-        TraceLog(LOG_INFO, "-----environment sprite %s %0.0f %0.0f", this_level.environment_data[thing].item_string.c_str(), this_level.environment_data[thing].position.x, this_level.environment_data[thing].position.y);
+        //TraceLog(LOG_INFO, "-----environment sprite %s %0.0f %0.0f", this_level.environment_data[thing].item_string.c_str(), this_level.environment_data[thing].position.x, this_level.environment_data[thing].position.y);
         int id = StrToEnviroSpriteId(this_level.environment_data[thing].item_string);
 
-        Sprite new_sprite;
-        LoadSprite(new_sprite, g_environment_sprites[id], this_level.environment_data[thing].position);
-        float x_offset = new_sprite.texture.width/2;
-        float y_offset = new_sprite.texture.height;
-        new_sprite.center = { x_offset, y_offset };
-        level_data.environment_sprites.push_back(new_sprite);
-/*      which thing?
-        instance Sprite with proper texture
-        place at location
-        add to level data environment_sprites */
-
+        
+        if(id < SPRITE_ENVIRO_GRASS1) {
+            EnvironmentalEntity *new_entity = new EnvironmentalEntity(this_level.environment_data[thing].position, id, true);
+            level_data.environment_entities.push_back(new_entity);
+        }
+        else {
+            EnvironmentalEntity *new_entity = new EnvironmentalEntity(this_level.environment_data[thing].position, id, false);
+            level_data.environment_entities.push_back(new_entity);
+        }
+        TraceLog(LOG_INFO, "-----\n");
     }
 
     for(const auto & container : g_persistant_containers) {
@@ -833,11 +831,11 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
 
     static const std::unordered_map<std::string, EnvironmentSpriteID> lookup_table = {
         {"Tree1",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE1},
-
+        {"Grass1",                        EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
-        TraceLog(LOG_INFO, "enviro ID found %i", it->second);
+        //TraceLog(LOG_INFO, "enviro ID found %i", it->second);
         return it->second;
     }
     //TraceLog(LOG_INFO, "Spell ID not found ");

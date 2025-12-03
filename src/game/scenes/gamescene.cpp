@@ -158,43 +158,72 @@ void GameScene::DrawScene() {
         sub_scene->DrawScene();
     }
     else {
-        BeginMode2D(g_camera);
-        tile_layer->Draw();
 
-        DL_Draw(level_data.entity_list);
+    level_data.draw_list.clear();
 
-        LDTKDrawShadows(g_current_player->position);
-        for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
+    level_data.draw_list.push_back(g_current_player);
+
+    for (auto e : level_data.environment_entities)
+        level_data.draw_list.push_back(e);
+
+
+    for (auto e : level_data.entity_list)
+        level_data.draw_list.push_back(e);
+
+    std::sort(level_data.draw_list.begin(), level_data.draw_list.end(),
+    [](BaseEntity* a, BaseEntity* b) {
+        return a->GetYSort() < b->GetYSort();
+    });
+    
+    //TraceLog(LOG_INFO, "DRAW LIST SIZE %i", level_data.draw_list.size());
+
+    BeginMode2D(g_camera);
+    tile_layer->Draw();
+
+        //DL_Draw(level_data.entity_list);
+
+    LDTKDrawShadows(g_current_player->position);
+
+    for(auto e: level_data.draw_list) {
+        e->Draw();
+    }
+
+/*         for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
             if(g_current_player->position.y + g_current_player->ground_point_offset.y > level_data.environment_sprites[thing].position.y) {
-                float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.05f );
-                level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
+                if(level_data.environment_sprites[thing].fadeable) {
+                    
+                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.5f );
+                    level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
+                }
                 DrawSprite(level_data.environment_sprites[thing]);
             }
-        }
+        } */
 
-        g_current_player->Draw();
+        //g_current_player->Draw();
 
-        for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
+/*         for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
             if(g_current_player->position.y + g_current_player->ground_point_offset.y < level_data.environment_sprites[thing].position.y) {
-                //level_data.environment_sprites[thing].modulate = WHITE;
-                Rectangle rect = {
-                    level_data.environment_sprites[thing].position.x - level_data.environment_sprites[thing].center.x,
-                    level_data.environment_sprites[thing].position.y - level_data.environment_sprites[thing].center.y,
-                    level_data.environment_sprites[thing].size.x,
-                    level_data.environment_sprites[thing].size.y,
-                };
-
-                if( CheckCollisionPointRec(g_current_player->position, rect ) ) {
-                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 30.0f, 0.05f );
-                    level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
-                }
-                else {
-                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.05f );
-                    level_data.environment_sprites[thing].modulate = {255, 255, 255, (unsigned char)alpha_value};
+                if(level_data.environment_sprites[thing].fadeable) {
+                    
+                    Rectangle rect = {
+                        level_data.environment_sprites[thing].position.x - level_data.environment_sprites[thing].center.x,
+                        level_data.environment_sprites[thing].position.y - level_data.environment_sprites[thing].center.y,
+                        level_data.environment_sprites[thing].size.x,
+                        level_data.environment_sprites[thing].size.y,
+                    };
+                    
+                    if( CheckCollisionPointRec(g_current_player->position, rect ) ) {
+                        float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 30.0f, 0.5f );
+                        level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
+                    }
+                    else {
+                        float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.5f );
+                        level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
+                    }
                 }
                 DrawSprite(level_data.environment_sprites[thing]);
             }
-        }
+        } */
 
         EndMode2D();
     }    

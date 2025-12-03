@@ -253,3 +253,6 @@ PlayerCharacter::~PlayerCharacter()
     TraceLog(LOG_INFO, "deleting player!!!!!!!!!!!!!!!!!!!!");
 }
 
+float PlayerCharacter::GetYSort() {
+    return position.y + ground_point_offset.y;
+}

@@ -146,17 +146,38 @@ void ShelterScene::Draw() {
 
 void ShelterScene::DrawScene() {
 
+    level_data.draw_list.clear();
+
+    level_data.draw_list.push_back(g_current_player);
+
+    for (auto e : level_data.environment_entities)
+        level_data.draw_list.push_back(e);
+
+
+    for (auto e : level_data.entity_list)
+        level_data.draw_list.push_back(e);
+
+    //std::sort(level_data.draw_list.begin(), level_data.draw_list.end());
+
+    std::sort(level_data.draw_list.begin(), level_data.draw_list.end(),
+    [](BaseEntity* a, BaseEntity* b) {
+        return a->GetYSort() < b->GetYSort();
+    });
+
+    //TraceLog(LOG_INFO, "DRAW LIST SIZE %i", level_data.draw_list.size());
+
     BeginMode2D(g_camera);
     tile_layer->Draw();
     
-    /*     for(int i = 0; i < g_level_data.game_areas.size(); i++) {
-        g_level_data.game_areas[i]->Draw();
-        } */
-       
-       DL_Draw(level_data.entity_list);
-       
-       g_current_player->Draw();
-       LDTKDrawShadows(g_current_player->position);
+    
+    for(auto e: level_data.draw_list) {
+        e->Draw();
+    }
+
+
+    LDTKDrawShadows(g_current_player->position);
+
+
     EndMode2D();
 }
 

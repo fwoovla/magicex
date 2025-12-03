@@ -8,6 +8,7 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     void Update() override;
     void Draw() override;
     void DrawUI()override;
+    float GetYSort() override;
     void CheckInput();
 
     bool CanEquip(int item_id);

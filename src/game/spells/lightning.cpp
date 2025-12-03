@@ -70,3 +70,7 @@ void Lightning::DrawUI() {
 void Lightning::OnLifetimeTimeout() {
     should_delete = true;
 }
+
+float Lightning::GetYSort() {
+    return position.y;
+}

@@ -15,6 +15,9 @@ class BaseEntity  {
     virtual void Update() = 0;   
     virtual void Draw() = 0; 
     virtual void DrawUI() = 0;
+    virtual float GetYSort() = 0;
+
+    //Sprite sprite;
 
     bool should_delete;
     Rectangle collision_rect;
@@ -39,6 +42,7 @@ class SpriteEntity : public BaseEntity {
     virtual void Update() = 0;
     virtual void Draw() = 0;
     virtual void DrawUI() = 0;
+    virtual float GetYSort() = 0;
 };
 
 class AnimatedSpriteEntity : public BaseEntity {
@@ -49,7 +53,9 @@ class AnimatedSpriteEntity : public BaseEntity {
     virtual void Update() = 0;
     virtual void Draw() = 0;
     virtual void DrawUI() = 0;
+    virtual float GetYSort() = 0;
 };
+
 
 
 //extern std::vector<BaseEntity *> active_entity_list;

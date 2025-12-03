@@ -99,3 +99,7 @@ void MagicMissle::DrawUI() {
 void MagicMissle::OnLifetimeTimeout() {
     should_delete = true;
 }
+
+float MagicMissle::GetYSort() {
+    return position.y;
+}

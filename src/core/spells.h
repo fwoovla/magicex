@@ -50,6 +50,7 @@ class MagicMissle : public BaseSpell {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
+    float GetYSort() override;
     void OnLifetimeTimeout() override;
 
 };
@@ -62,6 +63,7 @@ class FireBall : public BaseSpell {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
+    float GetYSort() override;
     void OnLifetimeTimeout() override;
 
 };
@@ -74,6 +76,7 @@ class Lightning : public BaseSpell {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
+    float GetYSort() override;
     void OnLifetimeTimeout() override;
 
 };

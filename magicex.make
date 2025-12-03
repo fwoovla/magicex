@@ -85,6 +85,7 @@ GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/entityspawner.o
+GENERATED += $(OBJDIR)/environmentalentity.o
 GENERATED += $(OBJDIR)/events.o
 GENERATED += $(OBJDIR)/fireball.o
 GENERATED += $(OBJDIR)/game.o
@@ -122,6 +123,7 @@ OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/entityspawner.o
+OBJECTS += $(OBJDIR)/environmentalentity.o
 OBJECTS += $(OBJDIR)/events.o
 OBJECTS += $(OBJDIR)/fireball.o
 OBJECTS += $(OBJDIR)/game.o
@@ -231,6 +233,9 @@ $(OBJDIR)/containerentity.o: src/game/entities/containerentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/entityspawner.o: src/game/entities/entityspawner.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/environmentalentity.o: src/game/entities/environmentalentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/mushroomentity.o: src/game/entities/mushroomentity.cpp

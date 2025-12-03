@@ -26,7 +26,11 @@ struct AnimatedSprite : public Sprite {
     
 };
 
+struct EnvironmentalSprite : public Sprite {
 
+    bool fadeable;
+    
+};
 
 inline void LoadSpriteCentered(Sprite &_sprite, Texture2D _texture, Vector2 _position) {
     _sprite.texture = _texture;
@@ -136,6 +140,34 @@ inline void LoadSprite(AnimatedSprite &_sprite, Texture2D _texture, Vector2 _pos
     _sprite.y_index = 0;
 }
 
+inline void LoadSprite(EnvironmentalSprite &_sprite, Texture2D _texture, Vector2 _position, bool _fadeable) {
+    _sprite.texture = _texture;
+    _sprite.size = {(float)_texture.width, (float)_texture.height};
+    _sprite.frame_size = _sprite.size.x;
+    _sprite.position = _position;
+
+    float x_offset = _sprite.texture.width/2;
+    float y_offset = _sprite.texture.height;
+    _sprite.center = { x_offset, y_offset };
+
+    _sprite.source = {
+        .x = 0,
+        .y = 0,
+        .width = _sprite.size.x,
+        .height = _sprite.size.y,
+    };
+    _sprite.dest = {
+        _sprite.position.x,
+        _sprite.position.y,
+        _sprite.size.x,
+        _sprite.size.y  
+    };
+    _sprite.rotation = 0.0;
+    _sprite.modulate = WHITE;
+    _sprite.pivot = _sprite.center;
+    _sprite.fadeable = _fadeable;
+}
+
 inline void ScaleSprite(Sprite &_sprite, Vector2 _scale) {
     
     _sprite.scale = _scale;
@@ -176,6 +208,12 @@ inline void DrawSprite(AnimatedSprite &_sprite) {
         _sprite.source.y = _sprite.y_index * _sprite.size.y;
     }
     
+    DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.rotation, _sprite.modulate );       
+}
+
+inline void DrawSprite(EnvironmentalSprite &_sprite) {
+    _sprite.dest.x = _sprite.position.x;
+    _sprite.dest.y = _sprite.position.y;
     DrawTexturePro(_sprite.texture, _sprite.source, _sprite.dest, _sprite.center, _sprite.rotation, _sprite.modulate );       
 }
 

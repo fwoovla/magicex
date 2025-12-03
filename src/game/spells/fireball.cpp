@@ -70,3 +70,7 @@ void FireBall::DrawUI() {
 void FireBall::OnLifetimeTimeout() {
     should_delete = true;
 }
+
+float FireBall::GetYSort() {
+    return position.y;
+}

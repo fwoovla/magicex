@@ -159,7 +159,8 @@ struct LevelData {
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
     std::vector<Polygon> collision_polys;
-    std::vector<Sprite> environment_sprites;
+    std::vector<EnvironmentalEntity *> environment_entities;
+    std::vector<BaseEntity *> draw_list;
 
 };
 

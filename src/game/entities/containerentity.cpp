@@ -89,6 +89,10 @@ bool PermContainerEntity::IsEmpty() {
     return true;
 }
 
+float PermContainerEntity::GetYSort() {
+    return position.y;
+}
+
 //=====================================================
 
 GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
@@ -189,4 +193,8 @@ bool GroundContainerEntity::IsEmpty() {
 void GroundContainerEntity::SetSprite(int sprite_id) {
     LoadSprite(sprite, g_item_sprites[sprite_id], position);
     ScaleSprite(sprite, {0.5f, 0.5f});
+}
+
+float GroundContainerEntity::GetYSort() {
+    return position.y;
 }

@@ -49,3 +49,7 @@ bool MushroomEntity::IsEmpty() {
     }
     return true;
 }
+
+float MushroomEntity::GetYSort() {
+    return position.y;
+}
