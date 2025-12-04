@@ -548,28 +548,53 @@ void LoadResources() {
 
 
 //environmental sprites
-    //icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
-    //icon_pos = {0,0};
     item_pos = {43,1};
-
-    //ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
-    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 5, 16 * 5});
-    //g_icon_sprites[ITEM_ID_ERROR] = LoadTextureFromImage(icon_image);
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 5, 16 * 6});
     g_environment_sprites[SPRITE_ENVIRO_TREE1] = LoadTextureFromImage(item_image);
-    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_TREE");
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_TREE1");
 
-    //icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
-    //icon_pos = {0,0};
-    item_pos = {45,8};
+    item_pos = {43,7};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 5, 16 * 3});
+    g_shadow_sprites[SPRITE_SHADOW_TREE1] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_TREE1");
+//
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {40,1};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 2, 16 * 8});
+    g_environment_sprites[SPRITE_ENVIRO_TREE2] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_TREE2");
 
-    //ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {40,9};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 3, 16 * 3});
+    g_shadow_sprites[SPRITE_SHADOW_TREE2] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_TREE2");
+//
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {35,1};
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    //g_icon_sprites[ITEM_ID_ERROR] = LoadTextureFromImage(icon_image);
     g_environment_sprites[SPRITE_ENVIRO_GRASS1] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_GRASS1");
 
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {35,2};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_shadow_sprites[SPRITE_SHADOW_GRASS1] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_GRASS1");
+//
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {36,1};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_environment_sprites[SPRITE_ENVIRO_GRASS2] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_GRASS2");
+
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {36,2};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_shadow_sprites[SPRITE_SHADOW_GRASS2] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_GRASS2");
 
 //containers
     TraceLog(LOG_INFO, "LOADING CONTAINER SPRITES");
@@ -654,5 +679,10 @@ void UnloadResources() {
     TraceLog(LOG_INFO, "UNLOADING ENVIRONMENT SPRITES");
     for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_environment_sprites[i]);
+    }
+
+    TraceLog(LOG_INFO, "UNLOADING ENVIRONMENT SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_shadow_sprites[i]);
     }
 }

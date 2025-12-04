@@ -8,6 +8,7 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
     
 
     LoadSprite(sprite, g_environment_sprites[_sprite_id], position);
+    LoadSprite(shadow_sprite, g_shadow_sprites[_sprite_id], {position.x - (sprite.size.x/2), position.y});
 
     float x_offset = sprite.texture.width/2;
     float y_offset = sprite.texture.height;
@@ -17,6 +18,12 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
     centered_offset = {0,0};
     collided = false;
 
+    collision_rect = {
+            position.x - sprite.center.x,
+            position.y - sprite.center.y,
+            sprite.size.x,
+            sprite.size.y,
+        };
     
     should_delete = false;
     is_persistant = false;
@@ -39,14 +46,9 @@ void EnvironmentalEntity::Draw() {
     //DrawCircleV(sprite.position, 2, WHITE);
     if(fadeable) {
                     
-        Rectangle rect = {
-            position.x - sprite.center.x,
-            position.y - sprite.center.y,
-            sprite.size.x,
-            sprite.size.y,
-        };
+        
                     
-        if( CheckCollisionPointRec(Vector2Add(g_current_player->position, g_current_player->ground_point_offset), rect ) ) {
+        if( CheckCollisionPointRec(Vector2Add(g_current_player->position, g_current_player->ground_point_offset), collision_rect ) ) {
             float alpha_value = Lerp((float)sprite.modulate.a, 30.0f, 0.5f );
             sprite.modulate.a = (unsigned char)alpha_value;
         }
@@ -56,15 +58,11 @@ void EnvironmentalEntity::Draw() {
         }
     }
     if(g_game_settings.show_debug) {
-        Rectangle rect = {
-            position.x - sprite.center.x,
-            position.y - sprite.center.y,
-            sprite.size.x,
-            sprite.size.y,
-        };
-        DrawRectangleRec(rect, RED);
+
+        DrawRectangleRec(collision_rect, RED);
     }
     DrawSprite(sprite);
+    DrawSprite(shadow_sprite);
 }
 
 void EnvironmentalEntity::DrawUI() {

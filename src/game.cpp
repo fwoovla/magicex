@@ -1,6 +1,7 @@
 #include "core/gamedefs.h"
 
 std::unique_ptr<BaseScene> g_current_scene;
+std::unique_ptr<SubScene> g_sub_scene;
 
 std::unordered_map<int, PlayerData> g_class_data;
 std::unordered_map<int, ItemData> g_item_data;
@@ -31,6 +32,7 @@ Texture2D g_ui_panels[MAX_SPRITES];
 Texture2D g_ui_backgrounds[MAX_SPRITES];
 Texture2D g_spell_sprites[MAX_SPRITES];
 Texture2D g_environment_sprites[MAX_SPRITES];
+Texture2D g_shadow_sprites[MAX_SPRITES];
 PlayerData g_player_data;
 
 PlayerCharacter *g_current_player;

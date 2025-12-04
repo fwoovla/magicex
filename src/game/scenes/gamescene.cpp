@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
 #define MAX_ZOOM 1.8f
-#define MIN_ZOOM 1.5f
+#define MIN_ZOOM 0.05f
 #define ZOOM_STEP 0.05f
 
 
@@ -77,15 +77,14 @@ GameScene::GameScene() {
 
 
 SCENE_ID GameScene::Update() {
-    //TraceLog(LOG_INFO, " UPDATE");
     if(can_delete_sub) {
-        delete sub_scene;
-        sub_scene = nullptr;
+        g_sub_scene.reset();
         can_delete_sub = false;
     }
-
+    
     if(g_game_data.is_in_sub_map) {
-        sub_scene->Update();
+        TraceLog(LOG_INFO, " UPDATE");
+        g_sub_scene->Update();
     }
     else {
         if(character_menu_visible) {
@@ -101,6 +100,7 @@ SCENE_ID GameScene::Update() {
             g_current_player->Update();
             HandleCamera();
         }
+
         if(g_input.keys_pressed[0] == KEY_E) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
@@ -143,8 +143,8 @@ SCENE_ID GameScene::Update() {
                 }
             }
         }
+        YSortEntities(level_data);
     }
-
     return return_scene;
 }
 
@@ -155,76 +155,20 @@ void GameScene::DrawScene() {
 
     if(g_game_data.is_in_sub_map) {
         //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
-        sub_scene->DrawScene();
+        g_sub_scene->DrawScene();
     }
     else {
+        //TraceLog(LOG_INFO, "GAME SCENE DRAW, %i", g_game_data.current_map_index);
 
-    level_data.draw_list.clear();
+        BeginMode2D(g_camera);
+        LDTKDrawMap(g_current_player->position);
 
-    level_data.draw_list.push_back(g_current_player);
+        for(auto e: level_data.draw_list) {
+            e->Draw();
+        }
 
-    for (auto e : level_data.environment_entities)
-        level_data.draw_list.push_back(e);
-
-
-    for (auto e : level_data.entity_list)
-        level_data.draw_list.push_back(e);
-
-    std::sort(level_data.draw_list.begin(), level_data.draw_list.end(),
-    [](BaseEntity* a, BaseEntity* b) {
-        return a->GetYSort() < b->GetYSort();
-    });
-    
-    //TraceLog(LOG_INFO, "DRAW LIST SIZE %i", level_data.draw_list.size());
-
-    BeginMode2D(g_camera);
-    tile_layer->Draw();
-
-        //DL_Draw(level_data.entity_list);
-
-    LDTKDrawShadows(g_current_player->position);
-
-    for(auto e: level_data.draw_list) {
-        e->Draw();
-    }
-
-/*         for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
-            if(g_current_player->position.y + g_current_player->ground_point_offset.y > level_data.environment_sprites[thing].position.y) {
-                if(level_data.environment_sprites[thing].fadeable) {
-                    
-                    float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.5f );
-                    level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
-                }
-                DrawSprite(level_data.environment_sprites[thing]);
-            }
-        } */
-
-        //g_current_player->Draw();
-
-/*         for(int thing = 0; thing < level_data.environment_sprites.size(); thing++) {
-            if(g_current_player->position.y + g_current_player->ground_point_offset.y < level_data.environment_sprites[thing].position.y) {
-                if(level_data.environment_sprites[thing].fadeable) {
-                    
-                    Rectangle rect = {
-                        level_data.environment_sprites[thing].position.x - level_data.environment_sprites[thing].center.x,
-                        level_data.environment_sprites[thing].position.y - level_data.environment_sprites[thing].center.y,
-                        level_data.environment_sprites[thing].size.x,
-                        level_data.environment_sprites[thing].size.y,
-                    };
-                    
-                    if( CheckCollisionPointRec(g_current_player->position, rect ) ) {
-                        float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 30.0f, 0.5f );
-                        level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
-                    }
-                    else {
-                        float alpha_value = Lerp((float)level_data.environment_sprites[thing].modulate.a, 255.0f, 0.5f );
-                        level_data.environment_sprites[thing].modulate.a = (unsigned char)alpha_value;
-                    }
-                }
-                DrawSprite(level_data.environment_sprites[thing]);
-            }
-        } */
-
+        LDTKDrawShadows(g_current_player->position);
+        
         EndMode2D();
     }    
 }
@@ -233,7 +177,7 @@ void GameScene::DrawUI() {
 
     if(g_game_data.is_in_sub_map) {
         //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
-        sub_scene->DrawUI();
+        g_sub_scene->DrawUI();
     }
     else {
         if(character_menu_visible) {
@@ -355,8 +299,9 @@ void GameScene::OnHouseTransitionActivated() {
     //TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 
     g_game_data.is_in_sub_map = true;
-    sub_scene = new SubScene();
-    sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
+    g_sub_scene = std::make_unique<SubScene>();
+    g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
+    TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
 
 }
 
@@ -365,7 +310,7 @@ void GameScene::OnSubSceneExited() {
     g_game_data.is_in_sub_map = false;
 
     g_current_player->position = g_game_data.sub_return_position;
-    TraceLog(LOG_INFO, "+ reset player position");
+    TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
 
     g_camera.zoom = 1.0f; 
     

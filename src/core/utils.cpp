@@ -198,6 +198,27 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
 
+void DL_Sort(LevelData &_level_data) {
+
+    _level_data.draw_list.clear();
+
+    _level_data.draw_list.push_back(g_current_player);
+
+    for (auto e : _level_data.environment_entities)
+        _level_data.draw_list.push_back(e);
+
+
+    for (auto e : _level_data.entity_list)
+        _level_data.draw_list.push_back(e);
+
+    //std::sort(level_data.draw_list.begin(), level_data.draw_list.end());
+
+    std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
+    [](BaseEntity* a, BaseEntity* b) {
+        return a->GetYSort() < b->GetYSort();
+    });
+}
+
 
 bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
     Vector2 end = Vector2Add(_ray.position, _ray.direction);

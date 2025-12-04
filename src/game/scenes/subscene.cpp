@@ -23,6 +23,7 @@ SubScene::SubScene() {
             t_area->area_entered.Connect( [this](){OnMapTransitionEntered();} );
             t_area->area_activated.Connect( [this](){OnMapTransitionActivated();} );
         }
+
     }
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
         if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
@@ -57,7 +58,7 @@ SubScene::SubScene() {
 
 
 SCENE_ID SubScene::Update() {
-    //TraceLog(LOG_INFO, "SUB SCENE UPDATE, %i", g_game_data.sub_map_index);
+    //TraceLog(LOG_INFO, "SUB SCENE UPDATE, %i", g_game_data.current_map_index);
 
     if(character_menu_visible) {
         character_menu->Update();
@@ -112,6 +113,7 @@ SCENE_ID SubScene::Update() {
                 }
             }
         }
+    YSortEntities(level_data);
     return return_scene;
 }
 
@@ -120,11 +122,22 @@ void SubScene::Draw() {
 
 
 void SubScene::DrawScene() {
+    //TraceLog(LOG_INFO, "SUB SCENE DRAW, %i", g_game_data.current_map_index);
     BeginMode2D(g_camera);
+    LDTKDrawMap(g_current_player->position);
+
+    for(auto e: level_data.draw_list) {
+        e->Draw();
+    }
+
+    LDTKDrawShadows(g_current_player->position);
+        
+    EndMode2D();
+/*     BeginMode2D(g_camera);
     tile_layer->Draw();
     DL_Draw(level_data.entity_list);
     g_current_player->Draw();
-    EndMode2D();
+    EndMode2D(); */
 
 }
 

@@ -198,7 +198,7 @@ void LoadGameData() {
 void SaveGame(LevelData &level_data) {
 
     TraceLog(LOG_INFO, "----------------------SAVING GAME------------------------" );
-
+    g_game_data.using_saved_data = true;
     std::ofstream file(save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "filed to open save file");
@@ -269,8 +269,6 @@ void SaveGame(LevelData &level_data) {
 
 
 
-
-
     json json_persistant_containers = json::array();
 
     for(int entity = 0; entity < level_data.entity_list.size(); entity++) {
@@ -294,6 +292,9 @@ void SaveGame(LevelData &level_data) {
 
                 json_persistant_containers.push_back(container);
                 TraceLog(LOG_INFO, "saving container  iid %s", c_entity->iid.c_str());
+
+                ContainerData c_data = container.get<ContainerData>();
+                g_persistant_containers[c_data.iid] = c_data;
  
             }
         }
@@ -496,7 +497,7 @@ void LoadLevelData(LevelData &level_data) {
 
                         
                         ContainerData new_container;
-                        //TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
+                        TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
                         
                         new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
                         new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -566,17 +567,20 @@ void LoadLevelData(LevelData &level_data) {
             EnvironmentalEntity *new_entity = new EnvironmentalEntity(this_level.environment_data[thing].position, id, false);
             level_data.environment_entities.push_back(new_entity);
         }
-        TraceLog(LOG_INFO, "-----\n");
+        //TraceLog(LOG_INFO, "-----\n");
     }
 
+    TraceLog(LOG_INFO, "PERSISTANT CONTAINER LIST SIZE %i", g_persistant_containers.size());
     for(const auto & container : g_persistant_containers) {
+        TraceLog(LOG_INFO, "LOOKING FOR SAVED SAVED CONTAINER DATA %s", container.second.identifier.c_str());
          if(container.second.level_index == g_game_data.current_map_index) {
-            //TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND %s", container.second.iid.c_str());
+            TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND %s", container.second.iid.c_str());
             ContainerData new_container = container.second;
 
             level_data.container_data.push_back(new_container);
         }
     }
+    TraceLog(LOG_INFO, "END LOAD LEVEL DATA ");
 }
 
 
@@ -831,7 +835,9 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
 
     static const std::unordered_map<std::string, EnvironmentSpriteID> lookup_table = {
         {"Tree1",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE1},
+        {"Tree2",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE2},
         {"Grass1",                        EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
+        {"Grass2",                        EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -872,4 +878,22 @@ void from_json(const json &j, ContainerData &i) {
     j.at("level_index").get_to(i.level_index);
 
     //TraceLog(LOG_INFO, "container loaded  %s", i.iid.c_str());
+}
+
+void YSortEntities(LevelData & _level_data) {
+    _level_data.draw_list.clear();
+
+    _level_data.draw_list.push_back(g_current_player);
+
+    for (auto e : _level_data.environment_entities)
+        _level_data.draw_list.push_back(e);
+
+
+    for (auto e : _level_data.entity_list)
+        _level_data.draw_list.push_back(e);
+
+    std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
+    [](BaseEntity* a, BaseEntity* b) {
+        return a->GetYSort() < b->GetYSort();
+    });
 }

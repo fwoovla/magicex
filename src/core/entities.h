@@ -15,6 +15,7 @@ class EnvironmentalEntity : public SpriteEntity {
     void DrawUI() override;
     float GetYSort() override;
 
+    Sprite shadow_sprite;
     bool fadeable;
 };
 

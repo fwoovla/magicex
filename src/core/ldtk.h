@@ -274,7 +274,7 @@ void LDTKLoadTileSets (json &mj);
 void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
 
-void LDTKDrawForegroundLayer(Vector2 focus_position);
+//void LDTKDrawForegroundLayer(Vector2 focus_position);
 
 void LDTKDrawShadows(Vector2 focus_position);
 

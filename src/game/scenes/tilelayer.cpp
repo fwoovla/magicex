@@ -16,10 +16,10 @@ void TileLayer::Update() {
 }
 
 void TileLayer::Draw() {
-
+/* 
     double time = GetTime();
     g_debug_data.tiles_drawn =  LDTKDrawMap(g_current_player->position);
-    g_debug_data.tile_dt = GetTime() - time;
+    g_debug_data.tile_dt = GetTime() - time; */
 }
 
 
@@ -27,17 +27,47 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int
     //================TILE COLLISION=========================
     bool collided = false;
 
-    LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+    LevelData *level_data = nullptr;
 
-    if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
+        return -1;
+    }
+
+
+
+/*     if(g_game_data.is_in_sub_map) {
+        map_index = g_game_data.sub_map_index;
+        col_index = -1;
+    }
+    else {
+        map_index = g_game_data.current_map_index;
+        col_index = g_current_scene->level_data.precalc.collision_layer_index;
+    }
+
+    if(map_index == -1) {
+        return -1;
+    } */
+    LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    //LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
         return false;
     }
     
-    LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
+    LDTKLayerInstance &col_layer = this_level.layer_instances[level_data->precalc.collision_layer_index];
+    
 
-    int tile_size = g_current_scene->level_data.precalc.tile_size;
-    float inv_tile_size = g_current_scene->level_data.precalc.inv_tile_size;
-    int map_width = g_current_scene->level_data.precalc.map_width;
+    int tile_size = level_data->precalc.tile_size;
+    float inv_tile_size = level_data->precalc.inv_tile_size;
+    int map_width = level_data->precalc.map_width;
 
     Vector2 checker_pos = Vector2Add(checker->position, checker->centered_offset);
 
@@ -111,18 +141,33 @@ bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result) {
     
     bool collided = false;
 
-    LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
 
-    if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
+    LevelData *level_data = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
+        return -1;
+    }
+
+
+    LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
         return false;
     }
-    LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
+    LDTKLayerInstance &col_layer = this_level.layer_instances[level_data->precalc.collision_layer_index];
 
 
 
-    int tile_size = g_current_scene->level_data.precalc.tile_size;
-    float inv_tile_size = g_current_scene->level_data.precalc.inv_tile_size;
-    int map_width = g_current_scene->level_data.precalc.map_width;
+    int tile_size = level_data->precalc.tile_size;
+    float inv_tile_size = level_data->precalc.inv_tile_size;
+    int map_width = level_data->precalc.map_width;
 
     Vector2 checker_pos = Vector2Add(checker->position, checker->centered_offset);
 

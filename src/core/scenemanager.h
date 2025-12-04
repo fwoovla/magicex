@@ -5,6 +5,7 @@
 void InstanceLevelObjects(LevelData &level_data);
 
 extern std::unique_ptr<BaseScene> g_current_scene;
+extern std::unique_ptr<SubScene> g_sub_scene;
 
 class SceneManager{
     public:

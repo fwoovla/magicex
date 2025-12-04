@@ -256,9 +256,9 @@ void InstanceLevelObjects(LevelData &level_data) {
 
             if(g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) {
                 for (auto& [key, value] : g_item_instances) {
-                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
                     if(key, value.container_id == new_container->iid) {
-                        //TraceLog(LOG_INFO, "ITEM FOUND");
+                        TraceLog(LOG_INFO, "ITEM FOUND");
                         new_container->c_area.item_list.push_back(value.instance_id);
                     }
                     //std::cout << key << " = " << value << "\n";

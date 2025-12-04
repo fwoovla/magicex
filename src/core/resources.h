@@ -147,13 +147,24 @@ extern Texture2D g_tile_sheets[MAX_SPRITES];
 enum EnvironmentSpriteID {
     SPRITE_ENVIRO_ERROR,
     SPRITE_ENVIRO_TREE1,
+    SPRITE_ENVIRO_TREE2,
     SPRITE_ENVIRO_GRASS1,
+    SPRITE_ENVIRO_GRASS2,
     SPRITE_ENVIRO_NUM_SPRITES
 };
 
 extern Texture2D g_environment_sprites[MAX_SPRITES];
 
+enum ShadowSpriteID {
+    SPRITE_SHADOW_ERROR,
+    SPRITE_SHADOW_TREE1,
+    SPRITE_SHADOW_TREE2,
+    SPRITE_SHADOW_GRASS1,
+    SPRITE_SHADOW_GRASS2,
+    SPRITE_SHADOW_NUM_SPRITES
+};
 
+extern Texture2D g_shadow_sprites[MAX_SPRITES];
 
 
 

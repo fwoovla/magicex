@@ -196,3 +196,5 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 void from_json(const json &j, ItemInstanceData &i);
 
 void from_json(const json &j, ContainerData &i);
+
+void YSortEntities(LevelData & _level_data);

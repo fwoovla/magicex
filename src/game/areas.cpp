@@ -27,7 +27,7 @@ void TransitionArea::Update() {
             CreateLabel(label, {lx, ly}, 20, WHITE, "open");
             if(identifier == "HouseTransition") {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
-                    g_game_data.sub_return_position = payload_v * g_ldtk_maps.default_grid_size;
+                    g_game_data.sub_return_position = payload_v * 2;
                     g_game_data.sub_map_index = payload_i;
                     //label.text += "\n\n\nopen";
                     in_range = true;

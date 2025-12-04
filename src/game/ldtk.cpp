@@ -160,9 +160,9 @@ void LDTKLoadMaps (json &mj) {
                                             new_data.item_string = value_s;
                                             new_data.position = {(float)this_tile.px[0] + (g_ldtk_maps.default_grid_size/2), (float)this_tile.px[1] + (g_ldtk_maps.default_grid_size)};
                                             this_level.environment_data.push_back(new_data);
-                                            TraceLog(LOG_INFO, "          |||||||tile id: %i has enum %s||||||", this_tile.t, new_data.item_string.c_str());
-                                            TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", (float)this_tile.px[0], (float)this_tile.px[1]);
-                                            TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", new_data.position.x, new_data.position.y); 
+                                            //TraceLog(LOG_INFO, "          |||||||tile id: %i has enum %s||||||", this_tile.t, new_data.item_string.c_str());
+                                            //TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", (float)this_tile.px[0], (float)this_tile.px[1]);
+                                            //TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", new_data.position.x, new_data.position.y); 
 
                                         }
                                     }
@@ -170,7 +170,7 @@ void LDTKLoadMaps (json &mj) {
                             }
                         }
                     }
-                    TraceLog(LOG_INFO, "      |||||||# of enviro sprites: %i", this_level.environment_data.size());
+                    TraceLog(LOG_INFO, "      |||||||# of enviro entities: %i", this_level.environment_data.size());
                     //TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES ADDED %i", this_layer.grid_tiles.size());
                 }
 
@@ -291,23 +291,33 @@ void LDTKLoadMaps (json &mj) {
 
 int LDTKDrawMap(Vector2 focus_position) {
 
-/*     int map_index = g_game_data.current_map_index;
-    if(g_game_data.is_in_sub_map) {
-        map_index = g_game_data.sub_map_index;
-    } */
-    //TraceLog(LOG_INFO, "drawing map index:  %i ", map_index);
+    //int map_index = -1;
+
     int tiles_drawn = 0;
 
     //invert layers for drawing
     int tilesheet_id = 0;
 
-    LDTKLevel *this_level = &g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
+    LevelData *level_data = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
+        return -1;
+    }
+
+    LDTKLevel *this_level = &g_ldtk_maps.levels[level_data->precalc.map_index];
 
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         if(this_level->layer_instances[l].type == "IntGrid") {
             break;
         }
-        if(g_current_scene->level_data.precalc.foreground_layer_index == l) {
+        if(level_data->precalc.foreground_layer_index == l) {
             break;
         }
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
@@ -352,60 +362,36 @@ int LDTKDrawMap(Vector2 focus_position) {
 }
 
 
-void LDTKDrawForegroundLayer(Vector2 focus_position) {
-    LDTKLevel *this_level = &g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
-    int layer = g_current_scene->level_data.precalc.foreground_layer_index;
-
-    int tilesheet_id = this_level->layer_instances[layer].tileset_def_uid;
-
-    for(int tile = 0; tile < this_level->layer_instances[layer].grid_tiles.size(); tile++) {
-        LDTKGridTile *this_tile = &this_level->layer_instances[layer].grid_tiles[tile];
-
-        int tile_id = this_tile->t;
-
-        int tile_x = this_tile->px[0] * g_viewport.inv_tile_size;
-        int tile_y = this_tile->px[1] * g_viewport.inv_tile_size;
-
-        if(tile_id == -1) {
-            TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %i  y %i", tile_x, tile_y);
-            break;
-        } 
-
-        if((tile_x >= g_viewport.x_min) and (tile_x <= g_viewport.x_max) and (tile_y >= g_viewport.y_min) and (tile_y <= g_viewport.y_max)) {
-
-            Vector2 tile_pos = {(float)this_tile->px[0], (float)this_tile->px[1]};
-            Vector2 atlas_pos = {(float)this_tile->src[0], (float)this_tile->src[1]};
-
-            Color color = WHITE;
-
-            DrawTexturePro(
-                g_ldtk_tilesheets[tilesheet_id].texture,
-                {atlas_pos.x, atlas_pos.y, (float)g_viewport.tile_size, (float)g_viewport.tile_size},
-                {(float)tile_pos.x, (float)tile_pos.y,(float)g_viewport.tile_size+.1f, (float )g_viewport.tile_size +.1f},
-                {0,0},
-                0.0,
-                color
-            );
-        }
-        
-    }
-}
-
 
 void LDTKDrawShadows(Vector2 focus_position) {
-        LDTKLevel &this_level = g_ldtk_maps.levels[g_current_scene->level_data.precalc.map_index];
 
-    if(g_current_scene->level_data.precalc.collision_layer_index == -1) {
+    LevelData *level_data = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
         return;
     }
-    LDTKLayerInstance &col_layer = this_level.layer_instances[g_current_scene->level_data.precalc.collision_layer_index];
-
-    int tile_size = g_current_scene->level_data.precalc.tile_size;
-    float inv_tile_size = g_current_scene->level_data.precalc.inv_tile_size;
-    int map_width = g_current_scene->level_data.precalc.map_width;
 
 
-    for(auto &poly : g_current_scene->level_data.collision_polys) {
+    LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
+        return;
+    }
+    LDTKLayerInstance &col_layer = this_level.layer_instances[level_data->precalc.collision_layer_index];
+
+    int tile_size = level_data->precalc.tile_size;
+    float inv_tile_size = level_data->precalc.inv_tile_size;
+    int map_width = level_data->precalc.map_width;
+
+
+    for(auto &poly : level_data->collision_polys) {
 
 
         if(g_game_settings.show_debug) { //Draw Polys
@@ -432,7 +418,7 @@ void LDTKDrawShadows(Vector2 focus_position) {
     float extrudeDist = 500.0f;
     Color shadowColor = {0, 0, 0, 10};
     //Color shadowColor = DARKERGRAY;
-    for (auto &poly : g_current_scene->level_data.collision_polys) {
+    for (auto &poly : level_data->collision_polys) {
         int p_n = poly.points.size();
          if(p_n > 2) {
 

@@ -1,5 +1,7 @@
 #pragma once
+
 #include "baseentity.h"
+#include "gamedefs.h"
 #include <vector>
 #include <raylib.h>
 #include <cmath>
@@ -91,5 +93,7 @@ void DL_DrawUI(std::vector<BaseEntity *> &_draw_list);
 void DL_Update(std::vector<BaseEntity *> &_draw_list);
 
 void DL_Clear(std::vector<BaseEntity *> &_draw_list);
+
+void DL_Sort();
 
 bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range);

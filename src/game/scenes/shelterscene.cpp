@@ -7,11 +7,12 @@
 
 ShelterScene::ShelterScene() {
 
-    scene_id = GAME_SCENE;
+    scene_id = SHELTER_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
     
     LoadLevelData(level_data);
+    WaitTime(1);
     InstanceLevelObjects(level_data);
     
 
@@ -62,13 +63,12 @@ ShelterScene::ShelterScene() {
     g_camera.zoom = 2.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 
-    SaveGame(level_data);
+    //SaveGame(level_data);
 
 }
 
 
 SCENE_ID ShelterScene::Update() {
-
     if(show_map_menu == true) {
         map_menu->Update();
     }
@@ -137,6 +137,8 @@ SCENE_ID ShelterScene::Update() {
             }
         }
     }
+
+    YSortEntities(level_data);
     return return_scene;
 }
 
@@ -146,28 +148,9 @@ void ShelterScene::Draw() {
 
 void ShelterScene::DrawScene() {
 
-    level_data.draw_list.clear();
-
-    level_data.draw_list.push_back(g_current_player);
-
-    for (auto e : level_data.environment_entities)
-        level_data.draw_list.push_back(e);
-
-
-    for (auto e : level_data.entity_list)
-        level_data.draw_list.push_back(e);
-
-    //std::sort(level_data.draw_list.begin(), level_data.draw_list.end());
-
-    std::sort(level_data.draw_list.begin(), level_data.draw_list.end(),
-    [](BaseEntity* a, BaseEntity* b) {
-        return a->GetYSort() < b->GetYSort();
-    });
-
-    //TraceLog(LOG_INFO, "DRAW LIST SIZE %i", level_data.draw_list.size());
-
     BeginMode2D(g_camera);
-    tile_layer->Draw();
+    //tile_layer->Draw();
+    LDTKDrawMap(g_current_player->position);
     
     
     for(auto e: level_data.draw_list) {
@@ -205,6 +188,7 @@ void ShelterScene::DrawUI() {
 
 
 ShelterScene::~ShelterScene() {
+    TraceLog(LOG_INFO, "SCENE DESTRUCTOR CALLED:  SHELTER return scene %i", return_scene);
     //SaveGame();
     ClearLevelData(level_data);
     delete ui_layer;
