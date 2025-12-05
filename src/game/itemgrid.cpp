@@ -217,12 +217,13 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
 
         int _type = -1;// TYPE_ALL;
 
-        auto itter = g_item_instances.find((*item_list)[index]);
+        auto itter = g_item_instances.find(item_id);
+         TraceLog(LOG_INFO, "checking  item instance id  :%i", item_id);
         if(itter != g_item_instances.end()) {
             _type = itter->second.type;
-            //TraceLog(LOG_INFO, "checking     accepted:%i  type:%i", accepted_type, _type);
+            TraceLog(LOG_INFO, "checking     accepted:%i  type:%i", accepted_type, _type);
             if(accepted_type !=  _type) {
-                //TraceLog(LOG_INFO, "rejecting item      accepted:%i  type:%i", accepted_type, _type);
+                TraceLog(LOG_INFO, "rejecting item      accepted:%i  type:%i", accepted_type, _type);
                 return false;
             }
         }
