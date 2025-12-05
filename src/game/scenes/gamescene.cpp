@@ -83,7 +83,6 @@ SCENE_ID GameScene::Update() {
     }
     
     if(g_game_data.is_in_sub_map) {
-        TraceLog(LOG_INFO, " UPDATE");
         g_sub_scene->Update();
     }
     else {

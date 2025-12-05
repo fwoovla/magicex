@@ -6,14 +6,8 @@ TitleScene::TitleScene() {
     scene_id = TITLE_SCENE;
     return_scene = NO_SCENE;
 
-    LoadSprite(bg_sprite_1, g_ldtk_tilesheets[3].texture, {0,0});
-
-    auto sheet = g_ldtk_tilesheets.find(3);
-    if( sheet != g_ldtk_tilesheets.end() ) {
-        int id = sheet->second.uid;
-        //TraceLog(LOG_INFO, "tilesheet id %i", id);
-    }
-
+    //LoadSprite(bg_sprite_1, g_ui_backgrounds[BG_TITLE], {0,0});
+    //ScaleSprite(bg_sprite_1, {2,2});
 
 
     ui_layer = new TitleUILayer();
@@ -36,15 +30,27 @@ SCENE_ID TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-    DrawRectangle( 0,0, g_resolution.x, g_resolution.y, BLACK ); 
-    DrawSprite(bg_sprite_1);
-    ui_layer->Draw();
 
 }
 
 
 void TitleScene::DrawScene() {
-    DrawSprite(bg_sprite_1);
+        Rectangle source = {
+        .x = 0.0f,
+        .y = 0.0f,
+        .width = (float)g_ui_backgrounds[BG_TITLE].width,
+        .height = (float)g_ui_backgrounds[BG_TITLE].height
+    };
+
+    Rectangle dest = {
+        .x = 0.0f,
+        .y = 0.0f,
+        .width = (float)g_resolution.x,
+        .height = (float)g_resolution.y
+    };
+
+    DrawTexturePro(g_ui_backgrounds[BG_TITLE], source, dest,{0.0f,0.0f}, 0.0f, WHITE);
+    //DrawSprite(bg_sprite_1);
 
 }
 
@@ -80,5 +86,4 @@ void TitleScene::OnContinuePressed() {
     g_current_player = new PlayerCharacter({0,0});
     return_scene = SHELTER_SCENE;
     g_game_data.next_map_index = g_game_data.shelter_map_index;
-    //TraceLog(LOG_INFO, "SHELTER SCENE = %i", g_game_data.shelter_map_index);
 }

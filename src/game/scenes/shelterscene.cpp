@@ -157,9 +157,7 @@ void ShelterScene::DrawScene() {
         e->Draw();
     }
 
-
     LDTKDrawShadows(g_current_player->position);
-
 
     EndMode2D();
 }

@@ -160,10 +160,6 @@ void LDTKLoadMaps (json &mj) {
                                             new_data.item_string = value_s;
                                             new_data.position = {(float)this_tile.px[0] + (g_ldtk_maps.default_grid_size/2), (float)this_tile.px[1] + (g_ldtk_maps.default_grid_size)};
                                             this_level.environment_data.push_back(new_data);
-                                            //TraceLog(LOG_INFO, "          |||||||tile id: %i has enum %s||||||", this_tile.t, new_data.item_string.c_str());
-                                            //TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", (float)this_tile.px[0], (float)this_tile.px[1]);
-                                            //TraceLog(LOG_INFO, "          |||||||position: %0.0f  %0.0f||||||", new_data.position.x, new_data.position.y); 
-
                                         }
                                     }
                                 }
@@ -353,11 +349,8 @@ int LDTKDrawMap(Vector2 focus_position) {
                 );
                 tiles_drawn++;
             }
-
         }
     }
-
-
     return tiles_drawn;
 }
 
@@ -378,7 +371,6 @@ void LDTKDrawShadows(Vector2 focus_position) {
         return;
     }
 
-
     LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
 
     if(level_data->precalc.collision_layer_index == -1) {
@@ -391,10 +383,9 @@ void LDTKDrawShadows(Vector2 focus_position) {
     int map_width = level_data->precalc.map_width;
 
 
-    for(auto &poly : level_data->collision_polys) {
+    if(g_game_settings.show_debug) { //Draw Polys
 
-
-        if(g_game_settings.show_debug) { //Draw Polys
+        for(auto &poly : level_data->collision_polys) {
 
             int p_n = poly.points.size();
             if(p_n >= 3) {
@@ -403,20 +394,15 @@ void LDTKDrawShadows(Vector2 focus_position) {
                         poly.points[0],
                         poly.points[i+1],
                         poly.points[i],
-                        RED
+                        DARKRED
                     );
-                    
-/*                     TraceLog(LOG_INFO, "drawing triangle.... ");
-                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f", poly.points[0].x, poly.points[0].y);
-                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f", poly.points[i].x, poly.points[i].y );
-                    TraceLog(LOG_INFO, ".... point:  %0.2f  %0.2f\n", poly.points[i+1].x, poly.points[i+1].y ); */
                 } 
             }
         }
     }
 
-    float extrudeDist = 500.0f;
-    Color shadowColor = {0, 0, 0, 10};
+    float extrudeDist = 1500.0f;
+    Color shadowColor = {0, 0, 0, 5};
     //Color shadowColor = DARKERGRAY;
     for (auto &poly : level_data->collision_polys) {
         int p_n = poly.points.size();
@@ -430,7 +416,6 @@ void LDTKDrawShadows(Vector2 focus_position) {
 
                 Vector2 normal = { -edge.y, edge.x };
 
-                //DrawLineV(v1, v2, shadowColor);
 
                 float facing = Vector2DotProduct( normal, v1 - focus_position );
 
@@ -441,7 +426,6 @@ void LDTKDrawShadows(Vector2 focus_position) {
                     Vector2 v1_ext = v1 + dir1 * extrudeDist;
                     Vector2 v2_ext = v2 + dir2 * extrudeDist;
 
-                    //DrawLineV(v2, dir2, shadowColor);
                     if(g_game_settings.show_debug) {
 
                         DrawLineV(v1, v2, RED);

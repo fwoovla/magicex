@@ -628,6 +628,7 @@ void LoadResources() {
     g_ui_panels[PANEL_CHAR_SCREEN] = LoadTexture("assets/characterpanelbg.png");
 
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
+    g_ui_backgrounds[BG_TITLE] = LoadTexture("assets/titleimage.png");
     g_ui_backgrounds[BG_STAGING] = LoadTexture("assets/staging_bg2.png");
     g_ui_backgrounds[BG_SHELTER] = LoadTexture("assets/staging_bg1.png");
     g_ui_backgrounds[BG_HOUSE_TRANS] = LoadTexture("assets/house_trans.png");

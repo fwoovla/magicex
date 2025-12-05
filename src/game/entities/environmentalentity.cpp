@@ -59,7 +59,7 @@ void EnvironmentalEntity::Draw() {
     }
     if(g_game_settings.show_debug) {
 
-        DrawRectangleRec(collision_rect, RED);
+        DrawRectangleRec(collision_rect, BLUE);
     }
     DrawSprite(sprite);
     DrawSprite(shadow_sprite);
