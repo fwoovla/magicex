@@ -431,6 +431,15 @@ void ClearLevelData(LevelData &level_data) {
     level_data.level_transitions.clear();
     level_data.container_data.clear();
     level_data.game_areas.clear();
+/* 
+    for (auto& [key, value] : g_sub_scene_data) {
+        DL_Clear(g_sub_scene_data[key]->entity_list);
+        //g_sub_scene_data[key]->level_transitions.clear();
+        //g_sub_scene_data[key]->container_data.clear();
+        //g_sub_scene_data[key]->game_areas.clear();
+    }
+
+    g_sub_scene_data.clear(); */
 
 }
 
@@ -482,6 +491,7 @@ void LoadLevelData(LevelData &level_data) {
                     new_transition.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
                     new_transition.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
                     new_transition.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+                    new_transition.uid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
 
                     if(new_transition.identifier == "HouseTransition") {
                         new_transition.return_position = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_v;

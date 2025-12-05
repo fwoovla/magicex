@@ -6,15 +6,25 @@
 
 
 
-SubScene::SubScene() {
+SubScene::SubScene(LevelData *_level_data, bool is_new) {
     scene_id = SUB_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
 
 
     //ClearLevelData();
-    LoadLevelData(level_data);
-    InstanceLevelObjects(level_data);
+    if(is_new) {
+        LoadLevelData(level_data);
+        InstanceLevelObjects(level_data);
+    }
+    else {
+        //LoadLevelData(level_data);
+        //InstanceLevelObjects(level_data);
+        level_data = *_level_data;
+        InstanceLevelObjects(level_data);
+    }
+
+    TraceLog(LOG_INFO, "SPAWN POSITION, %0.02f %0.02f", level_data.spawn_position.x, level_data.spawn_position.y);
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
         if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
@@ -29,7 +39,7 @@ SubScene::SubScene() {
         if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
             level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
             level_data.entity_list[entity_index]->identifier == "Mushroom") {
-             TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
+            TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
             if(p_entity) {
                 TraceLog(LOG_INFO, "container connected");
@@ -159,10 +169,11 @@ void SubScene::DrawUI() {
 
 
 SubScene::~SubScene() {
-    ClearLevelData(level_data);
     delete ui_layer;
     delete tile_layer;
     delete character_menu;
+    g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>(level_data);
+    //ClearLevelData(level_data);
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SUB SCENE");
 }
@@ -179,6 +190,7 @@ void SubScene::OnMapTransitionEntered() {
 
 void SubScene::OnMapTransitionActivated() {
     TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    
     sub_scene_exited.EmitSignal();
 }
 

@@ -7,6 +7,15 @@
 
 ShelterScene::ShelterScene() {
 
+    for (auto& [key, value] : g_sub_scene_data) {
+        DL_Clear(g_sub_scene_data[key]->entity_list);
+        g_sub_scene_data[key]->level_transitions.clear();
+        g_sub_scene_data[key]->container_data.clear();
+        g_sub_scene_data[key]->game_areas.clear();
+    }
+
+    g_sub_scene_data.clear();
+
     scene_id = SHELTER_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;

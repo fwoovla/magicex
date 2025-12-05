@@ -1,6 +1,5 @@
 #include "../core/gamedefs.h"
 
-char level1_data[] = "assets/map4.png";
 
 void SceneManager::UpdateScene()
 {
@@ -201,6 +200,7 @@ void InstanceLevelObjects(LevelData &level_data) {
     TraceLog(LOG_INFO, "instacing game objects");
 
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
+    TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   transition  size %i", level_data.level_transitions.size());
     
 /*     TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
     for (const auto& [key, value] : g_item_instances) {
@@ -217,6 +217,7 @@ void InstanceLevelObjects(LevelData &level_data) {
         new_area->position = t_posisition;
         new_area->size = {level_data.level_transitions[t_index].size.x, level_data.level_transitions[t_index].size.y};
         new_area->payload_s = level_data.level_transitions[t_index].dest_string;
+        new_area->uid = level_data.level_transitions[t_index].uid;
         
         if(level_data.level_transitions[t_index].identifier == "HouseTransition") {
             new_area->payload_v = level_data.level_transitions[t_index].return_position;
@@ -227,7 +228,7 @@ void InstanceLevelObjects(LevelData &level_data) {
                 new_area->payload_i = level_index;
             }
         }
-        //TraceLog(LOG_INFO, "instacing transition %s", new_area->identifier.c_str());
+        TraceLog(LOG_INFO, "instacing transition %s  level index %i  uid %s", new_area->identifier.c_str(), new_area->payload_i, new_area->uid.c_str());
         level_data.game_areas.push_back(new_area);
     }
 

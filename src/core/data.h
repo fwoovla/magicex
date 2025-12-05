@@ -119,6 +119,7 @@ struct MushroomZoneData {
 struct LevelTransitionData {
     std::string identifier;
     std::string dest_string;
+    std::string uid;
     Vector2 position_i;
     Vector2 position_f;
     Vector2 return_position;
@@ -161,8 +162,12 @@ struct LevelData {
     std::vector<Polygon> collision_polys;
     std::vector<EnvironmentalEntity *> environment_entities;
     std::vector<BaseEntity *> draw_list;
+    //std::unordered_map <std::string, std::unique_ptr< SubScene> > sub_scene_instances; 
 
 };
+
+
+
 
 extern std::vector<std::vector<int>> g_loot_tables;
 

@@ -251,12 +251,16 @@ struct GameData {
     bool using_saved_data;
     bool paused = false;
     SCENE_ID current_scene_id;
+
     int current_map_index;
     int next_map_index;
     int shelter_map_index;
+
     int sub_map_index;
     bool is_in_sub_map;
     Vector2 sub_return_position;
+    std::string sub_map_uid;
+
     int loot_table_id;
     std::vector<int> *loot_table;
     BaseContainerEntity *return_container;

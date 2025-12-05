@@ -29,14 +29,13 @@ void TransitionArea::Update() {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                     g_game_data.sub_return_position = payload_v * 2;
                     g_game_data.sub_map_index = payload_i;
-                    //label.text += "\n\n\nopen";
+                    g_game_data.sub_map_uid = uid ;
                     in_range = true;
                 }
             }
             else {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                         g_game_data.next_map_index = payload_i;
-                        //label.text += "\n\n\n'space'";
                         in_range = true;
                 }
             }

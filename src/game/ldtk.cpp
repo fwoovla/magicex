@@ -181,12 +181,13 @@ void LDTKLoadMaps (json &mj) {
                         new_entity.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["__identifier"];
                         TraceLog(LOG_INFO, "++++++------------NEW ENTITY FOUND %s", new_entity.identifier.c_str());
 
+                        new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
                         new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][0]);
                         new_entity.px.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][1]);
                         new_entity.width = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["width"];
                         new_entity.height = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["height"];
 
-                        //TraceLog(LOG_INFO, "++++++---------------------------ENTITY POSITION %i %i", new_entity.px[0], new_entity.px[1]);
+                        TraceLog(LOG_INFO, "++++++---------------------------ENTITY UID %s ", new_entity.iid.c_str());
                         //TraceLog(LOG_INFO, "++++++---------------------------ENTITY SIZE %i x %i", new_entity.width, new_entity.height);
 
                         if(new_entity.identifier == "LevelTransition" or new_entity.identifier == "ShelterTransition" or new_entity.identifier == "HouseTransition") {                            
@@ -195,11 +196,11 @@ void LDTKLoadMaps (json &mj) {
                                 LDTKFieldInstance new_field;
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
-                                //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
+                                TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
 
                                 if(new_field.identifier == "DestMapString" ) {
                                     new_field.value_s = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    //TraceLog(LOG_INFO, "++++++--------------------------------transition dest string %s", new_field.value_s.c_str());
+                                    TraceLog(LOG_INFO, "++++++--------------------------------transition dest string %s", new_field.value_s.c_str());
                                 }
 
                                 if(new_field.identifier == "ReturnPosition" ) {

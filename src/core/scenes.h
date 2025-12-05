@@ -1,3 +1,4 @@
+#pragma once
 #include "basescene.h"
 
 enum TrantitionType {
@@ -113,7 +114,7 @@ class ShelterScene : public  BaseScene{
 
 class SubScene : public  BaseScene{
     public:
-        SubScene();
+        SubScene(LevelData *_level_data, bool is_new);
         ~SubScene() override;
         SCENE_ID Update() override;
         void Draw() override;
@@ -176,7 +177,7 @@ class GameScene : public  BaseScene{
 
         TileLayer *tile_layer;
 
-        SubScene *sub_scene;
+        //std::unique_ptr<SubScene> sub_scene;
         bool can_delete_sub;
 
         Vector2 saved_player_position;
@@ -197,3 +198,4 @@ class EndScene : public  BaseScene{
         
 };
 
+//extern std::unordered_map <std::string, std::unique_ptr< SubScene> > g_sub_scene_instances;

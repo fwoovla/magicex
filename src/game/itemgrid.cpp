@@ -153,7 +153,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
     item_sprites.clear();
     int item_count = item_list->size();
 
-    TraceLog(LOG_INFO, "setting items --list size %i  %s", item_list->size(), container_iid.c_str());
+    //TraceLog(LOG_INFO, "setting items --list size %i  %s", item_list->size(), container_iid.c_str());
 
     for(int i = 0; i < cols*rows; i++) {
         if(i < item_count) {

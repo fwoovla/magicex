@@ -11,9 +11,6 @@ GameScene::GameScene() {
     return_scene = NO_SCENE;
     character_menu_visible = false;
 
-    sub_scene = nullptr;
-
-
     //ClearLevelData(level_data);
     LoadLevelData(level_data);
     InstanceLevelObjects(level_data);
@@ -237,19 +234,17 @@ void GameScene::HandleCamera() {
         g_camera.target.y = g_camera.target.y - y_dif;
         //g_camera.target.y = (int)g_camera.target.y;
 
-    }
-
-    
+    }    
 }
 
 
 GameScene::~GameScene() {
 
-    ClearLevelData(level_data);
     delete ui_layer;
     delete character_menu;
     delete tile_layer;
     //DL_Clear(entity_draw_list);
+    ClearLevelData(level_data);
     
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
 }
@@ -295,27 +290,42 @@ void GameScene::OnHouseTransitionEntered() {
 
 void GameScene::OnHouseTransitionActivated() {
 
-    //TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss map index %i    ss uid %s", g_game_data.sub_map_index, g_game_data.sub_map_uid.c_str());
 
     g_game_data.is_in_sub_map = true;
-    g_sub_scene = std::make_unique<SubScene>();
-    g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
-    TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
 
+    auto it = g_sub_scene_data.find(g_game_data.sub_map_uid);
+    if (it != g_sub_scene_data.end()) {
+        TraceLog(LOG_INFO, "SUB MAP INSTANCE FOUND:  uid %s", g_game_data.sub_map_uid.c_str());
+        g_sub_scene = std::make_unique<SubScene>(g_sub_scene_data[g_game_data.sub_map_uid].get(), false);
+        g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
+    }
+    else {
+        TraceLog(LOG_INFO, "NEW SUB MAP INSTANCE :  uid %s", g_game_data.sub_map_uid.c_str());
+
+        g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>();
+        g_sub_scene = std::make_unique<SubScene>(g_sub_scene_data[g_game_data.sub_map_uid].get(), true);
+        g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
+    }
+
+    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss instances %i", g_sub_scene_data.size());
 }
 
 void GameScene::OnSubSceneExited() {
     TraceLog(LOG_INFO, "SUB MAP EXITED %i", g_game_data.current_map_index);
-    g_game_data.is_in_sub_map = false;
 
+    //g_sub_scene_data[g_game_data.sub_map_uid] = &g_sub_scene->level_data;
+    
     g_current_player->position = g_game_data.sub_return_position;
-    TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
-
-    g_camera.zoom = 1.0f; 
+    
+    g_camera.zoom = 1.4f; 
     
     character_menu->Open();
-
+    
     can_delete_sub = true;
+    g_game_data.is_in_sub_map = false;
+
+    TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
 }
 
 

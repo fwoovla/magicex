@@ -26,7 +26,7 @@ class BaseArea {
 
         float time_pressed;
         
-
+        std::string uid;
         std::string payload_s;
         Vector2 payload_v;
         int payload_i;
