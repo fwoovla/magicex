@@ -16,17 +16,50 @@
     ],
     "health": 15,
     "hotbar": [
+        -1,
+        -1,
+        -1,
+        -1,
         -1
     ],
     "inventory": [
+        72075232,
+        251547767,
+        157885382,
+        839479082,
+        -1,
+        962762397,
+        -1,
+        6711504,
+        844362487,
+        425544490,
+        674321566,
+        79445076,
+        769602020,
+        -1,
+        -1,
+        26081966,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
         -1
     ],
     "item_instances": [
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 161682501,
+            "container_id": "",
+            "instance_id": 79445076,
             "item_id": 24,
             "item_name": "MUSHROOM_JUICE",
             "spell_id": 36,
@@ -36,19 +69,96 @@
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 478302823,
-            "item_id": 23,
-            "item_name": "MUSHROOM",
+            "container_id": "",
+            "instance_id": 703597226,
+            "item_id": 22,
+            "item_name": "LIGHTNING_STAFF 3",
             "spell_id": 36,
-            "type": 6,
+            "type": 0,
             "value": 0
         },
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 412820033,
+            "container_id": "",
+            "instance_id": 309218772,
+            "item_id": 20,
+            "item_name": "LIGHTNING_STAFF 1",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 839479082,
+            "item_id": 17,
+            "item_name": "FIREBALL_STAFF 1",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 962762397,
+            "item_id": 16,
+            "item_name": "MAGICMISSLE_STAFF 3",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 6711504,
+            "item_id": 15,
+            "item_name": "MAGICMISSLE_STAFF 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 72075232,
+            "item_id": 18,
+            "item_name": "FIREBALL_STAFF 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 844362487,
+            "item_id": 14,
+            "item_name": "MAGICMISSLE_STAFF 1",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 26081966,
+            "item_id": 0,
+            "item_name": "Dagger",
+            "spell_id": 686988352,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 769602020,
             "item_id": 38,
             "item_name": "MUSHROOM PRESS PLAN",
             "spell_id": 36,
@@ -58,12 +168,45 @@
         {
             "ammo_count": 0,
             "clip_size": 0,
-            "container_id": "d4e7e320-ac70-11f0-a97d-791b61a21b41",
-            "instance_id": 21240325,
+            "container_id": "",
+            "instance_id": 157885382,
+            "item_id": 21,
+            "item_name": "LIGHTNING_STAFF 2",
+            "spell_id": 36,
+            "type": 0,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 251547767,
+            "item_id": 23,
+            "item_name": "MUSHROOM",
+            "spell_id": 36,
+            "type": 6,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 425544490,
             "item_id": 37,
             "item_name": "STOVE PLAN",
             "spell_id": 36,
             "type": 9,
+            "value": 0
+        },
+        {
+            "ammo_count": 0,
+            "clip_size": 0,
+            "container_id": "",
+            "instance_id": 674321566,
+            "item_id": 19,
+            "item_name": "FIREBALL_STAFF 3",
+            "spell_id": 36,
+            "type": 0,
             "value": 0
         }
     ],
@@ -87,10 +230,10 @@
     ],
     "portrait_id": 0,
     "primary": [
-        -1
+        703597226
     ],
     "secondary": [
-        -1
+        309218772
     ],
     "sprite_sheet_id": 0
 }

@@ -12,6 +12,7 @@ std::unordered_map<int, WeaponData> g_weapon_data;
 std::unordered_map<int, SpellData> g_spell_data;
 std::unordered_map<int, ModuleData> g_module_data;
 std::unordered_map<int, RecipieData> g_recipie_data;
+std::unordered_map<int, PlanData> g_plan_data;
 
 std::vector<std::vector<int>> g_loot_tables;
 

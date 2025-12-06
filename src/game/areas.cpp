@@ -176,9 +176,6 @@ void ContainerArea::Draw() {
 
 
 
-
-
-
 ////MODULE AREA
 
 ModuleArea::~ModuleArea() {
@@ -205,8 +202,12 @@ void ModuleArea::Update() {
         float lx = g_input.screen_mouse_position.x * g_inv_scale;
         float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
-        text = "MODULE";
-        
+        text = "";
+
+        auto itter = g_module_data.find(payload_i);
+        if(itter != g_module_data.end()) {
+            text = itter->second.module_name;
+        }
         
         CreateLabel(label, {lx, ly}, 20, WHITE, text.c_str());
 

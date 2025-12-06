@@ -10,6 +10,8 @@ struct Button {
     Rectangle rect;
     Color focus_color;
     Color default_color;
+    Color text_color_focus;
+    Color text_color;
     std::string text;
     int text_size;
     bool hovered;
@@ -21,6 +23,8 @@ struct Button {
 inline void CreateButton(Button &_button, Vector2 _position, Vector2 _size, Color _focus_color, std::string _text) {
     _button.focus_color = _focus_color;
     _button.default_color = GRAY;
+    _button.text_color_focus = DARKGRAY;
+    _button.text_color = RAYWHITE;
     _button.size = _size;
     _button.hovered = false;
     _button.already_hovered = false;
@@ -37,14 +41,14 @@ inline void DrawButton(Button &_button) {
         DrawRectangleRec(_button.rect, _button.focus_color);
 
         int tw = MeasureText(_button.text.c_str(), _button.text_size);
-        DrawText((TextFormat("%s",_button.text.c_str())), _button.position.x - (tw *0.5), _button.position.y - (_button.text_size *0.5f), _button.text_size, DARKGRAY);
+        DrawText((TextFormat("%s",_button.text.c_str())), _button.position.x - (tw *0.5), _button.position.y - (_button.text_size *0.5f), _button.text_size, _button.text_color_focus);
         //TraceLog(LOG_INFO, "BUTTON TEXT %s", _button.text.c_str());
     }
     else {
         DrawRectangleRec(_button.rect, _button.default_color);
 
         int tw = MeasureText(_button.text.c_str(), _button.text_size);
-        DrawText((TextFormat("%s",_button.text.c_str())), _button.position.x - (tw*0.5), _button.position.y - (_button.text_size *0.5f), _button.text_size, RAYWHITE);
+        DrawText((TextFormat("%s",_button.text.c_str())), _button.position.x - (tw*0.5), _button.position.y - (_button.text_size *0.5f), _button.text_size, _button.text_color);
     }
 }
 

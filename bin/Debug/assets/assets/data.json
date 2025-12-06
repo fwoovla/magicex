@@ -582,17 +582,17 @@
         {
             "module_id":"MODULE_ID_WORKBENCH",
             "module_name":"WORKBENCH",
-            "recipies":[0]
+            "recipies":["ITEM_ID_DAGGER", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE"]
         },
         {
             "module_id":"MODULE_ID_STOVE",
             "module_name":"STOVE",
-            "recipies":[1]
+            "recipies":["RECIPIE_ID_APPLE"]
         },
         {
             "module_id":"MODULE_ID_MUSHROOMPRESS",
             "module_name":"MUSHROOM PRESS",
-            "recipies":[2]
+            "recipies":["RECIPIE_ID_MUSHROOMJUICE"]
         }
 
     ],
@@ -601,17 +601,20 @@
         {
             "recipie_id":"RECIPIE_ID_DAGGER",
             "recipie_name":"dagger",
-            "ingredients":[23]
+            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
+            "produces":"ITEM_ID_DAGGER"
         },
         {
             "recipie_id":"RECIPIE_ID_APPLE",
             "recipie_name":"apple",
-            "ingredients":[23]
+            "ingredients":["ITEM_ID_DAGGER"],
+            "produces":"ITEM_ID_APPLE"
         },
         {
             "recipie_id":"RECIPIE_ID_MUSHROOMJUICE",
             "recipie_name":"mushroom juice",
-            "ingredients":[23]
+            "ingredients":["ITEM_ID_MUSHROOM"],
+            "produces":"ITEM_ID_MUSHROOM_JUICE"
         }
 
     ]

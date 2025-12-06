@@ -31,22 +31,23 @@ void ItemGrid::Update() {
             cell_pos.y = position.y + (r * grid_size);
                 
             if(CheckCollisionPointRec(g_input.screen_mouse_position * g_inv_scale, {cell_pos.x, cell_pos.y, (float)grid_size, (float)grid_size})) {
-                int item_id = (*item_list)[r * cols + c];
+                int instance_id = (*item_list)[r * cols + c];
                 hovered_cell = {(float)c,(float)r};
                 if(!can_select) {
                     shared_data->dest_cell = hovered_cell;
                     shared_data->dest_grid = this_grid;
                 }
-                if(item_id != -1) {
+                if(instance_id != -1) {
                     cell_hovered = true;
 
                     if(can_select){
-
+                        //ItemID item_id = ITEM_ID_ERROR;
                         std::string i_name = "no item found";
-                        auto itter = g_item_instances.find(item_id);
+                        auto itter = g_item_instances.find(instance_id);
                         if(itter != g_item_instances.end()) {
                             //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                             i_name = itter->second.item_name;
+                            //item_id = itter->second.item_id;
 
                         }
                         CreateLabel(label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, WHITE, i_name.c_str());
@@ -58,7 +59,7 @@ void ItemGrid::Update() {
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
                         shared_data->source_cell = selected_cell;
-                        shared_data->item_id = item_id;
+                        shared_data->item_id = instance_id;
                         selecting.EmitSignal();
                     }
                     if(g_input.mouse_right and can_select) {
@@ -66,7 +67,7 @@ void ItemGrid::Update() {
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
                         shared_data->source_cell = selected_cell;
-                        shared_data->item_id = item_id;
+                        shared_data->item_id = instance_id;
                         pickup.EmitSignal();
                     }
                 }
@@ -86,16 +87,23 @@ void ItemGrid::Update() {
             }
             else {
                 //item dropped in this grid
-                //TraceLog(LOG_INFO, "DROPPED IN CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                TraceLog(LOG_INFO, "DROPPED IN CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
                 if(hovered_cell == Vector2{-1,-1} or (*item_list)[dest_index] != -1) {
-                    //TraceLog(LOG_INFO, "DROPPED IN invalid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                    TraceLog(LOG_INFO, "DROPPED IN invalid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
                     item_sprites[source_index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
                 }
                 else {
-                    //TraceLog(LOG_INFO, "DROPPED IN valid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
+                    TraceLog(LOG_INFO, "DROPPED IN valid CELL  hc %0.0f %0.0f   %i", hovered_cell.x, hovered_cell.y, (*item_list)[source_index]);
                     (*item_list)[dest_index] = (*item_list)[source_index];
+
+                    auto itter = g_item_instances.find(shared_data->item_id);
+                    int _id = ITEM_ID_ERROR;
+                    if(itter != g_item_instances.end()) {
+                        _id = itter->second.item_id;
+                    }
+
                     //LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[ g_item_data[ (*item_list)[dest_index] ].id ], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
-                    LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[ shared_data->item_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+                    LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
                     ScaleSprite(item_sprites[dest_index], {2,2});
                     
                     (*item_list)[source_index] = -1;

@@ -646,12 +646,12 @@ void LoadResources() {
     TraceLog(LOG_INFO, "MODULES   MUDULE_ID_WORKBENCH");
 
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
-    item_pos = {21,20};
+    item_pos = {22,20};
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
     g_module_sprites[MODULE_ID_STOVE] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "MODULES   MUDULE_ID_STOVE");
 
-        item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_pos = {23,20};
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
     g_module_sprites[MODULE_ID_MUSHROOMPRESS] = LoadTextureFromImage(item_image);

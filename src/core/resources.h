@@ -89,6 +89,12 @@ enum RecipieID {
 };
 
 
+enum PlanID {
+    PLAN_ID_NONE = -1,
+    PLAN_ID_STOVE,
+    PLAN_ID_MUSHROOMPRESS,
+};
+
 enum ModuleID {
     MODULE_ID_NONE = -1,
     MODULE_ID_WORKBENCH,

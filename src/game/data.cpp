@@ -154,6 +154,35 @@ void LoadGameData() {
     }
 
 
+//------------------------------------plan data
+    for(int i = 0; i < cj["plan_data"].size(); i++) {
+
+        std::string p_id_s = cj["plan_data"][i]["plan_id"];
+        PlanID p_id = StrToPlanId(p_id_s);
+
+        std::string name = cj["plan_data"][i]["plan_name"];
+
+        std::vector<int> recipie_list;
+
+        for(int r = 0; r < cj["plan_data"][i]["required_items"].size(); r++) {
+            int _id = StrToRecipieId( cj["plan_data"][i]["required_items"][r] );
+            recipie_list.push_back(_id);
+        }
+
+        ModuleID m_id = StrToModuleId( cj["plan_data"][i]["module_id"]);
+
+        PlanData new_plan = {
+            .plan_id = p_id,
+            .plan_name = name,
+            .ingredients = recipie_list,
+            .module_id = m_id
+        };
+
+        TraceLog(LOG_INFO, "Plan Data Loaded  id: %i  %s  %i", p_id, name.c_str(), recipie_list.size());
+        g_plan_data[(int)m_id] = new_plan;
+    }
+
+
 //------------------------------------module data
     for(int i = 0; i < cj["module_data"].size(); i++) {
 
@@ -165,7 +194,7 @@ void LoadGameData() {
         std::vector<int> recipie_list;
 
         for(int r = 0; r < cj["module_data"][i]["recipies"].size(); r++) {
-            int _id = cj["module_data"][i]["recipies"][r].get<int>();
+            int _id = StrToRecipieId( cj["module_data"][i]["recipies"][r] );
             recipie_list.push_back(_id);
         }
 
@@ -191,17 +220,20 @@ void LoadGameData() {
         std::vector<int> ingredient_list;
 
         for(int r = 0; r < cj["recipie_data"][i]["ingredients"].size(); r++) {
-            int _id = cj["recipie_data"][i]["ingredients"][r].get<int>();
+            ItemID _id = StrToItemId( cj["recipie_data"][i]["ingredients"][r] );
             ingredient_list.push_back(_id);
         }
+
+        ItemID produces = StrToItemId(cj["recipie_data"][i]["produces"]);
 
         RecipieData new_recipie = {
             .recipie_name = name,      
             .recipie_id = m_id,
-            .ingredients = ingredient_list
+            .ingredients = ingredient_list,
+            .produces = produces
         };
 
-        TraceLog(LOG_INFO, "recipie_data  Loaded  id: %i  %s", m_id, name.c_str());
+        TraceLog(LOG_INFO, "recipie_data  Loaded  id: %i  %s  produces %i", m_id, name.c_str(), produces);
         g_recipie_data[(int)m_id] = new_recipie;
     }
 
@@ -749,6 +781,7 @@ void PrecalculateShadowData(LevelData &level_data) {
 void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+
     for(int item = 0; item < source_list.size(); item++) {
         int uid = GetRandomValue(1000, 1000000000);
 
@@ -764,7 +797,6 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
             new_instance.clip_size = 0;
             new_instance.ammo_count = 0;
             new_instance.container_id = container_id;
-            
             g_item_instances[uid] = new_instance;
             dest_list.push_back(uid);
             //TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
@@ -772,6 +804,50 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
     }
 }
 
+
+void InstancePlayerItem(ItemID item_id) {
+
+    //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+
+    
+    int uid = GetRandomValue(1000, 1000000000);
+
+    ItemInstanceData new_instance;
+    new_instance.instance_id = uid;
+    new_instance.item_id = item_id;
+
+    auto item_it = g_item_data.find(item_id);
+    if(item_it != g_item_data.end()) {
+        new_instance.item_name = item_it->second.item_name;
+        new_instance.type = item_it->second.type;
+        new_instance.value = item_it->second.value;
+        new_instance.clip_size = 0;
+        new_instance.ammo_count = 0;
+        new_instance.container_id = "";
+            
+        g_item_instances[uid] = new_instance;
+
+        int found_spot = -1;
+        for(int slot = 0; slot < g_player_data.inventory.size(); slot++) {
+            if(g_player_data.inventory[slot] == -1) {
+                found_spot = slot;
+                break;
+            }
+        }
+
+        if(found_spot != -1) {
+            g_player_data.inventory[found_spot] = uid;
+            //TraceLog(LOG_INFO, "item id %i  item uid %i  spot %i",item_id, uid, found_spot);
+        }
+        else {
+            g_player_data.inventory.push_back(uid);
+            //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
+        }
+
+        //dest_list.push_back(uid);
+        
+    }
+}
 
 void GenerateContainerItemList(int lti, std::vector<int> &list) {
 
@@ -804,6 +880,27 @@ void GenerateContainerItemList(int lti, std::vector<int> &list) {
  
     }
 }
+
+
+
+PlanID StrToPlanId(const std::string& s) {
+    static const std::unordered_map<std::string, PlanID> lookup_table = {
+        {"PLAN_ID_NONE",          PlanID::PLAN_ID_NONE},
+        {"PLAN_ID_STOVE",         PlanID::PLAN_ID_STOVE},
+        {"PLAN_ID_MUSHROOMPRESS",         PlanID::PLAN_ID_MUSHROOMPRESS},
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return PlanID::PLAN_ID_NONE;
+}
+
+
+
 
 RecipieID StrToRecipieId(const std::string& s) {
     static const std::unordered_map<std::string, RecipieID> lookup_table = {

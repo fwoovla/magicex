@@ -87,8 +87,21 @@ struct RecipieData {
     std::string recipie_name;
     RecipieID recipie_id;
     std::vector<int> ingredients;
+    ItemID produces;
 };
 extern std::unordered_map<int, RecipieData> g_recipie_data;
+
+
+struct PlanData {
+    PlanID plan_id;
+    std::string plan_name;
+    std::vector<int> ingredients;
+    ModuleID module_id;
+};
+
+extern std::unordered_map<int, PlanData> g_plan_data;
+
+
 
 struct PlayerData {
     int health;
@@ -206,12 +219,16 @@ void PrecalculateShadowData(LevelData &level_data);
 
 void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id);
 
+void InstancePlayerItem(ItemID item_id);
+
 void GenerateContainerItemList(int lti, std::vector<int> &list);
 
 
 SpellID StrToSpellId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);
+
+PlanID StrToPlanId(const std::string& s);
 
 ModuleID StrToModuleId(const std::string& s);
 

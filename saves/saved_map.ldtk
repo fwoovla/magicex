@@ -1091,7 +1091,7 @@
 						},
 						{
 							"__identifier": "SpawnPoint",
-							"__grid": [9,7],
+							"__grid": [6,3],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -1100,10 +1100,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 21,
-							"px": [144,112],
+							"px": [96,48],
 							"fieldInstances": [],
-							"__worldX": -80,
-							"__worldY": 112
+							"__worldX": -128,
+							"__worldY": 48
 						},
 						{
 							"__identifier": "PermContainerEntity",
@@ -1138,6 +1138,38 @@
 							"px": [80,32],
 							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 67, "realEditorValues": [] }],
 							"__worldX": -144,
+							"__worldY": 32
+						},
+						{
+							"__identifier": "ModuleEntity",
+							"__grid": [4,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#17CFC5",
+							"iid": "41d55a60-ac70-11f0-83d3-75ddc24b10c3",
+							"width": 16,
+							"height": 16,
+							"defUid": 66,
+							"px": [64,32],
+							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 67, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }],
+							"__worldX": -160,
+							"__worldY": 32
+						},
+						{
+							"__identifier": "ModuleEntity",
+							"__grid": [3,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#17CFC5",
+							"iid": "42375080-ac70-11f0-83d3-53016e37a11f",
+							"width": 16,
+							"height": 16,
+							"defUid": 66,
+							"px": [48,32],
+							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 2, "__tile": null, "defUid": 67, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }],
+							"__worldX": -176,
 							"__worldY": 32
 						}
 					]

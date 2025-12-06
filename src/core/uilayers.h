@@ -138,6 +138,7 @@ class ModuleMenu : public BaseUILayer {
     void Update() override;
     void Draw() override;
     void OpenModule();
+    void RecipieSelected();
 
     Label title_label;
 
@@ -146,16 +147,31 @@ class ModuleMenu : public BaseUILayer {
 
     int module_id;
 
+    ModuleData module_data;
+
     Vector2 rpo;
+    Vector2 inpo;
     Vector2 ipo;
 
     Label recipie_header;
     Label ingredient_header;
+    Label inventory_header;
 
     Label recipie_label;
     Label ingredient_label;
+    
+    std::vector<Button> recipie_buttons;
+    std::vector<int> button_lookup;
+    int selected_button_index;
 
+    Signal recipie_hovered;
+    Signal recipie_selected;
 
+    ItemGrid *inventory_grid;
+
+    Button craft_button;
+
+    SharedItemData shared_data;
 };
 
 
