@@ -197,7 +197,7 @@ void InstanceLevelObjects(LevelData &level_data) {
         is_shelter = true;
     }
 
-    TraceLog(LOG_INFO, "instacing game objects");
+    TraceLog(LOG_INFO, "INSTANCING GAME OBJECTS");
 
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   transition  size %i", level_data.level_transitions.size());
@@ -262,15 +262,12 @@ void InstanceLevelObjects(LevelData &level_data) {
                         TraceLog(LOG_INFO, "ITEM FOUND");
                         new_container->c_area.item_list.push_back(value.instance_id);
                     }
-                    //std::cout << key << " = " << value << "\n";
                 }
-
             }
             else {
                 InstanceItemList(g_loot_tables[new_container->loot_table_id], new_container->c_area.item_list, new_container->iid);
             }
         }
-
 
         if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
             TraceLog(LOG_INFO, "instacing ground container");
@@ -303,7 +300,30 @@ void InstanceLevelObjects(LevelData &level_data) {
             }
             //TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
         }
+
+
+        
     }
+
+    for(int m_index = 0; m_index < level_data.module_data.size(); m_index++) {
+        TraceLog(LOG_INFO, "instacing module");
+        Vector2 pos = level_data.module_data[m_index].position_i;
+        int module_id = level_data.module_data[m_index].module_id;
+
+        WorkbenchModuleEntity *new_module = new WorkbenchModuleEntity(pos, module_id);
+        DL_Add(level_data.entity_list, new_module);
+            
+        new_module->is_persistant = is_shelter;
+        new_module->identifier = level_data.module_data[m_index].identifier;
+        new_module->iid = level_data.module_data[m_index].iid;
+        new_module->level_index = g_game_data.current_map_index;
+
+        new_module->m_area.identifier = level_data.module_data[m_index].identifier;
+        new_module->m_area.position = pos;
+        new_module->m_area.size = {level_data.module_data[m_index].size.x, level_data.module_data[m_index].size.y};
+            
+    }
+
 
 //mushroom zones
     for(int zone = 0; zone < level_data.mushroom_zones.size(); zone++) {
@@ -336,11 +356,6 @@ void InstanceLevelObjects(LevelData &level_data) {
             TraceLog(LOG_INFO, "instacing mushroom");
         }
     }
-
-    TraceLog(LOG_INFO, "|||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
-/*     TraceLog(LOG_INFO, "G_ITEM_INSTANCES ");
-    for (const auto& [key, value] : g_item_instances) {
-        TraceLog(LOG_INFO, "----item uid %i  item id %i", key, value.item_id);
-    } */
+    TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
 }
 

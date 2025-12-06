@@ -214,7 +214,7 @@ void LDTKLoadMaps (json &mj) {
 
 
                         if(new_entity.identifier == "PermContainerEntity") {
-                            new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
+                            //new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
                             //TraceLog(LOG_INFO, "++++++--------------------------------PERM CONTAINER ENTITY found %s", new_entity.iid.c_str());
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 LDTKFieldInstance new_field;
@@ -236,7 +236,7 @@ void LDTKLoadMaps (json &mj) {
                         }
 
                         if(new_entity.identifier == "GroundContainerEntity") {
-                            new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
+                            //new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
                             //TraceLog(LOG_INFO, "++++++----------------------GROUND CONTAINER ENTITY found %s", new_entity.iid.c_str());
                             for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
                                 LDTKFieldInstance new_field;
@@ -256,8 +256,22 @@ void LDTKLoadMaps (json &mj) {
 
                         }
 
+                        if(new_entity.identifier == "ModuleEntity") {
+                            TraceLog(LOG_INFO, "++++++----------------------MODULE ENTITY found %s", new_entity.iid.c_str());
+                            for(int _i = 0; _i < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"].size(); _i++) {
+                                LDTKFieldInstance new_field;
+
+                                new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
+                                if(new_field.identifier == "module_id" ) {
+                                    new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];   
+                                    TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s  value: %i", new_field.identifier.c_str(), new_field.value_i);
+                                }
+                                new_entity.field_instances.push_back(new_field);
+                                TraceLog(LOG_INFO, "++++++--------------------------------MODULE ENTITY FIELD added");
+                            }
+                        }
+
                         if(new_entity.identifier == "MushroomZone") {
-                            //new_entity.field_instances.push_back(new_field);
                             //TraceLog(LOG_INFO, "++++++----------------------MUSHROOM ZONE FOUND");
                             LDTKFieldInstance new_field;
 

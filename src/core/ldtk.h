@@ -261,6 +261,8 @@ struct GameData {
     Vector2 sub_return_position;
     std::string sub_map_uid;
 
+    int current_module_id;
+
     int loot_table_id;
     std::vector<int> *loot_table;
     BaseContainerEntity *return_container;

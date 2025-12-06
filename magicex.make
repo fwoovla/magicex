@@ -99,6 +99,8 @@ GENERATED += $(OBJDIR)/lightning.o
 GENERATED += $(OBJDIR)/magicmissle.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapmenu.o
+GENERATED += $(OBJDIR)/modulemenu.o
+GENERATED += $(OBJDIR)/modules.o
 GENERATED += $(OBJDIR)/mushroomentity.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
@@ -137,6 +139,8 @@ OBJECTS += $(OBJDIR)/lightning.o
 OBJECTS += $(OBJDIR)/magicmissle.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapmenu.o
+OBJECTS += $(OBJDIR)/modulemenu.o
+OBJECTS += $(OBJDIR)/modules.o
 OBJECTS += $(OBJDIR)/mushroomentity.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
@@ -259,6 +263,9 @@ $(OBJDIR)/label.o: src/game/label.cpp
 $(OBJDIR)/ldtk.o: src/game/ldtk.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/modules.o: src/game/modules.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/resources.o: src/game/resources.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -281,6 +288,9 @@ $(OBJDIR)/gameuilayer.o: src/game/scenes/gameuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/mapmenu.o: src/game/scenes/mapmenu.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/modulemenu.o: src/game/scenes/modulemenu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pausemenu.o: src/game/scenes/pausemenu.cpp

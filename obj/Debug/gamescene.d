@@ -255,7 +255,7 @@ obj/Debug/gamescene.o: src/game/scenes/gamescene.cpp \
  src/game/scenes/../../core/resources.h src/game/scenes/../../core/data.h \
  src/game/scenes/../../core/spells.h src/game/scenes/../../core/events.h \
  src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
- src/game/scenes/../../core/button.h \
+ src/game/scenes/../../core/button.h src/game/scenes/../../core/modules.h \
  src/game/scenes/../../core/playercharacter.h \
  src/game/scenes/../../core/entityspawner.h \
  src/game/scenes/../../core/basescene.h \
@@ -593,6 +593,7 @@ src/game/scenes/../../core/events.h:
 src/game/scenes/../../core/viewport.h:
 src/game/scenes/../../core/input.h:
 src/game/scenes/../../core/button.h:
+src/game/scenes/../../core/modules.h:
 src/game/scenes/../../core/playercharacter.h:
 src/game/scenes/../../core/entityspawner.h:
 src/game/scenes/../../core/basescene.h:

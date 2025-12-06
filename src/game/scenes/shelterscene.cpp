@@ -7,21 +7,17 @@
 
 ShelterScene::ShelterScene() {
 
-    for (auto& [key, value] : g_sub_scene_data) {
-        DL_Clear(g_sub_scene_data[key]->entity_list);
-        g_sub_scene_data[key]->level_transitions.clear();
-        g_sub_scene_data[key]->container_data.clear();
-        g_sub_scene_data[key]->game_areas.clear();
-    }
-
-    g_sub_scene_data.clear();
+    ClearSubLevelData();
 
     scene_id = SHELTER_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
+    module_menu_visible = false;
     
     LoadLevelData(level_data);
+
     WaitTime(1);
+
     InstanceLevelObjects(level_data);
     
 
@@ -47,6 +43,13 @@ ShelterScene::ShelterScene() {
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
             }
         }
+        if(identifier == "ModuleEntity") {
+            WorkbenchModuleEntity* m_entity = dynamic_cast<WorkbenchModuleEntity*>(level_data.entity_list[entity_index]);
+            if(m_entity) {
+                TraceLog(LOG_INFO, "module connected");
+                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
+            }
+        }
     }
 
     ui_layer = new ShelterUILayer();
@@ -56,6 +59,8 @@ ShelterScene::ShelterScene() {
     tile_layer = new TileLayer();
 
     character_menu = new CharacterMenu();
+
+    module_menu = new ModuleMenu();
     //character_menu->Open();
     
     map_menu = new MapMenu();
@@ -85,6 +90,9 @@ SCENE_ID ShelterScene::Update() {
         if(character_menu_visible) {
             character_menu->Update();
         }
+        else if(module_menu_visible) {
+            module_menu->Update();
+        }
         else {
             ui_layer->Update();
             for(int i = 0; i < level_data.game_areas.size(); i++) {
@@ -95,7 +103,9 @@ SCENE_ID ShelterScene::Update() {
             HandleCamera();
         }
 
-        if(g_input.keys_pressed[0] == KEY_E) {
+
+
+        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
 
@@ -145,6 +155,9 @@ SCENE_ID ShelterScene::Update() {
                 }
             }
         }
+        if(g_input.keys_pressed[0] == KEY_E and module_menu_visible) {
+            module_menu_visible = false;
+        }
     }
 
     YSortEntities(level_data);
@@ -178,18 +191,19 @@ void ShelterScene::DrawUI() {
     if(show_map_menu == true) {
         map_menu->Draw();
     }
+    else if (module_menu_visible) {
+        module_menu->Draw();
+    }
+    else if(character_menu_visible) {
+        character_menu->Draw();
+    }
     else {
-        if(character_menu_visible) {
-            character_menu->Draw();
+        for(int i = 0; i < level_data.game_areas.size(); i++) {
+            level_data.game_areas[i]->Draw();
         }
-        else {
-            for(int i = 0; i < level_data.game_areas.size(); i++) {
-                level_data.game_areas[i]->Draw();
-            }
-            DL_DrawUI(level_data.entity_list);
-            ui_layer->Draw();
-            character_menu->DrawHotBarOnly();
-        }
+        DL_DrawUI(level_data.entity_list);
+        ui_layer->Draw();
+        character_menu->DrawHotBarOnly();
     }
 }
 
@@ -202,6 +216,7 @@ ShelterScene::~ShelterScene() {
     delete character_menu;
     delete tile_layer;
     delete map_menu;
+    delete module_menu;
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SHELTER");
 }
@@ -265,5 +280,16 @@ void ShelterScene::OnContainerOpened() {
 
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;
+
+}
+
+void ShelterScene::OnModuleUsed() {
+    if(module_menu_visible) {
+        return;
+    }
+    //TraceLog(LOG_INFO, "OPENNING CONTAINER");
+
+    module_menu->OpenModule();
+    module_menu_visible = true;
 
 }

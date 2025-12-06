@@ -10,6 +10,7 @@ SubScene::SubScene(LevelData *_level_data, bool is_new) {
     scene_id = SUB_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
+    module_menu_visible = false;
 
 
     //ClearLevelData();
@@ -55,6 +56,8 @@ SubScene::SubScene(LevelData *_level_data, bool is_new) {
 
     character_menu = new CharacterMenu();
     character_menu->Open();
+
+    module_menu = new ModuleMenu();
     
     g_current_player->position = level_data.spawn_position;
 
@@ -72,6 +75,9 @@ SCENE_ID SubScene::Update() {
 
     if(character_menu_visible) {
         character_menu->Update();
+    }
+    else if(module_menu_visible) {
+            module_menu->Update();
     }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
@@ -156,6 +162,9 @@ void SubScene::DrawUI() {
     if(character_menu_visible) {
         character_menu->Draw();
     }
+    else if (module_menu_visible) {
+        module_menu->Draw();
+    }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
             level_data.game_areas[i]->Draw();
@@ -172,6 +181,7 @@ SubScene::~SubScene() {
     delete ui_layer;
     delete tile_layer;
     delete character_menu;
+    delete module_menu;
     g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>(level_data);
     //ClearLevelData(level_data);
 
@@ -223,4 +233,15 @@ void SubScene::OnContainerOpened() {
 
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;
+}
+
+void SubScene::OnModuleUsed() {
+    if(module_menu_visible) {
+        return;
+    }
+    //TraceLog(LOG_INFO, "OPENNING CONTAINER");
+
+    module_menu->OpenModule();
+    module_menu_visible = true;
+
 }

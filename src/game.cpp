@@ -10,6 +10,8 @@ std::unordered_map<int, ItemInstanceData> g_item_instances;
 std::unordered_map<std::string, ContainerData> g_persistant_containers;
 std::unordered_map<int, WeaponData> g_weapon_data;
 std::unordered_map<int, SpellData> g_spell_data;
+std::unordered_map<int, ModuleData> g_module_data;
+std::unordered_map<int, RecipieData> g_recipie_data;
 
 std::vector<std::vector<int>> g_loot_tables;
 
@@ -19,8 +21,6 @@ DebugData g_debug_data;
 LDTKMaps g_ldtk_maps;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
-
-//LevelData g_level_data;
 
 Texture2D g_tile_sheets[MAX_SPRITES];
 Texture2D g_sprite_sheets[MAX_SPRITES];
@@ -34,6 +34,7 @@ Texture2D g_ui_backgrounds[MAX_SPRITES];
 Texture2D g_spell_sprites[MAX_SPRITES];
 Texture2D g_environment_sprites[MAX_SPRITES];
 Texture2D g_shadow_sprites[MAX_SPRITES];
+Texture2D g_module_sprites[MAX_SPRITES];
 PlayerData g_player_data;
 
 PlayerCharacter *g_current_player;
@@ -46,9 +47,6 @@ float g_screen2world;
 
 Vector2 g_resolution;
 Vector2 g_screen_center;
-
-//std::vector<BaseEntity *> active_entity_list;
-//std::vector<std::unique_ptr<BaseEntity>> entity_draw_list;
 
 int g_map_width;
 int g_map_height;
@@ -95,7 +93,6 @@ void Game::StartGame() {
       
     scene_render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
     ui_render_texture = LoadRenderTexture(g_resolution.x, g_resolution.y);
-    //ui_render_texture = LoadRenderTexture(g_game_settings.window_size.x, g_game_settings.window_size.y);
 
     SetTargetFPS(60);
 
@@ -132,7 +129,6 @@ void Game::StartGame() {
             (Vector2){0, 0}, 0.0f, WHITE
         );
 
-        //DrawRectangleRec( (Rectangle){ 0, 0, (float)ui_render_texture.texture.width, -(float)ui_render_texture.texture.height }, WHITE);
         DrawTexturePro(
             ui_render_texture.texture,
             (Rectangle){ 0, 0, (float)ui_render_texture.texture.width, -(float)ui_render_texture.texture.height },
@@ -142,12 +138,6 @@ void Game::StartGame() {
 
 
         EndDrawing();
-
-/*         if(g_game_settings.show_debug == true) {
-            TraceLog(LOG_INFO, "dt %f", GetFrameTime());
-            TraceLog(LOG_INFO, "dt tile draw %f", g_debug_data.tile_dt);
-            TraceLog(LOG_INFO, "fps %i\n", GetFPS());
-        } */
 
         if(WindowShouldClose()) {
             game_running = false;

@@ -129,6 +129,36 @@ class MapMenu : public BaseUILayer {
 
 };
 
+
+class ModuleMenu : public BaseUILayer {
+
+    public:
+    ModuleMenu();
+    ~ModuleMenu() override;
+    void Update() override;
+    void Draw() override;
+    void OpenModule();
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    int module_id;
+
+    Vector2 rpo;
+    Vector2 ipo;
+
+    Label recipie_header;
+    Label ingredient_header;
+
+    Label recipie_label;
+    Label ingredient_label;
+
+
+};
+
+
 class CharacterMenu : public BaseUILayer {
 
     public:

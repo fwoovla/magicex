@@ -531,7 +531,33 @@ void LoadResources() {
     g_item_sprites[ITEM_ID_RING] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_RING");
 
+//---------------------------------------------------------------------------------------
 
+
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {20,20};
+    item_pos = {25,20};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_STOVE_PLAN] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_STOVE_PLAN] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_STOVE_PLAN");
+
+//---------------------------------------------------------------------------------------
+
+
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {20,20};
+    item_pos = {25,20};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_MUSHROOMPRESS_PLAN] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_MUSHROOMPRESS_PLAN] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MUSHROOMPRESS_PLAN");
 
 ///--------------error
 //---------------------------------------------------------------------------------------
@@ -610,6 +636,28 @@ void LoadResources() {
     g_container_sprites[SPRITE_CONTAINER_BARREL] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   SPRITE_CONTAINER_BARREL");
 
+
+//modules
+    TraceLog(LOG_INFO, "LOADING MODULE SPRITES");
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {21,20};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_module_sprites[MODULE_ID_WORKBENCH] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "MODULES   MUDULE_ID_WORKBENCH");
+
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {21,20};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_module_sprites[MODULE_ID_STOVE] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "MODULES   MUDULE_ID_STOVE");
+
+        item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_pos = {23,20};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_module_sprites[MODULE_ID_MUSHROOMPRESS] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "MODULES   MODULE_ID_MUSHROOMPRESS");
+
+
 //UI sprites
     TraceLog(LOG_INFO, "LOADING UI SPRITES");
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -626,6 +674,7 @@ void LoadResources() {
     g_ui_panels[PANEL_GRAY] = LoadTexture("assets/graypanel1.png");
     g_ui_panels[PANEL_WOOD_LARGE] = LoadTexture("assets/largepanel1.png");
     g_ui_panels[PANEL_CHAR_SCREEN] = LoadTexture("assets/characterpanelbg.png");
+    g_ui_panels[PANEL_MODULE_SCREEN] = LoadTexture("assets/modulepanelbg.png");
 
     TraceLog(LOG_INFO, "LOADING UI BACKGROUNDS");
     g_ui_backgrounds[BG_TITLE] = LoadTexture("assets/titleimage.png");
@@ -685,5 +734,10 @@ void UnloadResources() {
     TraceLog(LOG_INFO, "UNLOADING ENVIRONMENT SPRITES");
     for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_shadow_sprites[i]);
+    }
+
+    TraceLog(LOG_INFO, "UNLOADING ENVIRONMENT SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_module_sprites[i]);
     }
 }

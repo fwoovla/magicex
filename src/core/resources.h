@@ -69,6 +69,10 @@ enum ItemID {
     ITEM_ID_MEAT,
 
     ITEM_ID_RING,
+
+    ITEM_ID_STOVE_PLAN,
+    ITEM_ID_MUSHROOMPRESS_PLAN,
+
     ITEM_ID_ERROR,
     ITEM_ID_MAX
 };
@@ -76,6 +80,23 @@ enum ItemID {
 extern Texture2D g_item_sprites[MAX_SPRITES];
 extern Texture2D g_icon_sprites[MAX_SPRITES];
 
+
+enum RecipieID {
+    RECIPIE_ID_NONE = -1,
+    RECIPIE_ID_DAGGER,
+    RECIPIE_ID_APPLE,
+    RECIPIE_ID_MUSHROOMJUICE
+};
+
+
+enum ModuleID {
+    MODULE_ID_NONE = -1,
+    MODULE_ID_WORKBENCH,
+    MODULE_ID_STOVE,
+    MODULE_ID_MUSHROOMPRESS,
+};
+
+extern Texture2D g_module_sprites[MAX_SPRITES];
 
 enum SpellID {
     SPELL_ID_NONE = -1,
@@ -114,7 +135,8 @@ enum UIPanelID {
     PANEL_GRAY,
     PANEL_WOOD_LARGE,
     PANEL_NUM_SPRITES,
-    PANEL_CHAR_SCREEN
+    PANEL_CHAR_SCREEN,
+    PANEL_MODULE_SCREEN
 };
 
 extern Texture2D g_ui_panels[MAX_SPRITES];
@@ -139,8 +161,6 @@ enum TileSheetID {
 };
 
 extern Texture2D g_tile_sheets[MAX_SPRITES];
-
-
 
 
 

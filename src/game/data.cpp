@@ -87,13 +87,6 @@ void LoadGameData() {
         std::string name = cj["item_data"][i]["item_name"];
         ItemType type = cj["item_data"][i]["item_type"];
 
-/*         SpellID spell_id = SPELL_ID_NONE;
-
-        if(type == TYPE_WEAPON) {
-            std::string sp_id = cj["item_data"][i]["spell_id"];
-            spell_id = StrToSpellId(sp_id);
-        } */
-
         ItemData new_item = {
             .id = id,
             .value = value,
@@ -161,6 +154,58 @@ void LoadGameData() {
     }
 
 
+//------------------------------------module data
+    for(int i = 0; i < cj["module_data"].size(); i++) {
+
+        std::string m_id_s = cj["module_data"][i]["module_id"];
+        ModuleID m_id = StrToModuleId(m_id_s);
+
+        std::string name = cj["module_data"][i]["module_name"];
+
+        std::vector<int> recipie_list;
+
+        for(int r = 0; r < cj["module_data"][i]["recipies"].size(); r++) {
+            int _id = cj["module_data"][i]["recipies"][r].get<int>();
+            recipie_list.push_back(_id);
+        }
+
+        ModuleData new_module = {
+            .module_id = m_id,
+            .module_name = name,
+            .recipies = recipie_list    
+        };
+
+        TraceLog(LOG_INFO, "Module Data Loaded  id: %i  %s  %i", m_id, name.c_str(), recipie_list.size());
+        g_module_data[(int)m_id] = new_module;
+    }
+
+
+//------------------------------------recipie data
+    for(int i = 0; i < cj["recipie_data"].size(); i++) {
+
+        std::string m_id_s = cj["recipie_data"][i]["recipie_id"];
+        RecipieID m_id = StrToRecipieId(m_id_s);
+
+        std::string name = cj["recipie_data"][i]["recipie_name"];
+
+        std::vector<int> ingredient_list;
+
+        for(int r = 0; r < cj["recipie_data"][i]["ingredients"].size(); r++) {
+            int _id = cj["recipie_data"][i]["ingredients"][r].get<int>();
+            ingredient_list.push_back(_id);
+        }
+
+        RecipieData new_recipie = {
+            .recipie_name = name,      
+            .recipie_id = m_id,
+            .ingredients = ingredient_list
+        };
+
+        TraceLog(LOG_INFO, "recipie_data  Loaded  id: %i  %s", m_id, name.c_str());
+        g_recipie_data[(int)m_id] = new_recipie;
+    }
+
+
     //--------------------loot tables
     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
@@ -183,15 +228,6 @@ void LoadGameData() {
         g_game_data.save_available = true;
         TraceLog(LOG_INFO, "SAVE FILE FOUND");
     }
-
-
-  /*   TraceLog(LOG_INFO, "==========LOADING LDTK MAPS================");
-
-    std::string ldtk_map_dir = "assets/maps/ldtk";
-    int num_maps = load_ldtk_maps();
-
-    TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps); */
-
 }
 
 
@@ -268,7 +304,6 @@ void SaveGame(LevelData &level_data) {
     j["item_instances"] = json_item_instances;    
 
 
-
     json json_persistant_containers = json::array();
 
     for(int entity = 0; entity < level_data.entity_list.size(); entity++) {
@@ -301,9 +336,6 @@ void SaveGame(LevelData &level_data) {
     }
 
     j["persistant_containers"] = json_persistant_containers;
-
-
-
 
 
     file<<j.dump(4);
@@ -413,7 +445,6 @@ void LoadGame() {
 
     file.close();
 
-
     TraceLog(LOG_INFO, "==========LOADING SAVED LDTK MAPS================");
 
     std::string ldtk_map_path = "saves/saved_map.ldtk";
@@ -431,17 +462,21 @@ void ClearLevelData(LevelData &level_data) {
     level_data.level_transitions.clear();
     level_data.container_data.clear();
     level_data.game_areas.clear();
-/* 
-    for (auto& [key, value] : g_sub_scene_data) {
-        DL_Clear(g_sub_scene_data[key]->entity_list);
-        //g_sub_scene_data[key]->level_transitions.clear();
-        //g_sub_scene_data[key]->container_data.clear();
-        //g_sub_scene_data[key]->game_areas.clear();
-    }
-
-    g_sub_scene_data.clear(); */
 
 }
+
+
+void ClearSubLevelData() {
+    for (auto& [key, value] : g_sub_scene_data) {
+        DL_Clear(g_sub_scene_data[key]->entity_list);
+        g_sub_scene_data[key]->level_transitions.clear();
+        g_sub_scene_data[key]->container_data.clear();
+        g_sub_scene_data[key]->game_areas.clear();
+    }
+
+    g_sub_scene_data.clear();
+}
+
 
 void LoadLevelData(LevelData &level_data) {
 
@@ -545,6 +580,24 @@ void LoadLevelData(LevelData &level_data) {
                         level_data.container_data.push_back(new_container);
                     }
                 }
+
+                if(identifier == "ModuleEntity") {
+                    //if(!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index ) {
+                        ModuleEntityData new_module;
+                        TraceLog(LOG_INFO, "MODULE FOUND %s %i", identifier.c_str(), this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size());
+                        new_module.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
+                        new_module.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                        new_module.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                        new_module.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+                        new_module.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
+                        new_module.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+                        new_module.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+
+                        new_module.module_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
+                        level_data.module_data.push_back(new_module);
+                    //}
+                }
+
 
                 if(identifier == "MushroomZone") {
                     MushroomZoneData new_zone;
@@ -662,8 +715,6 @@ void PrecalculateShadowData(LevelData &level_data) {
     float inv_tile_size = level_data.precalc.inv_tile_size;
     int map_width = level_data.precalc.map_width;
 
-    //Vector2 checker_pos = Vector2Add(focus_position, checker->centered_offset);
-
     for(int tile = 0; tile < col_layer->int_grid.size(); tile++) {
         if(col_layer->int_grid[tile] == 1) {
             //TraceLog(LOG_INFO, "tile data %i", col_layer->int_grid[tile]);
@@ -691,10 +742,8 @@ void PrecalculateShadowData(LevelData &level_data) {
 
         }
     }
-
     TraceLog(LOG_INFO, "FINISHED CALCULATING SHADOW DATA  # polygons %i", level_data.collision_polys.size());
 }
-
 
 
 void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id) {
@@ -756,7 +805,40 @@ void GenerateContainerItemList(int lti, std::vector<int> &list) {
     }
 }
 
+RecipieID StrToRecipieId(const std::string& s) {
+    static const std::unordered_map<std::string, RecipieID> lookup_table = {
+        {"None",                        RecipieID::RECIPIE_ID_NONE},
+        {"RECIPIE_ID_DAGGER",         RecipieID::RECIPIE_ID_DAGGER},
+        {"RECIPIE_ID_APPLE",             RecipieID::RECIPIE_ID_APPLE},
+        {"RECIPIE_ID_MUSHROOMJUICE",     RecipieID::RECIPIE_ID_MUSHROOMJUICE},
 
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return RecipieID::RECIPIE_ID_NONE;
+}
+
+ModuleID StrToModuleId(const std::string& s) {
+
+    static const std::unordered_map<std::string, ModuleID> lookup_table = {
+        {"None",                        ModuleID::MODULE_ID_NONE},
+        {"MODULE_ID_WORKBENCH",         ModuleID::MODULE_ID_WORKBENCH},
+        {"MODULE_ID_STOVE",             ModuleID::MODULE_ID_STOVE},
+        {"MODULE_ID_MUSHROOMPRESS",     ModuleID::MODULE_ID_MUSHROOMPRESS},
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return ModuleID::MODULE_ID_NONE;
+}
 
 SpellID StrToSpellId(const std::string& s) {
 
@@ -832,6 +914,8 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_BREAD",           ItemID::ITEM_ID_BREAD},
         {"ITEM_ID_MEAT",            ItemID::ITEM_ID_MEAT},
         {"ITEM_ID_RING",            ItemID::ITEM_ID_RING},
+        {"ITEM_ID_STOVE_PLAN",            ItemID::ITEM_ID_STOVE_PLAN},
+        {"ITEM_ID_MUSHROOMPRESS_PLAN",    ItemID::ITEM_ID_MUSHROOMPRESS_PLAN},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {

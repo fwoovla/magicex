@@ -128,6 +128,7 @@ extern Viewport g_viewport;
 #include "label.h"
 #include "baseentity.h"
 #include "entities.h"
+#include "modules.h"
 #include "playercharacter.h"
 #include "entityspawner.h"
 //#include "units.h"

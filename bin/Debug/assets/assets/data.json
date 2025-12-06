@@ -254,6 +254,18 @@
             "item_id":"ITEM_ID_RING",
             "value":0,
             "item_type":7
+        },
+        {
+            "item_name": "STOVE PLAN",
+            "item_id":"ITEM_ID_STOVE_PLAN",
+            "value":0,
+            "item_type":9
+        },
+        {
+            "item_name": "MUSHROOM PRESS PLAN",
+            "item_id":"ITEM_ID_MUSHROOMPRESS_PLAN",
+            "value":0,
+            "item_type":9
         }
 
     ],
@@ -290,6 +302,11 @@
         },
         {
             "index":6,
+            "table_name":"plans",
+            "table_data":[37, 38, 23, 24]
+        },
+        {
+            "index":7,
             "table_name":"test",
             "table_data":[14]
         }
@@ -542,7 +559,62 @@
             "clip_size":10
         }
 
+    ],
+
+    "plan_data": [
         
+        {
+            "plan_id": "PLAN_ID_STOVE",
+            "plan_name": "STOVE PLAN",
+            "required_items":[23],
+            "module_id":"MODULE_ID_STOVE"
+        },
+        {
+            "plan_id": "PLAN_ID_MUSHROOMPRESS",
+            "plan_name": "MUSHROOM PRESS PLAN",
+            "required_items":[24],
+            "module_id":"MODULE_ID_MUSHROOMPRESS"
+        }
+
+    ],
+
+    "module_data": [
+        {
+            "module_id":"MODULE_ID_WORKBENCH",
+            "module_name":"WORKBENCH",
+            "recipies":[0]
+        },
+        {
+            "module_id":"MODULE_ID_STOVE",
+            "module_name":"STOVE",
+            "recipies":[1]
+        },
+        {
+            "module_id":"MODULE_ID_MUSHROOMPRESS",
+            "module_name":"MUSHROOM PRESS",
+            "recipies":[2]
+        }
+
+    ],
+
+    "recipie_data": [
+        {
+            "recipie_id":"RECIPIE_ID_DAGGER",
+            "recipie_name":"dagger",
+            "ingredients":[23]
+        },
+        {
+            "recipie_id":"RECIPIE_ID_APPLE",
+            "recipie_name":"apple",
+            "ingredients":[23]
+        },
+        {
+            "recipie_id":"RECIPIE_ID_MUSHROOMJUICE",
+            "recipie_name":"mushroom juice",
+            "ingredients":[23]
+        }
+
     ]
+
 }
 

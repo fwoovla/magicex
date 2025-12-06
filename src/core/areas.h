@@ -78,3 +78,20 @@ class ContainerArea : public BaseArea {
         Label label;
 
 };
+
+
+class ModuleArea : public BaseArea {
+
+    public:
+        ModuleArea(){};
+        ~ModuleArea() override;
+        void Update() override;
+        void Draw() override;
+        //void Activate() override;
+
+        Signal area_entered;
+        Signal area_activated;
+
+        Label label;
+
+};

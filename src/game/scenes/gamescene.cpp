@@ -10,6 +10,7 @@ GameScene::GameScene() {
     scene_id = GAME_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
+    module_menu_visible = false;
 
     //ClearLevelData(level_data);
     LoadLevelData(level_data);
@@ -62,6 +63,8 @@ GameScene::GameScene() {
     character_menu = new CharacterMenu();
     character_menu->Open();
 
+    module_menu = new ModuleMenu();
+
     g_current_player->position = level_data.spawn_position;
 
     g_camera = { 0 };
@@ -81,6 +84,9 @@ SCENE_ID GameScene::Update() {
     
     if(g_game_data.is_in_sub_map) {
         g_sub_scene->Update();
+    }
+    else if(module_menu_visible) {
+            module_menu->Update();
     }
     else {
         if(character_menu_visible) {
@@ -175,19 +181,21 @@ void GameScene::DrawUI() {
         //TraceLog(LOG_INFO, "SUB GAME SCENE DRAW");
         g_sub_scene->DrawUI();
     }
+    else if (module_menu_visible) {
+        module_menu->Draw();
+    }
+    else if(character_menu_visible) {
+        character_menu->Draw();
+    }
     else {
-        if(character_menu_visible) {
-            character_menu->Draw();
+        for(int i = 0; i < level_data.game_areas.size(); i++) {
+            level_data.game_areas[i]->Draw();
         }
-        else {
-            for(int i = 0; i < level_data.game_areas.size(); i++) {
-                level_data.game_areas[i]->Draw();
-            }
-            DL_DrawUI(level_data.entity_list);
-            ui_layer->Draw();
-            character_menu->DrawHotBarOnly();
-        }
-    }    
+        DL_DrawUI(level_data.entity_list);
+        ui_layer->Draw();
+        character_menu->DrawHotBarOnly();
+    }
+        
 }
 
 void GameScene::HandleCamera() {
@@ -243,6 +251,7 @@ GameScene::~GameScene() {
     delete ui_layer;
     delete character_menu;
     delete tile_layer;
+    delete module_menu;
     //DL_Clear(entity_draw_list);
     ClearLevelData(level_data);
     
@@ -337,4 +346,15 @@ void GameScene::OnContainerOpened() {
 
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;
+}
+
+void GameScene::OnModuleUsed() {
+    if(module_menu_visible) {
+        return;
+    }
+    //TraceLog(LOG_INFO, "OPENNING CONTAINER");
+
+    module_menu->OpenModule();
+    module_menu_visible = true;
+
 }

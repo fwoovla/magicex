@@ -248,9 +248,10 @@ obj/Debug/utils.o: src/core/utils.cpp /usr/include/stdc-predef.h \
  src/core/utils.h src/core/baseentity.h src/core/areas.h src/core/label.h \
  src/core/entities.h src/core/resources.h src/core/data.h \
  src/core/spells.h src/core/events.h src/core/viewport.h src/core/input.h \
- src/core/button.h src/core/playercharacter.h src/core/entityspawner.h \
- src/core/basescene.h src/core/tilelayer.h src/core/uilayers.h \
- src/core/scenes.h src/core/scenemanager.h src/core/game.h
+ src/core/button.h src/core/modules.h src/core/playercharacter.h \
+ src/core/entityspawner.h src/core/basescene.h src/core/tilelayer.h \
+ src/core/uilayers.h src/core/scenes.h src/core/scenemanager.h \
+ src/core/game.h
 /usr/include/stdc-predef.h:
 src/core/gamedefs.h:
 /usr/local/include/raylib.h:
@@ -580,6 +581,7 @@ src/core/events.h:
 src/core/viewport.h:
 src/core/input.h:
 src/core/button.h:
+src/core/modules.h:
 src/core/playercharacter.h:
 src/core/entityspawner.h:
 src/core/basescene.h:

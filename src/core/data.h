@@ -43,6 +43,7 @@ enum ItemType {
     TYPE_CONSUMEABLE,
     TYPE_RESOURCE,
     TYPE_ALL,
+    TYPE_PLAN
 };
 
 struct ItemData {
@@ -82,6 +83,12 @@ struct WeaponData {
 
 extern std::unordered_map<int, WeaponData> g_weapon_data;
 
+struct RecipieData {
+    std::string recipie_name;
+    RecipieID recipie_id;
+    std::vector<int> ingredients;
+};
+extern std::unordered_map<int, RecipieData> g_recipie_data;
 
 struct PlayerData {
     int health;
@@ -126,6 +133,16 @@ struct LevelTransitionData {
     Vector2 size;
 };
 
+struct ModuleEntityData {
+    std::string identifier;
+    std::string iid;
+    int level_index;
+    int module_id;
+    Vector2 position_i;
+    Vector2 position_f;
+    Vector2 size;
+};
+
 struct ContainerData {
     std::string identifier;
     std::string iid;
@@ -157,6 +174,7 @@ struct LevelData {
     std::vector<MushroomZoneData> mushroom_zones;
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
+    std::vector<ModuleEntityData> module_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
     std::vector<Polygon> collision_polys;
@@ -165,9 +183,6 @@ struct LevelData {
     //std::unordered_map <std::string, std::unique_ptr< SubScene> > sub_scene_instances; 
 
 };
-
-
-
 
 extern std::vector<std::vector<int>> g_loot_tables;
 
@@ -179,6 +194,8 @@ void LoadGame();
 
 
 void ClearLevelData(LevelData &level_data);
+
+void ClearSubLevelData();
 
 void LoadLevelData(LevelData &level_data);
 
@@ -195,6 +212,10 @@ void GenerateContainerItemList(int lti, std::vector<int> &list);
 SpellID StrToSpellId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);
+
+ModuleID StrToModuleId(const std::string& s);
+
+RecipieID StrToRecipieId(const std::string& s);
 
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 

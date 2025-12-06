@@ -261,6 +261,7 @@ obj/Debug/containerentity.o: src/game/entities/containerentity.cpp \
  src/game/entities/../../core/viewport.h \
  src/game/entities/../../core/input.h \
  src/game/entities/../../core/button.h \
+ src/game/entities/../../core/modules.h \
  src/game/entities/../../core/playercharacter.h \
  src/game/entities/../../core/entityspawner.h \
  src/game/entities/../../core/basescene.h \
@@ -598,6 +599,7 @@ src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:
 src/game/entities/../../core/input.h:
 src/game/entities/../../core/button.h:
+src/game/entities/../../core/modules.h:
 src/game/entities/../../core/playercharacter.h:
 src/game/entities/../../core/entityspawner.h:
 src/game/entities/../../core/basescene.h:
