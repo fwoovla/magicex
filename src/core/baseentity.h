@@ -32,6 +32,7 @@ class BaseEntity  {
     bool is_persistant;
     bool is_obstructable;
     bool is_obstructed;
+    bool y_sort;
 };
 
 class SpriteEntity : public BaseEntity {

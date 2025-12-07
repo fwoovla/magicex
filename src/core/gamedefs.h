@@ -4,10 +4,17 @@
 
 
 inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
+
+inline const Color TRANSDARKRED = {.r = 50, .g = 0, .b = 0, .a = 60};
+inline const Color TRANSRED = {.r = 255, .g = 0, .b = 0, .a = 60};
+
 inline const Color CYAN = {.r = 0, .g = 201, .b = 153, .a = 255};
 inline const Color DARKYELLOW = {.r = 153, .g = 151, .b = 0, .a = 255};
 inline const Color DARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 255};
 inline const Color TRANSDARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 150};
+
+inline const Color TRANSDARKGREEN = {.r = 0, .g = 50, .b = 0, .a = 60};
+inline const Color TRANSGREEN = {.r = 0, .g = 255, .b = 0, .a = 60};
 
 //inline const int TILE_SIZE = 32;
 //inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;
@@ -117,6 +124,7 @@ extern Viewport g_viewport;
 
 #include "ldtk.h"
 #include "resources.h"
+#include "itemgenerator.h"
 #include "data.h"
 #include "spells.h"
 #include "utils.h"

@@ -5,6 +5,7 @@ Lightning::Lightning(Vector2 _position, int _shooter_id, SpellData _data) {
 
     data = _data;
     should_delete = false;
+    y_sort = false;
 
     position = _position;
     centered_offset = {0,0};
@@ -12,11 +13,9 @@ Lightning::Lightning(Vector2 _position, int _shooter_id, SpellData _data) {
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
              
-    LoadSpriteCentered(sprite, g_spell_sprites[SPELL_ID_LIGHTNING_1 + (data.level - 1)], position);
+    
     
     shooter_id = _shooter_id;
-    
-    
     
     target_position = g_input.world_mouse_position;
     
@@ -31,7 +30,18 @@ Lightning::Lightning(Vector2 _position, int _shooter_id, SpellData _data) {
     lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
     lifetime_timer.Start(data.lifetime * dist_scale, true);
 
+    sprite = {};
+    LoadSpriteCentered(sprite, g_spell_sprites[data.spell_id], position);
     sprite.rotation = rotation;
+
+    TraceLog(LOG_INFO, 
+         "Missile sprite id = %i, size = %i x %i",
+         g_spell_sprites[_data.spell_id].id,
+         g_spell_sprites[_data.spell_id].width,
+         g_spell_sprites[_data.spell_id].height);
+
+    TraceLog(LOG_INFO, "using spell sprite %d, id=%d", 
+         _data.spell_id, g_spell_sprites[_data.spell_id].id);
 }
 
 Lightning::~Lightning() {

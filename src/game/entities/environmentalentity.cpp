@@ -5,6 +5,7 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
     position = _position;
     //sprite_id = _sprite_id;
     rotation = 0.0f;
+    y_sort = true;
     
 
     LoadSprite(sprite, g_environment_sprites[_sprite_id], position);

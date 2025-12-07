@@ -47,120 +47,18 @@
             "value":0,
             "item_type":0
         },
-        
-
-
         {
-            "item_name": "MAGICMISSLE_WAND 1",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_1",
+            "item_name": "WAND",
+            "item_id":"ITEM_ID_WAND",
             "value":0,
             "item_type":0
         },
         {
-            "item_name": "MAGICMISSLE_WAND 2",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_2",
+            "item_name": "STAFF",
+            "item_id":"ITEM_ID_STAFF",
             "value":0,
             "item_type":0
         },
-        {
-            "item_name": "MAGICMISSLE_WAND 3",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 1",
-            "item_id":"ITEM_ID_FIREBALL_WAND_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 2",
-            "item_id":"ITEM_ID_FIREBALL_WAND_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 3",
-            "item_id":"ITEM_ID_FIREBALL_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 1",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 2",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 3",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-
-
-        {
-            "item_name": "MAGICMISSLE_STAFF 1",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_STAFF 2",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_STAFF 3",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 1",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 2",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 3",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 1",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 2",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 3",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-
 
 
         {
@@ -273,47 +171,43 @@
         {
             "index":0,
             "table_name":"food",
-            "table_data":[32,33,34,35]
+            "table_data":["ITEM_ID_APPLE","ITEM_ID_CHEESE","ITEM_ID_BREAD","ITEM_ID_MEAT"]
         },
         {
             "index":1,
             "table_name":"mele",
-            "table_data":[0,1,2,3,4]
+            "table_data":["ITEM_ID_DAGGER","ITEM_ID_SWORD","ITEM_ID_AXE","ITEM_ID_SPEAR","ITEM_ID_BOW"]
         },
         {
             "index":2,
             "table_name":"wands",
-            "table_data":[5,6,7,8,9,10,11,12,13,23,24]
+            "table_data":["ITEM_ID_WAND", "ITEM_ID_STAFF"]
         },
         {
             "index":3,
             "table_name":"staves",
-            "table_data":[14,15,16,17,18,19,20,21,22,23,24]
+            "table_data":["ITEM_ID_WAND", "ITEM_ID_STAFF"]
         },
         {
             "index":4,
             "table_name":"armor",
-            "table_data":[25,26,27,28]
+            "table_data":["ITEM_ID_LEATHERGLOVES","ITEM_ID_LEATHERBOOTS","ITEM_ID_LEATHERLEGGINGS","ITEM_ID_LEATHERVEST"]
         },
         {
             "index":5,
             "table_name":"scrolls",
-            "table_data":[29,30,31, 23, 24]
+            "table_data":["ITEM_ID_MAGICMMISSLE_SCROLL","ITEM_ID_FIREBALL_SCROLL","ITEM_ID_LIGHTNING_SCROLL"]
         },
         {
             "index":6,
             "table_name":"plans",
-            "table_data":[37, 38, 23, 24]
-        },
-        {
-            "index":7,
-            "table_name":"test",
-            "table_data":[14]
+            "table_data":["ITEM_ID_STOVE_PLAN", "ITEM_ID_MUSHROOMPRESS_PLAN", "ITEM_ID_MUSHROOM_JUICE", "ITEM_ID_MUSHROOM", "ITEM_ID_WAND"]
         }
     ],
     "spell_data": [
         {
             "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "spell_name":"Magic Missle",
             "level":1,
             "lifetime":1.0,
             "speed": 200,
@@ -322,6 +216,7 @@
         },
         {
             "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "spell_name":"Magic Missle 2",
             "level":2,
             "lifetime":1.0,
             "speed": 200,
@@ -330,6 +225,7 @@
         },
         {
             "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "spell_name":"Magic Missle 3",
             "level":3,
             "lifetime":1.0,
             "speed": 200,
@@ -339,6 +235,7 @@
 
         {
             "spell_id":"SPELL_ID_FIREBALL_1",
+            "spell_name":"Fireball",
             "level":1,
             "lifetime":1.0,
             "speed": 100,
@@ -347,6 +244,7 @@
         },
         {
             "spell_id":"SPELL_ID_FIREBALL_2",
+            "spell_name":"Fireball 2",
             "level":2,
             "lifetime":1.0,
             "speed": 100,
@@ -355,6 +253,7 @@
         },
         {
             "spell_id":"SPELL_ID_FIREBALL_3",
+            "spell_name":"Fireball 3",
             "level":3,
             "lifetime":1.0,
             "speed": 100,
@@ -364,6 +263,7 @@
 
         {
             "spell_id":"SPELL_ID_LIGHTNING_1",
+            "spell_name":"Lightning",
             "level":1,
             "lifetime":1.0,
             "speed": 700,
@@ -372,6 +272,7 @@
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_2",
+            "spell_name":"Lightning 2",
             "level":2,
             "lifetime":1.0,
             "speed": 700,
@@ -380,6 +281,7 @@
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_3",
+            "spell_name":"Lightning 3",
             "level":3,
             "lifetime":1.0,
             "speed": 700,
@@ -393,170 +295,56 @@
             "weapon_name": "ITEM_ID_DAGGER",
             "cooldown": 0.4,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0
+            "clip_size":0,
+            "damage":1
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
             "weapon_name": "ITEM_ID_SWORD",
             "cooldown": 0.4,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0
+            "clip_size":0,
+            "damage":1
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
             "weapon_name": "ITEM_ID_SPEAR",
             "cooldown": 0.4,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0
+            "clip_size":0,
+            "damage":1
         },
         {
             "weapon_id": "ITEM_ID_AXE",
             "weapon_name": "ITEM_ID_AXE",
             "cooldown": 0.4,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0
+            "clip_size":0,
+            "damage":1
         },
         {
             "weapon_id": "ITEM_ID_BOW",
             "weapon_name": "ITEM_ID_BOW",
             "cooldown": 0.4,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0
+            "clip_size":0,
+            "damage":1
         },
-
         {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_1",
-            "weapon_name": "MAGICMISSLE WAND 1",
+            "weapon_id": "ITEM_ID_WAND",
+            "weapon_name": "WAND",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
-            "clip_size":10
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":10,
+            "damage":1
         },
         {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_2",
-            "weapon_name": "MAGICMISSLE WAND 2",
+            "weapon_id": "ITEM_ID_STAFF",
+            "weapon_name": "STAFF",
             "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_3",
-            "weapon_name": "MAGICMISSLE WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_1",
-            "weapon_name": "FIREBALL WAND 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_2",
-            "weapon_name": "FIREBALL WAND 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_3",
-            "weapon_name": "FIREBALL WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "clip_size":10
-        },
-
-        
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_1",
-            "weapon_name": "LIGHTNING WAND 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_2",
-            "weapon_name": "LIGHTNING WAND 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_3",
-            "weapon_name": "LIGHTNING WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "clip_size":10
-        },
-
-
-
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_1",
-            "weapon_name": "MAGICMISSLE STAFF 1",
-            "cooldown": 0.1,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_2",
-            "weapon_name": "MAGICMISSLE STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_3",
-            "weapon_name": "MAGICMISSLE STAFF 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_1",
-            "weapon_name": "FIREBALL STAFF 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_2",
-            "weapon_name": "FIREBALL STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_3",
-            "weapon_name": "FIREBALL STAFF 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_1",
-            "weapon_name": "LIGHTNING STAFF 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_2",
-            "weapon_name": "LIGHTNING STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_3",
-            "weapon_name": "LIGHTNING STAFF 3",
-            "cooldown": 0.01,
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "clip_size":10
+            "spell_id":"SPELL_ID_NONE",
+            "clip_size":10,
+            "damage":1
         }
 
     ],
@@ -566,13 +354,13 @@
         {
             "plan_id": "PLAN_ID_STOVE",
             "plan_name": "STOVE PLAN",
-            "required_items":[23],
+            "required_items":["ITEM_ID_MUSHROOM"],
             "module_id":"MODULE_ID_STOVE"
         },
         {
             "plan_id": "PLAN_ID_MUSHROOMPRESS",
             "plan_name": "MUSHROOM PRESS PLAN",
-            "required_items":[24],
+            "required_items":["ITEM_ID_MUSHROOM_JUICE"],
             "module_id":"MODULE_ID_MUSHROOMPRESS"
         }
 
@@ -582,7 +370,7 @@
         {
             "module_id":"MODULE_ID_WORKBENCH",
             "module_name":"WORKBENCH",
-            "recipies":["ITEM_ID_DAGGER", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE"]
+            "recipies":["RECIPIE_ID_DAGGER", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE", "RECIPIE_ID_WAND"]
         },
         {
             "module_id":"MODULE_ID_STOVE",
@@ -603,6 +391,18 @@
             "recipie_name":"dagger",
             "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
             "produces":"ITEM_ID_DAGGER"
+        },
+        {
+            "recipie_id":"RECIPIE_ID_STAFF",
+            "recipie_name":"BASIC STAFF",
+            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
+            "produces":"ITEM_ID_STAFF"
+        },
+        {
+            "recipie_id":"RECIPIE_ID_WAND",
+            "recipie_name":"BASIC WAND",
+            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
+            "produces":"ITEM_ID_WAND"
         },
         {
             "recipie_id":"RECIPIE_ID_APPLE",

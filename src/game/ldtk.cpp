@@ -221,13 +221,20 @@ void LDTKLoadMaps (json &mj) {
 
                                 new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__identifier"];
                                 //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", new_field.identifier.c_str());
-                                if(new_field.identifier == "loot_table_id" ) {
-                                    new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    //TraceLog(LOG_INFO, "++++++--------------------------------loot table id %i", new_field.value_i);
-                                }
+                                
                                 if(new_field.identifier == "sprite_id" ) {
                                     new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
-                                    //TraceLog(LOG_INFO, "++++++--------------------------------sprite id id %i", new_field.value_i);
+                                    TraceLog(LOG_INFO, "++++++--------------------------------sprite id id %i", new_field.value_i);
+                                }
+                                if(new_field.identifier == "loot_level" ) {
+                                    new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
+                                    TraceLog(LOG_INFO, "++++++--------------------------------loot level %i", new_field.value_i);
+                                }
+                                if(new_field.identifier == "loot_table_ids" ) {
+                                    for(int j = 0; j < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"].size(); j++) {
+                                        new_field.i_list.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                        TraceLog(LOG_INFO, "++++++--------------------------------item added %i", mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                    }
                                 }
                                 
 

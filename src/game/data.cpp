@@ -107,6 +107,8 @@ void LoadGameData() {
         std::string sp_id = cj["spell_data"][i]["spell_id"];
         SpellID spell_id = StrToSpellId(sp_id);
 
+        std::string name = cj["spell_data"][i]["spell_name"];
+
         float lifetime = cj["spell_data"][i]["lifetime"];
         float damage = cj["spell_data"][i]["damage"];
         int speed = cj["spell_data"][i]["speed"];
@@ -119,6 +121,7 @@ void LoadGameData() {
         new_spell.spell_id = spell_id;
         new_spell.radius = radius;
         new_spell.speed = speed;
+        new_spell.spell_name = name;
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
@@ -140,13 +143,16 @@ void LoadGameData() {
 
         int clip_size = cj["weapon_data"][i]["clip_size"];
 
+        int damage = cj["weapon_data"][i]["damage"];
+
         WeaponData new_weapon = {
             .weapon_name = name,
             .weapon_id = w_id,
             .cooldown = cooldown,
             .spell_id = spell_id,
             .clip_size = clip_size,
-            .ammo_count = clip_size                  
+            .ammo_count = clip_size,
+            .damage = damage                
         };
 
         TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s", w_id, name.c_str());
@@ -244,7 +250,8 @@ void LoadGameData() {
 
         std::vector<int> new_table;
         for(int t = 0; t < cj["loot_tables"][i]["table_data"].size(); t++) {
-            new_table.push_back(cj["loot_tables"][i]["table_data"][t]);
+            ItemID _id = StrToItemId( cj["loot_tables"][i]["table_data"][t] );
+            new_table.push_back(_id);
         }
 
         std::string name = cj["loot_tables"][i]["table_name"];
@@ -327,6 +334,7 @@ void SaveGame(LevelData &level_data) {
             {"clip_size", inst.clip_size},
             {"ammo_count", inst.ammo_count},
             {"container_id", inst.container_id},
+            {"cooldown", inst.cooldown},
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -585,7 +593,15 @@ void LoadLevelData(LevelData &level_data) {
                         new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
                         
                         new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
-                        new_container.loot_table_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
+                        new_container.loot_level = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
+
+                        for(int t = 0; t < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list.size(); t++) {
+                            int lt_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list[t];
+                            for(int loot = 0; loot < g_loot_tables[lt_id].size(); loot++) {
+                                new_container.item_list.push_back(g_loot_tables[lt_id][loot]);
+                                TraceLog(LOG_INFO, "item added to container %i", g_loot_tables[lt_id][loot]);
+                            }
+                        }
                         //TraceLog(LOG_INFO, "PERM CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
                         level_data.container_data.push_back(new_container);
                     }
@@ -771,7 +787,6 @@ void PrecalculateShadowData(LevelData &level_data) {
             new_poly.points.push_back(fourth);
 
             level_data.collision_polys.push_back(new_poly);
-
         }
     }
     TraceLog(LOG_INFO, "FINISHED CALCULATING SHADOW DATA  # polygons %i", level_data.collision_polys.size());
@@ -785,22 +800,21 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
     for(int item = 0; item < source_list.size(); item++) {
         int uid = GetRandomValue(1000, 1000000000);
 
-        ItemInstanceData new_instance;
-        new_instance.instance_id = uid;
-        new_instance.item_id = (ItemID) source_list[item];
+        g_item_instances[uid] = GenerateItem((ItemID) source_list[item], uid, container_id);
+        dest_list.push_back(uid);
+    }
+}
 
-        auto item_it = g_item_data.find(source_list[item]);
-        if(item_it != g_item_data.end()) {
-            new_instance.item_name = item_it->second.item_name;
-            new_instance.type = item_it->second.type;
-            new_instance.value = item_it->second.value;
-            new_instance.clip_size = 0;
-            new_instance.ammo_count = 0;
-            new_instance.container_id = container_id;
-            g_item_instances[uid] = new_instance;
-            dest_list.push_back(uid);
-            //TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
-        }
+
+void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id, int loot_level) {
+
+    //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+
+    for(int item = 0; item < source_list.size(); item++) {
+        int uid = GetRandomValue(1000, 1000000000);
+
+        g_item_instances[uid] = GenerateRandomItem((ItemID) source_list[item], uid, container_id, loot_level);
+        dest_list.push_back(uid);
     }
 }
 
@@ -808,7 +822,6 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
 void InstancePlayerItem(ItemID item_id) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
-
     
     int uid = GetRandomValue(1000, 1000000000);
 
@@ -904,8 +917,8 @@ PlanID StrToPlanId(const std::string& s) {
 
 RecipieID StrToRecipieId(const std::string& s) {
     static const std::unordered_map<std::string, RecipieID> lookup_table = {
-        {"None",                        RecipieID::RECIPIE_ID_NONE},
-        {"RECIPIE_ID_DAGGER",         RecipieID::RECIPIE_ID_DAGGER},
+        {"None",                         RecipieID::RECIPIE_ID_NONE},
+        {"RECIPIE_ID_DAGGER",            RecipieID::RECIPIE_ID_DAGGER},
         {"RECIPIE_ID_APPLE",             RecipieID::RECIPIE_ID_APPLE},
         {"RECIPIE_ID_MUSHROOMJUICE",     RecipieID::RECIPIE_ID_MUSHROOMJUICE},
 
@@ -940,7 +953,7 @@ ModuleID StrToModuleId(const std::string& s) {
 SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
-        {"None",                        SpellID::SPELL_ID_NONE},
+        {"None",                          SpellID::SPELL_ID_NONE},
         {"SPELL_ID_MAGICMISSLE_1",        SpellID::SPELL_ID_MAGICMISSLE_1},
         {"SPELL_ID_MAGICMISSLE_2",        SpellID::SPELL_ID_MAGICMISSLE_2},
         {"SPELL_ID_MAGICMISSLE_3",        SpellID::SPELL_ID_MAGICMISSLE_3},
@@ -968,10 +981,12 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_DAGGER",          ItemID::ITEM_ID_DAGGER},
         {"ITEM_ID_SWORD",           ItemID::ITEM_ID_SWORD},
         {"ITEM_ID_SPEAR",           ItemID::ITEM_ID_SPEAR},
-        {"ITEM_ID_AXE",                         ItemID::ITEM_ID_AXE},
-        {"ITEM_ID_BOW",                         ItemID::ITEM_ID_BOW},
+        {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
+        {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
+        {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
+        {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF},
 
-        {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
+/*         {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
         {"ITEM_ID_MAGICMISSLE_WAND_2",         ItemID::ITEM_ID_MAGICMISSLE_WAND_2},
         {"ITEM_ID_MAGICMISSLE_WAND_3",         ItemID::ITEM_ID_MAGICMISSLE_WAND_3},
         {"ITEM_ID_FIREBALL_WAND_1",         ItemID::ITEM_ID_FIREBALL_WAND_1},
@@ -990,7 +1005,7 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_FIREBALL_STAFF_3",         ItemID::ITEM_ID_FIREBALL_STAFF_3},
         {"ITEM_ID_LIGHTNING_STAFF_1",         ItemID::ITEM_ID_LIGHTNING_STAFF_1},
         {"ITEM_ID_LIGHTNING_STAFF_2",         ItemID::ITEM_ID_LIGHTNING_STAFF_2},
-        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3},
+        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3}, */
 
         {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
         {"ITEM_ID_MUSHROOM_JUICE",     ItemID::ITEM_ID_MUSHROOM_JUICE},
@@ -1050,6 +1065,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("clip_size").get_to(i.clip_size);
     j.at("ammo_count").get_to(i.ammo_count);
     j.at("container_id").get_to(i.container_id);
+    j.at("cooldown").get_to(i.cooldown);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }
@@ -1081,7 +1097,13 @@ void YSortEntities(LevelData & _level_data) {
 
 
     for (auto e : _level_data.entity_list)
+    if(e->y_sort){
         _level_data.draw_list.push_back(e);
+    }
+    for (auto e : _level_data.entity_list)
+    if(!e->y_sort){
+        _level_data.draw_list.push_back(e);
+    }
 
     std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
     [](BaseEntity* a, BaseEntity* b) {

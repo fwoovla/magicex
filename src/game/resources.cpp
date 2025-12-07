@@ -56,8 +56,6 @@ void LoadResources() {
 
 //---------------------------------------------------------------------------------------
 
-
-
     TraceLog(LOG_INFO, "LOADING ITEM and ICON SPRITES");
 
     Image icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -120,11 +118,33 @@ void LoadResources() {
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_BOW");
 
 
-
-
-
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {1,4};
+    item_pos = {10,4};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_WAND] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_WAND] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_WAND");
+
+
+    //---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {5,4};
+    item_pos = {14,4};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_STAFF] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_STAFF] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_STAFF");
+
+//---------------------------------------------------------------------------------------
+     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {1,5};
     item_pos = {10,5};
@@ -349,7 +369,7 @@ void LoadResources() {
 
 //---------------------------------------------------------------------------------------
 
-
+ 
 
 
 //---------------------------------------------------------------------------------------

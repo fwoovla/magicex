@@ -22,7 +22,7 @@ ModuleMenu::ModuleMenu() {
     CreateLabel(recipie_label, {rpo.x, rpo.y + 50}, 24, WHITE, "");
 
     CreateLabel(ingredient_header, inpo, 24, WHITE, "REQUIRED");
-    CreateLabel(ingredient_label, {inpo.x, inpo.y + 50}, 14, WHITE, "");
+    CreateLabel(ingredient_label, {inpo.x, inpo.y + 50}, 16, WHITE, "");
 
     CreateLabel(inventory_header, ipo, 24, WHITE, "INVENTORY");
 
@@ -45,10 +45,24 @@ void ModuleMenu::Draw() {
     DrawLabel(recipie_header);
     DrawLabel(ingredient_header);
     DrawLabel(recipie_label);
+
+    if(button_lookup[selected_button_index] == 1) {
+        ingredient_label.default_color = GREEN;
+    }
+    else {
+        ingredient_label.default_color = RED;
+    }
+
     DrawLabel(ingredient_label);
     DrawLabel(inventory_header);
 
     for(int i = 0; i < recipie_buttons.size(); i ++) {
+        if(i == selected_button_index) {
+            recipie_buttons[i].default_color.a = 150;
+        }
+        else {
+            recipie_buttons[i].default_color.a = 60;
+        }
         DrawButton(recipie_buttons[i]);
     }
 
@@ -73,7 +87,7 @@ void ModuleMenu::Update() {
         for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
             auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
             if(i_itter != g_item_data.end()) {
-                    ingredient_label.text += i_itter->second.item_name + "\n";
+                    ingredient_label.text += "- " + i_itter->second.item_name + "\n";
             }
         }   
     }        
@@ -138,7 +152,7 @@ void ModuleMenu::OpenModule() {
             TraceLog(LOG_INFO, " recipies %s", r_itter->second.recipie_name.c_str());
             
             Button new_button;
-            CreateButton(new_button, {rpo.x + 75, rpo.y + 50 + ( 40 * y_index)} , {100, 30}, BLANK, r_itter->second.recipie_name.c_str());
+            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, r_itter->second.recipie_name.c_str());
             new_button.text_size = 20;
             new_button.default_color = BLANK;
             
@@ -167,10 +181,14 @@ void ModuleMenu::OpenModule() {
             if(ingredients_types_found < num_ingredients_types) {
                 new_button.text_color = DARKRED;
                 new_button.text_color_focus = RED;
+                new_button.focus_color = TRANSRED;
+                new_button.default_color = TRANSDARKRED;
             }
             else {
                 new_button.text_color = DARKGREEN;
                 new_button.text_color_focus = GREEN; 
+                new_button.focus_color = TRANSGREEN;
+                new_button.default_color = TRANSDARKGREEN;
                 can_craft = true;
             }
             recipie_buttons.push_back(new_button);

@@ -8,6 +8,7 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
+    y_sort = true;
 
     c_area.area_activated.Connect( [&](){OnContainerOpened();} );
     
@@ -104,6 +105,7 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
+    y_sort = true;
 
     c_area.area_activated.Connect( [&](){OnContainerOpened();} );
     c_area.list_changed.Connect( [&](){OnListChanged();} );

@@ -10,6 +10,7 @@ struct SpellData {
     float lifetime;
     float radius;
     float speed;
+    std::string spell_name;
 };
 
 extern std::unordered_map<int, SpellData> g_spell_data;

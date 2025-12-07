@@ -250,7 +250,9 @@ void InstanceLevelObjects(LevelData &level_data) {
                 }
             }
             else {
-                InstanceItemList(g_loot_tables[new_container->loot_table_id], new_container->c_area.item_list, new_container->iid);
+                int loot_level = level_data.container_data[c_index].loot_level;
+                InstanceRandomItemsFromList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid, loot_level);
+                //InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid);
             }
         }
 

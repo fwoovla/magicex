@@ -5,6 +5,8 @@ FireBall::FireBall(Vector2 _position, int _shooter_id, SpellData _data) {
 
     data = _data;
     should_delete = false;
+    y_sort = false;
+
 
     position = _position;
     centered_offset = {0,0};
@@ -12,12 +14,9 @@ FireBall::FireBall(Vector2 _position, int _shooter_id, SpellData _data) {
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
              
-    LoadSpriteCentered(sprite, g_spell_sprites[SPELL_ID_FIREBALL_1 + (data.level - 1)], position);
-    sprite.rotation = target_rotation;
+    
     
     shooter_id = _shooter_id;
-
-
 
     target_position = g_input.world_mouse_position;
     
@@ -31,6 +30,10 @@ FireBall::FireBall(Vector2 _position, int _shooter_id, SpellData _data) {
 
     lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
     lifetime_timer.Start(data.lifetime * dist_scale, true);
+
+    sprite = {};
+    LoadSpriteCentered(sprite, g_spell_sprites[data.spell_id], position);
+    sprite.rotation = rotation;
 
 }
 

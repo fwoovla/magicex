@@ -92,6 +92,7 @@ GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
 GENERATED += $(OBJDIR)/input.o
+GENERATED += $(OBJDIR)/itemgenerator.o
 GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
 GENERATED += $(OBJDIR)/ldtk.o
@@ -132,6 +133,7 @@ OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
 OBJECTS += $(OBJDIR)/input.o
+OBJECTS += $(OBJDIR)/itemgenerator.o
 OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
 OBJECTS += $(OBJDIR)/ldtk.o
@@ -252,6 +254,9 @@ $(OBJDIR)/events.o: src/game/events.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/input.o: src/game/input.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/itemgenerator.o: src/game/itemgenerator.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/itemgrid.o: src/game/itemgrid.cpp

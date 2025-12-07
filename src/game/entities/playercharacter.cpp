@@ -179,18 +179,13 @@ void PlayerCharacter::CheckInput() {
             return;
         }
 
-        auto weapon_it = g_weapon_data.find(item_id);
-        if(weapon_it != g_weapon_data.end()) {
-            shot_timer.Start(weapon_it->second.cooldown, true);
-            can_shoot = false;
+        auto spell_it = g_spell_data.find(item_it->second.spell_id);
+        if(spell_it != g_spell_data.end()) {
 
-            auto spell_it = g_spell_data.find(weapon_it->second.spell_id);
-            if(spell_it != g_spell_data.end()) {
-
-                SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
-            }
+            SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
         }
-        
+        shot_timer.Start(item_it->second.cooldown, true);
+        can_shoot = false;
     }
 }
 
@@ -245,6 +240,7 @@ void PlayerCharacter::UnEquip(int item_id) {
 
 void PlayerCharacter::OnShotTimerTimeout() {
     can_shoot = true;
+    TraceLog(LOG_INFO, "can shoot");
 }
 
 

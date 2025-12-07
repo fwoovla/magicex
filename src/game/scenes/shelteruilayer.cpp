@@ -22,7 +22,7 @@ ShelterUILayer::~ShelterUILayer() {
 void ShelterUILayer::Draw() {
 
     DrawLabelCentered(title_label);
-    DrawButton(start_button);
+    //DrawButton(start_button);
     DrawButton(quit_button);
 
     if(!g_game_settings.show_debug){

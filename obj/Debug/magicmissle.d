@@ -252,8 +252,10 @@ obj/Debug/magicmissle.o: src/game/spells/magicmissle.cpp \
  src/game/spells/../../core/baseentity.h \
  src/game/spells/../../core/areas.h src/game/spells/../../core/label.h \
  src/game/spells/../../core/entities.h \
- src/game/spells/../../core/resources.h src/game/spells/../../core/data.h \
- src/game/spells/../../core/spells.h src/game/spells/../../core/events.h \
+ src/game/spells/../../core/resources.h \
+ src/game/spells/../../core/itemgenerator.h \
+ src/game/spells/../../core/data.h src/game/spells/../../core/spells.h \
+ src/game/spells/../../core/events.h \
  src/game/spells/../../core/viewport.h src/game/spells/../../core/input.h \
  src/game/spells/../../core/button.h src/game/spells/../../core/modules.h \
  src/game/spells/../../core/playercharacter.h \
@@ -587,6 +589,7 @@ src/game/spells/../../core/areas.h:
 src/game/spells/../../core/label.h:
 src/game/spells/../../core/entities.h:
 src/game/spells/../../core/resources.h:
+src/game/spells/../../core/itemgenerator.h:
 src/game/spells/../../core/data.h:
 src/game/spells/../../core/spells.h:
 src/game/spells/../../core/events.h:

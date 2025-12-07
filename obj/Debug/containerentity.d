@@ -255,6 +255,7 @@ obj/Debug/containerentity.o: src/game/entities/containerentity.cpp \
  src/game/entities/../../core/label.h \
  src/game/entities/../../core/entities.h \
  src/game/entities/../../core/resources.h \
+ src/game/entities/../../core/itemgenerator.h \
  src/game/entities/../../core/data.h \
  src/game/entities/../../core/spells.h \
  src/game/entities/../../core/events.h \
@@ -593,6 +594,7 @@ src/game/entities/../../core/areas.h:
 src/game/entities/../../core/label.h:
 src/game/entities/../../core/entities.h:
 src/game/entities/../../core/resources.h:
+src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/data.h:
 src/game/entities/../../core/spells.h:
 src/game/entities/../../core/events.h:

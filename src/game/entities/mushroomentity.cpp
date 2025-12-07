@@ -8,6 +8,7 @@ MushroomEntity::MushroomEntity(Vector2 _position) {
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
+    y_sort = true;
     
     should_delete = false;
 

@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 68,
+	"nextUid": 70,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -650,12 +650,49 @@
 					"tilesetUid": null
 				},
 				{
-					"identifier": "loot_table_id",
+					"identifier": "loot_level",
 					"doc": null,
 					"__type": "Int",
-					"uid": 49,
+					"uid": 69,
 					"type": "F_Int",
 					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": 1,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Int", "params": [1] },
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "loot_table_ids",
+					"doc": null,
+					"__type": "Array<Int>",
+					"uid": 68,
+					"type": "F_Int",
+					"isArray": true,
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
@@ -1119,7 +1156,8 @@
 							"px": [112,32],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 6, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [6] }] }
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [0,6], "__tile": null, "defUid": 68, "realEditorValues": [ null, { "id": "V_Int", "params": [6] } ] }
 							],
 							"__worldX": -112,
 							"__worldY": 32
@@ -1136,7 +1174,7 @@
 							"height": 16,
 							"defUid": 66,
 							"px": [80,32],
-							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 67, "realEditorValues": [] }],
+							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 67, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }],
 							"__worldX": -144,
 							"__worldY": 32
 						},
@@ -23320,7 +23358,8 @@
 							"px": [96,48],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_table_id", "__type": "Int", "__value": 3, "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [], "__tile": null, "defUid": 68, "realEditorValues": [] }
 							],
 							"__worldX": -230,
 							"__worldY": 208
