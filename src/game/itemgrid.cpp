@@ -51,25 +51,25 @@ void ItemGrid::Update() {
                         hovered_time = 0.0f;
                         show_details = false;
                     }
-                    //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
+                    TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
                     if(can_select){
                         //ItemID item_id = ITEM_ID_ERROR;
                         std::string i_name = "no item found";
+                        Color color = DEFAULTITEMCOLOR;
                         auto itter = g_item_instances.find(instance_id);
                         if(itter != g_item_instances.end()) {
-                            //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                             i_name = itter->second.item_name;
+                            color = g_item_type_colors[itter->second.type];
+                            TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
                             //item_id = itter->second.item_id;
 
-                        }
-                        Color color = g_item_type_colors[itter->second.type];
-                        CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
-
-                        if(show_details == true) {
-                            std::string details_text = CreateDetails(itter->second);
-
-                            CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, details_text);
+                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
+                            
+                            if(show_details == true) {
+                                std::string details_text = CreateDetails(itter->second);
+                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, details_text);
+                            }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                     }
@@ -205,7 +205,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 //LoadSpriteCentered(sp, g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
                 ScaleSprite(sp, {2,2});
                 item_sprites.push_back(sp);
-                //TraceLog(LOG_INFO, "   item id %i  ", (*item_list)[i]);
+                TraceLog(LOG_INFO, "   item id %i  ", (*item_list)[i]);
             }
             else {
                 Sprite bs;
@@ -313,9 +313,9 @@ void ItemGrid::RemoveItem(Vector2 source_cell) {
 std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string details;
     //TraceLog(LOG_INFO, "details %i", item_data.spell_id);
-    if(!show_details){
+/*     if(!show_details){
         return details;
-    }
+    } */
 
     if(item_data.type == TYPE_WEAPON) {
         if(item_data.spell_id != -1) {
@@ -332,6 +332,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             }
         }
     }
+
     if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
         auto itter = g_armor_data.find(item_data.item_id);
         if(itter != g_armor_data.end()) {
@@ -344,9 +345,11 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
 
     }
-    if(item_data.type =  TYPE_CONSUMEABLE) {
+    
+    if(item_data.type ==  TYPE_CONSUMEABLE) {
     }
-    if(item_data.type =  TYPE_FOOD) {
+
+    if(item_data.type ==  TYPE_FOOD) {
         auto itter = g_food_data.find(item_data.item_id);
         if(itter != g_food_data.end()) {
 
@@ -355,13 +358,13 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
     }
 
-    if(item_data.type =  TYPE_PLAN) {
+    if(item_data.type ==  TYPE_PLAN) {
     }
 
-    if(item_data.type =  TYPE_RESOURCE) {
+    if(item_data.type ==  TYPE_RESOURCE) {
     }
-    
-    if(item_data.type =  TYPE_SCROLL) {
+
+    if(item_data.type ==  TYPE_SCROLL) {
     }
 
     return details;

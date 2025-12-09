@@ -18,7 +18,7 @@ void LoadGameData() {
     g_item_type_colors[TYPE_RESOURCE] = DEFAULTITEMCOLOR;
     g_item_type_colors[TYPE_PLAN] = PLANCOLOR;
     g_item_type_colors[TYPE_SCROLL] = SCROLLCOLOR;
-    g_item_type_colors[TYPE_FOOD] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_FOOD] = FOODCOLOR;
     g_item_type_colors[TYPE_ALL] = DEFAULTITEMCOLOR;
 
 
@@ -31,7 +31,6 @@ void LoadGameData() {
     
     json cj;
     cfile>>cj;
-
 
     for(int i = 0; i < cj["base_class"].size(); i++) {
         int health = cj["base_class"][i]["health"];
@@ -1092,8 +1091,8 @@ ItemType StrToItemType(const std::string& s) {
         {"TYPE_RESOURCE",    ItemType::TYPE_RESOURCE},
         {"TYPE_ALL",    ItemType::TYPE_ALL},
         {"TYPE_PLAN",    ItemType::TYPE_PLAN},
-        {"TYPE_PLAN",    ItemType::TYPE_SCROLL},
-        {"TYPE_PLAN",    ItemType::TYPE_FOOD},
+        {"TYPE_SCROLL",    ItemType::TYPE_SCROLL},
+        {"TYPE_FOOD",    ItemType::TYPE_FOOD},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {

@@ -98,7 +98,7 @@ void ModuleMenu::Update() {
         }
         else {
             int plan_index = selected_button_index -  (button_lookup.size() - 2);
-            TraceLog(LOG_INFO, "looking for plan %i", plan_index);
+            //TraceLog(LOG_INFO, "looking for plan %i", plan_index);
             auto p_itter = g_plan_data.find(g_module_data[module_id].accepted_plans[selected_button_index - (button_lookup.size() - 2)]);
             if(p_itter != g_plan_data.end()) {
                 //TraceLog(LOG_INFO, "plan found %s", p_itter->second.plan_name.c_str());
