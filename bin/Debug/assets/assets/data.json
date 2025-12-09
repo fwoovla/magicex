@@ -300,6 +300,33 @@
 
     ],
 
+    "food_data": [
+        {
+            "food_id": "ITEM_ID_APPLE",
+            "food_name": "Apple",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 0.5
+        },
+        {
+            "food_id": "ITEM_ID_CHEESE",
+            "food_name": "Cheese",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 1.0
+        },
+        {
+            "food_id": "ITEM_ID_BREAD",
+            "food_name": "Bread",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 2.0
+        },
+        {
+            "food_id": "ITEM_ID_MEAT",
+            "food_name": "Meat",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 2.5
+        }
+    ],
+
     "armor_data": [
         {
             "armor_id": "ITEM_ID_HELMET",
@@ -341,13 +368,13 @@
     "plan_data": [
         
         {
-            "plan_id": "PLAN_ID_STOVE",
+            "plan_id": "ITEM_ID_STOVE_PLAN",
             "plan_name": "STOVE PLAN",
             "required_items":["ITEM_ID_MUSHROOM"],
             "module_id":"MODULE_ID_STOVE"
         },
         {
-            "plan_id": "PLAN_ID_MUSHROOMPRESS",
+            "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
             "plan_name": "MUSHROOM PRESS PLAN",
             "required_items":["ITEM_ID_MUSHROOM_JUICE"],
             "module_id":"MODULE_ID_MUSHROOMPRESS"
@@ -359,17 +386,20 @@
         {
             "module_id":"MODULE_ID_WORKBENCH",
             "module_name":"WORKBENCH",
-            "recipies":["RECIPIE_ID_STAFF", "RECIPIE_ID_WAND"]
+            "recipies":["RECIPIE_ID_STAFF", "RECIPIE_ID_WAND", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE"],
+            "accepted_plans":["ITEM_ID_MUSHROOMPRESS_PLAN", "ITEM_ID_STOVE_PLAN"]
         },
         {
             "module_id":"MODULE_ID_STOVE",
             "module_name":"STOVE",
-            "recipies":["RECIPIE_ID_APPLE"]
+            "recipies":["RECIPIE_ID_APPLE"],
+            "accepted_plans":[]
         },
         {
             "module_id":"MODULE_ID_MUSHROOMPRESS",
             "module_name":"MUSHROOM PRESS",
-            "recipies":["RECIPIE_ID_MUSHROOMJUICE"]
+            "recipies":["RECIPIE_ID_MUSHROOMJUICE"],
+            "accepted_plans":[]
         }
 
     ],
@@ -378,13 +408,13 @@
         {
             "recipie_id":"RECIPIE_ID_STAFF",
             "recipie_name":"BASIC STAFF",
-            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
+            "ingredients":["ITEM_ID_CHEESE"],
             "produces":"ITEM_ID_STAFF"
         },
         {
             "recipie_id":"RECIPIE_ID_WAND",
             "recipie_name":"BASIC WAND",
-            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
+            "ingredients":["ITEM_ID_APPLE"],
             "produces":"ITEM_ID_WAND"
         },
         {

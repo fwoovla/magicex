@@ -14,6 +14,7 @@ std::unordered_map<int, ModuleData> g_module_data;
 std::unordered_map<int, RecipieData> g_recipie_data;
 std::unordered_map<int, PlanData> g_plan_data;
 std::unordered_map<int, ArmorData> g_armor_data;
+std::unordered_map<int, FoodData> g_food_data;
 
 std::vector<std::vector<int>> g_loot_tables;
 

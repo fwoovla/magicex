@@ -40,10 +40,10 @@ void ItemGrid::Update() {
                 }
                 if(instance_id != -1) {
                     cell_hovered = true;
-                    if(hovered_cell == last_hovered_cell and can_select) {
+
+                    if(hovered_cell == last_hovered_cell) {
                         hovered_time += GetFrameTime() * 1;
-                        //TraceLog(LOG_INFO, "hover time %0.2f", hovered_time);
-                        if(hovered_time > 0.5f) {
+                        if(hovered_time > 0.70f) {
                             show_details = true;
                         }
                     }
@@ -51,7 +51,7 @@ void ItemGrid::Update() {
                         hovered_time = 0.0f;
                         show_details = false;
                     }
-                    last_hovered_cell = hovered_cell;
+                    //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
                     if(can_select){
                         //ItemID item_id = ITEM_ID_ERROR;
@@ -67,7 +67,9 @@ void ItemGrid::Update() {
                         CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
 
                         if(show_details == true) {
-                            CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, i_name.c_str());
+                            std::string details_text = CreateDetails(itter->second);
+
+                            CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, details_text);
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                     }
@@ -91,7 +93,8 @@ void ItemGrid::Update() {
                 }
             }
         }
-    }
+    } 
+    last_hovered_cell = hovered_cell;
     
     if(!g_input.selecting) {
 
@@ -171,7 +174,7 @@ void ItemGrid::DrawItems() {
     if(cell_hovered and can_select) {
         DrawLabelCentered(name_label);
         if(show_details) {
-            DrawLabelCenteredWithBG(details_label, DARKERGRAY);
+            DrawLabelCenteredWithBG(details_label, BLACK);
         }
     }
 }
@@ -304,4 +307,62 @@ void ItemGrid::RemoveItem(Vector2 source_cell) {
     int index = source_cell.y * cols + source_cell.x;
     (*item_list)[index] = -1;
 
+}
+
+
+std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
+    std::string details;
+    //TraceLog(LOG_INFO, "details %i", item_data.spell_id);
+    if(!show_details){
+        return details;
+    }
+
+    if(item_data.type == TYPE_WEAPON) {
+        if(item_data.spell_id != -1) {
+            auto itter = g_spell_data.find(item_data.spell_id);
+            if(itter != g_spell_data.end()) {
+                details += itter->second.spell_name + "\n";
+            }
+        }
+        if(item_data.item_id != -1) {
+            auto itter = g_weapon_data.find(item_data.item_id);
+            if(itter != g_weapon_data.end()) {
+                std::string damage = std::to_string(itter->second.damage);
+                details += damage + " damage";
+            }
+        }
+    }
+    if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
+        auto itter = g_armor_data.find(item_data.item_id);
+        if(itter != g_armor_data.end()) {
+            std::string defence = std::to_string((int)itter->second.defence);
+            std::string mdefence = std::to_string((int)itter->second.magic_defence);
+            details += defence + " defence\n";
+            if(itter->second.magic_defence > 0) {
+                details += mdefence + " magic defence\n";
+            }
+        }
+
+    }
+    if(item_data.type =  TYPE_CONSUMEABLE) {
+    }
+    if(item_data.type =  TYPE_FOOD) {
+        auto itter = g_food_data.find(item_data.item_id);
+        if(itter != g_food_data.end()) {
+
+            std::string sat = TextFormat("%0.2f", itter->second.saturation);
+            details += sat + " saturation";
+        }
+    }
+
+    if(item_data.type =  TYPE_PLAN) {
+    }
+
+    if(item_data.type =  TYPE_RESOURCE) {
+    }
+    
+    if(item_data.type =  TYPE_SCROLL) {
+    }
+
+    return details;
 }

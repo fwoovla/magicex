@@ -35,6 +35,7 @@ ModuleMenu::ModuleMenu() {
 
 ModuleMenu::~ModuleMenu() {
     //UnloadSound(button_sound);
+    delete inventory_grid;
     TraceLog(LOG_INFO, "UI DESTRUCTOR:  MODULEMENU ");
 }
 
@@ -82,17 +83,40 @@ void ModuleMenu::Update() {
     ingredient_label.text = "";
 
     if(selected_button_index >= 0) {
-        
-        auto r_itter = g_recipie_data.find(g_module_data[module_id].recipies[selected_button_index]);
-        if(r_itter != g_recipie_data.end()) {
-            
-            for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
-                auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
-                if(i_itter != g_item_data.end()) {
-                    ingredient_label.text += "- " + i_itter->second.item_name + "\n";
+        if(!plan_selected) {
+
+            auto r_itter = g_recipie_data.find(g_module_data[module_id].recipies[selected_button_index]);
+            if(r_itter != g_recipie_data.end()) {
+                
+                for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
+                    auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
+                    if(i_itter != g_item_data.end()) {
+                        ingredient_label.text += "- " + i_itter->second.item_name + "\n";
+                    }
+                }   
+            }
+        }
+        else {
+            int plan_index = selected_button_index -  (button_lookup.size() - 2);
+            TraceLog(LOG_INFO, "looking for plan %i", plan_index);
+            auto p_itter = g_plan_data.find(g_module_data[module_id].accepted_plans[selected_button_index - (button_lookup.size() - 2)]);
+            if(p_itter != g_plan_data.end()) {
+                //TraceLog(LOG_INFO, "plan found %s", p_itter->second.plan_name.c_str());
+                
+                for(int item = 0; item < p_itter->second.ingredients.size(); item++) {
+                    
+                    //TraceLog(LOG_INFO, "ingredient found? %i", p_itter->second.ingredients[item]);
+
+                    auto i_itter = g_item_data.find(p_itter->second.ingredients[item]);
+                    if(i_itter != g_item_data.end()) {
+                        
+                        //TraceLog(LOG_INFO, "ingredient found %s", i_itter->second.item_name.c_str());
+                        ingredient_label.text += "- " + i_itter->second.item_name + "\n";
+                    }
                 }
-            }   
-        }        
+            }
+        }
+
     }
         
     for(int b = 0; b <recipie_buttons.size(); b++) {
@@ -102,7 +126,19 @@ void ModuleMenu::Update() {
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 selected_button_index = b;
-                TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
+
+                plan_selected = false;
+                for(int i = 0; i < plan_indexes.size(); i ++) {
+                    if(plan_indexes[i] == selected_button_index) {
+                        plan_selected = true;
+                    }
+                }
+                if(plan_selected) {
+                    TraceLog(LOG_INFO, "selected plan ingredient list size %i", module_data.accepted_plans.size());
+                }
+                else{
+                    TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
+                }
             }        
         }
     }
@@ -113,7 +149,7 @@ void ModuleMenu::Update() {
                 //recipie_selected.EmitSignal();
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
+                //TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
                 RecipieSelected();
                 //recipie_selected.EmitSignal();
             }        
@@ -126,6 +162,7 @@ void ModuleMenu::OpenModule() {
     selected_button_index = -1;
     recipie_buttons.clear();
     button_lookup.clear();
+    plan_selected = false;
 
     module_id = g_game_data.current_module_id;
 
@@ -135,7 +172,7 @@ void ModuleMenu::OpenModule() {
         return;
     }
 
-    module_data = g_module_data[module_id];
+    module_data = itter->second;
 
     title_label.text = module_data.module_name.c_str();
     TraceLog(LOG_INFO, " MODULEMENU %s  recipies %i", module_data.module_name.c_str(), module_data.recipies.size());
@@ -148,7 +185,6 @@ void ModuleMenu::OpenModule() {
             TraceLog(LOG_INFO, "recipie data available");
             
             TraceLog(LOG_INFO, " recipies %s", r_itter->second.recipie_name.c_str());
-            
             Button new_button;
             CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, r_itter->second.recipie_name.c_str());
             new_button.text_size = 20;
@@ -194,7 +230,67 @@ void ModuleMenu::OpenModule() {
             y_index ++;
         }
     }
-    
+    TraceLog(LOG_INFO, "plans  available %i", module_data.accepted_plans.size());
+    for(int i = 0; i < module_data.accepted_plans.size(); i++) {
+
+        TraceLog(LOG_INFO, "index %i  plan id %i", i, module_data.accepted_plans[i]);
+
+        auto p_itter = g_plan_data.find(module_data.accepted_plans[i]);
+        if(p_itter != g_plan_data.end()) {
+            TraceLog(LOG_INFO, "plan data available for %s %i    %i", p_itter->second.plan_name.c_str(), p_itter->second.plan_id, module_data.accepted_plans[i]);
+            Button new_button;
+            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, p_itter->second.plan_name.c_str());
+            new_button.text_size = 20;
+            new_button.default_color = BLANK;
+
+            int ingredients_types_found = 0;
+            int num_ingredients_types = p_itter->second.ingredients.size();
+            bool can_craft = false;
+
+            TraceLog(LOG_INFO, " ingredient list size  %i",  p_itter->second.ingredients.size());
+            for(int ingredient = 0; ingredient < p_itter->second.ingredients.size(); ingredient++) {
+
+                TraceLog(LOG_INFO, " ingredient id      %i", p_itter->second.ingredients[ingredient]);
+                int ingredient_id = p_itter->second.ingredients[ingredient];
+                TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
+
+
+                for(int item = 0; item < g_player_data.inventory.size(); item++) {
+
+                    auto i_itter = g_item_instances.find(g_player_data.inventory[item]);
+                    if(i_itter != g_item_instances.end()) {
+                        if(ingredient_id == i_itter->second.item_id) {
+                            TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
+                            ingredients_types_found++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(ingredients_types_found < num_ingredients_types) {
+                new_button.text_color = DARKRED;
+                new_button.text_color_focus = RED;
+                new_button.focus_color = TRANSRED;
+                new_button.default_color = TRANSDARKRED;
+            }
+            else {
+                new_button.text_color = DARKGREEN;
+                new_button.text_color_focus = GREEN; 
+                new_button.focus_color = TRANSGREEN;
+                new_button.default_color = TRANSDARKGREEN;
+                can_craft = true;
+            }
+            recipie_buttons.push_back(new_button);
+            button_lookup.push_back(can_craft);
+            plan_indexes.push_back(button_lookup.size() - 1);
+            y_index ++;
+        }
+    }
+
+
+
+
 }
 
 void ModuleMenu::RecipieSelected() {
@@ -207,34 +303,67 @@ void ModuleMenu::RecipieSelected() {
         return;
     }
 
-    auto r_itter = g_recipie_data.find(module_data.recipies[selected_button_index]);
-    if(r_itter == g_recipie_data.end()) {
-        TraceLog(LOG_INFO, "recipie not found");
-        return;
-    }
- 
-    
-    TraceLog(LOG_INFO, "crafting", r_itter->second.produces);
-    
-    InstancePlayerItem(r_itter->second.produces);
-    
-    int instance_id;
-    int item_id;
+    if(!plan_selected) {
 
-    for(int item = 0; item < g_player_data.inventory.size(); item++) {
-        auto i_itter = g_item_instances.find(g_player_data.inventory[item]);
-        if(i_itter != g_item_instances.end()) {
-            item_id = i_itter->second.item_id;
-            instance_id = i_itter->second.instance_id;
+        auto r_itter = g_recipie_data.find(module_data.recipies[selected_button_index]);
+        if(r_itter == g_recipie_data.end()) {
+            TraceLog(LOG_INFO, "recipie not found");
+            return;
+        }
 
-            for(int ingredient = 0; ingredient < r_itter->second.ingredients.size(); ingredient++) {
-                if(item_id == r_itter->second.ingredients[ingredient]) {
-                    g_item_instances.erase(instance_id);
-                    g_player_data.inventory[item] = -1;
-                    break;
+        TraceLog(LOG_INFO, "crafting %i", r_itter->second.produces);
+        
+        InstancePlayerItem(r_itter->second.produces);
+        
+        int instance_id;
+        int item_id;
+
+        for(int item = 0; item < g_player_data.inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_player_data.inventory[item]);
+            if(i_itter != g_item_instances.end()) {
+                item_id = i_itter->second.item_id;
+                instance_id = i_itter->second.instance_id;
+
+                for(int ingredient = 0; ingredient < r_itter->second.ingredients.size(); ingredient++) {
+                    if(item_id == r_itter->second.ingredients[ingredient]) {
+                        g_item_instances.erase(instance_id);
+                        g_player_data.inventory[item] = -1;
+                        break;
+                    }
                 }
             }
         }
+    }
+    else {
+        auto p_itter = g_plan_data.find(module_data.accepted_plans[selected_button_index - (button_lookup.size() - 2)]);
+        if(p_itter == g_plan_data.end()) {
+            TraceLog(LOG_INFO, "plan not found");
+            return;
+        }
+
+        TraceLog(LOG_INFO, "crafting module  %i --------- COMMING SOON!!!!!", p_itter->second.module_id);
+        
+        //InstancePlayerItem(r_itter->second.produces);
+        
+        int instance_id;
+        int item_id;
+
+        for(int item = 0; item < g_player_data.inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_player_data.inventory[item]);
+            if(i_itter != g_item_instances.end()) {
+                item_id = i_itter->second.item_id;
+                instance_id = i_itter->second.instance_id;
+
+                for(int ingredient = 0; ingredient < p_itter->second.ingredients.size(); ingredient++) {
+                    if(item_id == p_itter->second.ingredients[ingredient]) {
+                        g_item_instances.erase(instance_id);
+                        g_player_data.inventory[item] = -1;
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
 

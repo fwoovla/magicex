@@ -47,7 +47,8 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         new_instance.spell_id = SPELL_ID_NONE;
         new_instance.sprite_id = item_id;
         new_instance.icon_id = item_id;
-        //new_instance.item_color = g_item_type_colors[new_instance.type];
+        new_instance.defence = 0;
+        new_instance.magic_defence = 0;
 
         if(new_instance.type == TYPE_WEAPON ) {
             GenerateRandomWeapon(new_instance, loot_level);

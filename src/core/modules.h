@@ -6,6 +6,8 @@ struct ModuleData {
     ModuleID module_id;
     std::string module_name;
     std::vector<int> recipies;
+    std::vector<int> accepted_plans;
+
 };
 
 extern std::unordered_map<int, ModuleData> g_module_data;

@@ -60,6 +60,17 @@ enum ItemType {
 
 extern Color g_item_type_colors[TYPE_ALL];
 
+
+struct FoodData {
+    ItemID food_id;
+    std::string food_name;
+    SpellID spell_id;
+    float saturation;
+};
+
+extern std::unordered_map<int, FoodData> g_food_data;
+
+
 struct ItemData {
     ItemID id;
     int value;
@@ -68,6 +79,7 @@ struct ItemData {
     SpellID spell_id;
 };
 
+extern std::unordered_map<int, ItemData> g_item_data;
 
 struct ItemInstanceData {
     std::string container_id;
@@ -86,10 +98,8 @@ struct ItemInstanceData {
     int level;
     float defence;
     float magic_defence;
-    //Color item_color;
+    float saturation;
 };
-
-extern std::unordered_map<int, ItemData> g_item_data;
 
 extern std::unordered_map<int, ItemInstanceData> g_item_instances;
 
@@ -125,7 +135,7 @@ extern std::unordered_map<int, RecipieData> g_recipie_data;
 
 
 struct PlanData {
-    PlanID plan_id;
+    ItemID plan_id;
     std::string plan_name;
     std::vector<int> ingredients;
     ModuleID module_id;

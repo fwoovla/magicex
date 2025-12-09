@@ -31,8 +31,7 @@ void LoadGameData() {
     
     json cj;
     cfile>>cj;
-    //TraceLog(LOG_INFO, "==========LOADING GAME DATA FROM FILE================");
-    //TraceLog(LOG_INFO, "==========loading class data================");
+
 
     for(int i = 0; i < cj["base_class"].size(); i++) {
         int health = cj["base_class"][i]["health"];
@@ -206,32 +205,62 @@ void LoadGameData() {
     }
 
 
+
+//------------------------------------food data
+    for(int i = 0; i < cj["food_data"].size(); i++) {
+
+        std::string f_id_s = cj["food_data"][i]["food_id"];
+        ItemID f_id = StrToItemId(f_id_s);
+
+        std::string name = cj["food_data"][i]["food_name"];
+
+        std::string sp_id = cj["food_data"][i]["spell_id"];
+        SpellID spell_id = StrToSpellId(sp_id);
+
+        float saturation = cj["food_data"][i]["saturation"];
+
+        FoodData new_food = {
+            .food_id = f_id,
+            .food_name = name,
+            .spell_id = spell_id,
+            .saturation = saturation
+
+        };
+
+        TraceLog(LOG_INFO, "FOOD Data Loaded  id: %i  %s", f_id, name.c_str());
+        g_food_data[(int)f_id] = new_food;
+    }
+
+
 //------------------------------------plan data
     for(int i = 0; i < cj["plan_data"].size(); i++) {
 
         std::string p_id_s = cj["plan_data"][i]["plan_id"];
-        PlanID p_id = StrToPlanId(p_id_s);
+        ItemID p_id = StrToItemId(p_id_s);
 
         std::string name = cj["plan_data"][i]["plan_name"];
 
         std::vector<int> recipie_list;
 
         for(int r = 0; r < cj["plan_data"][i]["required_items"].size(); r++) {
-            int _id = StrToRecipieId( cj["plan_data"][i]["required_items"][r] );
+            int _id = StrToItemId( cj["plan_data"][i]["required_items"][r] );
+            TraceLog(LOG_INFO, "required item  %i", _id);
             recipie_list.push_back(_id);
         }
 
         ModuleID m_id = StrToModuleId( cj["plan_data"][i]["module_id"]);
 
+
+
         PlanData new_plan = {
             .plan_id = p_id,
             .plan_name = name,
             .ingredients = recipie_list,
-            .module_id = m_id
+            .module_id = m_id,
         };
 
         TraceLog(LOG_INFO, "Plan Data Loaded  id: %i  %s  %i", p_id, name.c_str(), recipie_list.size());
-        g_plan_data[(int)m_id] = new_plan;
+        g_plan_data[(int)p_id] = new_plan;
     }
 
 //------------------------------------module data
@@ -249,13 +278,22 @@ void LoadGameData() {
             recipie_list.push_back(_id);
         }
 
+        std::vector<int> plan_list;
+
+        for(int r = 0; r < cj["module_data"][i]["accepted_plans"].size(); r++) {
+            int _id = StrToItemId( cj["module_data"][i]["accepted_plans"][r] );
+            plan_list.push_back(_id);
+            TraceLog(LOG_INFO, "accepted plan id: %i", _id);
+        }
+
         ModuleData new_module = {
             .module_id = m_id,
             .module_name = name,
-            .recipies = recipie_list    
+            .recipies = recipie_list,
+            .accepted_plans = plan_list
         };
 
-        TraceLog(LOG_INFO, "Module Data Loaded  id: %i  %s  %i", m_id, name.c_str(), recipie_list.size());
+        TraceLog(LOG_INFO, "Module Data Loaded  id: %i  %s  %i %i", m_id, name.c_str(), recipie_list.size(),plan_list.size());
         g_module_data[(int)m_id] = new_module;
     }
 
@@ -386,6 +424,7 @@ void SaveGame(LevelData &level_data) {
             {"defence", inst.defence},
             {"magic_defence", inst.magic_defence},
             {"sprite_id", inst.sprite_id},
+            {"saturation", inst.saturation},
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -953,7 +992,7 @@ PlanID StrToPlanId(const std::string& s) {
     static const std::unordered_map<std::string, PlanID> lookup_table = {
         {"PLAN_ID_NONE",          PlanID::PLAN_ID_NONE},
         {"PLAN_ID_STOVE",         PlanID::PLAN_ID_STOVE},
-        {"PLAN_ID_MUSHROOMPRESS",         PlanID::PLAN_ID_MUSHROOMPRESS},
+        {"PLAN_ID_MUSHROOMPRESS", PlanID::PLAN_ID_MUSHROOMPRESS},
 
     };
 
@@ -1160,6 +1199,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("defence").get_to(i.defence);
     j.at("magic_defence").get_to(i.magic_defence);
     j.at("sprite_id").get_to(i.sprite_id);
+    j.at("saturation").get_to(i.saturation);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }

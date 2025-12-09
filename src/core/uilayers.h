@@ -56,6 +56,8 @@ class ItemGrid {
     bool CanRemoveItem(Vector2 source_cell);
     void RemoveItem(Vector2 source_cell);
 
+    std::string CreateDetails(ItemInstanceData &item_data);
+
     INVENTORYGRIDS this_grid;
     ItemType accepted_type;
 
@@ -166,7 +168,9 @@ class ModuleMenu : public BaseUILayer {
     
     std::vector<Button> recipie_buttons;
     std::vector<int> button_lookup;
+    std::vector<int> plan_indexes;
     int selected_button_index;
+    bool plan_selected;
 
     Signal recipie_hovered;
     Signal recipie_selected;
@@ -187,10 +191,8 @@ class CharacterMenu : public BaseUILayer {
     void Update() override;
     void Draw() override;
     void DrawHotBarOnly();
-    //void UpdateHotBarOnly();
     void Open();
     void OpenWith(BaseContainerEntity *container);
-    //void OpenWith(std::vector<int> &list);
 
     void OnItemSelected();
     void OnItemDeselected();
@@ -204,12 +206,9 @@ class CharacterMenu : public BaseUILayer {
     std::vector<int> blank_list;
     std::string default_iid;
 
-    //BaseContainerEntity *return_container;
 
     SharedItemData shared_data;
     std::vector<ItemGrid *> grid_list;
-    //INVENTORYGRIDS source_grid;
-    //INVENTORYGRIDS dest_grid;
 
     Label title_label;
 
