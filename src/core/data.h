@@ -33,6 +33,16 @@ inline std::string unit_names[10] = {
     "skort mc dort"
 };
 
+
+
+enum ItemRarity {
+    RARITY_COMMON = 50,
+    RARITY_UNCOMMON = 30,
+    RARITY_RARE = 10,
+    RARITY_VERYRARE = 5,
+    RARITY_ULTRARARE = 1,
+};
+
 enum ItemType {
     TYPE_WEAPON,
     TYPE_HEAD_ARMOR,
@@ -42,9 +52,13 @@ enum ItemType {
     TYPE_HAND_ARMOR,
     TYPE_CONSUMEABLE,
     TYPE_RESOURCE,
+    TYPE_PLAN,
+    TYPE_SCROLL,
+    TYPE_FOOD,
     TYPE_ALL,
-    TYPE_PLAN
 };
+
+extern Color g_item_type_colors[TYPE_ALL];
 
 struct ItemData {
     ItemID id;
@@ -67,6 +81,12 @@ struct ItemInstanceData {
     int ammo_count;
     float cooldown;
     int damage;
+    int sprite_id;
+    int icon_id;
+    int level;
+    float defence;
+    float magic_defence;
+    //Color item_color;
 };
 
 extern std::unordered_map<int, ItemData> g_item_data;
@@ -84,6 +104,16 @@ struct WeaponData {
 };
 
 extern std::unordered_map<int, WeaponData> g_weapon_data;
+
+struct ArmorData {
+    std::string armor_name;
+    ItemID armor_id;
+    SpellID spell_id;
+    float defence;
+    float magic_defence;
+};
+
+extern std::unordered_map<int, ArmorData> g_armor_data;
 
 struct RecipieData {
     std::string recipie_name;
@@ -228,6 +258,14 @@ void InstancePlayerItem(ItemID item_id);
 
 void GenerateContainerItemList(int lti, std::vector<int> &list);
 
+
+
+
+//Color StrToItemTypeColor(const std::string& s);
+
+ItemRarity StrToItemRarity(const std::string& s);
+
+ItemType StrToItemType(const std::string& s);
 
 SpellID StrToSpellId(const std::string& s);
 

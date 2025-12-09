@@ -27,9 +27,7 @@ void LoadResources() {
     Vector2 spell_pos = {20,15};
 
     ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 16, 16});
-    g_spell_sprites[SPELL_ID_MAGICMISSLE_1] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_MAGICMISSLE_2] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_MAGICMISSLE_3] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_MAGICMISSLE] = LoadTextureFromImage(spell_image);
     TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_MAGICMISSLE");
 
 
@@ -39,9 +37,7 @@ void LoadResources() {
     spell_pos = {21,15};
 
     ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 16, 16});
-    g_spell_sprites[SPELL_ID_FIREBALL_1] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_FIREBALL_2] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_FIREBALL_3] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_FIREBALL] = LoadTextureFromImage(spell_image);
     TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_FIREBALL");
 
 //---------------------------------------------------------------------------------------
@@ -49,9 +45,7 @@ void LoadResources() {
     spell_pos = {22,15};
 
     ImageCrop(&spell_image, {spell_pos.x * 16, spell_pos.y * 16, 32, 16});
-    g_spell_sprites[SPELL_ID_LIGHTNING_1] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_LIGHTNING_2] = LoadTextureFromImage(spell_image);
-    g_spell_sprites[SPELL_ID_LIGHTNING_3] = LoadTextureFromImage(spell_image);
+    g_spell_sprites[SPELL_ID_LIGHTNING] = LoadTextureFromImage(spell_image);
     TraceLog(LOG_INFO, "SPRITES   spell SPELL_ID_LIGHTNING");
 
 //---------------------------------------------------------------------------------------
@@ -151,12 +145,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_MAGICMISSLE_WAND_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_MAGICMISSLE_WAND_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_MAGICMISSLE_WAND] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_MAGICMISSLE_WAND] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MAGICMISSLE_WAND_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+/*     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {1,6};
     item_pos = {10,6};
@@ -178,7 +172,7 @@ void LoadResources() {
     g_icon_sprites[ITEM_ID_MAGICMISSLE_WAND_3] = LoadTextureFromImage(icon_image);
     g_item_sprites[ITEM_ID_MAGICMISSLE_WAND_3] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MAGICMISSLE_WAND_3");
-
+ */
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -187,12 +181,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_FIREBALL_WAND_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_FIREBALL_WAND_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_FIREBALL_WAND] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_FIREBALL_WAND] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_FIREBALL_WAND_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+/*     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {2,6};
     item_pos = {11,6};
@@ -214,7 +208,7 @@ void LoadResources() {
     g_icon_sprites[ITEM_ID_FIREBALL_WAND_3] = LoadTextureFromImage(icon_image);
     g_item_sprites[ITEM_ID_FIREBALL_WAND_3] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_FIREBALL_WAND_3");
-
+ */
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -223,12 +217,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LIGHTNING_WAND_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LIGHTNING_WAND_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_LIGHTNING_WAND] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LIGHTNING_WAND] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LIGHTNING_WAND_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+ /*    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {3,6};
     item_pos = {12,6};
@@ -253,7 +247,7 @@ void LoadResources() {
     
 
 
-
+ */
 
 //---------------------------------------------------------------------------------------
 
@@ -267,12 +261,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_MAGICMISSLE_STAFF_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_MAGICMISSLE_STAFF_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_MAGICMISSLE_STAFF] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_MAGICMISSLE_STAFF] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MAGICMISSLE_STAFF_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+/*     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {5,6};
     item_pos = {14,6};
@@ -294,7 +288,7 @@ void LoadResources() {
     g_icon_sprites[ITEM_ID_MAGICMISSLE_STAFF_3] = LoadTextureFromImage(icon_image);
     g_item_sprites[ITEM_ID_MAGICMISSLE_STAFF_3] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MAGICMISSLE_STAFF_3");
-
+ */
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -303,12 +297,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_FIREBALL_STAFF_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_FIREBALL_STAFF_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_FIREBALL_STAFF] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_FIREBALL_STAFF] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_FIREBALL_STAFF_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+/*     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {6,6};
     item_pos = {15,6};
@@ -330,7 +324,7 @@ void LoadResources() {
     g_icon_sprites[ITEM_ID_FIREBALL_STAFF_3] = LoadTextureFromImage(icon_image);
     g_item_sprites[ITEM_ID_FIREBALL_STAFF_3] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_FIREBALL_STAFF_3");
-
+ */
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -339,12 +333,12 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LIGHTNING_STAFF_1] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LIGHTNING_STAFF_1] = LoadTextureFromImage(item_image);
+    g_icon_sprites[ITEM_ID_LIGHTNING_STAFF] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LIGHTNING_STAFF] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LIGHTNING_STAFF_1");
 
 //---------------------------------------------------------------------------------------
-    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+/*     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
     icon_pos = {7,6};
     item_pos = {16,6};
@@ -366,7 +360,7 @@ void LoadResources() {
     g_icon_sprites[ITEM_ID_LIGHTNING_STAFF_3] = LoadTextureFromImage(icon_image);
     g_item_sprites[ITEM_ID_LIGHTNING_STAFF_3] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LIGHTNING_STAFF_3");
-
+ */
 //---------------------------------------------------------------------------------------
 
  
@@ -396,6 +390,22 @@ void LoadResources() {
     g_item_sprites[ITEM_ID_MUSHROOM_JUICE] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   ITEM_ID_MUSHROOM_JUICE");
 
+
+
+//---------------------------------------------------------------------------------------
+
+    icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    item_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
+    icon_pos = {6,1};
+    item_pos = {15,1};
+
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_HELMET] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_HELMET] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_HELMET");
+
+
 //---------------------------------------------------------------------------------------
 
 
@@ -406,9 +416,9 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LEATHERBOOTS] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LEATHERBOOTS] = LoadTextureFromImage(item_image);
-    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LEATHERBOOTS");
+    g_icon_sprites[ITEM_ID_BOOTS] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_BOOTS] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_BOOTS");
 
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -418,9 +428,9 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LEATHERVEST] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LEATHERVEST] = LoadTextureFromImage(item_image);
-    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LEATHERVEST");
+    g_icon_sprites[ITEM_ID_BODY] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_BODY] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_BODY");
 
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_sprite_sheets[SPRITE_MAIN]);
@@ -430,9 +440,9 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LEATHERGLOVES] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LEATHERGLOVES] = LoadTextureFromImage(item_image);
-    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LEATHERGLOVES");
+    g_icon_sprites[ITEM_ID_GLOVES] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_GLOVES] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_GLOVES");
  
 
 //---------------------------------------------------------------------------------------
@@ -443,9 +453,9 @@ void LoadResources() {
 
     ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
-    g_icon_sprites[ITEM_ID_LEATHERLEGGINGS] = LoadTextureFromImage(icon_image);
-    g_item_sprites[ITEM_ID_LEATHERLEGGINGS] = LoadTextureFromImage(item_image);
-    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LEATHERLEGGINGS");
+    g_icon_sprites[ITEM_ID_LEGGINGS] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_LEGGINGS] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_LEGGINGS");
 
 
 

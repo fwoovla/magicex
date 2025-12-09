@@ -64,12 +64,15 @@ class ItemGrid {
     int rows;
     int cols;
     int grid_size;
+    float hovered_time;
     Vector2 position;
 
     bool can_select;
     bool cell_hovered;
     bool cell_selected;
+    bool show_details;
     Vector2 hovered_cell;
+    Vector2 last_hovered_cell;
     Vector2 selected_cell;
 
     std::string container_iid;
@@ -79,7 +82,8 @@ class ItemGrid {
 
     std::vector<int> *item_list;
 
-    Label label;
+    Label name_label;
+    Label details_label;
 
     Signal selecting;
     Signal not_selecting;

@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 70,
+	"nextUid": 71,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -1157,7 +1157,15 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [0,6], "__tile": null, "defUid": 68, "realEditorValues": [ null, { "id": "V_Int", "params": [6] } ] }
+								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [0,6,3,3,3,1,4], "__tile": null, "defUid": 68, "realEditorValues": [
+									null,
+									{ "id": "V_Int", "params": [6] },
+									{ "id": "V_Int", "params": [3] },
+									{ "id": "V_Int", "params": [3] },
+									{ "id": "V_Int", "params": [3] },
+									{ "id": "V_Int", "params": [1] },
+									{ "id": "V_Int", "params": [4] }
+								] }
 							],
 							"__worldX": -112,
 							"__worldY": 32
@@ -1584,14 +1592,14 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "71a8dbd0-ac70-11f0-ac9d-6d4d0af5afca", "dir": "s" }]
+			"__neighbours": [ { "levelIid": "78034760-ac70-11f0-a66a-fffa2915d859", "dir": "e" }, { "levelIid": "71a8dbd0-ac70-11f0-ac9d-6d4d0af5afca", "dir": "s" } ]
 		},
 		{
 			"identifier": "Forrest",
 			"iid": "78034760-ac70-11f0-a66a-fffa2915d859",
 			"uid": 29,
-			"worldX": 496,
-			"worldY": 120,
+			"worldX": 0,
+			"worldY": 0,
 			"worldDepth": 0,
 			"pxWid": 1680,
 			"pxHei": 1392,
@@ -1647,8 +1655,8 @@
 								"id": "V_String",
 								"params": ["StartingShelter"]
 							}] }],
-							"__worldX": 628,
-							"__worldY": 618
+							"__worldX": 132,
+							"__worldY": 498
 						},
 						{
 							"__identifier": "HouseTransition",
@@ -1672,8 +1680,8 @@
 									"params": ["166,461"]
 								}] }
 							],
-							"__worldX": 834,
-							"__worldY": 1004
+							"__worldX": 338,
+							"__worldY": 884
 						},
 						{
 							"__identifier": "HouseTransition",
@@ -1697,8 +1705,8 @@
 									"params": ["46,526"]
 								}] }
 							],
-							"__worldX": 596,
-							"__worldY": 1130
+							"__worldX": 100,
+							"__worldY": 1010
 						},
 						{
 							"__identifier": "HouseTransition",
@@ -1722,8 +1730,8 @@
 									"params": ["199,155"]
 								}] }
 							],
-							"__worldX": 900,
-							"__worldY": 392
+							"__worldX": 404,
+							"__worldY": 272
 						}
 					]
 				},
@@ -1764,8 +1772,8 @@
 							"defUid": 21,
 							"px": [144,544],
 							"fieldInstances": [],
-							"__worldX": 640,
-							"__worldY": 664
+							"__worldX": 144,
+							"__worldY": 544
 						},
 						{
 							"__identifier": "MushroomZone",
@@ -1780,8 +1788,8 @@
 							"defUid": 52,
 							"px": [64,128],
 							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }],
-							"__worldX": 560,
-							"__worldY": 248
+							"__worldX": 64,
+							"__worldY": 128
 						},
 						{
 							"__identifier": "MushroomZone",
@@ -1796,8 +1804,8 @@
 							"defUid": 52,
 							"px": [176,560],
 							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 2, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }],
-							"__worldX": 672,
-							"__worldY": 680
+							"__worldX": 176,
+							"__worldY": 560
 						},
 						{
 							"__identifier": "MushroomZone",
@@ -1812,8 +1820,8 @@
 							"defUid": 52,
 							"px": [528,608],
 							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }],
-							"__worldX": 1024,
-							"__worldY": 728
+							"__worldX": 528,
+							"__worldY": 608
 						},
 						{
 							"__identifier": "MushroomZone",
@@ -1828,8 +1836,8 @@
 							"defUid": 52,
 							"px": [32,688],
 							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }],
-							"__worldX": 528,
-							"__worldY": 808
+							"__worldX": 32,
+							"__worldY": 688
 						},
 						{
 							"__identifier": "MushroomZone",
@@ -1844,8 +1852,8 @@
 							"defUid": 52,
 							"px": [112,1184],
 							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 3, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }],
-							"__worldX": 608,
-							"__worldY": 1304
+							"__worldX": 112,
+							"__worldY": 1184
 						}
 					]
 				},
@@ -23236,7 +23244,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": []
+			"__neighbours": [ { "levelIid": "79a162f2-ac70-11f0-97b6-e130ae7c61ed", "dir": "w" }, { "levelIid": "71a8dbd0-ac70-11f0-ac9d-6d4d0af5afca", "dir": "w" }, { "levelIid": "add726b0-ac70-11f0-a4e1-17f3d6ef88bf", "dir": "w" } ]
 		},
 		{
 			"identifier": "House_1",
@@ -23351,7 +23359,7 @@
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#FEE761",
-							"iid": "51f11ea0-ac70-11f0-b267-cf6e68158dd6",
+							"iid": "a59bcc80-ac70-11f0-beb4-ff069732c2e8",
 							"width": 16,
 							"height": 16,
 							"defUid": 47,
@@ -23359,10 +23367,30 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [], "__tile": null, "defUid": 68, "realEditorValues": [] }
+								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [0,1,2], "__tile": null, "defUid": 68, "realEditorValues": [ null, { "id": "V_Int", "params": [1] }, { "id": "V_Int", "params": [2] } ] }
 							],
 							"__worldX": -230,
 							"__worldY": 208
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [12,2],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "a7564dc0-ac70-11f0-beb4-639577d6606d",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [192,32],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "loot_table_ids", "__type": "Array<Int>", "__value": [4,5], "__tile": null, "defUid": 68, "realEditorValues": [ { "id": "V_Int", "params": [4] }, { "id": "V_Int", "params": [5] } ] }
+							],
+							"__worldX": -134,
+							"__worldY": 192
 						}
 					]
 				},
@@ -23878,7 +23906,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "79a162f2-ac70-11f0-97b6-e130ae7c61ed", "dir": "n" }]
+			"__neighbours": [ { "levelIid": "79a162f2-ac70-11f0-97b6-e130ae7c61ed", "dir": "n" }, { "levelIid": "78034760-ac70-11f0-a66a-fffa2915d859", "dir": "e" } ]
 		},
 		{
 			"identifier": "Level_3",
@@ -24085,7 +24113,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": []
+			"__neighbours": [{ "levelIid": "78034760-ac70-11f0-a66a-fffa2915d859", "dir": "e" }]
 		}
 	],
 	"worlds": [],

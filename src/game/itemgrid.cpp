@@ -10,6 +10,7 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) : shared_
     selected_cell = {-1,-1};
     hovered_cell = {-1,-1};
     can_select = true;
+    show_details = false;
 }
 
 ItemGrid::~ItemGrid() {
@@ -39,6 +40,18 @@ void ItemGrid::Update() {
                 }
                 if(instance_id != -1) {
                     cell_hovered = true;
+                    if(hovered_cell == last_hovered_cell and can_select) {
+                        hovered_time += GetFrameTime() * 1;
+                        //TraceLog(LOG_INFO, "hover time %0.2f", hovered_time);
+                        if(hovered_time > 0.5f) {
+                            show_details = true;
+                        }
+                    }
+                    else {
+                        hovered_time = 0.0f;
+                        show_details = false;
+                    }
+                    last_hovered_cell = hovered_cell;
 
                     if(can_select){
                         //ItemID item_id = ITEM_ID_ERROR;
@@ -50,7 +63,12 @@ void ItemGrid::Update() {
                             //item_id = itter->second.item_id;
 
                         }
-                        CreateLabel(label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, WHITE, i_name.c_str());
+                        Color color = g_item_type_colors[itter->second.type];
+                        CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
+
+                        if(show_details == true) {
+                            CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, i_name.c_str());
+                        }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                     }
                         
@@ -74,7 +92,7 @@ void ItemGrid::Update() {
             }
         }
     }
-
+    
     if(!g_input.selecting) {
 
         int source_index = selected_cell.y * cols + selected_cell.x;
@@ -99,7 +117,7 @@ void ItemGrid::Update() {
                     auto itter = g_item_instances.find(shared_data->item_id);
                     int _id = ITEM_ID_ERROR;
                     if(itter != g_item_instances.end()) {
-                        _id = itter->second.item_id;
+                        _id = itter->second.icon_id;
                     }
 
                     //LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[ g_item_data[ (*item_list)[dest_index] ].id ], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
@@ -151,7 +169,10 @@ void ItemGrid::DrawItems() {
     }
 
     if(cell_hovered and can_select) {
-        DrawLabelCentered(label);
+        DrawLabelCentered(name_label);
+        if(show_details) {
+            DrawLabelCenteredWithBG(details_label, DARKERGRAY);
+        }
     }
 }
 
@@ -174,7 +195,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 auto itter = g_item_instances.find((*item_list)[i]);
                 int _id = ITEM_ID_ERROR;
                 if(itter != g_item_instances.end()) {
-                    _id = itter->second.item_id;
+                    _id = itter->second.icon_id;
 
                 }
                 LoadSpriteCentered(sp, g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
@@ -241,24 +262,20 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
 
 void ItemGrid::AddItem(int item_id) {
     //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
+     int _id = ITEM_ID_ERROR;
     for(int i = 0; i < item_list->size(); i++) {
         if((*item_list)[i] == -1) {
             int x = i%(cols);
             int y = i/(cols);
             (*item_list)[i] = item_id;
 
-            int _id = ITEM_ID_ERROR;
-
             auto itter = g_item_instances.find(item_id);
             if(itter != g_item_instances.end()) {
-                _id = itter->second.item_id;
-                itter->second.container_id = container_iid;
-                //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
-            }
-
-            LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-            ScaleSprite(item_sprites[i], {2,2});
-            break;
+                    _id = itter->second.icon_id;
+                    LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                    ScaleSprite(item_sprites[i], {2,2});
+                    break;
+                }
         }
     }
 }
@@ -271,11 +288,9 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
 
     auto itter = g_item_instances.find(item_id);
     if(itter != g_item_instances.end()) {
-        _id = itter->second.item_id;
+        _id = itter->second.icon_id;
         itter->second.container_id = container_iid;
-        //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
     }
-
     LoadSpriteCentered(item_sprites[index], g_icon_sprites[_id ], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
     ScaleSprite(item_sprites[index], {2,2});
 }

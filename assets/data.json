@@ -21,43 +21,43 @@
             "item_name": "Dagger",
             "item_id":"ITEM_ID_DAGGER",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Sword",
             "item_id":"ITEM_ID_SWORD",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Spear",
             "item_id":"ITEM_ID_SPEAR",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Axe",
             "item_id":"ITEM_ID_AXE",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Bow",
             "item_id":"ITEM_ID_BOW",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "WAND",
             "item_id":"ITEM_ID_WAND",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "STAFF",
             "item_id":"ITEM_ID_STAFF",
             "value":0,
-            "item_type":0
+            "item_type":"TYPE_WEAPON"
         },
 
 
@@ -65,40 +65,45 @@
             "item_name": "MUSHROOM",
             "item_id":"ITEM_ID_MUSHROOM",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_CONSUMEABLE"
         },
         {
             "item_name": "MUSHROOM_JUICE",
             "item_id":"ITEM_ID_MUSHROOM_JUICE",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_CONSUMEABLE"
         },
 
 
-
         {
-            "item_name": "Leather Boots",
-            "item_id":"ITEM_ID_LEATHERBOOTS",
+            "item_name": "Helmet",
+            "item_id":"ITEM_ID_HELMET",
             "value":0,
-            "item_type":4
+            "item_type":"TYPE_HEAD_ARMOR"
+        },
+        {
+            "item_name": "Boots",
+            "item_id":"ITEM_ID_BOOTS",
+            "value":0,
+            "item_type":"TYPE_FEET_ARMOR"
         },
         {
             "item_name": "LEATHERVEST",
-            "item_id":"ITEM_ID_LEATHERVEST",
+            "item_id":"ITEM_ID_BODY",
             "value":0,
-            "item_type":2
+            "item_type":"TYPE_BODY_ARMOR"
         },
         {
-            "item_name": "LEATHERGLOVES",
-            "item_id":"ITEM_ID_LEATHERGLOVES",
+            "item_name": "GLOVES",
+            "item_id":"ITEM_ID_GLOVES",
             "value":0,
-            "item_type":5
+            "item_type":"TYPE_HAND_ARMOR"
         },
         {
-            "item_name": "LEATHER LEGGINGS",
-            "item_id":"ITEM_ID_LEATHERLEGGINGS",
+            "item_name": "LEGGINGS",
+            "item_id":"ITEM_ID_LEGGINGS",
             "value":0,
-            "item_type":3
+            "item_type":"TYPE_LEG_ARMOR"
         },
 
 
@@ -107,19 +112,19 @@
             "item_name": "Magic Missle Scroll",
             "item_id":"ITEM_ID_MAGICMMISSLE_SCROLL",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_SCROLL"
         },
         {
             "item_name": "Fireball Scroll",
             "item_id":"ITEM_ID_FIREBALL_SCROLL",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_SCROLL"
         },
         {
             "item_name": "Lightning Scroll",
             "item_id":"ITEM_ID_LIGHTNING_SCROLL",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_SCROLL"
         },
 
 
@@ -127,46 +132,47 @@
             "item_name": "APPLE",
             "item_id":"ITEM_ID_APPLE",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "CHEESE",
             "item_id":"ITEM_ID_CHEESE",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "BREAD",
             "item_id":"ITEM_ID_BREAD",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "MEAT",
             "item_id":"ITEM_ID_MEAT",
             "value":0,
-            "item_type":6
+            "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "RING",
             "item_id":"ITEM_ID_RING",
             "value":0,
-            "item_type":7
+            "item_type":"TYPE_CONSUMEABLE"
         },
         {
             "item_name": "STOVE PLAN",
             "item_id":"ITEM_ID_STOVE_PLAN",
             "value":0,
-            "item_type":9
+            "item_type":"TYPE_PLAN"
         },
         {
             "item_name": "MUSHROOM PRESS PLAN",
             "item_id":"ITEM_ID_MUSHROOMPRESS_PLAN",
             "value":0,
-            "item_type":9
+            "item_type":"TYPE_PLAN"
         }
 
     ],
+    
     "loot_tables": [
         {
             "index":0,
@@ -191,7 +197,7 @@
         {
             "index":4,
             "table_name":"armor",
-            "table_data":["ITEM_ID_LEATHERGLOVES","ITEM_ID_LEATHERBOOTS","ITEM_ID_LEATHERLEGGINGS","ITEM_ID_LEATHERVEST"]
+            "table_data":["ITEM_ID_GLOVES","ITEM_ID_BOOTS","ITEM_ID_LEGGINGS","ITEM_ID_BODY"]
         },
         {
             "index":5,
@@ -206,7 +212,7 @@
     ],
     "spell_data": [
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "spell_id":"SPELL_ID_MAGICMISSLE",
             "spell_name":"Magic Missle",
             "level":1,
             "lifetime":1.0,
@@ -215,26 +221,7 @@
             "radius":2
         },
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "spell_name":"Magic Missle 2",
-            "level":2,
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":1,
-            "radius":2
-        },
-        {
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "spell_name":"Magic Missle 3",
-            "level":3,
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":1,
-            "radius":2
-        },
-
-        {
-            "spell_id":"SPELL_ID_FIREBALL_1",
+            "spell_id":"SPELL_ID_FIREBALL",
             "spell_name":"Fireball",
             "level":1,
             "lifetime":1.0,
@@ -243,51 +230,15 @@
             "radius":2
         },
         {
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "spell_name":"Fireball 2",
-            "level":2,
-            "lifetime":1.0,
-            "speed": 100,
-            "damage":1,
-            "radius":2
-        },
-        {
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "spell_name":"Fireball 3",
-            "level":3,
-            "lifetime":1.0,
-            "speed": 100,
-            "damage":1,
-            "radius":2
-        },
-
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "spell_id":"SPELL_ID_LIGHTNING",
             "spell_name":"Lightning",
             "level":1,
             "lifetime":1.0,
             "speed": 700,
             "damage":1,
             "radius":2
-        },
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "spell_name":"Lightning 2",
-            "level":2,
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":1,
-            "radius":2
-        },
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "spell_name":"Lightning 3",
-            "level":3,
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":1,
-            "radius":2
         }
+
     ],
     "weapon_data": [
         {
@@ -349,6 +300,44 @@
 
     ],
 
+    "armor_data": [
+        {
+            "armor_id": "ITEM_ID_HELMET",
+            "armor_name": "Helmet",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0
+        },
+        {
+            "armor_id": "ITEM_ID_BODY",
+            "armor_name": "Chest Armor",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0
+        },
+        {
+            "armor_id": "ITEM_ID_GLOVES",
+            "armor_name": "Gloves",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0
+        },
+        {
+            "armor_id": "ITEM_ID_LEGGINGS",
+            "armor_name": "Leggings",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0
+        },
+        {
+            "armor_id": "ITEM_ID_BOOTS",
+            "armor_name": "Boots",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0
+        }
+    ],
+
     "plan_data": [
         
         {
@@ -370,7 +359,7 @@
         {
             "module_id":"MODULE_ID_WORKBENCH",
             "module_name":"WORKBENCH",
-            "recipies":["RECIPIE_ID_DAGGER", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE", "RECIPIE_ID_WAND"]
+            "recipies":["RECIPIE_ID_STAFF", "RECIPIE_ID_WAND"]
         },
         {
             "module_id":"MODULE_ID_STOVE",
@@ -386,12 +375,6 @@
     ],
 
     "recipie_data": [
-        {
-            "recipie_id":"RECIPIE_ID_DAGGER",
-            "recipie_name":"dagger",
-            "ingredients":["ITEM_ID_MUSHROOM_JUICE"],
-            "produces":"ITEM_ID_DAGGER"
-        },
         {
             "recipie_id":"RECIPIE_ID_STAFF",
             "recipie_name":"BASIC STAFF",

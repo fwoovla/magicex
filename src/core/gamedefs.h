@@ -1,7 +1,11 @@
 #pragma once
 #include <raylib.h>
 
-
+inline const Color WEAPONCOLOR = {.r = 172, .g = 26, .b = 118, .a = 255};
+inline const Color ARMORCOLOR = {.r = 65, .g = 182, .b = 26, .a = 255};
+inline const Color SCROLLCOLOR = {.r = 182, .g = 159, .b = 26, .a = 255};
+inline const Color PLANCOLOR = {.r = 150, .g = 182, .b = 26, .a = 255};
+inline const Color DEFAULTITEMCOLOR = RAYWHITE;
 
 inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
 
@@ -15,10 +19,6 @@ inline const Color TRANSDARKERGRAY = {.r = 40, .g = 40, .b = 40, .a = 150};
 
 inline const Color TRANSDARKGREEN = {.r = 0, .g = 50, .b = 0, .a = 60};
 inline const Color TRANSGREEN = {.r = 0, .g = 255, .b = 0, .a = 60};
-
-//inline const int TILE_SIZE = 32;
-//inline const int INV_TILE_SIZE = 1.0f/TILE_SIZE;
-
 
 
 struct GameSettings {

@@ -7,6 +7,22 @@ static const std::string save_path = "saves/save.json";
 void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
 
+
+    g_item_type_colors[TYPE_WEAPON] = WEAPONCOLOR;
+    g_item_type_colors[TYPE_HEAD_ARMOR] = ARMORCOLOR;
+    g_item_type_colors[TYPE_BODY_ARMOR] = ARMORCOLOR;
+    g_item_type_colors[TYPE_LEG_ARMOR] = ARMORCOLOR;
+    g_item_type_colors[TYPE_FEET_ARMOR] = ARMORCOLOR;
+    g_item_type_colors[TYPE_HAND_ARMOR] = ARMORCOLOR;
+    g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_RESOURCE] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_PLAN] = PLANCOLOR;
+    g_item_type_colors[TYPE_SCROLL] = SCROLLCOLOR;
+    g_item_type_colors[TYPE_FOOD] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_ALL] = DEFAULTITEMCOLOR;
+
+
+
     std::ifstream cfile("assets/data.json");
     if (!cfile.is_open()) {
         TraceLog(LOG_INFO, "CANNOT OPEN DATA FILE");
@@ -85,7 +101,9 @@ void LoadGameData() {
 
         int value = cj["item_data"][i]["value"];
         std::string name = cj["item_data"][i]["item_name"];
-        ItemType type = cj["item_data"][i]["item_type"];
+
+
+        ItemType type = StrToItemType( cj["item_data"][i]["item_type"] );
 
         ItemData new_item = {
             .id = id,
@@ -126,6 +144,34 @@ void LoadGameData() {
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
     }
+
+//------------------------------------armor data
+    for(int i = 0; i < cj["armor_data"].size(); i++) {
+
+        std::string w_id_s = cj["armor_data"][i]["armor_id"];
+        ItemID w_id = StrToItemId(w_id_s);
+
+        std::string name = cj["armor_data"][i]["armor_name"];
+
+        std::string sp_id = cj["armor_data"][i]["spell_id"];
+        SpellID spell_id = StrToSpellId(sp_id);
+
+        float defence = cj["armor_data"][i]["defence"];
+
+        float magic_defence = cj["armor_data"][i]["magic_defence"];
+
+        ArmorData new_armor = {
+            .armor_name= name,
+            .armor_id = w_id,
+            .defence = defence,
+            .magic_defence = magic_defence,               
+        };
+
+        TraceLog(LOG_INFO, "Armor Data Loaded  id: %i  %s", w_id, name.c_str());
+        g_armor_data[(int)w_id] = new_armor;
+    }
+
+
 
 //------------------------------------weapon data
     for(int i = 0; i < cj["weapon_data"].size(); i++) {
@@ -187,7 +233,6 @@ void LoadGameData() {
         TraceLog(LOG_INFO, "Plan Data Loaded  id: %i  %s  %i", p_id, name.c_str(), recipie_list.size());
         g_plan_data[(int)m_id] = new_plan;
     }
-
 
 //------------------------------------module data
     for(int i = 0; i < cj["module_data"].size(); i++) {
@@ -335,6 +380,12 @@ void SaveGame(LevelData &level_data) {
             {"ammo_count", inst.ammo_count},
             {"container_id", inst.container_id},
             {"cooldown", inst.cooldown},
+            {"item_id", inst.item_id},
+            {"icon_id", inst.icon_id},
+            {"level", inst.level},
+            {"defence", inst.defence},
+            {"magic_defence", inst.magic_defence},
+            {"sprite_id", inst.sprite_id},
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -837,6 +888,8 @@ void InstancePlayerItem(ItemID item_id) {
         new_instance.clip_size = 0;
         new_instance.ammo_count = 0;
         new_instance.container_id = "";
+        new_instance.sprite_id = item_id;
+        new_instance.icon_id = item_id;
             
         g_item_instances[uid] = new_instance;
 
@@ -914,13 +967,32 @@ PlanID StrToPlanId(const std::string& s) {
 
 
 
+/* ItemTypeColors IdToItemTypeColor(const std::string& s) {
+    static const std::unordered_map<std::string, ItemTypeColors> lookup_table = {
+        {"TYPE_COLOR_ARMOR",      ItemTypeColors::TYPE_COLOR_ARMOR},
+        {"TYPE_COLOR_DEFAULT",    ItemTypeColors::TYPE_COLOR_DEFAULT},
+        {"TYPE_COLOR_PLAN",       ItemTypeColors::TYPE_COLOR_PLAN},
+        {"TYPE_COLOR_SCROLL",     ItemTypeColors::TYPE_COLOR_SCROLL},
+        {"TYPE_COLOR_WEAPON",     ItemTypeColors::TYPE_COLOR_WEAPON}
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return ItemTypeColors::TYPE_COLOR_DEFAULT;
+} */
+
 
 RecipieID StrToRecipieId(const std::string& s) {
     static const std::unordered_map<std::string, RecipieID> lookup_table = {
         {"None",                         RecipieID::RECIPIE_ID_NONE},
-        {"RECIPIE_ID_DAGGER",            RecipieID::RECIPIE_ID_DAGGER},
         {"RECIPIE_ID_APPLE",             RecipieID::RECIPIE_ID_APPLE},
         {"RECIPIE_ID_MUSHROOMJUICE",     RecipieID::RECIPIE_ID_MUSHROOMJUICE},
+        {"RECIPIE_ID_WAND",              RecipieID::RECIPIE_ID_WAND},
+        {"RECIPIE_ID_STAFF",             RecipieID::RECIPIE_ID_STAFF},
 
     };
 
@@ -950,19 +1022,54 @@ ModuleID StrToModuleId(const std::string& s) {
     return ModuleID::MODULE_ID_NONE;
 }
 
+ItemRarity StrToItemRarity(const std::string& s) {
+
+    static const std::unordered_map<std::string, ItemRarity> lookup_table = {
+        {"RARITY_COMMON",       ItemRarity::RARITY_COMMON},
+        {"RARITY_UNCOMMON",     ItemRarity::RARITY_UNCOMMON},
+        {"RARITY_RARE",         ItemRarity::RARITY_RARE},
+        {"RARITY_VERYRARE",     ItemRarity::RARITY_VERYRARE},
+        {"RARITY_ULTRARARE",    ItemRarity::RARITY_ULTRARARE},
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return ItemRarity::RARITY_COMMON;
+}
+
+ItemType StrToItemType(const std::string& s) {
+    static const std::unordered_map<std::string, ItemType> lookup_table = {
+        {"TYPE_WEAPON",       ItemType::TYPE_WEAPON},
+        {"TYPE_HEAD_ARMOR",     ItemType::TYPE_HEAD_ARMOR},
+        {"TYPE_BODY_ARMOR",    ItemType::TYPE_BODY_ARMOR},
+        {"TYPE_LEG_ARMOR",     ItemType::TYPE_LEG_ARMOR},
+        {"TYPE_FEET_ARMOR",    ItemType::TYPE_FEET_ARMOR},
+        {"TYPE_HAND_ARMOR",    ItemType::TYPE_HAND_ARMOR},
+        {"TYPE_CONSUMEABLE",    ItemType::TYPE_CONSUMEABLE},
+        {"TYPE_RESOURCE",    ItemType::TYPE_RESOURCE},
+        {"TYPE_ALL",    ItemType::TYPE_ALL},
+        {"TYPE_PLAN",    ItemType::TYPE_PLAN},
+        {"TYPE_PLAN",    ItemType::TYPE_SCROLL},
+        {"TYPE_PLAN",    ItemType::TYPE_FOOD},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    return ItemType::TYPE_RESOURCE;  
+}
+
 SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
         {"None",                          SpellID::SPELL_ID_NONE},
-        {"SPELL_ID_MAGICMISSLE_1",        SpellID::SPELL_ID_MAGICMISSLE_1},
-        {"SPELL_ID_MAGICMISSLE_2",        SpellID::SPELL_ID_MAGICMISSLE_2},
-        {"SPELL_ID_MAGICMISSLE_3",        SpellID::SPELL_ID_MAGICMISSLE_3},
-        {"SPELL_ID_FIREBALL_1",           SpellID::SPELL_ID_FIREBALL_1},
-        {"SPELL_ID_FIREBALL_2",           SpellID::SPELL_ID_FIREBALL_2},
-        {"SPELL_ID_FIREBALL_3",           SpellID::SPELL_ID_FIREBALL_3},
-        {"SPELL_ID_LIGHTNING_1",          SpellID::SPELL_ID_LIGHTNING_1},
-        {"SPELL_ID_LIGHTNING_2",          SpellID::SPELL_ID_LIGHTNING_2},
-        {"SPELL_ID_LIGHTNING_3",          SpellID::SPELL_ID_LIGHTNING_3},
+        {"SPELL_ID_MAGICMISSLE",        SpellID::SPELL_ID_MAGICMISSLE},
+        {"SPELL_ID_FIREBALL",           SpellID::SPELL_ID_FIREBALL},
+        {"SPELL_ID_LIGHTNING",          SpellID::SPELL_ID_LIGHTNING},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -973,6 +1080,7 @@ SpellID StrToSpellId(const std::string& s) {
     return SpellID::SPELL_ID_NONE;
 
 }
+
 
 ItemID StrToItemId(const std::string& s) {
 
@@ -986,35 +1094,15 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
         {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF},
 
-/*         {"ITEM_ID_MAGICMISSLE_WAND_1",          ItemID::ITEM_ID_MAGICMISSLE_WAND_1},
-        {"ITEM_ID_MAGICMISSLE_WAND_2",         ItemID::ITEM_ID_MAGICMISSLE_WAND_2},
-        {"ITEM_ID_MAGICMISSLE_WAND_3",         ItemID::ITEM_ID_MAGICMISSLE_WAND_3},
-        {"ITEM_ID_FIREBALL_WAND_1",         ItemID::ITEM_ID_FIREBALL_WAND_1},
-        {"ITEM_ID_FIREBALL_WAND_2",         ItemID::ITEM_ID_FIREBALL_WAND_2},
-        {"ITEM_ID_FIREBALL_WAND_3",         ItemID::ITEM_ID_FIREBALL_WAND_3},
-        {"ITEM_ID_LIGHTNING_WAND_1",         ItemID::ITEM_ID_LIGHTNING_WAND_1},
-        {"ITEM_ID_LIGHTNING_WAND_2",         ItemID::ITEM_ID_LIGHTNING_WAND_2},
-        {"ITEM_ID_LIGHTNING_WAND_3",         ItemID::ITEM_ID_LIGHTNING_WAND_3},
-
-
-        {"ITEM_ID_MAGICMISSLE_STAFF_1",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_1},
-        {"ITEM_ID_MAGICMISSLE_STAFF_2",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_2},
-        {"ITEM_ID_MAGICMISSLE_STAFF_3",         ItemID::ITEM_ID_MAGICMISSLE_STAFF_3},
-        {"ITEM_ID_FIREBALL_STAFF_1",         ItemID::ITEM_ID_FIREBALL_STAFF_1},
-        {"ITEM_ID_FIREBALL_STAFF_2",         ItemID::ITEM_ID_FIREBALL_STAFF_2},
-        {"ITEM_ID_FIREBALL_STAFF_3",         ItemID::ITEM_ID_FIREBALL_STAFF_3},
-        {"ITEM_ID_LIGHTNING_STAFF_1",         ItemID::ITEM_ID_LIGHTNING_STAFF_1},
-        {"ITEM_ID_LIGHTNING_STAFF_2",         ItemID::ITEM_ID_LIGHTNING_STAFF_2},
-        {"ITEM_ID_LIGHTNING_STAFF_3",         ItemID::ITEM_ID_LIGHTNING_STAFF_3}, */
 
         {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
         {"ITEM_ID_MUSHROOM_JUICE",     ItemID::ITEM_ID_MUSHROOM_JUICE},
 
 
-        {"ITEM_ID_LEATHERBOOTS",    ItemID::ITEM_ID_LEATHERBOOTS},
-        {"ITEM_ID_LEATHERVEST",     ItemID::ITEM_ID_LEATHERVEST},
-        {"ITEM_ID_LEATHERGLOVES",   ItemID::ITEM_ID_LEATHERGLOVES},
-        {"ITEM_ID_LEATHERLEGGINGS",   ItemID::ITEM_ID_LEATHERLEGGINGS},
+        {"ITEM_ID_BOOTS",    ItemID::ITEM_ID_BOOTS},
+        {"ITEM_ID_BODY",     ItemID::ITEM_ID_BODY},
+        {"ITEM_ID_GLOVES",   ItemID::ITEM_ID_GLOVES},
+        {"ITEM_ID_LEGGINGS",   ItemID::ITEM_ID_LEGGINGS},
 
 
         {"ITEM_ID_MAGICMMISSLE_SCROLL",          ItemID::ITEM_ID_MAGICMMISSLE_SCROLL},
@@ -1066,13 +1154,18 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("ammo_count").get_to(i.ammo_count);
     j.at("container_id").get_to(i.container_id);
     j.at("cooldown").get_to(i.cooldown);
+    j.at("item_id").get_to(i.item_id);
+    j.at("icon_id").get_to(i.icon_id);
+    j.at("level").get_to(i.level);
+    j.at("defence").get_to(i.defence);
+    j.at("magic_defence").get_to(i.magic_defence);
+    j.at("sprite_id").get_to(i.sprite_id);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }
 
 
 void from_json(const json &j, ContainerData &i) {
-
 
     j.at("identifier").get_to(i.identifier);
     j.at("iid").get_to(i.iid);
@@ -1097,13 +1190,15 @@ void YSortEntities(LevelData & _level_data) {
 
 
     for (auto e : _level_data.entity_list)
-    if(e->y_sort){
-        _level_data.draw_list.push_back(e);
+    _level_data.draw_list.push_back(e);
+
+ /*    if(e->y_sort){
     }
+
     for (auto e : _level_data.entity_list)
     if(!e->y_sort){
         _level_data.draw_list.push_back(e);
-    }
+    } */
 
     std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
     [](BaseEntity* a, BaseEntity* b) {

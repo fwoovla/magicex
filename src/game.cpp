@@ -13,6 +13,7 @@ std::unordered_map<int, SpellData> g_spell_data;
 std::unordered_map<int, ModuleData> g_module_data;
 std::unordered_map<int, RecipieData> g_recipie_data;
 std::unordered_map<int, PlanData> g_plan_data;
+std::unordered_map<int, ArmorData> g_armor_data;
 
 std::vector<std::vector<int>> g_loot_tables;
 
@@ -22,6 +23,8 @@ DebugData g_debug_data;
 LDTKMaps g_ldtk_maps;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
+
+Color g_item_type_colors[TYPE_ALL];
 
 Texture2D g_tile_sheets[MAX_SPRITES];
 Texture2D g_sprite_sheets[MAX_SPRITES];

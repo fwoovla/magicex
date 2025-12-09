@@ -3,7 +3,7 @@
 
 ModuleMenu::ModuleMenu() {
 
-    selected_button_index = 0;
+    selected_button_index = -1;
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, WHITE, "MODULE MENU");
 
     panel_bg = g_ui_panels[PANEL_MODULE_SCREEN];
@@ -46,11 +46,14 @@ void ModuleMenu::Draw() {
     DrawLabel(ingredient_header);
     DrawLabel(recipie_label);
 
-    if(button_lookup[selected_button_index] == 1) {
-        ingredient_label.default_color = GREEN;
-    }
-    else {
-        ingredient_label.default_color = RED;
+    if(selected_button_index >= 0) {
+        if(button_lookup[selected_button_index] == 1) {
+            ingredient_label.default_color = GREEN;
+            DrawButton(craft_button);
+        }
+        else {
+            ingredient_label.default_color = RED;
+        }
     }
 
     DrawLabel(ingredient_label);
@@ -69,9 +72,6 @@ void ModuleMenu::Draw() {
     inventory_grid->DrawGrid();
     inventory_grid->DrawItems();
 
-    if(button_lookup[selected_button_index] == 1) {
-        DrawButton(craft_button);
-    }
     //DrawCircleV(rpo, 2, RED);
     //DrawCircleV(ipo, 2, RED);
     //DrawCircleV(inpo, 2, RED);
@@ -81,29 +81,28 @@ void ModuleMenu::Update() {
     recipie_label.text = "";
     ingredient_label.text = "";
 
-    auto r_itter = g_recipie_data.find(g_module_data[module_id].recipies[selected_button_index]);
-    if(r_itter != g_recipie_data.end()) {
-
-        for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
-            auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
-            if(i_itter != g_item_data.end()) {
+    if(selected_button_index >= 0) {
+        
+        auto r_itter = g_recipie_data.find(g_module_data[module_id].recipies[selected_button_index]);
+        if(r_itter != g_recipie_data.end()) {
+            
+            for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
+                auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
+                if(i_itter != g_item_data.end()) {
                     ingredient_label.text += "- " + i_itter->second.item_name + "\n";
-            }
-        }   
-    }        
-
+                }
+            }   
+        }        
+    }
+        
     for(int b = 0; b <recipie_buttons.size(); b++) {
 
         if(IsButtonHovered(recipie_buttons[b], g_scale)){
             if(recipie_buttons[b].already_hovered == false) {
-                //TraceLog(LOG_INFO, "selected hovered");
-                //recipie_selected.EmitSignal();
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 selected_button_index = b;
                 TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
-                //RecipieSelected();
-                //recipie_selected.EmitSignal();
             }        
         }
     }
@@ -114,7 +113,6 @@ void ModuleMenu::Update() {
                 //recipie_selected.EmitSignal();
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                //selected_button_index = b;
                 TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
                 RecipieSelected();
                 //recipie_selected.EmitSignal();
@@ -125,7 +123,7 @@ void ModuleMenu::Update() {
 
 void ModuleMenu::OpenModule() {
     inventory_grid->SetItems(&g_player_data.inventory);
-    selected_button_index = 0;
+    selected_button_index = -1;
     recipie_buttons.clear();
     button_lookup.clear();
 
@@ -200,6 +198,9 @@ void ModuleMenu::OpenModule() {
 }
 
 void ModuleMenu::RecipieSelected() {
+    if(selected_button_index < 0) {
+        return;
+    }
 
     if(button_lookup[selected_button_index] == 0) {
         TraceLog(LOG_INFO, "cannot craft item not enough resources");

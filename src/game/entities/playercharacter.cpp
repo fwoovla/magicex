@@ -21,7 +21,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
     int _id = ITEM_ID_ERROR;
     auto item_it = g_item_instances.find(g_player_data.primary[0]);
     if(item_it != g_item_instances.end()) {
-        _id = item_it->second.item_id;
+        _id = item_it->second.sprite_id;
         LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
     }
     else {
@@ -181,8 +181,12 @@ void PlayerCharacter::CheckInput() {
 
         auto spell_it = g_spell_data.find(item_it->second.spell_id);
         if(spell_it != g_spell_data.end()) {
-
-            SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
+            if(g_game_data.is_in_sub_map) {
+                SpawnSpell(spell_it->second , *g_sub_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
+            }
+            else {
+                SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
+            }
         }
         shot_timer.Start(item_it->second.cooldown, true);
         can_shoot = false;
@@ -196,30 +200,32 @@ bool PlayerCharacter::CanEquip(int item_id) {
 
 
 void PlayerCharacter::Equip(int item_id) {
-    if(g_item_data[item_id].type == TYPE_WEAPON) {
-        if(g_player_data.primary[0] == item_id) {
+    TraceLog(LOG_INFO, "trying to equip primary weapon %i", item_id);
 
-            //current_weapon_data = g_weapon_data[g_player_data.primary[0]];
-            if(item_id != -1) {
-                TraceLog(LOG_INFO, "equiping primary weapon %i", item_id);
+    int _id = ITEM_ID_ERROR;
 
-                int _id = ITEM_ID_ERROR;
-                auto item_it = g_item_instances.find(item_id);
-                if(item_it != g_item_instances.end()) {
-                    _id = item_it->second.item_id;
+    auto item_it = g_item_instances.find(item_id);
+
+    if(item_it != g_item_instances.end()) {
+        if(item_it->second.type == TYPE_WEAPON) {
+            if(g_player_data.primary[0] == item_id) {
+                if(item_id != -1) {
+                    
+                    auto item_it = g_item_instances.find(item_id);
+                    if(item_it != g_item_instances.end()) {
+                        _id = item_it->second.sprite_id;
+                        TraceLog(LOG_INFO, "equiping primary weapon %i sp_id %i", item_id, _id);
+                    }
                 }
-                
-                LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
             }
-            else {
-                TraceLog(LOG_INFO, "nothing to equip %i", item_id);
-                Texture2D t;
-                LoadSpriteCentered(weapon_sprite, t, position);
-            }
+
         }
     }
-}
+    
+    LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
 
+    TraceLog(LOG_INFO, "+++++++++++++");
+}
 
 
 bool PlayerCharacter::CanUnEquip(int item_id) {

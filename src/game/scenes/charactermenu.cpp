@@ -335,7 +335,7 @@ void CharacterMenu::OnTransferItem() {
             grid_list[dest_index]->AddItem(shared_data.item_id, shared_data.dest_cell);
 
             if(shared_data.dest_grid == GRID_PRIMARY or
-                shared_data.dest_grid == GRID_SECONDARY or
+                //shared_data.dest_grid == GRID_SECONDARY or
                 shared_data.dest_grid == GRID_HEAD or
                 shared_data.dest_grid == GRID_BODY or
                 shared_data.dest_grid == GRID_LEGS or
@@ -344,7 +344,7 @@ void CharacterMenu::OnTransferItem() {
                 if(g_current_player->CanEquip(shared_data.item_id)) {g_current_player->Equip(shared_data.item_id);}}
 
             if(shared_data.source_grid == GRID_PRIMARY or
-                shared_data.source_grid == GRID_SECONDARY or
+                //shared_data.source_grid == GRID_SECONDARY or
                 shared_data.source_grid == GRID_HEAD or
                 shared_data.source_grid == GRID_BODY or
                 shared_data.source_grid == GRID_LEGS or
@@ -359,7 +359,7 @@ void CharacterMenu::OnTransferItem() {
         }
     }
 
-    if(shared_data.dest_grid == GRID_PRIMARY or
+/*     if(shared_data.dest_grid == GRID_PRIMARY or
        shared_data.dest_grid == GRID_SECONDARY or
        shared_data.dest_grid == GRID_HEAD or
        shared_data.dest_grid == GRID_BODY or
@@ -371,7 +371,7 @@ void CharacterMenu::OnTransferItem() {
             
             g_current_player->Equip(shared_data.item_id);
         }
-    }
+    } */
 
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;
