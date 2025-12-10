@@ -252,11 +252,12 @@ obj/Debug/ldtk.o: src/game/ldtk.cpp /usr/include/stdc-predef.h \
  src/game/../core/itemgenerator.h src/game/../core/data.h \
  src/game/../core/spells.h src/game/../core/events.h \
  src/game/../core/viewport.h src/game/../core/input.h \
- src/game/../core/button.h src/game/../core/modules.h \
- src/game/../core/playercharacter.h src/game/../core/entityspawner.h \
- src/game/../core/basescene.h src/game/../core/tilelayer.h \
- src/game/../core/uilayers.h src/game/../core/scenes.h \
- src/game/../core/scenemanager.h src/game/../core/game.h
+ src/game/../core/button.h src/game/../core/charactereffectentity\ .h \
+ src/game/../core/modules.h src/game/../core/playercharacter.h \
+ src/game/../core/entityspawner.h src/game/../core/basescene.h \
+ src/game/../core/tilelayer.h src/game/../core/uilayers.h \
+ src/game/../core/scenes.h src/game/../core/scenemanager.h \
+ src/game/../core/game.h
 /usr/include/stdc-predef.h:
 src/game/../core/gamedefs.h:
 /usr/local/include/raylib.h:
@@ -587,6 +588,7 @@ src/game/../core/events.h:
 src/game/../core/viewport.h:
 src/game/../core/input.h:
 src/game/../core/button.h:
+src/game/../core/charactereffectentity\ .h:
 src/game/../core/modules.h:
 src/game/../core/playercharacter.h:
 src/game/../core/entityspawner.h:

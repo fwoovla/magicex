@@ -230,6 +230,7 @@ void ModuleMenu::OpenModule() {
             y_index ++;
         }
     }
+
     TraceLog(LOG_INFO, "plans  available %i", module_data.accepted_plans.size());
     for(int i = 0; i < module_data.accepted_plans.size(); i++) {
 
@@ -238,8 +239,19 @@ void ModuleMenu::OpenModule() {
         auto p_itter = g_plan_data.find(module_data.accepted_plans[i]);
         if(p_itter != g_plan_data.end()) {
             TraceLog(LOG_INFO, "plan data available for %s %i    %i", p_itter->second.plan_name.c_str(), p_itter->second.plan_id, module_data.accepted_plans[i]);
+
+            std::string module_name = "module not found";
+
+            auto m_itter = g_module_data.find(p_itter->second.module_id);
+            if(m_itter != g_module_data.end()) {
+                module_name = m_itter->second.module_name;
+            }
+            else {
+                return;
+            }
+
             Button new_button;
-            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, p_itter->second.plan_name.c_str());
+            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, module_name.c_str());
             new_button.text_size = 20;
             new_button.default_color = BLANK;
 

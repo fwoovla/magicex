@@ -60,6 +60,34 @@ enum ItemType {
 
 extern Color g_item_type_colors[TYPE_ALL];
 
+struct FoodModData {
+    ItemModID mod_id;
+    std::string mod_name;
+    float saturation;
+};
+
+extern std::unordered_map<int, FoodModData> g_food_mod_data;
+
+struct ArmorModData {
+    ItemModID mod_id;
+    std::string mod_name;
+    int defence;
+};
+
+extern std::unordered_map<int, ArmorModData> g_armor_mod_data;
+
+
+struct WeaponModData {
+    ItemModID mod_id;
+    std::string mod_name;
+
+    float cooldown;
+    int clip_size;
+    int damage;
+};
+
+extern std::unordered_map<int, WeaponModData> g_weapon_mod_data;
+
 
 struct FoodData {
     ItemID food_id;
@@ -70,6 +98,14 @@ struct FoodData {
 
 extern std::unordered_map<int, FoodData> g_food_data;
 
+
+struct CharacterEffectData {
+    CharEffectID effect_id;
+    std::string effect_name;
+    float durration;
+};
+
+extern std::unordered_map<int, CharacterEffectData> g_char_effect_data;
 
 struct ItemData {
     ItemID id;
@@ -82,6 +118,7 @@ struct ItemData {
 extern std::unordered_map<int, ItemData> g_item_data;
 
 struct ItemInstanceData {
+    std::vector<ItemModID> modifications;
     std::string container_id;
     ItemID item_id;
     int instance_id;
@@ -96,8 +133,8 @@ struct ItemInstanceData {
     int sprite_id;
     int icon_id;
     int level;
-    float defence;
-    float magic_defence;
+    int defence;
+    int magic_defence;
     float saturation;
 };
 
@@ -119,8 +156,8 @@ struct ArmorData {
     std::string armor_name;
     ItemID armor_id;
     SpellID spell_id;
-    float defence;
-    float magic_defence;
+    int defence;
+    int magic_defence;
 };
 
 extern std::unordered_map<int, ArmorData> g_armor_data;
@@ -272,6 +309,10 @@ void GenerateContainerItemList(int lti, std::vector<int> &list);
 
 
 //Color StrToItemTypeColor(const std::string& s);
+
+CharEffectID StrToCharEffectId(const std::string& s);
+
+ItemModID StrToModId(const std::string& s);
 
 ItemRarity StrToItemRarity(const std::string& s);
 

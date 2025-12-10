@@ -39,6 +39,6 @@ void DrawLabelCenteredWithBG(Label &_label, Color color) {
         if (c == '\n') lines++;
     }
 
-    DrawRectangle( _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), tw, _label.text_size * lines, color );
+    DrawRectangle( _label.position.x - 5 - (tw*0.5), _label.position.y - 5 - (_label.text_size *0.5f), tw + 10, ((_label.text_size + 2) * lines) + 10, color );
     DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), _label.text_size, _label.default_color);
 }

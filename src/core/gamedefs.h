@@ -5,7 +5,7 @@ inline const Color WEAPONCOLOR = {.r = 172, .g = 26, .b = 118, .a = 255};
 inline const Color ARMORCOLOR = {.r = 65, .g = 182, .b = 26, .a = 255};
 inline const Color SCROLLCOLOR = {.r = 182, .g = 159, .b = 26, .a = 255};
 inline const Color PLANCOLOR = {.r = 150, .g = 182, .b = 26, .a = 255};
-inline const Color FOODCOLOR = {.r = 50, .g = 182, .b = 126, .a = 255};
+inline const Color FOODCOLOR = {.r = 20, .g = 200, .b = 126, .a = 255};
 inline const Color DEFAULTITEMCOLOR = RAYWHITE;
 
 inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
@@ -137,6 +137,7 @@ extern Viewport g_viewport;
 #include "label.h"
 #include "baseentity.h"
 #include "entities.h"
+#include "charactereffectentity .h"
 #include "modules.h"
 #include "playercharacter.h"
 #include "entityspawner.h"

@@ -51,7 +51,7 @@ void ItemGrid::Update() {
                         hovered_time = 0.0f;
                         show_details = false;
                     }
-                    TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
+                    //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
                     if(can_select){
                         //ItemID item_id = ITEM_ID_ERROR;
@@ -61,7 +61,7 @@ void ItemGrid::Update() {
                         if(itter != g_item_instances.end()) {
                             i_name = itter->second.item_name;
                             color = g_item_type_colors[itter->second.type];
-                            TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
+                            //TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
                             //item_id = itter->second.item_id;
 
                             CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
@@ -172,7 +172,7 @@ void ItemGrid::DrawItems() {
     }
 
     if(cell_hovered and can_select) {
-        DrawLabelCentered(name_label);
+        DrawLabelCenteredWithBG(name_label, BLACK);
         if(show_details) {
             DrawLabelCenteredWithBG(details_label, BLACK);
         }
@@ -312,59 +312,64 @@ void ItemGrid::RemoveItem(Vector2 source_cell) {
 
 std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string details;
-    //TraceLog(LOG_INFO, "details %i", item_data.spell_id);
-/*     if(!show_details){
-        return details;
-    } */
 
-    if(item_data.type == TYPE_WEAPON) {
-        if(item_data.spell_id != -1) {
-            auto itter = g_spell_data.find(item_data.spell_id);
-            if(itter != g_spell_data.end()) {
-                details += itter->second.spell_name + "\n";
-            }
+    for(int mod = 0; mod < item_data.modifications.size(); mod++) {
+        auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
+        if(m_itter != g_weapon_mod_data.end()) {
+            details += m_itter->second.mod_name + "\n";
         }
-        if(item_data.item_id != -1) {
-            auto itter = g_weapon_data.find(item_data.item_id);
-            if(itter != g_weapon_data.end()) {
-                std::string damage = std::to_string(itter->second.damage);
-                details += damage + " damage";
-            }
+        auto a_itter = g_armor_mod_data.find(item_data.modifications[mod]);
+        if(a_itter != g_armor_mod_data.end()) {
+            details += a_itter->second.mod_name + "\n";
+        }
+        auto f_itter = g_food_mod_data.find(item_data.modifications[mod]);
+        if(f_itter != g_food_mod_data.end()) {
+            details += f_itter->second.mod_name + "\n";
         }
     }
 
-    if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
-        auto itter = g_armor_data.find(item_data.item_id);
-        if(itter != g_armor_data.end()) {
-            std::string defence = std::to_string((int)itter->second.defence);
-            std::string mdefence = std::to_string((int)itter->second.magic_defence);
-            details += defence + " defence\n";
-            if(itter->second.magic_defence > 0) {
-                details += mdefence + " magic defence\n";
-            }
-        }
+    if(item_data.modifications.size() > 0) {details += "\n";}
 
-    }
+    auto itter = g_item_instances.find(item_data.instance_id);
+    if(itter != g_item_instances.end()) {
     
-    if(item_data.type ==  TYPE_CONSUMEABLE) {
-    }
-
-    if(item_data.type ==  TYPE_FOOD) {
-        auto itter = g_food_data.find(item_data.item_id);
-        if(itter != g_food_data.end()) {
-
-            std::string sat = TextFormat("%0.2f", itter->second.saturation);
-            details += sat + " saturation";
+        if(item_data.type == TYPE_WEAPON) {
+            details += std::to_string(itter->second.damage) + " damage\n";
+            std::string cool = TextFormat("%0.2f", itter->second.cooldown);
+            details += cool + " cooldown\n";
+            if(itter->second.clip_size > 0){
+                details += std::to_string(itter->second.clip_size) + " max charges\n";
+            }
         }
-    }
 
-    if(item_data.type ==  TYPE_PLAN) {
-    }
+        if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
+            details += std::to_string(itter->second.defence) + " defence\n";
+            if(itter->second.magic_defence > 0) {
+                details += std::to_string(itter->second.magic_defence) + " magic defence\n";
+                
+            }
+        }
 
-    if(item_data.type ==  TYPE_RESOURCE) {
-    }
+        if(item_data.type ==  TYPE_CONSUMEABLE) {
 
-    if(item_data.type ==  TYPE_SCROLL) {
+        }
+
+        if(item_data.type ==  TYPE_FOOD) {
+            std::string sat = TextFormat("%0.2f", itter->second.saturation);
+            details += sat + " saturation\n";
+            
+        }
+   
+        if(item_data.type ==  TYPE_PLAN) {
+        }
+        
+        if(item_data.type ==  TYPE_RESOURCE) {
+        }
+        
+        if(item_data.type ==  TYPE_SCROLL) {
+        }
+
+        details += "$" + std::to_string( itter->second.value);
     }
 
     return details;

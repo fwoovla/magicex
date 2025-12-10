@@ -154,9 +154,9 @@ void LoadGameData() {
         std::string sp_id = cj["armor_data"][i]["spell_id"];
         SpellID spell_id = StrToSpellId(sp_id);
 
-        float defence = cj["armor_data"][i]["defence"];
+        int defence = cj["armor_data"][i]["defence"];
 
-        float magic_defence = cj["armor_data"][i]["magic_defence"];
+        int magic_defence = cj["armor_data"][i]["magic_defence"];
 
         ArmorData new_armor = {
             .armor_name= name,
@@ -326,6 +326,63 @@ void LoadGameData() {
     }
 
 
+    //--------------------cahracter effects
+    for(int i = 0; i < cj["character_effects"].size(); i++) {
+
+        CharacterEffectData new_effect;
+
+        new_effect.effect_id = StrToCharEffectId( cj["character_effects"][i]["effect_id"] );
+        new_effect.effect_name = cj["character_effects"][i]["effect_name"];
+        new_effect.durration = cj["character_effects"][i]["durration"];
+                
+        TraceLog(LOG_INFO, "Charactere effect Data  Loaded  id: %i  %s", new_effect.effect_id, new_effect.effect_name.c_str());
+        g_char_effect_data[new_effect.effect_id] = new_effect;
+    }
+
+
+    //--------------------food mods
+    for(int i = 0; i < cj["food_modifiers"].size(); i++) {
+
+        FoodModData new_mod;
+
+        new_mod.mod_id = StrToModId( cj["food_modifiers"][i]["mod_id"] );
+        new_mod.mod_name = cj["food_modifiers"][i]["mod_name"];
+        new_mod.saturation = cj["food_modifiers"][i]["saturation"];
+                
+        TraceLog(LOG_INFO, "FOOD Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
+        g_food_mod_data[new_mod.mod_id] = new_mod;
+    }
+
+
+    //--------------------armor mods
+    for(int i = 0; i < cj["armor_modifiers"].size(); i++) {
+
+        ArmorModData new_mod;
+
+        new_mod.mod_id = StrToModId( cj["armor_modifiers"][i]["mod_id"] );
+        new_mod.mod_name = cj["armor_modifiers"][i]["mod_name"];
+        new_mod.defence = cj["armor_modifiers"][i]["defence"];
+                
+        TraceLog(LOG_INFO, "ARMOR Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
+        g_armor_mod_data[new_mod.mod_id] = new_mod;
+    }
+
+    //--------------------weapon mods
+    for(int i = 0; i < cj["weapon_modifiers"].size(); i++) {
+
+        WeaponModData new_mod;
+
+        new_mod.mod_id = StrToModId( cj["weapon_modifiers"][i]["mod_id"] );
+        new_mod.mod_name = cj["weapon_modifiers"][i]["mod_name"];
+        new_mod.cooldown = cj["weapon_modifiers"][i]["cooldown"];
+        new_mod.clip_size = cj["weapon_modifiers"][i]["clip_size"];
+        new_mod.damage = cj["weapon_modifiers"][i]["damage"];
+                
+        TraceLog(LOG_INFO, "WEAPON Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
+        g_weapon_mod_data[new_mod.mod_id] = new_mod;
+    }
+
+
     //--------------------loot tables
     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
@@ -424,6 +481,7 @@ void SaveGame(LevelData &level_data) {
             {"magic_defence", inst.magic_defence},
             {"sprite_id", inst.sprite_id},
             {"saturation", inst.saturation},
+            {"modifications", inst.modifications}
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -1060,6 +1118,44 @@ ModuleID StrToModuleId(const std::string& s) {
     return ModuleID::MODULE_ID_NONE;
 }
 
+
+CharEffectID StrToCharEffectId(const std::string& s) {
+
+    static const std::unordered_map<std::string, CharEffectID> lookup_table = {
+        {"CHAREFFECT_MOVESPEED",       CharEffectID::CHAREFFECT_MOVESPEED},
+        {"CHAREFFECT_POISON",     CharEffectID::CHAREFFECT_POISON},
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return CharEffectID::CHAREFFECT_NONE;
+}
+
+
+ItemModID StrToModId(const std::string& s) {
+
+    static const std::unordered_map<std::string, ItemModID> lookup_table = {
+        {"ITEMMOD_NONE",       ItemModID::ITEMMOD_NONE},
+        {"ITEMMOD_SWIFTNESS",     ItemModID::ITEMMOD_SWIFTNESS},
+        {"ITEMMOD_STRENGTH",         ItemModID::ITEMMOD_STRENGTH},
+        {"ITEMMOD_TOUGHNESS",     ItemModID::ITEMMOD_TOUGHNESS},
+        {"ITEMMOD_NUTRITIOUS",     ItemModID::ITEMMOD_NUTRITIOUS},
+        {"ITEMMOD_MOLDY",     ItemModID::ITEMMOD_MOLDY},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return ItemModID::ITEMMOD_NONE;
+}
+
+
 ItemRarity StrToItemRarity(const std::string& s) {
 
     static const std::unordered_map<std::string, ItemRarity> lookup_table = {
@@ -1199,6 +1295,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("magic_defence").get_to(i.magic_defence);
     j.at("sprite_id").get_to(i.sprite_id);
     j.at("saturation").get_to(i.saturation);
+    j.at("modifications").get_to(i.modifications);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }

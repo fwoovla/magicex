@@ -257,7 +257,9 @@ obj/Debug/fireball.o: src/game/spells/fireball.cpp \
  src/game/spells/../../core/data.h src/game/spells/../../core/spells.h \
  src/game/spells/../../core/events.h \
  src/game/spells/../../core/viewport.h src/game/spells/../../core/input.h \
- src/game/spells/../../core/button.h src/game/spells/../../core/modules.h \
+ src/game/spells/../../core/button.h \
+ src/game/spells/../../core/charactereffectentity\ .h \
+ src/game/spells/../../core/modules.h \
  src/game/spells/../../core/playercharacter.h \
  src/game/spells/../../core/entityspawner.h \
  src/game/spells/../../core/basescene.h \
@@ -596,6 +598,7 @@ src/game/spells/../../core/events.h:
 src/game/spells/../../core/viewport.h:
 src/game/spells/../../core/input.h:
 src/game/spells/../../core/button.h:
+src/game/spells/../../core/charactereffectentity\ .h:
 src/game/spells/../../core/modules.h:
 src/game/spells/../../core/playercharacter.h:
 src/game/spells/../../core/entityspawner.h:

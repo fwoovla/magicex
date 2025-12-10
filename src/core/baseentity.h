@@ -6,7 +6,6 @@
 #include <raymath.h>
 #include "sprite.h"
 
-
 #define DRAW_LIST_SIZE 100
 
 class BaseEntity  {

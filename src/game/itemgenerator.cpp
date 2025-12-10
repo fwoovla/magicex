@@ -5,7 +5,6 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     
     ItemInstanceData new_instance;
 
-    //int uid = GetRandomValue(1000, 1000000000);
     new_instance.instance_id = uid;
     new_instance.item_id = item_id;
 
@@ -22,7 +21,6 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
         new_instance.icon_id = item_id;
         new_instance.level = 1;
 
-        //TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
     }
     return new_instance;
 }
@@ -32,13 +30,13 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     
     ItemInstanceData new_instance;
 
-    //int uid = GetRandomValue(1000, 1000000000);
     new_instance.instance_id = uid;
     new_instance.item_id = item_id;
 
     auto item_it = g_item_data.find(item_id);
     if(item_it != g_item_data.end()) {
         new_instance.item_name = item_it->second.item_name;
+        TraceLog(LOG_INFO, "Generating new Item %s", item_it->second.item_name.c_str());
         new_instance.type = item_it->second.type;
         new_instance.value = item_it->second.value;
         new_instance.clip_size = 0;
@@ -56,8 +54,13 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         if(new_instance.type >= TYPE_HEAD_ARMOR and new_instance.type <= TYPE_HAND_ARMOR ) {
             GenerateRandomArmor(new_instance, loot_level);
         }
-        //TraceLog(LOG_INFO, "item uid %i container id %s", uid, new_instance.container_id.c_str());
+        if(new_instance.type == TYPE_FOOD ) {
+            GenerateRandomFood(new_instance, loot_level);
+            
+            //GenerateRandomWeapon(new_instance, loot_level);
+        }
     }
+    TraceLog(LOG_INFO, "---------------------\n");
     return new_instance;
 }
 
@@ -78,16 +81,25 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     }
 
+    if(loot_level >= 1) {
+        ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_WEPONSTART, ITEMMOD_WEPONEND);
 
+        auto m_itter = g_weapon_mod_data.find(mod_id);
+        if(m_itter != g_weapon_mod_data.end()) {
+            if(m_itter->second.cooldown != -10000) { instance.cooldown += m_itter->second.cooldown; }
+            if(m_itter->second.clip_size != -10000) { instance.clip_size += m_itter->second.clip_size; }
+            if(m_itter->second.damage != -10000) { instance.damage += m_itter->second.damage; }
+
+            instance.modifications.push_back(mod_id);
+            TraceLog(LOG_INFO, "-----weapon mod selected  + %i------", instance.modifications[instance.modifications.size() - 1]);
+        }
+    }
 
     if(instance.item_id == ITEM_ID_WAND or instance.item_id == ITEM_ID_STAFF) {
 
         instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE, SPELL_ID_LIGHTNING);
         TraceLog(LOG_INFO, "-spell selected  + %i", instance.spell_id);
 
-        for(auto spell : g_spell_data) {
-            TraceLog(LOG_INFO, "-id in g_spell ids  %i", spell.second.spell_id);
-        }
         auto s_itter = g_spell_data.find((int)instance.spell_id);
         if(s_itter != g_spell_data.end()) {
             instance.item_name += " of " + s_itter->second.spell_name;
@@ -147,5 +159,42 @@ void GenerateRandomArmor(ItemInstanceData &instance, int loot_level) {
         instance.icon_id = a_itter->second.armor_id;
         TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
         TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+
+
+        if(loot_level >= 1) {
+        ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_ARMORSTART, ITEMMOD_ARMOREND);
+
+        auto m_itter = g_armor_mod_data.find(mod_id);
+        if(m_itter != g_armor_mod_data.end()) {
+            if(m_itter->second.defence != -10000) { instance.defence += m_itter->second.defence; }
+
+            instance.modifications.push_back(mod_id);
+            TraceLog(LOG_INFO, "-----armor mod selected  + %i  defence %i-----", instance.modifications[instance.modifications.size() - 1], instance.defence);
+            }
+        }
     }
 }
+
+
+void GenerateRandomFood(ItemInstanceData &instance, int loot_level) {
+
+    TraceLog(LOG_INFO, "making new food %i", loot_level);
+    auto f_itter = g_food_data.find(instance.item_id);
+
+    if(f_itter != g_food_data.end()) {
+        instance.saturation =  f_itter->second.saturation;
+    }
+
+    ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_FOODSTART, ITEMMOD_FOODEND);
+    TraceLog(LOG_INFO, "selected mod %i", mod_id);
+
+    auto m_itter = g_food_mod_data.find(mod_id);
+    if(m_itter != g_food_mod_data.end()) {
+        
+        if(m_itter->second.saturation != -10000) { instance.saturation += m_itter->second.saturation; }
+
+        instance.modifications.push_back(mod_id);
+        TraceLog(LOG_INFO, "-----food mod selected  + %i  saturation %0.2f-----", instance.modifications[instance.modifications.size() - 1], instance.saturation);
+        }
+
+    }
