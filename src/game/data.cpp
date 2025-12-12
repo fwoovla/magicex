@@ -14,12 +14,19 @@ void LoadGameData() {
     g_item_type_colors[TYPE_LEG_ARMOR] = ARMORCOLOR;
     g_item_type_colors[TYPE_FEET_ARMOR] = ARMORCOLOR;
     g_item_type_colors[TYPE_HAND_ARMOR] = ARMORCOLOR;
-    g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
-    g_item_type_colors[TYPE_RESOURCE] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_RESOURCE] = RESOURCECOLOR;
     g_item_type_colors[TYPE_PLAN] = PLANCOLOR;
     g_item_type_colors[TYPE_SCROLL] = SCROLLCOLOR;
     g_item_type_colors[TYPE_FOOD] = FOODCOLOR;
+
     g_item_type_colors[TYPE_ALL] = DEFAULTITEMCOLOR;
+    g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
+
+    g_rarity_colors[RARITY_COMMON] = COMMONCOLOR;
+    g_rarity_colors[RARITY_UNCOMMON] = UNCOMMONCOLOR;
+    g_rarity_colors[RARITY_RARE] = RARECOLOR;
+    g_rarity_colors[RARITY_VERYRARE] = VERYRARECOLOR;
+    g_rarity_colors[RARITY_ULTRARARE] = ULTRARARECOLOR;
 
 
 
@@ -107,15 +114,28 @@ void LoadGameData() {
             .id = id,
             .value = value,
             .type = type,
-            .item_name = name
-            //.spell_id = spell_id
-            
+            .item_name = name            
         };
 
         TraceLog(LOG_INFO, "Item Data Loaded  id: %i  %s", id, name.c_str());
         g_item_data[(int)id] = new_item;
+        if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
+            type = TYPE_ARMOR;
+        }
+        g_loot_tables[type].push_back(id);
+        g_loot_tables[TYPE_ALL].push_back(id);
+
     }
 
+    TraceLog(LOG_INFO, "-----------------------------");
+    TraceLog(LOG_INFO, "-------LOOT TABLES-----------");
+    TraceLog(LOG_INFO, "-----------------------------");
+    for(auto table : g_loot_tables) {
+        TraceLog(LOG_INFO, "loot table  id: %i", table.first);
+        for(int item = 0; item < table.second.size(); item++) {
+            TraceLog(LOG_INFO, "    in table: %i",  table.second[item]);
+        }
+    }
 //---------------------spell data
     for(int i = 0; i < cj["spell_data"].size(); i++) {
         SpellData new_spell;
@@ -334,10 +354,27 @@ void LoadGameData() {
         new_effect.effect_id = StrToCharEffectId( cj["character_effects"][i]["effect_id"] );
         new_effect.effect_name = cj["character_effects"][i]["effect_name"];
         new_effect.durration = cj["character_effects"][i]["durration"];
+        new_effect.rarity = StrToItemRarity( cj["character_effects"][i]["rarity"]);
                 
-        TraceLog(LOG_INFO, "Charactere effect Data  Loaded  id: %i  %s", new_effect.effect_id, new_effect.effect_name.c_str());
+        TraceLog(LOG_INFO, "Character effect Data  Loaded  id: %i  %s", new_effect.effect_id, new_effect.effect_name.c_str());
         g_char_effect_data[new_effect.effect_id] = new_effect;
     }
+
+    //--------------------cahracter mods
+    for(int i = 0; i < cj["character_modifiers"].size(); i++) {
+
+        CharacterModData new_mod;
+
+        new_mod.mod_id = StrToCharModId( cj["character_modifiers"][i]["mod_id"] );
+        new_mod.mod_name = cj["character_modifiers"][i]["mod_name"];
+        new_mod.health = cj["character_modifiers"][i]["health"];
+        new_mod.speed = cj["character_modifiers"][i]["speed"];
+        new_mod.rarity = StrToItemRarity( cj["character_modifiers"][i]["rarity"]);
+
+        TraceLog(LOG_INFO, "Character Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
+        g_char_mod_data[new_mod.mod_id] = new_mod;
+    }
+
 
 
     //--------------------food mods
@@ -345,9 +382,10 @@ void LoadGameData() {
 
         FoodModData new_mod;
 
-        new_mod.mod_id = StrToModId( cj["food_modifiers"][i]["mod_id"] );
+        new_mod.mod_id = StrToItemModId( cj["food_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["food_modifiers"][i]["mod_name"];
         new_mod.saturation = cj["food_modifiers"][i]["saturation"];
+        new_mod.rarity = StrToItemRarity( cj["food_modifiers"][i]["rarity"]);
                 
         TraceLog(LOG_INFO, "FOOD Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
         g_food_mod_data[new_mod.mod_id] = new_mod;
@@ -359,9 +397,10 @@ void LoadGameData() {
 
         ArmorModData new_mod;
 
-        new_mod.mod_id = StrToModId( cj["armor_modifiers"][i]["mod_id"] );
+        new_mod.mod_id = StrToItemModId( cj["armor_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["armor_modifiers"][i]["mod_name"];
         new_mod.defence = cj["armor_modifiers"][i]["defence"];
+        new_mod.rarity = StrToItemRarity( cj["armor_modifiers"][i]["rarity"]);
                 
         TraceLog(LOG_INFO, "ARMOR Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
         g_armor_mod_data[new_mod.mod_id] = new_mod;
@@ -372,11 +411,12 @@ void LoadGameData() {
 
         WeaponModData new_mod;
 
-        new_mod.mod_id = StrToModId( cj["weapon_modifiers"][i]["mod_id"] );
+        new_mod.mod_id = StrToItemModId( cj["weapon_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["weapon_modifiers"][i]["mod_name"];
         new_mod.cooldown = cj["weapon_modifiers"][i]["cooldown"];
         new_mod.clip_size = cj["weapon_modifiers"][i]["clip_size"];
         new_mod.damage = cj["weapon_modifiers"][i]["damage"];
+        new_mod.rarity = StrToItemRarity( cj["weapon_modifiers"][i]["rarity"]);
                 
         TraceLog(LOG_INFO, "WEAPON Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
         g_weapon_mod_data[new_mod.mod_id] = new_mod;
@@ -384,7 +424,7 @@ void LoadGameData() {
 
 
     //--------------------loot tables
-    for(int i = 0; i < cj["loot_tables"].size(); i++) {
+/*     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
 
         std::vector<int> new_table;
@@ -396,7 +436,7 @@ void LoadGameData() {
         std::string name = cj["loot_tables"][i]["table_name"];
 
         g_loot_tables.push_back(new_table);
-    }
+    } */
 
     cfile.close();
  
@@ -420,43 +460,43 @@ void SaveGame(LevelData &level_data) {
     }
 
     json j;
-
-    j["health"] = g_player_data.health;
-    j["exp"] = g_player_data.exp;
-    j["base_speed"] = g_player_data.base_speed;
-    j["sprite_sheet_id"] = g_player_data.sprite_sheet_id;
-    j["portrait_id"] = g_player_data.portrait_id;
-    j["name"] = g_player_data.name;
-    j["class_name"] = g_player_data.class_name;
+    int uid = g_current_player->uid;
+    j["health"] = g_character_data[uid].health;
+    j["exp"] = g_character_data[uid].exp;
+    j["base_speed"] = g_character_data[uid].base_speed;
+    j["sprite_sheet_id"] = g_character_data[uid].sprite_sheet_id;
+    j["portrait_id"] = g_character_data[uid].portrait_id;
+    j["name"] = g_character_data[uid].name;
+    j["class_name"] = g_character_data[uid].class_name;
 
     //j["inventory"] = {};
-    for(int i = 0; i < g_player_data.inventory.size(); i++) {
-        j["inventory"][i] = g_player_data.inventory[i];
+    for(int i = 0; i < g_character_data[uid].inventory.size(); i++) {
+        j["inventory"][i] = g_character_data[uid].inventory[i];
     }
-    for(int i = 0; i < g_player_data.hotbar.size(); i++) {
-        j["hotbar"][i] = g_player_data.hotbar[i];
+    for(int i = 0; i < g_character_data[uid].hotbar.size(); i++) {
+        j["hotbar"][i] = g_character_data[uid].hotbar[i];
     }
 
-    for(int i = 0; i < g_player_data.primary.size(); i++) {
-        j["primary"][i] = g_player_data.primary[i];
+    for(int i = 0; i < g_character_data[uid].primary.size(); i++) {
+        j["primary"][i] = g_character_data[uid].primary[i];
     }
-    for(int i = 0; i < g_player_data.secondary.size(); i++) {
-        j["secondary"][i] = g_player_data.secondary[i];
+    for(int i = 0; i < g_character_data[uid].secondary.size(); i++) {
+        j["secondary"][i] = g_character_data[uid].secondary[i];
     }
-    for(int i = 0; i < g_player_data.head.size(); i++) {
-        j["head"][i] = g_player_data.head[i];
+    for(int i = 0; i < g_character_data[uid].head.size(); i++) {
+        j["head"][i] = g_character_data[uid].head[i];
     }
-    for(int i = 0; i < g_player_data.body.size(); i++) {
-        j["body"][i] = g_player_data.body[i];
+    for(int i = 0; i < g_character_data[uid].body.size(); i++) {
+        j["body"][i] = g_character_data[uid].body[i];
     }
-    for(int i = 0; i < g_player_data.legs.size(); i++) {
-        j["legs"][i] = g_player_data.legs[i];
+    for(int i = 0; i < g_character_data[uid].legs.size(); i++) {
+        j["legs"][i] = g_character_data[uid].legs[i];
     }
-    for(int i = 0; i < g_player_data.feet.size(); i++) {
-        j["feet"][i] = g_player_data.feet[i];
+    for(int i = 0; i < g_character_data[uid].feet.size(); i++) {
+        j["feet"][i] = g_character_data[uid].feet[i];
     }
-    for(int i = 0; i < g_player_data.hands.size(); i++) {
-        j["hands"][i] = g_player_data.hands[i];
+    for(int i = 0; i < g_character_data[uid].hands.size(); i++) {
+        j["hands"][i] = g_character_data[uid].hands[i];
     }
 
     json json_item_instances = json::array();
@@ -537,27 +577,29 @@ void SaveGame(LevelData &level_data) {
 }
 
 
-void LoadGame() {
+int LoadGame() {
     TraceLog(LOG_INFO, "LOADING SAVED DATA....save.json");
+
+    int uid = GetRandomValue(10000, 1000000);
 
     g_game_data.using_saved_data = true;
 
     std::ifstream file(save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "CANNOT OPEN FILE");
-        return;
+        return uid;
     }
     
     json j;
     file>>j;
 
-    g_player_data.health = j["health"];
-    g_player_data.exp = j["exp"];
-    g_player_data.base_speed = j["base_speed"];
-    g_player_data.sprite_sheet_id = j["sprite_sheet_id"];
-    g_player_data.portrait_id = j["portrait_id"];
-    g_player_data.name = j["name"];
-    g_player_data.class_name = j["class_name"];
+    g_character_data[uid].health = j["health"];
+    g_character_data[uid].exp = j["exp"];
+    g_character_data[uid].base_speed = j["base_speed"];
+    g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
+    g_character_data[uid].portrait_id = j["portrait_id"];
+    g_character_data[uid].name = j["name"];
+    g_character_data[uid].class_name = j["class_name"];
 
     std::vector<int> inv;
     for(int i = 0; i < j["inventory"].size(); i++) {
@@ -606,16 +648,16 @@ void LoadGame() {
 
 
 
-    g_player_data.inventory = inv;
-    g_player_data.hotbar = hot;
+    g_character_data[uid].inventory = inv;
+    g_character_data[uid].hotbar = hot;
 
-    g_player_data.primary = p;
-    g_player_data.secondary = s;
-    g_player_data.head = hd;
-    g_player_data.body = bd;
-    g_player_data.legs = lg;
-    g_player_data.feet = ft;
-    g_player_data.hands = hs;
+    g_character_data[uid].primary = p;
+    g_character_data[uid].secondary = s;
+    g_character_data[uid].head = hd;
+    g_character_data[uid].body = bd;
+    g_character_data[uid].legs = lg;
+    g_character_data[uid].feet = ft;
+    g_character_data[uid].hands = hs;
 
 
     g_item_instances.clear();
@@ -638,6 +680,8 @@ void LoadGame() {
     int num_maps = load_ldtk_maps(ldtk_map_path);
 
     TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
+
+    return uid;
 
 }
 
@@ -743,10 +787,28 @@ void LoadLevelData(LevelData &level_data) {
                         new_container.loot_level = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
 
                         for(int t = 0; t < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list.size(); t++) {
-                            int lt_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list[t];
-                            for(int loot = 0; loot < g_loot_tables[lt_id].size(); loot++) {
-                                new_container.item_list.push_back(g_loot_tables[lt_id][loot]);
-                                TraceLog(LOG_INFO, "item added to container %i", g_loot_tables[lt_id][loot]);
+                            ItemType type = (ItemType)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list[t];
+
+                            auto l_itter = g_loot_tables.find(type);
+                            if(l_itter != g_loot_tables.end()) {
+                                if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
+
+                                    for(int loot = 0; loot < l_itter->second.size(); loot++) {
+                                        new_container.item_list.push_back(l_itter->second[loot]);
+                                        TraceLog(LOG_INFO, "item added to container %i", l_itter->second[loot]);
+                                    }
+                                }
+                                else {
+                                    int num_items = GetRandomValue(0, 5 + (new_container.loot_level * 5));
+                                    TraceLog(LOG_INFO, "container will have %i items", num_items);
+
+                                    for(int item = 0; item < num_items; item++) {
+                                        int index = GetRandomValue( 0, l_itter->second.size());
+                                        int id = l_itter->second[index];
+                                        new_container.item_list.push_back(id);
+                                        TraceLog(LOG_INFO, "     item added %i ", id);
+                                    }
+                                }
                             }
                         }
                         //TraceLog(LOG_INFO, "PERM CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
@@ -966,7 +1028,7 @@ void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int>
 }
 
 
-void InstancePlayerItem(ItemID item_id) {
+void InstanceCharacterItem(ItemID item_id, int character_uid) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
     
@@ -990,19 +1052,19 @@ void InstancePlayerItem(ItemID item_id) {
         g_item_instances[uid] = new_instance;
 
         int found_spot = -1;
-        for(int slot = 0; slot < g_player_data.inventory.size(); slot++) {
-            if(g_player_data.inventory[slot] == -1) {
+        for(int slot = 0; slot < g_character_data[character_uid].inventory.size(); slot++) {
+            if(g_character_data[character_uid].inventory[slot] == -1) {
                 found_spot = slot;
                 break;
             }
         }
 
         if(found_spot != -1) {
-            g_player_data.inventory[found_spot] = uid;
+            g_character_data[character_uid].inventory[found_spot] = uid;
             //TraceLog(LOG_INFO, "item id %i  item uid %i  spot %i",item_id, uid, found_spot);
         }
         else {
-            g_player_data.inventory.push_back(uid);
+            g_character_data[character_uid].inventory.push_back(uid);
             //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
         }
 
@@ -1010,39 +1072,6 @@ void InstancePlayerItem(ItemID item_id) {
         
     }
 }
-
-void GenerateContainerItemList(int lti, std::vector<int> &list) {
-
-    //TraceLog(LOG_INFO, "GENERATING ITEM INSTANCES ");
-
-    int max = g_loot_tables[lti].size();
-
-    for(int i = 0; i < max; i++) {        
-
-        int uid = GetRandomValue(1000, 100000000);
-
-        ItemInstanceData new_instance;
-        new_instance.instance_id = uid;
-        new_instance.item_id = (ItemID)g_loot_tables[lti][i];
-
-        auto item_it = g_item_data.find(g_loot_tables[lti][i]);
-        if(item_it != g_item_data.end()) {
-
-            new_instance.item_name = item_it->second.item_name; 
-            new_instance.type = item_it->second.type;
-            new_instance.value = item_it->second.value;
-            new_instance.clip_size = 0;
-            new_instance.ammo_count = 0;
-            new_instance.spell_id = item_it->second.spell_id;
-            
-            g_item_instances[uid] = new_instance;
-            //TraceLog(LOG_INFO, "----item uid %i   g_item_instance size %i", uid, g_item_instances.size());
-            list.push_back(uid);
-        }
- 
-    }
-}
-
 
 
 PlanID StrToPlanId(const std::string& s) {
@@ -1061,25 +1090,6 @@ PlanID StrToPlanId(const std::string& s) {
     return PlanID::PLAN_ID_NONE;
 }
 
-
-
-/* ItemTypeColors IdToItemTypeColor(const std::string& s) {
-    static const std::unordered_map<std::string, ItemTypeColors> lookup_table = {
-        {"TYPE_COLOR_ARMOR",      ItemTypeColors::TYPE_COLOR_ARMOR},
-        {"TYPE_COLOR_DEFAULT",    ItemTypeColors::TYPE_COLOR_DEFAULT},
-        {"TYPE_COLOR_PLAN",       ItemTypeColors::TYPE_COLOR_PLAN},
-        {"TYPE_COLOR_SCROLL",     ItemTypeColors::TYPE_COLOR_SCROLL},
-        {"TYPE_COLOR_WEAPON",     ItemTypeColors::TYPE_COLOR_WEAPON}
-
-    };
-
-    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
-        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
-        return it->second;
-    }
-    //TraceLog(LOG_INFO, "Spell ID not found ");
-    return ItemTypeColors::TYPE_COLOR_DEFAULT;
-} */
 
 
 RecipieID StrToRecipieId(const std::string& s) {
@@ -1122,8 +1132,17 @@ ModuleID StrToModuleId(const std::string& s) {
 CharEffectID StrToCharEffectId(const std::string& s) {
 
     static const std::unordered_map<std::string, CharEffectID> lookup_table = {
-        {"CHAREFFECT_MOVESPEED",       CharEffectID::CHAREFFECT_MOVESPEED},
-        {"CHAREFFECT_POISON",     CharEffectID::CHAREFFECT_POISON},
+        {"CHAREFFECT_SPEED1",       CharEffectID::CHAREFFECT_SPEED1},
+        {"CHAREFFECT_SPEED2",       CharEffectID::CHAREFFECT_SPEED2},
+        {"CHAREFFECT_SPEED3",       CharEffectID::CHAREFFECT_SPEED3},
+        {"CHAREFFECT_SPEED4",       CharEffectID::CHAREFFECT_SPEED4},
+        {"CHAREFFECT_SPEED5",       CharEffectID::CHAREFFECT_SPEED5},
+
+        {"CHAREFFECT_POISON1",     CharEffectID::CHAREFFECT_POISON1},
+        {"CHAREFFECT_POISON2",     CharEffectID::CHAREFFECT_POISON2},
+        {"CHAREFFECT_POISON3",     CharEffectID::CHAREFFECT_POISON3},
+        {"CHAREFFECT_POISON4",     CharEffectID::CHAREFFECT_POISON4},
+        {"CHAREFFECT_POISON5",     CharEffectID::CHAREFFECT_POISON5},
 
     };
 
@@ -1135,15 +1154,58 @@ CharEffectID StrToCharEffectId(const std::string& s) {
     return CharEffectID::CHAREFFECT_NONE;
 }
 
+CharModID StrToCharModId(const std::string& s) {
 
-ItemModID StrToModId(const std::string& s) {
+    static const std::unordered_map<std::string, CharModID> lookup_table = {
+        {"CHARMOD_HEALTH1",       CharModID::CHARMOD_HEALTH1},
+        {"CHARMOD_HEALTH2",       CharModID::CHARMOD_HEALTH2},
+        {"CHARMOD_HEALTH3",       CharModID::CHARMOD_HEALTH3},
+        {"CHARMOD_HEALTH4",       CharModID::CHARMOD_HEALTH4},
+        {"CHARMOD_HEALTH5",       CharModID::CHARMOD_HEALTH5},
+
+        {"CHARMOD_SPEED1",     CharModID::CHARMOD_SPEED1},
+        {"CHARMOD_SPEED2",     CharModID::CHARMOD_SPEED2},
+        {"CHARMOD_SPEED3",     CharModID::CHARMOD_SPEED3},
+        {"CHARMOD_SPEED4",     CharModID::CHARMOD_SPEED4},
+        {"CHARMOD_SPEED5",     CharModID::CHARMOD_SPEED5},
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "Spell ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return CharModID::CHARMOD_NONE;
+
+}
+
+ItemModID StrToItemModId(const std::string& s) {
 
     static const std::unordered_map<std::string, ItemModID> lookup_table = {
         {"ITEMMOD_NONE",       ItemModID::ITEMMOD_NONE},
-        {"ITEMMOD_SWIFTNESS",     ItemModID::ITEMMOD_SWIFTNESS},
-        {"ITEMMOD_STRENGTH",         ItemModID::ITEMMOD_STRENGTH},
-        {"ITEMMOD_TOUGHNESS",     ItemModID::ITEMMOD_TOUGHNESS},
+        {"ITEMMOD_SWIFTNESS1",     ItemModID::ITEMMOD_SWIFTNESS1},
+        {"ITEMMOD_SWIFTNESS2",     ItemModID::ITEMMOD_SWIFTNESS2},
+        {"ITEMMOD_SWIFTNESS3",     ItemModID::ITEMMOD_SWIFTNESS3},
+        {"ITEMMOD_SWIFTNESS4",     ItemModID::ITEMMOD_SWIFTNESS4},
+        {"ITEMMOD_SWIFTNESS5",     ItemModID::ITEMMOD_SWIFTNESS5},
+
+
+        {"ITEMMOD_DAMAGE1",         ItemModID::ITEMMOD_DAMAGE1},
+        {"ITEMMOD_DAMAGE2",         ItemModID::ITEMMOD_DAMAGE2},
+        {"ITEMMOD_DAMAGE3",         ItemModID::ITEMMOD_DAMAGE3},
+        {"ITEMMOD_DAMAGE4",         ItemModID::ITEMMOD_DAMAGE4},
+        {"ITEMMOD_DAMAGE4",         ItemModID::ITEMMOD_DAMAGE4},
+        
+
+        {"ITEMMOD_TOUGHNESS1",     ItemModID::ITEMMOD_TOUGHNESS1},
+        {"ITEMMOD_TOUGHNESS2",     ItemModID::ITEMMOD_TOUGHNESS2},
+        {"ITEMMOD_TOUGHNESS3",     ItemModID::ITEMMOD_TOUGHNESS3},
+        {"ITEMMOD_TOUGHNESS4",     ItemModID::ITEMMOD_TOUGHNESS4},
+        {"ITEMMOD_TOUGHNESS5",     ItemModID::ITEMMOD_TOUGHNESS5},
+
         {"ITEMMOD_NUTRITIOUS",     ItemModID::ITEMMOD_NUTRITIOUS},
+
         {"ITEMMOD_MOLDY",     ItemModID::ITEMMOD_MOLDY},
     };
 
@@ -1189,6 +1251,7 @@ ItemType StrToItemType(const std::string& s) {
         {"TYPE_PLAN",    ItemType::TYPE_PLAN},
         {"TYPE_SCROLL",    ItemType::TYPE_SCROLL},
         {"TYPE_FOOD",    ItemType::TYPE_FOOD},
+        {"TYPE_ARMOR",    ItemType::TYPE_ARMOR},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1232,7 +1295,7 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
         {"ITEM_ID_MUSHROOM_JUICE",     ItemID::ITEM_ID_MUSHROOM_JUICE},
 
-
+        {"ITEM_ID_HELMET",    ItemID::ITEM_ID_HELMET},
         {"ITEM_ID_BOOTS",    ItemID::ITEM_ID_BOOTS},
         {"ITEM_ID_BODY",     ItemID::ITEM_ID_BODY},
         {"ITEM_ID_GLOVES",   ItemID::ITEM_ID_GLOVES},
@@ -1247,10 +1310,22 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
         {"ITEM_ID_BREAD",           ItemID::ITEM_ID_BREAD},
         {"ITEM_ID_MEAT",            ItemID::ITEM_ID_MEAT},
+
+
         {"ITEM_ID_RING",            ItemID::ITEM_ID_RING},
+
+
         {"ITEM_ID_STOVE_PLAN",            ItemID::ITEM_ID_STOVE_PLAN},
         {"ITEM_ID_MUSHROOMPRESS_PLAN",    ItemID::ITEM_ID_MUSHROOMPRESS_PLAN},
+
+
+        {"ITEM_ID_HAMMER",    ItemID::ITEM_ID_HAMMER},
+        {"ITEM_ID_SAW",    ItemID::ITEM_ID_SAW},
+        {"ITEM_ID_SHOVEL",    ItemID::ITEM_ID_SHOVEL},
+        {"ITEM_ID_TONGS",    ItemID::ITEM_ID_TONGS},
+        {"ITEM_ID_ANVIL",    ItemID::ITEM_ID_ANVIL},
     };
+
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
         return it->second;

@@ -20,21 +20,6 @@
 
 using json = nlohmann::json;
 
-inline std::string unit_names[10] = {
-    "blerfy",
-    "toyf",
-    "margolot",
-    "dr farts",
-    "muffin man",
-    "doof",
-    "scar",
-    "diffny",
-    "bammabi",
-    "skort mc dort"
-};
-
-
-
 enum ItemRarity {
     RARITY_COMMON = 50,
     RARITY_UNCOMMON = 30,
@@ -43,8 +28,10 @@ enum ItemRarity {
     RARITY_ULTRARARE = 1,
 };
 
+
 enum ItemType {
     TYPE_WEAPON,
+    TYPE_ARMOR,
     TYPE_HEAD_ARMOR,
     TYPE_BODY_ARMOR,
     TYPE_LEG_ARMOR,
@@ -59,11 +46,13 @@ enum ItemType {
 };
 
 extern Color g_item_type_colors[TYPE_ALL];
+extern std::unordered_map<int, Color>g_rarity_colors;
 
 struct FoodModData {
     ItemModID mod_id;
     std::string mod_name;
     float saturation;
+    int rarity;
 };
 
 extern std::unordered_map<int, FoodModData> g_food_mod_data;
@@ -72,6 +61,7 @@ struct ArmorModData {
     ItemModID mod_id;
     std::string mod_name;
     int defence;
+    int rarity;
 };
 
 extern std::unordered_map<int, ArmorModData> g_armor_mod_data;
@@ -84,6 +74,7 @@ struct WeaponModData {
     float cooldown;
     int clip_size;
     int damage;
+    int rarity;
 };
 
 extern std::unordered_map<int, WeaponModData> g_weapon_mod_data;
@@ -94,6 +85,7 @@ struct FoodData {
     std::string food_name;
     SpellID spell_id;
     float saturation;
+    int rarity;
 };
 
 extern std::unordered_map<int, FoodData> g_food_data;
@@ -103,22 +95,34 @@ struct CharacterEffectData {
     CharEffectID effect_id;
     std::string effect_name;
     float durration;
+    int rarity;
 };
 
 extern std::unordered_map<int, CharacterEffectData> g_char_effect_data;
+
+struct CharacterModData {
+    CharModID mod_id;
+    std::string mod_name;
+    int health;
+    float speed;
+    float durration;
+    int rarity;
+};
+
+extern std::unordered_map<int, CharacterModData> g_char_mod_data;
 
 struct ItemData {
     ItemID id;
     int value;
     ItemType type;
     std::string item_name;
-    SpellID spell_id;
 };
 
 extern std::unordered_map<int, ItemData> g_item_data;
 
 struct ItemInstanceData {
     std::vector<ItemModID> modifications;
+    std::vector<CharModID> char_mods;
     std::string container_id;
     ItemID item_id;
     int instance_id;
@@ -136,6 +140,7 @@ struct ItemInstanceData {
     int defence;
     int magic_defence;
     float saturation;
+    int rarity;
 };
 
 extern std::unordered_map<int, ItemInstanceData> g_item_instances;
@@ -182,6 +187,7 @@ extern std::unordered_map<int, PlanData> g_plan_data;
 
 
 
+
 struct PlayerData {
     int health;
     int exp;
@@ -204,7 +210,7 @@ struct PlayerData {
 
 extern std::unordered_map<int, PlayerData> g_class_data;
 
-extern PlayerData g_player_data;
+//extern PlayerData g_player_data;
 
 extern PlayerData g_save_data;
 
@@ -277,13 +283,13 @@ struct LevelData {
 
 };
 
-extern std::vector<std::vector<int>> g_loot_tables;
+extern std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
 
 void LoadGameData();
 
 void SaveGame(LevelData &level_data);
 
-void LoadGame();
+int LoadGame();
 
 
 void ClearLevelData(LevelData &level_data);
@@ -301,18 +307,17 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
 
 void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id, int loot_level);
 
-void InstancePlayerItem(ItemID item_id);
-
-void GenerateContainerItemList(int lti, std::vector<int> &list);
+void InstanceCharacterItem(ItemID item_id, int character_uid);
 
 
 
 
-//Color StrToItemTypeColor(const std::string& s);
 
 CharEffectID StrToCharEffectId(const std::string& s);
 
-ItemModID StrToModId(const std::string& s);
+CharModID StrToCharModId(const std::string& s);
+
+ItemModID StrToItemModId(const std::string& s);
 
 ItemRarity StrToItemRarity(const std::string& s);
 
@@ -340,253 +345,3 @@ void YSortEntities(LevelData & _level_data);
 
 
 
-/* 
-
-        {
-            "item_name": "MAGICMISSLE_WAND 1",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_WAND 2",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_WAND 3",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 1",
-            "item_id":"ITEM_ID_FIREBALL_WAND_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 2",
-            "item_id":"ITEM_ID_FIREBALL_WAND_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_WAND 3",
-            "item_id":"ITEM_ID_FIREBALL_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 1",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 2",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_WAND 3",
-            "item_id":"ITEM_ID_LIGHTNING_WAND_3",
-            "value":0,
-            "item_type":0
-        },
-
-
-        {
-            "item_name": "MAGICMISSLE_STAFF 1",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_STAFF 2",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "MAGICMISSLE_STAFF 3",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 1",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 2",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "FIREBALL_STAFF 3",
-            "item_id":"ITEM_ID_FIREBALL_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 1",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_1",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 2",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_2",
-            "value":0,
-            "item_type":0
-        },
-        {
-            "item_name": "LIGHTNING_STAFF 3",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF_3",
-            "value":0,
-            "item_type":0
-        },
-
-
-
-
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_1",
-            "weapon_name": "MAGICMISSLE WAND 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_2",
-            "weapon_name": "MAGICMISSLE WAND 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_WAND_3",
-            "weapon_name": "MAGICMISSLE WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_1",
-            "weapon_name": "FIREBALL WAND 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_2",
-            "weapon_name": "FIREBALL WAND 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_WAND_3",
-            "weapon_name": "FIREBALL WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "clip_size":10
-        },
-
-        
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_1",
-            "weapon_name": "LIGHTNING WAND 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_2",
-            "weapon_name": "LIGHTNING WAND 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_WAND_3",
-            "weapon_name": "LIGHTNING WAND 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "clip_size":10
-        },
-
-
-
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_1",
-            "weapon_name": "MAGICMISSLE STAFF 1",
-            "cooldown": 0.1,
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_2",
-            "weapon_name": "MAGICMISSLE STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_MAGICMISSLE_STAFF_3",
-            "weapon_name": "MAGICMISSLE STAFF 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_1",
-            "weapon_name": "FIREBALL STAFF 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_2",
-            "weapon_name": "FIREBALL STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_FIREBALL_STAFF_3",
-            "weapon_name": "FIREBALL STAFF 3",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "clip_size":10
-        },
-
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_1",
-            "weapon_name": "LIGHTNING STAFF 1",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_2",
-            "weapon_name": "LIGHTNING STAFF 2",
-            "cooldown": 0.4,
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "clip_size":10
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNING_STAFF_3",
-            "weapon_name": "LIGHTNING STAFF 3",
-            "cooldown": 0.01,
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "clip_size":10
-        } */

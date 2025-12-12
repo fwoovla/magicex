@@ -252,6 +252,10 @@ class CharacterMenu : public BaseUILayer {
     Vector2 ipo;
     ItemGrid *inventory_grid;
 
+
+    Vector2 spo; 
+    Label speed_label;
+    Label health_label;
 };
 
 class TitleUILayer : public BaseUILayer {

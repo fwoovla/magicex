@@ -26,10 +26,10 @@ StagingUILayer::StagingUILayer() {
     };
 
     LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_WOOD_LARGE], cpo);
-    LoadSpriteCentered(character_sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(character_sprite, g_sprite_sheets[SPRITE_NERD], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {3,3});
 
-    CreateLabel(character_label,{cpo.x, cpo.y+25},20, RAYWHITE, g_player_data.class_name.c_str());
+    CreateLabel(character_label,{cpo.x, cpo.y+25},20, RAYWHITE, g_class_data[SPRITE_NERD].class_name.c_str());
     CreateLabel(character_stat_label,{20, cpo.y+85},14, RAYWHITE, "");
     
     
@@ -47,7 +47,7 @@ StagingUILayer::StagingUILayer() {
     select_chatacter_button.default_color = DARKGREEN;
     select_chatacter_button.text_size = 20/g_scale; 
 
-    CreateLabel(select_character_label,{spo.x, spo.y+25},18, RAYWHITE, g_player_data.class_name.c_str());
+    CreateLabel(select_character_label,{spo.x, spo.y+25},18, RAYWHITE, g_class_data[SPRITE_NERD].class_name.c_str());
 
     CreateButton(select_character_left_button, {spo.x - 20 - select_character_panel_sprite.size.x/2 , spo.y}, {30/g_scale , 100/g_scale}, YELLOW, "<");
     select_character_left_button.default_color = DARKYELLOW;
@@ -195,7 +195,7 @@ void StagingUILayer::UpdateCharacterInfo() {
         }        
     }
 
-    character_stat_label.text = TextFormat("health: %i\nspeed: %0.2f\nexp: %i", g_player_data.health, g_player_data.base_speed, g_player_data.exp);
+    character_stat_label.text = TextFormat("health: %i\nspeed: %0.2f\nexp: %i", g_class_data[select_index].health, g_class_data[select_index].base_speed, g_class_data[select_index].exp);
 }
 
 void StagingUILayer::DrawSelectPanel() {

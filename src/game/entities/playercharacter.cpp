@@ -11,15 +11,19 @@ enum AnimationState {
     RUN = 2,
 };
 
-PlayerCharacter::PlayerCharacter(Vector2 _position): AnimatedSpriteEntity() {
+PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity() {
 
     position = _position;
+    uid = _uid;
     rotation = 0.0f;
     velocity = {0,0};
-    LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
+    
+    LoadSpriteCentered(sprite, g_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
+    //LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
 
     int _id = ITEM_ID_ERROR;
-    auto item_it = g_item_instances.find(g_player_data.primary[0]);
+    auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
+    //auto item_it = g_item_instances.find(g_player_data.primary[0]);
     if(item_it != g_item_instances.end()) {
         _id = item_it->second.sprite_id;
         LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
@@ -135,7 +139,7 @@ void PlayerCharacter::CheckInput() {
     
     input_dir = Vector2Normalize(input_dir);
 
-    float speed = g_player_data.base_speed;
+    float speed = g_character_data[uid].base_speed;
 
     if(g_input.key_sprint) {
         speed = speed + (speed * 0.8f);
@@ -157,10 +161,10 @@ void PlayerCharacter::CheckInput() {
 
     if(g_input.key_switch_weapon and can_switch == true) {
         TraceLog(LOG_INFO, "switching primary weapon");
-        int temp_primary = g_player_data.primary[0];
-        g_player_data.primary[0] = g_player_data.secondary[0];
-        g_player_data.secondary[0] = temp_primary;
-        Equip(g_player_data.primary[0]);
+        int temp_primary = g_character_data[uid].primary[0];
+        g_character_data[uid].primary[0] = g_character_data[uid].secondary[0];
+        g_character_data[uid].secondary[0] = temp_primary;
+        Equip(g_character_data[uid].primary[0]);
         can_switch = false;
     }
     if(!g_input.key_switch_weapon) {
@@ -170,7 +174,7 @@ void PlayerCharacter::CheckInput() {
     if(g_input.mouse_left_down and can_shoot) {
 
         int item_id = -1;
-        auto item_it = g_item_instances.find(g_player_data.primary[0]);
+        auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
         if(item_it != g_item_instances.end()) {
             item_id = item_it->second.item_id;
         }
@@ -202,23 +206,27 @@ bool PlayerCharacter::CanEquip(int item_id) {
 void PlayerCharacter::Equip(int item_id) {
     TraceLog(LOG_INFO, "trying to equip primary weapon %i", item_id);
 
-    int _id = ITEM_ID_ERROR;
+    int _id = ITEM_ID_NONE;
 
     auto item_it = g_item_instances.find(item_id);
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            if(g_player_data.primary[0] == item_id) {
+            if(g_character_data[uid].primary[0] == item_id) {
                 if(item_id != -1) {
-                    
-                    auto item_it = g_item_instances.find(item_id);
-                    if(item_it != g_item_instances.end()) {
-                        _id = item_it->second.sprite_id;
-                        TraceLog(LOG_INFO, "equiping primary weapon %i sp_id %i", item_id, _id);
-                    }
+                    _id = item_it->second.sprite_id;
+                    TraceLog(LOG_INFO, "equiping primary weapon %i sp_id %i", item_id, _id);
                 }
             }
+        }
 
+        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+            auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
+            if(m_itter != g_char_mod_data.end()) {
+                TraceLog(LOG_INFO, "character mod %i %s", m_itter->second.mod_id, m_itter->second.mod_name.c_str());
+                if(m_itter->second.health != -1000){g_character_data[uid].health += m_itter->second.health;}
+                if(m_itter->second.speed != -1000){g_character_data[uid].base_speed += m_itter->second.speed;}
+            }
         }
     }
     
@@ -234,11 +242,26 @@ bool PlayerCharacter::CanUnEquip(int item_id) {
 
 
 void PlayerCharacter::UnEquip(int item_id) {
-    if(g_item_data[item_id].type == TYPE_WEAPON) {
-        if(g_player_data.primary[0] == item_id) {
-            TraceLog(LOG_INFO, "unequiping primary weapon %i", item_id);
-            Texture2D t;
-            LoadSpriteCentered(weapon_sprite, t, position);
+
+    auto item_it = g_item_instances.find(item_id);
+
+    if(item_it != g_item_instances.end()) {
+        if(item_it->second.type == TYPE_WEAPON) {
+            if(g_character_data[uid].primary[0] == item_id) {
+                TraceLog(LOG_INFO, "unequiping primary weapon %i", item_id);
+                g_character_data[uid].primary[0] = -1;
+                Texture2D t;
+                LoadSpriteCentered(weapon_sprite, t, position);
+            }
+        }
+
+        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+            auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
+            if(m_itter != g_char_mod_data.end()) {
+                TraceLog(LOG_INFO, "character mod %i %s", m_itter->second.mod_id, m_itter->second.mod_name.c_str());
+                if(m_itter->second.health != -1000){g_character_data[uid].health -= m_itter->second.health;}
+                if(m_itter->second.speed != -1000){g_character_data[uid].base_speed -= m_itter->second.speed;}
+            }
         }
     }
 }

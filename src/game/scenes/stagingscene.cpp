@@ -77,8 +77,9 @@ void StagingScene::OnQuitPressed() {
 
 void StagingScene::OnCharacterSelected() {
     TraceLog(LOG_INFO, "CHARACTER SELECTED");
-    g_player_data = g_class_data[ui_layer->select_index];
-    g_current_player = new PlayerCharacter({0,0});
+    int uid = GetRandomValue(10000, 10000000);
+    g_character_data[uid] = g_class_data[ui_layer->select_index];
+    g_current_player = new PlayerCharacter({0,0}, uid);
 }
 
 

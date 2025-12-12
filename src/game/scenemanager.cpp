@@ -75,6 +75,10 @@ void SceneManager::Init() {
 void SceneManager::CleanUp() {
 
     TraceLog(LOG_INFO, "cleaning up scene manager");
+    if(g_game_data.is_in_sub_map) {
+        g_sub_scene.reset();
+    }
+    g_current_scene.reset();
 }
 
 

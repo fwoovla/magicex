@@ -1,12 +1,20 @@
 #pragma once
 #include <raylib.h>
 
-inline const Color WEAPONCOLOR = {.r = 172, .g = 26, .b = 118, .a = 255};
-inline const Color ARMORCOLOR = {.r = 65, .g = 182, .b = 26, .a = 255};
-inline const Color SCROLLCOLOR = {.r = 182, .g = 159, .b = 26, .a = 255};
-inline const Color PLANCOLOR = {.r = 150, .g = 182, .b = 26, .a = 255};
-inline const Color FOODCOLOR = {.r = 20, .g = 200, .b = 126, .a = 255};
+inline const Color WEAPONCOLOR = {.r = 219, .g = 113, .b = 255, .a = 255};
+inline const Color ARMORCOLOR = {.r = 141, .g = 255, .b = 26, .a = 255};
+inline const Color SCROLLCOLOR = {.r = 182, .g = 159, .b = 113, .a = 255};
+inline const Color PLANCOLOR = {.r = 255, .g = 250, .b = 113, .a = 255};
+inline const Color FOODCOLOR = {.r = 164, .g = 130, .b = 251, .a = 255};
+inline const Color RESOURCECOLOR = {.r = 20, .g = 200, .b = 126, .a = 255};
 inline const Color DEFAULTITEMCOLOR = RAYWHITE;
+
+inline const Color COMMONCOLOR = {.r = 197, .g = 194, .b = 143, .a = 255};
+inline const Color UNCOMMONCOLOR = {.r = 201, .g = 158, .b = 125, .a = 255};
+inline const Color RARECOLOR = {.r = 197, .g = 143, .b = 143, .a = 255};
+inline const Color VERYRARECOLOR = {.r = 197, .g = 143, .b = 187, .a = 255};
+inline const Color ULTRARARECOLOR = {.r = 169, .g = 113, .b = 204, .a = 255};
+
 
 inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
 

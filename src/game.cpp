@@ -19,8 +19,10 @@ std::unordered_map<int, WeaponModData> g_weapon_mod_data;
 std::unordered_map<int, ArmorModData> g_armor_mod_data;
 std::unordered_map<int, FoodModData> g_food_mod_data;
 std::unordered_map<int, CharacterEffectData> g_char_effect_data;
+std::unordered_map<int, CharacterModData> g_char_mod_data;
 
-std::vector<std::vector<int>> g_loot_tables;
+std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
+//std::vector<std::vector<int>> g_loot_tables;
 
 GameData g_game_data;
 DebugData g_debug_data;
@@ -30,6 +32,7 @@ std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
 
 Color g_item_type_colors[TYPE_ALL];
+std::unordered_map<int, Color>g_rarity_colors;
 
 Texture2D g_tile_sheets[MAX_SPRITES];
 Texture2D g_sprite_sheets[MAX_SPRITES];
@@ -44,7 +47,11 @@ Texture2D g_spell_sprites[MAX_SPRITES];
 Texture2D g_environment_sprites[MAX_SPRITES];
 Texture2D g_shadow_sprites[MAX_SPRITES];
 Texture2D g_module_sprites[MAX_SPRITES];
-PlayerData g_player_data;
+
+
+//PlayerData g_player_data;
+
+std::unordered_map< int, PlayerData> g_character_data;
 
 PlayerCharacter *g_current_player;
 
@@ -78,7 +85,7 @@ void Game::StartGame() {
     LoadResources();
     LoadGameData();
 
-    g_player_data = g_class_data[0];
+    //g_player_data = g_class_data[0];
     g_current_player = nullptr;
     
     game_running = true;

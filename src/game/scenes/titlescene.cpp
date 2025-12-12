@@ -81,9 +81,9 @@ void TitleScene::OnQuitPressed() {
 
 void TitleScene::OnContinuePressed() {
 
-    LoadGame();
+    int uid = LoadGame();
 
-    g_current_player = new PlayerCharacter({0,0});
+    g_current_player = new PlayerCharacter({0,0}, uid);
     return_scene = SHELTER_SCENE;
     g_game_data.next_map_index = g_game_data.shelter_map_index;
 }

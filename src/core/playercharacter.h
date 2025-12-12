@@ -1,9 +1,27 @@
 #pragma once 
 #include "gamedefs.h"
 
-class PlayerCharacter : public AnimatedSpriteEntity {
+
+
+class CharacterEntity : public AnimatedSpriteEntity {
     public:
-    PlayerCharacter(Vector2 _position);
+    
+    ~CharacterEntity() = default;
+
+    int uid;
+    Vector2 velocity;
+    Sprite weapon_sprite;
+    bool can_shoot;
+    bool can_switch;
+    Timer shot_timer;
+    WeaponData current_weapon_data;
+
+}; 
+
+
+class PlayerCharacter : public CharacterEntity {
+    public:
+    PlayerCharacter(Vector2 _position, int uid);
     ~PlayerCharacter() override;
     void Update() override;
     void Draw() override;
@@ -20,18 +38,19 @@ class PlayerCharacter : public AnimatedSpriteEntity {
     void OnShotTimerTimeout();
 
 
-    Vector2 velocity;
+    //Vector2 velocity;
 
-    Sprite weapon_sprite;
+    //Sprite weapon_sprite;
 
     //Sprite crosshair_sprite;
-    bool can_switch;
-    bool can_shoot;
+    //bool can_switch;
+    //bool can_shoot;
 
-    Timer shot_timer;
+    //Timer shot_timer;
 
-    WeaponData current_weapon_data;
+    //WeaponData current_weapon_data;
 
 }; 
 
 extern PlayerCharacter *g_current_player;
+extern std::unordered_map< int, PlayerData> g_character_data;

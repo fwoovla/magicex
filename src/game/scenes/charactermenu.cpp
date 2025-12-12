@@ -26,12 +26,18 @@ CharacterMenu::CharacterMenu() {
 
     grid_list.push_back(ground_grid);
     
+//stats
+    spo = {panel_rect.x + 320, panel_rect.y + 350};
+    CreateLabel(health_label, {spo.x, spo.y + 5}, 14, RAYWHITE, "health:");
+    CreateLabel(speed_label, {spo.x, spo.y + 20}, 14, RAYWHITE, "speed:");
+
+
 //character 
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, 30/g_scale, WHITE, "CHARACTER");
 
     ppo = {cpo.x + 130, cpo.y + 170}; //portrait offset
-    LoadSpriteCentered(character_sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(character_sprite, g_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
 
     CreateLabel(primary_header_label, {ppo.x - 75, ppo.y - 10}, 15/g_scale, WHITE, "primary");
@@ -150,7 +156,7 @@ void CharacterMenu::Draw() {
     DrawLabel(inventory_label_header);
     inventory_grid->DrawGrid();
 
-    hotbar_grid->DrawGrid();
+    //hotbar_grid->DrawGrid();
 
     primary_grid->DrawGrid();
     DrawLabelCentered(primary_header_label);
@@ -175,7 +181,7 @@ void CharacterMenu::Draw() {
     
     ground_grid->DrawItems();
     inventory_grid->DrawItems();
-    hotbar_grid->DrawItems();
+    //hotbar_grid->DrawItems();
 
     primary_grid->DrawItems();
     secondary_grid->DrawItems();
@@ -189,6 +195,10 @@ void CharacterMenu::Draw() {
     DrawLabel(character_header_label);
     DrawSprite(character_sprite);
 
+    DrawLineV( {spo.x - 10, spo.y}, {spo.x + 220, spo.y}, RAYWHITE);
+    DrawLabel(health_label);
+    DrawLabel(speed_label);
+
 /*     DrawCircleV(gpo, 2, RED);
     DrawCircleV(ipo, 2, RED);
     DrawCircleV(cpo, 2, RED);
@@ -197,8 +207,8 @@ void CharacterMenu::Draw() {
 }
 
 void CharacterMenu::DrawHotBarOnly() {
-    hotbar_grid->DrawGrid();
-    hotbar_grid->DrawItems();
+    //hotbar_grid->DrawGrid();
+    //hotbar_grid->DrawItems();
 }
 
 
@@ -207,7 +217,7 @@ void CharacterMenu::Update() {
 
     ground_grid->Update();
     inventory_grid->Update();
-    hotbar_grid->Update();
+    //hotbar_grid->Update();
 
     primary_grid->Update();
     secondary_grid->Update();
@@ -217,20 +227,26 @@ void CharacterMenu::Update() {
     feet_grid->Update();
     hands_grid->Update();
 
+    std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].base_speed);
+    speed_label.text = "speed: " + speed;
+
+    std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
+    health_label.text = "health: " + health;
+
 }
 
 void CharacterMenu::Open() {
      TraceLog(LOG_INFO, "opening character menu with no container");
-    inventory_grid->SetItems(&g_player_data.inventory);
-    hotbar_grid->SetItems(&g_player_data.hotbar);
+    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
+    hotbar_grid->SetItems(&g_character_data[g_current_player->uid].hotbar);
 
-    primary_grid->SetItems(&g_player_data.primary);
-    secondary_grid->SetItems(&g_player_data.secondary);
-    head_grid->SetItems(&g_player_data.head);
-    body_grid->SetItems(&g_player_data.body);
-    legs_grid->SetItems(&g_player_data.legs);
-    feet_grid->SetItems(&g_player_data.feet);
-    hands_grid->SetItems(&g_player_data.hands);
+    primary_grid->SetItems(&g_character_data[g_current_player->uid].primary);
+    secondary_grid->SetItems(&g_character_data[g_current_player->uid].secondary);
+    head_grid->SetItems(&g_character_data[g_current_player->uid].head);
+    body_grid->SetItems(&g_character_data[g_current_player->uid].body);
+    legs_grid->SetItems(&g_character_data[g_current_player->uid].legs);
+    feet_grid->SetItems(&g_character_data[g_current_player->uid].feet);
+    hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
 
     //std::vector<int> blank_list;
     use_ground = true;
@@ -244,16 +260,16 @@ void CharacterMenu::Open() {
 
 void CharacterMenu::OpenWith(BaseContainerEntity *container) {
     TraceLog(LOG_INFO, "OPENING CONTAINER %s", container->iid.c_str());
-    inventory_grid->SetItems(&g_player_data.inventory);
-    hotbar_grid->SetItems(&g_player_data.hotbar);
+    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
+    hotbar_grid->SetItems(&g_character_data[g_current_player->uid].hotbar);
 
-    primary_grid->SetItems(&g_player_data.primary);
-    secondary_grid->SetItems(&g_player_data.secondary);
-    head_grid->SetItems(&g_player_data.head);
-    body_grid->SetItems(&g_player_data.body);
-    legs_grid->SetItems(&g_player_data.legs);
-    feet_grid->SetItems(&g_player_data.feet);
-    hands_grid->SetItems(&g_player_data.hands);
+    primary_grid->SetItems(&g_character_data[g_current_player->uid].primary);
+    secondary_grid->SetItems(&g_character_data[g_current_player->uid].secondary);
+    head_grid->SetItems(&g_character_data[g_current_player->uid].head);
+    body_grid->SetItems(&g_character_data[g_current_player->uid].body);
+    legs_grid->SetItems(&g_character_data[g_current_player->uid].legs);
+    feet_grid->SetItems(&g_character_data[g_current_player->uid].feet);
+    hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
 
     use_ground = false;
     ground_grid->container_iid = container->iid;
@@ -335,7 +351,7 @@ void CharacterMenu::OnTransferItem() {
             grid_list[dest_index]->AddItem(shared_data.item_id, shared_data.dest_cell);
 
             if(shared_data.dest_grid == GRID_PRIMARY or
-                //shared_data.dest_grid == GRID_SECONDARY or
+                shared_data.dest_grid == GRID_SECONDARY or
                 shared_data.dest_grid == GRID_HEAD or
                 shared_data.dest_grid == GRID_BODY or
                 shared_data.dest_grid == GRID_LEGS or
@@ -344,7 +360,7 @@ void CharacterMenu::OnTransferItem() {
                 if(g_current_player->CanEquip(shared_data.item_id)) {g_current_player->Equip(shared_data.item_id);}}
 
             if(shared_data.source_grid == GRID_PRIMARY or
-                //shared_data.source_grid == GRID_SECONDARY or
+                shared_data.source_grid == GRID_SECONDARY or
                 shared_data.source_grid == GRID_HEAD or
                 shared_data.source_grid == GRID_BODY or
                 shared_data.source_grid == GRID_LEGS or

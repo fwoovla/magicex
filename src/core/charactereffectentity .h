@@ -27,4 +27,6 @@ class MovementEffectEntity : public BaseCharacterEffectEntity {
     CharacterEffectData data;
     Timer lifetime;
 
+    BaseEntity *target;
+
 };

@@ -1,6 +1,8 @@
 #include "../core/gamedefs.h"
 
 
+
+
 ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id) {
     
     ItemInstanceData new_instance;
@@ -32,6 +34,9 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
 
     new_instance.instance_id = uid;
     new_instance.item_id = item_id;
+    new_instance.item_name = "error locating item data";
+    new_instance.sprite_id = ITEM_ID_NONE;
+    new_instance.rarity = RARITY_COMMON;
 
     auto item_it = g_item_data.find(item_id);
     if(item_it != g_item_data.end()) {
@@ -47,6 +52,11 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         new_instance.icon_id = item_id;
         new_instance.defence = 0;
         new_instance.magic_defence = 0;
+        new_instance.saturation = 0;
+
+
+        //add chara mods here
+
 
         if(new_instance.type == TYPE_WEAPON ) {
             GenerateRandomWeapon(new_instance, loot_level);
@@ -56,10 +66,10 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         }
         if(new_instance.type == TYPE_FOOD ) {
             GenerateRandomFood(new_instance, loot_level);
-            
             //GenerateRandomWeapon(new_instance, loot_level);
         }
     }
+    TraceLog(LOG_INFO, "----------rarity  %i-----------\n", new_instance.rarity);
     TraceLog(LOG_INFO, "---------------------\n");
     return new_instance;
 }
@@ -82,16 +92,50 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
     }
 
     if(loot_level >= 1) {
-        ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_WEPONSTART, ITEMMOD_WEPONEND);
+
+        std::vector<int> wep_mod_list;
+        for(auto mod : g_weapon_mod_data) {
+            for(int i = 0; i < mod.second.rarity; i++) {
+                wep_mod_list.push_back(mod.second.mod_id);
+            }
+        }
+        TraceLog(LOG_INFO, "-----weapon mod list size  + %i------", wep_mod_list.size());
+        ItemModID mod_id = (ItemModID) wep_mod_list[ GetRandomValue(0, wep_mod_list.size() - 1)];
 
         auto m_itter = g_weapon_mod_data.find(mod_id);
         if(m_itter != g_weapon_mod_data.end()) {
-            if(m_itter->second.cooldown != -10000) { instance.cooldown += m_itter->second.cooldown; }
-            if(m_itter->second.clip_size != -10000) { instance.clip_size += m_itter->second.clip_size; }
-            if(m_itter->second.damage != -10000) { instance.damage += m_itter->second.damage; }
+            if(m_itter->second.cooldown > -900) { instance.cooldown += m_itter->second.cooldown; }
+            if(m_itter->second.clip_size != -1000) { instance.clip_size += m_itter->second.clip_size; }
+            if(m_itter->second.damage != -1000) { instance.damage += m_itter->second.damage; }
+            if(m_itter->second.rarity < instance.rarity){instance.rarity = m_itter->second.rarity;}
 
             instance.modifications.push_back(mod_id);
             TraceLog(LOG_INFO, "-----weapon mod selected  + %i------", instance.modifications[instance.modifications.size() - 1]);
+        }
+    }
+
+    if(loot_level >= 1) {
+        std::vector<int> char_mod_list;
+        for(auto mod : g_char_mod_data) {
+            for(int i = 0; i < mod.second.rarity; i++) {
+                char_mod_list.push_back(mod.second.mod_id);
+            }
+        }
+
+        bool can_add = true;
+        if(GetRandomValue(0, 100) <= loot_level*10) {
+            can_add = true;
+        }
+        if(can_add) {
+
+            CharModID mod_id = (CharModID)char_mod_list[ GetRandomValue(0, char_mod_list.size() - 1)];
+
+            auto m_itter = g_char_mod_data.find(mod_id);
+            if(m_itter != g_char_mod_data.end()) {
+                instance.char_mods.push_back(mod_id);
+                if(m_itter->second.rarity < instance.rarity){instance.rarity = m_itter->second.rarity;}
+                TraceLog(LOG_INFO, "-----character mod selected  + %i------", instance.char_mods[instance.char_mods.size() - 1]);
+            }
         }
     }
 
@@ -112,7 +156,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
                 }
                 if(instance.item_id == ITEM_ID_STAFF) {
                     instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
-                    instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+                    instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
                 }
             }
             
@@ -161,15 +205,47 @@ void GenerateRandomArmor(ItemInstanceData &instance, int loot_level) {
         TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
 
 
-        if(loot_level >= 1) {
-        ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_ARMORSTART, ITEMMOD_ARMOREND);
+        if(loot_level >= 0) {
 
-        auto m_itter = g_armor_mod_data.find(mod_id);
-        if(m_itter != g_armor_mod_data.end()) {
-            if(m_itter->second.defence != -10000) { instance.defence += m_itter->second.defence; }
+        std::vector<int> armor_mod_list;
+        for(auto mod : g_armor_mod_data) {
+            for(int i = 0; i < mod.second.rarity; i++) {
+                armor_mod_list.push_back(mod.second.mod_id);
+            }
+        }
 
-            instance.modifications.push_back(mod_id);
-            TraceLog(LOG_INFO, "-----armor mod selected  + %i  defence %i-----", instance.modifications[instance.modifications.size() - 1], instance.defence);
+        TraceLog(LOG_INFO, "-----armor mod list size  + %i------", armor_mod_list.size());
+
+            ItemModID mod_id = (ItemModID) armor_mod_list[ GetRandomValue(0, armor_mod_list.size() - 1)];
+
+            auto m_itter = g_armor_mod_data.find(mod_id);
+            if(m_itter != g_armor_mod_data.end()) {
+                if(m_itter->second.defence != -1000) { instance.defence += m_itter->second.defence; }
+                instance.modifications.push_back(mod_id);
+                if(m_itter->second.rarity < instance.rarity){instance.rarity = m_itter->second.rarity;}
+                TraceLog(LOG_INFO, "-----armor mod selected  + %i  defence %i-----", instance.modifications[instance.modifications.size() - 1], instance.defence);
+            }
+
+            bool can_add = false;
+            if(GetRandomValue(0, 100) <= loot_level*10) {
+                can_add = true;
+            }
+            if(can_add) {
+                std::vector<int> char_mod_list;
+                for(auto mod : g_char_mod_data) {
+                    for(int i = 0; i < mod.second.rarity; i++) {
+                        char_mod_list.push_back(mod.second.mod_id);
+                    }
+                }
+
+                CharModID mod_id = (CharModID)char_mod_list[ GetRandomValue(0, char_mod_list.size() - 1)];
+
+                auto m_itter = g_char_mod_data.find(mod_id);
+                if(m_itter != g_char_mod_data.end()) {
+                    instance.char_mods.push_back(mod_id);
+                    if(m_itter->second.rarity < instance.rarity){instance.rarity = m_itter->second.rarity;}
+                    TraceLog(LOG_INFO, "-----character mod selected  + %i------", instance.char_mods[instance.char_mods.size() - 1]);
+                }
             }
         }
     }
@@ -191,7 +267,7 @@ void GenerateRandomFood(ItemInstanceData &instance, int loot_level) {
     auto m_itter = g_food_mod_data.find(mod_id);
     if(m_itter != g_food_mod_data.end()) {
         
-        if(m_itter->second.saturation != -10000) { instance.saturation += m_itter->second.saturation; }
+        if(m_itter->second.saturation != -1000) { instance.saturation += m_itter->second.saturation; }
 
         instance.modifications.push_back(mod_id);
         TraceLog(LOG_INFO, "-----food mod selected  + %i  saturation %0.2f-----", instance.modifications[instance.modifications.size() - 1], instance.saturation);

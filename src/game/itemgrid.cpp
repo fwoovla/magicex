@@ -68,7 +68,11 @@ void ItemGrid::Update() {
                             
                             if(show_details == true) {
                                 std::string details_text = CreateDetails(itter->second);
-                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, WHITE, details_text);
+                                auto c_itter = g_rarity_colors.find(itter->second.rarity);
+                                if(c_itter != g_rarity_colors.end()) {
+                                    color = c_itter->second;
+                                }
+                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, color, details_text);
                             }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
@@ -271,10 +275,12 @@ void ItemGrid::AddItem(int item_id) {
             int x = i%(cols);
             int y = i/(cols);
             (*item_list)[i] = item_id;
+            
 
             auto itter = g_item_instances.find(item_id);
             if(itter != g_item_instances.end()) {
                     _id = itter->second.icon_id;
+                    itter->second.container_id = container_iid;
                     LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
                     ScaleSprite(item_sprites[i], {2,2});
                     break;
@@ -312,23 +318,44 @@ void ItemGrid::RemoveItem(Vector2 source_cell) {
 
 std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string details;
+    std::string stat = "";
+    std::string value = "";
+
 
     for(int mod = 0; mod < item_data.modifications.size(); mod++) {
         auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
         if(m_itter != g_weapon_mod_data.end()) {
-            details += m_itter->second.mod_name + "\n";
+            
+            if(m_itter->second.clip_size != -1000) {stat = "max shots +: "; value = std::to_string(m_itter->second.clip_size);}
+            if(m_itter->second.cooldown != -1000) {stat = "cooldown +: "; value = TextFormat("%0.02f", m_itter->second.cooldown);}
+            if(m_itter->second.damage != -1000) {stat = "damage +: "; value = std::to_string(m_itter->second.damage);}
+            details += stat + value + "\n";
         }
         auto a_itter = g_armor_mod_data.find(item_data.modifications[mod]);
         if(a_itter != g_armor_mod_data.end()) {
-            details += a_itter->second.mod_name + "\n";
+            if(a_itter->second.defence != -1000) {stat = "defence +: "; value = std::to_string(a_itter->second.defence);}
+            details += stat + value + "\n";
         }
         auto f_itter = g_food_mod_data.find(item_data.modifications[mod]);
         if(f_itter != g_food_mod_data.end()) {
-            details += f_itter->second.mod_name + "\n";
+            if(f_itter->second.saturation != -1000) {stat = "saturation +: "; value = TextFormat("%0.02f", f_itter->second.saturation);}
+            details += stat + value + "\n";
+        }
+        
+    }
+
+    for(int mod = 0; mod < item_data.char_mods.size(); mod++) {
+        auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
+        if(cm_itter != g_char_mod_data.end()) {
+            //details += cm_itter->second.mod_name + "\n";
+            if(cm_itter->second.health != -1000) {stat = "health +: "; value = std::to_string(cm_itter->second.health);}
+            if(cm_itter->second.speed != -1000) {stat = "speed: +"; value = TextFormat("%0.02f", cm_itter->second.speed);}
+            details += stat + value + "\n"; 
         }
     }
 
-    if(item_data.modifications.size() > 0) {details += "\n";}
+    if(item_data.modifications.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
+    
 
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {

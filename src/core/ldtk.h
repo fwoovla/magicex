@@ -170,6 +170,7 @@ struct LDTKEnvironmentData {
 
 struct LDTKLevel {
     bool is_shelter;
+    bool is_sub_map;
     std::string identifier;
     std::string iid;
     int64_t uid;

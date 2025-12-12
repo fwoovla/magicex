@@ -61,18 +61,23 @@
         },
 
 
+
+
         {
             "item_name": "Mushroom",
             "item_id":"ITEM_ID_MUSHROOM",
             "value":0,
-            "item_type":"TYPE_CONSUMEABLE"
+            "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Mushroom Juice",
             "item_id":"ITEM_ID_MUSHROOM_JUICE",
             "value":0,
-            "item_type":"TYPE_CONSUMEABLE"
+            "item_type":"TYPE_RESOURCE"
         },
+
+
+
 
 
         {
@@ -108,6 +113,8 @@
 
 
 
+
+
         {
             "item_name": "Magic Missle Scroll",
             "item_id":"ITEM_ID_MAGICMMISSLE_SCROLL",
@@ -126,6 +133,7 @@
             "value":0,
             "item_type":"TYPE_SCROLL"
         },
+
 
 
         {
@@ -152,12 +160,22 @@
             "value":0,
             "item_type":"TYPE_FOOD"
         },
+
+
+
+
+
         {
             "item_name": "Ring",
             "item_id":"ITEM_ID_RING",
             "value":0,
-            "item_type":"TYPE_CONSUMEABLE"
+            "item_type":"TYPE_RESOURCE"
         },
+
+
+
+
+
         {
             "item_name": "Stove Plan",
             "item_id":"ITEM_ID_STOVE_PLAN",
@@ -169,47 +187,50 @@
             "item_id":"ITEM_ID_MUSHROOMPRESS_PLAN",
             "value":0,
             "item_type":"TYPE_PLAN"
-        }
+        },
 
-    ],
-    
-    "loot_tables": [
+
+
+
+
+
         {
-            "index":0,
-            "table_name":"food",
-            "table_data":["ITEM_ID_APPLE","ITEM_ID_CHEESE","ITEM_ID_BREAD","ITEM_ID_MEAT"]
+            "item_name": "Hammer",
+            "item_id":"ITEM_ID_HAMMER",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "index":1,
-            "table_name":"mele",
-            "table_data":["ITEM_ID_DAGGER","ITEM_ID_SWORD","ITEM_ID_AXE","ITEM_ID_SPEAR","ITEM_ID_BOW"]
+            "item_name": "Saw",
+            "item_id":"ITEM_ID_SAW",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "index":2,
-            "table_name":"wands",
-            "table_data":["ITEM_ID_WAND", "ITEM_ID_STAFF"]
+            "item_name": "Shovel",
+            "item_id":"ITEM_ID_SHOVEL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "index":3,
-            "table_name":"staves",
-            "table_data":["ITEM_ID_WAND", "ITEM_ID_STAFF"]
+            "item_name": "Tongs",
+            "item_id":"ITEM_ID_TONGS",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "index":4,
-            "table_name":"armor",
-            "table_data":["ITEM_ID_GLOVES","ITEM_ID_BOOTS","ITEM_ID_LEGGINGS","ITEM_ID_BODY"]
-        },
-        {
-            "index":5,
-            "table_name":"scrolls",
-            "table_data":["ITEM_ID_MAGICMMISSLE_SCROLL","ITEM_ID_FIREBALL_SCROLL","ITEM_ID_LIGHTNING_SCROLL"]
-        },
-        {
-            "index":6,
-            "table_name":"plans",
-            "table_data":["ITEM_ID_STOVE_PLAN", "ITEM_ID_MUSHROOMPRESS_PLAN", "ITEM_ID_MUSHROOM_JUICE", "ITEM_ID_MUSHROOM", "ITEM_ID_WAND"]
+            "item_name": "Anvil",
+            "item_id":"ITEM_ID_ANVIL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         }
     ],
+
+
+
+
+
+
     "spell_data": [
         {
             "spell_id":"SPELL_ID_MAGICMISSLE",
@@ -238,13 +259,17 @@
             "damage":1,
             "radius":2
         }
-
     ],
+
+
+
+
+
     "weapon_data": [
         {
             "weapon_id": "ITEM_ID_DAGGER",
             "weapon_name": "Dagger",
-            "cooldown": 0.4,
+            "cooldown": 0.40,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":0,
             "damage":1
@@ -252,7 +277,7 @@
         {
             "weapon_id": "ITEM_ID_SWORD",
             "weapon_name": "Sword",
-            "cooldown": 0.4,
+            "cooldown": 0.40,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":0,
             "damage":1
@@ -260,7 +285,7 @@
         {
             "weapon_id": "ITEM_ID_SPEAR",
             "weapon_name": "Spear",
-            "cooldown": 0.4,
+            "cooldown": 0.40,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":0,
             "damage":1
@@ -268,7 +293,7 @@
         {
             "weapon_id": "ITEM_ID_AXE",
             "weapon_name": "Axe",
-            "cooldown": 0.4,
+            "cooldown": 0.40,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":0,
             "damage":1
@@ -276,7 +301,7 @@
         {
             "weapon_id": "ITEM_ID_BOW",
             "weapon_name": "Bow",
-            "cooldown": 0.4,
+            "cooldown": 0.40,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":0,
             "damage":1
@@ -284,7 +309,7 @@
         {
             "weapon_id": "ITEM_ID_WAND",
             "weapon_name": "Wand",
-            "cooldown": 0.6,
+            "cooldown": 0.60,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":10,
             "damage":1
@@ -292,13 +317,14 @@
         {
             "weapon_id": "ITEM_ID_STAFF",
             "weapon_name": "Staff",
-            "cooldown": 0.8,
+            "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "clip_size":10,
             "damage":1
         }
-
     ],
+
+
 
     "food_data": [
         {
@@ -326,6 +352,10 @@
             "saturation": 2.5
         }
     ],
+
+
+
+
 
     "armor_data": [
         {
@@ -365,22 +395,29 @@
         }
     ],
 
+
+
+
     "plan_data": [
         
         {
             "plan_id": "ITEM_ID_STOVE_PLAN",
             "plan_name": "Stove Plan",
-            "required_items":["ITEM_ID_MUSHROOM"],
+            "required_items":["ITEM_ID_TONGS"],
             "module_id":"MODULE_ID_STOVE"
         },
         {
             "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
             "plan_name": "Mushroompress Plan",
-            "required_items":["ITEM_ID_MUSHROOM_JUICE"],
+            "required_items":["ITEM_ID_SAW"],
             "module_id":"MODULE_ID_MUSHROOMPRESS"
         }
 
     ],
+
+
+
+
 
     "module_data": [
         {
@@ -401,8 +438,11 @@
             "recipies":["RECIPIE_ID_MUSHROOMJUICE"],
             "accepted_plans":[]
         }
-
     ],
+
+
+
+
 
     "recipie_data": [
         {
@@ -420,7 +460,7 @@
         {
             "recipie_id":"RECIPIE_ID_APPLE",
             "recipie_name":"Apple",
-            "ingredients":["ITEM_ID_DAGGER"],
+            "ingredients":["ITEM_ID_APPLE"],
             "produces":"ITEM_ID_APPLE"
         },
         {
@@ -429,56 +469,298 @@
             "ingredients":["ITEM_ID_MUSHROOM"],
             "produces":"ITEM_ID_MUSHROOM_JUICE"
         }
-
     ],
+
+
+
+
     "weapon_modifiers": [
         {
-            "mod_id":"ITEMMOD_SWIFTNESS",
+            "mod_id":"ITEMMOD_SWIFTNESS1",
             "mod_name":"swiftness",
-            "cooldown": -0.2,
-            "clip_size":-10000,
-            "damage":-10000
+            "rarity":"RARITY_COMMON",
+            "cooldown": -0.1,
+            "clip_size":-1000,
+            "damage":-1000
         },
         {
-            "mod_id":"ITEMMOD_STRENGTH",
-            "mod_name":"strength",
-            "cooldown": -10000,
-            "clip_size":-10000,
+            "mod_id":"ITEMMOD_SWIFTNESS2",
+            "mod_name":"swiftness",
+            "rarity":"RARITY_UNCOMMON",
+            "cooldown": -0.2,
+            "clip_size":-1000,
+            "damage":-1000
+        },
+        {
+            "mod_id":"ITEMMOD_SWIFTNESS3",
+            "mod_name":"swiftness",
+            "rarity":"RARITY_RARE",
+            "cooldown": -0.3,
+            "clip_size":-1000,
+            "damage":-1000
+        },
+        {
+            "mod_id":"ITEMMOD_SWIFTNESS4",
+            "mod_name":"swiftness",
+            "rarity":"RARITY_VERYRARE",
+            "cooldown": -0.4,
+            "clip_size":-1000,
+            "damage":-1000
+        },
+        {
+            "mod_id":"ITEMMOD_SWIFTNESS5",
+            "mod_name":"swiftness",
+            "rarity":"RARITY_ULTRARARE",
+            "cooldown": -0.5,
+            "clip_size":-1000,
+            "damage":-1000
+        },
+
+
+        {
+            "mod_id":"ITEMMOD_DAMAGE1",
+            "mod_name":"damage",
+            "rarity":"RARITY_COMMON",
+            "cooldown": -1000,
+            "clip_size":-1000,
+            "damage":1
+        },
+        {
+            "mod_id":"ITEMMOD_DAMAGE2",
+            "mod_name":"damage",
+            "rarity":"RARITY_UNCOMMON",
+            "cooldown": -1000,
+            "clip_size":-1000,
+            "damage":2
+        },
+        {
+            "mod_id":"ITEMMOD_DAMAGE3",
+            "mod_name":"damage",
+            "rarity":"RARITY_RARE",
+            "cooldown": -1000,
+            "clip_size":-1000,
+            "damage":3
+        },
+        {
+            "mod_id":"ITEMMOD_DAMAGE4",
+            "mod_name":"damage",
+            "rarity":"RARITY_VERYRARE",
+            "cooldown": -1000,
+            "clip_size":-1000,
             "damage":4
+        },
+        {
+            "mod_id":"ITEMMOD_DAMAGE5",
+            "mod_name":"damage",
+            "rarity":"RARITY_ULTRARARE",
+            "cooldown": -1000,
+            "clip_size":-1000,
+            "damage":5
         }
 
     ],
+
+
+
+
+
     "armor_modifiers": [
 
         {
-            "mod_id":"ITEMMOD_TOUGHNESS",
+            "mod_id":"ITEMMOD_TOUGHNESS1",
             "mod_name":"toughness",
-            "defence":4
+            "rarity":"RARITY_COMMON",
+            "defence":1
+        },
+        {
+            "mod_id":"ITEMMOD_TOUGHNESS2",
+            "mod_name":"toughness",
+            "rarity":"RARITY_UNCOMMON",
+            "defence":2
+        },
+        {
+            "mod_id":"ITEMMOD_TOUGHNESS3",
+            "mod_name":"toughness",
+            "rarity":"RARITY_RARE",
+            "defence":3
+        },
+        {
+            "mod_id":"ITEMMOD_TOUGHNESS4",
+            "mod_name":"toughness",
+            "rarity":"RARITY_VERYRARE",
+            "defence":5
+        },
+        {
+            "mod_id":"ITEMMOD_TOUGHNESS5",
+            "mod_name":"toughness",
+            "rarity":"RARITY_ULTRARARE",
+            "defence":5
         }
     ],
+
+
+
+
+
+
     "food_modifiers": [
 
         {
             "mod_id":"ITEMMOD_NUTRITIOUS",
             "mod_name":"nutritious",
+            "rarity":"RARITY_COMMON",
             "saturation":0.5
         },
         {
             "mod_id":"ITEMMOD_MOLDY",
             "mod_name":"moldy",
+            "rarity":"RARITY_COMMON",
             "saturation":-0.5
         }
     ],
-        "character_effects": [
+
+
+
+    "character_modifiers": [
         {
-            "effect_id":"CHAREFFECT_MOVESPEED",
-            "effect_name":"movement speed",
-            "durration":10000
+            "mod_id":"CHARMOD_SPEED1",
+            "mod_name":"movement speed",
+            "rarity":"RARITY_COMMON",
+            "health":-1000,            
+            "speed":5
         },
         {
-            "effect_id":"CHAREFFECT_POISON",
-            "effect_name":"POISON",
+            "mod_id":"CHARMOD_SPEED2",
+            "mod_name":"movement speed",
+            "rarity":"RARITY_UNCOMMON",
+            "health":-1000,            
+            "speed":10
+        },
+        {
+            "mod_id":"CHARMOD_SPEED3",
+            "mod_name":"movement speed",
+            "rarity":"RARITY_RARE",
+            "health":-1000,            
+            "speed":15
+        },
+        {
+            "mod_id":"CHARMOD_SPEED4",
+            "mod_name":"movement speed",
+            "rarity":"RARITY_VERYRARE",
+            "health":-1000,            
+            "speed":20
+        },
+        {
+            "mod_id":"CHARMOD_SPEED5",
+            "mod_name":"movement speed",
+            "rarity":"RARITY_ULTRARARE",
+            "health":-1000,            
+            "speed":25
+        },
+
+
+        {
+            "mod_id":"CHARMOD_HEALTH1",
+            "mod_name":"character health",
+            "rarity":"RARITY_COMMON",
+            "health":5,
+            "speed":-1000
+        },
+        {
+            "mod_id":"CHARMOD_HEALTH2",
+            "mod_name":"character health",
+            "rarity":"RARITY_UNCOMMON",
+            "health":10,
+            "speed":-1000
+        },
+        {
+            "mod_id":"CHARMOD_HEALTH3",
+            "mod_name":"character health",
+            "rarity":"RARITY_RARE",
+            "health":15,
+            "speed":-1000
+        },
+        {
+            "mod_id":"CHARMOD_HEALTH4",
+            "mod_name":"character health",
+            "rarity":"RARITY_VERYRARE",
+            "health":20,
+            "speed":-1000
+        },
+        {
+            "mod_id":"CHARMOD_HEALTH5",
+            "mod_name":"character health",
+            "rarity":"RARITY_ULTRARARE",
+            "health":25,
+            "speed":-1000
+        }
+    ],
+
+
+
+
+        "character_effects": [
+        {
+            "effect_id":"CHAREFFECT_SPEED1",
+            "effect_name":"movement speed",
+            "rarity":"RARITY_COMMON",
             "durration":10
+        },
+        {
+            "effect_id":"CHAREFFECT_SPEED2",
+            "effect_name":"movement speed",
+            "rarity":"RARITY_UNCOMMON",
+            "durration":20
+        },
+        {
+            "effect_id":"CHAREFFECT_SPEED3",
+            "effect_name":"movement speed",
+            "rarity":"RARITY_RARE",
+            "durration":30
+        },
+        {
+            "effect_id":"CHAREFFECT_SPEED4",
+            "effect_name":"movement speed",
+            "rarity":"RARITY_VERYRARE",
+            "durration":40
+        },
+        {
+            "effect_id":"CHAREFFECT_SPEED5",
+            "effect_name":"movement speed",
+            "rarity":"RARITY_ULTRARARE",
+            "durration":50
+        },
+
+
+        {
+            "effect_id":"CHAREFFECT_POISON1",
+            "effect_name":"poison",
+            "rarity":"RARITY_COMMON",
+            "durration":10
+        },
+        {
+            "effect_id":"CHAREFFECT_POISON2",
+            "effect_name":"poison",
+            "rarity":"RARITY_UNCOMMON",
+            "durration":20
+        },
+        {
+            "effect_id":"CHAREFFECT_POISON3",
+            "effect_name":"poison",
+            "rarity":"RARITY_RARE",
+            "durration":30
+        },
+        {
+            "effect_id":"CHAREFFECT_POISON4",
+            "effect_name":"poison",
+            "rarity":"RARITY_VERYRARE",
+            "durration":40
+        },
+        {
+            "effect_id":"CHAREFFECT_POISON5",
+            "effect_name":"poison",
+            "rarity":"RARITY_ULTRARARE",
+            "durration":50
         }
     ]
 

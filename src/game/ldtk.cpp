@@ -75,6 +75,18 @@ void LDTKLoadMaps (json &mj) {
                             TraceLog(LOG_INFO, "SHELTER LEVEL FOUND at index: %i", level);
                             this_level.is_shelter = true;
                         }
+                        else {
+                            this_level.is_shelter = false;
+                        }
+                    }
+                    if(mj["levels"][level]["fieldInstances"][field]["__identifier"] == "is_sub_map") {
+                        if(mj["levels"][level]["fieldInstances"][field]["__value"] == true) {
+                            TraceLog(LOG_INFO, "Level loaded as sub map: %i", level);
+                            this_level.is_sub_map = true;
+                        }
+                        else {
+                            this_level.is_sub_map = false;
+                        }
                     }
                 }
             }
@@ -230,10 +242,11 @@ void LDTKLoadMaps (json &mj) {
                                     new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
                                     TraceLog(LOG_INFO, "++++++--------------------------------loot level %i", new_field.value_i);
                                 }
-                                if(new_field.identifier == "loot_table_ids" ) {
+                                if(new_field.identifier == "ItemTypes" ) {
                                     for(int j = 0; j < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"].size(); j++) {
-                                        new_field.i_list.push_back(mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
-                                        TraceLog(LOG_INFO, "++++++--------------------------------item added %i", mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j].get<int>());
+                                        ItemType type = StrToItemType (mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j]);
+                                        new_field.i_list.push_back(type);
+                                        TraceLog(LOG_INFO, "++++++--------------------------------type added %i", type);
                                     }
                                 }
                                 

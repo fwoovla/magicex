@@ -103,7 +103,7 @@ SCENE_ID GameScene::Update() {
             HandleCamera();
         }
 
-        if(g_input.keys_pressed[0] == KEY_E) {
+        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
 
@@ -115,7 +115,14 @@ SCENE_ID GameScene::Update() {
                     Vector2 pos = g_current_player->position;
                     for(int item = 0; item < character_menu->blank_list.size(); item++) {
                         if(character_menu->blank_list[item] != -1) {
-                            spi = g_item_data[ character_menu->blank_list[item]].id;
+
+                            //dfgg
+
+                            auto item_it = g_item_instances.find(character_menu->blank_list[item]);
+                            if(item_it != g_item_instances.end()) {
+                                spi = item_it->second.item_id;
+                            }
+
                             break;
                         }
                     }
@@ -127,12 +134,13 @@ SCENE_ID GameScene::Update() {
                         new_container->c_area.identifier = "GroundContainerEntity";
                         new_container->c_area.position = pos;
                         new_container->c_area.item_list = character_menu->blank_list;
-                        new_container->c_area.size = {8, 8};    
-                        //level_data.game_areas.push_back(&new_container->c_area);
+                        new_container->c_area.size = {8, 8};
+                        new_container->iid = character_menu->default_iid;
+                        new_container->is_persistant = true;
+                        new_container->level_index = g_game_data.current_map_index;
                     }
                 }
                 else { //was existing container
-
                     //if ground container
                     if(g_game_data.return_container != nullptr) {
                         if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {
@@ -193,7 +201,7 @@ void GameScene::DrawUI() {
         }
         DL_DrawUI(level_data.entity_list);
         ui_layer->Draw();
-        character_menu->DrawHotBarOnly();
+        //character_menu->DrawHotBarOnly();
     }
         
 }
@@ -252,6 +260,7 @@ GameScene::~GameScene() {
     delete character_menu;
     delete tile_layer;
     delete module_menu;
+    g_sub_scene.reset();
     //DL_Clear(entity_draw_list);
     ClearLevelData(level_data);
     
