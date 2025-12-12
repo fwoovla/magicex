@@ -52,9 +52,9 @@ ShelterScene::ShelterScene() {
         }
     }
 
-    ui_layer = new ShelterUILayer();
+    ui_layer = new GameUILayer();
     ui_layer->quit_pressed.Connect( [this](){OnQuitPressed();} );
-    ui_layer->start_pressed.Connect( [this](){OnStartPressed();} );
+    //ui_layer->start_pressed.Connect( [this](){OnStartPressed();} );
     
     tile_layer = new TileLayer();
 

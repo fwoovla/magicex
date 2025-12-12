@@ -160,12 +160,15 @@ void PlayerCharacter::CheckInput() {
     weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
 
     if(g_input.key_switch_weapon and can_switch == true) {
-        TraceLog(LOG_INFO, "switching primary weapon");
-        int temp_primary = g_character_data[uid].primary[0];
-        g_character_data[uid].primary[0] = g_character_data[uid].secondary[0];
-        g_character_data[uid].secondary[0] = temp_primary;
-        Equip(g_character_data[uid].primary[0]);
-        can_switch = false;
+        if(CanEquip(g_character_data[uid].secondary[0]) and CanUnEquip(g_character_data[uid].primary[0])) {
+            TraceLog(LOG_INFO, "switching primary weapon");
+            UnEquip(g_character_data[uid].primary[0]);
+            Equip(g_character_data[uid].secondary[0]);
+            int temp_primary = g_character_data[uid].primary[0];
+            g_character_data[uid].primary[0] = g_character_data[uid].secondary[0];
+            g_character_data[uid].secondary[0] = temp_primary;
+            can_switch = false;
+        }
     }
     if(!g_input.key_switch_weapon) {
         can_switch = true;
@@ -185,15 +188,20 @@ void PlayerCharacter::CheckInput() {
 
         auto spell_it = g_spell_data.find(item_it->second.spell_id);
         if(spell_it != g_spell_data.end()) {
+            if(g_character_data[uid].current_power < spell_it->second.pps) {
+                return;
+            }
             if(g_game_data.is_in_sub_map) {
                 SpawnSpell(spell_it->second , *g_sub_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
             }
             else {
                 SpawnSpell(spell_it->second , *g_current_scene, {.position = position,.rotation = weapon_sprite.rotation,.shooter_id = 0});
             }
+            g_character_data[uid].current_power -= spell_it->second.pps;
+            item_it->second.current_power = g_character_data[uid].current_power;
+            shot_timer.Start(spell_it->second.cooldown, true);
+            can_shoot = false;
         }
-        shot_timer.Start(item_it->second.cooldown, true);
-        can_shoot = false;
     }
 }
 
@@ -209,16 +217,24 @@ void PlayerCharacter::Equip(int item_id) {
     int _id = ITEM_ID_NONE;
 
     auto item_it = g_item_instances.find(item_id);
-
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            if(g_character_data[uid].primary[0] == item_id) {
-                if(item_id != -1) {
-                    _id = item_it->second.sprite_id;
-                    TraceLog(LOG_INFO, "equiping primary weapon %i sp_id %i", item_id, _id);
-                }
-            }
+
+            g_character_data[uid].max_power += item_it->second.max_power;
+            g_character_data[uid].current_power = item_it->second.current_power;
+            _id = item_it->second.sprite_id;
+            LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
+            TraceLog(LOG_INFO, "equiping primary weapon %i sprite_id %i", item_id, _id);
+            //}
         }
+        
+        if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
+            _id = item_it->second.sprite_id;
+            g_character_data[uid].defence += item_it->second.defence;
+            g_character_data[uid].magic_defence += item_it->second.magic_defence;
+            TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
+        }
+        
 
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
@@ -229,8 +245,12 @@ void PlayerCharacter::Equip(int item_id) {
             }
         }
     }
+    else if(_id == ITEM_ID_NONE) {
+        Texture2D t;
+        LoadSpriteCentered(weapon_sprite, t, position);
+    }
     
-    LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
+    
 
     TraceLog(LOG_INFO, "+++++++++++++");
 }
@@ -247,13 +267,32 @@ void PlayerCharacter::UnEquip(int item_id) {
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            if(g_character_data[uid].primary[0] == item_id) {
-                TraceLog(LOG_INFO, "unequiping primary weapon %i", item_id);
-                g_character_data[uid].primary[0] = -1;
+            TraceLog(LOG_INFO, "unequiping primary weapon %i %i", item_id, g_character_data[uid].primary[0]);
+            if (g_character_data[uid].primary[0] == -1) {
                 Texture2D t;
                 LoadSpriteCentered(weapon_sprite, t, position);
             }
+
+            g_character_data[uid].max_power -= item_it->second.max_power;
+
+            if(g_character_data[uid].max_power < 0) {
+                g_character_data[uid].max_power = 0;
+            }
+
+            item_it->second.current_power = g_character_data[uid].current_power;
+            g_character_data[uid].current_power -= item_it->second.max_power;
+            if(g_character_data[uid].current_power < 0) {
+                g_character_data[uid].current_power = 0;
+            }
+            
         }
+
+        if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
+            TraceLog(LOG_INFO, "unequiping armor %i", item_id);
+            g_character_data[uid].defence -= item_it->second.defence;
+            g_character_data[uid].magic_defence -= item_it->second.magic_defence;
+        }
+        
 
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
@@ -277,6 +316,7 @@ PlayerCharacter::~PlayerCharacter()
 {
     TraceLog(LOG_INFO, "deleting player!!!!!!!!!!!!!!!!!!!!");
 }
+
 
 float PlayerCharacter::GetYSort() {
     return position.y + ground_point_offset.y;

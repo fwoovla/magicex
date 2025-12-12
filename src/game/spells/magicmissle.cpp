@@ -66,10 +66,6 @@ void MagicMissle::Update() {
     //TraceLog(LOG_INFO, "rotating: %f  ", rotation);
     velocity = Vector2ClampValue(velocity, -data.speed , data.speed);
 
-
-
-
-
     position = Vector2Add(position, velocity * GetFrameTime());
 
     CollisionResult result;
@@ -80,6 +76,7 @@ void MagicMissle::Update() {
     }
     
     sprite.position = position;
+    sprite.rotation = rotation;
 
     lifetime_timer.Update(); 
 
@@ -88,7 +85,9 @@ void MagicMissle::Update() {
 void MagicMissle::Draw() {
     DrawSprite(sprite);
 
-    DrawCircleV(target_position, 4, RED);
+    if(g_game_settings.show_debug) {
+        DrawCircleV(target_position, 4, DARKRED);
+    }
 }
 
 void MagicMissle::DrawUI() {

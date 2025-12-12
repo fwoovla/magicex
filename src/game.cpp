@@ -33,6 +33,7 @@ std::vector<LDTKTileset> g_ldtk_tilesets;
 
 Color g_item_type_colors[TYPE_ALL];
 std::unordered_map<int, Color>g_rarity_colors;
+Font g_font;
 
 Texture2D g_tile_sheets[MAX_SPRITES];
 Texture2D g_sprite_sheets[MAX_SPRITES];

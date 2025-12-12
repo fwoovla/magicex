@@ -15,7 +15,7 @@ CharacterMenu::CharacterMenu() {
     };
 
     gpo = {panel_rect.x, panel_rect.y + 80};
-    CreateLabel(ground_header_label, {gpo.x + 90, gpo.y - 30}, 30/g_scale, WHITE, "GROUND");
+    CreateLabel(ground_header_label, {gpo.x + 90, gpo.y - 30}, FONTSIZE_50, WHITE, "GROUND");
     ground_grid = new ItemGrid(5, 6, 50, {gpo.x + 25, gpo.y + 20}, &shared_data);
     ground_grid->this_grid = GRID_GROUND;
     ground_grid->accepted_type = TYPE_ALL;
@@ -28,19 +28,25 @@ CharacterMenu::CharacterMenu() {
     
 //stats
     spo = {panel_rect.x + 320, panel_rect.y + 350};
-    CreateLabel(health_label, {spo.x, spo.y + 5}, 14, RAYWHITE, "health:");
-    CreateLabel(speed_label, {spo.x, spo.y + 20}, 14, RAYWHITE, "speed:");
+    CreateLabel(health_label, {spo.x, spo.y + 5}, FONTSIZE_24, RAYWHITE, "health:");
+    CreateLabel(speed_label, {spo.x, spo.y + 20}, FONTSIZE_24, RAYWHITE, "speed:");
+    CreateLabel(defence_label, {spo.x + 100, spo.y + 5}, FONTSIZE_24, RAYWHITE, "defence:");
+    CreateLabel(magic_defence_label, {spo.x + 100, spo.y + 20}, FONTSIZE_24, RAYWHITE, "magic defence:");
+    CreateLabel(max_power_label, {spo.x + 100, spo.y + 35}, FONTSIZE_24, RAYWHITE, "max_power:");
+    CreateLabel(current_power_label, {spo.x + 100, spo.y + 50}, FONTSIZE_24, RAYWHITE, "current power:");
 
 
 //character 
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
-    CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, 30/g_scale, WHITE, "CHARACTER");
+    CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "CHARACTER");
+
+    CreateLabel(exp_label, {cpo.x + 140, cpo.y + 20}, FONTSIZE_30, RAYWHITE, "exp:");
 
     ppo = {cpo.x + 130, cpo.y + 170}; //portrait offset
     LoadSpriteCentered(character_sprite, g_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
 
-    CreateLabel(primary_header_label, {ppo.x - 75, ppo.y - 10}, 15/g_scale, WHITE, "primary");
+    CreateLabel(primary_header_label, {ppo.x - 75, ppo.y - 10}, FONTSIZE_24, WHITE, "primary");
     primary_grid = new ItemGrid(1, 1, 50, {ppo.x - 100, ppo.y}, &shared_data);
     primary_grid->this_grid = GRID_PRIMARY;
     primary_grid->accepted_type = TYPE_WEAPON;
@@ -50,7 +56,7 @@ CharacterMenu::CharacterMenu() {
     grid_list.push_back(primary_grid);
 
     
-    CreateLabel(secondary_header_label, {ppo.x + 75, ppo.y - 10}, 15/g_scale, WHITE, "secondary");
+    CreateLabel(secondary_header_label, {ppo.x + 105, ppo.y - 10}, FONTSIZE_24, WHITE, "secondary");
     secondary_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y}, &shared_data);
     secondary_grid->this_grid = GRID_SECONDARY;
     secondary_grid->accepted_type = TYPE_WEAPON;
@@ -59,7 +65,7 @@ CharacterMenu::CharacterMenu() {
     secondary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     grid_list.push_back(secondary_grid);
 
-    CreateLabel(head_header_label, {ppo.x + 75, ppo.y - 110}, 15/g_scale, WHITE, "head");
+    CreateLabel(head_header_label, {ppo.x + 75, ppo.y - 110}, FONTSIZE_24, WHITE, "head");
     head_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y - 100}, &shared_data);
     head_grid->this_grid = GRID_HEAD;
     head_grid->accepted_type = TYPE_HEAD_ARMOR;
@@ -68,7 +74,7 @@ CharacterMenu::CharacterMenu() {
     head_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     grid_list.push_back(head_grid);
 
-    CreateLabel(body_header_label, {ppo.x - 75, ppo.y - 110}, 15/g_scale, WHITE, "body");
+    CreateLabel(body_header_label, {ppo.x - 75, ppo.y - 110}, FONTSIZE_24, WHITE, "body");
     body_grid = new ItemGrid(1, 1, 50, {ppo.x - 100, ppo.y - 100}, &shared_data);
     body_grid->this_grid = GRID_BODY;
     body_grid->accepted_type = TYPE_BODY_ARMOR;
@@ -77,7 +83,7 @@ CharacterMenu::CharacterMenu() {
     body_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     grid_list.push_back(body_grid);
 
-    CreateLabel(legs_header_label, {ppo.x, ppo.y + 70}, 15/g_scale, WHITE, "legs");
+    CreateLabel(legs_header_label, {ppo.x, ppo.y + 70}, FONTSIZE_24, WHITE, "legs");
     legs_grid = new ItemGrid(1, 1, 50, {ppo.x - 25, ppo.y + 80}, &shared_data);
     legs_grid->this_grid = GRID_LEGS;
     legs_grid->accepted_type = TYPE_LEG_ARMOR;
@@ -86,7 +92,7 @@ CharacterMenu::CharacterMenu() {
     legs_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     grid_list.push_back(legs_grid);
 
-    CreateLabel(feet_header_label, {ppo.x - 75, ppo.y + 70}, 15/g_scale, WHITE, "feet");
+    CreateLabel(feet_header_label, {ppo.x - 75, ppo.y + 70}, FONTSIZE_24, WHITE, "feet");
     feet_grid = new ItemGrid(1, 1, 50, {ppo.x - 100, ppo.y + 80}, &shared_data);
     feet_grid->this_grid = GRID_FEET;
     feet_grid->accepted_type = TYPE_FEET_ARMOR;
@@ -95,7 +101,7 @@ CharacterMenu::CharacterMenu() {
     feet_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     grid_list.push_back(feet_grid);
 
-    CreateLabel(hands_header_label, {ppo.x + 75, ppo.y + 70}, 15/g_scale, WHITE, "hands");
+    CreateLabel(hands_header_label, {ppo.x + 75, ppo.y + 70}, FONTSIZE_24, WHITE, "hands");
     hands_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y + 80}, &shared_data);
     hands_grid->this_grid = GRID_HANDS;
     hands_grid->accepted_type = TYPE_HAND_ARMOR;
@@ -109,7 +115,7 @@ CharacterMenu::CharacterMenu() {
 //end character
 
     ipo = {panel_rect.x + 560, panel_rect.y + 80};
-    CreateLabel(inventory_label_header, {ipo.x + 60, ipo.y - 30}, 30/g_scale, WHITE, "INVENTORY");
+    CreateLabel(inventory_label_header, {ipo.x + 60, ipo.y - 30}, FONTSIZE_50, WHITE, "INVENTORY");
 
     inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 25, ipo.y + 20}, &shared_data);
     inventory_grid->this_grid = GRID_INVENTORY;
@@ -149,8 +155,20 @@ CharacterMenu::~CharacterMenu() {
 
 void CharacterMenu::Draw() {
     DrawRectangleRec({0,0,g_resolution.x,g_resolution.y}, TRANSDARKERGRAY);
-    //DrawRectangleRec(panel_rect, RED);
     DrawTexturePro(panel_bg, {0,0,(float)panel_bg.width, (float)panel_bg.height}, panel_rect, {0,0}, 0.0f, WHITE);
+
+    DrawLineV( {spo.x - 10, spo.y}, {spo.x + 220, spo.y}, RAYWHITE);
+    DrawLabel(health_label);
+    DrawLabel(speed_label);
+    DrawLabelCentered(exp_label);
+    DrawLabel(defence_label);
+    DrawLabel(magic_defence_label);
+    DrawLabel(max_power_label);
+    DrawLabel(current_power_label);
+    DrawLabel(character_header_label);
+    DrawSprite(character_sprite);
+
+
     DrawLabel(ground_header_label);
     ground_grid->DrawGrid();
     DrawLabel(inventory_label_header);
@@ -192,18 +210,14 @@ void CharacterMenu::Draw() {
     hands_grid->DrawItems();
 
 
-    DrawLabel(character_header_label);
-    DrawSprite(character_sprite);
+    if(g_game_settings.show_debug) {
 
-    DrawLineV( {spo.x - 10, spo.y}, {spo.x + 220, spo.y}, RAYWHITE);
-    DrawLabel(health_label);
-    DrawLabel(speed_label);
-
-/*     DrawCircleV(gpo, 2, RED);
-    DrawCircleV(ipo, 2, RED);
-    DrawCircleV(cpo, 2, RED);
-    DrawCircleV(hpo, 2, RED);
-    DrawCircleV(ppo, 2, RED); */
+        DrawCircleV(gpo, 2, RED);
+        DrawCircleV(ipo, 2, RED);
+        DrawCircleV(cpo, 2, RED);
+        DrawCircleV(hpo, 2, RED);
+        DrawCircleV(ppo, 2, RED);
+    }
 }
 
 void CharacterMenu::DrawHotBarOnly() {
@@ -233,6 +247,20 @@ void CharacterMenu::Update() {
     std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
     health_label.text = "health: " + health;
 
+    std::string exp = TextFormat("%i", g_character_data[g_current_player->uid].exp);
+    exp_label.text = "exp: " + exp;
+
+    std::string defence = TextFormat("%i", g_character_data[g_current_player->uid].defence);
+    defence_label.text = "defence: " + defence;
+
+    std::string magic_defence = TextFormat("%i", g_character_data[g_current_player->uid].magic_defence);
+    magic_defence_label.text = "magic defence: " + magic_defence;
+
+    std::string max_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].max_power);
+    max_power_label.text = "max power: " + max_power;
+
+    std::string current_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_power);
+    current_power_label.text = "current power: " + current_power;
 }
 
 void CharacterMenu::Open() {
@@ -248,7 +276,6 @@ void CharacterMenu::Open() {
     feet_grid->SetItems(&g_character_data[g_current_player->uid].feet);
     hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
 
-    //std::vector<int> blank_list;
     use_ground = true;
     blank_list.clear();
     blank_list.push_back(-1);
@@ -350,23 +377,26 @@ void CharacterMenu::OnTransferItem() {
         if(grid_list[dest_index]->CanAddItem(shared_data.item_id, shared_data.dest_cell)) {
             grid_list[dest_index]->AddItem(shared_data.item_id, shared_data.dest_cell);
 
+
+
+            if(shared_data.source_grid == GRID_PRIMARY or
+                //shared_data.source_grid == GRID_SECONDARY or
+                shared_data.source_grid == GRID_HEAD or
+                shared_data.source_grid == GRID_BODY or
+                shared_data.source_grid == GRID_LEGS or
+                shared_data.source_grid == GRID_FEET or 
+                shared_data.source_grid == GRID_HANDS) {
+                if(g_current_player->CanUnEquip(shared_data.item_id)) {grid_list[source_index]->RemoveItem(shared_data.source_cell); g_current_player->UnEquip(shared_data.item_id);}}
+
+
             if(shared_data.dest_grid == GRID_PRIMARY or
-                shared_data.dest_grid == GRID_SECONDARY or
+                //shared_data.dest_grid == GRID_SECONDARY or
                 shared_data.dest_grid == GRID_HEAD or
                 shared_data.dest_grid == GRID_BODY or
                 shared_data.dest_grid == GRID_LEGS or
                 shared_data.dest_grid == GRID_FEET or 
                 shared_data.dest_grid == GRID_HANDS) {
                 if(g_current_player->CanEquip(shared_data.item_id)) {g_current_player->Equip(shared_data.item_id);}}
-
-            if(shared_data.source_grid == GRID_PRIMARY or
-                shared_data.source_grid == GRID_SECONDARY or
-                shared_data.source_grid == GRID_HEAD or
-                shared_data.source_grid == GRID_BODY or
-                shared_data.source_grid == GRID_LEGS or
-                shared_data.source_grid == GRID_FEET or 
-                shared_data.source_grid == GRID_HANDS) {
-                if(g_current_player->CanUnEquip(shared_data.item_id)) {g_current_player->UnEquip(shared_data.item_id);}}
 
             grid_list[source_index]->RemoveItem(shared_data.source_cell);
         }
@@ -375,24 +405,11 @@ void CharacterMenu::OnTransferItem() {
         }
     }
 
-/*     if(shared_data.dest_grid == GRID_PRIMARY or
-       shared_data.dest_grid == GRID_SECONDARY or
-       shared_data.dest_grid == GRID_HEAD or
-       shared_data.dest_grid == GRID_BODY or
-       shared_data.dest_grid == GRID_LEGS or
-       shared_data.dest_grid == GRID_FEET or 
-       shared_data.dest_grid == GRID_HANDS
-    ) {
-        if(g_current_player->CanEquip(shared_data.item_id)) {
-            
-            g_current_player->Equip(shared_data.item_id);
-        }
-    } */
-
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;
     shared_data.source_cell = {-1,-1};
     shared_data.source_grid = GRID_NONE;
+    shared_data.item_id = -1;
 
     TraceLog(LOG_INFO, "---------------------------------");
 }

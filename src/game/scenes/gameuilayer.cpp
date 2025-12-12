@@ -8,6 +8,9 @@ GameUILayer::GameUILayer() {
     CreateButton(quit_button, {g_resolution.x - 10, 10}, {30/g_scale , 30/g_scale}, RED, "X");
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
+
+
+    CreateLabel(power_label, {20, g_resolution.y - 50}, FONTSIZE_80, RAYWHITE, "power...");
 }
 
 GameUILayer::~GameUILayer() {
@@ -18,6 +21,7 @@ GameUILayer::~GameUILayer() {
 void GameUILayer::Draw() {
 
     DrawButton(quit_button);
+    DrawLabel(power_label);
 
     if(!g_game_settings.show_debug){
         return;
@@ -29,7 +33,8 @@ void GameUILayer::Draw() {
 }
 
 void GameUILayer::Update() {
-
+    std::string power = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_power);
+    power_label.text = power;
 
     if(IsButtonHovered(quit_button, g_scale)){
         if(quit_button.already_hovered == false) {

@@ -256,6 +256,11 @@ class CharacterMenu : public BaseUILayer {
     Vector2 spo; 
     Label speed_label;
     Label health_label;
+    Label exp_label;
+    Label defence_label;
+    Label magic_defence_label;
+    Label max_power_label;
+    Label current_power_label;
 };
 
 class TitleUILayer : public BaseUILayer {
@@ -369,6 +374,8 @@ class GameUILayer : public BaseUILayer {
     Label title_label;
 
     Label debug_zoom_level;
+
+    Label power_label;
 
 };
 

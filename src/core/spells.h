@@ -10,6 +10,8 @@ struct SpellData {
     float lifetime;
     float radius;
     float speed;
+    float cooldown;
+    float pps;
     std::string spell_name;
 };
 

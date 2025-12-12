@@ -21,7 +21,7 @@ FireBall::FireBall(Vector2 _position, int _shooter_id, SpellData _data) {
     target_position = g_input.world_mouse_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
-    rotation = (target_rotation * RAD2DEG);
+    rotation = target_rotation * RAD2DEG;
     velocity = Vector2Rotate({data.speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);
@@ -64,6 +64,10 @@ void FireBall::Update() {
 
 void FireBall::Draw() {
     DrawSprite(sprite);
+
+    if(g_game_settings.show_debug) {
+        DrawCircleV(target_position, 4, DARKRED);
+    }
 }
 
 void FireBall::DrawUI() {

@@ -54,7 +54,6 @@ void ItemGrid::Update() {
                     //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
                     if(can_select){
-                        //ItemID item_id = ITEM_ID_ERROR;
                         std::string i_name = "no item found";
                         Color color = DEFAULTITEMCOLOR;
                         auto itter = g_item_instances.find(instance_id);
@@ -62,9 +61,8 @@ void ItemGrid::Update() {
                             i_name = itter->second.item_name;
                             color = g_item_type_colors[itter->second.type];
                             //TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
-                            //item_id = itter->second.item_id;
 
-                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, 20, color, i_name.c_str());
+                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
                                 std::string details_text = CreateDetails(itter->second);
@@ -72,7 +70,7 @@ void ItemGrid::Update() {
                                 if(c_itter != g_rarity_colors.end()) {
                                     color = c_itter->second;
                                 }
-                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, 18, color, details_text);
+                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, FONTSIZE_24, color, details_text);
                             }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
@@ -127,7 +125,6 @@ void ItemGrid::Update() {
                         _id = itter->second.icon_id;
                     }
 
-                    //LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[ g_item_data[ (*item_list)[dest_index] ].id ], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
                     LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
                     ScaleSprite(item_sprites[dest_index], {2,2});
                     
@@ -326,7 +323,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
         if(m_itter != g_weapon_mod_data.end()) {
             
-            if(m_itter->second.clip_size != -1000) {stat = "max shots +: "; value = std::to_string(m_itter->second.clip_size);}
+            if(m_itter->second.max_power != -1000) {stat = "power +: "; value = std::to_string(m_itter->second.max_power);}
             if(m_itter->second.cooldown != -1000) {stat = "cooldown +: "; value = TextFormat("%0.02f", m_itter->second.cooldown);}
             if(m_itter->second.damage != -1000) {stat = "damage +: "; value = std::to_string(m_itter->second.damage);}
             details += stat + value + "\n";
@@ -364,8 +361,9 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             details += std::to_string(itter->second.damage) + " damage\n";
             std::string cool = TextFormat("%0.2f", itter->second.cooldown);
             details += cool + " cooldown\n";
-            if(itter->second.clip_size > 0){
-                details += std::to_string(itter->second.clip_size) + " max charges\n";
+            if(itter->second.max_power > 0){
+                std::string power = TextFormat("%0.2f", itter->second.max_power);
+                details += power + " max power\n";
             }
         }
 

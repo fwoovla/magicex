@@ -25,6 +25,8 @@ void ShelterUILayer::Draw() {
     //DrawButton(start_button);
     DrawButton(quit_button);
 
+    DrawTextEx(g_font, "CHECK", {10, 10}, 40, 1, RED);
+    DrawText("DEFAULT", 10, 60, 40, BLUE);
     if(!g_game_settings.show_debug){
         return;
     }

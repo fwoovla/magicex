@@ -102,7 +102,8 @@ class ShelterScene : public  BaseScene{
         void OnTransitionAreaEntered();
         void OnTransitionAreaActivated();
 
-        ShelterUILayer *ui_layer;
+        //ShelterUILayer *ui_layer;
+        GameUILayer *ui_layer;
 
         CharacterMenu *character_menu;
         bool character_menu_visible;

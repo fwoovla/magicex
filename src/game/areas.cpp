@@ -24,7 +24,7 @@ void TransitionArea::Update() {
             float lx = g_input.screen_mouse_position.x * g_inv_scale;
             float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
-            CreateLabel(label, {lx, ly}, 20, WHITE, "open");
+            CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "open");
             if(identifier == "HouseTransition") {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                     g_game_data.sub_return_position = payload_v * 2;
@@ -64,8 +64,8 @@ void TransitionArea::Draw() {
         else {
             label.default_color = WHITE;
         }
-        DrawLabelCentered(label);
-        DrawLabelCenteredWithBG(label, TRANSDARKERGRAY);
+        //DrawLabelCentered(label);
+        DrawLabelCenteredWithBG(label, BLACK);
 
         if(time_pressed > 0) {
             Rectangle rect = {
@@ -126,7 +126,7 @@ void ContainerArea::Update() {
         else {
             text = "open";
         }
-        CreateLabel(label, {lx, ly}, 20, WHITE, text.c_str());
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
@@ -158,7 +158,7 @@ void ContainerArea::Draw() {
         else {
             label.default_color = WHITE;
         }
-        DrawLabelCenteredWithBG(label, TRANSDARKERGRAY);
+        DrawLabelCenteredWithBG(label, BLACK);
 
         if(time_pressed > 0) {
 
@@ -209,7 +209,7 @@ void ModuleArea::Update() {
             text = itter->second.module_name;
         }
         
-        CreateLabel(label, {lx, ly}, 20, WHITE, text.c_str());
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
@@ -241,7 +241,7 @@ void ModuleArea::Draw() {
         else {
             label.default_color = WHITE;
         }
-        DrawLabelCenteredWithBG(label, TRANSDARKERGRAY);
+        DrawLabelCenteredWithBG(label, BLACK);
 
         if(time_pressed > 0) {
 

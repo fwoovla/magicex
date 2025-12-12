@@ -30,6 +30,19 @@ inline const Color TRANSDARKGREEN = {.r = 0, .g = 50, .b = 0, .a = 60};
 inline const Color TRANSGREEN = {.r = 0, .g = 255, .b = 0, .a = 60};
 
 
+inline const int FONTSIZE_80 = 80;
+inline const int FONTSIZE_50 = 50;
+inline const int FONTSIZE_40 = 40;
+inline const int FONTSIZE_30 = 30;
+inline const int FONTSIZE_24 = 24;
+inline const int FONTSIZE_20 = 20;
+inline const int FONTSIZE_16 = 16;
+inline const int FONTSIZE_14 = 14;
+inline const int FONTSIZE_10 = 10;
+
+
+extern Font g_font;
+
 struct GameSettings {
     Vector2 window_size;
     Vector2 resolution;

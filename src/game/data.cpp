@@ -29,6 +29,9 @@ void LoadGameData() {
     g_rarity_colors[RARITY_ULTRARARE] = ULTRARARECOLOR;
 
 
+    g_font = LoadFontEx("assets/FFatF.ttf", 64, nullptr, 0);
+    TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
+    TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
 
     std::ifstream cfile("assets/data.json");
     if (!cfile.is_open()) {
@@ -79,6 +82,8 @@ void LoadGameData() {
             .health = health,
             .exp = exp,
             .base_speed = base_speed,
+            .max_power = 0,
+            .current_power = 0,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = "not assigned",
@@ -150,6 +155,8 @@ void LoadGameData() {
         int speed = cj["spell_data"][i]["speed"];
         int level = cj["spell_data"][i]["level"];
         float radius = cj["spell_data"][i]["radius"];
+        float cooldown = cj["spell_data"][i]["cooldown"];
+        float pps = cj["spell_data"][i]["pps"];
 
         new_spell.lifetime = lifetime;
         new_spell.damage = damage;
@@ -158,6 +165,8 @@ void LoadGameData() {
         new_spell.radius = radius;
         new_spell.speed = speed;
         new_spell.spell_name = name;
+        new_spell.cooldown = cooldown;
+        new_spell.pps = pps;
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
@@ -205,7 +214,7 @@ void LoadGameData() {
         std::string sp_id = cj["weapon_data"][i]["spell_id"];
         spell_id = StrToSpellId(sp_id);
 
-        int clip_size = cj["weapon_data"][i]["clip_size"];
+        int max_power = cj["weapon_data"][i]["max_power"];
 
         int damage = cj["weapon_data"][i]["damage"];
 
@@ -214,8 +223,7 @@ void LoadGameData() {
             .weapon_id = w_id,
             .cooldown = cooldown,
             .spell_id = spell_id,
-            .clip_size = clip_size,
-            .ammo_count = clip_size,
+            .max_power = max_power,
             .damage = damage                
         };
 
@@ -414,7 +422,7 @@ void LoadGameData() {
         new_mod.mod_id = StrToItemModId( cj["weapon_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["weapon_modifiers"][i]["mod_name"];
         new_mod.cooldown = cj["weapon_modifiers"][i]["cooldown"];
-        new_mod.clip_size = cj["weapon_modifiers"][i]["clip_size"];
+        new_mod.max_power = cj["weapon_modifiers"][i]["max_power"];
         new_mod.damage = cj["weapon_modifiers"][i]["damage"];
         new_mod.rarity = StrToItemRarity( cj["weapon_modifiers"][i]["rarity"]);
                 
@@ -463,6 +471,10 @@ void SaveGame(LevelData &level_data) {
     int uid = g_current_player->uid;
     j["health"] = g_character_data[uid].health;
     j["exp"] = g_character_data[uid].exp;
+    j["max_power"] = g_character_data[uid].max_power;
+    j["current_power"] = g_character_data[uid].current_power;
+    j["defence"] = g_character_data[uid].defence;
+    j["magic_defence"] = g_character_data[uid].magic_defence;
     j["base_speed"] = g_character_data[uid].base_speed;
     j["sprite_sheet_id"] = g_character_data[uid].sprite_sheet_id;
     j["portrait_id"] = g_character_data[uid].portrait_id;
@@ -510,8 +522,6 @@ void SaveGame(LevelData &level_data) {
             {"type", inst.type},
             {"item_name", inst.item_name},
             {"spell_id", inst.spell_id},
-            {"clip_size", inst.clip_size},
-            {"ammo_count", inst.ammo_count},
             {"container_id", inst.container_id},
             {"cooldown", inst.cooldown},
             {"item_id", inst.item_id},
@@ -521,7 +531,9 @@ void SaveGame(LevelData &level_data) {
             {"magic_defence", inst.magic_defence},
             {"sprite_id", inst.sprite_id},
             {"saturation", inst.saturation},
-            {"modifications", inst.modifications}
+            {"modifications", inst.modifications},
+            {"max_power", inst.max_power},
+            {"current_power", inst.current_power}
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -595,6 +607,8 @@ int LoadGame() {
 
     g_character_data[uid].health = j["health"];
     g_character_data[uid].exp = j["exp"];
+    g_character_data[uid].defence = j["defence"];
+    g_character_data[uid].magic_defence = j["magic_defence"];
     g_character_data[uid].base_speed = j["base_speed"];
     g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
     g_character_data[uid].portrait_id = j["portrait_id"];
@@ -1043,8 +1057,8 @@ void InstanceCharacterItem(ItemID item_id, int character_uid) {
         new_instance.item_name = item_it->second.item_name;
         new_instance.type = item_it->second.type;
         new_instance.value = item_it->second.value;
-        new_instance.clip_size = 0;
-        new_instance.ammo_count = 0;
+        new_instance.max_power = 0;
+        new_instance.current_power = 0;
         new_instance.container_id = "";
         new_instance.sprite_id = item_id;
         new_instance.icon_id = item_id;
@@ -1324,6 +1338,14 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_SHOVEL",    ItemID::ITEM_ID_SHOVEL},
         {"ITEM_ID_TONGS",    ItemID::ITEM_ID_TONGS},
         {"ITEM_ID_ANVIL",    ItemID::ITEM_ID_ANVIL},
+
+        {"ITEM_ID_CHARCOAL",    ItemID::ITEM_ID_CHARCOAL},
+        {"ITEM_ID_RESIN",    ItemID::ITEM_ID_RESIN},
+        {"ITEM_ID_BONE",    ItemID::ITEM_ID_BONE},
+        {"ITEM_ID_ROPE",    ItemID::ITEM_ID_ROPE},
+        {"ITEM_ID_BUCKET",    ItemID::ITEM_ID_BUCKET},
+
+
     };
 
 
@@ -1359,8 +1381,6 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("type").get_to(i.type);
     j.at("item_name").get_to(i.item_name);
     j.at("spell_id").get_to(i.spell_id);
-    j.at("clip_size").get_to(i.clip_size);
-    j.at("ammo_count").get_to(i.ammo_count);
     j.at("container_id").get_to(i.container_id);
     j.at("cooldown").get_to(i.cooldown);
     j.at("item_id").get_to(i.item_id);
@@ -1371,6 +1391,8 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("sprite_id").get_to(i.sprite_id);
     j.at("saturation").get_to(i.saturation);
     j.at("modifications").get_to(i.modifications);
+    j.at("max_power").get_to(i.max_power);
+    j.at("current_power").get_to(i.current_power);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }

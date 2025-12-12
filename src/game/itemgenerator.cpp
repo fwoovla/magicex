@@ -15,13 +15,13 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
         new_instance.item_name = item_it->second.item_name;
         new_instance.type = item_it->second.type;
         new_instance.value = item_it->second.value;
-        new_instance.clip_size = 0;
-        new_instance.ammo_count = 0;
         new_instance.container_id = container_id;
         new_instance.spell_id = SPELL_ID_NONE;
         new_instance.sprite_id = item_id;
         new_instance.icon_id = item_id;
-        new_instance.level = 1;
+        new_instance.level = 0;
+        new_instance.max_power = 0;
+        new_instance.current_power = 0;
 
     }
     return new_instance;
@@ -44,8 +44,6 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         TraceLog(LOG_INFO, "Generating new Item %s", item_it->second.item_name.c_str());
         new_instance.type = item_it->second.type;
         new_instance.value = item_it->second.value;
-        new_instance.clip_size = 0;
-        new_instance.ammo_count = 0;
         new_instance.container_id = container_id;
         new_instance.spell_id = SPELL_ID_NONE;
         new_instance.sprite_id = item_id;
@@ -53,6 +51,9 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
         new_instance.defence = 0;
         new_instance.magic_defence = 0;
         new_instance.saturation = 0;
+        new_instance.level = 0;
+        new_instance.max_power = 0;
+        new_instance.current_power = 0;
 
 
         //add chara mods here
@@ -79,8 +80,6 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
 
     auto w_itter = g_weapon_data.find(instance.item_id);
     if(w_itter != g_weapon_data.end()) {
-        instance.clip_size = w_itter->second.clip_size;
-        TraceLog(LOG_INFO, "-clipsize %i", instance.clip_size );
         instance.cooldown = w_itter->second.cooldown;
         TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
         instance.damage =  w_itter->second.damage;
@@ -89,6 +88,8 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         instance.icon_id = w_itter->second.weapon_id;
         TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
         TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+        instance.max_power = w_itter->second.max_power;
+        instance.current_power = w_itter->second.max_power;
     }
 
     if(loot_level >= 1) {
@@ -105,7 +106,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         auto m_itter = g_weapon_mod_data.find(mod_id);
         if(m_itter != g_weapon_mod_data.end()) {
             if(m_itter->second.cooldown > -900) { instance.cooldown += m_itter->second.cooldown; }
-            if(m_itter->second.clip_size != -1000) { instance.clip_size += m_itter->second.clip_size; }
+            if(m_itter->second.max_power != -1000) { instance.max_power += m_itter->second.max_power; }
             if(m_itter->second.damage != -1000) { instance.damage += m_itter->second.damage; }
             if(m_itter->second.rarity < instance.rarity){instance.rarity = m_itter->second.rarity;}
 
@@ -147,6 +148,8 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         auto s_itter = g_spell_data.find((int)instance.spell_id);
         if(s_itter != g_spell_data.end()) {
             instance.item_name += " of " + s_itter->second.spell_name;
+            //instance.max_power = s_itter->second.;
+
             TraceLog(LOG_INFO, "-name  + %s", s_itter->second.spell_name.c_str());
 
             if(instance.spell_id == SPELL_ID_MAGICMISSLE) {

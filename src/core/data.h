@@ -72,7 +72,7 @@ struct WeaponModData {
     std::string mod_name;
 
     float cooldown;
-    int clip_size;
+    int max_power;
     int damage;
     int rarity;
 };
@@ -130,8 +130,6 @@ struct ItemInstanceData {
     ItemType type;
     std::string item_name;
     SpellID spell_id;
-    int clip_size;
-    int ammo_count;
     float cooldown;
     int damage;
     int sprite_id;
@@ -141,6 +139,8 @@ struct ItemInstanceData {
     int magic_defence;
     float saturation;
     int rarity;
+    float max_power;
+    float current_power;
 };
 
 extern std::unordered_map<int, ItemInstanceData> g_item_instances;
@@ -150,7 +150,7 @@ struct WeaponData {
     ItemID weapon_id;
     float cooldown;
     SpellID spell_id;
-    int clip_size;
+    int max_power;
     int ammo_count;
     int damage;
 };
@@ -192,6 +192,10 @@ struct PlayerData {
     int health;
     int exp;
     float base_speed;
+    int defence;
+    int magic_defence;
+    float max_power;
+    float current_power;
     int sprite_sheet_id;
     int portrait_id;
     std::string name;

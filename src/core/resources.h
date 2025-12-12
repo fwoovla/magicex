@@ -72,6 +72,12 @@ enum ItemID {
     ITEM_ID_TONGS,
     ITEM_ID_ANVIL,
 
+    ITEM_ID_CHARCOAL,
+    ITEM_ID_RESIN,
+    ITEM_ID_BONE,
+    ITEM_ID_ROPE,
+    ITEM_ID_BUCKET,
+
     ITEM_ID_ERROR,
     ITEM_ID_MAX
 };

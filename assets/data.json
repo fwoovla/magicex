@@ -223,6 +223,36 @@
             "item_id":"ITEM_ID_ANVIL",
             "value":0,
             "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Charcoal",
+            "item_id":"ITEM_ID_CHARCOAL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Resin",
+            "item_id":"ITEM_ID_RESIN",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Bone",
+            "item_id":"ITEM_ID_BONE",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Rope",
+            "item_id":"ITEM_ID_ROPE",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Bucket",
+            "item_id":"ITEM_ID_BUCKET",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
         }
     ],
 
@@ -239,7 +269,9 @@
             "lifetime":1.0,
             "speed": 200,
             "damage":1,
-            "radius":2
+            "radius":2,
+            "cooldown":0.1,
+            "pps":0.1
         },
         {
             "spell_id":"SPELL_ID_FIREBALL",
@@ -248,7 +280,9 @@
             "lifetime":1.0,
             "speed": 100,
             "damage":1,
-            "radius":2
+            "radius":2,
+            "cooldown":0.5,
+            "pps":0.5
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING",
@@ -257,7 +291,9 @@
             "lifetime":1.0,
             "speed": 700,
             "damage":1,
-            "radius":2
+            "radius":2,
+            "cooldown":0.5,
+            "pps":1.0
         }
     ],
 
@@ -271,7 +307,7 @@
             "weapon_name": "Dagger",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0,
+            "max_power":0,
             "damage":1
         },
         {
@@ -279,7 +315,7 @@
             "weapon_name": "Sword",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0,
+            "max_power":0,
             "damage":1
         },
         {
@@ -287,7 +323,7 @@
             "weapon_name": "Spear",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0,
+            "max_power":0,
             "damage":1
         },
         {
@@ -295,7 +331,7 @@
             "weapon_name": "Axe",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0,
+            "max_power":0,
             "damage":1
         },
         {
@@ -303,7 +339,7 @@
             "weapon_name": "Bow",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":0,
+            "max_power":0,
             "damage":1
         },
         {
@@ -311,7 +347,7 @@
             "weapon_name": "Wand",
             "cooldown": 0.60,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":10,
+            "max_power":10,
             "damage":1
         },
         {
@@ -319,7 +355,7 @@
             "weapon_name": "Staff",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
-            "clip_size":10,
+            "max_power":20,
             "damage":1
         }
     ],
@@ -480,7 +516,7 @@
             "mod_name":"swiftness",
             "rarity":"RARITY_COMMON",
             "cooldown": -0.1,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":-1000
         },
         {
@@ -488,7 +524,7 @@
             "mod_name":"swiftness",
             "rarity":"RARITY_UNCOMMON",
             "cooldown": -0.2,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":-1000
         },
         {
@@ -496,7 +532,7 @@
             "mod_name":"swiftness",
             "rarity":"RARITY_RARE",
             "cooldown": -0.3,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":-1000
         },
         {
@@ -504,7 +540,7 @@
             "mod_name":"swiftness",
             "rarity":"RARITY_VERYRARE",
             "cooldown": -0.4,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":-1000
         },
         {
@@ -512,7 +548,7 @@
             "mod_name":"swiftness",
             "rarity":"RARITY_ULTRARARE",
             "cooldown": -0.5,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":-1000
         },
 
@@ -522,7 +558,7 @@
             "mod_name":"damage",
             "rarity":"RARITY_COMMON",
             "cooldown": -1000,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":1
         },
         {
@@ -530,7 +566,7 @@
             "mod_name":"damage",
             "rarity":"RARITY_UNCOMMON",
             "cooldown": -1000,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":2
         },
         {
@@ -538,7 +574,7 @@
             "mod_name":"damage",
             "rarity":"RARITY_RARE",
             "cooldown": -1000,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":3
         },
         {
@@ -546,7 +582,7 @@
             "mod_name":"damage",
             "rarity":"RARITY_VERYRARE",
             "cooldown": -1000,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":4
         },
         {
@@ -554,7 +590,7 @@
             "mod_name":"damage",
             "rarity":"RARITY_ULTRARARE",
             "cooldown": -1000,
-            "clip_size":-1000,
+            "max_power":-1000,
             "damage":5
         }
 

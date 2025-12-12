@@ -18,19 +18,19 @@ ModuleMenu::ModuleMenu() {
     inpo = {panel_rect.x + 250, panel_rect.y + 50};
     ipo = {panel_rect.x + 470, panel_rect.y + 50};
 
-    CreateLabel(recipie_header, rpo, 24, WHITE, "RECIPIES");
-    CreateLabel(recipie_label, {rpo.x, rpo.y + 50}, 24, WHITE, "");
+    CreateLabel(recipie_header, rpo, FONTSIZE_50, WHITE, "RECIPIES");
+    CreateLabel(recipie_label, {rpo.x, rpo.y + 50}, FONTSIZE_50, WHITE, "");
 
-    CreateLabel(ingredient_header, inpo, 24, WHITE, "REQUIRED");
-    CreateLabel(ingredient_label, {inpo.x, inpo.y + 50}, 16, WHITE, "");
+    CreateLabel(ingredient_header, inpo, FONTSIZE_50, WHITE, "REQUIRED");
+    CreateLabel(ingredient_label, {inpo.x, inpo.y + 50}, FONTSIZE_40, WHITE, "");
 
-    CreateLabel(inventory_header, ipo, 24, WHITE, "INVENTORY");
+    CreateLabel(inventory_header, ipo, FONTSIZE_50, WHITE, "INVENTORY");
 
     inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 50, ipo.y + 50}, &shared_data);
 
     CreateButton(craft_button, {inpo.x + 100, panel_rect.height }, {100, 30}, YELLOW, "CRAFT");
     craft_button.default_color = DARKYELLOW;
-    craft_button.text_size = 20;
+    craft_button.text_size = FONTSIZE_30;
 }
 
 ModuleMenu::~ModuleMenu() {
@@ -116,7 +116,6 @@ void ModuleMenu::Update() {
                 }
             }
         }
-
     }
         
     for(int b = 0; b <recipie_buttons.size(); b++) {
@@ -144,17 +143,16 @@ void ModuleMenu::Update() {
     }
 
     if(IsButtonHovered(craft_button, g_scale)){
-            if(craft_button.already_hovered == false) {
-                //TraceLog(LOG_INFO, "selected hovered");
-                //recipie_selected.EmitSignal();
-            }
-            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                //TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
-                RecipieSelected();
-                //recipie_selected.EmitSignal();
-            }        
+        if(craft_button.already_hovered == false) {
+            //TraceLog(LOG_INFO, "selected hovered");
+            //recipie_selected.EmitSignal();
         }
-
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            //TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
+            RecipieSelected();
+            //recipie_selected.EmitSignal();
+        }        
+    }
 }
 
 void ModuleMenu::OpenModule() {
@@ -187,7 +185,7 @@ void ModuleMenu::OpenModule() {
             TraceLog(LOG_INFO, " recipies %s", r_itter->second.recipie_name.c_str());
             Button new_button;
             CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, r_itter->second.recipie_name.c_str());
-            new_button.text_size = 20;
+            new_button.text_size = FONTSIZE_20;
             new_button.default_color = BLANK;
             
             int ingredients_types_found = 0;
@@ -299,10 +297,6 @@ void ModuleMenu::OpenModule() {
             y_index ++;
         }
     }
-
-
-
-
 }
 
 void ModuleMenu::RecipieSelected() {
