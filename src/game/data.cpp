@@ -1374,6 +1374,22 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
 
 }
 
+
+std::string ModuleIdToStr(const int id) {
+
+    static const std::unordered_map<int , std::string> lookup_table = {
+        {ModuleID::MODULE_ID_WORKBENCH,     "WORKBENCH"},
+         {ModuleID::MODULE_ID_STOVE,     "STOVE"},
+          {ModuleID::MODULE_ID_MUSHROOMPRESS,     "MUSHROOMPRESS"},
+    };
+    if (auto it = lookup_table.find(id); it != lookup_table.end()) {
+        return it->second;
+    }
+    return "";
+
+}
+
+
 void from_json(const json &j, ItemInstanceData &i) {
     j.at("item_id").get_to(i.item_id);
     j.at("instance_id").get_to(i.instance_id);

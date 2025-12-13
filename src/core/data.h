@@ -335,6 +335,8 @@ PlanID StrToPlanId(const std::string& s);
 
 ModuleID StrToModuleId(const std::string& s);
 
+std::string ModuleIdToStr(const int id);
+
 RecipieID StrToRecipieId(const std::string& s);
 
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);

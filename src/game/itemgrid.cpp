@@ -344,7 +344,6 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     for(int mod = 0; mod < item_data.char_mods.size(); mod++) {
         auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
         if(cm_itter != g_char_mod_data.end()) {
-            //details += cm_itter->second.mod_name + "\n";
             if(cm_itter->second.health != -1000) {stat = "health +: "; value = std::to_string(cm_itter->second.health);}
             if(cm_itter->second.speed != -1000) {stat = "speed: +"; value = TextFormat("%0.02f", cm_itter->second.speed);}
             details += stat + value + "\n"; 
@@ -386,6 +385,11 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
    
         if(item_data.type ==  TYPE_PLAN) {
+            auto p_it = g_plan_data.find(item_data.item_id);
+            if(p_it != g_plan_data.end()) {
+
+                details += " use with " +  ModuleIdToStr( p_it->second.module_id) + "\n";
+            }
         }
         
         if(item_data.type ==  TYPE_RESOURCE) {

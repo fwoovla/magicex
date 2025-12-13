@@ -19,11 +19,9 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     velocity = {0,0};
     
     LoadSpriteCentered(sprite, g_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
-    //LoadSpriteCentered(sprite, g_sprite_sheets[g_player_data.sprite_sheet_id], position, 4, 16.0f, 0.10f);
 
     int _id = ITEM_ID_ERROR;
     auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
-    //auto item_it = g_item_instances.find(g_player_data.primary[0]);
     if(item_it != g_item_instances.end()) {
         _id = item_it->second.sprite_id;
         LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
@@ -45,7 +43,6 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
 }
 
 void PlayerCharacter::Update() {
-    //TraceLog(LOG_INFO, "player update");
     CheckInput();
 
     collided = false;
@@ -76,11 +73,9 @@ void PlayerCharacter::Update() {
         SetAmination(sprite, IDLE);
     }
     if(g_input.world_mouse_position.x  < position.x){
-        //if(velocity.x < -1) {
         sprite.source.width = -sprite.size.x;
     }
     else {
-        //else if(velocity.x > 1){
         sprite.source.width = sprite.size.x;
     }
 
@@ -93,7 +88,6 @@ void PlayerCharacter::Update() {
 }
 
 void PlayerCharacter::Draw() {
-    //TraceLog(LOG_INFO, "player draw");
 
     DrawSprite(sprite);
     DrawSprite(weapon_sprite);
@@ -144,8 +138,6 @@ void PlayerCharacter::CheckInput() {
     if(g_input.key_sprint) {
         speed = speed + (speed * 0.8f);
     }
-
-    //TraceLog(LOG_INFO, "player speed : %0.04f", speed);
 
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
     if(abs(velocity.x) < 4.0f) {
@@ -235,7 +227,6 @@ void PlayerCharacter::Equip(int item_id) {
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
         
-
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
             if(m_itter != g_char_mod_data.end()) {
@@ -249,9 +240,6 @@ void PlayerCharacter::Equip(int item_id) {
         Texture2D t;
         LoadSpriteCentered(weapon_sprite, t, position);
     }
-    
-    
-
     TraceLog(LOG_INFO, "+++++++++++++");
 }
 
@@ -274,13 +262,17 @@ void PlayerCharacter::UnEquip(int item_id) {
             }
 
             g_character_data[uid].max_power -= item_it->second.max_power;
+            g_character_data[uid].current_power -= item_it->second.max_power;
 
             if(g_character_data[uid].max_power < 0) {
                 g_character_data[uid].max_power = 0;
             }
 
-            item_it->second.current_power = g_character_data[uid].current_power;
-            g_character_data[uid].current_power -= item_it->second.max_power;
+            //item_it->second.current_power = g_character_data[uid].current_power;
+
+            if(item_it->second.current_power > item_it->second.max_power) {
+                item_it->second.current_power = item_it->second.max_power;
+            }
             if(g_character_data[uid].current_power < 0) {
                 g_character_data[uid].current_power = 0;
             }
