@@ -30,17 +30,22 @@ CharacterMenu::CharacterMenu() {
     spo = {panel_rect.x + 320, panel_rect.y + 350};
     CreateLabel(health_label, {spo.x, spo.y + 5}, FONTSIZE_24, RAYWHITE, "health:");
     CreateLabel(speed_label, {spo.x, spo.y + 20}, FONTSIZE_24, RAYWHITE, "speed:");
-    CreateLabel(defence_label, {spo.x + 100, spo.y + 5}, FONTSIZE_24, RAYWHITE, "defence:");
-    CreateLabel(magic_defence_label, {spo.x + 100, spo.y + 20}, FONTSIZE_24, RAYWHITE, "magic defence:");
-    CreateLabel(max_power_label, {spo.x + 100, spo.y + 35}, FONTSIZE_24, RAYWHITE, "max_power:");
-    CreateLabel(current_power_label, {spo.x + 100, spo.y + 50}, FONTSIZE_24, RAYWHITE, "current power:");
+    CreateLabel(sat_label, {spo.x, spo.y + 35}, FONTSIZE_24, RAYWHITE, "saturation:");
+
+    CreateLabel(defence_label, {spo.x + 105, spo.y + 5}, FONTSIZE_24, RAYWHITE, "defence:");
+    CreateLabel(magic_defence_label, {spo.x + 105, spo.y + 20}, FONTSIZE_24, RAYWHITE, "magic defence:");
+    
 
 
 //character 
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "CHARACTER");
 
+    
     CreateLabel(exp_label, {cpo.x + 140, cpo.y + 20}, FONTSIZE_30, RAYWHITE, "exp:");
+    //CreateLabel(max_power_label, {cpo.x + 140, cpo.y + 30}, FONTSIZE_24, RAYWHITE, "max_power:");
+    CreateLabel(current_power_label, {cpo.x + 140, cpo.y + 40}, FONTSIZE_24, RAYWHITE, "current power:");
+    current_power_label.default_color = CYAN;
 
     ppo = {cpo.x + 130, cpo.y + 170}; //portrait offset
     LoadSpriteCentered(character_sprite, g_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
@@ -56,7 +61,7 @@ CharacterMenu::CharacterMenu() {
     grid_list.push_back(primary_grid);
 
     
-    CreateLabel(secondary_header_label, {ppo.x + 105, ppo.y - 10}, FONTSIZE_24, WHITE, "secondary");
+    CreateLabel(secondary_header_label, {ppo.x + 75, ppo.y - 10}, FONTSIZE_24, WHITE, "secondary");
     secondary_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y}, &shared_data);
     secondary_grid->this_grid = GRID_SECONDARY;
     secondary_grid->accepted_type = TYPE_WEAPON;
@@ -158,14 +163,18 @@ void CharacterMenu::Draw() {
     DrawTexturePro(panel_bg, {0,0,(float)panel_bg.width, (float)panel_bg.height}, panel_rect, {0,0}, 0.0f, WHITE);
 
     DrawLineV( {spo.x - 10, spo.y}, {spo.x + 220, spo.y}, RAYWHITE);
+    DrawLineV( {spo.x + 100, spo.y}, {spo.x + 100, spo.y + 80}, RAYWHITE);
+
     DrawLabel(health_label);
     DrawLabel(speed_label);
     DrawLabelCentered(exp_label);
     DrawLabel(defence_label);
     DrawLabel(magic_defence_label);
-    DrawLabel(max_power_label);
-    DrawLabel(current_power_label);
+    //DrawLabelCentered(max_power_label);
+    DrawLabelCentered(current_power_label);
     DrawLabel(character_header_label);
+  
+    DrawLabel(sat_label);
     DrawSprite(character_sprite);
 
 
@@ -242,25 +251,27 @@ void CharacterMenu::Update() {
     hands_grid->Update();
 
     std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].base_speed);
-    speed_label.text = "speed: " + speed;
+    speed_label.text = "speed:  " + speed;
 
     std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
-    health_label.text = "health: " + health;
+    health_label.text = "health:  " + health;
 
     std::string exp = TextFormat("%i", g_character_data[g_current_player->uid].exp);
-    exp_label.text = "exp: " + exp;
+    exp_label.text = "exp:  " + exp;
 
     std::string defence = TextFormat("%i", g_character_data[g_current_player->uid].defence);
-    defence_label.text = "defence: " + defence;
+    defence_label.text = "defence:  " + defence;
 
     std::string magic_defence = TextFormat("%i", g_character_data[g_current_player->uid].magic_defence);
-    magic_defence_label.text = "magic defence: " + magic_defence;
+    magic_defence_label.text = "magic defence:  " + magic_defence;
 
     std::string max_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].max_power);
-    max_power_label.text = "max power: " + max_power;
-
+    //max_power_label.text = "max power: " + max_power;
     std::string current_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_power);
-    current_power_label.text = "current power: " + current_power;
+    current_power_label.text = "power:  " + current_power + "/" + max_power;
+
+    std::string sat = TextFormat("%0.2f", g_character_data[g_current_player->uid].saturation);
+    sat_label.text = "sat:  " +sat;
 }
 
 void CharacterMenu::Open() {

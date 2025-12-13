@@ -196,6 +196,7 @@ struct PlayerData {
     int magic_defence;
     float max_power;
     float current_power;
+    float saturation;
     int sprite_sheet_id;
     int portrait_id;
     std::string name;

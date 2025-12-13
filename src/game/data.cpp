@@ -29,7 +29,7 @@ void LoadGameData() {
     g_rarity_colors[RARITY_ULTRARARE] = ULTRARARECOLOR;
 
 
-    g_font = LoadFontEx("assets/FFatF.ttf", 64, nullptr, 0);
+    g_font = LoadFontEx("assets/FFatF.ttf", 32, nullptr, 0);
     TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
     TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
 
@@ -84,6 +84,7 @@ void LoadGameData() {
             .base_speed = base_speed,
             .max_power = 0,
             .current_power = 0,
+            .saturation = 10,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = "not assigned",
@@ -476,6 +477,7 @@ void SaveGame(LevelData &level_data) {
     j["defence"] = g_character_data[uid].defence;
     j["magic_defence"] = g_character_data[uid].magic_defence;
     j["base_speed"] = g_character_data[uid].base_speed;
+    j["saturation"] = g_character_data[uid].saturation;
     j["sprite_sheet_id"] = g_character_data[uid].sprite_sheet_id;
     j["portrait_id"] = g_character_data[uid].portrait_id;
     j["name"] = g_character_data[uid].name;
@@ -533,7 +535,8 @@ void SaveGame(LevelData &level_data) {
             {"saturation", inst.saturation},
             {"modifications", inst.modifications},
             {"max_power", inst.max_power},
-            {"current_power", inst.current_power}
+            {"current_power", inst.current_power},
+            {"rarity", inst.rarity}
         };
         json_item_instances.push_back(instance);
         TraceLog(LOG_INFO, "saving item %i   instance id: %i container iid: %s  sub json size: %i  g_instances size %i", inst.item_id, inst.instance_id, inst.container_id.c_str(), json_item_instances.size(), g_item_instances.size());
@@ -610,6 +613,7 @@ int LoadGame() {
     g_character_data[uid].defence = j["defence"];
     g_character_data[uid].magic_defence = j["magic_defence"];
     g_character_data[uid].base_speed = j["base_speed"];
+    g_character_data[uid].saturation = j["saturation"];
     g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
     g_character_data[uid].portrait_id = j["portrait_id"];
     g_character_data[uid].name = j["name"];
@@ -1409,6 +1413,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("modifications").get_to(i.modifications);
     j.at("max_power").get_to(i.max_power);
     j.at("current_power").get_to(i.current_power);
+    j.at("rarity").get_to(i.rarity);
 
     //TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
 }

@@ -8,7 +8,7 @@ void CreateLabel(Label &_label, Vector2 _position, int _text_size, Color _defaul
 }
 
 void DrawLabelCentered(Label &_label) {
-    int tw = MeasureText(_label.text.c_str(), _label.text_size);
+    int tw = MeasureText(_label.text.c_str(),   _label.text_size * 0.6);
     DrawTextEx(g_font, _label.text.c_str(), { (float)(_label.position.x - (tw*0.5) ), (float)(_label.position.y - (_label.text_size *0.5f) ) }, _label.text_size, 0, _label.default_color);
     //DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), _label.text_size, _label.default_color);
 }
@@ -21,25 +21,58 @@ void DrawLabel(Label &_label) {
 
 void DrawLabelWithBG(Label &_label, Color color) {
     int tw = MeasureText(_label.text.c_str(),  _label.text_size * 0.6);
+
     int lines = 1;
+
+    for (char c : _label.text) {
+        if (c == '\n') lines++;
+    }
+    DrawRectangle( _label.position.x - 5 - (tw*0.5), _label.position.y - 5 - (_label.text_size *0.5f), tw + 10, ((_label.text_size + 2) * lines), color );
+
+    float lineSpacing = _label.text_size * 10.02f;
+    Vector2 pos = { (float)(_label.position.x - (tw*0.5) ), (float)(_label.position.y - (_label.text_size *0.5f) ) };
+    std::stringstream ss(_label.text);
+    std::string line;
+
+    
+    while (std::getline(ss, line)) {
+            DrawTextEx(g_font, line.c_str(), pos, _label.text_size, 0, _label.default_color);
+            pos.y += lineSpacing;
+    }
+/*     int lines = 1;
     for (char c : _label.text) {
         if (c == '\n') lines++;
     }
 
     DrawRectangle( _label.position.x, _label.position.y - (_label.text_size *0.5f), tw + 10, ((_label.text_size + 2) * lines), color );
     DrawTextEx(g_font, _label.text.c_str(), _label.position, _label.text_size, 0, _label.default_color);
-    //TraceLog(LOG_INFO, "text size %i",tw);
+    //TraceLog(LOG_INFO, "text size %i",tw); */
     
 }
 
 void DrawLabelCenteredWithBG(Label &_label, Color color) {
     int tw = MeasureText(_label.text.c_str(), _label.text_size * 0.6);
+
     int lines = 1;
+
     for (char c : _label.text) {
         if (c == '\n') lines++;
     }
+    DrawRectangle( _label.position.x - 5 - (tw*0.5), _label.position.y - 5 - (_label.text_size * 0.4f), tw + 10, ((_label.text_size) * (lines * 0.85)), color );
 
-    DrawRectangle( _label.position.x - 5 - (tw*0.5), _label.position.y - 5 - (_label.text_size *0.5f), tw + 10, ((_label.text_size + 2) * lines), color );
-    DrawTextEx(g_font, _label.text.c_str(), { (float)(_label.position.x - (tw*0.5) ), (float)(_label.position.y - (_label.text_size *0.5f) ) }, _label.text_size, 0, _label.default_color);
+    float lineSpacing = _label.text_size * 0.8f;
+    Vector2 pos = { (float)(_label.position.x - (tw*0.5) ), (float)(_label.position.y - (_label.text_size *0.5f) ) };
+    std::stringstream ss(_label.text);
+    std::string line;
+
+    
+    while (std::getline(ss, line)) {
+            DrawTextEx(g_font, line.c_str(), pos, _label.text_size, 0, _label.default_color);
+            pos.y += lineSpacing;
+    }
+
+
+    //DrawRectangle( _label.position.x - 5 - (tw*0.5), _label.position.y - 5 - (_label.text_size *0.5f), tw + 10, ((_label.text_size + 2) * lines), color );
+    //DrawTextEx(g_font, _label.text.c_str(), { (float)(_label.position.x - (tw*0.5) ), (float)(_label.position.y - (_label.text_size *0.5f) ) }, _label.text_size, 0, _label.default_color);
     //DrawText((TextFormat("%s",_label.text.c_str())), _label.position.x - (tw*0.5), _label.position.y - (_label.text_size *0.5f), _label.text_size, _label.default_color);
 }

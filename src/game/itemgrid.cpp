@@ -11,6 +11,8 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) : shared_
     hovered_cell = {-1,-1};
     can_select = true;
     show_details = false;
+
+    CreateLabel(details_label, {0,0}, FONTSIZE_24, WHITE, "");
 }
 
 ItemGrid::~ItemGrid() {
@@ -50,6 +52,7 @@ void ItemGrid::Update() {
                     else {
                         hovered_time = 0.0f;
                         show_details = false;
+                        details_label.text = "";
                     }
                     //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
@@ -62,7 +65,7 @@ void ItemGrid::Update() {
                             color = g_item_type_colors[itter->second.type];
                             //TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
 
-                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y+ 50)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
+                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
                                 std::string details_text = CreateDetails(itter->second);
@@ -70,7 +73,24 @@ void ItemGrid::Update() {
                                 if(c_itter != g_rarity_colors.end()) {
                                     color = c_itter->second;
                                 }
-                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + 100)*g_inv_scale}, FONTSIZE_24, color, details_text);
+
+                                int y_offset = 40;
+
+                              /*   if(g_input.screen_mouse_position.y*g_inv_scale > g_resolution.y * 0.5f) {
+                                    int lines = 1;
+                                    for (char c : details_label.text) {
+                                        if (c == '\n') lines++;
+                                    }
+                                    //TraceLog(LOG_INFO, "upper %i %i", lines, ((details_label.text_size + 1) * lines));
+                                    y_offset = -details_label.position.y - 5 - (details_label.text_size *0.5f);   
+                                }
+                                else {
+                                    //TraceLog(LOG_INFO, "lower");
+                                }
+                                details_label.position = {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale};
+                                details_label.text = details_text;
+                                details_label.default_color = color; */
+                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_24, color, details_text);
                             }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
@@ -318,24 +338,23 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-
     for(int mod = 0; mod < item_data.modifications.size(); mod++) {
         auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
         if(m_itter != g_weapon_mod_data.end()) {
             
-            if(m_itter->second.max_power != -1000) {stat = "power +: "; value = std::to_string(m_itter->second.max_power);}
-            if(m_itter->second.cooldown != -1000) {stat = "cooldown +: "; value = TextFormat("%0.02f", m_itter->second.cooldown);}
-            if(m_itter->second.damage != -1000) {stat = "damage +: "; value = std::to_string(m_itter->second.damage);}
+            if(m_itter->second.max_power != -1000) {stat = "power  "; value = std::to_string(m_itter->second.max_power);}
+            if(m_itter->second.cooldown != -1000) {stat = "cooldown  "; value = TextFormat("%0.02f", m_itter->second.cooldown);}
+            if(m_itter->second.damage != -1000) {stat = "damage  "; value = std::to_string(m_itter->second.damage);}
             details += stat + value + "\n";
         }
         auto a_itter = g_armor_mod_data.find(item_data.modifications[mod]);
         if(a_itter != g_armor_mod_data.end()) {
-            if(a_itter->second.defence != -1000) {stat = "defence +: "; value = std::to_string(a_itter->second.defence);}
+            if(a_itter->second.defence != -1000) {stat = "defence  "; value = std::to_string(a_itter->second.defence);}
             details += stat + value + "\n";
         }
         auto f_itter = g_food_mod_data.find(item_data.modifications[mod]);
         if(f_itter != g_food_mod_data.end()) {
-            if(f_itter->second.saturation != -1000) {stat = "saturation +: "; value = TextFormat("%0.02f", f_itter->second.saturation);}
+            if(f_itter->second.saturation != -1000) {stat = "saturation  "; value = TextFormat("%0.02f", f_itter->second.saturation);}
             details += stat + value + "\n";
         }
         
@@ -344,8 +363,8 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     for(int mod = 0; mod < item_data.char_mods.size(); mod++) {
         auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
         if(cm_itter != g_char_mod_data.end()) {
-            if(cm_itter->second.health != -1000) {stat = "health +: "; value = std::to_string(cm_itter->second.health);}
-            if(cm_itter->second.speed != -1000) {stat = "speed: +"; value = TextFormat("%0.02f", cm_itter->second.speed);}
+            if(cm_itter->second.health != -1000) {stat = "health  "; value = std::to_string(cm_itter->second.health);}
+            if(cm_itter->second.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", cm_itter->second.speed);}
             details += stat + value + "\n"; 
         }
     }
@@ -357,19 +376,19 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     if(itter != g_item_instances.end()) {
     
         if(item_data.type == TYPE_WEAPON) {
-            details += std::to_string(itter->second.damage) + " damage\n";
+            details += std::to_string(itter->second.damage) + "  damage\n";
             std::string cool = TextFormat("%0.2f", itter->second.cooldown);
-            details += cool + " cooldown\n";
+            details += cool + "  cooldown\n";
             if(itter->second.max_power > 0){
                 std::string power = TextFormat("%0.2f", itter->second.max_power);
-                details += power + " max power\n";
+                details += power + "  max power\n";
             }
         }
 
         if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
-            details += std::to_string(itter->second.defence) + " defence\n";
+            details += std::to_string(itter->second.defence) + "  defence\n";
             if(itter->second.magic_defence > 0) {
-                details += std::to_string(itter->second.magic_defence) + " magic defence\n";
+                details += std::to_string(itter->second.magic_defence) + "  magic defence\n";
                 
             }
         }
@@ -380,7 +399,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
 
         if(item_data.type ==  TYPE_FOOD) {
             std::string sat = TextFormat("%0.2f", itter->second.saturation);
-            details += sat + " saturation\n";
+            details += sat + "  saturation\n";
             
         }
    
@@ -388,7 +407,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             auto p_it = g_plan_data.find(item_data.item_id);
             if(p_it != g_plan_data.end()) {
 
-                details += " use with " +  ModuleIdToStr( p_it->second.module_id) + "\n";
+                details += "use with " +  ModuleIdToStr( p_it->second.module_id) + "\n";
             }
         }
         

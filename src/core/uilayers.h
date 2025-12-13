@@ -261,6 +261,7 @@ class CharacterMenu : public BaseUILayer {
     Label magic_defence_label;
     Label max_power_label;
     Label current_power_label;
+    Label sat_label;
 };
 
 class TitleUILayer : public BaseUILayer {
@@ -376,6 +377,7 @@ class GameUILayer : public BaseUILayer {
     Label debug_zoom_level;
 
     Label power_label;
+    Label sat_label;
 
 };
 
