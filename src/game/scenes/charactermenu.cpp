@@ -11,7 +11,7 @@ CharacterMenu::CharacterMenu() {
         .x = 50,
         .y = 20,
         .width = ((float)g_resolution.x - 100),
-        .height = ((float)g_resolution.y - 100)
+        .height = ((float)g_resolution.y - 40)
     };
 
     gpo = {panel_rect.x, panel_rect.y + 80};
@@ -27,13 +27,22 @@ CharacterMenu::CharacterMenu() {
     grid_list.push_back(ground_grid);
     
 //stats
-    spo = {panel_rect.x + 320, panel_rect.y + 350};
-    CreateLabel(health_label, {spo.x, spo.y + 5}, FONTSIZE_24, RAYWHITE, "health:");
-    CreateLabel(speed_label, {spo.x, spo.y + 20}, FONTSIZE_24, RAYWHITE, "speed:");
-    CreateLabel(sat_label, {spo.x, spo.y + 35}, FONTSIZE_24, RAYWHITE, "saturation:");
+    spo = {panel_rect.x + 425, panel_rect.y + 320};
 
-    CreateLabel(defence_label, {spo.x + 105, spo.y + 5}, FONTSIZE_24, RAYWHITE, "defence:");
-    CreateLabel(magic_defence_label, {spo.x + 105, spo.y + 20}, FONTSIZE_24, RAYWHITE, "magic defence:");
+    CreateLabel(exp_label, {spo.x, spo.y + 20}, FONTSIZE_30, RAYWHITE, "exp:");
+
+    CreateLabel(health_label, {spo.x, spo.y + 40}, FONTSIZE_30, RAYWHITE, "health:");
+    health_label.default_color = PINK;
+
+    CreateLabel(current_power_label, {spo.x, spo.y + 60}, FONTSIZE_30, RAYWHITE, "current power:");
+    current_power_label.default_color = CYAN;
+
+    CreateLabel(sat_label, {spo.x, spo.y + 80}, FONTSIZE_30, RAYWHITE, "saturation:");
+    sat_label.default_color = GREEN;
+
+    CreateLabel(speed_label, {spo.x - 100, spo.y + 85}, FONTSIZE_24, RAYWHITE, "speed:");
+    CreateLabel(defence_label, {spo.x + 10, spo.y + 85}, FONTSIZE_24, RAYWHITE, "defence:");
+    CreateLabel(magic_defence_label, {spo.x + 10, spo.y + 105}, FONTSIZE_24, RAYWHITE, "magic defence:");
     
 
 
@@ -41,14 +50,17 @@ CharacterMenu::CharacterMenu() {
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "CHARACTER");
 
-    
-    CreateLabel(exp_label, {cpo.x + 140, cpo.y + 20}, FONTSIZE_30, RAYWHITE, "exp:");
-    //CreateLabel(max_power_label, {cpo.x + 140, cpo.y + 30}, FONTSIZE_24, RAYWHITE, "max_power:");
-    CreateLabel(current_power_label, {cpo.x + 140, cpo.y + 40}, FONTSIZE_24, RAYWHITE, "current power:");
-    current_power_label.default_color = CYAN;
 
-    ppo = {cpo.x + 130, cpo.y + 170}; //portrait offset
-    LoadSpriteCentered(character_sprite, g_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
+    ppo = {cpo.x + 130, cpo.y + 130}; //portrait offset
+
+
+    
+    //CreateLabel(max_power_label, {cpo.x + 140, cpo.y + 30}, FONTSIZE_24, RAYWHITE, "max_power:");
+    
+    
+
+
+    LoadSpriteCentered(character_sprite, g_character_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
 
     CreateLabel(primary_header_label, {ppo.x - 75, ppo.y - 10}, FONTSIZE_24, WHITE, "primary");
@@ -162,19 +174,19 @@ void CharacterMenu::Draw() {
     DrawRectangleRec({0,0,g_resolution.x,g_resolution.y}, TRANSDARKERGRAY);
     DrawTexturePro(panel_bg, {0,0,(float)panel_bg.width, (float)panel_bg.height}, panel_rect, {0,0}, 0.0f, WHITE);
 
-    DrawLineV( {spo.x - 10, spo.y}, {spo.x + 220, spo.y}, RAYWHITE);
-    DrawLineV( {spo.x + 100, spo.y}, {spo.x + 100, spo.y + 80}, RAYWHITE);
+    DrawLineV( {spo.x - 100, spo.y}, {spo.x + 100, spo.y}, RAYWHITE);
 
-    DrawLabel(health_label);
-    DrawLabel(speed_label);
+    DrawLabelCentered(health_label);
     DrawLabelCentered(exp_label);
+    DrawLabelCentered(current_power_label);
+
+    DrawLabel(speed_label);
     DrawLabel(defence_label);
     DrawLabel(magic_defence_label);
     //DrawLabelCentered(max_power_label);
-    DrawLabelCentered(current_power_label);
     DrawLabel(character_header_label);
   
-    DrawLabel(sat_label);
+    DrawLabelCentered(sat_label);
     DrawSprite(character_sprite);
 
 
@@ -226,6 +238,7 @@ void CharacterMenu::Draw() {
         DrawCircleV(cpo, 2, RED);
         DrawCircleV(hpo, 2, RED);
         DrawCircleV(ppo, 2, RED);
+        DrawCircleV(spo, 2, RED);
     }
 }
 
@@ -254,7 +267,7 @@ void CharacterMenu::Update() {
     speed_label.text = "speed:  " + speed;
 
     std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
-    health_label.text = "health:  " + health;
+    health_label.text = "health:  " + health + "/" + health;
 
     std::string exp = TextFormat("%i", g_character_data[g_current_player->uid].exp);
     exp_label.text = "exp:  " + exp;

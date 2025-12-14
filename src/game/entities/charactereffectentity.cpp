@@ -17,6 +17,7 @@ MovementEffectEntity::MovementEffectEntity(CharacterEffectData &_data, Vector2 _
     is_persistant = false;
     is_obstructable = false;
     is_obstructed = false;
+    can_take_damage = false;
 
     lifetime.timer_timeout.Connect( [&](){OnLifetimeTimeout();} );
     lifetime.Start(data.durration, true);

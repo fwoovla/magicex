@@ -26,7 +26,7 @@ StagingUILayer::StagingUILayer() {
     };
 
     LoadSpriteCentered(character_panel_sprite, g_ui_panels[PANEL_WOOD_LARGE], cpo);
-    LoadSpriteCentered(character_sprite, g_sprite_sheets[SPRITE_NERD], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(character_sprite, g_character_sprite_sheets[SPRITE_NERD], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {3,3});
 
     CreateLabel(character_label,{cpo.x, cpo.y+25},20, RAYWHITE, g_class_data[SPRITE_NERD].class_name.c_str());
@@ -40,7 +40,7 @@ StagingUILayer::StagingUILayer() {
     is_selecting = true;
 
     LoadSpriteCentered(select_character_panel_sprite, g_ui_panels[PANEL_WOOD_LARGE], spo);
-    LoadSpriteCentered(select_chatacter_sprite, g_sprite_sheets[0], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(select_chatacter_sprite, g_character_sprite_sheets[0], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
     ScaleSprite(select_chatacter_sprite, {3,3});
 
     CreateButton(select_chatacter_button, {spo.x, g_resolution.y -50}, {200/g_scale , 50/g_scale}, GREEN, "choose character");
@@ -151,10 +151,10 @@ void StagingUILayer::UpdateSelectPanel() {
                 select_index = g_class_data.size() - 1;
             }
             //TraceLog(LOG_INFO, "index: %i", select_index);
-            LoadSpriteCentered(select_chatacter_sprite, g_sprite_sheets[select_index], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
+            LoadSpriteCentered(select_chatacter_sprite, g_character_sprite_sheets[select_index], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
             ScaleSprite(select_chatacter_sprite, {3,3});
 
-            LoadSpriteCentered(character_sprite, g_sprite_sheets[select_index], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
+            LoadSpriteCentered(character_sprite, g_character_sprite_sheets[select_index], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
             ScaleSprite(character_sprite, {3,3});
             //play_pressed.EmitSignal();
             character_left_pressed.EmitSignal();
@@ -172,10 +172,10 @@ void StagingUILayer::UpdateSelectPanel() {
                 select_index = 0;
             }
             //TraceLog(LOG_INFO, "index: %i", select_index);
-            LoadSpriteCentered(select_chatacter_sprite, g_sprite_sheets[select_index], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
+            LoadSpriteCentered(select_chatacter_sprite, g_character_sprite_sheets[select_index], {spo.x, spo.y - 30}, 4, 16.0f, 0.10f);
             ScaleSprite(select_chatacter_sprite, {3,3});
 
-            LoadSpriteCentered(character_sprite, g_sprite_sheets[select_index], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
+            LoadSpriteCentered(character_sprite, g_character_sprite_sheets[select_index], {cpo.x, cpo.y - 30}, 4, 16.0f, 0.10f);
             ScaleSprite(character_sprite, {3,3});
             //play_pressed.EmitSignal();
             character_right_pressed.EmitSignal();

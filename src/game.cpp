@@ -4,7 +4,8 @@ std::unique_ptr<BaseScene> g_current_scene;
 std::unique_ptr<SubScene> g_sub_scene;
 std::unordered_map<std::string, std::unique_ptr<LevelData>> g_sub_scene_data;
 
-std::unordered_map<int, PlayerData> g_class_data;
+std::unordered_map<int, CharacterData> g_class_data;
+std::unordered_map<int, CharacterData> g_creature_data;
 std::unordered_map<int, ItemData> g_item_data;
 std::unordered_map<int, ItemInstanceData> g_item_instances;
 std::unordered_map<std::string, ContainerData> g_persistant_containers;
@@ -35,8 +36,10 @@ Color g_item_type_colors[TYPE_ALL];
 std::unordered_map<int, Color>g_rarity_colors;
 Font g_font;
 
+Texture2D g_main_sprite_sheet;
 Texture2D g_tile_sheets[MAX_SPRITES];
-Texture2D g_sprite_sheets[MAX_SPRITES];
+Texture2D g_character_sprite_sheets[MAX_SPRITES];
+Texture2D g_creature_sprite_sheets[MAX_SPRITES];
 Texture2D g_item_sprites[MAX_SPRITES];
 Texture2D g_icon_sprites[MAX_SPRITES];
 Texture2D g_ui_sprites[MAX_SPRITES];
@@ -52,7 +55,7 @@ Texture2D g_module_sprites[MAX_SPRITES];
 
 //PlayerData g_player_data;
 
-std::unordered_map< int, PlayerData> g_character_data;
+std::unordered_map< int, CharacterData> g_character_data;
 
 PlayerCharacter *g_current_player;
 

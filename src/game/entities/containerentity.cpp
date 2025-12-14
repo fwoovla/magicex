@@ -16,6 +16,7 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     is_persistant = false;
     is_obstructable = true;
     is_obstructed = false;
+    can_take_damage = true;
 }
 
 PermContainerEntity::~PermContainerEntity() {
@@ -94,6 +95,10 @@ float PermContainerEntity::GetYSort() {
     return position.y;
 }
 
+void PermContainerEntity::TakeDamage() {
+    TraceLog(LOG_INFO, "container taking damage ");
+}
+
 //=====================================================
 
 GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
@@ -114,6 +119,7 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     is_persistant = false;
     is_obstructable = true;
     is_obstructed = false;
+    can_take_damage = false;
 }
 
 GroundContainerEntity::~GroundContainerEntity() {
@@ -199,4 +205,8 @@ void GroundContainerEntity::SetSprite(int sprite_id) {
 
 float GroundContainerEntity::GetYSort() {
     return position.y;
+}
+
+void GroundContainerEntity::TakeDamage() {
+    TraceLog(LOG_INFO, "container taking damage ");
 }

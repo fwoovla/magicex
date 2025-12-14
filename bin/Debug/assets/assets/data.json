@@ -798,6 +798,15 @@
             "rarity":"RARITY_ULTRARARE",
             "durration":50
         }
+    ],
+    "creature_data": [
+        {
+            "creature_id":"CREATURE_TESTDUMMY",
+            "creature_name": "TestDummy",
+            "health":15,
+            "base_speed":45.0
+        }
+
     ]
 
 }

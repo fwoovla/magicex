@@ -62,7 +62,12 @@ void Lightning::Update() {
     if(CollideWithTile(this, result)) {
         should_delete = true;
     }
-    
+
+    if(CollideWithEntity(this, result)) {
+        result.collider->TakeDamage();
+        should_delete = true;
+    }
+
     sprite.position = position;
 
     lifetime_timer.Update(); 
@@ -87,4 +92,8 @@ void Lightning::OnLifetimeTimeout() {
 
 float Lightning::GetYSort() {
     return position.y;
+}
+
+void Lightning::TakeDamage() {
+    TraceLog(LOG_INFO, "taking damage ");
 }

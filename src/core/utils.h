@@ -94,6 +94,8 @@ void DL_Update(std::vector<BaseEntity *> &_draw_list);
 
 void DL_Clear(std::vector<BaseEntity *> &_draw_list);
 
-void DL_Sort();
-
 bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range);
+
+bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result);
+
+bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision_result);

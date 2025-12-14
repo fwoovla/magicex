@@ -19,6 +19,13 @@ ShelterScene::ShelterScene() {
     WaitTime(1);
 
     InstanceLevelObjects(level_data);
+
+
+    int uid = GetRandomValue(1000, 1000000);
+    g_character_data[uid] = g_creature_data[CREATURE_TESTDUMMY];
+    TraceLog(LOG_INFO, "new creature  uid %i  creature id %i", uid, g_character_data[uid].creature_id);
+    TestDummyEntity *new_dummy = new TestDummyEntity({100, 100}, uid);
+    DL_Add(level_data.entity_list, new_dummy);
     
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
@@ -99,6 +106,7 @@ SCENE_ID ShelterScene::Update() {
                 level_data.game_areas[i]->Update();
             } 
             DL_Update(level_data.entity_list);
+            DL_Update(level_data.spell_list);
             g_current_player->Update();
             HandleCamera();
         }

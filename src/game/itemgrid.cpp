@@ -338,7 +338,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-    for(int mod = 0; mod < item_data.modifications.size(); mod++) {
+/*     for(int mod = 0; mod < item_data.modifications.size(); mod++) {
         auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
         if(m_itter != g_weapon_mod_data.end()) {
             
@@ -358,7 +358,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             details += stat + value + "\n";
         }
         
-    }
+    } */
 
     for(int mod = 0; mod < item_data.char_mods.size(); mod++) {
         auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);

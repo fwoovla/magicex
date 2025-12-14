@@ -44,8 +44,9 @@ void LoadGameData() {
 
     for(int i = 0; i < cj["base_class"].size(); i++) {
         int health = cj["base_class"][i]["health"];
-        int exp = 0;
+        //int exp = 0;
         float base_speed = cj["base_class"][i]["base_speed"];
+        float current_speed = base_speed;
         int sprite_sheet_id = cj["base_class"][i]["sprite_sheet_id"];
         int portrait_id = cj["base_class"][i]["portrait_id"];
         std::string class_name = cj["base_class"][i]["class_name"];
@@ -78,10 +79,14 @@ void LoadGameData() {
         hs.push_back(-1);
 
 
-        PlayerData this_class = {
+        CharacterData this_class = {
+            .creature_id = -1,
             .health = health,
-            .exp = exp,
+            .exp = 0,
             .base_speed = base_speed,
+            .current_speed = current_speed,
+            .defence = 0,
+            .magic_defence = 0,
             .max_power = 0,
             .current_power = 0,
             .saturation = 10,
@@ -89,6 +94,7 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = "not assigned",
             .class_name = class_name,
+
             .inventory = inv,
             .hotbar = hot,
 
@@ -432,7 +438,77 @@ void LoadGameData() {
     }
 
 
-    //--------------------loot tables
+    //--------------------creature data
+
+    for(int i = 0; i < cj["creature_data"].size(); i++) {
+        int creature_id = StrToCreatureId( cj["creature_data"][i]["creature_id"] );
+        int health = cj["creature_data"][i]["health"];
+        int exp = 0;
+        float base_speed = cj["creature_data"][i]["base_speed"];
+        float current_speed = base_speed;
+        int sprite_sheet_id = creature_id;
+        int portrait_id = -1;
+        std::string name = cj["creature_data"][i]["creature_name"];
+        
+        std::vector<int> inv;
+        inv.push_back(-1);
+        
+        std::vector<int> hot;
+        hot.push_back(-1);
+
+        std::vector<int> p;
+        p.push_back(-1);
+
+        std::vector<int> s;
+        s.push_back(-1);
+
+        std::vector<int> hd;
+        hd.push_back(-1);
+
+        std::vector<int> bd;
+        bd.push_back(-1);
+
+        std::vector<int> lg;
+        lg.push_back(-1);
+
+        std::vector<int> ft;
+        ft.push_back(-1);
+
+        std::vector<int> hs;
+        hs.push_back(-1);
+
+
+        CharacterData this_creature = {
+            .creature_id = creature_id,
+            .health = health,
+            .exp = 0,
+            .base_speed = base_speed,
+            .current_speed = current_speed,
+            .defence = 0,
+            .magic_defence = 0,
+            .max_power = 0,
+            .current_power = 0,
+            .saturation = 10,
+            .sprite_sheet_id = sprite_sheet_id,
+            .portrait_id = portrait_id,
+            .name = name,
+            .class_name = name,
+            .inventory = inv,
+            .hotbar = hot,
+
+            .primary = p,
+            .secondary = s,
+            .head = hd,
+            .body = bd,
+            .legs = lg,
+            .feet = ft,
+            .hands = hs
+        };
+
+        g_creature_data[this_creature.creature_id] = this_creature;
+        TraceLog(LOG_INFO, "CREATURE Data  Loaded  id: %i  %s", this_creature.creature_id, this_creature.name.c_str());
+    }
+
 /*     for(int i = 0; i < cj["loot_tables"].size(); i++) {
         int id = i;
 
@@ -608,16 +684,19 @@ int LoadGame() {
     json j;
     file>>j;
 
+    g_character_data[uid].creature_id = 0;
     g_character_data[uid].health = j["health"];
     g_character_data[uid].exp = j["exp"];
-    g_character_data[uid].defence = j["defence"];
-    g_character_data[uid].magic_defence = j["magic_defence"];
-    g_character_data[uid].base_speed = j["base_speed"];
     g_character_data[uid].saturation = j["saturation"];
     g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
     g_character_data[uid].portrait_id = j["portrait_id"];
     g_character_data[uid].name = j["name"];
     g_character_data[uid].class_name = j["class_name"];
+    
+    g_character_data[uid].base_speed = j["base_speed"];
+    g_character_data[uid].current_speed = j["base_speed"];
+
+     g_character_data[uid].creature_id = -1;
 
     std::vector<int> inv;
     for(int i = 0; i < j["inventory"].size(); i++) {
@@ -663,8 +742,6 @@ int LoadGame() {
     for(int i = 0; i < j["hands"].size(); i++) {
         hs.push_back(j["hands"][i]);
     }
-
-
 
     g_character_data[uid].inventory = inv;
     g_character_data[uid].hotbar = hot;
@@ -1296,6 +1373,19 @@ SpellID StrToSpellId(const std::string& s) {
 
 }
 
+CreatureID StrToCreatureId(const std::string& s) {
+
+    static const std::unordered_map<std::string, CreatureID> lookup_table = {
+        {"CREATURE_TESTDUMMY",                          CreatureID::CREATURE_TESTDUMMY},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    return CreatureID::CREATURE_NONE;
+
+}
+
 
 ItemID StrToItemId(const std::string& s) {
 
@@ -1439,20 +1529,17 @@ void YSortEntities(LevelData & _level_data) {
 
     _level_data.draw_list.push_back(g_current_player);
 
-    for (auto e : _level_data.environment_entities)
+    for (auto e : _level_data.environment_entities) {
         _level_data.draw_list.push_back(e);
-
-
-    for (auto e : _level_data.entity_list)
-    _level_data.draw_list.push_back(e);
-
- /*    if(e->y_sort){
     }
 
-    for (auto e : _level_data.entity_list)
-    if(!e->y_sort){
+    for (auto e : _level_data.entity_list) {
         _level_data.draw_list.push_back(e);
-    } */
+    }
+
+    for (auto e : _level_data.spell_list){
+        _level_data.draw_list.push_back(e);
+    }
 
     std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
     [](BaseEntity* a, BaseEntity* b) {

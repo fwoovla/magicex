@@ -4,25 +4,33 @@
 
 #define MAX_SPRITES 1000
 
-
+extern Texture2D g_main_sprite_sheet;
 
 enum SpriteSheetID {
     SPRITE_APPRENTICE,
     SPRITE_NERD,
+    SPRITE_TESTDUMMY,
     SPRITE_MAIN,
-/*     SPRITE_CROSSHAIR,
-    SPRITE_WAND,
-     */
+
     SPRITE_NUM_SPRITES
 };
 
-extern Texture2D g_sprite_sheets[MAX_SPRITES];
+extern Texture2D g_character_sprite_sheets[MAX_SPRITES];
 
 enum UISpriteID {
     UI_ID_CROSSHAIR,
 };
 
 extern Texture2D g_ui_sprites[MAX_SPRITES];
+
+
+enum CreatureID {
+    CREATURE_NONE = -1,
+    CREATURE_TESTDUMMY,
+    CREATURE_NUM_CREATURES
+};
+
+extern Texture2D g_creature_sprite_sheets[MAX_SPRITES];
 
 enum ItemID {
     ITEM_ID_NONE = -1,
@@ -252,6 +260,7 @@ enum ShadowSpriteID {
     SPRITE_SHADOW_TREE2,
     SPRITE_SHADOW_GRASS1,
     SPRITE_SHADOW_GRASS2,
+    SPRITE_SHADOW_CHAR1,
     SPRITE_SHADOW_NUM_SPRITES
 };
 

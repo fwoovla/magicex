@@ -56,6 +56,11 @@ void FireBall::Update() {
         should_delete = true;
     }
     
+    if(CollideWithEntity(this, result)) {
+        should_delete = true;
+        result.collider->TakeDamage();
+    }
+
     sprite.position = position;
 
     lifetime_timer.Update(); 
@@ -80,4 +85,8 @@ void FireBall::OnLifetimeTimeout() {
 
 float FireBall::GetYSort() {
     return position.y;
+}
+
+void FireBall::TakeDamage() {
+    TraceLog(LOG_INFO, "taking damage ");
 }

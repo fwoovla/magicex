@@ -15,6 +15,7 @@ class BaseEntity  {
     virtual void Draw() = 0; 
     virtual void DrawUI() = 0;
     virtual float GetYSort() = 0;
+    virtual void TakeDamage() = 0;
 
     //Sprite sprite;
 
@@ -32,6 +33,7 @@ class BaseEntity  {
     bool is_obstructable;
     bool is_obstructed;
     bool y_sort;
+    bool can_take_damage;
 };
 
 class SpriteEntity : public BaseEntity {
@@ -61,4 +63,5 @@ class AnimatedSpriteEntity : public BaseEntity {
 /* inline void YSortEntities(LevelData &_level_data) {
 
 } */
+
 

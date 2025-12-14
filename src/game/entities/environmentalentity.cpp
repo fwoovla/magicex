@@ -30,6 +30,7 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
     is_persistant = false;
     is_obstructable = true;
     is_obstructed = false;
+    can_take_damage = false;
 
     fadeable = _fadeable;
 }
@@ -71,4 +72,8 @@ void EnvironmentalEntity::DrawUI() {
 
 float EnvironmentalEntity::GetYSort() {
     return position.y;
+}
+
+void EnvironmentalEntity::TakeDamage() {
+    TraceLog(LOG_INFO, "MushroomEntity taking damage ");
 }

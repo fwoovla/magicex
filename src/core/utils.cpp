@@ -224,9 +224,6 @@ bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range)
     Vector2 end = Vector2Add(_ray.position, _ray.direction);
     Vector2 step = _ray.direction * 0.1;
 
-
-
-    
     BaseScene *this_scene = g_current_scene.get();
     //TraceLog(LOG_INFO, "RAY CHECKING %i ", this_scene->level_data.precalc.map_index);
 
@@ -264,4 +261,49 @@ bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range)
         }
     }
     return false;
+}
+
+bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result) {
+    bool collided = false;
+
+    BaseScene *this_scene = g_current_scene.get();
+    //TraceLog(LOG_INFO, "RAY CHECKING %i ", this_scene->level_data.precalc.map_index);
+
+    if(g_game_data.is_in_sub_map) {
+        this_scene = g_sub_scene.get();
+    }
+
+    
+    for(auto entity : this_scene->level_data.entity_list) {
+        if(entity->can_take_damage) {
+            collided = CheckCollisionCircles( checker->position, checker->collision_radius, entity->position, entity->collision_radius);
+            if(collided) {
+                collision_result.collider = entity;
+            }
+        }
+    }
+    return collided;
+}
+
+bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision_result) {
+
+    bool collided = false;
+
+    BaseScene *this_scene = g_current_scene.get();
+    //TraceLog(LOG_INFO, "RAY CHECKING %i ", this_scene->level_data.precalc.map_index);
+
+    if(g_game_data.is_in_sub_map) {
+        this_scene = g_sub_scene.get();
+    }
+
+    for(auto entity : this_scene->level_data.entity_list) {
+        if(entity->can_take_damage) {
+            collided = CheckCollisionCircles( c_pos, c_radius, entity->position, entity->collision_radius);
+            if(collided) {
+                collision_result.collider = entity;
+            }
+        }
+    }
+    return collided;
+
 }

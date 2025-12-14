@@ -14,6 +14,7 @@ class EnvironmentalEntity : public SpriteEntity {
     void Draw() override;
     void DrawUI() override;
     float GetYSort() override;
+    void TakeDamage() override;
 
     Sprite shadow_sprite;
     bool fadeable;
@@ -55,6 +56,7 @@ class PermContainerEntity : public BaseContainerEntity {
     void OnContainerOpened() override;
     bool IsEmpty() override;
     float GetYSort() override;
+    void TakeDamage() override;
 };
 
 class GroundContainerEntity : public BaseContainerEntity {
@@ -68,6 +70,7 @@ class GroundContainerEntity : public BaseContainerEntity {
     bool IsEmpty() override;
     float GetYSort() override;
     void SetSprite(int sprite_id);
+    void TakeDamage() override;
 
     void OnListChanged();
 };
@@ -82,5 +85,6 @@ class MushroomEntity : public BaseContainerEntity {
     void OnContainerOpened() override;
     bool IsEmpty() override;
     float GetYSort() override;
+    void TakeDamage() override;
 };
 

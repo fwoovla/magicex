@@ -188,19 +188,23 @@ extern std::unordered_map<int, PlanData> g_plan_data;
 
 
 
-struct PlayerData {
-    int health;
-    int exp;
-    float base_speed;
-    int defence;
-    int magic_defence;
-    float max_power;
-    float current_power;
-    float saturation;
-    int sprite_sheet_id;
-    int portrait_id;
-    std::string name;
-    std::string class_name;
+struct CharacterData {
+    int creature_id = -1;
+    int health = 0;
+    int exp = 0;
+    float base_speed = 0;
+    float current_speed = 0;
+    int defence = 0;
+    int magic_defence = 0;
+    float max_power = 0;
+    float current_power = 0;
+    float saturation = 0;
+
+    int sprite_sheet_id = -1;
+    int portrait_id = -1;
+
+    std::string name = "";
+    std::string class_name = "";
     std::vector<int> inventory;
     std::vector<int> hotbar;
 
@@ -213,11 +217,12 @@ struct PlayerData {
     std::vector<int> hands;
 };
 
-extern std::unordered_map<int, PlayerData> g_class_data;
+extern std::unordered_map<int, CharacterData> g_class_data;
+extern std::unordered_map<int, CharacterData> g_creature_data;
 
 //extern PlayerData g_player_data;
 
-extern PlayerData g_save_data;
+extern CharacterData g_save_data;
 
 
 struct MushroomZoneData {
@@ -281,6 +286,7 @@ struct LevelData {
     std::vector<ModuleEntityData> module_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
+    std::vector<BaseEntity*> spell_list;
     std::vector<Polygon> collision_polys;
     std::vector<EnvironmentalEntity *> environment_entities;
     std::vector<BaseEntity *> draw_list;
@@ -329,6 +335,8 @@ ItemRarity StrToItemRarity(const std::string& s);
 ItemType StrToItemType(const std::string& s);
 
 SpellID StrToSpellId(const std::string& s);
+
+CreatureID StrToCreatureId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);
 

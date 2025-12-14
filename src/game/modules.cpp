@@ -43,3 +43,7 @@ void WorkbenchModuleEntity::OnModuleUsed() {
 float WorkbenchModuleEntity::GetYSort() {
     return position.y;
 }
+
+void WorkbenchModuleEntity::TakeDamage() {
+    TraceLog(LOG_INFO, "taking damage ");
+}

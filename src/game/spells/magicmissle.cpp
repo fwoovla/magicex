@@ -70,8 +70,12 @@ void MagicMissle::Update() {
 
     CollisionResult result;
 
-    //if(CollideWithTile(this, result)) {
-    if(CollideAndSlide(this, result, 2)) {
+    if(CollideWithTile(this, result)) {
+        should_delete = true;
+    }
+
+    if(CollideWithEntity(this, result)) {
+        result.collider->TakeDamage();
         should_delete = true;
     }
     
@@ -100,4 +104,8 @@ void MagicMissle::OnLifetimeTimeout() {
 
 float MagicMissle::GetYSort() {
     return position.y;
+}
+
+void MagicMissle::TakeDamage() {
+    TraceLog(LOG_INFO, "taking damage ");
 }

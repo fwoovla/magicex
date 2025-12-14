@@ -9,6 +9,7 @@ MushroomEntity::MushroomEntity(Vector2 _position) {
     centered_offset = {0,0};
     collided = false;
     y_sort = true;
+    can_take_damage = false;
     
     should_delete = false;
 
@@ -53,4 +54,8 @@ bool MushroomEntity::IsEmpty() {
 
 float MushroomEntity::GetYSort() {
     return position.y;
+}
+
+void MushroomEntity::TakeDamage() {
+    TraceLog(LOG_INFO, "MushroomEntity taking damage ");
 }

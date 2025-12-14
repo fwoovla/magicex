@@ -114,6 +114,7 @@ GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
 GENERATED += $(OBJDIR)/subscene.o
+GENERATED += $(OBJDIR)/testdummy.o
 GENERATED += $(OBJDIR)/tilelayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
@@ -156,6 +157,7 @@ OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
 OBJECTS += $(OBJDIR)/subscene.o
+OBJECTS += $(OBJDIR)/testdummy.o
 OBJECTS += $(OBJDIR)/tilelayer.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
@@ -253,6 +255,9 @@ $(OBJDIR)/mushroomentity.o: src/game/entities/mushroomentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/testdummy.o: src/game/entities/testdummy.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/events.o: src/game/events.cpp
