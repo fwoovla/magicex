@@ -6,21 +6,22 @@ std::unordered_map<std::string, std::unique_ptr<LevelData>> g_sub_scene_data;
 
 std::unordered_map<int, CharacterData> g_class_data;
 std::unordered_map<int, CharacterData> g_creature_data;
-std::unordered_map<int, ItemData> g_item_data;
+std::vector<ItemData> g_item_data;
+std::vector<WeaponData> g_weapon_data;
+std::vector<RecipieData> g_recipie_data;
+std::vector<PlanData> g_plan_data;
+std::vector<ArmorData> g_armor_data;
+std::vector<FoodData> g_food_data;
+std::vector<ArmorModData> g_armor_mod_data;
+std::vector<FoodModData> g_food_mod_data;
+std::vector<WeaponModData> g_weapon_mod_data;
+std::vector<CharacterEffectData> g_char_effect_data;
+std::vector<CharacterModData> g_char_mod_data;
+std::vector<SpellData> g_spell_data;
+std::vector<ModuleData> g_module_data;
+
 std::unordered_map<int, ItemInstanceData> g_item_instances;
 std::unordered_map<std::string, ContainerData> g_persistant_containers;
-std::unordered_map<int, WeaponData> g_weapon_data;
-std::unordered_map<int, SpellData> g_spell_data;
-std::unordered_map<int, ModuleData> g_module_data;
-std::unordered_map<int, RecipieData> g_recipie_data;
-std::unordered_map<int, PlanData> g_plan_data;
-std::unordered_map<int, ArmorData> g_armor_data;
-std::unordered_map<int, FoodData> g_food_data;
-std::unordered_map<int, WeaponModData> g_weapon_mod_data;
-std::unordered_map<int, ArmorModData> g_armor_mod_data;
-std::unordered_map<int, FoodModData> g_food_mod_data;
-std::unordered_map<int, CharacterEffectData> g_char_effect_data;
-std::unordered_map<int, CharacterModData> g_char_mod_data;
 
 std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
 //std::vector<std::vector<int>> g_loot_tables;
@@ -32,8 +33,8 @@ LDTKMaps g_ldtk_maps;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
 
-Color g_item_type_colors[TYPE_ALL];
-std::unordered_map<int, Color>g_rarity_colors;
+std::vector<Color> g_item_type_colors;
+std::vector<Color> g_rarity_colors;
 Font g_font;
 
 Texture2D g_main_sprite_sheet;

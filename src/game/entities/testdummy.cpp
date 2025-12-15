@@ -101,12 +101,10 @@ void TestDummyEntity::Equip(int item_id) {
         }
         
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
-            auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
-            if(m_itter != g_char_mod_data.end()) {
-                TraceLog(LOG_INFO, "character mod %i %s", m_itter->second.mod_id, m_itter->second.mod_name.c_str());
-                if(m_itter->second.health != -1000){g_character_data[uid].health += m_itter->second.health;}
-                if(m_itter->second.speed != -1000){g_character_data[uid].current_speed += m_itter->second.speed;}
-            }
+            TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
+            if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health += item_it->second.char_mods[mod].health;}
+            if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
+            
         }
     }
     TraceLog(LOG_INFO, "+++++++++++++");
@@ -153,12 +151,10 @@ void TestDummyEntity::UnEquip(int item_id) {
         }
         
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
-            auto m_itter = g_char_mod_data.find(item_it->second.char_mods[mod]);
-            if(m_itter != g_char_mod_data.end()) {
-                TraceLog(LOG_INFO, "character mod %i %s", m_itter->second.mod_id, m_itter->second.mod_name.c_str());
-                if(m_itter->second.health != -1000){g_character_data[uid].health -= m_itter->second.health;}
-                if(m_itter->second.speed != -1000){g_character_data[uid].current_speed -= m_itter->second.speed;}
-            }
+                TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
+                if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health -= item_it->second.char_mods[mod].health;}
+                if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
+            
         }
     }
 }

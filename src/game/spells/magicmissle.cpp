@@ -1,36 +1,36 @@
 #include "../../core/gamedefs.h"
 
 
-MagicMissle::MagicMissle(Vector2 _position, int _shooter_id, SpellData _data){
+MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
 
     data = _data;
     should_delete = false;
     y_sort = false;
 
 
-    position = _position;
+    position = payload.position;
     centered_offset = {0,0};
-    collision_radius = data.radius;
+    collision_radius = data->radius;
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
                 
-    shooter_id = _shooter_id;
+    shooter_id = payload.shooter_id;
 
     target_position = g_input.world_mouse_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
     rotation = (target_rotation * RAD2DEG) + GetRandomValue(-50, 50);
-    velocity = Vector2Rotate({data.speed, 0}, rotation * DEG2RAD );
+    velocity = Vector2Rotate({data->speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);
-    dist_scale = target_dist/data.speed;
+    dist_scale = target_dist/data->speed;
     //TraceLog(LOG_INFO, "scale %f", dist_scale);
 
     lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
-    lifetime_timer.Start(data.lifetime * dist_scale, true);
+    lifetime_timer.Start(data->lifetime * dist_scale, true);
 
     sprite = {};
-    LoadSpriteCentered(sprite, g_spell_sprites[data.spell_id], position);
+    LoadSpriteCentered(sprite, g_spell_sprites[data->spell_id], position);
     sprite.rotation = rotation;
 
     //id = GetRandomValue(0, 10000);
@@ -64,7 +64,7 @@ void MagicMissle::Update() {
 
     vClamp(velocity, 1.0);
     //TraceLog(LOG_INFO, "rotating: %f  ", rotation);
-    velocity = Vector2ClampValue(velocity, -data.speed , data.speed);
+    velocity = Vector2ClampValue(velocity, -data->speed , data->speed);
 
     position = Vector2Add(position, velocity * GetFrameTime());
 

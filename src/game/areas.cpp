@@ -204,10 +204,8 @@ void ModuleArea::Update() {
 
         text = "";
 
-        auto itter = g_module_data.find(payload_i);
-        if(itter != g_module_data.end()) {
-            text = itter->second.module_name;
-        }
+        text = g_module_data[payload_i].module_name;
+
         
         CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
 

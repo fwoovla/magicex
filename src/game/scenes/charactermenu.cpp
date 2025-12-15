@@ -263,7 +263,7 @@ void CharacterMenu::Update() {
     feet_grid->Update();
     hands_grid->Update();
 
-    std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].base_speed);
+    std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_speed);
     speed_label.text = "speed:  " + speed;
 
     std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);

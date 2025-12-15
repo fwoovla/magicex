@@ -68,28 +68,12 @@ void ItemGrid::Update() {
                             CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
+                                color = g_rarity_colors[itter->second.rarity];
                                 std::string details_text = CreateDetails(itter->second);
-                                auto c_itter = g_rarity_colors.find(itter->second.rarity);
-                                if(c_itter != g_rarity_colors.end()) {
-                                    color = c_itter->second;
-                                }
+                                
 
                                 int y_offset = 40;
 
-                              /*   if(g_input.screen_mouse_position.y*g_inv_scale > g_resolution.y * 0.5f) {
-                                    int lines = 1;
-                                    for (char c : details_label.text) {
-                                        if (c == '\n') lines++;
-                                    }
-                                    //TraceLog(LOG_INFO, "upper %i %i", lines, ((details_label.text_size + 1) * lines));
-                                    y_offset = -details_label.position.y - 5 - (details_label.text_size *0.5f);   
-                                }
-                                else {
-                                    //TraceLog(LOG_INFO, "lower");
-                                }
-                                details_label.position = {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale};
-                                details_label.text = details_text;
-                                details_label.default_color = color; */
                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_24, color, details_text);
                             }
                         }
@@ -360,16 +344,17 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         
     } */
 
-    for(int mod = 0; mod < item_data.char_mods.size(); mod++) {
-        auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
-        if(cm_itter != g_char_mod_data.end()) {
-            if(cm_itter->second.health != -1000) {stat = "health  "; value = std::to_string(cm_itter->second.health);}
-            if(cm_itter->second.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", cm_itter->second.speed);}
+    for(auto mod : item_data.char_mods) {
+        //auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
+        //if(cm_itter != g_char_mod_data.end()) {
+            TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
+            if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
+            if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
             details += stat + value + "\n"; 
-        }
+        
     }
 
-    if(item_data.modifications.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
+    if(item_data.char_mods.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
     
 
     auto itter = g_item_instances.find(item_data.instance_id);
@@ -404,11 +389,8 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
    
         if(item_data.type ==  TYPE_PLAN) {
-            auto p_it = g_plan_data.find(item_data.item_id);
-            if(p_it != g_plan_data.end()) {
+            details += "use with " +  ModuleIdToStr(  g_plan_data[item_data.item_id].module_id) + "\n";
 
-                details += "use with " +  ModuleIdToStr( p_it->second.module_id) + "\n";
-            }
         }
         
         if(item_data.type ==  TYPE_RESOURCE) {

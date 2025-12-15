@@ -98,6 +98,7 @@ SCENE_ID GameScene::Update() {
                 level_data.game_areas[i]->Update();
             }
             DL_Update(level_data.entity_list);
+            DL_Update(level_data.spell_list);
             ui_layer->Update();
             g_current_player->Update();
             HandleCamera();

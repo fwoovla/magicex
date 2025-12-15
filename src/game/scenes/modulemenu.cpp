@@ -85,35 +85,23 @@ void ModuleMenu::Update() {
     if(selected_button_index >= 0) {
         if(!plan_selected) {
 
-            auto r_itter = g_recipie_data.find(g_module_data[module_id].recipies[selected_button_index]);
-            if(r_itter != g_recipie_data.end()) {
-                
-                for(int i = 0; i < r_itter->second.ingredients.size(); i++) {
-                    auto i_itter = g_item_data.find(r_itter->second.ingredients[i]);
-                    if(i_itter != g_item_data.end()) {
-                        ingredient_label.text += "- " + i_itter->second.item_name + "\n";
-                    }
-                }   
-            }
+            for(int i = 0; i < g_recipie_data[g_module_data[module_id].recipies[selected_button_index]].ingredients.size(); i++) {
+                ingredient_label.text += "- " + g_item_data[g_recipie_data[g_module_data[module_id].recipies[selected_button_index]].ingredients[i]].item_name + "\n";
+            }   
         }
         else {
-            int plan_index = selected_button_index -  (button_lookup.size() - 2);
-            //TraceLog(LOG_INFO, "looking for plan %i", plan_index);
-            auto p_itter = g_plan_data.find(g_module_data[module_id].accepted_plans[selected_button_index - (button_lookup.size() - 2)]);
-            if(p_itter != g_plan_data.end()) {
-                //TraceLog(LOG_INFO, "plan found %s", p_itter->second.plan_name.c_str());
-                
-                for(int item = 0; item < p_itter->second.ingredients.size(); item++) {
-                    
-                    //TraceLog(LOG_INFO, "ingredient found? %i", p_itter->second.ingredients[item]);
+            //int plan_index = selected_button_index - (button_lookup.size() - 2);
 
-                    auto i_itter = g_item_data.find(p_itter->second.ingredients[item]);
-                    if(i_itter != g_item_data.end()) {
-                        
-                        //TraceLog(LOG_INFO, "ingredient found %s", i_itter->second.item_name.c_str());
-                        ingredient_label.text += "- " + i_itter->second.item_name + "\n";
-                    }
-                }
+            int lookup = selected_button_index - (button_lookup.size() - 2);
+/*             TraceLog(LOG_INFO, "looking for plan %i module id  %i  ingredients %i",
+                lookup,
+                module_id,
+                g_module_data[module_id].accepted_plans[lookup]
+            ); */
+
+                
+            for(int item = 0; item < g_plan_data[ g_module_data[module_id].accepted_plans[lookup] - ITEM_ID_STOVE_PLAN].ingredients.size(); item++) {
+                ingredient_label.text += "- " + g_item_data[g_plan_data[ g_module_data[module_id].accepted_plans[lookup] - ITEM_ID_STOVE_PLAN].ingredients[item]].item_name + "\n";                
             }
         }
     }
@@ -133,10 +121,10 @@ void ModuleMenu::Update() {
                     }
                 }
                 if(plan_selected) {
-                    TraceLog(LOG_INFO, "selected plan ingredient list size %i", module_data.accepted_plans.size());
+                    //TraceLog(LOG_INFO, "selected plan ingredient list size %i", module_data.accepted_plans.size());
                 }
                 else{
-                    TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
+                    //TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
                 }
             }        
         }
@@ -164,138 +152,122 @@ void ModuleMenu::OpenModule() {
 
     module_id = g_game_data.current_module_id;
 
-    auto itter = g_module_data.find(module_id);
-    if(itter == g_module_data.end()) {
-        TraceLog(LOG_INFO, " no module data available");
-        return;
-    }
-
-    module_data = itter->second;
+    module_data = g_module_data[module_id];
 
     title_label.text = module_data.module_name.c_str();
     TraceLog(LOG_INFO, " MODULEMENU %s  recipies %i", module_data.module_name.c_str(), module_data.recipies.size());
 
     int y_index = 0;
     for(int i = 0; i < module_data.recipies.size(); i++) {
+        TraceLog(LOG_INFO, "recipie data available");
+        TraceLog(LOG_INFO, " recipies %s", g_recipie_data[module_data.recipies[i]].recipie_name.c_str());
 
-        auto r_itter = g_recipie_data.find(module_data.recipies[i]);
-        if(r_itter != g_recipie_data.end()) {
-            TraceLog(LOG_INFO, "recipie data available");
-            
-            TraceLog(LOG_INFO, " recipies %s", r_itter->second.recipie_name.c_str());
-            Button new_button;
-            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, r_itter->second.recipie_name.c_str());
-            new_button.text_size = FONTSIZE_20;
-            new_button.default_color = BLANK;
-            
-            int ingredients_types_found = 0;
-            int num_ingredients_types = r_itter->second.ingredients.size();
-            bool can_craft = false;
+        Button new_button;
+        CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, g_recipie_data[module_data.recipies[i]].recipie_name.c_str());
+        new_button.text_size = FONTSIZE_20;
+        new_button.default_color = BLANK;
+        int ingredients_types_found = 0;
+        int num_ingredients_types = g_recipie_data[module_data.recipies[i]].ingredients.size();
+        bool can_craft = false;
 
-            for(int ingredient = 0; ingredient < r_itter->second.ingredients.size(); ingredient++) {
-
-                int ingredient_id = r_itter->second.ingredients[ingredient];
-                TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
+        for(int ingredient = 0; ingredient < g_recipie_data[module_data.recipies[i]].ingredients.size(); ingredient++) {
+            int ingredient_id = g_recipie_data[module_data.recipies[i]].ingredients[ingredient];
+            TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
 
 
-                for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
-
-                    auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
-                    if(i_itter != g_item_instances.end()) {
-                        if(ingredient_id == i_itter->second.item_id) {
-                            TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
-                            ingredients_types_found++;
-                            break;
-                        }
+            for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
+                auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+                if(i_itter != g_item_instances.end()) {
+                    if(ingredient_id == i_itter->second.item_id) {
+                        TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
+                        ingredients_types_found++;
+                        break;
                     }
                 }
             }
-            if(ingredients_types_found < num_ingredients_types) {
-                new_button.text_color = DARKRED;
-                new_button.text_color_focus = RED;
-                new_button.focus_color = TRANSRED;
-                new_button.default_color = TRANSDARKRED;
-            }
-            else {
-                new_button.text_color = DARKGREEN;
-                new_button.text_color_focus = GREEN; 
-                new_button.focus_color = TRANSGREEN;
-                new_button.default_color = TRANSDARKGREEN;
-                can_craft = true;
-            }
-            recipie_buttons.push_back(new_button);
-            button_lookup.push_back(can_craft);
-            y_index ++;
         }
+
+        
+        if(ingredients_types_found < num_ingredients_types) {
+            new_button.text_color = DARKRED;
+            new_button.text_color_focus = RED;
+            new_button.focus_color = TRANSRED;
+            new_button.default_color = TRANSDARKRED;
+        }
+        else {
+            new_button.text_color = DARKGREEN;
+            new_button.text_color_focus = GREEN; 
+            new_button.focus_color = TRANSGREEN;
+            new_button.default_color = TRANSDARKGREEN;
+            can_craft = true;
+        }
+        recipie_buttons.push_back(new_button);
+        button_lookup.push_back(can_craft);
+        y_index ++;
+
     }
 
     TraceLog(LOG_INFO, "plans  available %i", module_data.accepted_plans.size());
     for(int i = 0; i < module_data.accepted_plans.size(); i++) {
+        int offset = module_data.accepted_plans[i] - ITEM_ID_STOVE_PLAN;
 
         TraceLog(LOG_INFO, "index %i  plan id %i", i, module_data.accepted_plans[i]);
 
-        auto p_itter = g_plan_data.find(module_data.accepted_plans[i]);
-        if(p_itter != g_plan_data.end()) {
-            TraceLog(LOG_INFO, "plan data available for %s %i    %i", p_itter->second.plan_name.c_str(), p_itter->second.plan_id, module_data.accepted_plans[i]);
+        TraceLog(LOG_INFO, "plan data available for %s ", g_plan_data[offset].plan_name.c_str());
 
-            std::string module_name = "module not found";
+        //auto p_itter = g_plan_data[module_data.accepted_plans[i]];
 
-            auto m_itter = g_module_data.find(p_itter->second.module_id);
-            if(m_itter != g_module_data.end()) {
-                module_name = m_itter->second.module_name;
-            }
-            else {
-                return;
-            }
+        std::string module_name = g_module_data[ g_plan_data[offset].module_id].module_name;
 
-            Button new_button;
-            CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, module_name.c_str());
-            new_button.text_size = 20;
-            new_button.default_color = BLANK;
+        Button new_button;
+        CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, module_name.c_str());
+        new_button.text_size = 20;
+        new_button.default_color = BLANK;
 
-            int ingredients_types_found = 0;
-            int num_ingredients_types = p_itter->second.ingredients.size();
-            bool can_craft = false;
+        int ingredients_types_found = 0;
+        int num_ingredients_types = g_plan_data[offset].ingredients.size();
+        bool can_craft = false;
 
-            TraceLog(LOG_INFO, " ingredient list size  %i",  p_itter->second.ingredients.size());
-            for(int ingredient = 0; ingredient < p_itter->second.ingredients.size(); ingredient++) {
+        TraceLog(LOG_INFO, " ingredient list size  %i",  g_plan_data[offset].ingredients.size());
+        for(int ingredient = 0; ingredient < g_plan_data[offset].ingredients.size(); ingredient++) {
 
-                TraceLog(LOG_INFO, " ingredient id      %i", p_itter->second.ingredients[ingredient]);
-                int ingredient_id = p_itter->second.ingredients[ingredient];
-                TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
+            TraceLog(LOG_INFO, " ingredient id      %i", g_plan_data[offset].ingredients[ingredient]);
+            int ingredient_id = g_plan_data[offset].ingredients[ingredient];
+            TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
 
 
-                for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
+            for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
 
-                    auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
-                    if(i_itter != g_item_instances.end()) {
-                        if(ingredient_id == i_itter->second.item_id) {
-                            TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
-                            ingredients_types_found++;
-                            break;
-                        }
+                auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+                if(i_itter != g_item_instances.end()) {
+                    if(ingredient_id == i_itter->second.item_id) {
+                        TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
+                        ingredients_types_found++;
+                        break;
                     }
                 }
             }
-
-            if(ingredients_types_found < num_ingredients_types) {
-                new_button.text_color = DARKRED;
-                new_button.text_color_focus = RED;
-                new_button.focus_color = TRANSRED;
-                new_button.default_color = TRANSDARKRED;
-            }
-            else {
-                new_button.text_color = DARKGREEN;
-                new_button.text_color_focus = GREEN; 
-                new_button.focus_color = TRANSGREEN;
-                new_button.default_color = TRANSDARKGREEN;
-                can_craft = true;
-            }
-            recipie_buttons.push_back(new_button);
-            button_lookup.push_back(can_craft);
-            plan_indexes.push_back(button_lookup.size() - 1);
-            y_index ++;
         }
+
+        if(ingredients_types_found < num_ingredients_types) {
+            new_button.text_color = DARKRED;
+            new_button.text_color_focus = RED;
+            new_button.focus_color = TRANSRED;
+            new_button.default_color = TRANSDARKRED;
+        }
+        else {
+            new_button.text_color = DARKGREEN;
+            new_button.text_color_focus = GREEN; 
+            new_button.focus_color = TRANSGREEN;
+            new_button.default_color = TRANSDARKGREEN;
+            can_craft = true;
+        }
+        recipie_buttons.push_back(new_button);
+        button_lookup.push_back(can_craft);
+        plan_indexes.push_back(button_lookup.size() - 1);
+        y_index ++;
+
+
     }
 }
 
@@ -311,15 +283,10 @@ void ModuleMenu::RecipieSelected() {
 
     if(!plan_selected) {
 
-        auto r_itter = g_recipie_data.find(module_data.recipies[selected_button_index]);
-        if(r_itter == g_recipie_data.end()) {
-            TraceLog(LOG_INFO, "recipie not found");
-            return;
-        }
 
-        TraceLog(LOG_INFO, "crafting %i", r_itter->second.produces);
+        TraceLog(LOG_INFO, "crafting %i", g_recipie_data[module_data.recipies[selected_button_index]].produces);
         
-        InstanceCharacterItem(r_itter->second.produces, g_current_player->uid);
+        InstanceCharacterItem(g_recipie_data[module_data.recipies[selected_button_index]].produces, g_current_player->uid);
         
         int instance_id;
         int item_id;
@@ -330,8 +297,8 @@ void ModuleMenu::RecipieSelected() {
                 item_id = i_itter->second.item_id;
                 instance_id = i_itter->second.instance_id;
 
-                for(int ingredient = 0; ingredient < r_itter->second.ingredients.size(); ingredient++) {
-                    if(item_id == r_itter->second.ingredients[ingredient]) {
+                for(int ingredient = 0; ingredient < g_recipie_data[module_data.recipies[selected_button_index]].ingredients.size(); ingredient++) {
+                    if(item_id == g_recipie_data[module_data.recipies[selected_button_index]].ingredients[ingredient]) {
                         g_item_instances.erase(instance_id);
                         g_character_data[g_current_player->uid].inventory[item] = -1;
                         break;
@@ -341,13 +308,10 @@ void ModuleMenu::RecipieSelected() {
         }
     }
     else {
-        auto p_itter = g_plan_data.find(module_data.accepted_plans[selected_button_index - (button_lookup.size() - 2)]);
-        if(p_itter == g_plan_data.end()) {
-            TraceLog(LOG_INFO, "plan not found");
-            return;
-        }
+        int lookup = selected_button_index - (button_lookup.size() - 2);
+        TraceLog(LOG_INFO, "crafting module  %i --------- COMMING SOON!!!!!", g_plan_data[module_data.accepted_plans[lookup]].module_id);
 
-        TraceLog(LOG_INFO, "crafting module  %i --------- COMMING SOON!!!!!", p_itter->second.module_id);
+
         
         //InstancePlayerItem(r_itter->second.produces);
         
@@ -360,8 +324,8 @@ void ModuleMenu::RecipieSelected() {
                 item_id = i_itter->second.item_id;
                 instance_id = i_itter->second.instance_id;
 
-                for(int ingredient = 0; ingredient < p_itter->second.ingredients.size(); ingredient++) {
-                    if(item_id == p_itter->second.ingredients[ingredient]) {
+                for(int ingredient = 0; ingredient < g_plan_data[module_data.accepted_plans[lookup]].ingredients.size(); ingredient++) {
+                    if(item_id == g_plan_data[module_data.accepted_plans[lookup]].ingredients[ingredient]) {
                         g_item_instances.erase(instance_id);
                         g_character_data[g_current_player->uid].inventory[item] = -1;
                         break;

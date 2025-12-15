@@ -10,7 +10,7 @@ struct ModuleData {
 
 };
 
-extern std::unordered_map<int, ModuleData> g_module_data;
+extern std::vector<ModuleData> g_module_data;
 
 class BaseModuleEntity : public SpriteEntity {
     public:

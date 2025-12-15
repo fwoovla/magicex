@@ -42,7 +42,8 @@ class CharacterEntity : public AnimatedSpriteEntity {
     Timer spell_timer;
     Timer mele_timer;
     Timer stun_timer;
-    WeaponData current_weapon_data;
+
+    ItemInstanceData *current_primary_data;
 
     AnimationState animation_state;
     WeaponState weapon_state;

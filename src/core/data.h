@@ -45,8 +45,9 @@ enum ItemType {
     TYPE_ALL,
 };
 
-extern Color g_item_type_colors[TYPE_ALL];
-extern std::unordered_map<int, Color>g_rarity_colors;
+extern std::vector<Color> g_item_type_colors;
+
+extern std::vector<Color> g_rarity_colors;
 
 struct FoodModData {
     ItemModID mod_id;
@@ -55,7 +56,7 @@ struct FoodModData {
     int rarity;
 };
 
-extern std::unordered_map<int, FoodModData> g_food_mod_data;
+extern std::vector<FoodModData> g_food_mod_data;
 
 struct ArmorModData {
     ItemModID mod_id;
@@ -64,7 +65,7 @@ struct ArmorModData {
     int rarity;
 };
 
-extern std::unordered_map<int, ArmorModData> g_armor_mod_data;
+extern std::vector<ArmorModData> g_armor_mod_data;
 
 
 struct WeaponModData {
@@ -77,7 +78,19 @@ struct WeaponModData {
     int rarity;
 };
 
-extern std::unordered_map<int, WeaponModData> g_weapon_mod_data;
+struct ItemModData {
+    ItemModID mod_id;
+    std::string mod_name;
+
+    float saturation;
+    int defence;
+    float cooldown;
+    int max_power;
+    int damage;
+    int rarity;
+};
+
+extern std::vector<WeaponModData> g_weapon_mod_data;
 
 
 struct FoodData {
@@ -85,10 +98,10 @@ struct FoodData {
     std::string food_name;
     SpellID spell_id;
     float saturation;
-    int rarity;
+    //int rarity;
 };
 
-extern std::unordered_map<int, FoodData> g_food_data;
+extern std::vector<FoodData> g_food_data;
 
 
 struct CharacterEffectData {
@@ -98,7 +111,7 @@ struct CharacterEffectData {
     int rarity;
 };
 
-extern std::unordered_map<int, CharacterEffectData> g_char_effect_data;
+extern std::vector<CharacterEffectData> g_char_effect_data;
 
 struct CharacterModData {
     CharModID mod_id;
@@ -109,7 +122,7 @@ struct CharacterModData {
     int rarity;
 };
 
-extern std::unordered_map<int, CharacterModData> g_char_mod_data;
+extern std::vector<CharacterModData> g_char_mod_data;
 
 struct ItemData {
     ItemID id;
@@ -118,11 +131,12 @@ struct ItemData {
     std::string item_name;
 };
 
-extern std::unordered_map<int, ItemData> g_item_data;
+extern std::vector<ItemData> g_item_data;
+//extern std::unordered_map<int, ItemData> g_item_data;
 
 struct ItemInstanceData {
-    std::vector<ItemModID> modifications;
-    std::vector<CharModID> char_mods;
+    //std::vector<ItemModData> *item_mods;
+    std::vector<CharacterModData> char_mods;
     std::string container_id;
     ItemID item_id;
     int instance_id;
@@ -130,6 +144,7 @@ struct ItemInstanceData {
     ItemType type;
     std::string item_name;
     SpellID spell_id;
+    SpellData *spell_data;
     float cooldown;
     int damage;
     int sprite_id;
@@ -155,7 +170,7 @@ struct WeaponData {
     int damage;
 };
 
-extern std::unordered_map<int, WeaponData> g_weapon_data;
+extern std::vector<WeaponData> g_weapon_data;
 
 struct ArmorData {
     std::string armor_name;
@@ -165,7 +180,7 @@ struct ArmorData {
     int magic_defence;
 };
 
-extern std::unordered_map<int, ArmorData> g_armor_data;
+extern std::vector<ArmorData> g_armor_data;
 
 struct RecipieData {
     std::string recipie_name;
@@ -173,7 +188,7 @@ struct RecipieData {
     std::vector<int> ingredients;
     ItemID produces;
 };
-extern std::unordered_map<int, RecipieData> g_recipie_data;
+extern std::vector<RecipieData> g_recipie_data;
 
 
 struct PlanData {
@@ -183,7 +198,7 @@ struct PlanData {
     ModuleID module_id;
 };
 
-extern std::unordered_map<int, PlanData> g_plan_data;
+extern std::vector<PlanData> g_plan_data;
 
 
 
@@ -351,6 +366,8 @@ RecipieID StrToRecipieId(const std::string& s);
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 
 void from_json(const json &j, ItemInstanceData &i);
+
+void from_json(const json &j, CharacterModData &i);
 
 void from_json(const json &j, ContainerData &i);
 
