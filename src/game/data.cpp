@@ -1188,11 +1188,17 @@ void InstanceCharacterItem(ItemID item_id, int character_uid) {
     new_instance.item_name = g_item_data[item_id].item_name;
     new_instance.type = g_item_data[item_id].type;
     new_instance.value = g_item_data[item_id].value;
-    new_instance.max_power = 0;
-    new_instance.current_power = 0;
     new_instance.container_id = "";
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
+    
+    new_instance.spell_id = SPELL_ID_NONE;
+    new_instance.level = 0;
+    new_instance.max_power = 0;
+    new_instance.current_power = 0;
+    new_instance.saturation = 0.0f;
+    new_instance.defence = 0;
+    new_instance.magic_defence = 0;
 
     g_item_instances[uid] = new_instance;
 

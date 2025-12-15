@@ -638,22 +638,23 @@
 
 
 
-
     "food_modifiers": [
 
         {
             "mod_id":"ITEMMOD_NUTRITIOUS",
-            "mod_name":"nutritious",
+            "mod_name":"Nutritious",
             "rarity":"RARITY_COMMON",
-            "saturation":0.5
+            "saturation":0.4
         },
         {
             "mod_id":"ITEMMOD_MOLDY",
-            "mod_name":"moldy",
+            "mod_name":"Moldy",
             "rarity":"RARITY_COMMON",
-            "saturation":-0.5
+            "saturation":-0.4
         }
     ],
+
+
 
 
 
@@ -663,35 +664,35 @@
             "mod_name":"movement speed",
             "rarity":"RARITY_COMMON",
             "health":-1000,            
-            "speed":2
+            "speed":2.0
         },
         {
             "mod_id":"CHARMOD_SPEED2",
             "mod_name":"movement speed",
             "rarity":"RARITY_UNCOMMON",
             "health":-1000,            
-            "speed":4
+            "speed":4.0
         },
         {
             "mod_id":"CHARMOD_SPEED3",
             "mod_name":"movement speed",
             "rarity":"RARITY_RARE",
             "health":-1000,            
-            "speed":6
+            "speed":6.0
         },
         {
             "mod_id":"CHARMOD_SPEED4",
             "mod_name":"movement speed",
             "rarity":"RARITY_VERYRARE",
             "health":-1000,            
-            "speed":8
+            "speed":8.0
         },
         {
             "mod_id":"CHARMOD_SPEED5",
             "mod_name":"movement speed",
             "rarity":"RARITY_ULTRARARE",
             "health":-1000,            
-            "speed":10
+            "speed":10.0
         },
 
 
@@ -734,6 +735,8 @@
 
 
 
+
+    
 
         "character_effects": [
         {
@@ -804,7 +807,7 @@
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
             "health":15,
-            "base_speed":45.0
+            "base_speed":0.0
         }
 
     ]

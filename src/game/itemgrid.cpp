@@ -365,8 +365,9 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             std::string cool = TextFormat("%0.2f", itter->second.cooldown);
             details += cool + "  cooldown\n";
             if(itter->second.max_power > 0){
-                std::string power = TextFormat("%0.2f", itter->second.max_power);
-                details += power + "  max power\n";
+                std::string mpower = TextFormat("%0.2f", itter->second.max_power);
+                std::string cpower = TextFormat("%0.2f", itter->second.current_power);
+                details += cpower + "/" +  mpower +"\n";
             }
         }
 
