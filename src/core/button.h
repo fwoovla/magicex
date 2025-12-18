@@ -37,6 +37,7 @@ inline void CreateButton(Button &_button, Vector2 _position, Vector2 _size, Colo
 
 
 inline void DrawButton(Button &_button) {
+    _button.rect.x = _button.position.x - ( _button.size.x*0.5f);
     if(_button.hovered) {
         DrawRectangleRec(_button.rect, _button.focus_color);
 

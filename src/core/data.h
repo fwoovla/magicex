@@ -333,7 +333,7 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
 
 void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id, int loot_level);
 
-void InstanceCharacterItem(ItemID item_id, int character_uid);
+ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid);
 
 
 

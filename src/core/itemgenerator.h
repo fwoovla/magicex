@@ -8,9 +8,13 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
 
 ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string container_id, int loot_level);
 
+void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string container_id);
 
-void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level);
+void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random);
 
-void GenerateRandomArmor(ItemInstanceData &instance, int loot_level);
+void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random);
 
-void GenerateRandomFood(ItemInstanceData &instance, int loot_level);
+void GenerateFood(ItemInstanceData &instance, int loot_level, bool random);
+
+
+

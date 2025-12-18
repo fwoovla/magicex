@@ -29,6 +29,16 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     new_instance.magic_defence = 0;
 
 
+    if(new_instance.type == TYPE_WEAPON ) {
+        GenerateWeapon(new_instance, 0, false);
+    }
+    if(new_instance.type >= TYPE_HEAD_ARMOR and new_instance.type <= TYPE_HAND_ARMOR ) {
+        GenerateArmor(new_instance, 0, false);
+    }
+    if(new_instance.type == TYPE_FOOD ) {
+        GenerateFood(new_instance, 0, false);   
+    }
+
     return new_instance;
 }
 
@@ -63,13 +73,13 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
 
 
     if(new_instance.type == TYPE_WEAPON ) {
-        GenerateRandomWeapon(new_instance, loot_level);
+        GenerateWeapon(new_instance, loot_level, true);
     }
     if(new_instance.type >= TYPE_HEAD_ARMOR and new_instance.type <= TYPE_HAND_ARMOR ) {
-        GenerateRandomArmor(new_instance, loot_level);
+        GenerateArmor(new_instance, loot_level, true);
     }
     if(new_instance.type == TYPE_FOOD ) {
-        GenerateRandomFood(new_instance, loot_level);
+        GenerateFood(new_instance, loot_level, true);
             //GenerateRandomWeapon(new_instance, loot_level);
     }
     
@@ -78,7 +88,7 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     return new_instance;
 }
 
-void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
+void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "making new weapon %i", loot_level);
 
     
@@ -94,7 +104,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
     TraceLog(LOG_INFO, "-damage %i", instance.damage );
 
 
-    if(loot_level >= -1) {
+    if(loot_level >= 1 and random) {
 
         std::vector<int> wep_mod_list;
         for(auto mod : g_weapon_mod_data) {
@@ -112,7 +122,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         TraceLog(LOG_INFO, "-----weapon mod   + %i------", mod_id - ITEMMOD_SWIFTNESS1);
     }
 
-    if(loot_level >= 1) {
+    if(loot_level >= 1 and random) {
         std::vector<int> char_mod_list;
         for(auto mod : g_char_mod_data) {
             for(int i = 0; i < mod.rarity; i++) {
@@ -121,7 +131,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         }
 
         bool can_add = false;
-        if(GetRandomValue(0, 100) <= loot_level*10) {
+        if(GetRandomValue(0, 100) <= loot_level*10 and random) {
             can_add = true;
         }
         if(can_add) {
@@ -135,7 +145,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         }
     }
 
-    if(instance.item_id == ITEM_ID_WAND or instance.item_id == ITEM_ID_STAFF) {
+    if(  (instance.item_id == ITEM_ID_WAND or instance.item_id == ITEM_ID_STAFF) and random) {
 
         instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE, SPELL_ID_LIGHTNING);
         TraceLog(LOG_INFO, "-spell selected  + %i", instance.spell_id);
@@ -179,6 +189,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
         }
 
     }
+
     TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
     TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
@@ -188,7 +199,7 @@ void GenerateRandomWeapon(ItemInstanceData &instance, int loot_level) {
 
 
 
-void GenerateRandomArmor(ItemInstanceData &instance, int loot_level) {
+void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "making new armor %i", loot_level);
 
     instance.defence = g_armor_data[instance.item_id - ITEM_ID_HELMET].defence;
@@ -245,7 +256,7 @@ void GenerateRandomArmor(ItemInstanceData &instance, int loot_level) {
 
 
 
-void GenerateRandomFood(ItemInstanceData &instance, int loot_level) {
+void GenerateFood(ItemInstanceData &instance, int loot_level, bool random) {
 
     TraceLog(LOG_INFO, "making new food %s", g_food_data[instance.item_id - ITEM_ID_APPLE].food_name.c_str());
     instance.saturation =  g_food_data[instance.item_id - ITEM_ID_APPLE].saturation;
@@ -257,6 +268,35 @@ void GenerateRandomFood(ItemInstanceData &instance, int loot_level) {
     instance.saturation += g_food_mod_data[mod_id - ITEMMOD_NUTRITIOUS].saturation;
 
     TraceLog(LOG_INFO, "-----food sat: %0.2f-----", instance.saturation);
+
+
+}
+
+
+
+
+void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string container_id) {
+
+    TraceLog(LOG_INFO, "-generating scroll with spell  + %i", spell_id);
+
+
+    instance.spell_id = spell_id;
+    instance.item_name = g_spell_data[instance.spell_id].spell_name +  " " + instance.item_name;
+
+    if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
+        instance.sprite_id = ITEM_ID_MAGICMMISSLE_SCROLL;
+        instance.icon_id = ITEM_ID_MAGICMMISSLE_SCROLL;
+    }
+
+    if(instance.spell_id == SPELL_ID_FIREBALL) {
+        instance.sprite_id = ITEM_ID_FIREBALL_SCROLL;
+        instance.icon_id = ITEM_ID_FIREBALL_SCROLL;
+    }
+
+    if(instance.spell_id == SPELL_ID_LIGHTNING) {
+        instance.sprite_id = ITEM_ID_LIGHTNING_SCROLL;
+        instance.icon_id = ITEM_ID_LIGHTNING_SCROLL;
+    }
 
 
 }

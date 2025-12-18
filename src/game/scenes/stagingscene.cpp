@@ -40,12 +40,11 @@ void StagingScene::DrawScene() {
         {0,0,(float)g_resolution.x, (float)g_resolution.y},
         {0,0},
         0.0f,
-        WHITE
+        GRAY
     );
 }
 
 void StagingScene::DrawUI() {
-    //DrawRectangle( 0,0, g_resolution.x, g_resolution.y, {0,0,0,0});
     ui_layer->Draw();
 }
 
@@ -80,6 +79,7 @@ void StagingScene::OnCharacterSelected() {
     int uid = GetRandomValue(10000, 10000000);
     g_character_data[uid] = g_class_data[ui_layer->select_index];
     g_current_player = new PlayerCharacter({0,0}, uid);
+    ui_layer->SetPlayer(uid);
 }
 
 

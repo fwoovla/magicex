@@ -73,6 +73,7 @@ class ItemGrid {
     bool cell_hovered;
     bool cell_selected;
     bool show_details;
+    bool is_using;
     Vector2 hovered_cell;
     Vector2 last_hovered_cell;
     Vector2 selected_cell;
@@ -91,6 +92,7 @@ class ItemGrid {
     Signal not_selecting;
     Signal transfer_item;
     Signal pickup;
+    Signal use_item;
 };
 
 
@@ -176,10 +178,10 @@ class ModuleMenu : public BaseUILayer {
     Signal recipie_selected;
 
     ItemGrid *inventory_grid;
+    SharedItemData shared_data;
 
     Button craft_button;
 
-    SharedItemData shared_data;
 };
 
 
@@ -200,6 +202,8 @@ class CharacterMenu : public BaseUILayer {
     void OnTransferItem();
 
     void OnPickup();
+
+    void OnUseItem();
 
 
     bool use_ground;
@@ -300,6 +304,9 @@ class StagingUILayer : public BaseUILayer {
     void Draw() override;
     void DrawSelectPanel();
     void DrawCharacterInfo();
+    void SetPlayer(int uid);
+    void ItemSelected(int item_id);
+    void SpellSelected(int spell_id);
 
     Label title_label;
 
@@ -335,6 +342,28 @@ class StagingUILayer : public BaseUILayer {
     Label character_stat_label;
 
     std::vector<UnitPortrait > portraits;
+
+    ItemGrid *inventory_grid;
+    SharedItemData shared_data;
+
+    Vector2 tw_offset;
+    Vector2 ts_offset;
+    Vector2 tf_offset;
+
+    Label take_weapon_label;
+    Rectangle take_weapon_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_weapon_buttons;
+    std::vector<int> weapon_ids;
+
+    Label take_spell_label;
+    Rectangle take_spell_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_spell_buttons;
+    std::vector<int> spell_ids;
+
+    Label take_food_label;
+    Rectangle take_food_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_food_buttons;
+    std::vector<int> food_ids;
 
 };
 

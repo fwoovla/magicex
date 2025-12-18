@@ -71,10 +71,18 @@ void ItemGrid::Update() {
                                 color = g_rarity_colors[itter->second.rarity];
                                 std::string details_text = CreateDetails(itter->second);
                                 
-
                                 int y_offset = 40;
 
                                CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_24, color, details_text);
+                            }
+                            if(g_input.mouse_right) {
+                                if(itter->second.type == TYPE_SCROLL) {
+                                    //std::string text = "use " + itter->second.item_name + " on what?";
+                                    TraceLog(LOG_INFO, "use %s on what?", itter->second.item_name.c_str());
+                                    //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
+                                    is_using = true;
+                                    can_select = false;
+                                }
                             }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
@@ -95,6 +103,11 @@ void ItemGrid::Update() {
                         shared_data->source_cell = selected_cell;
                         shared_data->item_id = instance_id;
                         pickup.EmitSignal();
+                    }
+                    if(g_input.selecting and is_using) {
+                        //cell_selected = true;
+                        
+                        use_item.EmitSignal();
                     }
                 }
             }
@@ -181,6 +194,10 @@ void ItemGrid::DrawItems() {
         if(show_details) {
             DrawLabelCenteredWithBG(details_label, BLACK);
         }
+    }
+
+    if(is_using) {
+        DrawLineV( {} ,{} ,WHITE);
     }
 }
 

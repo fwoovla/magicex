@@ -114,7 +114,12 @@
 
 
 
-
+        {
+            "item_name": "Scroll",
+            "item_id":"ITEM_ID_SCROLL",
+            "value":0,
+            "item_type":"TYPE_SCROLL"
+        },
         {
             "item_name": "Magic Missle Scroll",
             "item_id":"ITEM_ID_MAGICMMISSLE_SCROLL",
@@ -134,7 +139,7 @@
             "item_type":"TYPE_SCROLL"
         },
 
-
+        
 
         {
             "item_name": "Apple",

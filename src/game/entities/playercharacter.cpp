@@ -27,7 +27,6 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     can_switch = true;
     can_take_damage = true;
 
-    //spell_timer.wait_time = 0.5f;
     spell_timer.timer_timeout.Connect( [&](){OnSpellTimerTimeout();} );
     can_use_spell = true;
 
@@ -38,12 +37,9 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
     if(item_it != g_item_instances.end()) {
         Equip(g_character_data[uid].primary[0]);
-        //_id = item_it->second.sprite_id;
-        //LoadSpriteCentered(weapon_sprite, g_item_sprites[_id], position);
+
     }
     else {
-        //Texture2D blank;
-        //LoadSpriteCentered(weapon_sprite, blank, position);
     }
 
     Equip(g_character_data[uid].head[0]);
@@ -123,10 +119,7 @@ void PlayerCharacter::Draw() {
     DrawSprite(weapon_sprite);
     DrawSprite(sprite);
 
-    //DrawCircleV(position,3, RED);
-    //Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
-    //t_pos = Vector2Add(t_pos, position);
-    //DrawCircleV( t_pos, 3, BLUE);
+
 
     if(weapon_state == WSTATE_MELE) {
     }
@@ -134,6 +127,11 @@ void PlayerCharacter::Draw() {
         DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
         DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);
         DrawCircleV(Vector2Add(position, ground_point_offset), 1, BLUE); 
+
+        DrawCircleV(position,3, RED);
+        Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
+        //t_pos = Vector2Add(t_pos, position);
+        DrawCircleV( t_pos, 3, BLUE);
     }
 }
 
@@ -209,10 +207,8 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(g_input.mouse_right_down and can_mele) {
-        //int item_id = -1;
-        //auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
+
         if(current_primary_data != nullptr) {
-            //item_id = item_it->second.item_id;
             TraceLog(LOG_INFO, "mele attack");
             mele_timer.Start(current_primary_data->cooldown, true);
             can_mele = false;
@@ -245,7 +241,7 @@ void PlayerCharacter::CheckInput() {
                 }
                 g_character_data[uid].current_power -= g_spell_data[current_primary_data->spell_id].pps;
                 current_primary_data->current_power = g_character_data[uid].current_power; 
-                spell_timer.Start(current_primary_data->cooldown, true);
+                spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
                 can_use_spell = false;
 
             }

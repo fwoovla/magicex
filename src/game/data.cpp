@@ -1172,35 +1172,14 @@ void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int>
 }
 
 
-void InstanceCharacterItem(ItemID item_id, int character_uid) {
+ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
     
     int uid = GetRandomValue(1000, 1000000000);
-
-    ItemInstanceData new_instance;
-    new_instance.instance_id = uid;
-    new_instance.item_id = item_id;
+    g_item_instances[uid] = GenerateItem(item_id, uid, "");
 
 
-
-
-    new_instance.item_name = g_item_data[item_id].item_name;
-    new_instance.type = g_item_data[item_id].type;
-    new_instance.value = g_item_data[item_id].value;
-    new_instance.container_id = "";
-    new_instance.sprite_id = item_id;
-    new_instance.icon_id = item_id;
-    
-    new_instance.spell_id = SPELL_ID_NONE;
-    new_instance.level = 0;
-    new_instance.max_power = 0;
-    new_instance.current_power = 0;
-    new_instance.saturation = 0.0f;
-    new_instance.defence = 0;
-    new_instance.magic_defence = 0;
-
-    g_item_instances[uid] = new_instance;
 
 
     int found_spot = -1;
@@ -1219,6 +1198,7 @@ void InstanceCharacterItem(ItemID item_id, int character_uid) {
         g_character_data[character_uid].inventory.push_back(uid);
         //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
     }
+    return &g_item_instances[uid];
 
 }
 
@@ -1464,6 +1444,7 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_LEGGINGS",   ItemID::ITEM_ID_LEGGINGS},
 
 
+        {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
         {"ITEM_ID_MAGICMMISSLE_SCROLL",          ItemID::ITEM_ID_MAGICMMISSLE_SCROLL},
         {"ITEM_ID_FIREBALL_SCROLL",          ItemID::ITEM_ID_FIREBALL_SCROLL},
         {"ITEM_ID_LIGHTNING_SCROLL",          ItemID::ITEM_ID_LIGHTNING_SCROLL},

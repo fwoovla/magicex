@@ -70,6 +70,7 @@ CharacterMenu::CharacterMenu() {
     primary_grid->selecting.Connect( [&](){OnItemSelected();} );
     primary_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     primary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    primary_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(primary_grid);
 
     
@@ -80,6 +81,7 @@ CharacterMenu::CharacterMenu() {
     secondary_grid->selecting.Connect( [&](){OnItemSelected();} );
     secondary_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     secondary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    secondary_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(secondary_grid);
 
     CreateLabel(head_header_label, {ppo.x + 75, ppo.y - 110}, FONTSIZE_24, WHITE, "head");
@@ -89,6 +91,7 @@ CharacterMenu::CharacterMenu() {
     head_grid->selecting.Connect( [&](){OnItemSelected();} );
     head_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     head_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    head_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(head_grid);
 
     CreateLabel(body_header_label, {ppo.x - 75, ppo.y - 110}, FONTSIZE_24, WHITE, "body");
@@ -98,6 +101,7 @@ CharacterMenu::CharacterMenu() {
     body_grid->selecting.Connect( [&](){OnItemSelected();} );
     body_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     body_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    body_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(body_grid);
 
     CreateLabel(legs_header_label, {ppo.x, ppo.y + 70}, FONTSIZE_24, WHITE, "legs");
@@ -107,6 +111,7 @@ CharacterMenu::CharacterMenu() {
     legs_grid->selecting.Connect( [&](){OnItemSelected();} );
     legs_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     legs_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    legs_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(legs_grid);
 
     CreateLabel(feet_header_label, {ppo.x - 75, ppo.y + 70}, FONTSIZE_24, WHITE, "feet");
@@ -116,6 +121,7 @@ CharacterMenu::CharacterMenu() {
     feet_grid->selecting.Connect( [&](){OnItemSelected();} );
     feet_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     feet_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    feet_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(feet_grid);
 
     CreateLabel(hands_header_label, {ppo.x + 75, ppo.y + 70}, FONTSIZE_24, WHITE, "hands");
@@ -125,6 +131,7 @@ CharacterMenu::CharacterMenu() {
     hands_grid->selecting.Connect( [&](){OnItemSelected();} );
     hands_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     hands_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    hands_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(hands_grid);
 
 
@@ -140,6 +147,7 @@ CharacterMenu::CharacterMenu() {
     inventory_grid->selecting.Connect( [&](){OnItemSelected();} );
     inventory_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    inventory_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(inventory_grid);
 
     hpo = { 350, g_resolution.y - 80};
@@ -149,6 +157,7 @@ CharacterMenu::CharacterMenu() {
     hotbar_grid->selecting.Connect( [&](){OnItemSelected();} );
     hotbar_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     hotbar_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    hotbar_grid->use_item.Connect( [&](){OnUseItem();} );
     grid_list.push_back(hotbar_grid);
 
 }
@@ -436,4 +445,31 @@ void CharacterMenu::OnTransferItem() {
     shared_data.item_id = -1;
 
     TraceLog(LOG_INFO, "---------------------------------");
+}
+
+void CharacterMenu::OnUseItem() {
+    TraceLog(LOG_INFO, "--------------using item-------------------");
+    ground_grid->is_using = false;
+    inventory_grid->is_using = false;
+    hotbar_grid->is_using = false;
+
+    primary_grid->is_using = false;
+    secondary_grid->is_using = false;
+    head_grid->is_using = false;
+    body_grid->is_using = false;
+    legs_grid->is_using = false;
+    feet_grid->is_using = false;
+    hands_grid->is_using = false;
+
+    ground_grid->can_select = true;
+    inventory_grid->can_select = true;
+    hotbar_grid->can_select = true;
+    
+    primary_grid->can_select = true;
+    secondary_grid->can_select = true;
+    head_grid->can_select = true;
+    body_grid->can_select = true;
+    legs_grid->can_select = true;
+    feet_grid->can_select = true;
+    hands_grid->can_select = true;
 }

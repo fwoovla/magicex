@@ -322,7 +322,16 @@ void LoadResources() {
 
 
 
-
+//---------------------------------------------------------------------------------------
+    icon_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    icon_pos = {10,14};
+    item_pos = {11,14};
+    ImageCrop(&icon_image, {icon_pos.x * 16, icon_pos.y * 16, 16, 16});
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_icon_sprites[ITEM_ID_SCROLL] = LoadTextureFromImage(icon_image);
+    g_item_sprites[ITEM_ID_SCROLL] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   ITEM_ID_SCROLL");
 
 //---------------------------------------------------------------------------------------
     icon_image = LoadImageFromTexture(g_main_sprite_sheet);
