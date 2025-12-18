@@ -74,7 +74,7 @@ void ItemGrid::Update() {
                                 
                                 int y_offset = 40;
 
-                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_24, color, details_text);
+                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_30, color, details_text);
                             }
                             if(g_input.mouse_right) {
                                 if(itter->second.type == TYPE_SCROLL) {
@@ -88,6 +88,13 @@ void ItemGrid::Update() {
                                     g_cursor.state = CURSOR_USE;
                                     //std::string text = "use " + itter->second.item_name + " on what?";
                                     //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
+                                }
+                                if(itter->second.type == TYPE_FOOD) {
+                                    shared_data->item_id = itter->second.instance_id;
+                                    shared_data->source_grid = this_grid;
+                                    selected_cell = hovered_cell;
+                                    shared_data->source_cell = selected_cell;
+                                    use_item.EmitSignal();
                                 }
                             }
                         }
@@ -389,11 +396,12 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         if(item_data.type ==  TYPE_FOOD) {
             std::string sat = TextFormat("%0.2f", itter->second.saturation);
             details += sat + "  saturation\n";
+            details += "  [LMB] to use\n";
             
         }
    
         if(item_data.type ==  TYPE_PLAN) {
-            details += "use with " +  ModuleIdToStr(  g_plan_data[item_data.item_id].module_id) + "\n";
+            details += "use with " +  ModuleIdToStr(  g_plan_data[item_data.item_id - ITEM_ID_STOVE_PLAN].module_id) + "\n";
 
         }
         
@@ -401,6 +409,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
         
         if(item_data.type ==  TYPE_SCROLL) {
+            details += "  [LMB] to use\n";
         }
 
         details += "$" + std::to_string( itter->second.value);

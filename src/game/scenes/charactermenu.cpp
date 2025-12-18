@@ -475,19 +475,25 @@ void CharacterMenu::OnUseItem() {
         }
     }
 
-
-
     auto source_itter = g_item_instances.find(shared_data.item_id);
     auto dest_itter = g_item_instances.find(shared_data.use_id);
+
+    if(source_itter != g_item_instances.end()) {
+        if(source_itter->second.type == TYPE_FOOD) {
+            TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
+            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
+            g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
+            grid_list[source_index]->RemoveItem(shared_data.source_cell);
+        }
+     }
 
     if(source_itter != g_item_instances.end() and dest_itter != g_item_instances.end()) {
         TraceLog(LOG_INFO, "-------item instances found-------");
         TraceLog(LOG_INFO, "--------------using %s  on %s-------------------", source_itter->second.item_name.c_str(), dest_itter->second.item_name.c_str());
-
+        
         if(source_itter->second.type == TYPE_SCROLL) {
             TraceLog(LOG_INFO, "-------using a scroll-------");
 
-            
             dest_itter->second.item_name += " of " + g_spell_data[source_itter->second.spell_id].spell_name;
             dest_itter->second.spell_id = source_itter->second.spell_id;
             dest_itter->second.max_power = source_itter->second.max_power;
@@ -526,20 +532,9 @@ void CharacterMenu::OnUseItem() {
                 }
             }
         }
-
-
-
-
-
-
-
         grid_list[source_index]->RemoveItem(shared_data.source_cell);
+        grid_list[dest_index]->AddItem(shared_data.use_id, shared_data.dest_cell);
     }
-
-
-
-
-
 
 
     ground_grid->can_select = true;
