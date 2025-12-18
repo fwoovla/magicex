@@ -113,6 +113,7 @@ GENERATED += $(OBJDIR)/shelteruilayer.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
+GENERATED += $(OBJDIR)/statusbar.o
 GENERATED += $(OBJDIR)/subscene.o
 GENERATED += $(OBJDIR)/testdummy.o
 GENERATED += $(OBJDIR)/tilelayer.o
@@ -156,6 +157,7 @@ OBJECTS += $(OBJDIR)/shelteruilayer.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
+OBJECTS += $(OBJDIR)/statusbar.o
 OBJECTS += $(OBJDIR)/subscene.o
 OBJECTS += $(OBJDIR)/testdummy.o
 OBJECTS += $(OBJDIR)/tilelayer.o
@@ -348,6 +350,9 @@ $(OBJDIR)/lightning.o: src/game/spells/lightning.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/magicmissle.o: src/game/spells/magicmissle.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/statusbar.o: src/game/statusbar.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/viewport.o: src/game/viewport.cpp

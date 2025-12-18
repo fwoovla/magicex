@@ -42,6 +42,29 @@ struct SharedItemData {
     //int source_index
 };
 
+
+struct StatusBar {
+/*     StatusBar(Vector2 _position, float _max_value, Color _bar_color, float _width, float _height);
+    //~StatusBar() {};
+    void Update();
+    void Draw(); */
+
+    Color bar_color;
+    Vector2 position;
+    float max_value;
+    float current_value;
+    float width;
+    float height;
+    float unit_ratio;
+
+
+};
+
+void CreateStatusBar (StatusBar &bar, Vector2 _position, float _max_value, float _width, float _height, Color _color);
+void DrawStatusBar(StatusBar &bar);
+void UpdateStatusBar(StatusBar &bar);
+
+
 class ItemGrid {
     public:
     ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd);
@@ -412,6 +435,10 @@ class GameUILayer : public BaseUILayer {
 
     Label power_label;
     Label sat_label;
+
+    StatusBar saturation_bar;
+    StatusBar power_bar;
+    float last_max_power;
 
 };
 
