@@ -31,6 +31,8 @@ class BaseUILayer{
 
 struct SharedItemData {
     int item_id;
+    int use_id;
+    bool is_using;
     //std::vector<int> *source_list;
     //std::vector<int> *dest_list;
     INVENTORYGRIDS source_grid;
@@ -73,7 +75,7 @@ class ItemGrid {
     bool cell_hovered;
     bool cell_selected;
     bool show_details;
-    bool is_using;
+    //bool is_using;
     Vector2 hovered_cell;
     Vector2 last_hovered_cell;
     Vector2 selected_cell;
@@ -350,16 +352,19 @@ class StagingUILayer : public BaseUILayer {
     Vector2 ts_offset;
     Vector2 tf_offset;
 
+    bool show_weapons;
     Label take_weapon_label;
     Rectangle take_weapon_rect;  //visual
     std::vector<std::unique_ptr<Button>> take_weapon_buttons;
     std::vector<int> weapon_ids;
 
+    bool show_spells;
     Label take_spell_label;
     Rectangle take_spell_rect;  //visual
     std::vector<std::unique_ptr<Button>> take_spell_buttons;
     std::vector<int> spell_ids;
 
+    bool show_food;
     Label take_food_label;
     Rectangle take_food_rect;  //visual
     std::vector<std::unique_ptr<Button>> take_food_buttons;

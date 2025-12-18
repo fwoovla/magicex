@@ -10,6 +10,8 @@ void SceneManager::UpdateScene()
 
 
     SetCursorPosition(g_input.screen_mouse_position / g_scale);
+    g_cursor.sprite.texture = g_ui_sprites[g_cursor.state];
+    
     //SetCursorPosition(g_input.screen_mouse_position);
 
 

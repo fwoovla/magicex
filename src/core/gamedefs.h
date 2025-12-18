@@ -122,9 +122,16 @@ struct Viewport {
 
 #include "sprite.h"
 
+enum CursorState {
+    CURSOR_CROSSHAIR,
+    CURSOR_USE
+};
+
 struct Cursor {
     Vector2 poisition;
     Sprite sprite;
+    CursorState state;
+
 };
 
 extern Cursor g_cursor;

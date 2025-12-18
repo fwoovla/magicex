@@ -310,6 +310,13 @@ void CharacterMenu::Open() {
     hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
 
     use_ground = true;
+    shared_data.dest_cell = {-1,-1};
+    shared_data.dest_grid = GRID_NONE;
+    shared_data.source_cell = {-1,-1};
+    shared_data.source_grid = GRID_NONE;
+    shared_data.item_id = -1;
+    shared_data.use_id = -1;
+
     blank_list.clear();
     blank_list.push_back(-1);
     default_iid = "ground" + std::to_string(GetRandomValue(1000, 1000000));
@@ -443,23 +450,97 @@ void CharacterMenu::OnTransferItem() {
     shared_data.source_cell = {-1,-1};
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
+    shared_data.use_id = -1;
 
     TraceLog(LOG_INFO, "---------------------------------");
 }
 
 void CharacterMenu::OnUseItem() {
-    TraceLog(LOG_INFO, "--------------using item-------------------");
-    ground_grid->is_using = false;
-    inventory_grid->is_using = false;
-    hotbar_grid->is_using = false;
+    TraceLog(LOG_INFO, "--------------using %i  on %i-------------------", shared_data.item_id, shared_data.use_id);
+    TraceLog(LOG_INFO, "--------------source grid %i  dest grid %i-------------------", shared_data.source_grid, shared_data.dest_grid);
+    TraceLog(LOG_INFO, "--------------source cell %0.0f %0.0f-------------------", shared_data.source_cell.x, shared_data.source_cell.y);
+    TraceLog(LOG_INFO, "--------------dest cell %0.0f %0.0f-------------------", shared_data.dest_cell.x, shared_data.dest_cell.y);
 
-    primary_grid->is_using = false;
-    secondary_grid->is_using = false;
-    head_grid->is_using = false;
-    body_grid->is_using = false;
-    legs_grid->is_using = false;
-    feet_grid->is_using = false;
-    hands_grid->is_using = false;
+
+
+    int source_index = -1;
+    int dest_index = -1;
+
+    for(int i = 0; i < grid_list.size(); i++) {
+        if(grid_list[i]->this_grid == shared_data.source_grid) {
+            source_index = i;
+        }
+        if(grid_list[i]->this_grid == shared_data.dest_grid) {
+            dest_index = i;
+        }
+    }
+
+
+
+    auto source_itter = g_item_instances.find(shared_data.item_id);
+    auto dest_itter = g_item_instances.find(shared_data.use_id);
+
+    if(source_itter != g_item_instances.end() and dest_itter != g_item_instances.end()) {
+        TraceLog(LOG_INFO, "-------item instances found-------");
+        TraceLog(LOG_INFO, "--------------using %s  on %s-------------------", source_itter->second.item_name.c_str(), dest_itter->second.item_name.c_str());
+
+        if(source_itter->second.type == TYPE_SCROLL) {
+            TraceLog(LOG_INFO, "-------using a scroll-------");
+
+            
+            dest_itter->second.item_name += " of " + g_spell_data[source_itter->second.spell_id].spell_name;
+            dest_itter->second.spell_id = source_itter->second.spell_id;
+            dest_itter->second.max_power = source_itter->second.max_power;
+            dest_itter->second.current_power = source_itter->second.current_power;
+
+            if(dest_itter->second.spell_id == SPELL_ID_MAGICMISSLE) {
+                if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                    dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
+                    dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+                }
+                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                    dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
+                    dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
+                }
+            }
+
+            if(dest_itter->second.spell_id == SPELL_ID_FIREBALL) {
+                if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                    dest_itter->second.sprite_id = ITEM_ID_FIREBALL_WAND;
+                    dest_itter->second.icon_id = ITEM_ID_FIREBALL_WAND;
+                }
+                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                    dest_itter->second.sprite_id = ITEM_ID_FIREBALL_STAFF;
+                    dest_itter->second.icon_id = ITEM_ID_FIREBALL_STAFF;
+                }
+            }
+
+            if(dest_itter->second.spell_id == SPELL_ID_LIGHTNING) {
+                if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                    dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_WAND;
+                    dest_itter->second.icon_id = ITEM_ID_LIGHTNING_WAND;
+                }
+                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                    dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_STAFF;
+                    dest_itter->second.icon_id = ITEM_ID_LIGHTNING_STAFF;
+                }
+            }
+        }
+
+
+
+
+
+
+
+        grid_list[source_index]->RemoveItem(shared_data.source_cell);
+    }
+
+
+
+
+
+
 
     ground_grid->can_select = true;
     inventory_grid->can_select = true;
@@ -472,4 +553,12 @@ void CharacterMenu::OnUseItem() {
     legs_grid->can_select = true;
     feet_grid->can_select = true;
     hands_grid->can_select = true;
+
+    shared_data.is_using = false;
+    shared_data.dest_cell = {-1,-1};
+    shared_data.dest_grid = GRID_NONE;
+    shared_data.source_cell = {-1,-1};
+    shared_data.source_grid = GRID_NONE;
+    shared_data.item_id = -1;
+    shared_data.use_id = -1;
 }

@@ -282,6 +282,8 @@ void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string co
 
     instance.spell_id = spell_id;
     instance.item_name = g_spell_data[instance.spell_id].spell_name +  " " + instance.item_name;
+    instance.max_power = GetRandomValue(5, 15);
+    instance.current_power = instance.max_power;
 
     if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
         instance.sprite_id = ITEM_ID_MAGICMMISSLE_SCROLL;

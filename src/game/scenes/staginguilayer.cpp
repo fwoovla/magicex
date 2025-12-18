@@ -1,7 +1,11 @@
 #include "../../core/gamedefs.h"
 
 StagingUILayer::StagingUILayer() {
-    
+
+    show_weapons = false;
+    show_spells = false;
+    show_food = false;
+        
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, BLACK, "staging");
     
     CreateButton(settings_button, {g_resolution.x - 80, 10}, {120/g_scale , 30/g_scale}, YELLOW, "settings");
@@ -173,20 +177,25 @@ void StagingUILayer::Draw() {
         DrawRectangleRec(take_food_rect, TRANSDARKERGRAY );
 
         DrawCharacterInfo();
-        DrawLabel(take_weapon_label);
-        for(int i = 0; i < take_weapon_buttons.size(); i++) {
-            DrawButton(*take_weapon_buttons[i]);
+        if(show_weapons) { 
+            DrawLabel(take_weapon_label);
+            for(int i = 0; i < take_weapon_buttons.size(); i++) {
+                DrawButton(*take_weapon_buttons[i]);
+            }
         }
 
-
-        DrawLabel(take_spell_label);
-        for(int i = 0; i < take_weapon_buttons.size(); i++) {
-            DrawButton(*take_spell_buttons[i]);
+        if(show_spells) {
+            DrawLabel(take_spell_label);
+            for(int i = 0; i < take_weapon_buttons.size(); i++) {
+                DrawButton(*take_spell_buttons[i]);
+            }
         }
 
-        DrawLabel(take_food_label);
-        for(int i = 0; i < take_weapon_buttons.size(); i++) {
-            DrawButton(*take_food_buttons[i]);
+        if(show_food) {
+            DrawLabel(take_food_label);
+            for(int i = 0; i < take_weapon_buttons.size(); i++) {
+                DrawButton(*take_food_buttons[i]);
+            }
         }
 
         inventory_grid->DrawGrid();
@@ -241,6 +250,11 @@ void StagingUILayer::UpdateSelectPanel() {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             TraceLog(LOG_INFO, "CHARACTER SELECTED UI");
             is_selecting = false;
+
+            show_weapons = true;
+            show_spells = true;
+            show_food = true;
+
             start_button.position.x = character_sprite.position.x;
             //play_pressed.EmitSignal();
             character_selected.EmitSignal();
@@ -303,46 +317,53 @@ void StagingUILayer::UpdateCharacterInfo() {
     }
 
 
+    if(show_weapons) {
 
-    for(int i = 0; i <  take_weapon_buttons.size(); i++)
-    {
-        if(IsButtonHovered(*take_weapon_buttons[i], g_scale)){
-            if(take_weapon_buttons[i]->already_hovered == false) {
-                //PlaySound(button_sound);
+        for(int i = 0; i <  take_weapon_buttons.size(); i++)
+        {
+            if(IsButtonHovered(*take_weapon_buttons[i], g_scale)){
+                if(take_weapon_buttons[i]->already_hovered == false) {
+                    //PlaySound(button_sound);
+                }
+                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    show_weapons = false;
+                    ItemSelected(weapon_ids[i]);
+                }        
             }
-            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                ItemSelected(weapon_ids[i]);
-            }        
         }
     }
     
 
-    for(int i = 0; i <  take_spell_buttons.size(); i++)
-    {
-        if(IsButtonHovered(*take_spell_buttons[i], g_scale)){
-            if(take_spell_buttons[i]->already_hovered == false) {
-                //PlaySound(button_sound);
+     if(show_spells) {
+        for(int i = 0; i <  take_spell_buttons.size(); i++)
+        {
+            if(IsButtonHovered(*take_spell_buttons[i], g_scale)){
+                if(take_spell_buttons[i]->already_hovered == false) {
+                    //PlaySound(button_sound);
+                }
+                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    show_spells = false;
+                    SpellSelected(spell_ids[i]);
+                }        
             }
-            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                SpellSelected(spell_ids[i]);
-            }        
         }
     }
 
 
-
-    for(int i = 0; i <  take_food_buttons.size(); i++)
-    {
-        if(IsButtonHovered(*take_food_buttons[i], g_scale)){
-            if(take_food_buttons[i]->already_hovered == false) {
-                //PlaySound(button_sound);
+    if(show_food) {
+        for(int i = 0; i <  take_food_buttons.size(); i++) {
+            if(IsButtonHovered(*take_food_buttons[i], g_scale)){
+                if(take_food_buttons[i]->already_hovered == false) {
+                    //PlaySound(button_sound);
+                }
+                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    show_food = false;
+                    ItemSelected(food_ids[i]);
+                }        
             }
-            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                ItemSelected(food_ids[i]);
-            }        
         }
-    }
-
+    } 
+        
 
     character_stat_label.text = TextFormat("health: %i\nspeed: %0.2f\nexp: %i", g_class_data[select_index].health, g_class_data[select_index].base_speed, g_class_data[select_index].exp);
 }

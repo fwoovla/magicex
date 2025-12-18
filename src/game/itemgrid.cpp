@@ -11,6 +11,7 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) : shared_
     hovered_cell = {-1,-1};
     can_select = true;
     show_details = false;
+    
 
     CreateLabel(details_label, {0,0}, FONTSIZE_24, WHITE, "");
 }
@@ -56,7 +57,7 @@ void ItemGrid::Update() {
                     }
                     //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
-                    if(can_select){
+                    if(can_select and !shared_data->is_using){
                         std::string i_name = "no item found";
                         Color color = DEFAULTITEMCOLOR;
                         auto itter = g_item_instances.find(instance_id);
@@ -77,18 +78,23 @@ void ItemGrid::Update() {
                             }
                             if(g_input.mouse_right) {
                                 if(itter->second.type == TYPE_SCROLL) {
-                                    //std::string text = "use " + itter->second.item_name + " on what?";
                                     TraceLog(LOG_INFO, "use %s on what?", itter->second.item_name.c_str());
-                                    //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
-                                    is_using = true;
+                                    shared_data->item_id = itter->second.instance_id;
+                                    shared_data->source_grid = this_grid;
+                                    selected_cell = hovered_cell;
+                                    shared_data->source_cell = selected_cell;
+                                    shared_data->is_using = true;
                                     can_select = false;
+                                    g_cursor.state = CURSOR_USE;
+                                    //std::string text = "use " + itter->second.item_name + " on what?";
+                                    //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                                 }
                             }
                         }
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                     }
                         
-                    if(g_input.selecting and can_select) {
+                    if(g_input.selecting and can_select and !shared_data->is_using) {
                         cell_selected = true;
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
@@ -96,7 +102,7 @@ void ItemGrid::Update() {
                         shared_data->item_id = instance_id;
                         selecting.EmitSignal();
                     }
-                    if(g_input.mouse_right and can_select) {
+                    if(g_input.mouse_right and can_select and !shared_data->is_using) {
                         //cell_selected = true;
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
@@ -104,9 +110,9 @@ void ItemGrid::Update() {
                         shared_data->item_id = instance_id;
                         pickup.EmitSignal();
                     }
-                    if(g_input.selecting and is_using) {
-                        //cell_selected = true;
-                        
+                    if(g_input.mouse_left and shared_data->is_using) {    
+                        shared_data->use_id = instance_id;   
+                        g_cursor.state = CURSOR_CROSSHAIR;               
                         use_item.EmitSignal();
                     }
                 }
@@ -115,7 +121,10 @@ void ItemGrid::Update() {
     } 
     last_hovered_cell = hovered_cell;
     
-    if(!g_input.selecting) {
+
+
+
+    if(!g_input.selecting and !shared_data->is_using) {
 
         int source_index = selected_cell.y * cols + selected_cell.x;
         int dest_index = hovered_cell.y * cols + hovered_cell.x;
@@ -153,6 +162,11 @@ void ItemGrid::Update() {
         }
         cell_selected = false;
         selected_cell = {-1,-1};
+    }
+
+    if(g_input.mouse_left and shared_data->is_using) {
+        g_cursor.state = CURSOR_CROSSHAIR;
+        use_item.EmitSignal();
     }
 
 }
@@ -196,9 +210,6 @@ void ItemGrid::DrawItems() {
         }
     }
 
-    if(is_using) {
-        DrawLineV( {} ,{} ,WHITE);
-    }
 }
 
 
@@ -339,41 +350,16 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-/*     for(int mod = 0; mod < item_data.modifications.size(); mod++) {
-        auto m_itter = g_weapon_mod_data.find(item_data.modifications[mod]);
-        if(m_itter != g_weapon_mod_data.end()) {
-            
-            if(m_itter->second.max_power != -1000) {stat = "power  "; value = std::to_string(m_itter->second.max_power);}
-            if(m_itter->second.cooldown != -1000) {stat = "cooldown  "; value = TextFormat("%0.02f", m_itter->second.cooldown);}
-            if(m_itter->second.damage != -1000) {stat = "damage  "; value = std::to_string(m_itter->second.damage);}
-            details += stat + value + "\n";
-        }
-        auto a_itter = g_armor_mod_data.find(item_data.modifications[mod]);
-        if(a_itter != g_armor_mod_data.end()) {
-            if(a_itter->second.defence != -1000) {stat = "defence  "; value = std::to_string(a_itter->second.defence);}
-            details += stat + value + "\n";
-        }
-        auto f_itter = g_food_mod_data.find(item_data.modifications[mod]);
-        if(f_itter != g_food_mod_data.end()) {
-            if(f_itter->second.saturation != -1000) {stat = "saturation  "; value = TextFormat("%0.02f", f_itter->second.saturation);}
-            details += stat + value + "\n";
-        }
-        
-    } */
 
     for(auto mod : item_data.char_mods) {
-        //auto cm_itter = g_char_mod_data.find(item_data.char_mods[mod]);
-        //if(cm_itter != g_char_mod_data.end()) {
-            TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
-            if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
-            if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
-            details += stat + value + "\n"; 
-        
+        TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
+        if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
+        if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
+        details += stat + value + "\n"; 
     }
 
     if(item_data.char_mods.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
     
-
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {
     

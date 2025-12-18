@@ -19,6 +19,7 @@ extern Texture2D g_character_sprite_sheets[MAX_SPRITES];
 
 enum UISpriteID {
     UI_ID_CROSSHAIR,
+    UI_ID_USE,
 };
 
 extern Texture2D g_ui_sprites[MAX_SPRITES];

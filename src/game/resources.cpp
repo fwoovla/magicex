@@ -689,6 +689,12 @@ void LoadResources() {
     g_ui_sprites[UI_ID_CROSSHAIR] = LoadTextureFromImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   UI_ID_CROSSHAIR");
 
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {3,22};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 32, 32});
+    g_ui_sprites[UI_ID_USE] = LoadTextureFromImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   UI_ID_USE");
+
 
     TraceLog(LOG_INFO, "LOADING PORTRAITS");
     g_portrait_sprites[PORTRAIT_BASE_CHAR] = LoadTexture("assets/portrait1.png");
