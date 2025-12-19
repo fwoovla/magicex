@@ -461,79 +461,89 @@ void CharacterMenu::OnUseItem() {
     TraceLog(LOG_INFO, "--------------source cell %0.0f %0.0f-------------------", shared_data.source_cell.x, shared_data.source_cell.y);
     TraceLog(LOG_INFO, "--------------dest cell %0.0f %0.0f-------------------", shared_data.dest_cell.x, shared_data.dest_cell.y);
 
-
-
-    int source_index = -1;
-    int dest_index = -1;
-
-    for(int i = 0; i < grid_list.size(); i++) {
-        if(grid_list[i]->this_grid == shared_data.source_grid) {
-            source_index = i;
-        }
-        if(grid_list[i]->this_grid == shared_data.dest_grid) {
-            dest_index = i;
-        }
-    }
-
-    auto source_itter = g_item_instances.find(shared_data.item_id);
-    auto dest_itter = g_item_instances.find(shared_data.use_id);
-
-    if(source_itter != g_item_instances.end()) {
-        if(source_itter->second.type == TYPE_FOOD) {
-            TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
-            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
-            g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
-            grid_list[source_index]->RemoveItem(shared_data.source_cell);
-        }
-     }
-
-    if(source_itter != g_item_instances.end() and dest_itter != g_item_instances.end()) {
-        TraceLog(LOG_INFO, "-------item instances found-------");
-        TraceLog(LOG_INFO, "--------------using %s  on %s-------------------", source_itter->second.item_name.c_str(), dest_itter->second.item_name.c_str());
+    if(shared_data.item_id != shared_data.use_id) {
         
-        if(source_itter->second.type == TYPE_SCROLL) {
-            TraceLog(LOG_INFO, "-------using a scroll-------");
+        int source_index = -1;
+        int dest_index = -1;
 
-            dest_itter->second.item_name += " of " + g_spell_data[source_itter->second.spell_id].spell_name;
-            dest_itter->second.spell_id = source_itter->second.spell_id;
-            dest_itter->second.max_power = source_itter->second.max_power;
-            dest_itter->second.current_power = source_itter->second.current_power;
-
-            if(dest_itter->second.spell_id == SPELL_ID_MAGICMISSLE) {
-                if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                    dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
-                    dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_WAND;
-                }
-                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                    dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
-                    dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
-                }
+        for(int i = 0; i < grid_list.size(); i++) {
+            if(grid_list[i]->this_grid == shared_data.source_grid) {
+                source_index = i;
             }
-
-            if(dest_itter->second.spell_id == SPELL_ID_FIREBALL) {
-                if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                    dest_itter->second.sprite_id = ITEM_ID_FIREBALL_WAND;
-                    dest_itter->second.icon_id = ITEM_ID_FIREBALL_WAND;
-                }
-                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                    dest_itter->second.sprite_id = ITEM_ID_FIREBALL_STAFF;
-                    dest_itter->second.icon_id = ITEM_ID_FIREBALL_STAFF;
-                }
+            if(grid_list[i]->this_grid == shared_data.dest_grid) {
+                dest_index = i;
             }
+        }
 
-            if(dest_itter->second.spell_id == SPELL_ID_LIGHTNING) {
-                if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                    dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_WAND;
-                    dest_itter->second.icon_id = ITEM_ID_LIGHTNING_WAND;
+        auto source_itter = g_item_instances.find(shared_data.item_id);
+        auto dest_itter = g_item_instances.find(shared_data.use_id);
+
+        if(source_itter != g_item_instances.end()) {
+            if(source_itter->second.type == TYPE_FOOD) {
+                TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
+                TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
+                g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
+                if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
+                    g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
                 }
-                if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                    dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_STAFF;
-                    dest_itter->second.icon_id = ITEM_ID_LIGHTNING_STAFF;
+
+                grid_list[source_index]->RemoveItem(shared_data.source_cell);
+            }
+        }
+
+        if(source_itter != g_item_instances.end() and dest_itter != g_item_instances.end()) {
+            TraceLog(LOG_INFO, "-------item instances found-------");
+            TraceLog(LOG_INFO, "--------------using %s  on %s-------------------", source_itter->second.item_name.c_str(), dest_itter->second.item_name.c_str());
+            
+            if(source_itter->second.type == TYPE_SCROLL) {
+                TraceLog(LOG_INFO, "-------using a scroll-------");
+                if(dest_itter->second.spell_id == SPELL_ID_NONE) {            
+
+                    dest_itter->second.item_name += " of " + g_spell_data[source_itter->second.spell_id].spell_name;
+                    dest_itter->second.spell_id = source_itter->second.spell_id;
+                    dest_itter->second.max_power = source_itter->second.max_power;
+                    dest_itter->second.current_power = source_itter->second.current_power;
+
+                    if(dest_itter->second.spell_id == SPELL_ID_MAGICMISSLE) {
+                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                            dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
+                            dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+                        }
+                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                            dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
+                            dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
+                        }
+                    }
+
+                    if(dest_itter->second.spell_id == SPELL_ID_FIREBALL) {
+                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                            dest_itter->second.sprite_id = ITEM_ID_FIREBALL_WAND;
+                            dest_itter->second.icon_id = ITEM_ID_FIREBALL_WAND;
+                        }
+                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                            dest_itter->second.sprite_id = ITEM_ID_FIREBALL_STAFF;
+                            dest_itter->second.icon_id = ITEM_ID_FIREBALL_STAFF;
+                        }
+                    }
+
+                    if(dest_itter->second.spell_id == SPELL_ID_LIGHTNING) {
+                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
+                            dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_WAND;
+                            dest_itter->second.icon_id = ITEM_ID_LIGHTNING_WAND;
+                        }
+                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
+                            dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_STAFF;
+                            dest_itter->second.icon_id = ITEM_ID_LIGHTNING_STAFF;
+                        }
+                    }
+                    grid_list[source_index]->RemoveItem(shared_data.source_cell);
+                    grid_list[dest_index]->AddItem(shared_data.use_id, shared_data.dest_cell);
+                }
+                else {
+                    TraceLog(LOG_INFO, "-------cant add spell-------");
                 }
             }
         }
-        grid_list[source_index]->RemoveItem(shared_data.source_cell);
-        grid_list[dest_index]->AddItem(shared_data.use_id, shared_data.dest_cell);
     }
 
 

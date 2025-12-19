@@ -37,9 +37,11 @@ void ItemGrid::Update() {
             if(CheckCollisionPointRec(g_input.screen_mouse_position * g_inv_scale, {cell_pos.x, cell_pos.y, (float)grid_size, (float)grid_size})) {
                 int instance_id = (*item_list)[r * cols + c];
                 hovered_cell = {(float)c,(float)r};
-                if(!can_select) {
+
+                if(!can_select or shared_data->is_using) {
                     shared_data->dest_cell = hovered_cell;
                     shared_data->dest_grid = this_grid;
+                    //TraceLog(LOG_INFO, "dest grid %i",shared_data->dest_grid); 
                 }
                 if(instance_id != -1) {
                     cell_hovered = true;
@@ -55,6 +57,7 @@ void ItemGrid::Update() {
                         show_details = false;
                         details_label.text = "";
                     }
+
                     //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
 
                     if(can_select and !shared_data->is_using){
@@ -78,7 +81,7 @@ void ItemGrid::Update() {
                             }
                             if(g_input.mouse_right) {
                                 if(itter->second.type == TYPE_SCROLL) {
-                                    TraceLog(LOG_INFO, "use %s on what?", itter->second.item_name.c_str());
+                                    //TraceLog(LOG_INFO, "use %s on what?", itter->second.item_name.c_str());
                                     shared_data->item_id = itter->second.instance_id;
                                     shared_data->source_grid = this_grid;
                                     selected_cell = hovered_cell;
@@ -86,8 +89,6 @@ void ItemGrid::Update() {
                                     shared_data->is_using = true;
                                     can_select = false;
                                     g_cursor.state = CURSOR_USE;
-                                    //std::string text = "use " + itter->second.item_name + " on what?";
-                                    //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                                 }
                                 if(itter->second.type == TYPE_FOOD) {
                                     shared_data->item_id = itter->second.instance_id;
@@ -110,7 +111,6 @@ void ItemGrid::Update() {
                         selecting.EmitSignal();
                     }
                     if(g_input.mouse_right and can_select and !shared_data->is_using) {
-                        //cell_selected = true;
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
                         shared_data->source_cell = selected_cell;
@@ -119,17 +119,15 @@ void ItemGrid::Update() {
                     }
                     if(g_input.mouse_left and shared_data->is_using) {    
                         shared_data->use_id = instance_id;   
-                        g_cursor.state = CURSOR_CROSSHAIR;               
+                        g_cursor.state = CURSOR_CROSSHAIR;         
                         use_item.EmitSignal();
                     }
                 }
             }
         }
-    } 
+    }
+
     last_hovered_cell = hovered_cell;
-    
-
-
 
     if(!g_input.selecting and !shared_data->is_using) {
 
@@ -173,9 +171,10 @@ void ItemGrid::Update() {
 
     if(g_input.mouse_left and shared_data->is_using) {
         g_cursor.state = CURSOR_CROSSHAIR;
+        cell_selected = false;
+        selected_cell = {-1,-1};
         use_item.EmitSignal();
     }
-
 }
 
 void ItemGrid::DrawGrid() {
@@ -201,7 +200,7 @@ void ItemGrid::DrawItems() {
                 //TraceLog(LOG_INFO, "item sprite %i  %i", (int)(r*cols+c), item_sprites.size());
                 int item_id = (*item_list)[index];
                 if(item_id != -1){
-                    if(selected_cell == (Vector2){(float)c,(float)r}) {
+                    if(selected_cell == (Vector2){(float)c,(float)r} and !shared_data->is_using) {
                         item_sprites[index].position = { g_input.screen_mouse_position.x*g_inv_scale, g_input.screen_mouse_position.y*g_inv_scale };
                     }
                     DrawSprite(item_sprites[index]);
@@ -397,12 +396,10 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             std::string sat = TextFormat("%0.2f", itter->second.saturation);
             details += sat + "  saturation\n";
             details += "  [LMB] to use\n";
-            
         }
    
         if(item_data.type ==  TYPE_PLAN) {
             details += "use with " +  ModuleIdToStr(  g_plan_data[item_data.item_id - ITEM_ID_STOVE_PLAN].module_id) + "\n";
-
         }
         
         if(item_data.type ==  TYPE_RESOURCE) {

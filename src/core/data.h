@@ -213,7 +213,8 @@ struct CharacterData {
     int magic_defence = 0;
     float max_power = 0;
     float current_power = 0;
-    float saturation = 0;
+    float saturation = 0.0f;
+    float max_saturation = 0.0f;
 
     int sprite_sheet_id = -1;
     int portrait_id = -1;

@@ -38,6 +38,10 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     if(new_instance.type == TYPE_FOOD ) {
         GenerateFood(new_instance, 0, false);   
     }
+    if(new_instance.type == TYPE_SCROLL ) {
+        int spell_id =  g_spell_data[GetRandomValue(0, SPELL_ID_MAX - 1)].spell_id;
+        GenerateScroll(new_instance, (SpellID)spell_id, "");
+    }
 
     return new_instance;
 }
@@ -81,6 +85,18 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     if(new_instance.type == TYPE_FOOD ) {
         GenerateFood(new_instance, loot_level, true);
             //GenerateRandomWeapon(new_instance, loot_level);
+    }
+
+    if(new_instance.type == TYPE_SCROLL ) {
+        int spell_id;
+        if(new_instance.item_id == ITEM_ID_SCROLL) {
+            spell_id =  g_spell_data[GetRandomValue(0, SPELL_ID_MAX - 1)].spell_id;
+        }
+        else {
+            spell_id =  ITEM_ID_LIGHTNING_SCROLL - new_instance.item_id;
+        }
+
+        GenerateScroll(new_instance, (SpellID)spell_id, "");
     }
     
     TraceLog(LOG_INFO, "----------rarity  %i-----------\n", new_instance.rarity);
@@ -278,7 +294,6 @@ void GenerateFood(ItemInstanceData &instance, int loot_level, bool random) {
 void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string container_id) {
 
     TraceLog(LOG_INFO, "-generating scroll with spell  + %i", spell_id);
-
 
     instance.spell_id = spell_id;
     instance.item_name = g_spell_data[instance.spell_id].spell_name +  " " + instance.item_name;

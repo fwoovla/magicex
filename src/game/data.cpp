@@ -93,6 +93,7 @@ void LoadGameData() {
             .max_power = 0,
             .current_power = 0,
             .saturation = 10,
+            .max_saturation = 10,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = "not assigned",
@@ -523,6 +524,7 @@ void LoadGameData() {
             .max_power = 0,
             .current_power = 0,
             .saturation = 10,
+            .max_saturation = 10,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = name,
@@ -592,6 +594,7 @@ void SaveGame(LevelData &level_data) {
     j["portrait_id"] = g_character_data[uid].portrait_id;
     j["name"] = g_character_data[uid].name;
     j["class_name"] = g_character_data[uid].class_name;
+    j["max_saturation"] = g_character_data[uid].max_saturation;
 
     //j["inventory"] = {};
     for(int i = 0; i < g_character_data[uid].inventory.size(); i++) {
@@ -737,6 +740,7 @@ int LoadGame() {
     g_character_data[uid].health = j["health"];
     g_character_data[uid].exp = j["exp"];
     g_character_data[uid].saturation = j["saturation"];
+    g_character_data[uid].max_saturation= j["max_saturation"];
     g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
     g_character_data[uid].portrait_id = j["portrait_id"];
     g_character_data[uid].name = j["name"];
