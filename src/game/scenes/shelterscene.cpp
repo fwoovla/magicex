@@ -107,6 +107,7 @@ SCENE_ID ShelterScene::Update() {
             } 
             DL_Update(level_data.entity_list);
             DL_Update(level_data.spell_list);
+            DL_Update(level_data.ui_entities);
             g_current_player->Update();
             HandleCamera();
         }
@@ -187,6 +188,7 @@ void ShelterScene::DrawScene() {
         e->Draw();
     }
 
+    DL_Draw(level_data.ui_entities);
     LDTKDrawShadows(g_current_player->position);
 
     EndMode2D();
@@ -210,6 +212,7 @@ void ShelterScene::DrawUI() {
             level_data.game_areas[i]->Draw();
         }
         DL_DrawUI(level_data.entity_list);
+        //DL_DrawUI(level_data.ui_entities);
         ui_layer->Draw();
         character_menu->DrawHotBarOnly();
     }

@@ -26,12 +26,17 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     should_delete = false;
     can_switch = true;
     can_take_damage = true;
+    can_reload = true;
 
     spell_timer.timer_timeout.Connect( [&](){OnSpellTimerTimeout();} );
     can_use_spell = true;
 
     mele_timer.timer_timeout.Connect( [&](){OnMeleTimerTimeout();} );
     can_mele = true;
+
+    hunger_timer.timer_timeout.Connect( [&](){OnHungerTimerTimeout();} );
+    hunger_rate = .1;
+    hunger_timer.Start(10, false);
 
     int _id = ITEM_ID_ERROR;
     auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
@@ -74,7 +79,6 @@ void PlayerCharacter::Update() {
                 velocity.y = 0.0f;
             }
         }
-
     }
     else {
         SetAmination(sprite, ANIM_IDLE);
@@ -98,6 +102,7 @@ void PlayerCharacter::Update() {
     if(!can_mele) {
         mele_timer.Update();
     }
+    hunger_timer.Update();
 
     if(weapon_state == WSTATE_MELE) {
         weapon_sprite.rotation =  Lerp(weapon_sprite.rotation, weapon_sprite.rotation + (400 * swing_dir), 0.1f);
@@ -119,8 +124,6 @@ void PlayerCharacter::Draw() {
     DrawSprite(weapon_sprite);
     DrawSprite(sprite);
 
-
-
     if(weapon_state == WSTATE_MELE) {
     }
     if(g_game_settings.show_debug == true) {
@@ -136,7 +139,6 @@ void PlayerCharacter::Draw() {
 }
 
 void PlayerCharacter::DrawUI() {
-    
 
 }
 
@@ -204,6 +206,32 @@ void PlayerCharacter::CheckInput() {
     }
     if(!g_input.key_switch_weapon) {
         can_switch = true;
+    }
+
+    if(g_input.key_reload and can_reload) {            
+        TraceLog(LOG_INFO, "reload");
+        for(int item = 0; item < g_character_data[uid].inventory.size(); item++) {
+            int instance_id = g_character_data[uid].inventory[item];
+            if(g_item_instances[instance_id].item_id == ITEM_ID_MUSHROOM_JUICE) {
+                TraceLog(LOG_INFO, "reloading");
+                can_reload = false;
+                g_character_data[uid].current_power = g_character_data[uid].max_power;
+                g_character_data[uid].inventory[item] = -1;
+                g_item_instances.erase(instance_id);
+
+                if(g_game_data.is_in_sub_map) {
+                    SpawnCharacterMessage (*g_sub_scene, position, "reload", WHITE, 0.3f);
+                }
+                else {
+                    SpawnCharacterMessage(*g_current_scene, position, "reload", WHITE, 0.3f);
+                }
+
+                break;
+            }
+        }
+    }
+    if(!g_input.key_reload) {
+        can_reload = true;
     }
 
     if(g_input.mouse_right_down and can_mele) {
@@ -283,7 +311,6 @@ void PlayerCharacter::Equip(int item_id) {
             TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
             if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health += item_it->second.char_mods[mod].health;}
             if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
-            
         }
     }
     TraceLog(LOG_INFO, "+++++++++++++");
@@ -306,8 +333,6 @@ void PlayerCharacter::UnEquip(int item_id) {
                 Texture2D t;
                 LoadSpriteCentered(weapon_sprite, t, position);
                 current_primary_data = nullptr;
-                
-            //}
 
             g_character_data[uid].max_power -= item_it->second.max_power;
             g_character_data[uid].current_power -= item_it->second.max_power;
@@ -334,7 +359,6 @@ void PlayerCharacter::UnEquip(int item_id) {
                 TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
                 if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health -= item_it->second.char_mods[mod].health;}
                 if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
-            
         }
     }
 }
@@ -353,6 +377,15 @@ void PlayerCharacter::OnMeleTimerTimeout() {
 void PlayerCharacter::OnStunTimerTimeout() {
     is_stunned = false;
     //TraceLog(LOG_INFO, "is_stunned false");
+}
+
+void PlayerCharacter::OnHungerTimerTimeout() {
+    g_character_data[uid].saturation -= hunger_rate;
+    if(g_character_data[uid].saturation < 0) {
+        g_character_data[uid].saturation = 0;
+        TakeDamage();
+    }
+    //TraceLog(LOG_INFO, "hunger");
 }
 
 PlayerCharacter::~PlayerCharacter()

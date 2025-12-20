@@ -46,7 +46,8 @@ void LoadGameData() {
     cfile>>cj;
 
     for(int i = 0; i < cj["base_class"].size(); i++) {
-        int health = cj["base_class"][i]["health"];
+        int max_health = cj["base_class"][i]["max_health"];
+        int health = max_health;
         //int exp = 0;
         float base_speed = cj["base_class"][i]["base_speed"];
         float current_speed = base_speed;
@@ -85,6 +86,7 @@ void LoadGameData() {
         CharacterData this_class = {
             .creature_id = -1,
             .health = health,
+            .max_health = max_health,
             .exp = 0,
             .base_speed = base_speed,
             .current_speed = current_speed,
@@ -477,7 +479,8 @@ void LoadGameData() {
 
     for(int i = 0; i < cj["creature_data"].size(); i++) {
         int creature_id = StrToCreatureId( cj["creature_data"][i]["creature_id"] );
-        int health = cj["creature_data"][i]["health"];
+        int max_health = cj["creature_data"][i]["max_health"];
+        int health = max_health;
         int exp = 0;
         float base_speed = cj["creature_data"][i]["base_speed"];
         float current_speed = base_speed;
@@ -516,6 +519,7 @@ void LoadGameData() {
         CharacterData this_creature = {
             .creature_id = creature_id,
             .health = health,
+            .max_health = max_health,
             .exp = 0,
             .base_speed = base_speed,
             .current_speed = current_speed,
@@ -583,6 +587,7 @@ void SaveGame(LevelData &level_data) {
     json j;
     int uid = g_current_player->uid;
     j["health"] = g_character_data[uid].health;
+    j["max_health"] = g_character_data[uid].max_health;
     j["exp"] = g_character_data[uid].exp;
     j["max_power"] = g_character_data[uid].max_power;
     j["current_power"] = g_character_data[uid].current_power;
@@ -738,6 +743,7 @@ int LoadGame() {
 
     g_character_data[uid].creature_id = 0;
     g_character_data[uid].health = j["health"];
+    g_character_data[uid].max_health = j["max_health"];
     g_character_data[uid].exp = j["exp"];
     g_character_data[uid].saturation = j["saturation"];
     g_character_data[uid].max_saturation= j["max_saturation"];

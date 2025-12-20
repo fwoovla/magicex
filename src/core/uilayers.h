@@ -43,6 +43,7 @@ struct SharedItemData {
 };
 
 
+
 struct StatusBar {
 /*     StatusBar(Vector2 _position, float _max_value, Color _bar_color, float _width, float _height);
     //~StatusBar() {};
@@ -438,6 +439,7 @@ class GameUILayer : public BaseUILayer {
 
     StatusBar saturation_bar;
     StatusBar power_bar;
+    StatusBar health_bar;
     float last_max_power;
 
 };

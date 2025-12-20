@@ -206,6 +206,7 @@ extern std::vector<PlanData> g_plan_data;
 struct CharacterData {
     int creature_id = -1;
     int health = 0;
+    int max_health;
     int exp = 0;
     float base_speed = 0;
     float current_speed = 0;
@@ -306,8 +307,7 @@ struct LevelData {
     std::vector<Polygon> collision_polys;
     std::vector<EnvironmentalEntity *> environment_entities;
     std::vector<BaseEntity *> draw_list;
-    //std::unordered_map <std::string, std::unique_ptr< SubScene> > sub_scene_instances; 
-
+    std::vector<BaseEntity *> ui_entities;
 };
 
 extern std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;

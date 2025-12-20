@@ -70,6 +70,8 @@ void GetInputFromPlayer() {
 
     g_input.key_switch_weapon = IsKeyDown(KEY_Q);
 
+    g_input.key_reload = IsKeyDown(KEY_R);
+
     if(g_input.selecting) {
         
         float _x = 0.0f;

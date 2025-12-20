@@ -215,7 +215,6 @@ void ItemGrid::DrawItems() {
             DrawLabelCenteredWithBG(details_label, BLACK);
         }
     }
-
 }
 
 
@@ -275,8 +274,6 @@ bool ItemGrid::HasRoom() {
     }
     return true;
 }
-
-
 
 bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
@@ -356,9 +353,8 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-
     for(auto mod : item_data.char_mods) {
-        TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
+        //TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
         if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
         details += stat + value + "\n"; 
@@ -395,7 +391,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         if(item_data.type ==  TYPE_FOOD) {
             std::string sat = TextFormat("%0.2f", itter->second.saturation);
             details += sat + "  saturation\n";
-            details += "  [LMB] to use\n";
+            details += "  [ LMB ] to eat\n";
         }
    
         if(item_data.type ==  TYPE_PLAN) {
@@ -406,7 +402,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
         
         if(item_data.type ==  TYPE_SCROLL) {
-            details += "  [LMB] to use\n";
+            details += "  [ LMB ] to use\n";
         }
 
         details += "$" + std::to_string( itter->second.value);

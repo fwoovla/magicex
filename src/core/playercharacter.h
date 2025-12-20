@@ -27,6 +27,7 @@ class CharacterEntity : public AnimatedSpriteEntity {
     virtual void OnSpellTimerTimeout() = 0;
     virtual void OnMeleTimerTimeout() = 0;
     virtual void OnStunTimerTimeout() = 0;
+    virtual void OnHungerTimerTimeout() = 0;
 
     int uid;
     Vector2 velocity;
@@ -35,6 +36,7 @@ class CharacterEntity : public AnimatedSpriteEntity {
     bool can_use_spell;
     bool can_mele;
     bool can_switch;
+    bool can_reload;
     bool is_stunned;
     int stunned_frames;
     float weapon_end_rotation;
@@ -42,6 +44,8 @@ class CharacterEntity : public AnimatedSpriteEntity {
     Timer spell_timer;
     Timer mele_timer;
     Timer stun_timer;
+    Timer hunger_timer;
+    float hunger_rate;
 
     ItemInstanceData *current_primary_data;
 
@@ -70,6 +74,7 @@ class TestDummyEntity : public CharacterEntity {
     void OnSpellTimerTimeout() override;
     void OnMeleTimerTimeout() override;
     void OnStunTimerTimeout() override;
+    void OnHungerTimerTimeout() override;
 };
 
 
@@ -92,6 +97,7 @@ class PlayerCharacter : public CharacterEntity {
     void OnSpellTimerTimeout() override;
     void OnMeleTimerTimeout() override;
     void OnStunTimerTimeout() override;
+    void OnHungerTimerTimeout() override;
     
     void CheckInput();
     

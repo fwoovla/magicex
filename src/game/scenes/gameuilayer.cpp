@@ -9,13 +9,13 @@ GameUILayer::GameUILayer() {
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-
     CreateLabel(power_label, {20, g_resolution.y - 40}, FONTSIZE_50, RAYWHITE, "power...");
     CreateLabel(sat_label, {20, g_resolution.y - 85}, FONTSIZE_50, RAYWHITE, "SAT...");
 
-    CreateStatusBar(saturation_bar,{20, g_resolution.y - 85}, g_character_data[g_current_player->uid].max_saturation, 100.0f, 10.0f, GREEN);
-    CreateStatusBar(power_bar,{20, g_resolution.y - 40}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
+    CreateStatusBar(health_bar,{20, g_resolution.y - 50}, g_character_data[g_current_player->uid].max_health, 100.0f, 10.0f, RED);
+    CreateStatusBar(power_bar,{20, g_resolution.y - 35}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
     last_max_power = power_bar.max_value;
+    CreateStatusBar(saturation_bar,{20, g_resolution.y - 20}, g_character_data[g_current_player->uid].max_saturation, 100.0f, 10.0f, GREEN);
 }
 
 GameUILayer::~GameUILayer() {
@@ -27,7 +27,8 @@ void GameUILayer::Draw() {
 
     DrawButton(quit_button);
     //DrawLabel(power_label);
-    DrawLabel(sat_label);
+    //DrawLabel(sat_label);
+    DrawStatusBar(health_bar);
     DrawStatusBar(saturation_bar);
     DrawStatusBar(power_bar);
 
@@ -43,19 +44,13 @@ void GameUILayer::Draw() {
 void GameUILayer::Update() {
     if(last_max_power != g_character_data[g_current_player->uid].max_power) {
         //max power changed
-        CreateStatusBar(power_bar,{20, g_resolution.y - 40}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
+        CreateStatusBar(power_bar,{20, g_resolution.y - 35}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
         last_max_power = power_bar.max_value;
     }
 
+    health_bar.current_value = g_character_data[g_current_player->uid].health;
     power_bar.current_value = g_character_data[g_current_player->uid].current_power;
-
-
-/*     std::string power = TextFormat("%0.2f", power_bar.max_value);
-    power_label.text = power; */
-
     saturation_bar.current_value = g_character_data[g_current_player->uid].saturation;
-    std::string sat = TextFormat("%0.2f", saturation_bar.current_value);
-    sat_label.text = sat; 
 
     if(IsButtonHovered(quit_button, g_scale)){
         if(quit_button.already_hovered == false) {

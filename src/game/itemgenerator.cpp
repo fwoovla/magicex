@@ -1,8 +1,6 @@
 #include "../core/gamedefs.h"
 
 
-
-
 ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id) {
     
     ItemInstanceData new_instance;
@@ -289,8 +287,6 @@ void GenerateFood(ItemInstanceData &instance, int loot_level, bool random) {
 }
 
 
-
-
 void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string container_id) {
 
     TraceLog(LOG_INFO, "-generating scroll with spell  + %i", spell_id);
@@ -314,6 +310,4 @@ void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string co
         instance.sprite_id = ITEM_ID_LIGHTNING_SCROLL;
         instance.icon_id = ITEM_ID_LIGHTNING_SCROLL;
     }
-
-
 }

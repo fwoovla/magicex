@@ -3,6 +3,23 @@
 #include "baseentity.h"
 
 
+class CharacterMessage : public BaseEntity {
+    public:
+    CharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds);
+    ~CharacterMessage() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void TakeDamage() override;
+    
+    Label label;
+    Color color;
+    float delay_seconds;
+    float current_seconds;
+
+
+};
 
 class EnvironmentalEntity : public SpriteEntity {
     public:

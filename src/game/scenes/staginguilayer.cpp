@@ -126,7 +126,6 @@ StagingUILayer::StagingUILayer() {
         take_spell_buttons.push_back(std::move(new_button));
     }
 
-
     choices.clear();
     CreateLabel(take_food_label,{tf_offset.x, tf_offset.y}, FONTSIZE_40, RAYWHITE, "TAKE SOME FOOD");
         take_food_rect = {
@@ -149,7 +148,6 @@ StagingUILayer::StagingUILayer() {
 
         take_food_buttons.push_back(std::move(new_button));
     }
-
 }
 
 StagingUILayer::~StagingUILayer() {
@@ -227,7 +225,6 @@ void StagingUILayer::Update() {
         }        
     }
 
-
     if(is_selecting) {
         UpdateSelectPanel();
         
@@ -236,7 +233,6 @@ void StagingUILayer::Update() {
         UpdateCharacterInfo();
         
     }
-
 }
 
 void StagingUILayer::UpdateSelectPanel() {
@@ -316,7 +312,6 @@ void StagingUILayer::UpdateCharacterInfo() {
         }        
     }
 
-
     if(show_weapons) {
 
         for(int i = 0; i <  take_weapon_buttons.size(); i++)
@@ -332,7 +327,6 @@ void StagingUILayer::UpdateCharacterInfo() {
             }
         }
     }
-    
 
      if(show_spells) {
         for(int i = 0; i <  take_spell_buttons.size(); i++)
@@ -349,7 +343,6 @@ void StagingUILayer::UpdateCharacterInfo() {
         }
     }
 
-
     if(show_food) {
         for(int i = 0; i <  take_food_buttons.size(); i++) {
             if(IsButtonHovered(*take_food_buttons[i], g_scale)){
@@ -364,7 +357,6 @@ void StagingUILayer::UpdateCharacterInfo() {
         }
     } 
         
-
     character_stat_label.text = TextFormat("health: %i\nspeed: %0.2f\nexp: %i", g_class_data[select_index].health, g_class_data[select_index].base_speed, g_class_data[select_index].exp);
 }
 
@@ -405,6 +397,5 @@ void StagingUILayer::SpellSelected(int spell_id) {
     //create scroll
     ItemInstanceData *new_instance =  InstanceCharacterItem(ITEM_ID_SCROLL, g_current_player->uid);
     GenerateScroll(*new_instance, (SpellID)spell_id, "");
-    
     SetPlayer(g_current_player->uid);
 }

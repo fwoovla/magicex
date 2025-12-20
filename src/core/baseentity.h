@@ -60,6 +60,7 @@ class AnimatedSpriteEntity : public BaseEntity {
 
 
 
+
 /* inline void YSortEntities(LevelData &_level_data) {
 
 } */

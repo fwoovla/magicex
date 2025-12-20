@@ -2,14 +2,14 @@
 
  "base_class": [
         {
-            "health":15,
+            "max_health":15,
             "base_speed":45.0,
             "sprite_sheet_id":0,
             "portrait_id":0,
             "class_name": "Apprentice"
         },
         {
-            "health":10,
+            "max_health":10,
             "base_speed":45.0,
             "sprite_sheet_id":1,
             "portrait_id":0,
@@ -811,7 +811,7 @@
         {
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
-            "health":15,
+            "max_health":15,
             "base_speed":0.0
         }
 

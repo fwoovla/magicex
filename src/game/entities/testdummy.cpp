@@ -177,6 +177,10 @@ void TestDummyEntity::OnStunTimerTimeout() {
     //TraceLog(LOG_INFO, "un stunned");
 }
 
+void TestDummyEntity::OnHungerTimerTimeout() {
+
+}
+
 TestDummyEntity::~TestDummyEntity()
 {
     TraceLog(LOG_INFO, "deleting entity!!!!!!!!!!!!!!!!!!!! %i", uid);
@@ -194,4 +198,12 @@ void TestDummyEntity::TakeDamage() {
     sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
     stun_timer.Start(0.5f, true);
+
+
+    if(g_game_data.is_in_sub_map) {
+        SpawnCharacterMessage (*g_sub_scene, position, "hit", RED, 0.3f);
+    }
+    else {
+        SpawnCharacterMessage(*g_current_scene, position, "hit", RED, 0.3f);
+    }
 }
