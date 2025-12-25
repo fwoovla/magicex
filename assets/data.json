@@ -783,7 +783,7 @@
             "rarity":"RARITY_UNCOMMON",
             "health":-1000,
             "speed":-1000,
-            "stamina":4
+            "stamina":4.0
         },
         {
             "mod_id":"CHARMOD_STAMINA3",
@@ -791,7 +791,7 @@
             "rarity":"RARITY_RARE",
             "health":-1000,
             "speed":-1000,
-            "stamina":6
+            "stamina":6.0
         },
         {
             "mod_id":"CHARMOD_STAMINA4",
@@ -799,7 +799,7 @@
             "rarity":"RARITY_VERYRARE",
             "health":-1000,
             "speed":-1000,
-            "stamina":8
+            "stamina":8.0
         },
         {
             "mod_id":"CHARMOD_STAMINA5",
@@ -807,7 +807,7 @@
             "rarity":"RARITY_ULTRARARE",
             "health":-1000,
             "speed":-1000,
-            "stamina":10
+            "stamina":10.0
         }
         
     ],

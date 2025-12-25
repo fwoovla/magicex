@@ -138,7 +138,6 @@ void PlayerCharacter::Draw() {
 
         DrawCircleV(position,3, RED);
         Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
-        //t_pos = Vector2Add(t_pos, position);
         DrawCircleV( t_pos, 3, BLUE);
     }
 }
@@ -224,7 +223,7 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(g_input.key_reload and can_reload) {            
-        TraceLog(LOG_INFO, "reload");
+        //TraceLog(LOG_INFO, "reload");
         for(int item = 0; item < g_character_data[uid].inventory.size(); item++) {
             int instance_id = g_character_data[uid].inventory[item];
             if(g_item_instances[instance_id].item_id == ITEM_ID_MUSHROOM_JUICE) {
