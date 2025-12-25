@@ -76,6 +76,7 @@ struct WeaponModData {
     int max_power;
     int damage;
     int rarity;
+    
 };
 
 struct ItemModData {
@@ -118,7 +119,8 @@ struct CharacterModData {
     std::string mod_name;
     int health;
     float speed;
-    float durration;
+    float stamina;
+    //float durration;
     int rarity;
 };
 
@@ -156,6 +158,9 @@ struct ItemInstanceData {
     int rarity;
     float max_power;
     float current_power;
+    float recoil;
+    float knockback;
+
 };
 
 extern std::unordered_map<int, ItemInstanceData> g_item_instances;
@@ -168,6 +173,8 @@ struct WeaponData {
     int max_power;
     int ammo_count;
     int damage;
+    float recoil;
+    float knockback;
 };
 
 extern std::vector<WeaponData> g_weapon_data;
@@ -216,9 +223,13 @@ struct CharacterData {
     float current_power = 0;
     float saturation = 0.0f;
     float max_saturation = 0.0f;
+    float max_stamina = 0.0f;
+    float current_stamina = 0.0f;
 
     int sprite_sheet_id = -1;
     int portrait_id = -1;
+
+    Vector2 spawn_position;
 
     std::string name = "";
     std::string class_name = "";
@@ -301,6 +312,7 @@ struct LevelData {
     std::vector<LevelTransitionData> level_transitions;
     std::vector<ContainerData> container_data;
     std::vector<ModuleEntityData> module_data;
+    std::vector<CharacterData> creature_data;
     std::vector<BaseArea*> game_areas;
     std::vector<BaseEntity*> entity_list;
     std::vector<BaseEntity*> spell_list;

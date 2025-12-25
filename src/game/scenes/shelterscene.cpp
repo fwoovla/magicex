@@ -7,6 +7,10 @@
 
 ShelterScene::ShelterScene() {
 
+    g_input.world_mouse_position.x = 100;
+    g_input.world_mouse_position.y = 100;
+
+
     ClearSubLevelData();
 
     scene_id = SHELTER_SCENE;
@@ -20,13 +24,6 @@ ShelterScene::ShelterScene() {
 
     InstanceLevelObjects(level_data);
 
-
-    int uid = GetRandomValue(1000, 1000000);
-    g_character_data[uid] = g_creature_data[CREATURE_TESTDUMMY];
-    TraceLog(LOG_INFO, "new creature  uid %i  creature id %i", uid, g_character_data[uid].creature_id);
-    TestDummyEntity *new_dummy = new TestDummyEntity({100, 100}, uid);
-    DL_Add(level_data.entity_list, new_dummy);
-    
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
         if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
@@ -42,9 +39,7 @@ ShelterScene::ShelterScene() {
             TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
 
-/*             if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity") {
-                p_entity->is_persistant = true;
-            } */
+
             if(p_entity) {
                 TraceLog(LOG_INFO, "container connected");
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
@@ -61,7 +56,6 @@ ShelterScene::ShelterScene() {
 
     ui_layer = new GameUILayer();
     ui_layer->quit_pressed.Connect( [this](){OnQuitPressed();} );
-    //ui_layer->start_pressed.Connect( [this](){OnStartPressed();} );
     
     tile_layer = new TileLayer();
 
@@ -178,6 +172,7 @@ void ShelterScene::Draw() {
 
 
 void ShelterScene::DrawScene() {
+    
 
     BeginMode2D(g_camera);
     //tile_layer->Draw();
@@ -189,7 +184,8 @@ void ShelterScene::DrawScene() {
     }
 
     DL_Draw(level_data.ui_entities);
-    LDTKDrawShadows(g_current_player->position);
+    //LDTKDrawShadows(g_current_player->position);
+
 
     EndMode2D();
 }
@@ -197,6 +193,7 @@ void ShelterScene::DrawScene() {
 
 void ShelterScene::DrawUI() {
 
+    
 
     if(show_map_menu == true) {
         map_menu->Draw();
@@ -216,6 +213,7 @@ void ShelterScene::DrawUI() {
         ui_layer->Draw();
         character_menu->DrawHotBarOnly();
     }
+    //DrawCircleV(g_camera.target, 5, RED);
 }
 
 
@@ -279,7 +277,8 @@ void ShelterScene::HandleCamera() {
     float x_offset_f = g_viewport.x_offset_f;
     float y_offset_f = g_viewport.y_offset_f;
 
-    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
+    g_camera.target = Vector2Subtract( g_current_player->position, {x_offset_f, y_offset_f} );
+
 }
 
 

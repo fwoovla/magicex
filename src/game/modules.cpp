@@ -44,6 +44,6 @@ float WorkbenchModuleEntity::GetYSort() {
     return position.y;
 }
 
-void WorkbenchModuleEntity::TakeDamage() {
+void WorkbenchModuleEntity::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

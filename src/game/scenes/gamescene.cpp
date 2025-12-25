@@ -178,7 +178,7 @@ void GameScene::DrawScene() {
             e->Draw();
         }
 
-        LDTKDrawShadows(g_current_player->position);
+        //LDTKDrawShadows(g_current_player->position);
         
         EndMode2D();
     }    

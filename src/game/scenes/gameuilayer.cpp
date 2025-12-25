@@ -9,13 +9,15 @@ GameUILayer::GameUILayer() {
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-    CreateLabel(power_label, {20, g_resolution.y - 40}, FONTSIZE_50, RAYWHITE, "power...");
-    CreateLabel(sat_label, {20, g_resolution.y - 85}, FONTSIZE_50, RAYWHITE, "SAT...");
-
-    CreateStatusBar(health_bar,{20, g_resolution.y - 50}, g_character_data[g_current_player->uid].max_health, 100.0f, 10.0f, RED);
-    CreateStatusBar(power_bar,{20, g_resolution.y - 35}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
+    //CreateLabel(power_label, {20, g_resolution.y - 40}, FONTSIZE_50, RAYWHITE, "power...");
+    //CreateLabel(sat_label, {20, g_resolution.y - 85}, FONTSIZE_50, RAYWHITE, "SAT...");
+    
+    CreateStatusBar(health_bar,{20, g_resolution.y - 60}, g_character_data[g_current_player->uid].max_health, 100.0f, 10.0f, RED);
+    CreateStatusBar(power_bar,{20, g_resolution.y - 45}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
     last_max_power = power_bar.max_value;
-    CreateStatusBar(saturation_bar,{20, g_resolution.y - 20}, g_character_data[g_current_player->uid].max_saturation, 100.0f, 10.0f, GREEN);
+
+    CreateStatusBar(saturation_bar,{20, g_resolution.y - 30}, g_character_data[g_current_player->uid].max_saturation, 100.0f, 10.0f, GREEN);
+    CreateStatusBar(stamina_bar,{20, g_resolution.y - 15}, g_character_data[g_current_player->uid].max_stamina, 100.0f, 10.0f, RAYWHITE);
 }
 
 GameUILayer::~GameUILayer() {
@@ -31,6 +33,7 @@ void GameUILayer::Draw() {
     DrawStatusBar(health_bar);
     DrawStatusBar(saturation_bar);
     DrawStatusBar(power_bar);
+    DrawStatusBar(stamina_bar);
 
     if(!g_game_settings.show_debug){
         return;
@@ -44,13 +47,14 @@ void GameUILayer::Draw() {
 void GameUILayer::Update() {
     if(last_max_power != g_character_data[g_current_player->uid].max_power) {
         //max power changed
-        CreateStatusBar(power_bar,{20, g_resolution.y - 35}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
+        CreateStatusBar(power_bar,{20, g_resolution.y - 45}, g_character_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
         last_max_power = power_bar.max_value;
     }
 
     health_bar.current_value = g_character_data[g_current_player->uid].health;
     power_bar.current_value = g_character_data[g_current_player->uid].current_power;
     saturation_bar.current_value = g_character_data[g_current_player->uid].saturation;
+    stamina_bar.current_value = g_character_data[g_current_player->uid].current_stamina;
 
     if(IsButtonHovered(quit_button, g_scale)){
         if(quit_button.already_hovered == false) {

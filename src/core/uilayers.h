@@ -439,8 +439,10 @@ class GameUILayer : public BaseUILayer {
 
     StatusBar saturation_bar;
     StatusBar power_bar;
-    StatusBar health_bar;
     float last_max_power;
+
+    StatusBar health_bar;
+    StatusBar stamina_bar;
 
 };
 

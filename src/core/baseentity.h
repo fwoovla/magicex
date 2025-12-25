@@ -8,6 +8,15 @@
 
 #define DRAW_LIST_SIZE 100
 
+struct DamagePayload{
+    Vector2 knockback;
+    int attacker_id;
+    int damage;
+    //int payload_index;
+};
+
+
+
 class BaseEntity  {
     public:
     virtual ~BaseEntity() = default;
@@ -15,7 +24,7 @@ class BaseEntity  {
     virtual void Draw() = 0; 
     virtual void DrawUI() = 0;
     virtual float GetYSort() = 0;
-    virtual void TakeDamage() = 0;
+    virtual void TakeDamage(DamagePayload _payload) = 0;
 
     //Sprite sprite;
 

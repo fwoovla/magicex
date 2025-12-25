@@ -187,7 +187,6 @@ void ModuleMenu::OpenModule() {
             }
         }
 
-        
         if(ingredients_types_found < num_ingredients_types) {
             new_button.text_color = DARKRED;
             new_button.text_color_focus = RED;
@@ -267,7 +266,6 @@ void ModuleMenu::OpenModule() {
         plan_indexes.push_back(button_lookup.size() - 1);
         y_index ++;
 
-
     }
 }
 
@@ -283,17 +281,18 @@ void ModuleMenu::RecipieSelected() {
 
     if(!plan_selected) {
 
-
         TraceLog(LOG_INFO, "crafting %i", g_recipie_data[module_data.recipies[selected_button_index]].produces);
         
         InstanceCharacterItem(g_recipie_data[module_data.recipies[selected_button_index]].produces, g_current_player->uid);
         
         int instance_id;
         int item_id;
+        int num_needed = 1;
+        int num_found = 0;
 
         for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
             auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
-            if(i_itter != g_item_instances.end()) {
+            if(i_itter != g_item_instances.end() and num_found < num_needed) {
                 item_id = i_itter->second.item_id;
                 instance_id = i_itter->second.instance_id;
 
@@ -301,7 +300,7 @@ void ModuleMenu::RecipieSelected() {
                     if(item_id == g_recipie_data[module_data.recipies[selected_button_index]].ingredients[ingredient]) {
                         g_item_instances.erase(instance_id);
                         g_character_data[g_current_player->uid].inventory[item] = -1;
-                        break;
+                        num_found++;
                     }
                 }
             }
@@ -311,8 +310,6 @@ void ModuleMenu::RecipieSelected() {
         int lookup = selected_button_index - (button_lookup.size() - 2);
         TraceLog(LOG_INFO, "crafting module  %i --------- COMMING SOON!!!!!", g_plan_data[module_data.accepted_plans[lookup]].module_id);
 
-
-        
         //InstancePlayerItem(r_itter->second.produces);
         
         int instance_id;

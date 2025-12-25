@@ -57,8 +57,14 @@ void FireBall::Update() {
     }
     
     if(CollideWithEntity(this, result)) {
+        
+        DamagePayload new_payload;
+        new_payload.attacker_id = data->shooter_id;
+        new_payload.damage = data->damage;
+        new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
+        result.collider->TakeDamage(new_payload);
+        
         should_delete = true;
-        result.collider->TakeDamage();
     }
 
     sprite.position = position;
@@ -87,6 +93,6 @@ float FireBall::GetYSort() {
     return position.y;
 }
 
-void FireBall::TakeDamage() {
+void FireBall::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

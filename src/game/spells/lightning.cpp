@@ -64,7 +64,13 @@ void Lightning::Update() {
     }
 
     if(CollideWithEntity(this, result)) {
-        result.collider->TakeDamage();
+
+        DamagePayload new_payload;
+        new_payload.attacker_id = data->shooter_id;
+        new_payload.damage = data->damage;
+        new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
+        result.collider->TakeDamage(new_payload);
+
         should_delete = true;
     }
 
@@ -94,6 +100,6 @@ float Lightning::GetYSort() {
     return position.y;
 }
 
-void Lightning::TakeDamage() {
+void Lightning::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

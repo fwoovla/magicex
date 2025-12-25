@@ -59,7 +59,7 @@ class TestDummyEntity : public CharacterEntity {
     public:
     TestDummyEntity(Vector2 _position, int uid);
     ~TestDummyEntity() override;
-    void TakeDamage() override;
+    void TakeDamage(DamagePayload _payload) override;
     void Update() override;
     void Draw() override;
     void DrawUI()override;
@@ -82,7 +82,7 @@ class PlayerCharacter : public CharacterEntity {
     public:
     PlayerCharacter(Vector2 _position, int uid);
     ~PlayerCharacter() override;
-    void TakeDamage() override;
+    void TakeDamage(DamagePayload _payload) override;
     void Update() override;
     void Draw() override;
     void DrawUI()override;

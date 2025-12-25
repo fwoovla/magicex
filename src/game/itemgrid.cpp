@@ -357,6 +357,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         //TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
         if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
+        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}
         details += stat + value + "\n"; 
     }
 

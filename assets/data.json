@@ -6,14 +6,16 @@
             "base_speed":45.0,
             "sprite_sheet_id":0,
             "portrait_id":0,
-            "class_name": "Apprentice"
+            "class_name": "Apprentice",
+            "max_stamina":10
         },
         {
             "max_health":10,
             "base_speed":45.0,
             "sprite_sheet_id":1,
             "portrait_id":0,
-            "class_name": "Nerd"
+            "class_name": "Nerd",
+            "max_stamina":10
         }
     ],
  "item_data": [
@@ -276,7 +278,9 @@
             "damage":1,
             "radius":2,
             "cooldown":0.1,
-            "pps":0.1
+            "pps":0.1,
+            "recoil":20,
+            "knockback":20
         },
         {
             "spell_id":"SPELL_ID_FIREBALL",
@@ -287,7 +291,9 @@
             "damage":1,
             "radius":2,
             "cooldown":0.5,
-            "pps":0.5
+            "pps":0.5,
+            "recoil":30,
+            "knockback":40
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING",
@@ -298,7 +304,9 @@
             "damage":1,
             "radius":2,
             "cooldown":0.5,
-            "pps":1.0
+            "pps":1.0,
+            "recoil":50,
+            "knockback":60
         }
     ],
 
@@ -313,7 +321,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":10
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
@@ -321,7 +331,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":30
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
@@ -329,7 +341,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":40
         },
         {
             "weapon_id": "ITEM_ID_AXE",
@@ -337,7 +351,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":30
         },
         {
             "weapon_id": "ITEM_ID_BOW",
@@ -345,7 +361,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1
+            "damage":1,
+            "recoil":30,
+            "knockback":10
         },
         {
             "weapon_id": "ITEM_ID_WAND",
@@ -353,7 +371,9 @@
             "cooldown": 0.60,
             "spell_id":"SPELL_ID_NONE",
             "max_power":10,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":10
         },
         {
             "weapon_id": "ITEM_ID_STAFF",
@@ -361,7 +381,9 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":20,
-            "damage":1
+            "damage":1,
+            "recoil":20,
+            "knockback":30
         }
     ],
 
@@ -669,35 +691,40 @@
             "mod_name":"movement speed",
             "rarity":"RARITY_COMMON",
             "health":-1000,            
-            "speed":2.0
+            "speed":2.0,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_SPEED2",
             "mod_name":"movement speed",
             "rarity":"RARITY_UNCOMMON",
             "health":-1000,            
-            "speed":4.0
+            "speed":4.0,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_SPEED3",
             "mod_name":"movement speed",
             "rarity":"RARITY_RARE",
             "health":-1000,            
-            "speed":6.0
+            "speed":6.0,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_SPEED4",
             "mod_name":"movement speed",
             "rarity":"RARITY_VERYRARE",
             "health":-1000,            
-            "speed":8.0
+            "speed":8.0,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_SPEED5",
             "mod_name":"movement speed",
             "rarity":"RARITY_ULTRARARE",
             "health":-1000,            
-            "speed":10.0
+            "speed":10.0,
+            "stamina":-1000
         },
 
 
@@ -706,36 +733,83 @@
             "mod_name":"character health",
             "rarity":"RARITY_COMMON",
             "health":1,
-            "speed":-1000
+            "speed":-1000,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_HEALTH2",
             "mod_name":"character health",
             "rarity":"RARITY_UNCOMMON",
             "health":2,
-            "speed":-1000
+            "speed":-1000,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_HEALTH3",
             "mod_name":"character health",
             "rarity":"RARITY_RARE",
             "health":3,
-            "speed":-1000
+            "speed":-1000,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_HEALTH4",
             "mod_name":"character health",
             "rarity":"RARITY_VERYRARE",
             "health":4,
-            "speed":-1000
+            "speed":-1000,
+            "stamina":-1000
         },
         {
             "mod_id":"CHARMOD_HEALTH5",
             "mod_name":"character health",
             "rarity":"RARITY_ULTRARARE",
             "health":5,
-            "speed":-1000
+            "speed":-1000,
+            "stamina":-1000
+        },
+
+        {
+            "mod_id":"CHARMOD_STAMINA1",
+            "mod_name":"character stamina",
+            "rarity":"RARITY_COMMON",
+            "health":-1000,
+            "speed":-1000,
+            "stamina":2
+        },
+        {
+            "mod_id":"CHARMOD_STAMINA2",
+            "mod_name":"character stamina",
+            "rarity":"RARITY_UNCOMMON",
+            "health":-1000,
+            "speed":-1000,
+            "stamina":4
+        },
+        {
+            "mod_id":"CHARMOD_STAMINA3",
+            "mod_name":"character stamina",
+            "rarity":"RARITY_RARE",
+            "health":-1000,
+            "speed":-1000,
+            "stamina":6
+        },
+        {
+            "mod_id":"CHARMOD_STAMINA4",
+            "mod_name":"character stamina",
+            "rarity":"RARITY_VERYRARE",
+            "health":-1000,
+            "speed":-1000,
+            "stamina":8
+        },
+        {
+            "mod_id":"CHARMOD_STAMINA5",
+            "mod_name":"character stamina",
+            "rarity":"RARITY_ULTRARARE",
+            "health":-1000,
+            "speed":-1000,
+            "stamina":10
         }
+        
     ],
 
 
@@ -812,9 +886,9 @@
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
             "max_health":15,
-            "base_speed":0.0
+            "base_speed":0.0,
+            "max_stamina":0
         }
-
     ]
 
 }

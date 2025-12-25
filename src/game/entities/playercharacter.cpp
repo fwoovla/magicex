@@ -109,7 +109,12 @@ void PlayerCharacter::Update() {
         Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
         CollisionResult result;
         if(CollideWithEntity(t_pos, 2, result)) {
-            result.collider->TakeDamage();
+
+            DamagePayload new_payload;
+            new_payload.damage = current_primary_data->damage;
+            new_payload.attacker_id = uid;
+            new_payload.knockback = Vector2Rotate( {current_primary_data->knockback, 0}, weapon_sprite.rotation * DEG2RAD);
+            result.collider->TakeDamage(new_payload);
         }
         if(weapon_sprite.rotation >=  weapon_end_rotation - 5 and weapon_sprite.rotation <=  weapon_end_rotation + 5) {
             weapon_state = WSTATE_IDLE;
@@ -175,8 +180,18 @@ void PlayerCharacter::CheckInput() {
 
     float speed = g_character_data[uid].current_speed;
 
-    if(g_input.key_sprint) {
+    if(g_input.key_sprint and g_character_data[uid].current_stamina > 0.1) {
         speed = speed + (speed * 0.8f);
+        g_character_data[uid].current_stamina -= 5.0f * GetFrameTime();
+        if(g_character_data[uid].current_stamina < 0.0f) {
+            g_character_data[uid].current_stamina = 0.0f;
+        }
+    }
+    else {
+        g_character_data[uid].current_stamina += 2.0f * GetFrameTime();
+        if(g_character_data[uid].current_stamina > g_character_data[uid].max_stamina) {
+            g_character_data[uid].current_stamina = g_character_data[uid].max_stamina;
+        }
     }
 
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
@@ -242,6 +257,8 @@ void PlayerCharacter::CheckInput() {
             can_mele = false;
             weapon_state = WSTATE_MELE;
             weapon_end_rotation = weapon_sprite.rotation + (400 * swing_dir);
+
+            //velocity = Vector2Rotate( {-current_primary_data->recoil, 0}, weapon_sprite.rotation * DEG2RAD);
         }
     }
 
@@ -271,7 +288,7 @@ void PlayerCharacter::CheckInput() {
                 current_primary_data->current_power = g_character_data[uid].current_power; 
                 spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
                 can_use_spell = false;
-
+                velocity = Vector2Rotate( {-g_spell_data[current_primary_data->spell_id].recoil, 0}, weapon_sprite.rotation * DEG2RAD);
             }
         }
     }
@@ -309,8 +326,9 @@ void PlayerCharacter::Equip(int item_id) {
         
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-            if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health += item_it->second.char_mods[mod].health;}
+            if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health += item_it->second.char_mods[mod].health;}
             if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
+            if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina += item_it->second.char_mods[mod].stamina;}
         }
     }
     TraceLog(LOG_INFO, "+++++++++++++");
@@ -357,8 +375,9 @@ void PlayerCharacter::UnEquip(int item_id) {
         
         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
                 TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-                if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health -= item_it->second.char_mods[mod].health;}
+                if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health -= item_it->second.char_mods[mod].health;}
                 if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
+                if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina -= item_it->second.char_mods[mod].stamina;}
         }
     }
 }
@@ -383,7 +402,8 @@ void PlayerCharacter::OnHungerTimerTimeout() {
     g_character_data[uid].saturation -= hunger_rate;
     if(g_character_data[uid].saturation < 0) {
         g_character_data[uid].saturation = 0;
-        TakeDamage();
+        DamagePayload new_payload;
+        TakeDamage(new_payload);
     }
     //TraceLog(LOG_INFO, "hunger");
 }
@@ -398,6 +418,6 @@ float PlayerCharacter::GetYSort() {
     return position.y + ground_point_offset.y;
 }
 
-void PlayerCharacter::TakeDamage() {
+void PlayerCharacter::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage %i", g_character_data[uid].health);
 }

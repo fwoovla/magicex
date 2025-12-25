@@ -302,6 +302,17 @@ void LDTKLoadMaps (json &mj) {
 
                             new_entity.field_instances.push_back(new_field);
                         }
+
+                        if(new_entity.identifier == "CreatureEntity") {
+                            TraceLog(LOG_INFO, "++++++----------------------CREATURE FOUND");
+                            LDTKFieldInstance new_field;
+                            new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__identifier"];
+                            
+                            CreatureID type = StrToCreatureId (mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__value"]);
+                            new_field.value_i = type;
+                            TraceLog(LOG_INFO, "++++++--------type %i", type);
+                            new_entity.field_instances.push_back(new_field);                  
+                        }
                         
                         
                         this_layer.entity_instances.push_back(new_entity);

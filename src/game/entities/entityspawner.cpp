@@ -58,7 +58,7 @@ float CharacterMessage::GetYSort() {
     return position.y;
 }
 
-void CharacterMessage::TakeDamage() {
+void CharacterMessage::TakeDamage(DamagePayload _payload) {
 
 }
 

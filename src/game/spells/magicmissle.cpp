@@ -75,7 +75,13 @@ void MagicMissle::Update() {
     }
 
     if(CollideWithEntity(this, result)) {
-        result.collider->TakeDamage();
+        
+        DamagePayload new_payload;
+        new_payload.attacker_id = data->shooter_id;
+        new_payload.damage = data->damage;
+        new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
+        result.collider->TakeDamage(new_payload);
+
         should_delete = true;
     }
     
@@ -106,6 +112,6 @@ float MagicMissle::GetYSort() {
     return position.y;
 }
 
-void MagicMissle::TakeDamage() {
+void MagicMissle::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

@@ -95,7 +95,7 @@ float PermContainerEntity::GetYSort() {
     return position.y;
 }
 
-void PermContainerEntity::TakeDamage() {
+void PermContainerEntity::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "container taking damage ");
 }
 
@@ -207,6 +207,6 @@ float GroundContainerEntity::GetYSort() {
     return position.y;
 }
 
-void GroundContainerEntity::TakeDamage() {
+void GroundContainerEntity::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "container taking damage ");
 }

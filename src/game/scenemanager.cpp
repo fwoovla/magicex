@@ -47,7 +47,8 @@ void SceneManager::UpdateScene()
     }
 
     if(g_game_settings.show_debug) {
-        debug_label.text = TextFormat( "player pos ff %0.2f %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i", 
+        debug_label.text = TextFormat( "mmp %0.2f  %0.2f \n  player pos  %0.2f   %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i\n", 
+        g_input.world_mouse_position.x, g_input.world_mouse_position.y,
         g_current_player->position.x, g_current_player->position.y,
         (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
         (int)g_camera.target.x, (int)g_camera.target.y,
@@ -346,6 +347,18 @@ void InstanceLevelObjects(LevelData &level_data) {
             TraceLog(LOG_INFO, "instacing mushroom");
         }
     }
+
+
+    for(int creature = 0; creature < level_data.creature_data.size(); creature++) {
+
+        int uid = GetRandomValue(1000, 1000000);
+        g_character_data[uid] = level_data.creature_data[creature];
+
+        TraceLog(LOG_INFO, "new creature  uid %i  creature id %i", uid, g_character_data[uid].creature_id);
+        TestDummyEntity *new_dummy = new TestDummyEntity({100, 100}, uid);
+        DL_Add(level_data.entity_list, new_dummy);
+    }
+
     TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
 }
 

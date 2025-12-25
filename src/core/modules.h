@@ -42,4 +42,4 @@ class WorkbenchModuleEntity : public BaseModuleEntity {
     void DrawUI() override;
     void OnModuleUsed() override;
     float GetYSort() override;
-    void TakeDamage() override;};
+    void TakeDamage(DamagePayload _payload) override;};

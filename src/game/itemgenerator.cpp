@@ -25,6 +25,8 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     new_instance.saturation = 0;
     new_instance.defence = 0;
     new_instance.magic_defence = 0;
+    new_instance.recoil = 0;
+    new_instance.knockback = 0;
 
 
     if(new_instance.type == TYPE_WEAPON ) {
@@ -69,6 +71,8 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     new_instance.saturation = 0.0f;
     new_instance.defence = 0;
     new_instance.magic_defence = 0;
+    new_instance.recoil = 0;
+    new_instance.knockback = 0;
 
 
         //add chara mods here
@@ -112,10 +116,16 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     instance.icon_id = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].weapon_id;
     instance.max_power = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].max_power;
     instance.current_power = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].max_power;
+
+    instance.recoil = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].recoil;
+    instance.knockback = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].knockback;
+
     TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
     TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
     TraceLog(LOG_INFO, "-damage %i", instance.damage );
+    TraceLog(LOG_INFO, "-recoil %f", instance.recoil );
+    TraceLog(LOG_INFO, "-knockback %f", instance.knockback );
 
 
     if(loot_level >= 1 and random) {

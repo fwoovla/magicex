@@ -46,6 +46,38 @@ TestDummyEntity::TestDummyEntity(Vector2 _position, int _uid): CharacterEntity()
 }
 
 void TestDummyEntity::Update() {
+
+    velocity = Vector2Lerp(velocity, {0.0f,0.0f}, .15);
+
+    if(abs(velocity.x) < 4.0f) {
+        velocity.x = {0.0};
+    }
+    if (abs(velocity.y) < 4.0f) {
+        velocity.y = {0.0};
+    }
+
+    Vector2 previous_position = position;
+
+    if(velocity.x != 0 or velocity.y != 0) {
+        position = Vector2Add(position, velocity * GetFrameTime());
+        SetAmination(sprite, ANIM_RUN);
+
+        CollisionResult result;
+        result.collision_dir = {0,0};
+
+        if(CollideAndSlide(this, result, 2) == true) {
+            //TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
+            if(result.collision_dir.x != 0) {
+                position.x = previous_position.x;
+                velocity.x = 0.0f;
+            }
+            if(result.collision_dir.y != 0) {
+                position.y = previous_position.y;
+                velocity.y = 0.0f;
+            }
+        }
+    }
+
     sprite.position = position;
     weapon_sprite.position = position;
     shadow_sprite.position =  Vector2Add( position, {0, 3});
@@ -192,18 +224,24 @@ float TestDummyEntity::GetYSort() {
 }
 
 
-void TestDummyEntity::TakeDamage() {
+void TestDummyEntity::TakeDamage(DamagePayload _payload) {
     //TraceLog(LOG_INFO, "taking damage %i", g_character_data[uid].health);
     is_stunned = true;
     sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
     stun_timer.Start(0.5f, true);
 
+    std::string damage_string = std::to_string(_payload.damage);
+
+
+    velocity = _payload.knockback;
+
+    TraceLog(LOG_INFO, "knockback %0.2f  %0.2f", _payload.knockback.x, _payload.knockback.y);
 
     if(g_game_data.is_in_sub_map) {
-        SpawnCharacterMessage (*g_sub_scene, position, "hit", RED, 0.3f);
+        SpawnCharacterMessage (*g_sub_scene, position, damage_string, RED, 0.3f);
     }
     else {
-        SpawnCharacterMessage(*g_current_scene, position, "hit", RED, 0.3f);
+        SpawnCharacterMessage(*g_current_scene, position, damage_string, RED, 0.3f);
     }
 }

@@ -74,6 +74,6 @@ float EnvironmentalEntity::GetYSort() {
     return position.y;
 }
 
-void EnvironmentalEntity::TakeDamage() {
+void EnvironmentalEntity::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "MushroomEntity taking damage ");
 }

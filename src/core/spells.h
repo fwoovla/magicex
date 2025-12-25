@@ -12,6 +12,8 @@ struct SpellData {
     float speed;
     float cooldown;
     float pps;
+    float recoil;
+    float knockback;
     std::string spell_name;
 };
 
@@ -56,7 +58,7 @@ class MagicMissle : public BaseSpell {
     void DrawUI() override;
     float GetYSort() override;
     void OnLifetimeTimeout() override;
-    void TakeDamage() override;
+    void TakeDamage(DamagePayload _payload) override;
 
 };
 
@@ -70,7 +72,7 @@ class FireBall : public BaseSpell {
     void DrawUI() override;
     float GetYSort() override;
     void OnLifetimeTimeout() override;
-    void TakeDamage() override;
+    void TakeDamage(DamagePayload _payload) override;
 
 };
 
@@ -84,6 +86,6 @@ class Lightning : public BaseSpell {
     void DrawUI() override;
     float GetYSort() override;
     void OnLifetimeTimeout() override;
-    void TakeDamage() override;
+    void TakeDamage(DamagePayload _payload) override;
 
 };

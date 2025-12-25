@@ -715,7 +715,7 @@ void LoadResources() {
 }
 
 void UnloadResources() {
-
+    
     UnloadTexture(g_main_sprite_sheet);
 
     TraceLog(LOG_INFO, "UNLOADING CHARACTER SHEETS");

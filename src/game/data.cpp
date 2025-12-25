@@ -54,6 +54,8 @@ void LoadGameData() {
         int sprite_sheet_id = cj["base_class"][i]["sprite_sheet_id"];
         int portrait_id = cj["base_class"][i]["portrait_id"];
         std::string class_name = cj["base_class"][i]["class_name"];
+
+        float max_stamina = cj["base_class"][i]["max_stamina"];
         
         std::vector<int> inv;
         inv.push_back(-1);
@@ -96,6 +98,8 @@ void LoadGameData() {
             .current_power = 0,
             .saturation = 10,
             .max_saturation = 10,
+            .max_stamina = max_stamina,
+            .current_stamina = max_stamina,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = "not assigned",
@@ -177,6 +181,8 @@ void LoadGameData() {
         float radius = cj["spell_data"][i]["radius"];
         float cooldown = cj["spell_data"][i]["cooldown"];
         float pps = cj["spell_data"][i]["pps"];
+        float recoil = cj["spell_data"][i]["recoil"];
+        float knockback = cj["spell_data"][i]["knockback"];
 
         new_spell.lifetime = lifetime;
         new_spell.damage = damage;
@@ -187,6 +193,8 @@ void LoadGameData() {
         new_spell.spell_name = name;
         new_spell.cooldown = cooldown;
         new_spell.pps = pps;
+        new_spell.recoil = recoil;
+        new_spell.knockback = knockback;
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
@@ -242,13 +250,18 @@ void LoadGameData() {
 
         int damage = cj["weapon_data"][i]["damage"];
 
+        float recoil = cj["weapon_data"][i]["recoil"];
+        float knockback = cj["weapon_data"][i]["knockback"];
+
         WeaponData new_weapon = {
             .weapon_name = name,
             .weapon_id = w_id,
             .cooldown = cooldown,
             .spell_id = spell_id,
             .max_power = max_power,
-            .damage = damage                
+            .damage = damage,
+            .recoil = recoil,
+            .knockback = knockback
         };
 
         TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s", w_id, name.c_str());
@@ -416,6 +429,7 @@ void LoadGameData() {
         new_mod.mod_name = cj["character_modifiers"][i]["mod_name"];
         new_mod.health = cj["character_modifiers"][i]["health"];
         new_mod.speed = cj["character_modifiers"][i]["speed"];
+        new_mod.stamina = cj["character_modifiers"][i]["stamina"];
         new_mod.rarity = StrToItemRarity( cj["character_modifiers"][i]["rarity"]);
 
         TraceLog(LOG_INFO, "Character Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
@@ -487,6 +501,8 @@ void LoadGameData() {
         int sprite_sheet_id = creature_id;
         int portrait_id = -1;
         std::string name = cj["creature_data"][i]["creature_name"];
+
+        float max_stamina = cj["base_class"][i]["max_stamina"];
         
         std::vector<int> inv;
         inv.push_back(-1);
@@ -529,6 +545,8 @@ void LoadGameData() {
             .current_power = 0,
             .saturation = 10,
             .max_saturation = 10,
+            .max_stamina = max_stamina,
+            .current_stamina = max_stamina,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = name,
@@ -634,6 +652,7 @@ void SaveGame(LevelData &level_data) {
     json json_item_instances = json::array();
 
     TraceLog(LOG_INFO, "# g_item_instances %i  ", g_item_instances.size());
+
     for (auto& [key, inst] : g_item_instances) {
         json instance = {
             {"item_id", inst.item_id},
@@ -655,7 +674,9 @@ void SaveGame(LevelData &level_data) {
             {"damage", inst.damage,},
             {"max_power", inst.max_power},
             {"current_power", inst.current_power},
-            {"rarity", inst.rarity}
+            {"rarity", inst.rarity},
+            {"recoil", inst.recoil},
+            {"knockback", inst.knockback}
         };
         json json_mods = json::array();
         for(auto mod : inst.char_mods) {
@@ -845,6 +866,7 @@ void ClearLevelData(LevelData &level_data) {
 
     DL_Clear(level_data.entity_list);
     level_data.level_transitions.clear();
+    level_data.creature_data.clear();
     level_data.container_data.clear();
     level_data.game_areas.clear();
 
@@ -1021,6 +1043,16 @@ void LoadLevelData(LevelData &level_data) {
                     //TraceLog(LOG_INFO, "max mushrooms %i", new_zone.max_mushrooms); 
 
                    level_data.mushroom_zones.push_back(new_zone);
+                }
+
+                if(identifier == "CreatureEntity") {
+                    CreatureID creature_id = (CreatureID)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
+                    CharacterData new_creature = g_creature_data[creature_id];
+                    new_creature.spawn_position.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                    new_creature.spawn_position.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+                    TraceLog(LOG_INFO, "NEW CREATURE DATA %i    %s  ", creature_id, g_creature_data[creature_id].name.c_str());
+
+                    level_data.creature_data.push_back(new_creature);
                 }
        
             }
@@ -1308,6 +1340,12 @@ CharModID StrToCharModId(const std::string& s) {
         {"CHARMOD_SPEED4",     CharModID::CHARMOD_SPEED4},
         {"CHARMOD_SPEED5",     CharModID::CHARMOD_SPEED5},
 
+        {"CHARMOD_STAMINA1",     CharModID::CHARMOD_STAMINA1},
+        {"CHARMOD_STAMINA2",     CharModID::CHARMOD_STAMINA2},
+        {"CHARMOD_STAMINA3",     CharModID::CHARMOD_STAMINA3},
+        {"CHARMOD_STAMINA4",     CharModID::CHARMOD_STAMINA4},
+        {"CHARMOD_STAMINA5",     CharModID::CHARMOD_STAMINA5},
+
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1546,6 +1584,8 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("sprite_id").get_to(i.sprite_id);
     j.at("saturation").get_to(i.saturation);
     j.at("damage").get_to(i.damage);
+    j.at("recoil").get_to(i.recoil);
+    j.at("knockback").get_to(i.knockback);
 
     j.at("max_power").get_to(i.max_power);
     j.at("current_power").get_to(i.current_power);
