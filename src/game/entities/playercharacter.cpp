@@ -9,12 +9,12 @@
 
 PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity() {
 
-    position = _position;
     uid = _uid;
+    data = &g_character_data[uid];
+    character_entity = this;
+    position = _position;
     rotation = 0.0f;
     velocity = {0,0};
-    //weapon_sprite = {};
-    //shadow_sprite = {};
     
     LoadSpriteCentered(sprite, g_character_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
     LoadSpriteCentered(shadow_sprite, g_shadow_sprites[SPRITE_SHADOW_CHAR1], position);
@@ -233,13 +233,7 @@ void PlayerCharacter::CheckInput() {
                 g_character_data[uid].inventory[item] = -1;
                 g_item_instances.erase(instance_id);
 
-                if(g_game_data.is_in_sub_map) {
-                    SpawnCharacterMessage (*g_sub_scene, position, "reload", WHITE, 0.3f);
-                }
-                else {
-                    SpawnCharacterMessage(*g_current_scene, position, "reload", WHITE, 0.3f);
-                }
-
+                SpawnCharacterMessage (position, "reload", WHITE, 0.3f);
                 break;
             }
         }
@@ -300,7 +294,7 @@ bool PlayerCharacter::CanEquip(int item_id) {
 
 
 void PlayerCharacter::Equip(int item_id) {
-    TraceLog(LOG_INFO, "trying to equip iteme %i", item_id);
+    TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
 
     int _id = ITEM_ID_NONE;
 
@@ -345,11 +339,10 @@ void PlayerCharacter::UnEquip(int item_id) {
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            TraceLog(LOG_INFO, "unequiping primary weapon %i %i", item_id, g_character_data[uid].primary[0]);
-            //if (g_character_data[uid].primary[0] == -1) {
-                Texture2D t;
-                LoadSpriteCentered(weapon_sprite, t, position);
-                current_primary_data = nullptr;
+            TraceLog(LOG_INFO, "%i unequiping primary weapon %i %i", uid, item_id, g_character_data[uid].primary[0]);
+            Texture2D t;
+            LoadSpriteCentered(weapon_sprite, t, position);
+            current_primary_data = nullptr;
 
             g_character_data[uid].max_power -= item_it->second.max_power;
             g_character_data[uid].current_power -= item_it->second.max_power;
@@ -418,5 +411,8 @@ float PlayerCharacter::GetYSort() {
 }
 
 void PlayerCharacter::TakeDamage(DamagePayload _payload) {
-    TraceLog(LOG_INFO, "taking damage %i", g_character_data[uid].health);
+    TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
+    
+    std::string damage_string = std::to_string(_payload.damage);
+    SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
 }

@@ -47,6 +47,13 @@ SubScene::SubScene(LevelData *_level_data, bool is_new) {
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
             }
         }
+        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
+            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
+            if(m_entity) {
+                TraceLog(LOG_INFO, "module connected");
+                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
+            }
+        }
     }
 
     ui_layer = new GameUILayer();
@@ -85,7 +92,8 @@ SCENE_ID SubScene::Update() {
         }
         DL_Update(level_data.entity_list);
         DL_Update(level_data.spell_list);
-        ui_layer->Update(); 
+        ui_layer->Update();
+        DL_Update(level_data.ui_entities);
         g_current_player->Update();
         HandleCamera();
     }
@@ -148,14 +156,8 @@ void SubScene::DrawScene() {
     }
 
     LDTKDrawShadows(g_current_player->position);
-        
+    DL_Draw(level_data.ui_entities);
     EndMode2D();
-/*     BeginMode2D(g_camera);
-    tile_layer->Draw();
-    DL_Draw(level_data.entity_list);
-    g_current_player->Draw();
-    EndMode2D(); */
-
 }
 
 

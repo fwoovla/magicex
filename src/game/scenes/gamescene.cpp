@@ -52,7 +52,15 @@ GameScene::GameScene() {
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
             }
         }
+        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
+            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
+            if(m_entity) {
+                TraceLog(LOG_INFO, "module connected");
+                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
+            }
+        }
     }
+    
 
     tile_layer = new TileLayer();
     
@@ -99,6 +107,7 @@ SCENE_ID GameScene::Update() {
             }
             DL_Update(level_data.entity_list);
             DL_Update(level_data.spell_list);
+            DL_Update(level_data.ui_entities);
             ui_layer->Update();
             g_current_player->Update();
             HandleCamera();
@@ -116,8 +125,6 @@ SCENE_ID GameScene::Update() {
                     Vector2 pos = g_current_player->position;
                     for(int item = 0; item < character_menu->blank_list.size(); item++) {
                         if(character_menu->blank_list[item] != -1) {
-
-                            //dfgg
 
                             auto item_it = g_item_instances.find(character_menu->blank_list[item]);
                             if(item_it != g_item_instances.end()) {
@@ -179,7 +186,7 @@ void GameScene::DrawScene() {
         }
 
         //LDTKDrawShadows(g_current_player->position);
-        
+        DL_Draw(level_data.ui_entities);
         EndMode2D();
     }    
 }
@@ -204,6 +211,7 @@ void GameScene::DrawUI() {
         ui_layer->Draw();
         //character_menu->DrawHotBarOnly();
     }
+    
         
 }
 
@@ -230,26 +238,22 @@ void GameScene::HandleCamera() {
         float x_dif = x_offset_f - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
-        //g_camera.target.x = (int)g_camera.target.x;
     }
     else if(g_current_player->position.x + x_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_wid) {
         float x_dif = (x_offset_f + g_current_player->position.x) - g_ldtk_maps.levels[g_game_data.current_map_index].px_wid;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.y);
          g_camera.target.x = g_camera.target.x - x_dif;
-        //g_camera.target.x = (int)g_camera.target.x;
     }
 
     if(g_current_player->position.y - y_offset_f < 0) {
         float y_dif = y_offset_f - g_current_player->position.y;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
-        g_camera.target.y = (int)g_camera.target.y + y_dif;
-        //g_camera.target.y = (int)g_camera.target.y;
+        g_camera.target.y = g_camera.target.y + y_dif;
     }
     else if(g_current_player->position.y + y_offset_f > g_ldtk_maps.levels[g_game_data.current_map_index].px_hei) {
         float y_dif = (y_offset_f + g_current_player->position.y) - g_ldtk_maps.levels[g_game_data.current_map_index].px_hei;
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
-        //g_camera.target.y = (int)g_camera.target.y;
 
     }    
 }

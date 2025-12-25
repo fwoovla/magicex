@@ -1,6 +1,12 @@
 #pragma once 
 #include "gamedefs.h"
 
+enum ActionState {
+    ACTION_IDLE,
+    ACTION_CHARGE,
+    ACTION_RETREAT,
+};
+
 enum AnimationState {
     ANIM_IDLE = 0,
     ANIM_WALK = 1,
@@ -48,9 +54,11 @@ class CharacterEntity : public AnimatedSpriteEntity {
     float hunger_rate;
 
     ItemInstanceData *current_primary_data;
+    CharacterData *data;
 
     AnimationState animation_state;
     WeaponState weapon_state;
+    ActionState action_state;
 }; 
 
 
@@ -75,6 +83,41 @@ class TestDummyEntity : public CharacterEntity {
     void OnMeleTimerTimeout() override;
     void OnStunTimerTimeout() override;
     void OnHungerTimerTimeout() override;
+};
+
+
+class CreatureEntity : public CharacterEntity {
+    public:
+    CreatureEntity(Vector2 _position, int uid);
+    ~CreatureEntity() override;
+    void TakeDamage(DamagePayload _payload) override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI()override;
+    float GetYSort() override;
+    
+    bool CanEquip(int item_id) override;
+    void Equip(int item_id) override;
+    
+    bool CanUnEquip(int item_id) override;
+    void UnEquip(int item_id) override;
+    
+    void OnSpellTimerTimeout() override;
+    void OnMeleTimerTimeout() override;
+    void OnStunTimerTimeout() override;
+    void OnHungerTimerTimeout() override;
+    void OnDetectTimerTimeout();
+    void OnActionTimerTimeout();
+
+    float detect_range;
+    CharacterEntity *target_creature;
+    std::vector<CharacterEntity *> detected_creatures;
+    std::vector<Vector2> target_path;
+    int path_index;
+
+    Timer detect_timer;
+    Timer action_timer;
+
 };
 
 

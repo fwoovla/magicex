@@ -211,6 +211,19 @@ extern std::vector<PlanData> g_plan_data;
 
 
 struct CharacterData {
+
+
+    std::vector<int> inventory;
+    std::vector<int> hotbar;
+
+    std::vector<int> primary;
+    std::vector<int> secondary;
+    std::vector<int> head;
+    std::vector<int> body;
+    std::vector<int> legs;
+    std::vector<int> feet;
+    std::vector<int> hands;
+
     int creature_id = -1;
     int health = 0;
     int max_health;
@@ -228,21 +241,11 @@ struct CharacterData {
 
     int sprite_sheet_id = -1;
     int portrait_id = -1;
-
     Vector2 spawn_position;
 
     std::string name = "";
     std::string class_name = "";
-    std::vector<int> inventory;
-    std::vector<int> hotbar;
 
-    std::vector<int> primary;
-    std::vector<int> secondary;
-    std::vector<int> head;
-    std::vector<int> body;
-    std::vector<int> legs;
-    std::vector<int> feet;
-    std::vector<int> hands;
 };
 
 extern std::unordered_map<int, CharacterData> g_class_data;

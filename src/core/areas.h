@@ -95,3 +95,24 @@ class ModuleArea : public BaseArea {
         Label label;
 
 };
+
+
+/* class CreatureDetectArea : public BaseArea {
+
+    public:
+        CreatureDetectArea(){};
+        ~CreatureDetectArea() override;
+        void Update() override;
+        void Draw() override;
+        //void Activate() override;
+
+        Signal area_entered;
+        Signal area_activated;
+
+        Label label;
+
+        CharacterEntity *target_creature;
+
+        std::vector<CharacterEntity *> detected_creatures;
+
+}; */

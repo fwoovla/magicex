@@ -881,13 +881,39 @@
             "durration":50
         }
     ],
+
     "creature_data": [
         {
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
             "max_health":15,
             "base_speed":0.0,
+            "sprite_sheet_id":2,
             "max_stamina":0
+        },
+        {
+            "creature_id":"CREATURE_BUNNY",
+            "creature_name": "Bunny",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":3,
+            "max_stamina":10
+        },
+        {
+            "creature_id":"CREATURE_SCAVENGER",
+            "creature_name": "Scavenger",
+            "max_health":15,
+            "base_speed":30.0,
+            "sprite_sheet_id":4,
+            "max_stamina":10
+        },
+        {
+            "creature_id":"CREATURE_TRADER",
+            "creature_name": "Trader",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":5,
+            "max_stamina":10
         }
     ]
 

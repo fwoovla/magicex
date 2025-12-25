@@ -15,9 +15,9 @@ TestDummyEntity::TestDummyEntity(Vector2 _position, int _uid): CharacterEntity()
     velocity = {0,0};
     weapon_sprite = {};
     
-    LoadSpriteCentered(sprite, g_creature_sprite_sheets[g_character_data[uid].creature_id], position, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(sprite, g_creature_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
     LoadSpriteCentered(shadow_sprite, g_shadow_sprites[SPRITE_SHADOW_CHAR1], position);
-    //SetAmination(sprite, ANIM_IDLE);
+    SetAmination(sprite, ANIM_IDLE);
 
     collision_radius = 5;
     centered_offset = {0,0};
@@ -26,6 +26,7 @@ TestDummyEntity::TestDummyEntity(Vector2 _position, int _uid): CharacterEntity()
     should_delete = false;
     can_switch = true;
     can_take_damage = true;
+    is_stunned = false;
 
     
     int _id = ITEM_ID_ERROR;
@@ -88,7 +89,7 @@ void TestDummyEntity::Update() {
 }
 
 void TestDummyEntity::Draw() {
-
+    //TraceLog(LOG_INFO, "+++++++draw++++++");
     DrawSprite(shadow_sprite);
     DrawSprite(weapon_sprite);
     DrawSprite(sprite);
@@ -110,7 +111,7 @@ bool TestDummyEntity::CanEquip(int item_id) {
 
 
 void TestDummyEntity::Equip(int item_id) {
-    TraceLog(LOG_INFO, "trying to equip iteme %i", item_id);
+    TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
 
     int _id = ITEM_ID_NONE;
 
@@ -122,6 +123,7 @@ void TestDummyEntity::Equip(int item_id) {
             _id = item_it->second.sprite_id;
             LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
             weapon_sprite.center.x -= weapon_sprite.center.x - 3;
+            current_primary_data = &item_it->second;
             TraceLog(LOG_INFO, "equiping primary weapon %i sprite_id %i", item_id, _id);
         }
         
@@ -136,6 +138,7 @@ void TestDummyEntity::Equip(int item_id) {
             TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
             if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health += item_it->second.char_mods[mod].health;}
             if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
+            if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina += item_it->second.char_mods[mod].stamina;}
             
         }
     }
@@ -154,13 +157,11 @@ void TestDummyEntity::UnEquip(int item_id) {
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            TraceLog(LOG_INFO, "unequiping primary weapon %i %i", item_id, g_character_data[uid].primary[0]);
-            //if (g_character_data[uid].primary[0] == -1) {
-                Texture2D t;
-                LoadSpriteCentered(weapon_sprite, t, position);
+            TraceLog(LOG_INFO, "%i unequiping primary weapon %i %i", uid, item_id, g_character_data[uid].primary[0]);
+            Texture2D t;
+            LoadSpriteCentered(weapon_sprite, t, position);
+            current_primary_data = nullptr;
                 
-            //}
-
             g_character_data[uid].max_power -= item_it->second.max_power;
             g_character_data[uid].current_power -= item_it->second.max_power;
 
@@ -186,6 +187,7 @@ void TestDummyEntity::UnEquip(int item_id) {
                 TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
                 if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].health -= item_it->second.char_mods[mod].health;}
                 if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
+                if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina -= item_it->second.char_mods[mod].stamina;}
             
         }
     }
@@ -225,7 +227,8 @@ float TestDummyEntity::GetYSort() {
 
 
 void TestDummyEntity::TakeDamage(DamagePayload _payload) {
-    //TraceLog(LOG_INFO, "taking damage %i", g_character_data[uid].health);
+    TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
+
     is_stunned = true;
     sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
@@ -238,10 +241,6 @@ void TestDummyEntity::TakeDamage(DamagePayload _payload) {
 
     TraceLog(LOG_INFO, "knockback %0.2f  %0.2f", _payload.knockback.x, _payload.knockback.y);
 
-    if(g_game_data.is_in_sub_map) {
-        SpawnCharacterMessage (*g_sub_scene, position, damage_string, RED, 0.3f);
-    }
-    else {
-        SpawnCharacterMessage(*g_current_scene, position, damage_string, RED, 0.3f);
-    }
+    SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
+
 }

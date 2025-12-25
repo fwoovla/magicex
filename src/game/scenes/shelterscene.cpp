@@ -46,7 +46,7 @@ ShelterScene::ShelterScene() {
             }
         }
         if(identifier == "ModuleEntity") {
-            WorkbenchModuleEntity* m_entity = dynamic_cast<WorkbenchModuleEntity*>(level_data.entity_list[entity_index]);
+            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
             if(m_entity) {
                 TraceLog(LOG_INFO, "module connected");
                 m_entity->open_module.Connect( [this](){OnModuleUsed();} );

@@ -38,10 +38,10 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     if(new_instance.type == TYPE_FOOD ) {
         GenerateFood(new_instance, 0, false);   
     }
-    if(new_instance.type == TYPE_SCROLL ) {
+/*     if(new_instance.type == TYPE_SCROLL ) {
         int spell_id =  g_spell_data[GetRandomValue(0, SPELL_ID_MAX - 1)].spell_id;
         GenerateScroll(new_instance, (SpellID)spell_id, "");
-    }
+    } */
 
     return new_instance;
 }

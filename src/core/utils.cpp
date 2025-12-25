@@ -279,6 +279,7 @@ bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result) {
             collided = CheckCollisionCircles( checker->position, checker->collision_radius, entity->position, entity->collision_radius);
             if(collided) {
                 collision_result.collider = entity;
+                return collided;
             }
         }
     }
@@ -290,20 +291,50 @@ bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision
     bool collided = false;
 
     BaseScene *this_scene = g_current_scene.get();
-    //TraceLog(LOG_INFO, "RAY CHECKING %i ", this_scene->level_data.precalc.map_index);
 
     if(g_game_data.is_in_sub_map) {
         this_scene = g_sub_scene.get();
     }
 
-    for(auto entity : this_scene->level_data.entity_list) {
+    for(auto &entity : this_scene->level_data.entity_list) {
         if(entity->can_take_damage) {
+            //TraceLog(LOG_INFO, "CHECKING COLLISION WITH? %s ", entity->identifier.c_str());
+            //TraceLog(LOG_INFO, "entity position? %0.2f  %0.2f      radius %0.2f", entity->position.x, entity->position.y, entity->collision_radius);
             collided = CheckCollisionCircles( c_pos, c_radius, entity->position, entity->collision_radius);
             if(collided) {
                 collision_result.collider = entity;
+                return collided;
             }
         }
     }
+    //TraceLog(LOG_INFO, "\n");
     return collided;
 
+}
+
+
+
+void DetectCreatures(CharacterEntity &checker, float c_radius, EntityDetectResult &_result) {
+
+    bool collided = false;
+
+    BaseScene *this_scene = g_current_scene.get();
+
+    if(g_game_data.is_in_sub_map) {
+        this_scene = g_sub_scene.get();
+    }
+
+    for(auto &entity : this_scene->level_data.entity_list) {
+        collided = false;
+        if(entity->can_take_damage and entity->character_entity and &checker != entity->character_entity) {
+            collided = CheckCollisionCircles( checker.position, c_radius, entity->position, entity->collision_radius);
+            if(collided) {
+                _result.detected_creatures.push_back(entity->character_entity);
+            }
+        }
+    }
+    if(CheckCollisionCircles( checker.position, c_radius, g_current_player->position, g_current_player->collision_radius)) {
+        _result.detected_creatures.push_back(g_current_player);
+    }
+    //TraceLog(LOG_INFO, "\n");
 }

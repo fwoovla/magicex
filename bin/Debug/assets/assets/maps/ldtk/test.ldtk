@@ -1090,7 +1090,12 @@
 			{ "id": "TYPE_FOOD", "tileRect": null, "color": 2943221 },
 			{ "id": "TYPE_ALL", "tileRect": null, "color": 16777215 }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
-		{ "identifier": "CreatureTypes", "uid": 78, "values": [{ "id": "CREATURE_TESTDUMMY", "tileRect": { "tilesetUid": 25, "x": 192, "y": 0, "w": 16, "h": 16 }, "color": 12470831 }], "iconTilesetUid": 25, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
+		{ "identifier": "CreatureTypes", "uid": 78, "values": [
+			{ "id": "CREATURE_TESTDUMMY", "tileRect": { "tilesetUid": 25, "x": 192, "y": 0, "w": 16, "h": 16 }, "color": 12470831 },
+			{ "id": "CREATURE_BUNNY", "tileRect": null, "color": 14120515 },
+			{ "id": "CREATURE_SCAVENGER", "tileRect": null, "color": 15389866 },
+			{ "id": "CREATURE_TRADER", "tileRect": null, "color": 14984818 }
+		], "iconTilesetUid": 25, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "is_shelter",
@@ -1349,19 +1354,76 @@
 						},
 						{
 							"__identifier": "CreatureEntity",
-							"__grid": [6,5],
+							"__grid": [6,6],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
 							"__smartColor": "#E4A672",
-							"iid": "e2c4ab10-d380-11f0-8b59-27141276588a",
+							"iid": "3b74f450-d380-11f0-bb31-bb6aff528874",
 							"width": 16,
 							"height": 16,
 							"defUid": 77,
-							"px": [96,80],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [null] }],
+							"px": [96,96],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_BUNNY", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_BUNNY"]
+							}] }],
 							"__worldX": -128,
-							"__worldY": 80
+							"__worldY": 96
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [11,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "4c39e740-d380-11f0-bb31-c16a620f15ad",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [176,48],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_SCAVENGER", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_SCAVENGER"]
+							}] }],
+							"__worldX": -48,
+							"__worldY": 48
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [2,7],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "4dc06030-d380-11f0-bb31-efb8ef35bcd2",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [32,112],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TRADER", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_TRADER"]
+							}] }],
+							"__worldX": -192,
+							"__worldY": 112
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [11,7],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "4e42fdb0-d380-11f0-bb31-af2a1bfa6c6f",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [176,112],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
+							"__worldX": -48,
+							"__worldY": 112
 						}
 					]
 				},
@@ -1890,22 +1952,6 @@
 							"__worldY": 544
 						},
 						{
-							"__identifier": "MushroomZone",
-							"__grid": [2,35],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#EFC19A",
-							"iid": "39b68050-ac70-11f0-b267-470707a1028a",
-							"width": 224,
-							"height": 64,
-							"defUid": 52,
-							"px": [32,560],
-							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }],
-							"__worldX": 32,
-							"__worldY": 560
-						},
-						{
 							"__identifier": "PermContainerEntity",
 							"__grid": [6,33],
 							"__pivot": [0,0],
@@ -1966,36 +2012,36 @@
 							"__worldY": 256
 						},
 						{
-							"__identifier": "MushroomZone",
-							"__grid": [42,28],
+							"__identifier": "CreatureEntity",
+							"__grid": [58,17],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#EFC19A",
-							"iid": "6b585a00-d380-11f0-8b59-a59f6e793657",
-							"width": 192,
-							"height": 64,
-							"defUid": 52,
-							"px": [672,448],
-							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }],
-							"__worldX": 672,
-							"__worldY": 448
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "ebcb9b30-d380-11f0-bb31-cb4de68f6c3a",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [928,272],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
+							"__worldX": 928,
+							"__worldY": 272
 						},
 						{
-							"__identifier": "MushroomZone",
-							"__grid": [52,13],
+							"__identifier": "CreatureEntity",
+							"__grid": [8,37],
 							"__pivot": [0,0],
 							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#EFC19A",
-							"iid": "866391c0-d380-11f0-8b59-032f4e94d16a",
-							"width": 96,
-							"height": 48,
-							"defUid": 52,
-							"px": [832,208],
-							"fieldInstances": [{ "__identifier": "max_mushrooms", "__type": "Int", "__value": 5, "__tile": null, "defUid": 53, "realEditorValues": [] }],
-							"__worldX": 832,
-							"__worldY": 208
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "5fbcc280-d380-11f0-bb31-35ca488ae71d",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [128,592],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
+							"__worldX": 128,
+							"__worldY": 592
 						}
 					]
 				},

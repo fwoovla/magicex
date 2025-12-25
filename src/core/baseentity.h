@@ -15,7 +15,7 @@ struct DamagePayload{
     //int payload_index;
 };
 
-
+class CharacterEntity;
 
 class BaseEntity  {
     public:
@@ -43,6 +43,8 @@ class BaseEntity  {
     bool is_obstructed;
     bool y_sort;
     bool can_take_damage;
+
+    CharacterEntity *character_entity = nullptr;
 };
 
 class SpriteEntity : public BaseEntity {

@@ -33,10 +33,10 @@ class BaseModuleEntity : public SpriteEntity {
 
 };
 
-class WorkbenchModuleEntity : public BaseModuleEntity {
+class ModuleEntity : public BaseModuleEntity {
     public:
-    WorkbenchModuleEntity(Vector2 position, int _module_id);
-    ~WorkbenchModuleEntity() override;
+    ModuleEntity(Vector2 position, int _module_id);
+    ~ModuleEntity() override;
     void Update() override;
     void Draw() override;
     void DrawUI() override;

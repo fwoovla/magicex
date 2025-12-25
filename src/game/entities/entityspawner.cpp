@@ -23,6 +23,7 @@ CharacterMessage::CharacterMessage(Vector2 _position, std::string _text, Color _
     current_seconds = 0.0f;
 
     CreateLabel(label, _position, FONTSIZE_14, _color, _text);
+    TraceLog(LOG_INFO, "CharacterMessage ENTITY CREATED");
 }
 
 CharacterMessage::~CharacterMessage() {
@@ -73,28 +74,72 @@ void CharacterMessage::TakeDamage(DamagePayload _payload) {
 
 void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
 
+    BaseScene *this_scene = nullptr;
+    BaseSpell *this_spell = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        this_scene = g_sub_scene.get();
+    }
+    else {
+        this_scene = g_current_scene.get();
+    }
+
     if(_data->spell_id == SPELL_ID_MAGICMISSLE) {
-        MagicMissle *mm = new MagicMissle(payload, _data);
-        TraceLog(LOG_INFO, "magic missle spell cast"); 
-        DL_Add( _scene.level_data.spell_list, mm);
+        this_spell = new MagicMissle(payload, _data);
     }
     if(_data->spell_id == SPELL_ID_FIREBALL) {
-        FireBall *mm = new FireBall(payload, _data);
-        TraceLog(LOG_INFO, "fireball spell cast"); 
-        DL_Add( _scene.level_data.spell_list, mm);
+        this_spell = new FireBall(payload, _data);
     }
     if(_data->spell_id == SPELL_ID_LIGHTNING) {
-        Lightning *mm = new Lightning(payload, _data);
-        //MagicMissle *mm = new MagicMissle(nsp.position, nsp.shooter_id, _data);
-        TraceLog(LOG_INFO, "lightning spell cast"); 
-        DL_Add( _scene.level_data.spell_list, mm);
+        this_spell = new Lightning(payload, _data);
     }
+
+    if(this_scene and this_spell) {
+        DL_Add( this_scene->level_data.spell_list, this_spell);
+    }
+
     TraceLog(LOG_INFO, "entity list size  %i", _scene.level_data.entity_list.size()); 
 }
 
-void SpawnCharacterMessage(BaseScene &_scene, Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
+void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
 
-    CharacterMessage *new_msg = new CharacterMessage( _position, _text, _color, _delay_seconds);
-    DL_Add( _scene.level_data.ui_entities, new_msg);
+    if(g_game_data.is_in_sub_map) {
+        CharacterMessage *new_msg = new CharacterMessage( _position, _text, _color, _delay_seconds);
+        DL_Add( g_sub_scene->level_data.ui_entities, new_msg);
+    }
+    else {
+        CharacterMessage *new_msg = new CharacterMessage( _position, _text, _color, _delay_seconds);
+        DL_Add( g_current_scene->level_data.ui_entities, new_msg);
+    }
+}
+
+
+void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index) {
+
+    CharacterEntity  *new_creature;
+    int uid = GetRandomValue(1000, 1000000);
+
+    g_character_data[uid] = level_data.creature_data[_creature_index];
+
+    TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
+
+
+/*     if(g_character_data[uid].creature_id == CREATURE_BUNNY) {
+        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
+    }
+    else if(g_character_data[uid].creature_id == CREATURE_SCAVENGER) {
+        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
+    }
+    else if(g_character_data[uid].creature_id == CREATURE_TRADER) {
+        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
+    }
+    else if(g_character_data[uid].creature_id == CREATURE_TESTDUMMY) {
+        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
+        
+    } */
+    
+    new_creature = new CreatureEntity(g_character_data[uid].spawn_position, uid);
+    new_creature->identifier = g_character_data[uid].name;
+    DL_Add(level_data.entity_list, new_creature);
 
 }

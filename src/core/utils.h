@@ -56,6 +56,11 @@ struct  CollisionResult {
     
 };
 
+struct  EntityDetectResult {
+    //Vector2 collision_dir;
+    std::vector<CharacterEntity*> detected_creatures;
+};
+
 struct  RayCast {
     Vector2 position;
     Vector2 direction;
@@ -99,3 +104,5 @@ bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range)
 bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result);
 
 bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision_result);
+
+void DetectCreatures(CharacterEntity &checker, float c_radius, EntityDetectResult &_result);

@@ -80,6 +80,25 @@ void TransitionArea::Draw() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////CONTAINER AREA
 
 ContainerArea::~ContainerArea() {
@@ -176,6 +195,30 @@ void ContainerArea::Draw() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////MODULE AREA
 
 ModuleArea::~ModuleArea() {
@@ -191,11 +234,15 @@ void ModuleArea::Update() {
         .width = (float)size.x,
         .height = (float)size.y
     };
+    in_range = false;
+
+    if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+            in_range = true;
+    }
     //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
     if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
         //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
-        hovered = true;
-        in_range = false;
+        //hovered = true;
 
         int grid_size = g_ldtk_maps.default_grid_size;
 
@@ -209,9 +256,7 @@ void ModuleArea::Update() {
         
         CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
 
-        if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
-            in_range = true;
-        }
+        
     }
     else {
         hovered = false;
@@ -254,3 +299,84 @@ void ModuleArea::Draw() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+
+
+CreatureDetectArea::~CreatureDetectArea() {
+    TraceLog(LOG_INFO, "CreatureDetectArea AREA DESTROYED, %s", identifier.c_str());
+}
+
+void CreatureDetectArea::Update() {
+    
+    float max_time_to_press = 1.0f;
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+
+    in_range = false;
+
+    CollisionResult result;
+    if(CollideWithEntity(position, 100, result)) {
+        in_range = true;
+    }
+
+
+    if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+        in_range = true;
+    }
+
+    if(in_range) {
+        target_creature = ;
+    }
+
+    //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
+
+
+        
+
+}
+
+void CreatureDetectArea::Draw() {
+    
+
+    if(hovered) {
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+ */

@@ -89,6 +89,8 @@ void ItemGrid::Update() {
                                     shared_data->is_using = true;
                                     can_select = false;
                                     g_cursor.state = CURSOR_USE;
+                                    //std::string new_text = "use " + i_name;
+                                    CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, "use " + i_name);
                                 }
                                 if(itter->second.type == TYPE_FOOD) {
                                     shared_data->item_id = itter->second.instance_id;
@@ -207,6 +209,10 @@ void ItemGrid::DrawItems() {
                 }
             }
         }
+    }
+
+    if(shared_data->is_using and shared_data->dest_grid == this_grid) {
+        DrawLabelCenteredWithBG(name_label, BLACK);
     }
 
     if(cell_hovered and can_select) {

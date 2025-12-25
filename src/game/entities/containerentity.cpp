@@ -6,7 +6,7 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     rotation = 0.0f;
     LoadSprite(sprite, g_container_sprites[sprite_id], position);
     collision_radius = 5;
-    centered_offset = {0,0};
+    centered_offset = {sprite.texture.width*0.5f, sprite.texture.height*0.5f};
     collided = false;
     y_sort = true;
 
@@ -24,7 +24,7 @@ PermContainerEntity::~PermContainerEntity() {
     if(!is_persistant) {
         for(int i = 0; i < c_area.item_list.size(); i++) {
             g_item_instances.erase(c_area.item_list[i]);
-            TraceLog(LOG_INFO, "pc instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
+            TraceLog(LOG_INFO, "perm container instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
         }
     }
 
@@ -67,6 +67,7 @@ void PermContainerEntity::Draw() {
         if(is_obstructed) {
             color = RED;
         }
+        DrawRectangle(c_area.position.x, c_area.position.y, c_area.size.x, c_area.size.y, DARKBLUE);
         DrawLineV(raycast.position, {raycast.position.x + raycast.direction.x, raycast.position.y + raycast.direction.y}, color);
     }
 }
@@ -127,7 +128,7 @@ GroundContainerEntity::~GroundContainerEntity() {
     if(!is_persistant) {
         for(int i = 0; i < c_area.item_list.size(); i++) {
             g_item_instances.erase(c_area.item_list[i]);
-            TraceLog(LOG_INFO, "gc instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
+            TraceLog(LOG_INFO, "ground container instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
         }
     }
 
@@ -170,6 +171,7 @@ void GroundContainerEntity::Draw() {
         if(is_obstructed) {
             color = RED;
         }
+        DrawRectangle(c_area.position.x, c_area.position.y, c_area.size.x, c_area.size.y, DARKBLUE);
         DrawLineV(raycast.position, {raycast.position.x + raycast.direction.x, raycast.position.y + raycast.direction.y}, color);
     }
 }

@@ -301,7 +301,7 @@ void InstanceLevelObjects(LevelData &level_data) {
         Vector2 pos = level_data.module_data[m_index].position_i;
         int module_id = level_data.module_data[m_index].module_id;
 
-        WorkbenchModuleEntity *new_module = new WorkbenchModuleEntity(pos, module_id);
+        ModuleEntity *new_module = new ModuleEntity(pos, module_id);
         DL_Add(level_data.entity_list, new_module);
             
         new_module->is_persistant = is_shelter;
@@ -351,14 +351,19 @@ void InstanceLevelObjects(LevelData &level_data) {
 
     for(int creature = 0; creature < level_data.creature_data.size(); creature++) {
 
-        int uid = GetRandomValue(1000, 1000000);
+        SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
+        /* int uid = GetRandomValue(1000, 1000000);
         g_character_data[uid] = level_data.creature_data[creature];
 
         TraceLog(LOG_INFO, "new creature  uid %i  creature id %i", uid, g_character_data[uid].creature_id);
-        TestDummyEntity *new_dummy = new TestDummyEntity({100, 100}, uid);
-        DL_Add(level_data.entity_list, new_dummy);
+        TestDummyEntity *new_dummy = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
+        new_dummy->identifier = "creature entity";
+        DL_Add(level_data.entity_list, new_dummy); */
     }
 
-    TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   g_item_instance size %i", g_item_instances.size());
+    TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   level_data.entity_list size %i", level_data.entity_list.size());
+    for(auto entity : level_data.entity_list) {
+        TraceLog(LOG_INFO, "  entity %s", entity->identifier.c_str());
+    }
 }
 

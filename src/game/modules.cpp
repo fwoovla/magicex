@@ -1,6 +1,6 @@
 #include "../core/gamedefs.h"
 
-WorkbenchModuleEntity::WorkbenchModuleEntity(Vector2 _position, int _module_id) {
+ModuleEntity::ModuleEntity(Vector2 _position, int _module_id) {
 
     module_id = _module_id;
     position = _position;
@@ -9,41 +9,44 @@ WorkbenchModuleEntity::WorkbenchModuleEntity(Vector2 _position, int _module_id) 
     collision_radius = 5;
     centered_offset = {0,0};
     collided = false;
+    can_take_damage = false;
     
     should_delete = false;
 
     m_area.area_activated.Connect( [&](){OnModuleUsed();} );
 }
 
-WorkbenchModuleEntity::~WorkbenchModuleEntity() {
+ModuleEntity::~ModuleEntity() {
 
 
     TraceLog(LOG_INFO, "MODULE DESTROYED");    
 }
 
-void WorkbenchModuleEntity::Update() {
+void ModuleEntity::Update() {
     m_area.Update();
 }
 
-void WorkbenchModuleEntity::Draw() {
-    //DrawRectangle(c_area.position.x, c_area.position.y, c_area.size.x, c_area.size.y, RED);
+void ModuleEntity::Draw() {
     DrawSprite(sprite);
+    if(g_game_settings.show_debug) {
+        DrawRectangle(m_area.position.x, m_area.position.y, m_area.size.x, m_area.size.y, YELLOW);
+    }
 }
 
-void WorkbenchModuleEntity::DrawUI() {
+void ModuleEntity::DrawUI() {
     m_area.Draw();
 }
 
-void WorkbenchModuleEntity::OnModuleUsed() {
+void ModuleEntity::OnModuleUsed() {
     g_game_data.current_module_id = module_id;
     open_module.EmitSignal();
 }
 
 
-float WorkbenchModuleEntity::GetYSort() {
+float ModuleEntity::GetYSort() {
     return position.y;
 }
 
-void WorkbenchModuleEntity::TakeDamage(DamagePayload _payload) {
+void ModuleEntity::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

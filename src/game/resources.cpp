@@ -22,9 +22,33 @@ void LoadResources() {
     sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
     sheet_pos = {25,6};
     ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
-    g_creature_sprite_sheets[CREATURE_TESTDUMMY] = LoadTextureFromImage(sheet_image);
+    g_creature_sprite_sheets[SPRITE_TESTDUMMY] = LoadTextureFromImage(sheet_image);
     TraceLog(LOG_INFO, "SHEETS   SPRITE_TESTDUMMY");
     
+    sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
+    sheet_pos = {25,11};
+    ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
+    g_creature_sprite_sheets[SPRITE_BUNNY] = LoadTextureFromImage(sheet_image);
+    TraceLog(LOG_INFO, "SHEETS   SPRITE_BUNNY");
+
+    sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
+    sheet_pos = {30,6};
+    ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
+    g_creature_sprite_sheets[SPRITE_SCAVENGER] = LoadTextureFromImage(sheet_image);
+    TraceLog(LOG_INFO, "SHEETS   SPRITE_SCAVENGER");
+
+    sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
+    sheet_pos = {30,11};
+    ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
+    g_creature_sprite_sheets[SPRITE_TRADER] = LoadTextureFromImage(sheet_image);
+    TraceLog(LOG_INFO, "SHEETS   SPRITE_TRADER");
+
+    sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
+    sheet_pos = {30,6};
+    ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
+    g_creature_sprite_sheets[SPRITE_SLIME] = LoadTextureFromImage(sheet_image);
+    TraceLog(LOG_INFO, "SHEETS   SPRITE_SLIME");
+
 
 
 

@@ -86,6 +86,19 @@ void LoadGameData() {
 
 
         CharacterData this_class = {
+        
+            .inventory = inv,
+            .hotbar = hot,
+
+            .primary = p,
+            .secondary = s,
+            .head = hd,
+            .body = bd,
+            .legs = lg,
+            .feet = ft,
+            .hands = hs,
+
+
             .creature_id = -1,
             .health = health,
             .max_health = max_health,
@@ -104,17 +117,6 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = "not assigned",
             .class_name = class_name,
-
-            .inventory = inv,
-            .hotbar = hot,
-
-            .primary = p,
-            .secondary = s,
-            .head = hd,
-            .body = bd,
-            .legs = lg,
-            .feet = ft,
-            .hands = hs
         };
 
         g_class_data[i] = this_class;
@@ -498,11 +500,11 @@ void LoadGameData() {
         int exp = 0;
         float base_speed = cj["creature_data"][i]["base_speed"];
         float current_speed = base_speed;
-        int sprite_sheet_id = creature_id;
+        int sprite_sheet_id = cj["creature_data"][i]["sprite_sheet_id"];
         int portrait_id = -1;
         std::string name = cj["creature_data"][i]["creature_name"];
 
-        float max_stamina = cj["base_class"][i]["max_stamina"];
+        float max_stamina = cj["creature_data"][i]["max_stamina"];
         
         std::vector<int> inv;
         inv.push_back(-1);
@@ -533,6 +535,19 @@ void LoadGameData() {
 
 
         CharacterData this_creature = {
+            
+            
+            .inventory = inv,
+            .hotbar = hot,
+
+            .primary = p,
+            .secondary = s,
+            .head = hd,
+            .body = bd,
+            .legs = lg,
+            .feet = ft,
+            .hands = hs,
+
             .creature_id = creature_id,
             .health = health,
             .max_health = max_health,
@@ -551,35 +566,11 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = name,
             .class_name = name,
-            .inventory = inv,
-            .hotbar = hot,
-
-            .primary = p,
-            .secondary = s,
-            .head = hd,
-            .body = bd,
-            .legs = lg,
-            .feet = ft,
-            .hands = hs
         };
 
         g_creature_data[this_creature.creature_id] = this_creature;
         TraceLog(LOG_INFO, "CREATURE Data  Loaded  id: %i  %s", this_creature.creature_id, this_creature.name.c_str());
     }
-
-/*     for(int i = 0; i < cj["loot_tables"].size(); i++) {
-        int id = i;
-
-        std::vector<int> new_table;
-        for(int t = 0; t < cj["loot_tables"][i]["table_data"].size(); t++) {
-            ItemID _id = StrToItemId( cj["loot_tables"][i]["table_data"][t] );
-            new_table.push_back(_id);
-        }
-
-        std::string name = cj["loot_tables"][i]["table_name"];
-
-        g_loot_tables.push_back(new_table);
-    } */
 
     cfile.close();
  
@@ -618,6 +609,7 @@ void SaveGame(LevelData &level_data) {
     j["name"] = g_character_data[uid].name;
     j["class_name"] = g_character_data[uid].class_name;
     j["max_saturation"] = g_character_data[uid].max_saturation;
+    j["max_stamina"] = g_character_data[uid].max_stamina;
 
     //j["inventory"] = {};
     for(int i = 0; i < g_character_data[uid].inventory.size(); i++) {
@@ -768,6 +760,8 @@ int LoadGame() {
     g_character_data[uid].exp = j["exp"];
     g_character_data[uid].saturation = j["saturation"];
     g_character_data[uid].max_saturation= j["max_saturation"];
+    g_character_data[uid].max_stamina= j["max_stamina"];
+    g_character_data[uid].current_stamina= j["max_stamina"];
     g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
     g_character_data[uid].portrait_id = j["portrait_id"];
     g_character_data[uid].name = j["name"];
@@ -776,7 +770,7 @@ int LoadGame() {
     g_character_data[uid].base_speed = j["base_speed"];
     g_character_data[uid].current_speed = j["base_speed"];
 
-     g_character_data[uid].creature_id = -1;
+    g_character_data[uid].creature_id = -1;
 
     std::vector<int> inv;
     for(int i = 0; i < j["inventory"].size(); i++) {
@@ -1458,12 +1452,17 @@ SpellID StrToSpellId(const std::string& s) {
 CreatureID StrToCreatureId(const std::string& s) {
 
     static const std::unordered_map<std::string, CreatureID> lookup_table = {
-        {"CREATURE_TESTDUMMY",                          CreatureID::CREATURE_TESTDUMMY},
+        {"CREATURE_TESTDUMMY",                      CreatureID::CREATURE_TESTDUMMY},
+        {"CREATURE_BUNNY",                          CreatureID::CREATURE_BUNNY},
+        {"CREATURE_SCAVENGER",                      CreatureID::CREATURE_SCAVENGER},
+        {"CREATURE_TRADER",                      CreatureID::CREATURE_TRADER},
+        {"CREATURE_SLIME",                      CreatureID::CREATURE_SLIME},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
         return it->second;
     }
+    TraceLog(LOG_INFO, "creature ID not found ");
     return CreatureID::CREATURE_NONE;
 
 }
