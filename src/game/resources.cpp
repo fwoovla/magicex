@@ -44,7 +44,7 @@ void LoadResources() {
     TraceLog(LOG_INFO, "SHEETS   SPRITE_TRADER");
 
     sheet_image = LoadImageFromTexture(g_main_sprite_sheet);
-    sheet_pos = {30,6};
+    sheet_pos = {35,6};
     ImageCrop(&sheet_image, {sheet_pos.x * 16, sheet_pos.y * 16, 16*4, 16*4});
     g_creature_sprite_sheets[SPRITE_SLIME] = LoadTextureFromImage(sheet_image);
     TraceLog(LOG_INFO, "SHEETS   SPRITE_SLIME");

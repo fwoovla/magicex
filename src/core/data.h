@@ -207,8 +207,13 @@ struct PlanData {
 
 extern std::vector<PlanData> g_plan_data;
 
+struct AiData {
+    AIID ai_id;
+    std::string ai_name;
+    int hostility;
+};
 
-
+extern std::vector<AiData> g_ai_data;
 
 struct CharacterData {
 
@@ -238,6 +243,7 @@ struct CharacterData {
     float max_saturation = 0.0f;
     float max_stamina = 0.0f;
     float current_stamina = 0.0f;
+    AiData ai_data;
 
     int sprite_sheet_id = -1;
     int portrait_id = -1;
@@ -320,7 +326,7 @@ struct LevelData {
     std::vector<BaseEntity*> entity_list;
     std::vector<BaseEntity*> spell_list;
     std::vector<Polygon> collision_polys;
-    std::vector<EnvironmentalEntity *> environment_entities;
+    std::vector<BaseEntity *> environment_entities;
     std::vector<BaseEntity *> draw_list;
     std::vector<BaseEntity *> ui_entities;
 };
@@ -351,8 +357,7 @@ void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int>
 
 ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid);
 
-
-
+ItemInstanceData* InstanceRandomCharacterItem(ItemID item_id, int character_uid, int _level);
 
 
 CharEffectID StrToCharEffectId(const std::string& s);
@@ -367,9 +372,13 @@ ItemType StrToItemType(const std::string& s);
 
 SpellID StrToSpellId(const std::string& s);
 
+AIID StrToAiId(const std::string& s);
+
 CreatureID StrToCreatureId(const std::string& s);
 
 ItemID StrToItemId(const std::string& s);
+
+SpriteSheetID StrToSpriteId(const std::string& s);
 
 PlanID StrToPlanId(const std::string& s);
 

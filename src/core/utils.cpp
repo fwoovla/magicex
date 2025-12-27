@@ -89,6 +89,18 @@ void AreaSignal::EmitSignal(TransitionArea a) {
 
 
 
+bool IsOnScreen(Vector2 _position, Vector2 _size) {
+    int tile_size = g_current_scene->level_data.precalc.tile_size;
+    float inv_tile = g_current_scene->level_data.precalc.inv_tile_size;
+
+if(_position.x > (g_viewport.x_min - (_size.x * inv_tile) ) * tile_size and _position.x < (g_viewport.x_max + (_size.x * inv_tile)) * tile_size) {
+        if(_position.y > (g_viewport.y_min - (_size.y * inv_tile)) * tile_size and _position.y < (g_viewport.y_max + (_size.y * inv_tile)) * tile_size) {
+
+            return true;
+        }
+    }
+    return false;
+}
 
 
 

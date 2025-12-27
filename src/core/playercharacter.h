@@ -7,6 +7,11 @@ enum ActionState {
     ACTION_RETREAT,
 };
 
+enum DetectState {
+    DETECT_NONE,
+    DETECT_PLAYER
+};
+
 enum AnimationState {
     ANIM_IDLE = 0,
     ANIM_WALK = 1,
@@ -35,7 +40,7 @@ class CharacterEntity : public AnimatedSpriteEntity {
     virtual void OnStunTimerTimeout() = 0;
     virtual void OnHungerTimerTimeout() = 0;
 
-    int uid;
+    //int uid;
     Vector2 velocity;
     Sprite weapon_sprite;
     Sprite shadow_sprite;
@@ -59,6 +64,12 @@ class CharacterEntity : public AnimatedSpriteEntity {
     AnimationState animation_state;
     WeaponState weapon_state;
     ActionState action_state;
+    DetectState detect_state;
+
+    int obstructed_count;
+
+
+    RayCast raycast;
 }; 
 
 
@@ -109,7 +120,12 @@ class CreatureEntity : public CharacterEntity {
     void OnDetectTimerTimeout();
     void OnActionTimerTimeout();
 
+    Vector2 GetDirToPlayer();
+    void MoveCreature(Vector2 _input_dir);
+
     float detect_range;
+    float attack_range;
+    
     CharacterEntity *target_creature;
     std::vector<CharacterEntity *> detected_creatures;
     std::vector<Vector2> target_path;
@@ -117,6 +133,9 @@ class CreatureEntity : public CharacterEntity {
 
     Timer detect_timer;
     Timer action_timer;
+
+    bool should_use_spell;
+    bool should_mele;
 
 };
 

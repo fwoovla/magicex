@@ -20,7 +20,7 @@ void TileLayer::Draw() {
 }
 
 
-bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int _range) {
+bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vector2 ckeck_position) {
     //================TILE COLLISION=========================
     bool collided = false;
 
@@ -51,10 +51,11 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int
     float inv_tile_size = level_data->precalc.inv_tile_size;
     int map_width = level_data->precalc.map_width;
 
-    Vector2 checker_pos = Vector2Add(checker->position, checker->centered_offset);
+    Vector2 checker_pos = ckeck_position;
 
-    int cell_pos_x_i = (checker->position.x + checker->centered_offset.x) * inv_tile_size;
-    int cell_pos_y_i = (checker->position.y + checker->centered_offset.y) * inv_tile_size;
+
+    int cell_pos_x_i = (ckeck_position.x + checker->centered_offset.x) * inv_tile_size;
+    int cell_pos_y_i = (ckeck_position.y+ checker->centered_offset.y) * inv_tile_size;
 
 
     float c_rad = checker->collision_radius;

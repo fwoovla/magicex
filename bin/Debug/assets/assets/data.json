@@ -4,7 +4,7 @@
         {
             "max_health":15,
             "base_speed":45.0,
-            "sprite_sheet_id":0,
+            "sprite_sheet_id":"SPRITE_APPRENTICE",
             "portrait_id":0,
             "class_name": "Apprentice",
             "max_stamina":10
@@ -12,8 +12,8 @@
         {
             "max_health":10,
             "base_speed":45.0,
-            "sprite_sheet_id":1,
-            "portrait_id":0,
+            "sprite_sheet_id":"SPRITE_NERD",
+            "portrait_id":1,
             "class_name": "Nerd",
             "max_stamina":10
         }
@@ -288,7 +288,7 @@
             "level":1,
             "lifetime":1.0,
             "speed": 100,
-            "damage":1,
+            "damage":10,
             "radius":2,
             "cooldown":0.5,
             "pps":0.5,
@@ -301,7 +301,7 @@
             "level":1,
             "lifetime":1.0,
             "speed": 700,
-            "damage":1,
+            "damage":5,
             "radius":2,
             "cooldown":0.5,
             "pps":1.0,
@@ -331,7 +331,7 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1,
+            "damage":3,
             "recoil":20,
             "knockback":30
         },
@@ -341,7 +341,7 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1,
+            "damage":4,
             "recoil":20,
             "knockback":40
         },
@@ -351,7 +351,7 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":0,
-            "damage":1,
+            "damage":2,
             "recoil":20,
             "knockback":30
         },
@@ -371,7 +371,7 @@
             "cooldown": 0.60,
             "spell_id":"SPELL_ID_NONE",
             "max_power":10,
-            "damage":1,
+            "damage":2,
             "recoil":20,
             "knockback":10
         },
@@ -381,7 +381,7 @@
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
             "max_power":20,
-            "damage":1,
+            "damage":3,
             "recoil":20,
             "knockback":30
         }
@@ -883,39 +883,84 @@
     ],
 
     "creature_data": [
+
         {
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
-            "max_health":15,
+            "max_health":999999,
             "base_speed":0.0,
-            "sprite_sheet_id":2,
-            "max_stamina":0
+            "sprite_sheet_id":"SPRITE_TESTDUMMY",
+            "max_stamina":0,
+            "ai_id":"AI_HOSTILE",
+            "primary":"ITEM_ID_WAND"
         },
         {
             "creature_id":"CREATURE_BUNNY",
             "creature_name": "Bunny",
             "max_health":15,
             "base_speed":20.0,
-            "sprite_sheet_id":3,
-            "max_stamina":10
+            "sprite_sheet_id":"SPRITE_BUNNY",
+            "max_stamina":10,
+            "ai_id":"AI_FEARFULL",
+            "primary":"ITEM_ID_NONE"
         },
         {
             "creature_id":"CREATURE_SCAVENGER",
             "creature_name": "Scavenger",
             "max_health":15,
             "base_speed":30.0,
-            "sprite_sheet_id":4,
-            "max_stamina":10
+            "sprite_sheet_id":"SPRITE_SCAVENGER",
+            "max_stamina":10,
+            "ai_id":"AI_AGGRESSIVE",
+            "primary":"ITEM_ID_WAND"
         },
         {
             "creature_id":"CREATURE_TRADER",
             "creature_name": "Trader",
             "max_health":15,
             "base_speed":20.0,
-            "sprite_sheet_id":5,
-            "max_stamina":10
+            "sprite_sheet_id":"SPRITE_TRADER",
+            "max_stamina":10,
+            "ai_id":"AI_TERRITORIAL",
+            "primary":"ITEM_ID_NONE"
+        },
+        {
+            "creature_id":"CREATURE_SLIME",
+            "creature_name": "Slime",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":"SPRITE_SLIME",
+            "max_stamina":10,
+            "ai_id":"AI_HOSTILE",
+            "primary":"ITEM_ID_NONE"
+        }
+    ],
+    "ai_data": [
+        {
+            "ai_id":"AI_FEARFULL",
+            "ai_name":"AI_FEARFULL",
+            "hostility":"AI_FEARFULL"
+        },
+        {
+            "ai_id":"AI_PASSIVE",
+            "ai_name":"AI_PASSIVE",
+            "hostility":"AI_PASSIVE"
+        },
+        {
+            "ai_id":"AI_TERRITORIAL",
+            "ai_name":"AI_TERRITORIAL",
+            "hostility":"AI_TERRITORIAL"
+        },
+        {
+            "ai_id":"AI_AGGRESSIVE",
+            "ai_name":"AI_AGGRESSIVE",
+            "hostility":"AI_AGGRESSIVE"
+        },
+        {
+            "ai_id":"AI_HOSTILE",
+            "ai_name":"AI_HOSTILE",
+            "hostility":"AI_HOSTILE"
         }
     ]
-
 }
 

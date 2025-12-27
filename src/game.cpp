@@ -19,6 +19,7 @@ std::vector<CharacterEffectData> g_char_effect_data;
 std::vector<CharacterModData> g_char_mod_data;
 std::vector<SpellData> g_spell_data;
 std::vector<ModuleData> g_module_data;
+std::vector<AiData> g_ai_data;
 
 std::unordered_map<int, ItemInstanceData> g_item_instances;
 std::unordered_map<std::string, ContainerData> g_persistant_containers;

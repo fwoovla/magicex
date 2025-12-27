@@ -16,7 +16,7 @@ class TileLayer {
 
 };
 
-bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, int _range);
+bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vector2 ckeck_position);
 
 bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result);
 

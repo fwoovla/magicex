@@ -1094,7 +1094,8 @@
 			{ "id": "CREATURE_TESTDUMMY", "tileRect": { "tilesetUid": 25, "x": 192, "y": 0, "w": 16, "h": 16 }, "color": 12470831 },
 			{ "id": "CREATURE_BUNNY", "tileRect": null, "color": 14120515 },
 			{ "id": "CREATURE_SCAVENGER", "tileRect": null, "color": 15389866 },
-			{ "id": "CREATURE_TRADER", "tileRect": null, "color": 14984818 }
+			{ "id": "CREATURE_TRADER", "tileRect": null, "color": 14984818 },
+			{ "id": "CREATURE_SLIME", "tileRect": null, "color": 7552569 }
 		], "iconTilesetUid": 25, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [
 		{
@@ -1270,7 +1271,7 @@
 						},
 						{
 							"__identifier": "SpawnPoint",
-							"__grid": [6,3],
+							"__grid": [9,7],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -1279,10 +1280,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 21,
-							"px": [96,48],
+							"px": [144,112],
 							"fieldInstances": [],
-							"__worldX": -128,
-							"__worldY": 48
+							"__worldX": -80,
+							"__worldY": 112
 						},
 						{
 							"__identifier": "PermContainerEntity",
@@ -1359,74 +1360,14 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
 							"__smartColor": "#E4A672",
-							"iid": "a4b78d40-d380-11f0-8b59-8def122342d4",
+							"iid": "227941c0-d380-11f0-99e0-5f8dcd2beb04",
 							"width": 16,
 							"height": 16,
 							"defUid": 77,
 							"px": [80,80],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["CREATURE_TESTDUMMY"]
-							}] }],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [null] }],
 							"__worldX": -144,
 							"__worldY": 80
-						},
-						{
-							"__identifier": "CreatureEntity",
-							"__grid": [10,2],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#E4A672",
-							"iid": "b1c903c0-d380-11f0-bb31-9336516827a6",
-							"width": 16,
-							"height": 16,
-							"defUid": 77,
-							"px": [160,32],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_BUNNY", "__tile": null, "defUid": 79, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["CREATURE_BUNNY"]
-							}] }],
-							"__worldX": -64,
-							"__worldY": 32
-						},
-						{
-							"__identifier": "CreatureEntity",
-							"__grid": [10,4],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#E4A672",
-							"iid": "4cd2b130-d380-11f0-bb31-bb26e965945c",
-							"width": 16,
-							"height": 16,
-							"defUid": 77,
-							"px": [160,64],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_SCAVENGER", "__tile": null, "defUid": 79, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["CREATURE_SCAVENGER"]
-							}] }],
-							"__worldX": -64,
-							"__worldY": 64
-						},
-						{
-							"__identifier": "CreatureEntity",
-							"__grid": [10,6],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#E4A672",
-							"iid": "4d5ca1b0-d380-11f0-bb31-cd8be70faec3",
-							"width": 16,
-							"height": 16,
-							"defUid": 77,
-							"px": [160,96],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TRADER", "__tile": null, "defUid": 79, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["CREATURE_TRADER"]
-							}] }],
-							"__worldX": -64,
-							"__worldY": 96
 						}
 					]
 				},
@@ -1939,22 +1880,6 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "SpawnPoint",
-							"__grid": [9,34],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#BE4A2F",
-							"iid": "6d2f7450-ac70-11f0-b267-3f7102ce440a",
-							"width": 16,
-							"height": 16,
-							"defUid": 21,
-							"px": [144,544],
-							"fieldInstances": [],
-							"__worldX": 144,
-							"__worldY": 544
-						},
-						{
 							"__identifier": "PermContainerEntity",
 							"__grid": [6,33],
 							"__pivot": [0,0],
@@ -2032,7 +1957,7 @@
 						},
 						{
 							"__identifier": "CreatureEntity",
-							"__grid": [8,37],
+							"__grid": [19,30],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
@@ -2041,10 +1966,102 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 77,
-							"px": [128,592],
+							"px": [304,480],
 							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
-							"__worldX": 128,
-							"__worldY": 592
+							"__worldX": 304,
+							"__worldY": 480
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [27,35],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "d6032130-d380-11f0-99e0-2794f3a8311f",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [432,560],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_SLIME", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_SLIME"]
+							}] }],
+							"__worldX": 432,
+							"__worldY": 560
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [34,30],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "dae6a7d0-d380-11f0-99e0-f9430808fd2b",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [544,480],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_BUNNY", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_BUNNY"]
+							}] }],
+							"__worldX": 544,
+							"__worldY": 480
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [61,18],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "de2f4320-d380-11f0-99e0-ed49e5efb298",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [976,288],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TRADER", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_TRADER"]
+							}] }],
+							"__worldX": 976,
+							"__worldY": 288
+						},
+						{
+							"__identifier": "CreatureEntity",
+							"__grid": [47,32],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#E4A672",
+							"iid": "e5e857f0-d380-11f0-99e0-37932a5d02d4",
+							"width": 16,
+							"height": 16,
+							"defUid": 77,
+							"px": [752,512],
+							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_SCAVENGER", "__tile": null, "defUid": 79, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["CREATURE_SCAVENGER"]
+							}] }],
+							"__worldX": 752,
+							"__worldY": 512
+						},
+						{
+							"__identifier": "SpawnPoint",
+							"__grid": [9,34],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "14fa83b0-d380-11f0-99e0-970eed64a94e",
+							"width": 16,
+							"height": 16,
+							"defUid": 21,
+							"px": [144,544],
+							"fieldInstances": [],
+							"__worldX": 144,
+							"__worldY": 544
 						}
 					]
 				},
@@ -2615,6 +2632,7 @@
 						{ "px": [1232,240], "src": [512,304], "f": 0, "t": 792, "d": [6454], "a": 1 },
 						{ "px": [1248,240], "src": [528,304], "f": 0, "t": 793, "d": [6456], "a": 1 },
 						{ "px": [1264,240], "src": [544,304], "f": 0, "t": 794, "d": [6458], "a": 1 },
+						{ "px": [344,248], "src": [256,240], "f": 0, "t": 616, "d": [6553], "a": 1 },
 						{ "px": [592,248], "src": [576,320], "f": 0, "t": 836, "d": [6584], "a": 1 },
 						{ "px": [600,248], "src": [608,336], "f": 0, "t": 878, "d": [6585], "a": 1 },
 						{ "px": [608,248], "src": [608,336], "f": 0, "t": 878, "d": [6586], "a": 1 },

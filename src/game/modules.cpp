@@ -23,10 +23,17 @@ ModuleEntity::~ModuleEntity() {
 }
 
 void ModuleEntity::Update() {
+    is_on_screen = IsOnScreen(position, sprite.size);
+    if(!is_on_screen) {
+        return;
+    }
     m_area.Update();
 }
 
 void ModuleEntity::Draw() {
+    if(!is_on_screen) {
+        return;
+    }
     DrawSprite(sprite);
     if(g_game_settings.show_debug) {
         DrawRectangle(m_area.position.x, m_area.position.y, m_area.size.x, m_area.size.y, YELLOW);
@@ -34,6 +41,9 @@ void ModuleEntity::Draw() {
 }
 
 void ModuleEntity::DrawUI() {
+    if(!is_on_screen) {
+        return;
+    }
     m_area.Draw();
 }
 

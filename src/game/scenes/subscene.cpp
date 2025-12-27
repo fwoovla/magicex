@@ -94,6 +94,7 @@ SCENE_ID SubScene::Update() {
         DL_Update(level_data.spell_list);
         ui_layer->Update();
         DL_Update(level_data.ui_entities);
+        DL_Update(level_data.environment_entities);
         g_current_player->Update();
         HandleCamera();
     }

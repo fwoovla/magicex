@@ -28,6 +28,7 @@ class BaseEntity  {
 
     //Sprite sprite;
 
+    int uid;
     bool should_delete;
     Rectangle collision_rect;
     bool collided;
@@ -43,6 +44,7 @@ class BaseEntity  {
     bool is_obstructed;
     bool y_sort;
     bool can_take_damage;
+    bool is_on_screen;
 
     CharacterEntity *character_entity = nullptr;
 };

@@ -102,6 +102,7 @@ SCENE_ID ShelterScene::Update() {
             DL_Update(level_data.entity_list);
             DL_Update(level_data.spell_list);
             DL_Update(level_data.ui_entities);
+            DL_Update(level_data.environment_entities);
             g_current_player->Update();
             HandleCamera();
         }

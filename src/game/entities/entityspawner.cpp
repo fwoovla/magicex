@@ -121,23 +121,17 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
 
     g_character_data[uid] = level_data.creature_data[_creature_index];
 
+    ItemInstanceData *this_data;
+
+    for(int item : g_character_data[uid].primary) {
+        if(item != -1) {
+            this_data = InstanceRandomCharacterItem((ItemID)item, uid, 2);
+            g_character_data[uid].primary[0] = this_data->instance_id;
+        }
+    }
+
     TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
 
-
-/*     if(g_character_data[uid].creature_id == CREATURE_BUNNY) {
-        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
-    }
-    else if(g_character_data[uid].creature_id == CREATURE_SCAVENGER) {
-        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
-    }
-    else if(g_character_data[uid].creature_id == CREATURE_TRADER) {
-        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
-    }
-    else if(g_character_data[uid].creature_id == CREATURE_TESTDUMMY) {
-        new_creature = new TestDummyEntity(g_character_data[uid].spawn_position, uid);
-        
-    } */
-    
     new_creature = new CreatureEntity(g_character_data[uid].spawn_position, uid);
     new_creature->identifier = g_character_data[uid].name;
     DL_Add(level_data.entity_list, new_creature);

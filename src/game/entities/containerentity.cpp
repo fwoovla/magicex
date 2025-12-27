@@ -33,14 +33,7 @@ PermContainerEntity::~PermContainerEntity() {
 
 void PermContainerEntity::Update() {
 
-    bool is_on_screen = false;
-    int tile_size = g_current_scene->level_data.precalc.tile_size;
-
-    if(position.x > (g_viewport.x_min - 2) * tile_size and position.x < (g_viewport.x_max + 2) * tile_size) {
-        if(position.y > (g_viewport.y_min - 2) * tile_size and position.y < (g_viewport.y_max + 2) * tile_size) {
-            is_on_screen = true;
-        }
-    }
+    is_on_screen = IsOnScreen(position, sprite.size);
 
     if(!is_on_screen) {
         return;
@@ -58,6 +51,9 @@ void PermContainerEntity::Update() {
 }
 
 void PermContainerEntity::Draw() {
+    if(!is_on_screen) {
+        return;
+    }
     if(!is_obstructed) {
         DrawSprite(sprite);
     }

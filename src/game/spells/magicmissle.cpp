@@ -49,10 +49,6 @@ void MagicMissle::Update() {
     Vector2 previous_position = position;
     float dt = GetFrameTime();
 
-
-
-
-
     target_rotation = GetAngleFromTo(position, target_position);
     //rotation = RotateTowardsRad(rotation * DEG2RAD, target_rotation, PI * 20, GetFrameTime()) * RAD2DEG;
     rotation = target_rotation * RAD2DEG;
@@ -75,16 +71,18 @@ void MagicMissle::Update() {
     }
 
     if(CollideWithEntity(this, result)) {
-        
-        DamagePayload new_payload;
-        new_payload.attacker_id = data->shooter_id;
-        new_payload.damage = data->damage;
-        new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
-        result.collider->TakeDamage(new_payload);
-
-        should_delete = true;
-    }
+        if(result.collider->uid != shooter_id) {
+            TraceLog(LOG_INFO, "collider %s", result.collider->identifier.c_str());
+            DamagePayload new_payload;
+            new_payload.attacker_id = data->shooter_id;
+            new_payload.damage = data->damage;
+            new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
+            result.collider->TakeDamage(new_payload);
     
+            should_delete = true;
+        }
+        
+    }
     sprite.position = position;
     sprite.rotation = rotation;
 

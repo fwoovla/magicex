@@ -31,6 +31,7 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
     is_obstructable = true;
     is_obstructed = false;
     can_take_damage = false;
+    is_on_screen = false;
 
     fadeable = _fadeable;
 }
@@ -42,9 +43,18 @@ EnvironmentalEntity::~EnvironmentalEntity() {
 
 void EnvironmentalEntity::Update() {
 
+    is_on_screen = IsOnScreen(position, sprite.size);
+
+    if(!is_on_screen) {
+        return;
+    }
 }
 
 void EnvironmentalEntity::Draw() {
+    if(!is_on_screen) {
+        return;
+    }
+
     //DrawCircleV(sprite.position, 2, WHITE);
     if(fadeable) {
                     

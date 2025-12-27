@@ -66,7 +66,7 @@ void TestDummyEntity::Update() {
         CollisionResult result;
         result.collision_dir = {0,0};
 
-        if(CollideAndSlide(this, result, 2) == true) {
+        if(CollideAndSlide(this, result, position) == true) {
             //TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
             if(result.collision_dir.x != 0) {
                 position.x = previous_position.x;

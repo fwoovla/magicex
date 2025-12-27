@@ -74,6 +74,11 @@ struct Polygon {
 Vector2 vClamp(Vector2 v, float maxLength);
 
 
+
+
+bool IsOnScreen(Vector2 _position, Vector2 _size);
+
+
 float GetAngleFromTo(Vector2 from, Vector2 to);
 
 

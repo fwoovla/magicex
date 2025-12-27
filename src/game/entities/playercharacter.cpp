@@ -20,7 +20,7 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     LoadSpriteCentered(shadow_sprite, g_shadow_sprites[SPRITE_SHADOW_CHAR1], position);
         
     collision_radius = 5;
-    centered_offset = {0,0};
+    centered_offset = {0, 3};
     ground_point_offset = {0, sprite.frame_size/2};
     collided = false;
     should_delete = false;
@@ -59,26 +59,37 @@ void PlayerCharacter::Update() {
 
     collided = false;
     
-    Vector2 previous_position = position;
+    Vector2 next_position = position;
 
     if(velocity.x != 0 or velocity.y != 0) {
-        position = Vector2Add(position, velocity * GetFrameTime());
+        next_position = Vector2Add(next_position, velocity * GetFrameTime());
         SetAmination(sprite, ANIM_RUN);
 
         CollisionResult result;
         result.collision_dir = {0,0};
 
-        if(CollideAndSlide(this, result, 2) == true) {
+        if(CollideAndSlide(this, result, next_position) == false) {
+            position = next_position;
+        }
+        else {
             //TraceLog(LOG_INFO, "COLLIDED, %0.0f %0.0f \n", result.collision_dir.x, result.collision_dir.y);
-            if(result.collision_dir.x != 0) {
-                position.x = previous_position.x;
-                velocity.x = 0.0f;
+            //velocity = {0,0};
+            if(result.collision_dir.x == 0) {
+                position.x = next_position.x;
             }
-            if(result.collision_dir.y != 0) {
-                position.y = previous_position.y;
+            else {
+                velocity.x = 0.0f;
+                position.x -= (.2 * result.collision_dir.x);
+            }
+            if(result.collision_dir.y == 0) {
+                position.y = next_position.y;
+            }
+            else {
                 velocity.y = 0.0f;
+                position.y -= (.2 * result.collision_dir.y);
             }
         }
+
     }
     else {
         SetAmination(sprite, ANIM_IDLE);
@@ -120,6 +131,11 @@ void PlayerCharacter::Update() {
             weapon_state = WSTATE_IDLE;
         }
     }
+    if(weapon_state == WSTATE_IDLE) {
+        Vector2 pp = GetWorldToScreen2D( position, g_camera);
+        pp = {pp.x * g_scale, pp.y*g_scale};
+        weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+    }
     //TraceLog(LOG_INFO, "sprite rot  %0.2f", weapon_sprite.rotation);
 }
 
@@ -132,9 +148,17 @@ void PlayerCharacter::Draw() {
     if(weapon_state == WSTATE_MELE) {
     }
     if(g_game_settings.show_debug == true) {
-        DrawCircleV( Vector2Add(position, centered_offset), collision_radius, RED);
-        DrawCircleV(Vector2Add(position, centered_offset), 1, WHITE);
-        DrawCircleV(Vector2Add(position, ground_point_offset), 1, BLUE); 
+
+/*     Rectangle checker_rect = {
+        .x = position.x - collision_radius,
+        .y = position.y - collision_radius + 5,
+        .width = collision_radius * 2,
+        .height = collision_radius * 2
+    }; */
+        //DrawRectangleRec(checker_rect, RED);
+        DrawCircleV(Vector2Add(position, centered_offset), collision_radius, RED);
+        //DrawCircleV(Vector2Add(position, centered_offset), 2, WHITE);
+        DrawCircleV(Vector2Add(position, ground_point_offset), 2, BLUE); 
 
         DrawCircleV(position,3, RED);
         Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
@@ -200,12 +224,6 @@ void PlayerCharacter::CheckInput() {
     if (abs(velocity.y) < 4.0f) {
         velocity.y = {0.0};
     }
-
-    if(weapon_state == WSTATE_IDLE) {
-        Vector2 pp = GetWorldToScreen2D( position, g_camera);
-        pp = {pp.x * g_scale, pp.y*g_scale};
-        weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
-    }
     
     if(g_input.key_switch_weapon and can_switch == true) {
         if(CanEquip(g_character_data[uid].secondary[0]) and CanUnEquip(g_character_data[uid].primary[0])) {
@@ -245,7 +263,7 @@ void PlayerCharacter::CheckInput() {
     if(g_input.mouse_right_down and can_mele) {
 
         if(current_primary_data != nullptr) {
-            TraceLog(LOG_INFO, "mele attack");
+            //TraceLog(LOG_INFO, "mele attack");
             mele_timer.Start(current_primary_data->cooldown, true);
             can_mele = false;
             weapon_state = WSTATE_MELE;
@@ -263,8 +281,8 @@ void PlayerCharacter::CheckInput() {
                     return;
                 }
                 
-                TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
-                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
+                //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
+                //TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
 
                 NewSpellPayload payload;
                 payload.position = position;

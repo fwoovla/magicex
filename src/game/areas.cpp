@@ -239,10 +239,10 @@ void ModuleArea::Update() {
     if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
             in_range = true;
     }
-    //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
+    //TraceLog(LOG_INFO, "MODULE AREA update, %s", identifier.c_str());
     if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
         //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
-        //hovered = true;
+        hovered = true;
 
         int grid_size = g_ldtk_maps.default_grid_size;
 

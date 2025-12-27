@@ -7,6 +7,7 @@
 extern Texture2D g_main_sprite_sheet;
 
 enum SpriteSheetID {
+    SPRITE_NONE = -1,
     SPRITE_APPRENTICE,
     SPRITE_NERD,
     SPRITE_TESTDUMMY,
@@ -198,6 +199,16 @@ enum ModuleID {
 };
 
 extern Texture2D g_module_sprites[MAX_SPRITES];
+
+enum AIID {
+    AI_FEARFULL,
+    AI_PASSIVE,
+    AI_TERRITORIAL,
+    AI_AGGRESSIVE,
+    AI_HOSTILE,
+};
+
+
 
 enum SpellID {
     SPELL_ID_NONE = -1,

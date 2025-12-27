@@ -51,7 +51,7 @@ void LoadGameData() {
         //int exp = 0;
         float base_speed = cj["base_class"][i]["base_speed"];
         float current_speed = base_speed;
-        int sprite_sheet_id = cj["base_class"][i]["sprite_sheet_id"];
+        int sprite_sheet_id = StrToSpriteId(cj["base_class"][i]["sprite_sheet_id"]);
         int portrait_id = cj["base_class"][i]["portrait_id"];
         std::string class_name = cj["base_class"][i]["class_name"];
 
@@ -113,6 +113,7 @@ void LoadGameData() {
             .max_saturation = 10,
             .max_stamina = max_stamina,
             .current_stamina = max_stamina,
+            .ai_data = AiData(),
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = "not assigned",
@@ -490,6 +491,20 @@ void LoadGameData() {
         g_weapon_mod_data[new_mod.mod_id - ITEMMOD_SWIFTNESS1] = new_mod;
     }
 
+    //--------------------ai data
+    g_ai_data.resize(cj["ai_data"].size());
+    for(int i = 0; i < cj["ai_data"].size(); i++) {
+
+        AiData new_ai;
+
+        new_ai.ai_id = StrToAiId( cj["ai_data"][i]["ai_id"] );
+        new_ai.ai_name = cj["ai_data"][i]["ai_name"];
+        new_ai.hostility = StrToAiId( cj["ai_data"][i]["hostility"] );
+                
+        TraceLog(LOG_INFO, "AI Data  Loaded  id: %i  %s", new_ai.ai_id, new_ai.ai_name.c_str());
+        g_ai_data[new_ai.ai_id] = new_ai;
+    }
+
 
     //--------------------creature data
 
@@ -500,11 +515,13 @@ void LoadGameData() {
         int exp = 0;
         float base_speed = cj["creature_data"][i]["base_speed"];
         float current_speed = base_speed;
-        int sprite_sheet_id = cj["creature_data"][i]["sprite_sheet_id"];
+        int sprite_sheet_id = StrToSpriteId(cj["creature_data"][i]["sprite_sheet_id"]);
         int portrait_id = -1;
         std::string name = cj["creature_data"][i]["creature_name"];
 
         float max_stamina = cj["creature_data"][i]["max_stamina"];
+
+        AIID ai_id = StrToAiId( cj["creature_data"][i]["ai_id"]);
         
         std::vector<int> inv;
         inv.push_back(-1);
@@ -513,7 +530,7 @@ void LoadGameData() {
         hot.push_back(-1);
 
         std::vector<int> p;
-        p.push_back(-1);
+        p.push_back(StrToItemId(cj["creature_data"][i]["primary"]));
 
         std::vector<int> s;
         s.push_back(-1);
@@ -562,6 +579,7 @@ void LoadGameData() {
             .max_saturation = 10,
             .max_stamina = max_stamina,
             .current_stamina = max_stamina,
+            .ai_data = g_ai_data[ai_id],
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = name,
@@ -1211,12 +1229,8 @@ void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int>
 ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid) {
 
     //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
-    
     int uid = GetRandomValue(1000, 1000000000);
     g_item_instances[uid] = GenerateItem(item_id, uid, "");
-
-
-
 
     int found_spot = -1;
     for(int slot = 0; slot < g_character_data[character_uid].inventory.size(); slot++) {
@@ -1235,7 +1249,32 @@ ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid) {
         //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
     }
     return &g_item_instances[uid];
+}
 
+
+ItemInstanceData* InstanceRandomCharacterItem(ItemID item_id, int character_uid, int _level) {
+
+    //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+    int uid = GetRandomValue(1000, 1000000000);
+    g_item_instances[uid] = GenerateRandomItem(item_id, uid, "", _level);
+
+    int found_spot = -1;
+    for(int slot = 0; slot < g_character_data[character_uid].inventory.size(); slot++) {
+        if(g_character_data[character_uid].inventory[slot] == -1) {
+            found_spot = slot;
+            break;
+        }
+    }
+
+    if(found_spot != -1) {
+        g_character_data[character_uid].inventory[found_spot] = uid;
+        //TraceLog(LOG_INFO, "item id %i  item uid %i  spot %i",item_id, uid, found_spot);
+    }
+    else {
+        g_character_data[character_uid].inventory.push_back(uid);
+        //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
+    }
+    return &g_item_instances[uid];
 }
 
 
@@ -1551,6 +1590,22 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
 }
 
 
+AIID StrToAiId(const std::string& s) {
+    static const std::unordered_map<std::string, AIID> lookup_table = {
+        {"AI_FEARFULL",                        AIID::AI_FEARFULL},
+        {"AI_PASSIVE",                        AIID::AI_PASSIVE},
+        {"AI_TERRITORIAL",                        AIID::AI_TERRITORIAL},
+        {"AI_AGGRESSIVE",                        AIID::AI_AGGRESSIVE},
+        {"AI_HOSTILE",                        AIID::AI_HOSTILE},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    return AIID::AI_PASSIVE;
+
+}
+
 std::string ModuleIdToStr(const int id) {
 
     static const std::unordered_map<int , std::string> lookup_table = {
@@ -1565,6 +1620,27 @@ std::string ModuleIdToStr(const int id) {
 
 }
 
+SpriteSheetID StrToSpriteId(const std::string& s) {
+
+    static const std::unordered_map<std::string, SpriteSheetID> lookup_table = {
+        {"SPRITE_APPRENTICE",                        SpriteSheetID::SPRITE_APPRENTICE},
+        {"SPRITE_NERD",                        SpriteSheetID::SPRITE_NERD},
+        {"SPRITE_TESTDUMMY",                        SpriteSheetID::SPRITE_TESTDUMMY},
+        {"SPRITE_BUNNY",                        SpriteSheetID::SPRITE_BUNNY},
+        {"SPRITE_SCAVENGER",                        SpriteSheetID::SPRITE_SCAVENGER},
+        {"SPRITE_TRADER",                        SpriteSheetID::SPRITE_TRADER},
+        {"SPRITE_SLIME",                        SpriteSheetID::SPRITE_SLIME},
+        
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "enviro ID found %i", it->second);
+        return it->second;
+    }
+    //TraceLog(LOG_INFO, "Spell ID not found ");
+    return SpriteSheetID::SPRITE_NONE;
+
+}
 
 void from_json(const json &j, ItemInstanceData &i) {
     j.at("item_id").get_to(i.item_id);
