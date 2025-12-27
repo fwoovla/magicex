@@ -21,6 +21,7 @@ extern std::vector<SpellData> g_spell_data;
 
 struct NewSpellPayload {
     Vector2 position;
+    Vector2 target_position;
     float rotation;
     int shooter_id;
     //SpellData *spell_data;

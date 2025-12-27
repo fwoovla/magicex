@@ -78,6 +78,7 @@ ShelterScene::ShelterScene() {
     g_camera.zoom = 2.4f; 
     g_world2screen = (g_scale * g_camera.zoom);
 
+    
     //SaveGame(level_data);
 
 }

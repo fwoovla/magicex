@@ -16,7 +16,7 @@ MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
                 
     shooter_id = payload.shooter_id;
 
-    target_position = g_input.world_mouse_position;
+    target_position = payload.target_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
     rotation = (target_rotation * RAD2DEG) + GetRandomValue(-50, 50);
@@ -94,6 +94,7 @@ void MagicMissle::Draw() {
     DrawSprite(sprite);
 
     if(g_game_settings.show_debug) {
+        DrawCircleV(position, collision_radius, YELLOW);
         DrawCircleV(target_position, 4, DARKRED);
     }
 }

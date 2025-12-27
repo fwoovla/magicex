@@ -88,8 +88,7 @@ void CreatureEntity::Update() {
             input_dir =  GetDirToPlayer();
         }
         if(weapon_state == WSTATE_IDLE) {
-            /* Vector2 pp = GetWorldToScreen2D( position, g_camera);
-            pp = {pp.x * g_scale, pp.y*g_scale}; */
+
             weapon_sprite.rotation = GetAngleFromTo(position, target_creature->position) * RAD2DEG;
         }
         if(weapon_state == WSTATE_MELE) {
@@ -114,8 +113,6 @@ void CreatureEntity::Update() {
                 TraceLog(LOG_INFO, "mele attack  %0.2f", current_primary_data->cooldown);
                 mele_timer.Start(current_primary_data->cooldown, true);
                 can_mele = false;
-                //can_use_spell = false;
-                //should_use_spell = false;
                 should_mele = false;
                 weapon_state = WSTATE_MELE;
                 weapon_end_rotation = weapon_sprite.rotation + (400 * swing_dir);
@@ -133,13 +130,17 @@ void CreatureEntity::Update() {
                         return;
                     }
                     
-                    TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
-                    TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
-
+                    
                     NewSpellPayload payload;
                     payload.position = position;
                     payload.rotation = weapon_sprite.rotation;
                     payload.shooter_id = uid;
+                    payload.target_position = target_creature->position;
+
+
+                    TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
+                    TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
+
 
                     if(g_game_data.is_in_sub_map) {
                         SpawnSpell(*g_sub_scene, payload, &g_spell_data[current_primary_data->spell_id]);
@@ -151,9 +152,8 @@ void CreatureEntity::Update() {
                     current_primary_data->current_power = g_character_data[uid].current_power; 
                     spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
                     can_use_spell = false;
-                    //can_mele = false;
                     should_use_spell = false;
-                    should_mele = false;
+                    weapon_state = WSTATE_MELE;
                     velocity = Vector2Rotate( {-g_spell_data[current_primary_data->spell_id].recoil, 0}, weapon_sprite.rotation * DEG2RAD);
                 }
             }
@@ -405,7 +405,12 @@ void CreatureEntity::OnActionTimerTimeout() {
 
 CreatureEntity::~CreatureEntity()
 {
-    TraceLog(LOG_INFO, "deleting entity!!!!!!!!!!!!!!!!!!!! %i", uid);
+    TraceLog(LOG_INFO, "deleting creature !!!!!!!!!!!!!!!!!!!! %i", uid);
+    for(int i = 0; i < data->primary.size(); i++) {
+            g_item_instances.erase(data->primary[i]);
+            TraceLog(LOG_INFO, "entity primary instance  #%i   erased %i", data->primary[i], g_item_instances.size());
+    }
+
 }
 
 
@@ -417,16 +422,18 @@ float CreatureEntity::GetYSort() {
 void CreatureEntity::TakeDamage(DamagePayload _payload) {
     //TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
 
+    int damage = CalculateDamage(_payload, g_character_data[uid]);
+
     is_stunned = true;
     sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
     stun_timer.Start(0.5f, true);
 
-    std::string damage_string = std::to_string(_payload.damage);
+    std::string damage_string = std::to_string(damage);
 
     velocity = _payload.knockback;
 
-    data->health -= _payload.damage;
+    data->health -= damage;
     if(data->health <= 0) {
         should_delete = true;
     }

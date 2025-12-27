@@ -199,6 +199,9 @@ void InstanceLevelObjects(LevelData &level_data) {
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   transition  size %i", level_data.level_transitions.size());
 
+
+    DL_Add(level_data.entity_list, g_current_player);
+
 //transition areas
     for(int t_index = 0; t_index < level_data.level_transitions.size(); t_index++) {
         Vector2 t_posisition = level_data.level_transitions[t_index].position_i;

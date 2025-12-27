@@ -34,18 +34,15 @@ void Timer::Update() {
     }
 }
 
-bool Timer::IsDone()
-{
+bool Timer::IsDone() {
     return finished;
 }
 
-bool Timer::IsActive()
-{
+bool Timer::IsActive() {
     return active;
 }
 
-double Timer::TimeRemaining()
-{
+double Timer::TimeRemaining() {
     return wait_time - elapsed_time;
 }
 
@@ -72,19 +69,6 @@ void Signal::EmitSignal() {
         callbacks[i]();
     }
 }   
-
-
-
-/* void AreaSignal::Connect(std::function<void(TransitionArea a)> const& callback) {
-    callbacks.push_back(callback);
-}
-
-void AreaSignal::EmitSignal(TransitionArea a) {
-    for(int i = 0; i < callbacks.size(); i++) {
-        callbacks[i](a);
-    }
-}    */
-
 
 
 
@@ -147,9 +131,7 @@ void SetCursorPosition(Vector2 _pos) {
 }
 
 
-
 void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
-
 
     _draw_list.push_back(new_entity);
     //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
@@ -182,13 +164,16 @@ void DL_Update(std::vector<BaseEntity *> &_draw_list) {
 
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
-            _draw_list[i]->Update();
-            if(_draw_list[i]->should_delete) {
-                //TraceLog(LOG_INFO, "DELETING ENTITY");
-                delete _draw_list[i];
-                _draw_list.erase(_draw_list.begin() + i);
-                //_draw_list[i] = nullptr;
-                --i;
+            if(_draw_list[i] != g_current_player) {
+
+                _draw_list[i]->Update();
+                if(_draw_list[i]->should_delete) {
+                    //TraceLog(LOG_INFO, "DELETING ENTITY");
+                    delete _draw_list[i];
+                    _draw_list.erase(_draw_list.begin() + i);
+                    //_draw_list[i] = nullptr;
+                    --i;
+                }
             }
         }
     }
@@ -198,14 +183,15 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
 
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
+            if(_draw_list[i] != g_current_player) {
+                delete _draw_list[i];
+            }
             //TraceLog(LOG_INFO, "DELETING ENTITY");
-             delete _draw_list[i];
             //_draw_list.erase(_draw_list.begin() + i);
                 //_draw_list[i] = nullptr;
             //--i;
         }
     }
-    
     _draw_list.clear();
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
@@ -285,7 +271,6 @@ bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result) {
         this_scene = g_sub_scene.get();
     }
 
-    
     for(auto entity : this_scene->level_data.entity_list) {
         if(entity->can_take_damage) {
             collided = CheckCollisionCircles( checker->position, checker->collision_radius, entity->position, entity->collision_radius);
@@ -323,7 +308,6 @@ bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision
     return collided;
 
 }
-
 
 
 void DetectCreatures(CharacterEntity &checker, float c_radius, EntityDetectResult &_result) {

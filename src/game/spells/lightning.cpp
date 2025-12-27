@@ -17,7 +17,7 @@ Lightning::Lightning(NewSpellPayload payload, SpellData *_data) {
     
     shooter_id = payload.shooter_id;
     
-    target_position = g_input.world_mouse_position;
+    target_position = payload.target_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
     rotation = target_rotation * RAD2DEG;
@@ -32,16 +32,9 @@ Lightning::Lightning(NewSpellPayload payload, SpellData *_data) {
 
     sprite = {};
     LoadSpriteCentered(sprite, g_spell_sprites[data->spell_id], position);
+    sprite.center = {32, sprite.texture.height * 0.5f};
     sprite.rotation = rotation;
 
-/*     TraceLog(LOG_INFO, 
-         "Missile sprite id = %i, size = %i x %i",
-         g_spell_sprites[_data.spell_id].id,
-         g_spell_sprites[_data.spell_id].width,
-         g_spell_sprites[_data.spell_id].height); */
-
-/*     TraceLog(LOG_INFO, "using spell sprite %d, id=%d", 
-         _data.spell_id, g_spell_sprites[_data.spell_id].id); */
 }
 
 Lightning::~Lightning() {
@@ -87,6 +80,7 @@ void Lightning::Draw() {
     DrawSprite(sprite);
 
     if(g_game_settings.show_debug) {
+        DrawCircleV(position, collision_radius, YELLOW);
         DrawCircleV(target_position, 4, DARKRED);
     }
 }

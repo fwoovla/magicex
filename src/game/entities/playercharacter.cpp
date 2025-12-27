@@ -38,6 +38,8 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     hunger_rate = .1;
     hunger_timer.Start(10, false);
 
+    stun_timer.timer_timeout.Connect( [&](){OnStunTimerTimeout();} );
+
     int _id = ITEM_ID_ERROR;
     auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
     if(item_it != g_item_instances.end()) {
@@ -106,6 +108,10 @@ void PlayerCharacter::Update() {
     sprite.position = position;
     weapon_sprite.position = position;
     shadow_sprite.position =  Vector2Add( position, {0, 3});
+
+    if(is_stunned) {
+        stun_timer.Update();
+    }
 
     if(!can_use_spell) {
         spell_timer.Update();
@@ -288,6 +294,7 @@ void PlayerCharacter::CheckInput() {
                 payload.position = position;
                 payload.rotation = weapon_sprite.rotation;
                 payload.shooter_id = uid;
+                payload.target_position = g_input.world_mouse_position;
 
                 if(g_game_data.is_in_sub_map) {
                         SpawnSpell(*g_sub_scene, payload, &g_spell_data[current_primary_data->spell_id]);
@@ -405,6 +412,7 @@ void PlayerCharacter::OnMeleTimerTimeout() {
 
 void PlayerCharacter::OnStunTimerTimeout() {
     is_stunned = false;
+    sprite.modulate = WHITE;
     //TraceLog(LOG_INFO, "is_stunned false");
 }
 
@@ -429,8 +437,18 @@ float PlayerCharacter::GetYSort() {
 }
 
 void PlayerCharacter::TakeDamage(DamagePayload _payload) {
-    TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
+    //TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
     
-    std::string damage_string = std::to_string(_payload.damage);
+    int damage = CalculateDamage(_payload, g_character_data[uid]);
+
+    is_stunned = true;
+    sprite.modulate = RED;
+    SetAmination(sprite, ANIM_STUN);
+    stun_timer.Start(0.5f, true);
+
+    velocity = _payload.knockback;
+
+    
+    std::string damage_string = std::to_string(damage);
     SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
 }

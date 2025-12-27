@@ -2011,7 +2011,7 @@
 						},
 						{
 							"__identifier": "CreatureEntity",
-							"__grid": [61,18],
+							"__grid": [63,19],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
@@ -2020,13 +2020,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 77,
-							"px": [976,288],
+							"px": [1008,304],
 							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TRADER", "__tile": null, "defUid": 79, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["CREATURE_TRADER"]
 							}] }],
-							"__worldX": 976,
-							"__worldY": 288
+							"__worldX": 1008,
+							"__worldY": 304
 						},
 						{
 							"__identifier": "CreatureEntity",
