@@ -32,7 +32,7 @@ class BaseUILayer{
 struct SharedItemData {
     int item_id;
     int use_id;
-    bool is_using;
+    //bool is_using;
     //std::vector<int> *source_list;
     //std::vector<int> *dest_list;
     INVENTORYGRIDS source_grid;
@@ -119,6 +119,8 @@ class ItemGrid {
     Signal transfer_item;
     Signal pickup;
     Signal use_item;
+    Signal putdown_or_equip;
+
 };
 
 
@@ -228,6 +230,7 @@ class CharacterMenu : public BaseUILayer {
     void OnTransferItem();
 
     void OnPickup();
+    void OnPutDownOrEquip();
 
     void OnUseItem();
 

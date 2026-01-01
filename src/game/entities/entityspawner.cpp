@@ -75,6 +75,7 @@ void CharacterMessage::TakeDamage(DamagePayload _payload) {
 
 int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data) {
     int damage = damage_payload.damage;
+    //do stuff
     return damage;
 }
 

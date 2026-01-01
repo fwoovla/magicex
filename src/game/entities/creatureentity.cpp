@@ -319,7 +319,7 @@ void CreatureEntity::OnMeleTimerTimeout() {
 
 void CreatureEntity::OnStunTimerTimeout() {
     is_stunned = false;
-    sprite.modulate = WHITE;
+    //sprite.modulate = WHITE;
     SetAmination(sprite, ANIM_IDLE);
     //TraceLog(LOG_INFO, "un stunned");
 }
@@ -386,21 +386,19 @@ void CreatureEntity::OnActionTimerTimeout() {
     if(data->ai_data.hostility > AI_TERRITORIAL and detect_state == DETECT_PLAYER) {
 
         if(can_use_spell) {
-            if(GetRandomValue(0, 50) > 40) {
+            if(GetRandomValue(0, 60) < (data->ai_data.hostility * 10)) {
                 should_use_spell = true;
                 can_use_spell = false;
             }
         }
 
         if(can_mele) {
-            if(GetRandomValue(0, 50) > 40) {
+            if(GetRandomValue(0, 60) < (data->ai_data.hostility * 10)) {
                 should_mele = true;
                 can_mele = false;
             }
         }
     }
-
-
 }
 
 CreatureEntity::~CreatureEntity()
@@ -410,7 +408,6 @@ CreatureEntity::~CreatureEntity()
             g_item_instances.erase(data->primary[i]);
             TraceLog(LOG_INFO, "entity primary instance  #%i   erased %i", data->primary[i], g_item_instances.size());
     }
-
 }
 
 
@@ -425,7 +422,7 @@ void CreatureEntity::TakeDamage(DamagePayload _payload) {
     int damage = CalculateDamage(_payload, g_character_data[uid]);
 
     is_stunned = true;
-    sprite.modulate = RED;
+    //sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
     stun_timer.Start(0.5f, true);
 
@@ -438,10 +435,8 @@ void CreatureEntity::TakeDamage(DamagePayload _payload) {
         should_delete = true;
     }
 
-
     SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
     //TraceLog(LOG_INFO, "knockback %0.2f  %0.2f", _payload.knockback.x, _payload.knockback.y);
-
 }
 
 
@@ -462,8 +457,6 @@ Vector2 CreatureEntity::GetDirToPlayer() {
 void CreatureEntity::MoveCreature(Vector2 _input_dir) {
 
     velocity = Vector2Lerp(velocity, _input_dir * data->base_speed, .15);
-
-    
 
     if(_input_dir == Vector2{0,0}) {
         if(abs(velocity.x) < 4.0f) {
@@ -487,7 +480,9 @@ void CreatureEntity::MoveCreature(Vector2 _input_dir) {
 
     if(velocity.x != 0 or velocity.y != 0) {
         next_position = Vector2Add(next_position, velocity * GetFrameTime());
-        SetAmination(sprite, ANIM_RUN);
+        if(!is_stunned) {
+            SetAmination(sprite, ANIM_RUN);
+        }
 
         CollisionResult result;
         result.collision_dir = {0,0};
@@ -515,11 +510,12 @@ void CreatureEntity::MoveCreature(Vector2 _input_dir) {
         }
     }
     else {
-        SetAmination(sprite, ANIM_IDLE);
+        if(!is_stunned) {
+            SetAmination(sprite, ANIM_IDLE);
+        }
     }
 
     sprite.position = position;
     weapon_sprite.position = position;
     shadow_sprite.position =  Vector2Add( position, {0, 3});
-
 }

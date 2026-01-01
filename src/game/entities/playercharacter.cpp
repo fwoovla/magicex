@@ -65,7 +65,9 @@ void PlayerCharacter::Update() {
 
     if(velocity.x != 0 or velocity.y != 0) {
         next_position = Vector2Add(next_position, velocity * GetFrameTime());
-        SetAmination(sprite, ANIM_RUN);
+        if(!is_stunned) {
+            SetAmination(sprite, ANIM_RUN);
+        }
 
         CollisionResult result;
         result.collision_dir = {0,0};
@@ -94,7 +96,9 @@ void PlayerCharacter::Update() {
 
     }
     else {
-        SetAmination(sprite, ANIM_IDLE);
+        if(!is_stunned) {
+            SetAmination(sprite, ANIM_IDLE);
+        }
     }
     if(g_input.world_mouse_position.x  < position.x){
         sprite.source.width = -sprite.size.x;
@@ -412,7 +416,7 @@ void PlayerCharacter::OnMeleTimerTimeout() {
 
 void PlayerCharacter::OnStunTimerTimeout() {
     is_stunned = false;
-    sprite.modulate = WHITE;
+    //sprite.modulate = WHITE;
     //TraceLog(LOG_INFO, "is_stunned false");
 }
 
@@ -442,13 +446,13 @@ void PlayerCharacter::TakeDamage(DamagePayload _payload) {
     int damage = CalculateDamage(_payload, g_character_data[uid]);
 
     is_stunned = true;
-    sprite.modulate = RED;
+    //sprite.modulate = RED;
     SetAmination(sprite, ANIM_STUN);
     stun_timer.Start(0.5f, true);
 
     velocity = _payload.knockback;
 
-    
+
     std::string damage_string = std::to_string(damage);
     SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
 }

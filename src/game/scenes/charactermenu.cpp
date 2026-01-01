@@ -1,9 +1,8 @@
 #include "../../core/gamedefs.h"
 
-//static std::vector<int> blank_list;
-
 CharacterMenu::CharacterMenu() {
 
+    grid_list.resize(GRID_NUM_GRIDS);
     use_ground = false;
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 30/g_scale, BLACK, "CHARACTER MENU");
     panel_bg = g_ui_panels[PANEL_CHAR_SCREEN];
@@ -24,7 +23,7 @@ CharacterMenu::CharacterMenu() {
     ground_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     ground_grid->pickup.Connect( [&](){OnPickup();} );
 
-    grid_list.push_back(ground_grid);
+    grid_list[GRID_GROUND] = ground_grid;
     
 //stats
     spo = {panel_rect.x + 425, panel_rect.y + 320};
@@ -44,21 +43,11 @@ CharacterMenu::CharacterMenu() {
     CreateLabel(defence_label, {spo.x + 10, spo.y + 85}, FONTSIZE_24, RAYWHITE, "defence:");
     CreateLabel(magic_defence_label, {spo.x + 10, spo.y + 105}, FONTSIZE_24, RAYWHITE, "magic defence:");
     
-
-
 //character 
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "CHARACTER");
 
-
     ppo = {cpo.x + 130, cpo.y + 130}; //portrait offset
-
-
-    
-    //CreateLabel(max_power_label, {cpo.x + 140, cpo.y + 30}, FONTSIZE_24, RAYWHITE, "max_power:");
-    
-    
-
 
     LoadSpriteCentered(character_sprite, g_character_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
@@ -70,8 +59,9 @@ CharacterMenu::CharacterMenu() {
     primary_grid->selecting.Connect( [&](){OnItemSelected();} );
     primary_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     primary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    primary_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(primary_grid);
+    //primary_grid->use_item.Connect( [&](){OnUseItem();} );
+    primary_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_PRIMARY] = primary_grid;
 
     
     CreateLabel(secondary_header_label, {ppo.x + 75, ppo.y - 10}, FONTSIZE_24, WHITE, "secondary");
@@ -81,8 +71,9 @@ CharacterMenu::CharacterMenu() {
     secondary_grid->selecting.Connect( [&](){OnItemSelected();} );
     secondary_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     secondary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    secondary_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(secondary_grid);
+    //secondary_grid->use_item.Connect( [&](){OnUseItem();} );
+    secondary_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_SECONDARY] = secondary_grid;
 
     CreateLabel(head_header_label, {ppo.x + 75, ppo.y - 110}, FONTSIZE_24, WHITE, "head");
     head_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y - 100}, &shared_data);
@@ -91,8 +82,9 @@ CharacterMenu::CharacterMenu() {
     head_grid->selecting.Connect( [&](){OnItemSelected();} );
     head_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     head_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    head_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(head_grid);
+    //head_grid->use_item.Connect( [&](){OnUseItem();} );
+    head_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_HEAD] = head_grid;
 
     CreateLabel(body_header_label, {ppo.x - 75, ppo.y - 110}, FONTSIZE_24, WHITE, "body");
     body_grid = new ItemGrid(1, 1, 50, {ppo.x - 100, ppo.y - 100}, &shared_data);
@@ -101,8 +93,9 @@ CharacterMenu::CharacterMenu() {
     body_grid->selecting.Connect( [&](){OnItemSelected();} );
     body_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     body_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    body_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(body_grid);
+    //body_grid->use_item.Connect( [&](){OnUseItem();} );
+    body_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_BODY] = body_grid;
 
     CreateLabel(legs_header_label, {ppo.x, ppo.y + 70}, FONTSIZE_24, WHITE, "legs");
     legs_grid = new ItemGrid(1, 1, 50, {ppo.x - 25, ppo.y + 80}, &shared_data);
@@ -111,8 +104,9 @@ CharacterMenu::CharacterMenu() {
     legs_grid->selecting.Connect( [&](){OnItemSelected();} );
     legs_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     legs_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    legs_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(legs_grid);
+    //legs_grid->use_item.Connect( [&](){OnUseItem();} );
+    legs_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_LEGS] = legs_grid;
 
     CreateLabel(feet_header_label, {ppo.x - 75, ppo.y + 70}, FONTSIZE_24, WHITE, "feet");
     feet_grid = new ItemGrid(1, 1, 50, {ppo.x - 100, ppo.y + 80}, &shared_data);
@@ -121,8 +115,9 @@ CharacterMenu::CharacterMenu() {
     feet_grid->selecting.Connect( [&](){OnItemSelected();} );
     feet_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     feet_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    feet_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(feet_grid);
+    //feet_grid->use_item.Connect( [&](){OnUseItem();} );
+    feet_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_FEET] = feet_grid;
 
     CreateLabel(hands_header_label, {ppo.x + 75, ppo.y + 70}, FONTSIZE_24, WHITE, "hands");
     hands_grid = new ItemGrid(1, 1, 50, {ppo.x + 50, ppo.y + 80}, &shared_data);
@@ -131,8 +126,9 @@ CharacterMenu::CharacterMenu() {
     hands_grid->selecting.Connect( [&](){OnItemSelected();} );
     hands_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     hands_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    hands_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(hands_grid);
+    //hands_grid->use_item.Connect( [&](){OnUseItem();} );
+    hands_grid->pickup.Connect( [&](){OnPickup();} );
+    grid_list[GRID_HANDS] = hands_grid;
 
 
 
@@ -148,17 +144,18 @@ CharacterMenu::CharacterMenu() {
     inventory_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     inventory_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(inventory_grid);
+    inventory_grid->putdown_or_equip.Connect( [&](){OnPutDownOrEquip();} );
+    grid_list[GRID_INVENTORY] = inventory_grid;
 
     hpo = { 350, g_resolution.y - 80};
     hotbar_grid = new ItemGrid(5, 1, 50, {hpo.x, hpo.y}, &shared_data);
-    hotbar_grid->this_grid = GRID_HOTBAR;
+/*     hotbar_grid->this_grid = GRID_HOTBAR;
     hotbar_grid->accepted_type = TYPE_ALL;
     hotbar_grid->selecting.Connect( [&](){OnItemSelected();} );
     hotbar_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     hotbar_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    hotbar_grid->use_item.Connect( [&](){OnUseItem();} );
-    grid_list.push_back(hotbar_grid);
+    hotbar_grid->use_item.Connect( [&](){OnUseItem();} ); */
+    grid_list[GRID_HOTBAR] = hotbar_grid;
 
 }
 
@@ -192,7 +189,6 @@ void CharacterMenu::Draw() {
     DrawLabel(speed_label);
     DrawLabel(defence_label);
     DrawLabel(magic_defence_label);
-    //DrawLabelCentered(max_power_label);
     DrawLabel(character_header_label);
   
     DrawLabelCentered(sat_label);
@@ -275,8 +271,9 @@ void CharacterMenu::Update() {
     std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_speed);
     speed_label.text = "speed:  " + speed;
 
+    std::string max_health = TextFormat("%i", g_character_data[g_current_player->uid].max_health);
     std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
-    health_label.text = "health:  " + health + "/" + health;
+    health_label.text = "health:  " + health + "/" + max_health;
 
     std::string exp = TextFormat("%i", g_character_data[g_current_player->uid].exp);
     exp_label.text = "exp:  " + exp;
@@ -292,8 +289,9 @@ void CharacterMenu::Update() {
     std::string current_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_power);
     current_power_label.text = "power:  " + current_power + "/" + max_power;
 
+    std::string max_sat = TextFormat("%0.2f", g_character_data[g_current_player->uid].max_saturation);
     std::string sat = TextFormat("%0.2f", g_character_data[g_current_player->uid].saturation);
-    sat_label.text = "sat:  " +sat;
+    sat_label.text = "sat:  " + sat + "/" + max_sat;
 }
 
 void CharacterMenu::Open() {
@@ -346,104 +344,113 @@ void CharacterMenu::OpenWith(BaseContainerEntity *container) {
 
 
 void CharacterMenu::OnItemSelected() {
-    ground_grid->can_select = false;
-    inventory_grid->can_select = false;
-    hotbar_grid->can_select = false;
+    for(auto &grid : grid_list) {
+        grid->can_select = false;
+    }
 
-    primary_grid->can_select = false;
-    secondary_grid->can_select = false;
-    head_grid->can_select = false;
-    body_grid->can_select = false;
-    legs_grid->can_select = false;
-    feet_grid->can_select = false;
-    hands_grid->can_select = false;
 }
 
 void CharacterMenu::OnItemDeselected() {
-    ground_grid->can_select = true;
-    inventory_grid->can_select = true;
-    hotbar_grid->can_select = true;
-    
-    primary_grid->can_select = true;
-    secondary_grid->can_select = true;
-    head_grid->can_select = true;
-    body_grid->can_select = true;
-    legs_grid->can_select = true;
-    feet_grid->can_select = true;
-    hands_grid->can_select = true;
+    for(auto &grid :grid_list) {
+        grid->can_select = true;
+    }
+
 }
 
 
 void CharacterMenu::OnPickup() {
     TraceLog(LOG_INFO, "pickup");
-    int source_index = -1;
-    int dest_index = -1;
+    int item_id = shared_data.item_id;
+    int source_grid = shared_data.source_grid;
 
-    for(int i = 0; i < grid_list.size(); i++) {
-        if(grid_list[i]->this_grid == shared_data.source_grid) {
-            source_index = i;
+    int dest_grid = GRID_INVENTORY;
+    if(source_grid == GRID_INVENTORY) {
+        dest_grid = GRID_GROUND;
+    }
+
+    Vector2 source_cell = shared_data.source_cell;
+    Vector2 dest_cell = shared_data.dest_cell;
+
+    TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
+    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
+    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
+
+    if(grid_list[dest_grid]->HasRoom()) {
+        grid_list[dest_grid]->AddItem(item_id);
+        grid_list[source_grid]->RemoveItem(source_cell);
+        if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
+            g_current_player->UnEquip(item_id);
         }
-    }
-
-    if(inventory_grid->HasRoom()) {
-        TraceLog(LOG_INFO, "pickup %i", source_index);
-        inventory_grid->AddItem(shared_data.item_id);
-        grid_list[source_index]->RemoveItem(shared_data.source_cell);
-    }
-    else {
     }
 }
 
-void CharacterMenu::OnTransferItem() {
 
-    int source_index = -1;
-    int dest_index = -1;
+void CharacterMenu::OnPutDownOrEquip() {
+    TraceLog(LOG_INFO, "put down or equip item %i  %i", shared_data.item_id, grid_list.size());
+    int item_id = shared_data.item_id;
+    int source_grid = shared_data.source_grid;
+    int dest_grid =  GRID_GROUND;
+    Vector2 source_cell = shared_data.source_cell;
+    Vector2 dest_cell = shared_data.dest_cell;
+
 
     for(int i = 0; i < grid_list.size(); i++) {
-        if(grid_list[i]->this_grid == shared_data.source_grid) {
-            source_index = i;
-        }
-        if(grid_list[i]->this_grid == shared_data.dest_grid) {
-            dest_index = i;
+        //TraceLog(LOG_INFO, "put down or equip item list / %i   type %i", i, grid_list[i]->this_grid);
+
+        if(grid_list[i]->accepted_type == g_item_instances[shared_data.item_id].type) {
+            dest_grid = i;
+            break;
         }
     }
 
-    TraceLog(LOG_INFO, "\ntransfer items \ndest %0.0f %0.0f", shared_data.dest_cell.x, shared_data.dest_cell.y);
-    TraceLog(LOG_INFO, "source %0.0f %0.0f", shared_data.source_cell.x, shared_data.source_cell.y);
-    TraceLog(LOG_INFO, "move %i  from %i %i", shared_data.item_id, shared_data.source_grid, shared_data.dest_grid);
-    TraceLog(LOG_INFO, "source index %i dest index %i", source_index, dest_index);
 
-    if(source_index != -1 and dest_index != -1) {
-        if(grid_list[dest_index]->CanAddItem(shared_data.item_id, shared_data.dest_cell)) {
-            grid_list[dest_index]->AddItem(shared_data.item_id, shared_data.dest_cell);
+    TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
+    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
+    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
 
-
-
-            if(shared_data.source_grid == GRID_PRIMARY or
-                //shared_data.source_grid == GRID_SECONDARY or
-                shared_data.source_grid == GRID_HEAD or
-                shared_data.source_grid == GRID_BODY or
-                shared_data.source_grid == GRID_LEGS or
-                shared_data.source_grid == GRID_FEET or 
-                shared_data.source_grid == GRID_HANDS) {
-                if(g_current_player->CanUnEquip(shared_data.item_id)) {grid_list[source_index]->RemoveItem(shared_data.source_cell); g_current_player->UnEquip(shared_data.item_id);}}
+    if(grid_list[dest_grid]->HasRoom()) {
+        grid_list[dest_grid]->AddItem(item_id);
+        grid_list[source_grid]->RemoveItem(shared_data.source_cell);
+        if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
+            g_current_player->Equip(item_id);    
+        }
+    }
+}
 
 
-            if(shared_data.dest_grid == GRID_PRIMARY or
-                //shared_data.dest_grid == GRID_SECONDARY or
-                shared_data.dest_grid == GRID_HEAD or
-                shared_data.dest_grid == GRID_BODY or
-                shared_data.dest_grid == GRID_LEGS or
-                shared_data.dest_grid == GRID_FEET or 
-                shared_data.dest_grid == GRID_HANDS) {
-                if(g_current_player->CanEquip(shared_data.item_id)) {g_current_player->Equip(shared_data.item_id);}}
 
-            grid_list[source_index]->RemoveItem(shared_data.source_cell);
+void CharacterMenu::OnTransferItem() {
+
+    int item_id = shared_data.item_id;
+    int source_grid = shared_data.source_grid;
+    int dest_grid =  shared_data.dest_grid;
+    Vector2 source_cell = shared_data.source_cell;
+    Vector2 dest_cell = shared_data.dest_cell;
+
+    TraceLog(LOG_INFO, "\ntransfer items \ndest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
+    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
+    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
+
+    if(source_grid != -1 and dest_grid != -1) {
+        if(grid_list[dest_grid]->CanAddItem(item_id, dest_cell)) {
+            grid_list[dest_grid]->AddItem(item_id, dest_cell);
+            grid_list[source_grid]->RemoveItem(source_cell);
+            
+
+            if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
+                g_current_player->Equip(item_id);    
+            }
+            
+            if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
+                g_current_player->UnEquip(item_id);
+                
+            }
         }
         else {
-            grid_list[source_index]->AddItem(shared_data.item_id, shared_data.source_cell);
+            grid_list[source_grid]->AddItem(item_id, source_cell);
         }
     }
+
 
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;
@@ -456,114 +463,42 @@ void CharacterMenu::OnTransferItem() {
 }
 
 void CharacterMenu::OnUseItem() {
-    TraceLog(LOG_INFO, "--------------using %i  on %i-------------------", shared_data.item_id, shared_data.use_id);
-    TraceLog(LOG_INFO, "--------------source grid %i  dest grid %i-------------------", shared_data.source_grid, shared_data.dest_grid);
-    TraceLog(LOG_INFO, "--------------source cell %0.0f %0.0f-------------------", shared_data.source_cell.x, shared_data.source_cell.y);
-    TraceLog(LOG_INFO, "--------------dest cell %0.0f %0.0f-------------------", shared_data.dest_cell.x, shared_data.dest_cell.y);
+    int item_id = shared_data.item_id;
+    int source_grid = shared_data.source_grid;
+    int dest_grid =  shared_data.dest_grid;
+    Vector2 source_cell = shared_data.source_cell;
+    Vector2 dest_cell = shared_data.dest_cell;
 
-    if(shared_data.item_id != shared_data.use_id) {
-        
-        int source_index = -1;
-        int dest_index = -1;
+    TraceLog(LOG_INFO, "--------------using %i  -------------------", item_id);
+    TraceLog(LOG_INFO, "--------------source grid %i  dest grid %i-------------------", source_grid, dest_grid);
+    TraceLog(LOG_INFO, "--------------source cell %0.0f %0.0f-------------------", source_cell.x, source_cell.y);
+    TraceLog(LOG_INFO, "--------------dest cell %0.0f %0.0f-------------------", dest_cell.x, dest_cell.y);
 
-        for(int i = 0; i < grid_list.size(); i++) {
-            if(grid_list[i]->this_grid == shared_data.source_grid) {
-                source_index = i;
+
+    auto source_itter = g_item_instances.find(shared_data.item_id);
+    if(source_itter != g_item_instances.end()) {
+        if(source_itter->second.type == TYPE_FOOD) {
+            TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
+            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
+            g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
+            if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
+                g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
             }
-            if(grid_list[i]->this_grid == shared_data.dest_grid) {
-                dest_index = i;
-            }
-        }
 
-        auto source_itter = g_item_instances.find(shared_data.item_id);
-        auto dest_itter = g_item_instances.find(shared_data.use_id);
-
-        if(source_itter != g_item_instances.end()) {
-            if(source_itter->second.type == TYPE_FOOD) {
-                TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
-                TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
-                g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
-                if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
-                    g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
-                }
-
-                grid_list[source_index]->RemoveItem(shared_data.source_cell);
-            }
-        }
-
-        if(source_itter != g_item_instances.end() and dest_itter != g_item_instances.end()) {
-            TraceLog(LOG_INFO, "-------item instances found-------");
-            TraceLog(LOG_INFO, "--------------using %s  on %s-------------------", source_itter->second.item_name.c_str(), dest_itter->second.item_name.c_str());
-            
-            if(source_itter->second.type == TYPE_SCROLL) {
-                TraceLog(LOG_INFO, "-------using a scroll-------");
-                if(dest_itter->second.spell_id == SPELL_ID_NONE) {            
-
-                    dest_itter->second.item_name += " of " + g_spell_data[source_itter->second.spell_id].spell_name;
-                    dest_itter->second.spell_id = source_itter->second.spell_id;
-                    dest_itter->second.max_power = source_itter->second.max_power;
-                    dest_itter->second.current_power = source_itter->second.current_power;
-
-                    if(dest_itter->second.spell_id == SPELL_ID_MAGICMISSLE) {
-                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                            dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
-                            dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_WAND;
-                        }
-                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                            dest_itter->second.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
-                            dest_itter->second.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
-                        }
-                    }
-
-                    if(dest_itter->second.spell_id == SPELL_ID_FIREBALL) {
-                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                            dest_itter->second.sprite_id = ITEM_ID_FIREBALL_WAND;
-                            dest_itter->second.icon_id = ITEM_ID_FIREBALL_WAND;
-                        }
-                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                            dest_itter->second.sprite_id = ITEM_ID_FIREBALL_STAFF;
-                            dest_itter->second.icon_id = ITEM_ID_FIREBALL_STAFF;
-                        }
-                    }
-
-                    if(dest_itter->second.spell_id == SPELL_ID_LIGHTNING) {
-                        if(dest_itter->second.item_id == ITEM_ID_WAND) {
-                            dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_WAND;
-                            dest_itter->second.icon_id = ITEM_ID_LIGHTNING_WAND;
-                        }
-                        if(dest_itter->second.item_id == ITEM_ID_STAFF) {
-                            dest_itter->second.sprite_id = ITEM_ID_LIGHTNING_STAFF;
-                            dest_itter->second.icon_id = ITEM_ID_LIGHTNING_STAFF;
-                        }
-                    }
-                    grid_list[source_index]->RemoveItem(shared_data.source_cell);
-                    grid_list[dest_index]->AddItem(shared_data.use_id, shared_data.dest_cell);
-                }
-                else {
-                    TraceLog(LOG_INFO, "-------cant add spell-------");
-                }
-            }
+            grid_list[source_grid]->RemoveItem(source_cell);
         }
     }
 
+    for(auto &grid :grid_list) {
+        grid->can_select = true;
+    }
 
-    ground_grid->can_select = true;
-    inventory_grid->can_select = true;
-    hotbar_grid->can_select = true;
-    
-    primary_grid->can_select = true;
-    secondary_grid->can_select = true;
-    head_grid->can_select = true;
-    body_grid->can_select = true;
-    legs_grid->can_select = true;
-    feet_grid->can_select = true;
-    hands_grid->can_select = true;
-
-    shared_data.is_using = false;
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;
     shared_data.source_cell = {-1,-1};
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
     shared_data.use_id = -1;
+
+
 }
