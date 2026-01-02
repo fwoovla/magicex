@@ -97,7 +97,7 @@ StagingUILayer::StagingUILayer() {
         std::unique_ptr<Button> new_button = std::make_unique<Button>();
         
         CreateButton(*new_button, {tw_offset.x + 70 + (100 * i), tw_offset.y + 75}, {50, 50}, YELLOW, g_weapon_data[choice_index].weapon_name.c_str() );
-        new_button->text_size = FONTSIZE_20;
+        new_button->text_size = FONTSIZE_14;
 
         take_weapon_buttons.push_back(std::move(new_button));
     }
@@ -121,7 +121,7 @@ StagingUILayer::StagingUILayer() {
         std::unique_ptr<Button> new_button = std::make_unique<Button>();
         
         CreateButton(*new_button, {ts_offset.x + 70 + (100 * i), ts_offset.y + 75}, {50, 50}, YELLOW, g_spell_data[choice_index].spell_name.c_str() );
-        new_button->text_size = FONTSIZE_20;
+        new_button->text_size = FONTSIZE_14;
 
         take_spell_buttons.push_back(std::move(new_button));
     }
@@ -144,7 +144,7 @@ StagingUILayer::StagingUILayer() {
         std::unique_ptr<Button> new_button = std::make_unique<Button>();
         
         CreateButton(*new_button, {tf_offset.x + 70 + (100 * i), tf_offset.y + 75}, {50, 50}, YELLOW, g_food_data[choice_index].food_name.c_str() );
-        new_button->text_size = FONTSIZE_20;
+        new_button->text_size = FONTSIZE_14;
 
         take_food_buttons.push_back(std::move(new_button));
     }
@@ -395,7 +395,17 @@ void StagingUILayer::SpellSelected(int spell_id) {
     TraceLog(LOG_INFO, "selected spell: %i", spell_id);
 
     //create scroll
-    ItemInstanceData *new_instance =  InstanceCharacterItem(ITEM_ID_SCROLL, g_current_player->uid);
-    GenerateScroll(*new_instance, (SpellID)spell_id, "");
+    for(auto inst_id : g_current_player->data->inventory) {
+        auto i_itter =  g_item_instances.find(inst_id);
+        if(i_itter != g_item_instances.end()) {
+            if(i_itter->second.type == TYPE_WEAPON) {
+                //found weapon to add spell to 
+                AddSpellToItem( i_itter->second, (SpellID)spell_id);
+            }
+        }
+
+    }
+    //ItemInstanceData *new_instance =  InstanceCharacterItem(ITEM_ID_SCROLL, g_current_player->uid);
+    //GenerateScroll(*new_instance, (SpellID)spell_id, "");
     SetPlayer(g_current_player->uid);
 }

@@ -321,3 +321,53 @@ void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string co
         instance.icon_id = ITEM_ID_LIGHTNING_SCROLL;
     }
 }
+
+
+void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id) {
+    instance.spell_id = spell_id;
+
+    instance.item_name += " of " + g_spell_data[instance.spell_id].spell_name;
+    instance.max_power = 10;
+    instance.current_power = instance.max_power;
+
+    TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", g_spell_data[instance.spell_id].spell_name.c_str(), g_spell_data[instance.spell_id].pps);
+
+    if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
+        if(instance.item_id == ITEM_ID_WAND) {
+            instance.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
+            instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+        }
+        if(instance.item_id == ITEM_ID_STAFF) {
+            instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
+            instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
+        }
+    }
+        
+    if(instance.spell_id == SPELL_ID_FIREBALL) {
+        if(instance.item_id == ITEM_ID_WAND) {
+            instance.sprite_id = ITEM_ID_FIREBALL_WAND;
+            instance.icon_id = ITEM_ID_FIREBALL_WAND;
+        }
+        if(instance.item_id == ITEM_ID_STAFF) {
+            instance.sprite_id = ITEM_ID_FIREBALL_STAFF;
+            instance.icon_id = ITEM_ID_FIREBALL_STAFF;
+        }
+    }
+        
+    if(instance.spell_id == SPELL_ID_LIGHTNING) {
+        if(instance.item_id == ITEM_ID_WAND) {
+            instance.sprite_id = ITEM_ID_LIGHTNING_WAND;
+            instance.icon_id = ITEM_ID_LIGHTNING_WAND;
+        }
+        if(instance.item_id == ITEM_ID_STAFF) {
+            instance.sprite_id = ITEM_ID_LIGHTNING_STAFF;
+            instance.icon_id = ITEM_ID_LIGHTNING_STAFF;
+        }
+    }
+
+
+    TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+    TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
+    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
+    TraceLog(LOG_INFO, "-damage %i", instance.damage );
+}

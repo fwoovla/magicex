@@ -16,5 +16,5 @@ void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random);
 
 void GenerateFood(ItemInstanceData &instance, int loot_level, bool random);
 
-
+void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id);
 

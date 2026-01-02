@@ -270,6 +270,19 @@
 
     "spell_data": [
         {
+            "spell_id":"SPELL_ID_MAGICCHARGE",
+            "spell_name":"Charge",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 500,
+            "damage":1,
+            "radius":2,
+            "cooldown":1.0,
+            "pps":1.0,
+            "recoil":20,
+            "knockback":20
+        },
+        {
             "spell_id":"SPELL_ID_MAGICMISSLE",
             "spell_name":"Magic Missle",
             "level":1,
@@ -369,7 +382,7 @@
             "weapon_id": "ITEM_ID_WAND",
             "weapon_name": "Wand",
             "cooldown": 0.60,
-            "spell_id":"SPELL_ID_NONE",
+            "spell_id":"SPELL_ID_MAGICCHARGE",
             "max_power":10,
             "damage":2,
             "recoil":20,
@@ -379,7 +392,7 @@
             "weapon_id": "ITEM_ID_STAFF",
             "weapon_name": "Staff",
             "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
+            "spell_id":"SPELL_ID_MAGICCHARGE",
             "max_power":20,
             "damage":3,
             "recoil":20,
