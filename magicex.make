@@ -107,6 +107,7 @@ GENERATED += $(OBJDIR)/modules.o
 GENERATED += $(OBJDIR)/mushroomentity.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
+GENERATED += $(OBJDIR)/poison.o
 GENERATED += $(OBJDIR)/resources.o
 GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/shelterscene.o
@@ -152,6 +153,7 @@ OBJECTS += $(OBJDIR)/modules.o
 OBJECTS += $(OBJDIR)/mushroomentity.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
+OBJECTS += $(OBJDIR)/poison.o
 OBJECTS += $(OBJDIR)/resources.o
 OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/shelterscene.o
@@ -355,6 +357,9 @@ $(OBJDIR)/lightning.o: src/game/spells/lightning.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/magicmissle.o: src/game/spells/magicmissle.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/poison.o: src/game/spells/poison.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/statusbar.o: src/game/statusbar.cpp

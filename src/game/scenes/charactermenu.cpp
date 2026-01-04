@@ -8,7 +8,7 @@ CharacterMenu::CharacterMenu() {
     panel_bg = g_ui_panels[PANEL_CHAR_SCREEN];
     panel_rect = {
         .x = 50,
-        .y = 20,
+        .y = 0,
         .width = ((float)g_resolution.x - 100),
         .height = ((float)g_resolution.y - 40)
     };

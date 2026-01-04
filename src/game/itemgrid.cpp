@@ -76,7 +76,7 @@ void ItemGrid::Update() {
                                 
                                 int y_offset = 40;
 
-                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_30, color, details_text);
+                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_20, color, details_text);
                             }
                             if(g_input.mouse_right and this_grid == GRID_INVENTORY) {
                                 if(itter->second.type == TYPE_FOOD) {
@@ -346,15 +346,21 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-    for(auto mod : item_data.char_mods) {
+    for(auto mod : item_data.item_mods) {
         //TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
-        if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
+/*         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
         if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
-        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}
-        details += stat + value + "\n"; 
+        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}  */
+
+        details += mod.mod_name + "\n"; 
+
+    }
+    for(int i = 0; i < item_data.mod_slots - item_data.item_mods.size(); i++) {
+        details += "- empty slot -\n";
     }
 
-    if(item_data.char_mods.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
+    //if(item_data.char_mods.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
+    details += "\n";
     
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {
@@ -378,6 +384,12 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             }
         }
 
+/*         if(item_data.mod_slots > 0) {
+            std::string max_slots = std::to_string(itter->second.mod_slots);
+            std::string num_slots = std::to_string(itter->second.item_mods.size());
+            details += "upgrades " + num_slots + "/" + max_slots + "\n";
+        } */
+
         if(item_data.type ==  TYPE_CONSUMEABLE) {
 
         }
@@ -385,7 +397,7 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         if(item_data.type ==  TYPE_FOOD) {
             std::string sat = TextFormat("%0.2f", itter->second.saturation);
             details += sat + "  saturation\n";
-            details += "  [ LMB ] to eat\n";
+            details += "  [ RMB ] to eat\n";
         }
    
         if(item_data.type ==  TYPE_PLAN) {

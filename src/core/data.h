@@ -42,6 +42,7 @@ enum ItemType {
     TYPE_PLAN,
     TYPE_SCROLL,
     TYPE_FOOD,
+    TYPE_CHARM,
     TYPE_ALL,
 };
 
@@ -58,17 +59,17 @@ struct FoodModData {
 
 extern std::vector<FoodModData> g_food_mod_data;
 
-struct ArmorModData {
+/* struct ArmorModData {
     ItemModID mod_id;
     std::string mod_name;
     int defence;
     int rarity;
-};
+}; */
 
-extern std::vector<ArmorModData> g_armor_mod_data;
+//extern std::vector<ArmorModData> g_armor_mod_data;
 
 
-struct WeaponModData {
+/* struct WeaponModData {
     ItemModID mod_id;
     std::string mod_name;
 
@@ -77,7 +78,7 @@ struct WeaponModData {
     int damage;
     int rarity;
     
-};
+}; */
 
 struct ItemModData {
     ItemModID mod_id;
@@ -85,13 +86,14 @@ struct ItemModData {
 
     float saturation;
     int defence;
+    int magic_defence;
     float cooldown;
     int max_power;
     int damage;
     int rarity;
 };
 
-extern std::vector<WeaponModData> g_weapon_mod_data;
+extern std::vector<ItemModData> g_equipment_mod_data;
 
 
 struct FoodData {
@@ -134,10 +136,9 @@ struct ItemData {
 };
 
 extern std::vector<ItemData> g_item_data;
-//extern std::unordered_map<int, ItemData> g_item_data;
 
 struct ItemInstanceData {
-    //std::vector<ItemModData> *item_mods;
+    std::vector<ItemModData> item_mods;
     std::vector<CharacterModData> char_mods;
     std::string container_id;
     ItemID item_id;
@@ -146,7 +147,7 @@ struct ItemInstanceData {
     ItemType type;
     std::string item_name;
     SpellID spell_id;
-    SpellData *spell_data;
+    SpellData spell_data;
     float cooldown;
     int damage;
     int sprite_id;
@@ -160,6 +161,7 @@ struct ItemInstanceData {
     float current_power;
     float recoil;
     float knockback;
+    int mod_slots;
 
 };
 
@@ -175,6 +177,7 @@ struct WeaponData {
     int damage;
     float recoil;
     float knockback;
+    int mod_slots;
 };
 
 extern std::vector<WeaponData> g_weapon_data;
@@ -185,9 +188,20 @@ struct ArmorData {
     SpellID spell_id;
     int defence;
     int magic_defence;
+    int mod_slots;
 };
 
 extern std::vector<ArmorData> g_armor_data;
+
+
+struct CharmData {
+    std::string charm_name;
+    ItemID charm_id;
+    ItemModID mod_id;
+
+};
+
+extern std::vector<CharmData> g_charm_data;
 
 struct RecipieData {
     std::string recipie_name;

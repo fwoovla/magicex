@@ -287,7 +287,7 @@ void PlayerCharacter::CheckInput() {
         if(current_primary_data != nullptr) {
             if(current_primary_data->spell_id != -1) {
                 
-                if(g_character_data[uid].current_power < g_spell_data[current_primary_data->spell_id].pps) {
+                if(g_character_data[uid].current_power < current_primary_data->spell_data.pps) {
                     return;
                 }
                 
@@ -301,16 +301,16 @@ void PlayerCharacter::CheckInput() {
                 payload.target_position = g_input.world_mouse_position;
 
                 if(g_game_data.is_in_sub_map) {
-                        SpawnSpell(*g_sub_scene, payload, &g_spell_data[current_primary_data->spell_id]);
+                        SpawnSpell(*g_sub_scene, payload, &current_primary_data->spell_data);
                 }
                 else {
-                        SpawnSpell(*g_current_scene, payload, &g_spell_data[current_primary_data->spell_id]);
+                        SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
                 }
-                g_character_data[uid].current_power -= g_spell_data[current_primary_data->spell_id].pps;
+                g_character_data[uid].current_power -= current_primary_data->spell_data.pps;
                 current_primary_data->current_power = g_character_data[uid].current_power; 
-                spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
+                spell_timer.Start(current_primary_data->spell_data.cooldown, true);
                 can_use_spell = false;
-                velocity = Vector2Rotate( {-g_spell_data[current_primary_data->spell_id].recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                velocity = Vector2Rotate( {-current_primary_data->spell_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
             }
         }
     }
@@ -346,12 +346,12 @@ void PlayerCharacter::Equip(int item_id) {
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
         
-        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
             if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health += item_it->second.char_mods[mod].health;}
             if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
             if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina += item_it->second.char_mods[mod].stamina;}
-        }
+        } */
     }
     TraceLog(LOG_INFO, "+++++++++++++");
 }
@@ -394,12 +394,12 @@ void PlayerCharacter::UnEquip(int item_id) {
             g_character_data[uid].magic_defence -= item_it->second.magic_defence;
         }
         
-        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
                 TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
                 if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health -= item_it->second.char_mods[mod].health;}
                 if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
                 if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina -= item_it->second.char_mods[mod].stamina;}
-        }
+        } */
     }
 }
 

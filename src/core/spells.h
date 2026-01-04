@@ -49,6 +49,20 @@ class BaseSpell : public AnimatedSpriteEntity {
 
 };
 
+class Poison : public BaseSpell {
+    public:
+
+    Poison(NewSpellPayload payload, SpellData *_data);
+    ~Poison() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void OnLifetimeTimeout() override;
+    void TakeDamage(DamagePayload _payload) override;
+
+};
+
 class MagicMissle : public BaseSpell {
     public:
 

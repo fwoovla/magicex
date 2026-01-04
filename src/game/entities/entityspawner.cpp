@@ -93,14 +93,17 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
         this_scene = g_current_scene.get();
     }
 
-    if(_data->spell_id == SPELL_ID_MAGICMISSLE) {
+    if(_data->spell_id == SPELL_ID_MAGICMISSLE_WAND or _data->spell_id == SPELL_ID_MAGICMISSLE_STAFF) {
         this_spell = new MagicMissle(payload, _data);
     }
-    if(_data->spell_id == SPELL_ID_FIREBALL) {
+    if(_data->spell_id == SPELL_ID_FIREBALL_WAND or _data->spell_id == SPELL_ID_FIREBALL_STAFF) {
         this_spell = new FireBall(payload, _data);
     }
-    if(_data->spell_id == SPELL_ID_LIGHTNING) {
+    if(_data->spell_id == SPELL_ID_LIGHTNING_WAND or _data->spell_id == SPELL_ID_LIGHTNING_STAFF) {
         this_spell = new Lightning(payload, _data);
+    }
+    if(_data->spell_id == SPELL_ID_POISON_WAND or _data->spell_id == SPELL_ID_POISON_STAFF) {
+        this_spell = new Poison(payload, _data);
     }
 
     if(this_scene and this_spell) {

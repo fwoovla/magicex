@@ -88,22 +88,25 @@ StagingUILayer::StagingUILayer() {
     };
 
     for(int index = 0; index < g_weapon_data.size(); index++) {
-        choices.push_back(index);
+        if(g_weapon_data[index].weapon_id == ITEM_ID_WAND or g_weapon_data[index].weapon_id == ITEM_ID_STAFF) {
+            choices.push_back(g_weapon_data[index].weapon_id);
+        }
     }
+
     for(int i = 0; i <= 3; i++) {
-        choice_index = GetRandomValue(0, choices.size() - 1);
-        TraceLog(LOG_INFO, "w selected index: %i", choice_index);
-        weapon_ids.push_back(g_weapon_data[choice_index].weapon_id);
+        int choice =  choices[GetRandomValue(0, choices.size() - 1)];
+        TraceLog(LOG_INFO, "w selected index: %i", choice);
+        weapon_ids.push_back(g_weapon_data[choice].weapon_id);
         std::unique_ptr<Button> new_button = std::make_unique<Button>();
         
-        CreateButton(*new_button, {tw_offset.x + 70 + (100 * i), tw_offset.y + 75}, {50, 50}, YELLOW, g_weapon_data[choice_index].weapon_name.c_str() );
+        CreateButton(*new_button, {tw_offset.x + 70 + (100 * i), tw_offset.y + 75}, {50, 50}, YELLOW, g_weapon_data[choice].weapon_name.c_str() );
         new_button->text_size = FONTSIZE_14;
 
         take_weapon_buttons.push_back(std::move(new_button));
     }
 
 
-    choices.clear();
+/*     choices.clear();
     CreateLabel(take_spell_label,{ts_offset.x, ts_offset.y}, FONTSIZE_40, RAYWHITE, "TAKE A SPELL");
         take_spell_rect = {
         .x = ts_offset.x - 10,
@@ -125,7 +128,7 @@ StagingUILayer::StagingUILayer() {
 
         take_spell_buttons.push_back(std::move(new_button));
     }
-
+ */
     choices.clear();
     CreateLabel(take_food_label,{tf_offset.x, tf_offset.y}, FONTSIZE_40, RAYWHITE, "TAKE SOME FOOD");
         take_food_rect = {
@@ -182,12 +185,12 @@ void StagingUILayer::Draw() {
             }
         }
 
-        if(show_spells) {
+/*         if(show_spells) {
             DrawLabel(take_spell_label);
             for(int i = 0; i < take_weapon_buttons.size(); i++) {
                 DrawButton(*take_spell_buttons[i]);
             }
-        }
+        } */
 
         if(show_food) {
             DrawLabel(take_food_label);
@@ -328,7 +331,7 @@ void StagingUILayer::UpdateCharacterInfo() {
         }
     }
 
-     if(show_spells) {
+/*      if(show_spells and !show_weapons) {
         for(int i = 0; i <  take_spell_buttons.size(); i++)
         {
             if(IsButtonHovered(*take_spell_buttons[i], g_scale)){
@@ -341,7 +344,7 @@ void StagingUILayer::UpdateCharacterInfo() {
                 }        
             }
         }
-    }
+    } */
 
     if(show_food) {
         for(int i = 0; i <  take_food_buttons.size(); i++) {
@@ -387,6 +390,8 @@ void StagingUILayer::SetPlayer(int uid) {
 void StagingUILayer::ItemSelected(int item_id) {
     TraceLog(LOG_INFO, "selected item: %i", item_id);
     InstanceCharacterItem((ItemID) item_id, g_current_player->uid);
+
+    GenerateWeapon( g_item_instances[g_character_data[g_current_player->uid].inventory[0]], 0, true);
     SetPlayer(g_current_player->uid);
 }
 

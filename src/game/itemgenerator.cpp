@@ -16,7 +16,7 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     new_instance.value = g_item_data[item_id].value;
     new_instance.container_id = container_id;
     new_instance.spell_id = SPELL_ID_NONE;
-    new_instance.spell_data = nullptr;
+    new_instance.spell_data = {};
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
     new_instance.level = 0;
@@ -27,6 +27,7 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     new_instance.magic_defence = 0;
     new_instance.recoil = 0;
     new_instance.knockback = 0;
+    new_instance.mod_slots = 0;
 
 
     if(new_instance.type == TYPE_WEAPON ) {
@@ -62,7 +63,7 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     new_instance.value = g_item_data[item_id].value;
     new_instance.container_id = container_id;
     new_instance.spell_id = SPELL_ID_NONE;
-    new_instance.spell_data = nullptr;
+    new_instance.spell_data = {};
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
     new_instance.level = 0;
@@ -73,6 +74,7 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     new_instance.magic_defence = 0;
     new_instance.recoil = 0;
     new_instance.knockback = 0;
+    new_instance.mod_slots = 0;
 
 
         //add chara mods here
@@ -89,16 +91,21 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
             //GenerateRandomWeapon(new_instance, loot_level);
     }
 
+    if(new_instance.type == TYPE_CHARM ) {
+        GenerateCharm(new_instance);
+
+    }
+
     if(new_instance.type == TYPE_SCROLL ) {
-        int spell_id;
+        int mod_id;
         if(new_instance.item_id == ITEM_ID_SCROLL) {
-            spell_id =  g_spell_data[GetRandomValue(0, SPELL_ID_MAX - 1)].spell_id;
+            mod_id =  g_equipment_mod_data[GetRandomValue(ITEMMOD_ARMORSTART, ITEMMOD_ARMOREND - 1)].mod_id;
         }
         else {
-            spell_id =  ITEM_ID_LIGHTNING_SCROLL - new_instance.item_id;
+            mod_id =  ITEM_ID_RESIST_SCROLL - new_instance.item_id;
         }
 
-        GenerateScroll(new_instance, (SpellID)spell_id, "");
+        GenerateScroll(new_instance, (ItemModID)mod_id, "");
     }
     
     TraceLog(LOG_INFO, "----------rarity  %i-----------\n", new_instance.rarity);
@@ -107,9 +114,9 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
 }
 
 void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
-    TraceLog(LOG_INFO, "making new weapon %i", loot_level);
+    TraceLog(LOG_INFO, "making new weapon %s  %i", instance.item_name.c_str(), instance.item_id);
 
-    
+    instance.mod_slots = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].mod_slots;
     instance.cooldown = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].cooldown;
     instance.damage =  g_weapon_data[instance.item_id - ITEM_ID_DAGGER].damage;
     instance.sprite_id = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].weapon_id;
@@ -128,88 +135,88 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "-knockback %f", instance.knockback );
 
 
-    if(loot_level >= 1 and random) {
+/*     if(random) {
 
         std::vector<int> wep_mod_list;
-        for(auto mod : g_weapon_mod_data) {
-            for(int i = 0; i < mod.rarity; i++) {
-                wep_mod_list.push_back(mod.mod_id);
+        for(auto mod : g_equipment_mod_data) {
+            if(mod.mod_id > ITEMMOD_WEPONSTART and mod.mod_id < ITEMMOD_WEPONEND) {
+                for(int i = 0; i < mod.rarity; i++) {
+                    wep_mod_list.push_back(mod.mod_id);
+                }
             }
         }
         TraceLog(LOG_INFO, "-----weapon mod list size  + %i------", wep_mod_list.size());
         ItemModID mod_id = (ItemModID) wep_mod_list[ GetRandomValue(0, wep_mod_list.size() - 1)];
+
+        instance.item_mods.push_back(g_equipment_mod_data[mod_id]);
         
-        if(g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].cooldown > -100) { instance.cooldown += g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].cooldown; }
-        if(g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].max_power != -1000) { instance.max_power += g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].max_power; }
-        if(g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].rarity < instance.rarity){instance.rarity = g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].rarity;}
-        if(g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].damage != -1000) { instance.damage += g_weapon_mod_data[mod_id - ITEMMOD_SWIFTNESS1].damage; }
+        if(g_equipment_mod_data[mod_id].cooldown > -100) { instance.cooldown += g_equipment_mod_data[mod_id].cooldown; }
+        if(g_equipment_mod_data[mod_id].max_power != -1000) { instance.max_power += g_equipment_mod_data[mod_id].max_power; }
+        if(g_equipment_mod_data[mod_id].rarity < instance.rarity){instance.rarity = g_equipment_mod_data[mod_id].rarity;}
+        if(g_equipment_mod_data[mod_id].damage != -1000) { instance.damage += g_equipment_mod_data[mod_id].damage; }
         TraceLog(LOG_INFO, "-----weapon mod   + %i------", mod_id - ITEMMOD_SWIFTNESS1);
-    }
+    } */
 
-    if(loot_level >= 1 and random) {
-        std::vector<int> char_mod_list;
-        for(auto mod : g_char_mod_data) {
-            for(int i = 0; i < mod.rarity; i++) {
-                char_mod_list.push_back(mod.mod_id);
-            }
-        }
-
-        bool can_add = false;
-        if(GetRandomValue(0, 100) <= loot_level*10 and random) {
-            can_add = true;
-        }
-        if(can_add) {
-
-            CharModID mod_id = (CharModID)char_mod_list[ GetRandomValue(0, char_mod_list.size() - 1)];
-
-
-            instance.char_mods.push_back(g_char_mod_data[mod_id]);
-            if(g_char_mod_data[mod_id].rarity < instance.rarity){instance.rarity = g_char_mod_data[mod_id].rarity;}
-            TraceLog(LOG_INFO, "-----character mod selected  + %s------", instance.char_mods[instance.char_mods.size() - 1].mod_name.c_str());
-        }
-    }
-
-    if(  (instance.item_id == ITEM_ID_WAND or instance.item_id == ITEM_ID_STAFF) and random) {
-
-        instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE, SPELL_ID_LIGHTNING);
-        TraceLog(LOG_INFO, "-spell selected  + %i", instance.spell_id);
+    if(instance.item_id == ITEM_ID_WAND and random) {
+        instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE_WAND, SPELL_ID_POISON_WAND);
 
         instance.item_name += " of " + g_spell_data[instance.spell_id].spell_name;
-        //instance.spell_data = &g_spell_data[instance.spell_id];
+        instance.spell_data = g_spell_data[instance.spell_id];
 
+        TraceLog(LOG_INFO, "-spell selected  + %i", instance.spell_id);
         TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", g_spell_data[instance.spell_id].spell_name.c_str(), g_spell_data[instance.spell_id].pps);
 
-        if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
-            if(instance.item_id == ITEM_ID_WAND) {
-                instance.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
-                instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
-            }
-            if(instance.item_id == ITEM_ID_STAFF) {
-                instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
-                instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
-            }
+        if(instance.spell_id == SPELL_ID_MAGICMISSLE_WAND) {
+            instance.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
+            instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+        }
+
+        if(instance.spell_id == SPELL_ID_FIREBALL_WAND) {
+            instance.sprite_id = ITEM_ID_FIREBALL_WAND;
+            instance.icon_id = ITEM_ID_FIREBALL_WAND;
         }
         
-        if(instance.spell_id == SPELL_ID_FIREBALL) {
-            if(instance.item_id == ITEM_ID_WAND) {
-                instance.sprite_id = ITEM_ID_FIREBALL_WAND;
-                instance.icon_id = ITEM_ID_FIREBALL_WAND;
-            }
-            if(instance.item_id == ITEM_ID_STAFF) {
-                instance.sprite_id = ITEM_ID_FIREBALL_STAFF;
-                instance.icon_id = ITEM_ID_FIREBALL_STAFF;
-            }
+        if(instance.spell_id == SPELL_ID_LIGHTNING_WAND) {
+            instance.sprite_id = ITEM_ID_LIGHTNING_WAND;
+            instance.icon_id = ITEM_ID_LIGHTNING_WAND;
         }
         
-        if(instance.spell_id == SPELL_ID_LIGHTNING) {
-            if(instance.item_id == ITEM_ID_WAND) {
-                instance.sprite_id = ITEM_ID_LIGHTNING_WAND;
-                instance.icon_id = ITEM_ID_LIGHTNING_WAND;
-            }
-            if(instance.item_id == ITEM_ID_STAFF) {
-                instance.sprite_id = ITEM_ID_LIGHTNING_STAFF;
-                instance.icon_id = ITEM_ID_LIGHTNING_STAFF;
-            }
+        if(instance.spell_id == SPELL_ID_POISON_WAND) {
+            instance.sprite_id = ITEM_ID_POISON_WAND;
+            instance.icon_id = ITEM_ID_POISON_WAND;
+        }
+
+
+    }
+
+    if(instance.item_id == ITEM_ID_STAFF and random) {
+
+        instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE_STAFF, SPELL_ID_POISON_STAFF);
+        
+        instance.item_name += " of " + g_spell_data[instance.spell_id].spell_name;
+        instance.spell_data = g_spell_data[instance.spell_id];
+        
+        TraceLog(LOG_INFO, "-spell selected  + %i", instance.spell_id);
+        TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", g_spell_data[instance.spell_id].spell_name.c_str(), g_spell_data[instance.spell_id].pps);
+
+        if(instance.spell_id == SPELL_ID_MAGICMISSLE_STAFF) {
+            instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
+            instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
+        }
+
+        if(instance.spell_id == SPELL_ID_FIREBALL_STAFF) {
+            instance.sprite_id = ITEM_ID_FIREBALL_STAFF;
+            instance.icon_id = ITEM_ID_FIREBALL_STAFF;
+        }
+        
+        if(instance.spell_id == SPELL_ID_LIGHTNING_STAFF) {
+            instance.sprite_id = ITEM_ID_LIGHTNING_STAFF;
+            instance.icon_id = ITEM_ID_LIGHTNING_STAFF;
+        }
+        
+        if(instance.spell_id == SPELL_ID_POISON_STAFF) {
+            instance.sprite_id = ITEM_ID_POISON_STAFF;
+            instance.icon_id = ITEM_ID_POISON_STAFF;
         }
 
     }
@@ -235,47 +242,31 @@ void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random) {
     instance.icon_id = g_armor_data[instance.item_id - ITEM_ID_HELMET].armor_id;
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
     TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+    instance.mod_slots = g_armor_data[instance.item_id - ITEM_ID_HELMET].mod_slots;
 
     
-    if(loot_level >= 1) {
+/*     if(random) {
+
         std::vector<int> armor_mod_list;
-        for(auto mod : g_armor_mod_data) {
-            for(int i = 0; i < mod.rarity; i++) {
-                armor_mod_list.push_back(mod.mod_id);
+        for(auto mod : g_equipment_mod_data) {
+            if(mod.mod_id > ITEMMOD_ARMORSTART and mod.mod_id < ITEMMOD_ARMOREND) {
+                for(int i = 0; i < mod.rarity; i++) {
+                    armor_mod_list.push_back(mod.mod_id);
+                }
             }
         }
 
         TraceLog(LOG_INFO, "-----armor mod list size  + %i------", armor_mod_list.size());
 
         ItemModID mod_id = (ItemModID) armor_mod_list[ GetRandomValue(0, armor_mod_list.size() - 1)];
+        instance.item_mods.push_back(g_equipment_mod_data[mod_id]);
 
-        if(g_armor_mod_data[mod_id - ITEMMOD_TOUGHNESS1].defence != -1000) { instance.defence += g_armor_mod_data[mod_id - ITEMMOD_TOUGHNESS1].defence; }
-        if(g_armor_mod_data[mod_id - ITEMMOD_TOUGHNESS1].rarity < instance.rarity){instance.rarity = g_armor_mod_data[mod_id - ITEMMOD_TOUGHNESS1].rarity;}
-        TraceLog(LOG_INFO, "-----armor mod selected  + %s -----", g_armor_mod_data[mod_id - ITEMMOD_TOUGHNESS1].mod_name.c_str());
-
-        bool can_add = false;
-        if(GetRandomValue(0, 100) <= loot_level*10) {
-            can_add = true;
-        }
-
-        if(can_add) {
-            std::vector<int> char_mod_list;
-            for(auto mod : g_char_mod_data) {
-                for(int i = 0; i < mod.rarity; i++) {
-                    char_mod_list.push_back(mod.mod_id);
-                }
-            }
-
-            CharModID mod_id = (CharModID)char_mod_list[ GetRandomValue(0, char_mod_list.size() - 1)];
-
-
-            instance.char_mods.push_back(g_char_mod_data[mod_id]);
-
-            if(g_char_mod_data[mod_id].rarity < instance.rarity){instance.rarity = g_char_mod_data[mod_id].rarity;}
-            TraceLog(LOG_INFO, "-----character mod selected  + %s------", instance.char_mods[instance.char_mods.size() - 1].mod_name.c_str());
-
-        }
-   }
+        if(g_equipment_mod_data[mod_id].defence != -1000) { instance.defence += g_equipment_mod_data[mod_id].defence; }
+        if(g_equipment_mod_data[mod_id].magic_defence != -1000) { instance.magic_defence += g_equipment_mod_data[mod_id].magic_defence; }
+        if(g_equipment_mod_data[mod_id].rarity < instance.rarity){instance.rarity = g_equipment_mod_data[mod_id].rarity;}
+        TraceLog(LOG_INFO, "-----armor mod selected  + %s -----", g_equipment_mod_data[mod_id].mod_name.c_str());
+        
+   } */
 }
 
 
@@ -297,72 +288,86 @@ void GenerateFood(ItemInstanceData &instance, int loot_level, bool random) {
 }
 
 
-void GenerateScroll(ItemInstanceData &instance, SpellID spell_id, std::string container_id) {
+void GenerateScroll(ItemInstanceData &instance, ItemModID mod_id, std::string container_id) {
 
-    TraceLog(LOG_INFO, "-generating scroll with spell  + %i", spell_id);
+    TraceLog(LOG_INFO, "-generating scroll with mod  + %i", mod_id);
+}
 
-    instance.spell_id = spell_id;
-    instance.item_name = g_spell_data[instance.spell_id].spell_name +  " " + instance.item_name;
-    instance.max_power = GetRandomValue(5, 15);
-    instance.current_power = instance.max_power;
 
-    if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
-        instance.sprite_id = ITEM_ID_MAGICMMISSLE_SCROLL;
-        instance.icon_id = ITEM_ID_MAGICMMISSLE_SCROLL;
+void GenerateCharm(ItemInstanceData &instance) {
+
+    ItemID charm_id = (ItemID)0;
+    
+    if(instance.item_id == ITEM_ID_CHARM) {  //blank charm
+
+        charm_id = g_charm_data[GetRandomValue(0, g_charm_data.size() - 1)].charm_id;
+        TraceLog(LOG_INFO, "-blank charm charm id %i", charm_id);
+        
     }
-
-    if(instance.spell_id == SPELL_ID_FIREBALL) {
-        instance.sprite_id = ITEM_ID_FIREBALL_SCROLL;
-        instance.icon_id = ITEM_ID_FIREBALL_SCROLL;
+    else {  //has charm id
+        charm_id = instance.item_id;
     }
+    
+    instance.item_id = charm_id;
+    instance.sprite_id = instance.item_id;
+    instance.icon_id = instance.item_id;
+    instance.item_name = g_item_data[charm_id].item_name;
+    
+    TraceLog(LOG_INFO, "-generating charm with id %i", charm_id);
+    TraceLog(LOG_INFO, "-generating charm %s with charm id:   %i   mod id: %i", instance.item_name.c_str(), g_charm_data[charm_id - ITEM_ID_SWIFTNESS_CHARM_1].charm_id, g_charm_data[charm_id - ITEM_ID_SWIFTNESS_CHARM_1].mod_id);
 
-    if(instance.spell_id == SPELL_ID_LIGHTNING) {
-        instance.sprite_id = ITEM_ID_LIGHTNING_SCROLL;
-        instance.icon_id = ITEM_ID_LIGHTNING_SCROLL;
-    }
+
 }
 
 
 void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id) {
     instance.spell_id = spell_id;
-
-    instance.item_name += " of " + g_spell_data[instance.spell_id].spell_name;
+    instance.spell_data = g_spell_data[instance.spell_id];
+    instance.item_name += " of " + instance.spell_data.spell_name;
     instance.max_power = 10;
     instance.current_power = instance.max_power;
 
-    TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", g_spell_data[instance.spell_id].spell_name.c_str(), g_spell_data[instance.spell_id].pps);
+    TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", instance.item_name.c_str(), g_spell_data[instance.spell_id].pps);
 
-    if(instance.spell_id == SPELL_ID_MAGICMISSLE) {
-        if(instance.item_id == ITEM_ID_WAND) {
-            instance.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
-            instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
-        }
-        if(instance.item_id == ITEM_ID_STAFF) {
-            instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
-            instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
-        }
+    if(instance.spell_id == SPELL_ID_MAGICMISSLE_WAND) {
+        instance.sprite_id = ITEM_ID_MAGICMISSLE_WAND;
+        instance.icon_id = ITEM_ID_MAGICMISSLE_WAND;
+    }
+
+    if(instance.spell_id == SPELL_ID_FIREBALL_WAND) {
+        instance.sprite_id = ITEM_ID_FIREBALL_WAND;
+        instance.icon_id = ITEM_ID_FIREBALL_WAND;
     }
         
-    if(instance.spell_id == SPELL_ID_FIREBALL) {
-        if(instance.item_id == ITEM_ID_WAND) {
-            instance.sprite_id = ITEM_ID_FIREBALL_WAND;
-            instance.icon_id = ITEM_ID_FIREBALL_WAND;
-        }
-        if(instance.item_id == ITEM_ID_STAFF) {
-            instance.sprite_id = ITEM_ID_FIREBALL_STAFF;
-            instance.icon_id = ITEM_ID_FIREBALL_STAFF;
-        }
+    if(instance.spell_id == SPELL_ID_LIGHTNING_WAND) {
+        instance.sprite_id = ITEM_ID_LIGHTNING_WAND;
+        instance.icon_id = ITEM_ID_LIGHTNING_WAND;
     }
         
-    if(instance.spell_id == SPELL_ID_LIGHTNING) {
-        if(instance.item_id == ITEM_ID_WAND) {
-            instance.sprite_id = ITEM_ID_LIGHTNING_WAND;
-            instance.icon_id = ITEM_ID_LIGHTNING_WAND;
-        }
-        if(instance.item_id == ITEM_ID_STAFF) {
-            instance.sprite_id = ITEM_ID_LIGHTNING_STAFF;
-            instance.icon_id = ITEM_ID_LIGHTNING_STAFF;
-        }
+    if(instance.spell_id == SPELL_ID_POISON_WAND) {
+        instance.sprite_id = ITEM_ID_POISON_WAND;
+        instance.icon_id = ITEM_ID_POISON_WAND;
+    }
+
+
+    if(instance.spell_id == SPELL_ID_MAGICMISSLE_STAFF) {
+        instance.sprite_id = ITEM_ID_MAGICMISSLE_STAFF;
+        instance.icon_id = ITEM_ID_MAGICMISSLE_STAFF;
+    }
+
+    if(instance.spell_id == SPELL_ID_FIREBALL_STAFF) {
+        instance.sprite_id = ITEM_ID_FIREBALL_STAFF;
+        instance.icon_id = ITEM_ID_FIREBALL_STAFF;
+    }
+        
+    if(instance.spell_id == SPELL_ID_LIGHTNING_STAFF) {
+        instance.sprite_id = ITEM_ID_LIGHTNING_STAFF;
+        instance.icon_id = ITEM_ID_LIGHTNING_STAFF;
+    }
+        
+    if(instance.spell_id == SPELL_ID_POISON_STAFF) {
+        instance.sprite_id = ITEM_ID_POISON_STAFF;
+        instance.icon_id = ITEM_ID_POISON_STAFF;
     }
 
 
@@ -370,4 +375,8 @@ void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id) {
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
     TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
     TraceLog(LOG_INFO, "-damage %i", instance.damage );
+}
+
+void AddModToItem(ItemInstanceData &instance, ItemModID mod_id) {
+
 }

@@ -49,12 +49,44 @@
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
+
+
+
         {
             "item_name": "Wand",
             "item_id":"ITEM_ID_WAND",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
+
+
+        {
+            "item_name": "Magic Missle Wand",
+            "item_id":"ITEM_ID_MAGICMISSLE_WAND",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Fireball Wand",
+            "item_id":"ITEM_ID_FIREBALL_WAND",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Lightning Wand",
+            "item_id":"ITEM_ID_LIGHTNING_WAND",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Poison Wand",
+            "item_id":"ITEM_ID_POISON_WAND",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+
+
         {
             "item_name": "Staff",
             "item_id":"ITEM_ID_STAFF",
@@ -62,6 +94,30 @@
             "item_type":"TYPE_WEAPON"
         },
 
+        {
+            "item_name": "Magic Missle Staff",
+            "item_id":"ITEM_ID_MAGICMISSLE_STAFF",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Fireball Staff",
+            "item_id":"ITEM_ID_FIREBALL_STAFF",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Lightning Staff",
+            "item_id":"ITEM_ID_LIGHTNING_STAFF",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Poison Staff",
+            "item_id":"ITEM_ID_POISON_STAFF",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
 
 
 
@@ -123,25 +179,169 @@
             "item_type":"TYPE_SCROLL"
         },
         {
-            "item_name": "Magic Missle Scroll",
-            "item_id":"ITEM_ID_MAGICMMISSLE_SCROLL",
+            "item_name": "Swiftness Scroll",
+            "item_id":"ITEM_ID_SWIFTNESS_SCROLL",
             "value":0,
             "item_type":"TYPE_SCROLL"
         },
         {
-            "item_name": "Fireball Scroll",
-            "item_id":"ITEM_ID_FIREBALL_SCROLL",
+            "item_name": "Damage Scroll",
+            "item_id":"ITEM_ID_DAMAGE_SCROLL",
             "value":0,
             "item_type":"TYPE_SCROLL"
         },
         {
-            "item_name": "Lightning Scroll",
-            "item_id":"ITEM_ID_LIGHTNING_SCROLL",
+            "item_name": "Toughness Scroll",
+            "item_id":"ITEM_ID_TOUGHNESS_SCROLL",
+            "value":0,
+            "item_type":"TYPE_SCROLL"
+        },
+        {
+            "item_name": "Resist Scroll",
+            "item_id":"ITEM_ID_RESIST_SCROLL",
             "value":0,
             "item_type":"TYPE_SCROLL"
         },
 
-        
+
+                {
+            "item_name": "Charm",
+            "item_id":"ITEM_ID_CHARM",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+        {
+            "item_name": "Swiftness Charm 1",
+            "item_id":"ITEM_ID_SWIFTNESS_CHARM_1",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+        {
+            "item_name": "Swiftness Charm 2",
+            "item_id":"ITEM_ID_SWIFTNESS_CHARM_2",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Swiftness Charm 3",
+            "item_id":"ITEM_ID_SWIFTNESS_CHARM_3",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Swiftness Charm 4",
+            "item_id":"ITEM_ID_SWIFTNESS_CHARM_4",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Swiftness Charm 5",
+            "item_id":"ITEM_ID_SWIFTNESS_CHARM_5",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+
+
+
+
+        {
+            "item_name": "Damage Charm 1",
+            "item_id":"ITEM_ID_DAMAGE_CHARM_1",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+        {
+            "item_name": "Damage Charm 2",
+            "item_id":"ITEM_ID_DAMAGE_CHARM_2",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Damage Charm 3",
+            "item_id":"ITEM_ID_DAMAGE_CHARM_3",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Damage Charm 4",
+            "item_id":"ITEM_ID_DAMAGE_CHARM_4",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Damage Charm 5",
+            "item_id":"ITEM_ID_DAMAGE_CHARM_5",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+
+
+
+        {
+            "item_name": "Toughness Charm 1",
+            "item_id":"ITEM_ID_TOUGHNESS_CHARM_1",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+        {
+            "item_name": "Toughness Charm 2",
+            "item_id":"ITEM_ID_TOUGHNESS_CHARM_2",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Toughness Charm 3",
+            "item_id":"ITEM_ID_TOUGHNESS_CHARM_3",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Toughness Charm 4",
+            "item_id":"ITEM_ID_TOUGHNESS_CHARM_4",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Toughness Charm 5",
+            "item_id":"ITEM_ID_TOUGHNESS_CHARM_5",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+
+
+
+        {
+            "item_name": "Resist Charm 1",
+            "item_id":"ITEM_ID_RESIST_CHARM_1",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+        {
+            "item_name": "Resist Charm 2",
+            "item_id":"ITEM_ID_RESIST_CHARM_2",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Resist Charm 3",
+            "item_id":"ITEM_ID_RESIST_CHARM_3",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Resist Charm 4",
+            "item_id":"ITEM_ID_RESIST_CHARM_4",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+                {
+            "item_name": "Resist Charm 5",
+            "item_id":"ITEM_ID_RESIST_CHARM_5",
+            "value":0,
+            "item_type":"TYPE_CHARM"
+        },
+
+
 
         {
             "item_name": "Apple",
@@ -270,42 +470,109 @@
 
     "spell_data": [
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE",
-            "spell_name":"Magic Missle",
+            "spell_id":"SPELL_ID_POISON_WAND",
+            "spell_name":"Poison w",
             "level":1,
             "lifetime":1.0,
             "speed": 200,
             "damage":1,
             "radius":2,
-            "cooldown":0.1,
-            "pps":0.1,
+            "cooldown":0.5,
+            "pps":0.5,
             "recoil":20,
-            "knockback":20
+            "knockback":30
         },
         {
-            "spell_id":"SPELL_ID_FIREBALL",
-            "spell_name":"Fireball",
+            "spell_id":"SPELL_ID_POISON_STAFF",
+            "spell_name":"Poison s",
             "level":1,
             "lifetime":1.0,
-            "speed": 100,
-            "damage":10,
+            "speed": 200,
+            "damage":5,
+            "radius":2,
+            "cooldown":0.5,
+            "pps":1.5,
+            "recoil":20,
+            "knockback":40
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_WAND",
+            "spell_name":"Magic Missle w",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":1,
+            "radius":2,
+            "cooldown":0.5,
+            "pps":0.1,
+            "recoil":15,
+            "knockback":30
+        },
+                {
+            "spell_id":"SPELL_ID_MAGICMISSLE_STAFF",
+            "spell_name":"Magic Missle s",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":5,
+            "radius":2,
+            "cooldown":0.15,
+            "pps":0.15,
+            "recoil":30,
+            "knockback":40
+        },
+
+        {
+            "spell_id":"SPELL_ID_FIREBALL_WAND",
+            "spell_name":"Fireball w",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 150,
+            "damage":5,
             "radius":2,
             "cooldown":0.5,
             "pps":0.5,
             "recoil":30,
             "knockback":40
         },
+                {
+            "spell_id":"SPELL_ID_FIREBALL_STAFF",
+            "spell_name":"Fireball s",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 150,
+            "damage":10,
+            "radius":2,
+            "cooldown":0.5,
+            "pps":1.5,
+            "recoil":30,
+            "knockback":40
+        },
+
         {
-            "spell_id":"SPELL_ID_LIGHTNING",
-            "spell_name":"Lightning",
+            "spell_id":"SPELL_ID_LIGHTNING_WAND",
+            "spell_name":"Lightning w",
             "level":1,
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
             "cooldown":0.5,
+            "pps":0.5,
+            "recoil":40,
+            "knockback":60
+        },
+                {
+            "spell_id":"SPELL_ID_LIGHTNING_STAFF",
+            "spell_name":"Lightning s",
+            "level":1,
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":10,
+            "radius":2,
+            "cooldown":1.0,
             "pps":1.0,
-            "recoil":50,
+            "recoil":60,
             "knockback":60
         }
     ],
@@ -323,7 +590,8 @@
             "max_power":0,
             "damage":1,
             "recoil":20,
-            "knockback":10
+            "knockback":10,
+            "mod_slots":1
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
@@ -333,7 +601,8 @@
             "max_power":0,
             "damage":3,
             "recoil":20,
-            "knockback":30
+            "knockback":30,
+            "mod_slots":2
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
@@ -343,7 +612,8 @@
             "max_power":0,
             "damage":4,
             "recoil":20,
-            "knockback":40
+            "knockback":40,
+            "mod_slots":2
         },
         {
             "weapon_id": "ITEM_ID_AXE",
@@ -353,7 +623,8 @@
             "max_power":0,
             "damage":2,
             "recoil":20,
-            "knockback":30
+            "knockback":30,
+            "mod_slots":3
         },
         {
             "weapon_id": "ITEM_ID_BOW",
@@ -363,7 +634,8 @@
             "max_power":0,
             "damage":1,
             "recoil":30,
-            "knockback":10
+            "knockback":10,
+            "mod_slots":1
         },
         {
             "weapon_id": "ITEM_ID_WAND",
@@ -373,7 +645,8 @@
             "max_power":10,
             "damage":2,
             "recoil":20,
-            "knockback":10
+            "knockback":10,
+            "mod_slots":2
         },
         {
             "weapon_id": "ITEM_ID_STAFF",
@@ -383,11 +656,116 @@
             "max_power":20,
             "damage":3,
             "recoil":20,
-            "knockback":30
+            "knockback":30,
+            "mod_slots":3
         }
     ],
 
+    "charm_data": [
+        {
+            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_1",
+            "charm_name": "swiftness charm 1",
+            "mod_id":"ITEMMOD_SWIFTNESS1"
+        },
+        {
+            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_2",
+            "charm_name": "swiftness charm 2",
+            "mod_id":"ITEMMOD_SWIFTNESS2"
+        },
+        {
+            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_3",
+            "charm_name": "swiftness charm 3",
+            "mod_id":"ITEMMOD_SWIFTNESS3"
+        },
+        {
+            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_4",
+            "charm_name": "swiftness charm 4",
+            "mod_id":"ITEMMOD_SWIFTNESS4"
+        },
+        {
+            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_5",
+            "charm_name": "swiftness charm 5",
+            "mod_id":"ITEMMOD_SWIFTNESS5"
+        },
 
+        {
+            "charm_id": "ITEM_ID_DAMAGE_CHARM_1",
+            "charm_name": "damage charm 1",
+            "mod_id":"ITEMMOD_DAMAGE1"
+        },
+        {
+            "charm_id": "ITEM_ID_DAMAGE_CHARM_2",
+            "charm_name": "damage charm 2",
+            "mod_id":"ITEMMOD_DAMAGE2"
+        },
+        {
+            "charm_id": "ITEM_ID_DAMAGE_CHARM_3",
+            "charm_name": "damage charm 3",
+            "mod_id":"ITEMMOD_DAMAGE3"
+        },
+        {
+            "charm_id": "ITEM_ID_DAMAGE_CHARM_4",
+            "charm_name": "damage charm 4",
+            "mod_id":"ITEMMOD_DAMAGE4"
+        },
+        {
+            "charm_id": "ITEM_ID_DAMAGE_CHARM_5",
+            "charm_name": "damage charm 5",
+            "mod_id":"ITEMMOD_DAMAGE5"
+        },
+
+        {
+            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_1",
+            "charm_name": "toughness charm 1",
+            "mod_id":"ITEMMOD_TOUGHNESS1"
+        },
+        {
+            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_2",
+            "charm_name": "toughness charm 2",
+            "mod_id":"ITEMMOD_TOUGHNESS2"
+        },
+        {
+            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_3",
+            "charm_name": "toughness charm 3",
+            "mod_id":"ITEMMOD_TOUGHNESSS3"
+        },
+        {
+            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_4",
+            "charm_name": "toughness charm 4",
+            "mod_id":"ITEMMOD_TOUGHNESS4"
+        },
+        {
+            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_5",
+            "charm_name": "toughness charm 5",
+            "mod_id":"ITEMMOD_TOUGHNESS5"
+        },
+        {
+            "charm_id": "ITEM_ID_RESIST_CHARM_1",
+            "charm_name": "resist charm 1",
+            "mod_id":"ITEMMOD_RESIST1"
+        },
+        {
+            "charm_id": "ITEM_ID_RESIST_CHARM_2",
+            "charm_name": "resist charm 2",
+            "mod_id":"ITEMMOD_RESIST2"
+        },
+        {
+            "charm_id": "ITEM_ID_RESIST_CHARM_3",
+            "charm_name": "resist charm 3",
+            "mod_id":"ITEMMOD_RESISTS"
+        },
+        {
+            "charm_id": "ITEM_ID_RESIST_CHARM_4",
+            "charm_name": "resist charm 4",
+            "mod_id":"ITEMMOD_RESIST4"
+        },
+        {
+            "charm_id": "ITEM_ID_RESIST_CHARM_5",
+            "charm_name": "resist charm 5",
+            "mod_id":"ITEMMOD_RESIST5"
+        }
+        
+    ],
 
     "food_data": [
         {
@@ -426,35 +804,40 @@
             "armor_name": "Helmet",
             "spell_id":"SPELL_ID_NONE",
             "defence": 1.0,
-            "magic_defence": 1.0
+            "magic_defence": 1.0,
+            "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_BODY",
             "armor_name": "Chest Armor",
             "spell_id":"SPELL_ID_NONE",
             "defence": 1.0,
-            "magic_defence": 1.0
+            "magic_defence": 1.0,
+            "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_GLOVES",
             "armor_name": "Gloves",
             "spell_id":"SPELL_ID_NONE",
             "defence": 1.0,
-            "magic_defence": 1.0
+            "magic_defence": 1.0,
+            "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_LEGGINGS",
             "armor_name": "Leggings",
             "spell_id":"SPELL_ID_NONE",
             "defence": 1.0,
-            "magic_defence": 1.0
+            "magic_defence": 1.0,
+            "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_BOOTS",
             "armor_name": "Boots",
             "spell_id":"SPELL_ID_NONE",
             "defence": 1.0,
-            "magic_defence": 1.0
+            "magic_defence": 1.0,
+            "mod_slots":1
         }
     ],
 
@@ -540,7 +923,7 @@
     "weapon_modifiers": [
         {
             "mod_id":"ITEMMOD_SWIFTNESS1",
-            "mod_name":"swiftness",
+            "mod_name":"swift 1",
             "rarity":"RARITY_COMMON",
             "cooldown": -0.1,
             "max_power":-1000,
@@ -548,7 +931,7 @@
         },
         {
             "mod_id":"ITEMMOD_SWIFTNESS2",
-            "mod_name":"swiftness",
+            "mod_name":"swift 2",
             "rarity":"RARITY_UNCOMMON",
             "cooldown": -0.2,
             "max_power":-1000,
@@ -556,7 +939,7 @@
         },
         {
             "mod_id":"ITEMMOD_SWIFTNESS3",
-            "mod_name":"swiftness",
+            "mod_name":"swift 3",
             "rarity":"RARITY_RARE",
             "cooldown": -0.3,
             "max_power":-1000,
@@ -564,7 +947,7 @@
         },
         {
             "mod_id":"ITEMMOD_SWIFTNESS4",
-            "mod_name":"swiftness",
+            "mod_name":"swift 4",
             "rarity":"RARITY_VERYRARE",
             "cooldown": -0.4,
             "max_power":-1000,
@@ -572,7 +955,7 @@
         },
         {
             "mod_id":"ITEMMOD_SWIFTNESS5",
-            "mod_name":"swiftness",
+            "mod_name":"swift 5",
             "rarity":"RARITY_ULTRARARE",
             "cooldown": -0.5,
             "max_power":-1000,
@@ -582,7 +965,7 @@
 
         {
             "mod_id":"ITEMMOD_DAMAGE1",
-            "mod_name":"damage",
+            "mod_name":"damage 1",
             "rarity":"RARITY_COMMON",
             "cooldown": -1000,
             "max_power":-1000,
@@ -590,7 +973,7 @@
         },
         {
             "mod_id":"ITEMMOD_DAMAGE2",
-            "mod_name":"damage",
+            "mod_name":"damage 2",
             "rarity":"RARITY_UNCOMMON",
             "cooldown": -1000,
             "max_power":-1000,
@@ -598,7 +981,7 @@
         },
         {
             "mod_id":"ITEMMOD_DAMAGE3",
-            "mod_name":"damage",
+            "mod_name":"damage 3",
             "rarity":"RARITY_RARE",
             "cooldown": -1000,
             "max_power":-1000,
@@ -606,7 +989,7 @@
         },
         {
             "mod_id":"ITEMMOD_DAMAGE4",
-            "mod_name":"damage",
+            "mod_name":"damage 4",
             "rarity":"RARITY_VERYRARE",
             "cooldown": -1000,
             "max_power":-1000,
@@ -614,7 +997,7 @@
         },
         {
             "mod_id":"ITEMMOD_DAMAGE5",
-            "mod_name":"damage",
+            "mod_name":"damage 5",
             "rarity":"RARITY_ULTRARARE",
             "cooldown": -1000,
             "max_power":-1000,
@@ -626,38 +1009,79 @@
 
 
 
-
     "armor_modifiers": [
 
         {
             "mod_id":"ITEMMOD_TOUGHNESS1",
-            "mod_name":"toughness",
+            "mod_name":"toughness 1",
             "rarity":"RARITY_COMMON",
-            "defence":1
+            "defence":1,
+            "magic_defence":-1000
         },
         {
             "mod_id":"ITEMMOD_TOUGHNESS2",
-            "mod_name":"toughness",
+            "mod_name":"toughness 2",
             "rarity":"RARITY_UNCOMMON",
-            "defence":2
+            "defence":2,
+            "magic_defence":-1000
         },
         {
             "mod_id":"ITEMMOD_TOUGHNESS3",
-            "mod_name":"toughness",
+            "mod_name":"toughness 3",
             "rarity":"RARITY_RARE",
-            "defence":3
+            "defence":3,
+            "magic_defence":-1000
         },
         {
             "mod_id":"ITEMMOD_TOUGHNESS4",
-            "mod_name":"toughness",
+            "mod_name":"toughness 4",
             "rarity":"RARITY_VERYRARE",
-            "defence":5
+            "defence":5,
+            "magic_defence":-1000
         },
         {
             "mod_id":"ITEMMOD_TOUGHNESS5",
-            "mod_name":"toughness",
+            "mod_name":"toughness 5",
             "rarity":"RARITY_ULTRARARE",
-            "defence":5
+            "defence":5,
+            "magic_defence":-1000
+        },
+
+
+        {
+            "mod_id":"ITEMMOD_RESIST1",
+            "mod_name":"resist 1",
+            "rarity":"RARITY_COMMON",
+            "defence":-1000,
+            "magic_defence":1
+        },
+        {
+            "mod_id":"ITEMMOD_RESIST2",
+            "mod_name":"resist 2",
+            "rarity":"RARITY_UNCOMMON",
+            "defence":-1000,
+            "magic_defence":2
+        },
+        {
+            "mod_id":"ITEMMOD_RESIST3",
+            "mod_name":"resist 3",
+            "rarity":"RARITY_RARE",
+            "defence":-1000,
+            "magic_defence":3
+        },
+        {
+            "mod_id":"ITEMMOD_RESIST4",
+            "mod_name":"resist 4",
+            "rarity":"RARITY_VERYRARE",
+            "defence":-1000,
+            "magic_defence":4
+        },
+        {
+            "mod_id":"ITEMMOD_RESIST5",
+            "mod_name":"resist 5",
+            "rarity":"RARITY_ULTRARARE",
+            "defence":-1000,
+            "magic_defence":5
         }
     ],
 
@@ -690,41 +1114,41 @@
             "mod_id":"CHARMOD_SPEED1",
             "mod_name":"movement speed",
             "rarity":"RARITY_COMMON",
-            "health":-1000,            
+            "health":0.0,            
             "speed":2.0,
-            "stamina":-1000
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_SPEED2",
             "mod_name":"movement speed",
             "rarity":"RARITY_UNCOMMON",
-            "health":-1000,            
+            "health":0.0,            
             "speed":4.0,
-            "stamina":-1000
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_SPEED3",
             "mod_name":"movement speed",
             "rarity":"RARITY_RARE",
-            "health":-1000,            
+            "health":0.0,            
             "speed":6.0,
-            "stamina":-1000
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_SPEED4",
             "mod_name":"movement speed",
             "rarity":"RARITY_VERYRARE",
-            "health":-1000,            
+            "health":0.0,            
             "speed":8.0,
-            "stamina":-1000
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_SPEED5",
             "mod_name":"movement speed",
             "rarity":"RARITY_ULTRARARE",
-            "health":-1000,            
+            "health": 0.0,            
             "speed":10.0,
-            "stamina":-1000
+            "stamina":0.0
         },
 
 
@@ -733,80 +1157,80 @@
             "mod_name":"character health",
             "rarity":"RARITY_COMMON",
             "health":1,
-            "speed":-1000,
-            "stamina":-1000
+            "speed":0.0,
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_HEALTH2",
             "mod_name":"character health",
             "rarity":"RARITY_UNCOMMON",
             "health":2,
-            "speed":-1000,
-            "stamina":-1000
+            "speed":0.0,
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_HEALTH3",
             "mod_name":"character health",
             "rarity":"RARITY_RARE",
             "health":3,
-            "speed":-1000,
-            "stamina":-1000
+            "speed":0.0,
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_HEALTH4",
             "mod_name":"character health",
             "rarity":"RARITY_VERYRARE",
             "health":4,
-            "speed":-1000,
-            "stamina":-1000
+            "speed":0.0,
+            "stamina":0.0
         },
         {
             "mod_id":"CHARMOD_HEALTH5",
             "mod_name":"character health",
             "rarity":"RARITY_ULTRARARE",
             "health":5,
-            "speed":-1000,
-            "stamina":-1000
+            "speed":0.0,
+            "stamina":0.0
         },
 
         {
             "mod_id":"CHARMOD_STAMINA1",
             "mod_name":"character stamina",
             "rarity":"RARITY_COMMON",
-            "health":-1000,
-            "speed":-1000,
+            "health":0.0,
+            "speed":0.0,
             "stamina":2
         },
         {
             "mod_id":"CHARMOD_STAMINA2",
             "mod_name":"character stamina",
             "rarity":"RARITY_UNCOMMON",
-            "health":-1000,
-            "speed":-1000,
+            "health":0.0,
+            "speed":0.0,
             "stamina":4.0
         },
         {
             "mod_id":"CHARMOD_STAMINA3",
             "mod_name":"character stamina",
             "rarity":"RARITY_RARE",
-            "health":-1000,
-            "speed":-1000,
+            "health":0.0,
+            "speed":0.0,
             "stamina":6.0
         },
         {
             "mod_id":"CHARMOD_STAMINA4",
             "mod_name":"character stamina",
             "rarity":"RARITY_VERYRARE",
-            "health":-1000,
-            "speed":-1000,
+            "health":0.0,
+            "speed":0.0,
             "stamina":8.0
         },
         {
             "mod_id":"CHARMOD_STAMINA5",
             "mod_name":"character stamina",
             "rarity":"RARITY_ULTRARARE",
-            "health":-1000,
-            "speed":-1000,
+            "health":0.0,
+            "speed":-0.0,
             "stamina":10.0
         }
         
@@ -891,8 +1315,8 @@
             "base_speed":0.0,
             "sprite_sheet_id":"SPRITE_TESTDUMMY",
             "max_stamina":0,
-            "ai_id":"AI_HOSTILE",
-            "primary":"ITEM_ID_WAND"
+            "ai_id":"AI_PASSIVE",
+            "primary":"ITEM_ID_NONE"
         },
         {
             "creature_id":"CREATURE_BUNNY",

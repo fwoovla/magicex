@@ -7,6 +7,7 @@ inline const Color SCROLLCOLOR = {.r = 182, .g = 159, .b = 113, .a = 255};
 inline const Color PLANCOLOR = {.r = 255, .g = 250, .b = 113, .a = 255};
 inline const Color FOODCOLOR = {.r = 164, .g = 130, .b = 251, .a = 255};
 inline const Color RESOURCECOLOR = {.r = 20, .g = 200, .b = 126, .a = 255};
+inline const Color CHARMCOLOR = RAYWHITE;
 inline const Color DEFAULTITEMCOLOR = RAYWHITE;
 
 inline const Color COMMONCOLOR = {.r = 197, .g = 194, .b = 143, .a = 255};

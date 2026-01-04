@@ -1088,6 +1088,7 @@
 			{ "id": "TYPE_PLAN", "tileRect": null, "color": 4098376 },
 			{ "id": "TYPE_SCROLL", "tileRect": null, "color": 39387 },
 			{ "id": "TYPE_FOOD", "tileRect": null, "color": 2943221 },
+			{ "id": "TYPE_CHARM", "tileRect": null, "color": 1199753 },
 			{ "id": "TYPE_ALL", "tileRect": null, "color": 16777215 }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
 		{ "identifier": "CreatureTypes", "uid": 78, "values": [
@@ -1300,7 +1301,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": [], "__tile": null, "defUid": 72, "realEditorValues": [] }
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_CHARM"], "__tile": null, "defUid": 72, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TYPE_CHARM"]
+								}] }
 							],
 							"__worldX": -112,
 							"__worldY": 32
@@ -1894,50 +1898,13 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 4, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [4] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TYPE_ALL"]
+								}] }
 							],
 							"__worldX": 96,
 							"__worldY": 528
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [48,18],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "5bfa54a0-d380-11f0-8b59-e9ddf0d797d9",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [768,288],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
-							],
-							"__worldX": 768,
-							"__worldY": 288
-						},
-						{
-							"__identifier": "PermContainerEntity",
-							"__grid": [66,16],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "6270fe60-d380-11f0-8b59-b9ebf7f6b7c3",
-							"width": 16,
-							"height": 16,
-							"defUid": 47,
-							"px": [1056,256],
-							"fieldInstances": [
-								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
-							],
-							"__worldX": 1056,
-							"__worldY": 256
 						},
 						{
 							"__identifier": "CreatureEntity",
@@ -2062,6 +2029,75 @@
 							"fieldInstances": [],
 							"__worldX": 144,
 							"__worldY": 544
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [46,18],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "a267f020-d380-11f0-95e9-af06b2848efe",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [736,288],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_RESOURCE"], "__tile": null, "defUid": 72, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TYPE_RESOURCE"]
+								}] }
+							],
+							"__worldX": 736,
+							"__worldY": 288
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [66,16],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "a7e3bf20-d380-11f0-95e9-0d72f1914378",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [1056,256],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_FOOD"], "__tile": null, "defUid": 72, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TYPE_FOOD"]
+								}] }
+							],
+							"__worldX": 1056,
+							"__worldY": 256
+						},
+						{
+							"__identifier": "PermContainerEntity",
+							"__grid": [9,37],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "b0eb25e0-d380-11f0-95e9-27ce5ad0cda1",
+							"width": 16,
+							"height": 16,
+							"defUid": 47,
+							"px": [144,592],
+							"fieldInstances": [
+								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ARMOR"], "__tile": null, "defUid": 72, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TYPE_ARMOR"]
+								}] }
+							],
+							"__worldX": 144,
+							"__worldY": 592
 						}
 					]
 				},

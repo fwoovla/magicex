@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
 
-MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
+Poison::Poison(NewSpellPayload payload, SpellData *_data){
 
     data = _data;
     should_delete = false;
@@ -19,7 +19,7 @@ MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
     target_position = payload.target_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
-    rotation = (target_rotation * RAD2DEG) + GetRandomValue(-10, 10);
+    rotation = (target_rotation * RAD2DEG) + GetRandomValue(-20, 20);
     velocity = Vector2Rotate({data->speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);
@@ -33,13 +33,15 @@ MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
     LoadSpriteCentered(sprite, g_spell_sprites[data->spell_id], position);
     sprite.rotation = rotation;
 
-}
-
-MagicMissle::~MagicMissle() {
+    //id = GetRandomValue(0, 10000);
 
 }
 
-void MagicMissle::Update() {
+Poison::~Poison() {
+
+}
+
+void Poison::Update() {
     if(should_delete) {
         return;
     }
@@ -53,8 +55,8 @@ void MagicMissle::Update() {
 
     //velocity = Vector2Rotate(velocity, rotation * DEG2RAD);
     float rad = rotation * DEG2RAD;
-    velocity.x += cosf(rad) * 25.0f;
-    velocity.y += sinf(rad) * 25.0f;
+    velocity.x += cosf(rad) * 15.0f;
+    velocity.y += sinf(rad) * 15.0f;
 
     vClamp(velocity, 1.0);
     //TraceLog(LOG_INFO, "rotating: %f  ", rotation);
@@ -88,7 +90,7 @@ void MagicMissle::Update() {
 
 }
 
-void MagicMissle::Draw() {
+void Poison::Draw() {
     DrawSprite(sprite);
 
     if(g_game_settings.show_debug) {
@@ -97,18 +99,18 @@ void MagicMissle::Draw() {
     }
 }
 
-void MagicMissle::DrawUI() {
+void Poison::DrawUI() {
 
 }
 
-void MagicMissle::OnLifetimeTimeout() {
+void Poison::OnLifetimeTimeout() {
     should_delete = true;
 }
 
-float MagicMissle::GetYSort() {
+float Poison::GetYSort() {
     return position.y;
 }
 
-void MagicMissle::TakeDamage(DamagePayload _payload) {
+void Poison::TakeDamage(DamagePayload _payload) {
     TraceLog(LOG_INFO, "taking damage ");
 }

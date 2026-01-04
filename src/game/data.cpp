@@ -19,6 +19,7 @@ void LoadGameData() {
     g_item_type_colors[TYPE_PLAN] = PLANCOLOR;
     g_item_type_colors[TYPE_SCROLL] = SCROLLCOLOR;
     g_item_type_colors[TYPE_FOOD] = FOODCOLOR;
+    g_item_type_colors[TYPE_CHARM] = CHARMCOLOR;
 
     g_item_type_colors[TYPE_ALL] = DEFAULTITEMCOLOR;
     g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
@@ -32,7 +33,7 @@ void LoadGameData() {
     g_rarity_colors[RARITY_ULTRARARE] = ULTRARARECOLOR;
 
 
-    g_font = LoadFontEx("assets/FFatF.ttf", 32, nullptr, 0);
+    g_font = LoadFontEx("assets/FFatF.ttf", 128, nullptr, 0);
     TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
     TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
 
@@ -152,10 +153,22 @@ void LoadGameData() {
         if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
             type = TYPE_ARMOR;
         }
-        g_loot_tables[type].push_back(id);
-        g_loot_tables[TYPE_ALL].push_back(id);
+        if(type == TYPE_WEAPON) {
+            if(id <= ITEM_ID_STAFF) {
+                g_loot_tables[type].push_back(id);
+                g_loot_tables[TYPE_ALL].push_back(id);
+            }
+        }
+        else if(type == TYPE_CHARM) {
+            //do nothing
+        }
+        else {
+            g_loot_tables[type].push_back(id);
+            g_loot_tables[TYPE_ALL].push_back(id);
+        }
 
     }
+    g_loot_tables[TYPE_CHARM].push_back(ITEM_ID_CHARM);
 
     TraceLog(LOG_INFO, "-----------------------------");
     TraceLog(LOG_INFO, "-------LOOT TABLES-----------");
@@ -220,16 +233,51 @@ void LoadGameData() {
 
         int magic_defence = cj["armor_data"][i]["magic_defence"];
 
+        int mod_slots = cj["armor_data"][i]["mod_slots"];
+
         ArmorData new_armor = {
             .armor_name= name,
             .armor_id = w_id,
             .defence = defence,
-            .magic_defence = magic_defence,               
+            .magic_defence = magic_defence,
+            .mod_slots = mod_slots    
         };
 
         TraceLog(LOG_INFO, "Armor Data Loaded  id: %i  %s", w_id, name.c_str());
         g_armor_data[(int)w_id - ITEM_ID_HELMET] = new_armor;
     }
+
+
+
+
+
+
+//------------------------------------charm data
+    g_charm_data.resize(cj["charm_data"].size());
+
+    for(int i = 0; i < cj["charm_data"].size(); i++) {
+
+        ItemID id = StrToItemId(cj["charm_data"][i]["charm_id"]);
+
+        std::string name = cj["charm_data"][i]["charm_name"];
+
+        
+        ItemModID mod_id = StrToItemModId(cj["charm_data"][i]["mod_id"]);
+
+        CharmData new_charm = {
+            .charm_name= name,
+            .charm_id = id,
+            .mod_id = mod_id
+        };
+
+        TraceLog(LOG_INFO, "Charm Data Loaded  id: %i  %s %i", id, name.c_str(), id - ITEM_ID_SWIFTNESS_CHARM_1);
+        g_charm_data[id - ITEM_ID_SWIFTNESS_CHARM_1] = new_charm;
+    }
+
+
+
+
+
 
 
 
@@ -244,10 +292,7 @@ void LoadGameData() {
         std::string name = cj["weapon_data"][i]["weapon_name"];
         float cooldown = cj["weapon_data"][i]["cooldown"];
 
-        SpellID spell_id = SPELL_ID_NONE;
-
-        std::string sp_id = cj["weapon_data"][i]["spell_id"];
-        spell_id = StrToSpellId(sp_id);
+        SpellID spell_id = StrToSpellId(cj["weapon_data"][i]["spell_id"]);
 
         int max_power = cj["weapon_data"][i]["max_power"];
 
@@ -255,6 +300,8 @@ void LoadGameData() {
 
         float recoil = cj["weapon_data"][i]["recoil"];
         float knockback = cj["weapon_data"][i]["knockback"];
+
+        int mod_slots = cj["weapon_data"][i]["mod_slots"];;
 
         WeaponData new_weapon = {
             .weapon_name = name,
@@ -264,7 +311,8 @@ void LoadGameData() {
             .max_power = max_power,
             .damage = damage,
             .recoil = recoil,
-            .knockback = knockback
+            .knockback = knockback,
+            .mod_slots = mod_slots
         };
 
         TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s", w_id, name.c_str());
@@ -459,26 +507,31 @@ void LoadGameData() {
 
 
     //--------------------armor mods
-    g_armor_mod_data.resize(cj["armor_modifiers"].size());
+    g_equipment_mod_data.resize(ITEMMOD_MAX);
 
     for(int i = 0; i < cj["armor_modifiers"].size(); i++) {
 
-        ArmorModData new_mod;
+        ItemModData new_mod;
 
         new_mod.mod_id = StrToItemModId( cj["armor_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["armor_modifiers"][i]["mod_name"];
         new_mod.defence = cj["armor_modifiers"][i]["defence"];
+        new_mod.magic_defence= cj["armor_modifiers"][i]["magic_defence"];
         new_mod.rarity = StrToItemRarity( cj["armor_modifiers"][i]["rarity"]);
+        
+        new_mod.cooldown = 0.0f;
+        new_mod.max_power = 0.0f;
+        new_mod.damage = 0;
                 
         TraceLog(LOG_INFO, "ARMOR Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
-        g_armor_mod_data[new_mod.mod_id - ITEMMOD_TOUGHNESS1] = new_mod;
+        g_equipment_mod_data[new_mod.mod_id] = new_mod;
     }
 
     //--------------------weapon mods
-    g_weapon_mod_data.resize(cj["weapon_modifiers"].size());
+    //g_weapon_mod_data.resize(cj["weapon_modifiers"].size());
     for(int i = 0; i < cj["weapon_modifiers"].size(); i++) {
 
-        WeaponModData new_mod;
+        ItemModData new_mod;
 
         new_mod.mod_id = StrToItemModId( cj["weapon_modifiers"][i]["mod_id"] );
         new_mod.mod_name = cj["weapon_modifiers"][i]["mod_name"];
@@ -486,9 +539,12 @@ void LoadGameData() {
         new_mod.max_power = cj["weapon_modifiers"][i]["max_power"];
         new_mod.damage = cj["weapon_modifiers"][i]["damage"];
         new_mod.rarity = StrToItemRarity( cj["weapon_modifiers"][i]["rarity"]);
+
+        new_mod.defence = 0;
+        new_mod.magic_defence= 0;
                 
         TraceLog(LOG_INFO, "WEAPON Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
-        g_weapon_mod_data[new_mod.mod_id - ITEMMOD_SWIFTNESS1] = new_mod;
+        g_equipment_mod_data[new_mod.mod_id] = new_mod;
     }
 
     //--------------------ai data
@@ -686,7 +742,8 @@ void SaveGame(LevelData &level_data) {
             {"current_power", inst.current_power},
             {"rarity", inst.rarity},
             {"recoil", inst.recoil},
-            {"knockback", inst.knockback}
+            {"knockback", inst.knockback},
+            {"mod_slots", inst.mod_slots}
         };
         json json_mods = json::array();
         for(auto mod : inst.char_mods) {
@@ -979,6 +1036,7 @@ void LoadLevelData(LevelData &level_data) {
 
                             auto l_itter = g_loot_tables.find(type);
                             if(l_itter != g_loot_tables.end()) {
+                                TraceLog(LOG_INFO, "loot table size %i", l_itter->second.size());
                                 if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
 
                                     for(int loot = 0; loot < l_itter->second.size(); loot++) {
@@ -991,7 +1049,7 @@ void LoadLevelData(LevelData &level_data) {
                                     TraceLog(LOG_INFO, "container will have %i items", num_items);
 
                                     for(int item = 0; item < num_items; item++) {
-                                        int index = GetRandomValue( 0, l_itter->second.size());
+                                        int index = GetRandomValue( 0, l_itter->second.size() - 1);
                                         int id = l_itter->second[index];
                                         new_container.item_list.push_back(id);
                                         TraceLog(LOG_INFO, "     item added %i ", id);
@@ -1215,7 +1273,7 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
 
 void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id, int loot_level) {
 
-    //TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+    TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
 
     for(int item = 0; item < source_list.size(); item++) {
         int uid = GetRandomValue(1000, 1000000000);
@@ -1414,6 +1472,12 @@ ItemModID StrToItemModId(const std::string& s) {
         {"ITEMMOD_TOUGHNESS4",     ItemModID::ITEMMOD_TOUGHNESS4},
         {"ITEMMOD_TOUGHNESS5",     ItemModID::ITEMMOD_TOUGHNESS5},
 
+        {"ITEMMOD_RESIST1",     ItemModID::ITEMMOD_RESIST1},
+        {"ITEMMOD_RESIST2",     ItemModID::ITEMMOD_RESIST2},
+        {"ITEMMOD_RESIST3",     ItemModID::ITEMMOD_RESIST3},
+        {"ITEMMOD_RESIST4",     ItemModID::ITEMMOD_RESIST4},
+        {"ITEMMOD_RESIST5",     ItemModID::ITEMMOD_RESIST5},
+
         {"ITEMMOD_NUTRITIOUS",     ItemModID::ITEMMOD_NUTRITIOUS},
 
         {"ITEMMOD_MOLDY",     ItemModID::ITEMMOD_MOLDY},
@@ -1462,6 +1526,7 @@ ItemType StrToItemType(const std::string& s) {
         {"TYPE_SCROLL",    ItemType::TYPE_SCROLL},
         {"TYPE_FOOD",    ItemType::TYPE_FOOD},
         {"TYPE_ARMOR",    ItemType::TYPE_ARMOR},
+        {"TYPE_CHARM",    ItemType::TYPE_CHARM},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1474,9 +1539,14 @@ SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
         {"None",                          SpellID::SPELL_ID_NONE},
-        {"SPELL_ID_MAGICMISSLE",        SpellID::SPELL_ID_MAGICMISSLE},
-        {"SPELL_ID_FIREBALL",           SpellID::SPELL_ID_FIREBALL},
-        {"SPELL_ID_LIGHTNING",          SpellID::SPELL_ID_LIGHTNING},
+        {"SPELL_ID_MAGICMISSLE_WAND",        SpellID::SPELL_ID_MAGICMISSLE_WAND},
+        {"SPELL_ID_MAGICMISSLE_STAFF",        SpellID::SPELL_ID_MAGICMISSLE_STAFF},
+        {"SPELL_ID_FIREBALL_WAND",           SpellID::SPELL_ID_FIREBALL_WAND},
+        {"SPELL_ID_FIREBALL_STAFF",           SpellID::SPELL_ID_FIREBALL_STAFF},
+        {"SPELL_ID_LIGHTNING_WAND",          SpellID::SPELL_ID_LIGHTNING_WAND},
+        {"SPELL_ID_LIGHTNING_STAFF",          SpellID::SPELL_ID_LIGHTNING_STAFF},
+        {"SPELL_ID_POISON_WAND",          SpellID::SPELL_ID_POISON_WAND},
+        {"SPELL_ID_POISON_STAFF",          SpellID::SPELL_ID_POISON_STAFF},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1517,7 +1587,18 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
         {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
         {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
+
+        {"ITEM_ID_MAGICMISSLE_WAND",            ItemID::ITEM_ID_MAGICMISSLE_WAND},
+        {"ITEM_ID_FIREBALL_WAND",            ItemID::ITEM_ID_FIREBALL_WAND},
+        {"ITEM_ID_LIGHTNING_WAND",            ItemID::ITEM_ID_LIGHTNING_WAND},
+        {"ITEM_ID_POISON_WAND",            ItemID::ITEM_ID_POISON_WAND},
+
         {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF},
+
+        {"ITEM_ID_MAGICMISSLE_STAFF",           ItemID::ITEM_ID_MAGICMISSLE_STAFF},
+        {"ITEM_ID_FIREBALL_STAFF",           ItemID::ITEM_ID_FIREBALL_STAFF},
+        {"ITEM_ID_LIGHTNING_STAFF",           ItemID::ITEM_ID_LIGHTNING_STAFF},
+        {"ITEM_ID_POISON_STAFF",           ItemID::ITEM_ID_POISON_STAFF},
 
 
         {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
@@ -1531,9 +1612,36 @@ ItemID StrToItemId(const std::string& s) {
 
 
         {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
-        {"ITEM_ID_MAGICMMISSLE_SCROLL",          ItemID::ITEM_ID_MAGICMMISSLE_SCROLL},
-        {"ITEM_ID_FIREBALL_SCROLL",          ItemID::ITEM_ID_FIREBALL_SCROLL},
-        {"ITEM_ID_LIGHTNING_SCROLL",          ItemID::ITEM_ID_LIGHTNING_SCROLL},
+        {"ITEM_ID_SWIFTNESS_SCROLL",          ItemID::ITEM_ID_SWIFTNESS_SCROLL},
+        {"ITEM_ID_DAMAGE_SCROLL",          ItemID::ITEM_ID_DAMAGE_SCROLL},
+        {"ITEM_ID_TOUGHNESS_SCROLL",          ItemID::ITEM_ID_TOUGHNESS_SCROLL},
+        {"ITEM_ID_RESIST_SCROLL",          ItemID::ITEM_ID_RESIST_SCROLL},
+
+        {"ITEM_ID_CHARM",          ItemID::ITEM_ID_CHARM},
+
+        {"ITEM_ID_SWIFTNESS_CHARM_1",          ItemID::ITEM_ID_SWIFTNESS_CHARM_1},
+        {"ITEM_ID_SWIFTNESS_CHARM_2",          ItemID::ITEM_ID_SWIFTNESS_CHARM_2},
+        {"ITEM_ID_SWIFTNESS_CHARM_3",          ItemID::ITEM_ID_SWIFTNESS_CHARM_3},
+        {"ITEM_ID_SWIFTNESS_CHARM_4",          ItemID::ITEM_ID_SWIFTNESS_CHARM_4},
+        {"ITEM_ID_SWIFTNESS_CHARM_5",          ItemID::ITEM_ID_SWIFTNESS_CHARM_5},
+
+        {"ITEM_ID_DAMAGE_CHARM_1",          ItemID::ITEM_ID_DAMAGE_CHARM_1},
+        {"ITEM_ID_DAMAGE_CHARM_2",          ItemID::ITEM_ID_DAMAGE_CHARM_2},
+        {"ITEM_ID_DAMAGE_CHARM_3",          ItemID::ITEM_ID_DAMAGE_CHARM_3},
+        {"ITEM_ID_DAMAGE_CHARM_4",          ItemID::ITEM_ID_DAMAGE_CHARM_4},
+        {"ITEM_ID_DAMAGE_CHARM_5",          ItemID::ITEM_ID_DAMAGE_CHARM_5},
+        
+        {"ITEM_ID_TOUGHNESS_CHARM_1",          ItemID::ITEM_ID_TOUGHNESS_CHARM_1},
+        {"ITEM_ID_TOUGHNESS_CHARM_2",          ItemID::ITEM_ID_TOUGHNESS_CHARM_2},
+        {"ITEM_ID_TOUGHNESS_CHARM_3",          ItemID::ITEM_ID_TOUGHNESS_CHARM_3},
+        {"ITEM_ID_TOUGHNESS_CHARM_4",          ItemID::ITEM_ID_TOUGHNESS_CHARM_4},
+        {"ITEM_ID_TOUGHNESS_CHARM_5",          ItemID::ITEM_ID_TOUGHNESS_CHARM_5},
+
+        {"ITEM_ID_RESIST_CHARM_1",          ItemID::ITEM_ID_RESIST_CHARM_1},
+        {"ITEM_ID_RESIST_CHARM_2",          ItemID::ITEM_ID_RESIST_CHARM_2},
+        {"ITEM_ID_RESIST_CHARM_3",          ItemID::ITEM_ID_RESIST_CHARM_3},
+        {"ITEM_ID_RESIST_CHARM_4",          ItemID::ITEM_ID_RESIST_CHARM_4},
+        {"ITEM_ID_RESIST_CHARM_5",          ItemID::ITEM_ID_RESIST_CHARM_5},
 
         {"ITEM_ID_APPLE",           ItemID::ITEM_ID_APPLE},
         {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
@@ -1665,6 +1773,7 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("max_power").get_to(i.max_power);
     j.at("current_power").get_to(i.current_power);
     j.at("rarity").get_to(i.rarity);
+    j.at("mod_slots").get_to(i.mod_slots);
 
     for(auto mod : j.at("char_mods")) {
         CharacterModData new_mod;
