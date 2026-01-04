@@ -406,7 +406,7 @@ void CharacterMenu::OnPutDownOrEquip() {
 
     TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
     TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
-    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
+    TraceLog(LOG_INFO, "try to move %i  from %i %i", item_id, source_grid, dest_grid);
 
     if(grid_list[dest_grid]->HasRoom()) {
         grid_list[dest_grid]->AddItem(item_id);
@@ -414,7 +414,17 @@ void CharacterMenu::OnPutDownOrEquip() {
         if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
             g_current_player->Equip(item_id);    
         }
+        TraceLog(LOG_INFO, "move succsessfull!!!");
     }
+    else if (dest_grid != GRID_GROUND) {
+        dest_grid = GRID_GROUND;
+        if(grid_list[dest_grid]->HasRoom()) {
+            TraceLog(LOG_INFO, "moving to ground!!!");
+            grid_list[dest_grid]->AddItem(item_id);
+            grid_list[source_grid]->RemoveItem(shared_data.source_cell);
+        }
+    }
+    TraceLog(LOG_INFO, "---------------------------------\n");
 }
 
 
@@ -459,7 +469,7 @@ void CharacterMenu::OnTransferItem() {
     shared_data.item_id = -1;
     shared_data.use_id = -1;
 
-    TraceLog(LOG_INFO, "---------------------------------");
+    TraceLog(LOG_INFO, "---------------------------------\n");
 }
 
 void CharacterMenu::OnUseItem() {

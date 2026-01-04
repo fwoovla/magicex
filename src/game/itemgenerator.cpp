@@ -308,13 +308,15 @@ void GenerateCharm(ItemInstanceData &instance) {
         charm_id = instance.item_id;
     }
     
+    int charm_index = charm_id - ITEM_ID_SWIFTNESS_CHARM_1;
+
     instance.item_id = charm_id;
     instance.sprite_id = instance.item_id;
     instance.icon_id = instance.item_id;
-    instance.item_name = g_item_data[charm_id].item_name;
+    instance.item_name = g_charm_data[charm_index].charm_name;
     
     TraceLog(LOG_INFO, "-generating charm with id %i", charm_id);
-    TraceLog(LOG_INFO, "-generating charm %s with charm id:   %i   mod id: %i", instance.item_name.c_str(), g_charm_data[charm_id - ITEM_ID_SWIFTNESS_CHARM_1].charm_id, g_charm_data[charm_id - ITEM_ID_SWIFTNESS_CHARM_1].mod_id);
+    TraceLog(LOG_INFO, "-generating charm %s with charm id:   %i   mod id: %i", instance.item_name.c_str(), g_charm_data[charm_index].charm_id, g_charm_data[charm_index].mod_id);
 
 
 }

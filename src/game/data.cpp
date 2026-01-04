@@ -34,8 +34,9 @@ void LoadGameData() {
 
 
     g_font = LoadFontEx("assets/FFatF.ttf", 128, nullptr, 0);
-    TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
-    TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
+    SetTextureFilter(g_font.texture, TEXTURE_FILTER_POINT);
+    //TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
+    //TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
 
     std::ifstream cfile("assets/data.json");
     if (!cfile.is_open()) {
@@ -125,7 +126,7 @@ void LoadGameData() {
     }
 
 //------------------item data
-    g_item_data.resize(ITEM_ID_MAX - 1);
+    g_item_data.resize(ITEM_ID_MAX);
     TraceLog(LOG_INFO, "item data size  %i  %i", g_item_data.size(), cj["item_data"].size());
 
     for(int i = 0; i < cj["item_data"].size(); i++) {
@@ -264,20 +265,18 @@ void LoadGameData() {
         
         ItemModID mod_id = StrToItemModId(cj["charm_data"][i]["mod_id"]);
 
+        ItemType use_type = StrToItemType(cj["charm_data"][i]["use_type"]);
+
         CharmData new_charm = {
             .charm_name= name,
             .charm_id = id,
-            .mod_id = mod_id
+            .mod_id = mod_id,
+            .use_type = use_type
         };
 
         TraceLog(LOG_INFO, "Charm Data Loaded  id: %i  %s %i", id, name.c_str(), id - ITEM_ID_SWIFTNESS_CHARM_1);
         g_charm_data[id - ITEM_ID_SWIFTNESS_CHARM_1] = new_charm;
     }
-
-
-
-
-
 
 
 
@@ -1727,6 +1726,34 @@ std::string ModuleIdToStr(const int id) {
     return "";
 
 }
+
+
+std::string ItemTypeToStr(const int id) {
+    static const std::unordered_map<ItemType , std::string> lookup_table = {
+        {ItemType::TYPE_ARMOR,     "Any Armor"},
+        {ItemType::TYPE_HEAD_ARMOR,     "Head Armor"},
+        {ItemType::TYPE_BODY_ARMOR,     "Body Armor"},
+        {ItemType::TYPE_LEG_ARMOR,     "Leg Armor"},
+        {ItemType::TYPE_FEET_ARMOR,     "Foot Armor"},
+        {ItemType::TYPE_HAND_ARMOR,     "Hand Armor"},
+        {ItemType::TYPE_CONSUMEABLE,     "Consumeable"},
+        {ItemType::TYPE_RESOURCE,     "Resource"},
+        {ItemType::TYPE_PLAN,     "Plan"},
+        {ItemType::TYPE_SCROLL,     "Scroll"},
+        {ItemType::TYPE_FOOD,     "Food"},
+        {ItemType::TYPE_CHARM,     "Charm"},
+        {ItemType::TYPE_WEAPON,     "Any Weapon"},
+        {ItemType::TYPE_ALL,     "All"},
+    };
+
+
+    if (auto it = lookup_table.find((ItemType)id); it != lookup_table.end()) {
+        //TraceLog(LOG_INFO, "type  %s", it->second.c_str());
+        return it->second;
+    }
+    return "";
+}
+
 
 SpriteSheetID StrToSpriteId(const std::string& s) {
 

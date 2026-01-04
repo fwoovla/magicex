@@ -198,6 +198,7 @@ struct CharmData {
     std::string charm_name;
     ItemID charm_id;
     ItemModID mod_id;
+    ItemType use_type;
 
 };
 
@@ -399,6 +400,8 @@ PlanID StrToPlanId(const std::string& s);
 ModuleID StrToModuleId(const std::string& s);
 
 std::string ModuleIdToStr(const int id);
+
+std::string ItemTypeToStr(const int id);
 
 RecipieID StrToRecipieId(const std::string& s);
 

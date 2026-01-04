@@ -359,8 +359,8 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         details += "- empty slot -\n";
     }
 
-    //if(item_data.char_mods.size() > 0 or item_data.char_mods.size() > 0) {details += "\n";}
-    details += "\n";
+    if(item_data.mod_slots > 0) {details += "\n";}
+    //details += "\n";
     
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {
@@ -384,12 +384,6 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             }
         }
 
-/*         if(item_data.mod_slots > 0) {
-            std::string max_slots = std::to_string(itter->second.mod_slots);
-            std::string num_slots = std::to_string(itter->second.item_mods.size());
-            details += "upgrades " + num_slots + "/" + max_slots + "\n";
-        } */
-
         if(item_data.type ==  TYPE_CONSUMEABLE) {
 
         }
@@ -405,10 +399,33 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
         
         if(item_data.type ==  TYPE_RESOURCE) {
+            if(item_data.item_id == ITEM_ID_MUSHROOM_JUICE) {
+                details += "  Recharge power\n";
+            }
         }
         
         if(item_data.type ==  TYPE_SCROLL) {
-            //details += "  [ LMB ] to use\n";
+        }
+
+        if(item_data.type ==  TYPE_CHARM) {
+
+            std::string use_string = ItemTypeToStr(g_charm_data[itter->second.item_id - ITEM_ID_SWIFTNESS_CHARM_1].use_type);
+            details += "useable with " + use_string + "\n";
+
+            int mod_id = g_charm_data[itter->second.item_id - ITEM_ID_SWIFTNESS_CHARM_1].mod_id;
+
+            std::string mod_name_string = g_equipment_mod_data[mod_id].mod_name;
+
+            std::string mod_stat_string = "";
+
+            if(g_equipment_mod_data[mod_id].cooldown != 0.0f) {mod_stat_string += "mele cooldown" + std::to_string(g_equipment_mod_data[mod_id].cooldown);}
+            if(g_equipment_mod_data[mod_id].damage != 0) {mod_stat_string += "mele damage" + std::to_string(g_equipment_mod_data[mod_id].damage);}
+            if(g_equipment_mod_data[mod_id].defence != 0) {mod_stat_string += "defence" + std::to_string(g_equipment_mod_data[mod_id].defence);}
+            if(g_equipment_mod_data[mod_id].magic_defence != 0) {mod_stat_string += "magic_defence" + std::to_string(g_equipment_mod_data[mod_id].magic_defence);}
+            if(g_equipment_mod_data[mod_id].max_power != 0.0f) {mod_stat_string += " weapon power" + std::to_string(g_equipment_mod_data[mod_id].max_power);}
+
+            //TraceLog(LOG_INFO, "mod id %i  name  %s stats  %s", mod_id, mod_name_string.c_str(), mod_stat_string.c_str());
+            details += mod_stat_string + "\n";
         }
 
         details += "$" + std::to_string( itter->second.value);

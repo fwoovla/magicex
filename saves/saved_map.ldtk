@@ -2090,7 +2090,7 @@
 							"px": [144,592],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ARMOR"], "__tile": null, "defUid": 72, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["TYPE_ARMOR"]
