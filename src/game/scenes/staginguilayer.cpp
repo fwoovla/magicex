@@ -105,30 +105,6 @@ StagingUILayer::StagingUILayer() {
         take_weapon_buttons.push_back(std::move(new_button));
     }
 
-
-/*     choices.clear();
-    CreateLabel(take_spell_label,{ts_offset.x, ts_offset.y}, FONTSIZE_40, RAYWHITE, "TAKE A SPELL");
-        take_spell_rect = {
-        .x = ts_offset.x - 10,
-        .y = ts_offset.y - 10,
-        .width = 450,
-        .height = 150
-    };
-    for(int index = 0; index < g_spell_data.size(); index++) {
-        choices.push_back(index);
-    }
-    for(int i = 0; i <= 3; i++) {
-        choice_index = GetRandomValue(0, choices.size() - 1);
-        TraceLog(LOG_INFO, "s selected index: %i", choice_index);
-        spell_ids.push_back(g_spell_data[choice_index].spell_id);
-        std::unique_ptr<Button> new_button = std::make_unique<Button>();
-        
-        CreateButton(*new_button, {ts_offset.x + 70 + (100 * i), ts_offset.y + 75}, {50, 50}, YELLOW, g_spell_data[choice_index].spell_name.c_str() );
-        new_button->text_size = FONTSIZE_14;
-
-        take_spell_buttons.push_back(std::move(new_button));
-    }
- */
     choices.clear();
     CreateLabel(take_food_label,{tf_offset.x, tf_offset.y}, FONTSIZE_40, RAYWHITE, "TAKE SOME FOOD");
         take_food_rect = {
@@ -331,21 +307,6 @@ void StagingUILayer::UpdateCharacterInfo() {
         }
     }
 
-/*      if(show_spells and !show_weapons) {
-        for(int i = 0; i <  take_spell_buttons.size(); i++)
-        {
-            if(IsButtonHovered(*take_spell_buttons[i], g_scale)){
-                if(take_spell_buttons[i]->already_hovered == false) {
-                    //PlaySound(button_sound);
-                }
-                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    show_spells = false;
-                    SpellSelected(spell_ids[i]);
-                }        
-            }
-        }
-    } */
-
     if(show_food) {
         for(int i = 0; i <  take_food_buttons.size(); i++) {
             if(IsButtonHovered(*take_food_buttons[i], g_scale)){
@@ -389,15 +350,17 @@ void StagingUILayer::SetPlayer(int uid) {
 
 void StagingUILayer::ItemSelected(int item_id) {
     TraceLog(LOG_INFO, "selected item: %i", item_id);
-    InstanceCharacterItem((ItemID) item_id, g_current_player->uid);
-
-    GenerateWeapon( g_item_instances[g_character_data[g_current_player->uid].inventory[0]], 0, true);
+    ItemInstanceData * inst = InstanceCharacterItem((ItemID) item_id, g_current_player->uid);
+    TraceLog(LOG_INFO, "selected item type: %i", inst->type);
+    if(inst->type == TYPE_WEAPON) {
+        GenerateWeapon( *inst, 0, true);
+    }
     SetPlayer(g_current_player->uid);
 }
 
 
 void StagingUILayer::SpellSelected(int spell_id) {
-    TraceLog(LOG_INFO, "selected spell: %i", spell_id);
+/*     TraceLog(LOG_INFO, "selected spell: %i", spell_id);
 
     //create scroll
     for(auto inst_id : g_current_player->data->inventory) {
@@ -412,5 +375,5 @@ void StagingUILayer::SpellSelected(int spell_id) {
     }
     //ItemInstanceData *new_instance =  InstanceCharacterItem(ITEM_ID_SCROLL, g_current_player->uid);
     //GenerateScroll(*new_instance, (SpellID)spell_id, "");
-    SetPlayer(g_current_player->uid);
+    SetPlayer(g_current_player->uid); */
 }

@@ -48,7 +48,7 @@ TestDummyEntity::TestDummyEntity(Vector2 _position, int _uid): CharacterEntity()
 
 void TestDummyEntity::Update() {
 
-    velocity = Vector2Lerp(velocity, {0.0f,0.0f}, .15);
+/*     velocity = Vector2Lerp(velocity, {0.0f,0.0f}, .15);
 
     if(abs(velocity.x) < 4.0f) {
         velocity.x = {0.0};
@@ -85,7 +85,7 @@ void TestDummyEntity::Update() {
 
     if(is_stunned) {
         stun_timer.Update();
-    }
+    } */
 }
 
 void TestDummyEntity::Draw() {
@@ -111,7 +111,7 @@ bool TestDummyEntity::CanEquip(int item_id) {
 
 
 void TestDummyEntity::Equip(int item_id) {
-    TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
+/*     TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
 
     int _id = ITEM_ID_NONE;
 
@@ -142,7 +142,7 @@ void TestDummyEntity::Equip(int item_id) {
             
         }
     }
-    TraceLog(LOG_INFO, "+++++++++++++");
+    TraceLog(LOG_INFO, "+++++++++++++"); */
 }
 
 
@@ -153,7 +153,7 @@ bool TestDummyEntity::CanUnEquip(int item_id) {
 
 void TestDummyEntity::UnEquip(int item_id) {
 
-    auto item_it = g_item_instances.find(item_id);
+/*     auto item_it = g_item_instances.find(item_id);
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
@@ -190,7 +190,7 @@ void TestDummyEntity::UnEquip(int item_id) {
                 if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina -= item_it->second.char_mods[mod].stamina;}
             
         }
-    }
+    } */
 }
 
 

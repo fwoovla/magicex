@@ -59,26 +59,6 @@ struct FoodModData {
 
 extern std::vector<FoodModData> g_food_mod_data;
 
-/* struct ArmorModData {
-    ItemModID mod_id;
-    std::string mod_name;
-    int defence;
-    int rarity;
-}; */
-
-//extern std::vector<ArmorModData> g_armor_mod_data;
-
-
-/* struct WeaponModData {
-    ItemModID mod_id;
-    std::string mod_name;
-
-    float cooldown;
-    int max_power;
-    int damage;
-    int rarity;
-    
-}; */
 
 struct ItemModData {
     ItemModID mod_id;
@@ -137,43 +117,15 @@ struct ItemData {
 
 extern std::vector<ItemData> g_item_data;
 
-struct ItemInstanceData {
-    std::vector<ItemModData> item_mods;
-    std::vector<CharacterModData> char_mods;
-    std::string container_id;
-    ItemID item_id;
-    int instance_id;
-    int value;
-    ItemType type;
-    std::string item_name;
-    SpellID spell_id;
-    SpellData spell_data;
-    float cooldown;
-    int damage;
-    int sprite_id;
-    int icon_id;
-    int level;
-    int defence;
-    int magic_defence;
-    float saturation;
-    int rarity;
-    float max_power;
-    float current_power;
-    float recoil;
-    float knockback;
-    int mod_slots;
 
-};
-
-extern std::unordered_map<int, ItemInstanceData> g_item_instances;
 
 struct WeaponData {
     std::string weapon_name;
     ItemID weapon_id;
     float cooldown;
     SpellID spell_id;
-    int max_power;
-    int ammo_count;
+    float max_power;
+    float current_power;
     int damage;
     float recoil;
     float knockback;
@@ -221,6 +173,38 @@ struct PlanData {
 };
 
 extern std::vector<PlanData> g_plan_data;
+
+
+
+struct ItemInstanceData {
+    //std::vector<ItemModData> item_mods;
+    //std::vector<CharacterModData> char_mods;
+
+    SpellID spell_id;
+    SpellData spell_data;
+    ItemID weapon_id;
+    WeaponData weapon_data;
+    ItemID armor_id;
+    ArmorData armor_data;
+    ItemID food_id;
+    FoodData food_data;
+    
+    ItemID item_id;
+    ItemType type;
+    std::string item_name;
+    std::string container_id;
+    int instance_id;
+    int value;
+    int sprite_id;
+    int icon_id;
+    int level;
+    int rarity;
+    int mod_slots;
+
+};
+
+extern std::unordered_map<int, ItemInstanceData> g_item_instances;
+
 
 struct AiData {
     AIID ai_id;

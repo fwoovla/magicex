@@ -98,9 +98,9 @@ void CreatureEntity::Update() {
             if(CollideWithEntity(t_pos, 2, result)) {
 
                 DamagePayload new_payload;
-                new_payload.damage = current_primary_data->damage;
+                new_payload.damage = current_primary_data->weapon_data.damage;
                 new_payload.attacker_id = uid;
-                new_payload.knockback = Vector2Rotate( {current_primary_data->knockback, 0}, weapon_sprite.rotation * DEG2RAD);
+                new_payload.knockback = Vector2Rotate( {current_primary_data->weapon_data.knockback, 0}, weapon_sprite.rotation * DEG2RAD);
                 result.collider->TakeDamage(new_payload);
             }
             if(weapon_sprite.rotation >=  weapon_end_rotation - 5 and weapon_sprite.rotation <=  weapon_end_rotation + 5) {
@@ -110,8 +110,8 @@ void CreatureEntity::Update() {
         if(GetRandomValue(0,10) > 5 and should_mele) {
 
             if(current_primary_data != nullptr) {
-                TraceLog(LOG_INFO, "mele attack  %0.2f", current_primary_data->cooldown);
-                mele_timer.Start(current_primary_data->cooldown, true);
+                TraceLog(LOG_INFO, "mele attack  %0.2f", current_primary_data->weapon_data.cooldown);
+                mele_timer.Start(current_primary_data->weapon_data.cooldown, true);
                 can_mele = false;
                 should_mele = false;
                 weapon_state = WSTATE_MELE;
@@ -149,7 +149,7 @@ void CreatureEntity::Update() {
                         SpawnSpell(*g_current_scene, payload, &g_spell_data[current_primary_data->spell_id]);
                     }
                     g_character_data[uid].current_power -= g_spell_data[current_primary_data->spell_id].pps;
-                    current_primary_data->current_power = g_character_data[uid].current_power; 
+                    current_primary_data->weapon_data.current_power = g_character_data[uid].current_power; 
                     spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
                     can_use_spell = false;
                     should_use_spell = false;
@@ -232,8 +232,8 @@ void CreatureEntity::Equip(int item_id) {
     auto item_it = g_item_instances.find(item_id);
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            data->max_power += item_it->second.max_power;
-            data->current_power = item_it->second.current_power;
+            data->max_power += item_it->second.weapon_data.max_power;
+            data->current_power = item_it->second.weapon_data.current_power;
             _id = item_it->second.sprite_id;
             LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
             weapon_sprite.center.x -= weapon_sprite.center.x - 3;
@@ -243,18 +243,18 @@ void CreatureEntity::Equip(int item_id) {
         
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             _id = item_it->second.sprite_id;
-            data->defence += item_it->second.defence;
-            data->magic_defence += item_it->second.magic_defence;
+            data->defence += item_it->second.armor_data.defence;
+            data->magic_defence += item_it->second.armor_data.magic_defence;
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
         
-        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
             TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-            if(item_it->second.char_mods[mod].health != -1000){data->health += item_it->second.char_mods[mod].health;}
-            if(item_it->second.char_mods[mod].speed != -1000){data->current_speed += item_it->second.char_mods[mod].speed;}
-            if(item_it->second.char_mods[mod].stamina != -1000){data->max_stamina += item_it->second.char_mods[mod].stamina;}
+            if(item_it->second.char_mods[mod].health != 0){data->health += item_it->second.char_mods[mod].health;}
+            if(item_it->second.char_mods[mod].speed != 0){data->current_speed += item_it->second.char_mods[mod].speed;}
+            if(item_it->second.char_mods[mod].stamina != 0){data->max_stamina += item_it->second.char_mods[mod].stamina;}
             
-        }
+        } */
     }
     TraceLog(LOG_INFO, "+++++++++++++");
 }
@@ -276,15 +276,15 @@ void CreatureEntity::UnEquip(int item_id) {
             LoadSpriteCentered(weapon_sprite, t, position);
             current_primary_data = nullptr;
                 
-            data->max_power -= item_it->second.max_power;
-            data->current_power -= item_it->second.max_power;
+            data->max_power -= item_it->second.weapon_data.max_power;
+            data->current_power -= item_it->second.weapon_data.max_power;
 
             if(data->max_power < 0) {
                 data->max_power = 0;
             }
 
-            if(item_it->second.current_power > item_it->second.max_power) {
-                item_it->second.current_power = item_it->second.max_power;
+            if(item_it->second.weapon_data.current_power > item_it->second.weapon_data.max_power) {
+                item_it->second.weapon_data.current_power = item_it->second.weapon_data.max_power;
             }
             if(data->current_power < 0) {
                 data->current_power = 0;
@@ -293,16 +293,16 @@ void CreatureEntity::UnEquip(int item_id) {
 
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             TraceLog(LOG_INFO, "unequiping armor %i", item_id);
-            data->defence -= item_it->second.defence;
-            data->magic_defence -= item_it->second.magic_defence;
+            data->defence -= item_it->second.armor_data.defence;
+            data->magic_defence -= item_it->second.armor_data.magic_defence;
         }
         
-        for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
+/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
                 TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-                if(item_it->second.char_mods[mod].health != -1000){data->health -= item_it->second.char_mods[mod].health;}
-                if(item_it->second.char_mods[mod].speed != -1000){data->current_speed -= item_it->second.char_mods[mod].speed;}
-                if(item_it->second.char_mods[mod].stamina != -1000){data->max_stamina -= item_it->second.char_mods[mod].stamina;}
-        }
+                if(item_it->second.char_mods[mod].health != 0){data->health -= item_it->second.char_mods[mod].health;}
+                if(item_it->second.char_mods[mod].speed != 0){data->current_speed -= item_it->second.char_mods[mod].speed;}
+                if(item_it->second.char_mods[mod].stamina != 0){data->max_stamina -= item_it->second.char_mods[mod].stamina;}
+        } */
     }
 }
 

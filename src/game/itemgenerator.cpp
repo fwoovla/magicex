@@ -15,18 +15,21 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     new_instance.type = g_item_data[item_id].type;
     new_instance.value = g_item_data[item_id].value;
     new_instance.container_id = container_id;
+
     new_instance.spell_id = SPELL_ID_NONE;
     new_instance.spell_data = {};
+    
+    new_instance.weapon_id = ITEM_ID_NONE;
+    new_instance.weapon_data = {};
+
+    new_instance.armor_id = ITEM_ID_NONE;
+    new_instance.armor_data = {};
+    new_instance.food_id = ITEM_ID_NONE;
+    new_instance.food_data = {};
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
     new_instance.level = 0;
-    new_instance.max_power = 0;
-    new_instance.current_power = 0;
-    new_instance.saturation = 0;
-    new_instance.defence = 0;
-    new_instance.magic_defence = 0;
-    new_instance.recoil = 0;
-    new_instance.knockback = 0;
+
     new_instance.mod_slots = 0;
 
 
@@ -39,10 +42,9 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     if(new_instance.type == TYPE_FOOD ) {
         GenerateFood(new_instance, 0, false);   
     }
-/*     if(new_instance.type == TYPE_SCROLL ) {
-        int spell_id =  g_spell_data[GetRandomValue(0, SPELL_ID_MAX - 1)].spell_id;
-        GenerateScroll(new_instance, (SpellID)spell_id, "");
-    } */
+
+    TraceLog(LOG_INFO, "----------item type  %i-----------\n", new_instance.type);
+    TraceLog(LOG_INFO, "---------------------\n");
 
     return new_instance;
 }
@@ -62,20 +64,25 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     new_instance.type = g_item_data[item_id].type;
     new_instance.value = g_item_data[item_id].value;
     new_instance.container_id = container_id;
+    
+    //new_instance.item_mods = {};
+    //new_instance.char_mods = {};
+
     new_instance.spell_id = SPELL_ID_NONE;
     new_instance.spell_data = {};
+    
+    new_instance.weapon_id = ITEM_ID_NONE;
+    new_instance.weapon_data = {};
+
+    new_instance.armor_id = ITEM_ID_NONE;
+    new_instance.armor_data = {};
+    new_instance.food_id = ITEM_ID_NONE;
+    new_instance.food_data = {};
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
     new_instance.level = 0;
-    new_instance.max_power = 0;
-    new_instance.current_power = 0;
-    new_instance.saturation = 0.0f;
-    new_instance.defence = 0;
-    new_instance.magic_defence = 0;
-    new_instance.recoil = 0;
-    new_instance.knockback = 0;
-    new_instance.mod_slots = 0;
 
+    new_instance.mod_slots = 0;
 
         //add chara mods here
 
@@ -115,47 +122,26 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
 
 void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "making new weapon %s  %i", instance.item_name.c_str(), instance.item_id);
+    instance.weapon_id = (ItemID)(instance.item_id - ITEM_ID_DAGGER);
+    instance.weapon_data = g_weapon_data[instance.weapon_id];
 
-    instance.mod_slots = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].mod_slots;
-    instance.cooldown = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].cooldown;
-    instance.damage =  g_weapon_data[instance.item_id - ITEM_ID_DAGGER].damage;
-    instance.sprite_id = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].weapon_id;
-    instance.icon_id = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].weapon_id;
-    instance.max_power = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].max_power;
-    instance.current_power = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].max_power;
+    if(random) {
+        instance.weapon_data.max_power = GetRandomValue(10,20);
+        instance.weapon_data.current_power = instance.weapon_data.max_power;
+    }
+    else {
+        instance.weapon_data.max_power = 10;
+        instance.weapon_data.current_power = instance.weapon_data.max_power;
+    }
 
-    instance.recoil = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].recoil;
-    instance.knockback = g_weapon_data[instance.item_id - ITEM_ID_DAGGER].knockback;
-
-    TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+    TraceLog(LOG_INFO, "-item %i", instance.item_id );
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
-    TraceLog(LOG_INFO, "-damage %i", instance.damage );
-    TraceLog(LOG_INFO, "-recoil %f", instance.recoil );
-    TraceLog(LOG_INFO, "-knockback %f", instance.knockback );
+    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.weapon_data.cooldown );
+    TraceLog(LOG_INFO, "-damage %i", instance.weapon_data.damage );
+    TraceLog(LOG_INFO, "-recoil %f", instance.weapon_data.recoil );
+    TraceLog(LOG_INFO, "-knockback %f", instance.weapon_data.knockback );
+    TraceLog(LOG_INFO, "-max power %f", instance.weapon_data.max_power );
 
-
-/*     if(random) {
-
-        std::vector<int> wep_mod_list;
-        for(auto mod : g_equipment_mod_data) {
-            if(mod.mod_id > ITEMMOD_WEPONSTART and mod.mod_id < ITEMMOD_WEPONEND) {
-                for(int i = 0; i < mod.rarity; i++) {
-                    wep_mod_list.push_back(mod.mod_id);
-                }
-            }
-        }
-        TraceLog(LOG_INFO, "-----weapon mod list size  + %i------", wep_mod_list.size());
-        ItemModID mod_id = (ItemModID) wep_mod_list[ GetRandomValue(0, wep_mod_list.size() - 1)];
-
-        instance.item_mods.push_back(g_equipment_mod_data[mod_id]);
-        
-        if(g_equipment_mod_data[mod_id].cooldown > -100) { instance.cooldown += g_equipment_mod_data[mod_id].cooldown; }
-        if(g_equipment_mod_data[mod_id].max_power != -1000) { instance.max_power += g_equipment_mod_data[mod_id].max_power; }
-        if(g_equipment_mod_data[mod_id].rarity < instance.rarity){instance.rarity = g_equipment_mod_data[mod_id].rarity;}
-        if(g_equipment_mod_data[mod_id].damage != -1000) { instance.damage += g_equipment_mod_data[mod_id].damage; }
-        TraceLog(LOG_INFO, "-----weapon mod   + %i------", mod_id - ITEMMOD_SWIFTNESS1);
-    } */
 
     if(instance.item_id == ITEM_ID_WAND and random) {
         instance.spell_id = (SpellID)GetRandomValue(SPELL_ID_MAGICMISSLE_WAND, SPELL_ID_POISON_WAND);
@@ -223,8 +209,8 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
 
     TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
-    TraceLog(LOG_INFO, "-damage %i", instance.damage );
+    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.weapon_data.cooldown );
+    TraceLog(LOG_INFO, "-damage %i", instance.weapon_data.damage );
 
 }
 
@@ -233,16 +219,17 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
 void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "making new armor %i", loot_level);
 
-    instance.defence = g_armor_data[instance.item_id - ITEM_ID_HELMET].defence;
-    TraceLog(LOG_INFO, "-defence %i", instance.defence );
-    instance.magic_defence = g_armor_data[instance.item_id - ITEM_ID_HELMET].magic_defence;
-    TraceLog(LOG_INFO, "-magic_defence %0.3f", instance.magic_defence );
-
+    instance.armor_id = (ItemID)(instance.item_id - ITEM_ID_HELMET);
+    instance.armor_data = g_armor_data[instance.armor_id];
     instance.sprite_id = g_armor_data[instance.item_id - ITEM_ID_HELMET].armor_id;
     instance.icon_id = g_armor_data[instance.item_id - ITEM_ID_HELMET].armor_id;
-    TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     instance.mod_slots = g_armor_data[instance.item_id - ITEM_ID_HELMET].mod_slots;
+
+    TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
+    TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
+    TraceLog(LOG_INFO, "-defence %i", instance.armor_data.defence );
+    TraceLog(LOG_INFO, "-magic_defence %0.3f", instance.armor_data.magic_defence );
+
 
     
 /*     if(random) {
@@ -274,15 +261,15 @@ void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random) {
 void GenerateFood(ItemInstanceData &instance, int loot_level, bool random) {
 
     TraceLog(LOG_INFO, "making new food %s", g_food_data[instance.item_id - ITEM_ID_APPLE].food_name.c_str());
-    instance.saturation =  g_food_data[instance.item_id - ITEM_ID_APPLE].saturation;
-
+    instance.food_id =  (ItemID)(instance.item_id - ITEM_ID_APPLE);
+    instance.food_data = g_food_data[instance.food_id];
 
     ItemModID mod_id = (ItemModID)GetRandomValue(ITEMMOD_NUTRITIOUS, ITEMMOD_MOLDY);
 
     instance.item_name  = g_food_mod_data[mod_id - ITEMMOD_NUTRITIOUS].mod_name + " " + instance.item_name;
-    instance.saturation += g_food_mod_data[mod_id - ITEMMOD_NUTRITIOUS].saturation;
+    instance.food_data.saturation += g_food_mod_data[mod_id - ITEMMOD_NUTRITIOUS].saturation;
 
-    TraceLog(LOG_INFO, "-----food sat: %0.2f-----", instance.saturation);
+    //TraceLog(LOG_INFO, "-----food sat: %0.2f-----", instance.food_data.saturation);
 
 
 }
@@ -326,8 +313,8 @@ void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id) {
     instance.spell_id = spell_id;
     instance.spell_data = g_spell_data[instance.spell_id];
     instance.item_name += " of " + instance.spell_data.spell_name;
-    instance.max_power = 10;
-    instance.current_power = instance.max_power;
+    instance.weapon_data.max_power = 10;
+    instance.weapon_data.current_power = instance.weapon_data.max_power;
 
     TraceLog(LOG_INFO, "-name  + %s   pps %0.2f", instance.item_name.c_str(), g_spell_data[instance.spell_id].pps);
 
@@ -375,8 +362,8 @@ void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id) {
 
     TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
     TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.cooldown );
-    TraceLog(LOG_INFO, "-damage %i", instance.damage );
+    TraceLog(LOG_INFO, "-cooldown %0.3f", instance.weapon_data.cooldown );
+    TraceLog(LOG_INFO, "-damage %i", instance.weapon_data.damage );
 }
 
 void AddModToItem(ItemInstanceData &instance, ItemModID mod_id) {

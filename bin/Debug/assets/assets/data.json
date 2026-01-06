@@ -869,14 +869,14 @@
         {
             "plan_id": "ITEM_ID_STOVE_PLAN",
             "plan_name": "Stove Plan",
-            "required_items":["ITEM_ID_TONGS"],
+            "required_items":["ITEM_ID_TONGS", "ITEM_ID_CHARCOAL", "ITEM_ID_SAW", "ITEM_ID_HAMMER"],
             "module_id":"MODULE_ID_STOVE"
         },
         {
             "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
             "plan_name": "Mushroompress Plan",
-            "required_items":["ITEM_ID_SAW"],
-            "module_id":"MODULE_ID_MUSHROOMPRESS"
+            "required_items":["ITEM_ID_SAW", "ITEM_ID_BUCKET", "ITEM_ID_HAMMER" ],
+            "module_id":"MODULE_ID_WORKBENCH"
         }
 
     ],

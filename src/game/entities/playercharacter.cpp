@@ -132,9 +132,9 @@ void PlayerCharacter::Update() {
         if(CollideWithEntity(t_pos, 2, result)) {
 
             DamagePayload new_payload;
-            new_payload.damage = current_primary_data->damage;
+            new_payload.damage = current_primary_data->weapon_data.damage;
             new_payload.attacker_id = uid;
-            new_payload.knockback = Vector2Rotate( {current_primary_data->knockback, 0}, weapon_sprite.rotation * DEG2RAD);
+            new_payload.knockback = Vector2Rotate( {current_primary_data->weapon_data.knockback, 0}, weapon_sprite.rotation * DEG2RAD);
             result.collider->TakeDamage(new_payload);
         }
         if(weapon_sprite.rotation >=  weapon_end_rotation - 5 and weapon_sprite.rotation <=  weapon_end_rotation + 5) {
@@ -274,7 +274,7 @@ void PlayerCharacter::CheckInput() {
 
         if(current_primary_data != nullptr) {
             //TraceLog(LOG_INFO, "mele attack");
-            mele_timer.Start(current_primary_data->cooldown, true);
+            mele_timer.Start(current_primary_data->weapon_data.cooldown, true);
             can_mele = false;
             weapon_state = WSTATE_MELE;
             weapon_end_rotation = weapon_sprite.rotation + (400 * swing_dir);
@@ -291,8 +291,7 @@ void PlayerCharacter::CheckInput() {
                     return;
                 }
                 
-                //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
-                //TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
+               //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
 
                 NewSpellPayload payload;
                 payload.position = position;
@@ -307,10 +306,12 @@ void PlayerCharacter::CheckInput() {
                         SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
                 }
                 g_character_data[uid].current_power -= current_primary_data->spell_data.pps;
-                current_primary_data->current_power = g_character_data[uid].current_power; 
+                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power; 
                 spell_timer.Start(current_primary_data->spell_data.cooldown, true);
                 can_use_spell = false;
                 velocity = Vector2Rotate( {-current_primary_data->spell_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
+
             }
         }
     }
@@ -330,8 +331,9 @@ void PlayerCharacter::Equip(int item_id) {
     auto item_it = g_item_instances.find(item_id);
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            g_character_data[uid].max_power += item_it->second.max_power;
-            g_character_data[uid].current_power = item_it->second.current_power;
+            g_character_data[uid].current_power += item_it->second.weapon_data.current_power;
+            g_character_data[uid].max_power += item_it->second.weapon_data.max_power;
+
             _id = item_it->second.sprite_id;
             LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
             weapon_sprite.center.x -= weapon_sprite.center.x - 3;
@@ -341,8 +343,8 @@ void PlayerCharacter::Equip(int item_id) {
         
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             _id = item_it->second.sprite_id;
-            g_character_data[uid].defence += item_it->second.defence;
-            g_character_data[uid].magic_defence += item_it->second.magic_defence;
+            g_character_data[uid].defence += item_it->second.armor_data.defence;
+            g_character_data[uid].magic_defence += item_it->second.armor_data.magic_defence;
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
         
@@ -373,15 +375,15 @@ void PlayerCharacter::UnEquip(int item_id) {
             LoadSpriteCentered(weapon_sprite, t, position);
             current_primary_data = nullptr;
 
-            g_character_data[uid].max_power -= item_it->second.max_power;
-            g_character_data[uid].current_power -= item_it->second.max_power;
+            g_character_data[uid].max_power -= item_it->second.weapon_data.max_power;
+            g_character_data[uid].current_power -= item_it->second.weapon_data.max_power;
 
             if(g_character_data[uid].max_power < 0) {
                 g_character_data[uid].max_power = 0;
             }
 
-            if(item_it->second.current_power > item_it->second.max_power) {
-                item_it->second.current_power = item_it->second.max_power;
+            if(item_it->second.weapon_data.current_power > item_it->second.weapon_data.max_power) {
+                item_it->second.weapon_data.current_power = item_it->second.weapon_data.max_power;
             }
             if(g_character_data[uid].current_power < 0) {
                 g_character_data[uid].current_power = 0;
@@ -390,16 +392,10 @@ void PlayerCharacter::UnEquip(int item_id) {
 
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             TraceLog(LOG_INFO, "unequiping armor %i", item_id);
-            g_character_data[uid].defence -= item_it->second.defence;
-            g_character_data[uid].magic_defence -= item_it->second.magic_defence;
+            g_character_data[uid].defence -= item_it->second.armor_data.defence;
+            g_character_data[uid].magic_defence -= item_it->second.armor_data.magic_defence;
         }
         
-/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
-                TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-                if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health -= item_it->second.char_mods[mod].health;}
-                if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed -= item_it->second.char_mods[mod].speed;}
-                if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina -= item_it->second.char_mods[mod].stamina;}
-        } */
     }
 }
 

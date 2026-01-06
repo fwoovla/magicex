@@ -60,6 +60,103 @@
         },
 
 
+
+
+
+
+
+        {
+            "item_name": "new wand1",
+            "item_id":"ITEM_ID_NEWWAND1",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+        {
+            "item_name": "new wand2",
+            "item_id":"ITEM_ID_NEWWAND2",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand3",
+            "item_id":"ITEM_ID_NEWWAND3",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand4",
+            "item_id":"ITEM_ID_NEWWAND4",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand5",
+            "item_id":"ITEM_ID_NEWWAND5",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand6",
+            "item_id":"ITEM_ID_NEWWAND6",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand7",
+            "item_id":"ITEM_ID_NEWWAND7",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand8",
+            "item_id":"ITEM_ID_NEWWAND8",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand9",
+            "item_id":"ITEM_ID_NEWWAND9",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand10",
+            "item_id":"ITEM_ID_NEWWAND10",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand1",
+            "item_id":"ITEM_ID_NEWWAND11",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand12",
+            "item_id":"ITEM_ID_NEWWAND12",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand13",
+            "item_id":"ITEM_ID_NEWWAND13",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+                {
+            "item_name": "new wand14",
+            "item_id":"ITEM_ID_NEWWAND14",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+
+
+
+
+
+
         {
             "item_name": "Magic Missle Wand",
             "item_id":"ITEM_ID_MAGICMISSLE_WAND",
@@ -869,14 +966,14 @@
         {
             "plan_id": "ITEM_ID_STOVE_PLAN",
             "plan_name": "Stove Plan",
-            "required_items":["ITEM_ID_TONGS"],
+            "required_items":["ITEM_ID_TONGS", "ITEM_ID_CHARCOAL", "ITEM_ID_SAW", "ITEM_ID_HAMMER"],
             "module_id":"MODULE_ID_STOVE"
         },
         {
             "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
             "plan_name": "Mushroompress Plan",
-            "required_items":["ITEM_ID_SAW"],
-            "module_id":"MODULE_ID_MUSHROOMPRESS"
+            "required_items":["ITEM_ID_SAW", "ITEM_ID_BUCKET", "ITEM_ID_HAMMER" ],
+            "module_id":"MODULE_ID_WORKBENCH"
         }
 
     ],

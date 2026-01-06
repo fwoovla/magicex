@@ -489,8 +489,8 @@ void CharacterMenu::OnUseItem() {
     if(source_itter != g_item_instances.end()) {
         if(source_itter->second.type == TYPE_FOOD) {
             TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
-            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.saturation);
-            g_character_data[g_current_player->uid].saturation += source_itter->second.saturation;
+            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.food_data.saturation);
+            g_character_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
             if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
                 g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
             }

@@ -346,11 +346,11 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string stat = "";
     std::string value = "";
 
-    for(auto mod : item_data.item_mods) {
+/*     for(auto mod : item_data.item_mods) {
         //TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
-/*         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
+         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
         if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
-        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}  */
+        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}  
 
         details += mod.mod_name + "\n"; 
 
@@ -359,27 +359,34 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         details += "- empty slot -\n";
     }
 
-    if(item_data.mod_slots > 0) {details += "\n";}
+    if(item_data.mod_slots > 0) {details += "\n";} */
     //details += "\n";
     
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {
     
         if(item_data.type == TYPE_WEAPON) {
-            details += std::to_string(itter->second.damage) + "  damage\n";
-            std::string cool = TextFormat("%0.2f", itter->second.cooldown);
-            details += cool + "  cooldown\n";
-            if(itter->second.max_power > 0){
-                std::string mpower = TextFormat("%0.2f", itter->second.max_power);
-                std::string cpower = TextFormat("%0.2f", itter->second.current_power);
+            details += std::to_string(itter->second.weapon_data.damage) + "  damage\n";
+            std::string cool = TextFormat("%0.2f", itter->second.weapon_data.cooldown);
+            details += "cooldown: " + cool + "\n";
+
+            std::string knock = TextFormat("%0.2f", itter->second.weapon_data.knockback);
+            details += "knockback: " + knock + "\n";
+
+            std::string recoil = TextFormat("%0.2f", itter->second.weapon_data.recoil);
+            details += "recoil: " + recoil + "\n";
+
+            if(itter->second.weapon_data.max_power > 0){
+                std::string mpower = TextFormat("%0.2f", itter->second.weapon_data.max_power);
+                std::string cpower = TextFormat("%0.2f", itter->second.weapon_data.current_power);
                 details += cpower + "/" +  mpower +"\n";
             }
         }
 
         if(item_data.type >= TYPE_HEAD_ARMOR and item_data.type <= TYPE_HAND_ARMOR) {
-            details += std::to_string(itter->second.defence) + "  defence\n";
-            if(itter->second.magic_defence > 0) {
-                details += std::to_string(itter->second.magic_defence) + "  magic defence\n";
+            if(itter->second.armor_data.magic_defence > 0) {
+                details += "defence: " + std::to_string(itter->second.armor_data.defence) + "\n";
+                details += "magic defence: " + std::to_string(itter->second.armor_data.magic_defence) + "\n";
                 
             }
         }
@@ -389,8 +396,8 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
         }
 
         if(item_data.type ==  TYPE_FOOD) {
-            std::string sat = TextFormat("%0.2f", itter->second.saturation);
-            details += sat + "  saturation\n";
+            std::string sat = TextFormat("%0.2f", itter->second.food_data.saturation);
+            details += "saturation: " + sat + "\n";
             details += "  [ RMB ] to eat\n";
         }
    
@@ -418,11 +425,11 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
 
             std::string mod_stat_string = "";
 
-            if(g_equipment_mod_data[mod_id].cooldown != 0.0f) {mod_stat_string += "mele cooldown" + std::to_string(g_equipment_mod_data[mod_id].cooldown);}
-            if(g_equipment_mod_data[mod_id].damage != 0) {mod_stat_string += "mele damage" + std::to_string(g_equipment_mod_data[mod_id].damage);}
-            if(g_equipment_mod_data[mod_id].defence != 0) {mod_stat_string += "defence" + std::to_string(g_equipment_mod_data[mod_id].defence);}
-            if(g_equipment_mod_data[mod_id].magic_defence != 0) {mod_stat_string += "magic_defence" + std::to_string(g_equipment_mod_data[mod_id].magic_defence);}
-            if(g_equipment_mod_data[mod_id].max_power != 0.0f) {mod_stat_string += " weapon power" + std::to_string(g_equipment_mod_data[mod_id].max_power);}
+            if(g_equipment_mod_data[mod_id].cooldown != 0.0f) {mod_stat_string += "mele cooldown " + std::to_string(g_equipment_mod_data[mod_id].cooldown);}
+            if(g_equipment_mod_data[mod_id].damage != 0) {mod_stat_string += "mele damage " + std::to_string(g_equipment_mod_data[mod_id].damage);}
+            if(g_equipment_mod_data[mod_id].defence != 0) {mod_stat_string += "defence " + std::to_string(g_equipment_mod_data[mod_id].defence);}
+            if(g_equipment_mod_data[mod_id].magic_defence != 0) {mod_stat_string += "magic defence " + std::to_string(g_equipment_mod_data[mod_id].magic_defence);}
+            if(g_equipment_mod_data[mod_id].max_power != 0.0f) {mod_stat_string += " weapon power " + std::to_string(g_equipment_mod_data[mod_id].max_power);}
 
             //TraceLog(LOG_INFO, "mod id %i  name  %s stats  %s", mod_id, mod_name_string.c_str(), mod_stat_string.c_str());
             details += mod_stat_string + "\n";
