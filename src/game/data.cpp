@@ -1640,7 +1640,7 @@ std::string ModuleIdToStr(const int id) {
 
 std::string ItemTypeToStr(const int id) {
     static const std::unordered_map<ItemType , std::string> lookup_table = {
-        {ItemType::TYPE_ARMOR,     "Any Armor"},
+        {ItemType::TYPE_ARMOR,     "Armor"},
         {ItemType::TYPE_HEAD_ARMOR,     "Head Armor"},
         {ItemType::TYPE_BODY_ARMOR,     "Body Armor"},
         {ItemType::TYPE_LEG_ARMOR,     "Leg Armor"},
@@ -1652,7 +1652,7 @@ std::string ItemTypeToStr(const int id) {
         {ItemType::TYPE_SCROLL,     "Scroll"},
         {ItemType::TYPE_FOOD,     "Food"},
         {ItemType::TYPE_CHARM,     "Charm"},
-        {ItemType::TYPE_WEAPON,     "Any Weapon"},
+        {ItemType::TYPE_WEAPON,     "Weapon"},
         {ItemType::TYPE_ALL,     "All"},
     };
 

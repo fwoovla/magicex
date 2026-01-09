@@ -163,6 +163,7 @@ void PlayerCharacter::Draw() {
     //TraceLog(LOG_INFO, "aim pos  %0.2f  %0.2f", aim_position.x, aim_position.y);
     Vector2 mp = g_input.world_mouse_position;
     float width = Vector2Distance(aim_position, mp);
+    if(width > 20.0f) {width = 20.0f; }
     //DrawCircleLinesV(mp, width, WHITE);
     DrawLineV( {mp.x - width, mp.y}, {mp.x - width -5, mp.y}, WHITE );
 
@@ -182,6 +183,8 @@ void PlayerCharacter::Draw() {
         DrawCircleV(position,3, RED);
         Vector2 t_pos = Vector2Add(Vector2Rotate( {8, 0}, weapon_sprite.rotation * DEG2RAD), position);
         DrawCircleV( t_pos, 3, BLUE);
+        //DrawCircleLinesV(mp, width, WHITE);
+        DrawCircleV(aim_position, 5, BLUE);
     }
 }
 

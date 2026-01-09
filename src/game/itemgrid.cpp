@@ -26,6 +26,7 @@ void ItemGrid::Update() {
     cell_hovered = false;
     hovered_cell = {-1,-1};
     
+    
 
     for (int c = 0; c < cols; c++) { 
         for(int r = 0; r < rows; r++) {
@@ -43,6 +44,7 @@ void ItemGrid::Update() {
                     shared_data->dest_grid = this_grid;
                     //TraceLog(LOG_INFO, "dest grid %i",shared_data->dest_grid); 
                 }
+
                 if(instance_id != -1) {
                     cell_hovered = true;
 
@@ -59,7 +61,6 @@ void ItemGrid::Update() {
                     }
 
                     //TraceLog(LOG_INFO, "hc %0.0f %0.0f    lhc %0.0f  %0.0f", hovered_cell.x, hovered_cell.y, last_hovered_cell.x, last_hovered_cell.y);
-
                     if(can_select){
                         std::string i_name = "no item found";
                         Color color = DEFAULTITEMCOLOR;
@@ -71,12 +72,12 @@ void ItemGrid::Update() {
                             CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
-                                color = g_rarity_colors[itter->second.rarity];
-                                std::string details_text = CreateDetails(itter->second);
-                                
-                                int y_offset = 40;
+                                shared_data->item_id = itter->second.instance_id;
+                                shared_data->source_grid = this_grid;
+                                selected_cell = hovered_cell;
+                                shared_data->source_cell = selected_cell;
+                                open_details.EmitSignal();
 
-                               CreateLabel(details_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y + y_offset)*g_inv_scale}, FONTSIZE_20, color, details_text);
                             }
                             if(g_input.mouse_right and this_grid == GRID_INVENTORY) {
                                 if(itter->second.type == TYPE_FOOD) {
@@ -114,10 +115,19 @@ void ItemGrid::Update() {
                             putdown_or_equip.EmitSignal();
                         }
                     }
-                    
                 }
             }
         }
+    }
+
+    if(shared_data->showing_details == true and shared_data->source_grid == this_grid) {
+        if(hovered_cell == Vector2{-1, -1}) {
+            close_details.EmitSignal();
+        }
+        else if(last_hovered_cell != hovered_cell) {
+            close_details.EmitSignal();
+        }
+        
     }
 
     last_hovered_cell = hovered_cell;
@@ -161,6 +171,7 @@ void ItemGrid::Update() {
         cell_selected = false;
         selected_cell = {-1,-1};
     }
+
 }
 
 void ItemGrid::DrawGrid() {
@@ -207,12 +218,13 @@ void ItemGrid::DrawItems() {
         }
     }
 
-    if(cell_hovered and can_select) {
+/*     if(cell_hovered and can_select) {
         DrawLabelCenteredWithBG(name_label, BLACK);
         if(show_details) {
             DrawLabelCenteredWithBG(details_label, BLACK);
+            
         }
-    }
+    } */
 }
 
 

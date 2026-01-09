@@ -22,7 +22,8 @@ CharacterMenu::CharacterMenu() {
     ground_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
     ground_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     ground_grid->pickup.Connect( [&](){OnPickup();} );
-
+    ground_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    ground_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_GROUND] = ground_grid;
     
 //stats
@@ -61,6 +62,8 @@ CharacterMenu::CharacterMenu() {
     primary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //primary_grid->use_item.Connect( [&](){OnUseItem();} );
     primary_grid->pickup.Connect( [&](){OnPickup();} );
+    primary_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    primary_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_PRIMARY] = primary_grid;
 
     
@@ -73,6 +76,8 @@ CharacterMenu::CharacterMenu() {
     secondary_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //secondary_grid->use_item.Connect( [&](){OnUseItem();} );
     secondary_grid->pickup.Connect( [&](){OnPickup();} );
+    secondary_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    secondary_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_SECONDARY] = secondary_grid;
 
     CreateLabel(head_header_label, {ppo.x + 75, ppo.y - 110}, FONTSIZE_24, WHITE, "head");
@@ -84,6 +89,8 @@ CharacterMenu::CharacterMenu() {
     head_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //head_grid->use_item.Connect( [&](){OnUseItem();} );
     head_grid->pickup.Connect( [&](){OnPickup();} );
+    head_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    head_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_HEAD] = head_grid;
 
     CreateLabel(body_header_label, {ppo.x - 75, ppo.y - 110}, FONTSIZE_24, WHITE, "body");
@@ -95,6 +102,8 @@ CharacterMenu::CharacterMenu() {
     body_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //body_grid->use_item.Connect( [&](){OnUseItem();} );
     body_grid->pickup.Connect( [&](){OnPickup();} );
+    body_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    body_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_BODY] = body_grid;
 
     CreateLabel(legs_header_label, {ppo.x, ppo.y + 70}, FONTSIZE_24, WHITE, "legs");
@@ -106,6 +115,8 @@ CharacterMenu::CharacterMenu() {
     legs_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //legs_grid->use_item.Connect( [&](){OnUseItem();} );
     legs_grid->pickup.Connect( [&](){OnPickup();} );
+    legs_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    legs_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_LEGS] = legs_grid;
 
     CreateLabel(feet_header_label, {ppo.x - 75, ppo.y + 70}, FONTSIZE_24, WHITE, "feet");
@@ -117,6 +128,8 @@ CharacterMenu::CharacterMenu() {
     feet_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //feet_grid->use_item.Connect( [&](){OnUseItem();} );
     feet_grid->pickup.Connect( [&](){OnPickup();} );
+    feet_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    feet_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_FEET] = feet_grid;
 
     CreateLabel(hands_header_label, {ppo.x + 75, ppo.y + 70}, FONTSIZE_24, WHITE, "hands");
@@ -128,6 +141,8 @@ CharacterMenu::CharacterMenu() {
     hands_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     //hands_grid->use_item.Connect( [&](){OnUseItem();} );
     hands_grid->pickup.Connect( [&](){OnPickup();} );
+    hands_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    hands_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_HANDS] = hands_grid;
 
 
@@ -145,6 +160,8 @@ CharacterMenu::CharacterMenu() {
     inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
     inventory_grid->use_item.Connect( [&](){OnUseItem();} );
     inventory_grid->putdown_or_equip.Connect( [&](){OnPutDownOrEquip();} );
+    inventory_grid->open_details.Connect( [&](){OnOpenDetails();} );
+    inventory_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_INVENTORY] = inventory_grid;
 
     hpo = { 350, g_resolution.y - 80};
@@ -157,6 +174,8 @@ CharacterMenu::CharacterMenu() {
     hotbar_grid->use_item.Connect( [&](){OnUseItem();} ); */
     grid_list[GRID_HOTBAR] = hotbar_grid;
 
+    details_panel  = new DetailsPanel();
+    show_details = false;
 }
 
 CharacterMenu::~CharacterMenu() {
@@ -172,6 +191,7 @@ CharacterMenu::~CharacterMenu() {
     delete legs_grid;
     delete feet_grid;
     delete hands_grid;
+    delete details_panel;
 
     TraceLog(LOG_INFO, "UI DESTRUCTOR:  CHARACTER MENU UI");
 }
@@ -235,6 +255,9 @@ void CharacterMenu::Draw() {
     feet_grid->DrawItems();
     hands_grid->DrawItems();
 
+    if(show_details) {
+        details_panel->Draw();
+    }
 
     if(g_game_settings.show_debug) {
 
@@ -255,6 +278,9 @@ void CharacterMenu::DrawHotBarOnly() {
 
 void CharacterMenu::Update() {
     
+    if(show_details) {
+        details_panel->Update();
+    }
 
     ground_grid->Update();
     inventory_grid->Update();
@@ -314,6 +340,7 @@ void CharacterMenu::Open() {
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
     shared_data.use_id = -1;
+    shared_data.showing_details = false;
 
     blank_list.clear();
     blank_list.push_back(-1);
@@ -446,14 +473,11 @@ void CharacterMenu::OnTransferItem() {
             grid_list[dest_grid]->AddItem(item_id, dest_cell);
             grid_list[source_grid]->RemoveItem(source_cell);
             
-
             if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
                 g_current_player->Equip(item_id);    
             }
-            
             if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
                 g_current_player->UnEquip(item_id);
-                
             }
         }
         else {
@@ -468,6 +492,7 @@ void CharacterMenu::OnTransferItem() {
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
     shared_data.use_id = -1;
+    shared_data.showing_details = false;
 
     TraceLog(LOG_INFO, "---------------------------------\n");
 }
@@ -494,7 +519,6 @@ void CharacterMenu::OnUseItem() {
             if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
                 g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
             }
-
             grid_list[source_grid]->RemoveItem(source_cell);
         }
     }
@@ -509,6 +533,32 @@ void CharacterMenu::OnUseItem() {
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
     shared_data.use_id = -1;
+    shared_data.showing_details = false;
+
+}
 
 
+void CharacterMenu::OnOpenDetails() {
+    if(!show_details) {
+        show_details = true;
+        shared_data.showing_details = true;
+        details_panel->OpenPanel(&g_item_instances[shared_data.item_id]);
+        //TraceLog(LOG_INFO, "--------------open details %i------------------- %i ", shared_data.item_id, shared_data.source_grid);
+    }
+}
+
+
+void CharacterMenu::OnCloseDetails() {
+    if(show_details) {
+        show_details = false;
+        
+        shared_data.dest_cell = {-1,-1};
+        shared_data.dest_grid = GRID_NONE;
+        shared_data.item_id = -1;
+        shared_data.use_id = -1; 
+        shared_data.source_cell = {-1,-1};
+        shared_data.source_grid = GRID_NONE;
+        shared_data.showing_details = false;
+        TraceLog(LOG_INFO, "--------------close details %i  ------------------- %i", shared_data.item_id, shared_data.source_grid);
+    }
 }

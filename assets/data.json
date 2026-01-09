@@ -583,7 +583,7 @@
             "mod_slots":2,
             "shots":5,
             "pps":0.4,
-            "accuracy":0.1,
+            "accuracy":0.04,
             "spread": 40
         },
         {
@@ -598,7 +598,7 @@
             "mod_slots":3,
             "shots":1,
             "pps":0.2,
-            "accuracy":0.1,
+            "accuracy":0.06,
             "spread": 10
         },
         {
@@ -613,7 +613,7 @@
             "mod_slots":4,
             "shots":1,
             "pps":0.2,
-            "accuracy":0.1,
+            "accuracy":0.04,
             "spread": 10
         },
         {
@@ -628,7 +628,7 @@
             "mod_slots":1,
             "shots":1,
             "pps":0.3,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         },
         {
@@ -643,7 +643,7 @@
             "mod_slots":2,
             "shots":5,
             "pps":1.0,
-            "accuracy":0.15,
+            "accuracy":0.04,
             "spread": 30
         },
         {
@@ -658,28 +658,28 @@
             "mod_slots":3,
             "shots":1,
             "pps":1.0,
-            "accuracy":0.15,
+            "accuracy":0.03,
             "spread": 0     
         },
         {
             "weapon_id": "ITEM_ID_NEWWAND8",
             "weapon_name": "fb mg",
-            "cooldown": 0.20,
+            "cooldown": 0.15,
             "spell_id":"SPELL_ID_FIREBALL_4",
-            "max_power":10,
+            "max_power":20,
             "damage":2,
-            "recoil":20,
+            "recoil":5,
             "knockback":10,
             "mod_slots":4,
             "shots":1,
-            "pps":0.4,
-            "accuracy":0.15,
+            "pps":0.1,
+            "accuracy":0.05,
             "spread": 0
         },
         {
             "weapon_id": "ITEM_ID_NEWWAND9",
             "weapon_name": "lightning pistol",
-            "cooldown": 0.10,
+            "cooldown": 0.5,
             "spell_id":"SPELL_ID_LIGHTNING_1",
             "max_power":10,
             "damage":2,
@@ -688,13 +688,13 @@
             "mod_slots":1,
             "shots":1,
             "pps":0.4,
-            "accuracy":0.1,
+            "accuracy":0.05,
             "spread": 0
         },
         {
             "weapon_id": "ITEM_ID_NEWWAND10",
             "weapon_name": "lightning shotgun",
-            "cooldown": 0.50,
+            "cooldown": 0.6,
             "spell_id":"SPELL_ID_LIGHTNING_2",
             "max_power":10,
             "damage":2,
@@ -703,13 +703,13 @@
             "mod_slots":2,
             "shots":5,
             "pps":0.8,
-            "accuracy":0.15,
+            "accuracy":0.04,
             "spread": 30
         },
         {
             "weapon_id": "ITEM_ID_NEWWAND11",
             "weapon_name": "lightning chain",
-            "cooldown": 0.30,
+            "cooldown": 0.8,
             "spell_id":"SPELL_ID_LIGHTNING_3",
             "max_power":10,
             "damage":2,
@@ -718,7 +718,7 @@
             "mod_slots":3,
             "shots":1,
             "pps":1.0,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         },
         {
@@ -733,7 +733,7 @@
             "mod_slots":4,
             "shots":1,
             "pps":0.25,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         },
         {
@@ -748,7 +748,7 @@
             "mod_slots":1,
             "shots":1,
             "pps":0.3,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         },
         {
@@ -763,13 +763,13 @@
             "mod_slots":2,
             "shots":5,
             "pps":0.8,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 30
         },
         {
             "weapon_id": "ITEM_ID_NEWWAND15",
             "weapon_name": "poison launcher",
-            "cooldown": 0.30,
+            "cooldown": 0.6,
             "spell_id":"SPELL_ID_POISON_3",
             "max_power":10,
             "damage":2,
@@ -778,7 +778,7 @@
             "mod_slots":3,
             "shots":1,
             "pps":1.0,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         },
         {
@@ -793,7 +793,7 @@
             "mod_slots":4,
             "shots":1,
             "pps":0.8,
-            "accuracy":0.15,
+            "accuracy":0.05,
             "spread": 0
         }        
     ],
@@ -920,8 +920,6 @@
 
 
 
-
-
     "recipie_data": [
         {
             "recipie_id":"RECIPIE_ID_STAFF",
@@ -999,7 +997,7 @@
             "sprite_sheet_id":"SPRITE_SCAVENGER",
             "max_stamina":10,
             "ai_id":"AI_AGGRESSIVE",
-            "primary":"ITEM_ID_WAND"
+            "primary":"ITEM_ID_NEWWAND4"
         },
         {
             "creature_id":"CREATURE_TRADER",

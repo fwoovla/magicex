@@ -32,6 +32,7 @@ class BaseUILayer{
 struct SharedItemData {
     int item_id;
     int use_id;
+    bool showing_details;
     //bool is_using;
     //std::vector<int> *source_list;
     //std::vector<int> *dest_list;
@@ -120,9 +121,45 @@ class ItemGrid {
     Signal pickup;
     Signal use_item;
     Signal putdown_or_equip;
+    Signal open_details;
+    Signal close_details;
 
 };
 
+class DetailsPanel : public BaseUILayer {
+
+    public:
+    DetailsPanel();
+    ~DetailsPanel() override;
+    void Update() override;
+    void Draw() override;
+    void OpenPanel(ItemInstanceData *_data);
+
+    ItemInstanceData *item_data;
+    Rectangle panel_rect;
+
+
+    Label item_name_label;
+    Label item_type_label;
+    Label value_label;
+
+    Label modslots_label;
+
+    Label power_label;
+    Label damage_label;
+    Label recoil_label;
+    Label accuracy_label;
+    Label pps_label;
+    Label cooldown_label;
+    Label knockback_label;
+
+    Label defence_label;
+    Label magicdefence_label;
+
+    Label saturation_label;
+
+    Label slot_label;
+};
 
 
 class PauseMenu : public BaseUILayer {
@@ -234,6 +271,9 @@ class CharacterMenu : public BaseUILayer {
 
     void OnUseItem();
 
+    void OnOpenDetails();
+    void OnCloseDetails();
+
 
     bool use_ground;
     std::vector<int> blank_list;
@@ -295,6 +335,9 @@ class CharacterMenu : public BaseUILayer {
     Label max_power_label;
     Label current_power_label;
     Label sat_label;
+
+    bool show_details;
+    DetailsPanel *details_panel;
 };
 
 class TitleUILayer : public BaseUILayer {

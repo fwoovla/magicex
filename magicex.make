@@ -84,6 +84,7 @@ GENERATED += $(OBJDIR)/charactermenu.o
 GENERATED += $(OBJDIR)/containerentity.o
 GENERATED += $(OBJDIR)/creatureentity.o
 GENERATED += $(OBJDIR)/data.o
+GENERATED += $(OBJDIR)/detailspanel.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/entityspawner.o
@@ -130,6 +131,7 @@ OBJECTS += $(OBJDIR)/charactermenu.o
 OBJECTS += $(OBJDIR)/containerentity.o
 OBJECTS += $(OBJDIR)/creatureentity.o
 OBJECTS += $(OBJDIR)/data.o
+OBJECTS += $(OBJDIR)/detailspanel.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/entityspawner.o
@@ -297,6 +299,9 @@ $(OBJDIR)/scenemanager.o: src/game/scenemanager.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/charactermenu.o: src/game/scenes/charactermenu.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/detailspanel.o: src/game/scenes/detailspanel.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/endscene.o: src/game/scenes/endscene.cpp
