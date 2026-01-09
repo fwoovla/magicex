@@ -44,6 +44,7 @@ class CharacterEntity : public AnimatedSpriteEntity {
     Vector2 velocity;
     Sprite weapon_sprite;
     Sprite shadow_sprite;
+    Vector2 aim_position;
     bool can_use_spell;
     bool can_mele;
     bool can_switch;
@@ -162,6 +163,8 @@ class PlayerCharacter : public CharacterEntity {
     void OnHungerTimerTimeout() override;
     
     void CheckInput();
+
+    Sprite aim_sprite;
     
 }; 
 

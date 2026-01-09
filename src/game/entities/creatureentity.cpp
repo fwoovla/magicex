@@ -126,7 +126,7 @@ void CreatureEntity::Update() {
                 if(current_primary_data->spell_id != -1) {
                     TraceLog(LOG_INFO, "casting spell");
                     
-                    if(g_character_data[uid].current_power < g_spell_data[current_primary_data->spell_id].pps) {
+                    if(g_character_data[uid].current_power < current_primary_data->weapon_data.pps) {
                         return;
                     }
                     
@@ -136,25 +136,26 @@ void CreatureEntity::Update() {
                     payload.rotation = weapon_sprite.rotation;
                     payload.shooter_id = uid;
                     payload.target_position = target_creature->position;
+                    payload.spread = current_primary_data->weapon_data.spread;
+                    TraceLog(LOG_INFO, "casting spell id %i  shots %i", current_primary_data->spell_id, current_primary_data->weapon_data.shots);
+                    //TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
 
+                    for(int shot = 0; shot <= current_primary_data->weapon_data.shots; shot++) {
+                        if(g_game_data.is_in_sub_map) {
+                            SpawnSpell(*g_sub_scene, payload, &current_primary_data->spell_data);
 
-                    TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
-                    TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
-
-
-                    if(g_game_data.is_in_sub_map) {
-                        SpawnSpell(*g_sub_scene, payload, &g_spell_data[current_primary_data->spell_id]);
+                        }
+                        else {
+                            SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
+                        }
                     }
-                    else {
-                        SpawnSpell(*g_current_scene, payload, &g_spell_data[current_primary_data->spell_id]);
-                    }
-                    g_character_data[uid].current_power -= g_spell_data[current_primary_data->spell_id].pps;
+                    g_character_data[uid].current_power -= current_primary_data->weapon_data.pps;
                     current_primary_data->weapon_data.current_power = g_character_data[uid].current_power; 
-                    spell_timer.Start(g_spell_data[current_primary_data->spell_id].cooldown, true);
+                    spell_timer.Start(current_primary_data->weapon_data.cooldown, true);
                     can_use_spell = false;
                     should_use_spell = false;
-                    weapon_state = WSTATE_MELE;
-                    velocity = Vector2Rotate( {-g_spell_data[current_primary_data->spell_id].recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                    //weapon_state = WSTATE_MELE;
+                    velocity = Vector2Rotate( {-current_primary_data->weapon_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
                 }
             }
         }

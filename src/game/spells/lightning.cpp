@@ -20,7 +20,7 @@ Lightning::Lightning(NewSpellPayload payload, SpellData *_data) {
     target_position = payload.target_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
-    rotation = target_rotation * RAD2DEG;
+    rotation = (target_rotation * RAD2DEG) + GetRandomValue(-payload.spread, payload.spread);
     velocity = Vector2Rotate({data->speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);

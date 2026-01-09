@@ -1,4 +1,4 @@
-#include "../../core/gamedefs.h"
+/* #include "../../core/gamedefs.h"
 
 MovementEffectEntity::MovementEffectEntity(CharacterEffectData &_data, Vector2 _position) {
     data = _data;
@@ -49,4 +49,4 @@ float MovementEffectEntity::GetYSort() {
 
 void MovementEffectEntity::OnLifetimeTimeout() {
     should_delete = true;
-}
+} */

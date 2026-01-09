@@ -13,13 +13,15 @@ Poison::Poison(NewSpellPayload payload, SpellData *_data){
     collision_radius = data->radius;
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
-                
-    shooter_id = payload.shooter_id;
+             
+    
+    
+    shooter_id =payload.shooter_id;
 
     target_position = payload.target_position;
     
     target_rotation = GetAngleFromTo(position, target_position);
-    rotation = (target_rotation * RAD2DEG) + GetRandomValue(-20, 20);
+    rotation = (target_rotation * RAD2DEG) + GetRandomValue(-payload.spread, payload.spread);
     velocity = Vector2Rotate({data->speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);
@@ -33,7 +35,6 @@ Poison::Poison(NewSpellPayload payload, SpellData *_data){
     LoadSpriteCentered(sprite, g_spell_sprites[data->spell_id], position);
     sprite.rotation = rotation;
 
-    //id = GetRandomValue(0, 10000);
 
 }
 
@@ -49,30 +50,17 @@ void Poison::Update() {
     Vector2 previous_position = position;
     float dt = GetFrameTime();
 
-    target_rotation = GetAngleFromTo(position, target_position);
-    //rotation = RotateTowardsRad(rotation * DEG2RAD, target_rotation, PI * 20, GetFrameTime()) * RAD2DEG;
-    rotation = target_rotation * RAD2DEG;
-
-    //velocity = Vector2Rotate(velocity, rotation * DEG2RAD);
-    float rad = rotation * DEG2RAD;
-    velocity.x += cosf(rad) * 15.0f;
-    velocity.y += sinf(rad) * 15.0f;
-
-    vClamp(velocity, 1.0);
-    //TraceLog(LOG_INFO, "rotating: %f  ", rotation);
-    velocity = Vector2ClampValue(velocity, -data->speed , data->speed);
-
     position = Vector2Add(position, velocity * GetFrameTime());
 
     CollisionResult result;
-
     if(CollideWithTile(this, result)) {
         should_delete = true;
     }
-
+    
     if(CollideWithEntity(this, result)) {
+        
         if(result.collider->uid != shooter_id) {
-            TraceLog(LOG_INFO, "collider %s", result.collider->identifier.c_str());
+            TraceLog(LOG_INFO, "collider %s", result.collider->identifier);
             DamagePayload new_payload;
             new_payload.attacker_id = data->shooter_id;
             new_payload.damage = data->damage;
@@ -81,13 +69,11 @@ void Poison::Update() {
     
             should_delete = true;
         }
-        
     }
+
     sprite.position = position;
-    sprite.rotation = rotation;
 
     lifetime_timer.Update(); 
-
 }
 
 void Poison::Draw() {

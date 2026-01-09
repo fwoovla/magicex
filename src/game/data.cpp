@@ -151,33 +151,21 @@ void LoadGameData() {
 
         g_item_data[(int)id] = new_item;
 
-        if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
-            type = TYPE_ARMOR;
-        }
-        if(type == TYPE_WEAPON) {
-            if(id <= ITEM_ID_STAFF) {
-                g_loot_tables[type].push_back(id);
-                g_loot_tables[TYPE_ALL].push_back(id);
-            }
-        }
-        else if(type == TYPE_CHARM) {
-            //do nothing
-        }
-        else {
-            g_loot_tables[type].push_back(id);
-            g_loot_tables[TYPE_ALL].push_back(id);
-        }
+        g_loot_tables[type].push_back(id);
+        g_loot_tables[TYPE_ALL].push_back(id);
 
+        if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
+            g_loot_tables[TYPE_ARMOR].push_back(id);
+        }
     }
-    g_loot_tables[TYPE_CHARM].push_back(ITEM_ID_CHARM);
 
     TraceLog(LOG_INFO, "-----------------------------");
     TraceLog(LOG_INFO, "-------LOOT TABLES-----------");
     TraceLog(LOG_INFO, "-----------------------------");
-    for(auto table : g_loot_tables) {
+    for(auto &table : g_loot_tables) {
         TraceLog(LOG_INFO, "loot table  id: %i", table.first);
         for(int item = 0; item < table.second.size(); item++) {
-            TraceLog(LOG_INFO, "    in table: %i",  table.second[item]);
+            TraceLog(LOG_INFO, "    in table: %s",  g_item_data[table.second[item]].item_name.c_str());
         }
     }
 //---------------------spell data
@@ -194,23 +182,16 @@ void LoadGameData() {
         float lifetime = cj["spell_data"][i]["lifetime"];
         float damage = cj["spell_data"][i]["damage"];
         int speed = cj["spell_data"][i]["speed"];
-        int level = cj["spell_data"][i]["level"];
         float radius = cj["spell_data"][i]["radius"];
-        float cooldown = cj["spell_data"][i]["cooldown"];
-        float pps = cj["spell_data"][i]["pps"];
-        float recoil = cj["spell_data"][i]["recoil"];
         float knockback = cj["spell_data"][i]["knockback"];
 
         new_spell.lifetime = lifetime;
         new_spell.damage = damage;
-        new_spell.level = level;
         new_spell.spell_id = spell_id;
         new_spell.radius = radius;
         new_spell.speed = speed;
         new_spell.spell_name = name;
-        new_spell.cooldown = cooldown;
-        new_spell.pps = pps;
-        new_spell.recoil = recoil;
+        //new_spell.pps = pps;
         new_spell.knockback = knockback;
         
         g_spell_data[spell_id] = new_spell;
@@ -244,40 +225,9 @@ void LoadGameData() {
             .mod_slots = mod_slots    
         };
 
-        TraceLog(LOG_INFO, "Armor Data Loaded  id: %i  %s", w_id, name.c_str());
+        TraceLog(LOG_INFO, "Armor Data Loaded  id: %i  %s %i", w_id, name.c_str(), mod_slots);
         g_armor_data[(int)w_id - ITEM_ID_HELMET] = new_armor;
     }
-
-
-
-
-
-
-//------------------------------------charm data
-    g_charm_data.resize(cj["charm_data"].size());
-
-    for(int i = 0; i < cj["charm_data"].size(); i++) {
-
-        ItemID id = StrToItemId(cj["charm_data"][i]["charm_id"]);
-
-        std::string name = cj["charm_data"][i]["charm_name"];
-
-        
-        ItemModID mod_id = StrToItemModId(cj["charm_data"][i]["mod_id"]);
-
-        ItemType use_type = StrToItemType(cj["charm_data"][i]["use_type"]);
-
-        CharmData new_charm = {
-            .charm_name= name,
-            .charm_id = id,
-            .mod_id = mod_id,
-            .use_type = use_type
-        };
-
-        TraceLog(LOG_INFO, "Charm Data Loaded  id: %i  %s %i", id, name.c_str(), id - ITEM_ID_SWIFTNESS_CHARM_1);
-        g_charm_data[id - ITEM_ID_SWIFTNESS_CHARM_1] = new_charm;
-    }
-
 
 
 //------------------------------------weapon data
@@ -300,7 +250,12 @@ void LoadGameData() {
         float recoil = cj["weapon_data"][i]["recoil"];
         float knockback = cj["weapon_data"][i]["knockback"];
 
-        int mod_slots = cj["weapon_data"][i]["mod_slots"];;
+        int mod_slots = cj["weapon_data"][i]["mod_slots"];
+        float pps = cj["weapon_data"][i]["pps"];
+        int shots = cj["weapon_data"][i]["shots"];
+        float accuracy = cj["weapon_data"][i]["accuracy"];
+        int spread = cj["weapon_data"][i]["spread"];
+
 
         WeaponData new_weapon = {
             .weapon_name = name,
@@ -311,10 +266,14 @@ void LoadGameData() {
             .damage = damage,
             .recoil = recoil,
             .knockback = knockback,
-            .mod_slots = mod_slots
+            .mod_slots = mod_slots,
+            .pps = pps,
+            .shots = shots,
+            .accuracy = accuracy,
+            .spread = spread,
         };
 
-        TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s", w_id, name.c_str());
+        TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s  power %f", w_id, name.c_str(), max_power);
         g_weapon_data[(int)w_id - ITEM_ID_DAGGER] = new_weapon;
     }
 
@@ -452,42 +411,6 @@ void LoadGameData() {
     }
 
 
-    //--------------------cahracter effects
-    g_char_effect_data.resize(cj["character_effects"].size());
-
-    for(int i = 0; i < cj["character_effects"].size(); i++) {
-
-        CharacterEffectData new_effect;
-
-        new_effect.effect_id = StrToCharEffectId( cj["character_effects"][i]["effect_id"] );
-        new_effect.effect_name = cj["character_effects"][i]["effect_name"];
-        new_effect.durration = cj["character_effects"][i]["durration"];
-        new_effect.rarity = StrToItemRarity( cj["character_effects"][i]["rarity"]);
-                
-        TraceLog(LOG_INFO, "Character effect Data  Loaded  id: %i  %s", new_effect.effect_id, new_effect.effect_name.c_str());
-        g_char_effect_data[new_effect.effect_id] = new_effect;
-    }
-
-    //--------------------cahracter mods
-    g_char_mod_data.resize(cj["character_modifiers"].size());
-
-    for(int i = 0; i < cj["character_modifiers"].size(); i++) {
-
-        CharacterModData new_mod;
-
-        new_mod.mod_id = StrToCharModId( cj["character_modifiers"][i]["mod_id"] );
-        new_mod.mod_name = cj["character_modifiers"][i]["mod_name"];
-        new_mod.health = cj["character_modifiers"][i]["health"];
-        new_mod.speed = cj["character_modifiers"][i]["speed"];
-        new_mod.stamina = cj["character_modifiers"][i]["stamina"];
-        new_mod.rarity = StrToItemRarity( cj["character_modifiers"][i]["rarity"]);
-
-        TraceLog(LOG_INFO, "Character Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
-        g_char_mod_data[new_mod.mod_id] = new_mod;
-    }
-
-
-
     //--------------------food mods
     g_food_mod_data.resize(cj["food_modifiers"].size());
 
@@ -502,48 +425,6 @@ void LoadGameData() {
                 
         TraceLog(LOG_INFO, "FOOD Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
         g_food_mod_data[new_mod.mod_id - ITEMMOD_NUTRITIOUS] = new_mod;
-    }
-
-
-    //--------------------armor mods
-    g_equipment_mod_data.resize(ITEMMOD_MAX);
-
-    for(int i = 0; i < cj["armor_modifiers"].size(); i++) {
-
-        ItemModData new_mod;
-
-        new_mod.mod_id = StrToItemModId( cj["armor_modifiers"][i]["mod_id"] );
-        new_mod.mod_name = cj["armor_modifiers"][i]["mod_name"];
-        new_mod.defence = cj["armor_modifiers"][i]["defence"];
-        new_mod.magic_defence= cj["armor_modifiers"][i]["magic_defence"];
-        new_mod.rarity = StrToItemRarity( cj["armor_modifiers"][i]["rarity"]);
-        
-        new_mod.cooldown = 0.0f;
-        new_mod.max_power = 0.0f;
-        new_mod.damage = 0;
-                
-        TraceLog(LOG_INFO, "ARMOR Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
-        g_equipment_mod_data[new_mod.mod_id] = new_mod;
-    }
-
-    //--------------------weapon mods
-    //g_weapon_mod_data.resize(cj["weapon_modifiers"].size());
-    for(int i = 0; i < cj["weapon_modifiers"].size(); i++) {
-
-        ItemModData new_mod;
-
-        new_mod.mod_id = StrToItemModId( cj["weapon_modifiers"][i]["mod_id"] );
-        new_mod.mod_name = cj["weapon_modifiers"][i]["mod_name"];
-        new_mod.cooldown = cj["weapon_modifiers"][i]["cooldown"];
-        new_mod.max_power = cj["weapon_modifiers"][i]["max_power"];
-        new_mod.damage = cj["weapon_modifiers"][i]["damage"];
-        new_mod.rarity = StrToItemRarity( cj["weapon_modifiers"][i]["rarity"]);
-
-        new_mod.defence = 0;
-        new_mod.magic_defence= 0;
-                
-        TraceLog(LOG_INFO, "WEAPON Mod Data  Loaded  id: %i  %s", new_mod.mod_id, new_mod.mod_name.c_str());
-        g_equipment_mod_data[new_mod.mod_id] = new_mod;
     }
 
     //--------------------ai data
@@ -748,6 +629,10 @@ void SaveGame(LevelData &level_data) {
                 {"recoil", inst.weapon_data.recoil},
                 {"knockback", inst.weapon_data.knockback},
                 {"mod_slots", inst.weapon_data.mod_slots},
+                {"pps", inst.weapon_data.pps},
+                {"shots", inst.weapon_data.shots},
+                {"spread", inst.weapon_data.spread},
+                {"accuracy", inst.weapon_data.accuracy},
             };
             
             instance["weapon_data"] = new_weapon;
@@ -766,7 +651,7 @@ void SaveGame(LevelData &level_data) {
                 {"spell_id", inst.armor_data.spell_id},
             };
             
-            instance["weapon_data"] = new_armor;
+            instance["armor_data"] = new_armor;
             TraceLog(LOG_INFO, "saving armor data %s", new_armor["armor_name"]);
         }
     
@@ -775,7 +660,6 @@ void SaveGame(LevelData &level_data) {
 
             json new_food = {
                 {"food_id", inst.food_data.food_id},
-                
                 {"food_name", inst.food_data.food_name},
                 {"saturation", inst.food_data.saturation},
             };
@@ -796,9 +680,6 @@ void SaveGame(LevelData &level_data) {
                 {"damage", inst.spell_data.damage},
                 {"lifetime", inst.spell_data.lifetime},
                 {"radius", inst.spell_data.radius},
-                {"cooldown", inst.spell_data.cooldown},
-                {"pps", inst.spell_data.pps},
-                {"recoil", inst.spell_data.recoil},
                 {"knockback", inst.spell_data.knockback},
             };
 
@@ -1573,14 +1454,26 @@ SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
         {"None",                          SpellID::SPELL_ID_NONE},
-        {"SPELL_ID_MAGICMISSLE_WAND",        SpellID::SPELL_ID_MAGICMISSLE_WAND},
-        {"SPELL_ID_MAGICMISSLE_STAFF",        SpellID::SPELL_ID_MAGICMISSLE_STAFF},
-        {"SPELL_ID_FIREBALL_WAND",           SpellID::SPELL_ID_FIREBALL_WAND},
-        {"SPELL_ID_FIREBALL_STAFF",           SpellID::SPELL_ID_FIREBALL_STAFF},
-        {"SPELL_ID_LIGHTNING_WAND",          SpellID::SPELL_ID_LIGHTNING_WAND},
-        {"SPELL_ID_LIGHTNING_STAFF",          SpellID::SPELL_ID_LIGHTNING_STAFF},
-        {"SPELL_ID_POISON_WAND",          SpellID::SPELL_ID_POISON_WAND},
-        {"SPELL_ID_POISON_STAFF",          SpellID::SPELL_ID_POISON_STAFF},
+        {"SPELL_ID_MAGICMISSLE_1",        SpellID::SPELL_ID_MAGICMISSLE_1},
+        {"SPELL_ID_MAGICMISSLE_2",        SpellID::SPELL_ID_MAGICMISSLE_2},
+        {"SPELL_ID_MAGICMISSLE_3",           SpellID::SPELL_ID_MAGICMISSLE_3},
+        {"SPELL_ID_MAGICMISSLE_4",           SpellID::SPELL_ID_MAGICMISSLE_4},
+
+        {"SPELL_ID_FIREBALL_1",        SpellID::SPELL_ID_FIREBALL_1},
+        {"SPELL_ID_FIREBALL_2",        SpellID::SPELL_ID_FIREBALL_2},
+        {"SPELL_ID_FIREBALL_3",           SpellID::SPELL_ID_FIREBALL_3},
+        {"SPELL_ID_FIREBALL_4",           SpellID::SPELL_ID_FIREBALL_4},
+
+
+        {"SPELL_ID_LIGHTNING_1",          SpellID::SPELL_ID_LIGHTNING_1},
+        {"SPELL_ID_LIGHTNING_2",          SpellID::SPELL_ID_LIGHTNING_2},
+        {"SPELL_ID_LIGHTNING_3",          SpellID::SPELL_ID_LIGHTNING_3},
+        {"SPELL_ID_LIGHTNING_4",          SpellID::SPELL_ID_LIGHTNING_4},
+
+        {"SPELL_ID_POISON_1",          SpellID::SPELL_ID_POISON_1},
+        {"SPELL_ID_POISON_2",          SpellID::SPELL_ID_POISON_2},
+        {"SPELL_ID_POISON_3",          SpellID::SPELL_ID_POISON_3},
+        {"SPELL_ID_POISON_4",          SpellID::SPELL_ID_POISON_4},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1618,19 +1511,37 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_SPEAR",           ItemID::ITEM_ID_SPEAR},
         {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
         {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
-        {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
 
-        {"ITEM_ID_MAGICMISSLE_WAND",            ItemID::ITEM_ID_MAGICMISSLE_WAND},
+/*         {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
+        {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF}, */
+
+        {"ITEM_ID_NEWWAND1",            ItemID::ITEM_ID_NEWWAND1},
+        {"ITEM_ID_NEWWAND2",            ItemID::ITEM_ID_NEWWAND2},
+        {"ITEM_ID_NEWWAND3",            ItemID::ITEM_ID_NEWWAND3},
+        {"ITEM_ID_NEWWAND4",            ItemID::ITEM_ID_NEWWAND4},
+        {"ITEM_ID_NEWWAND5",            ItemID::ITEM_ID_NEWWAND5},
+        {"ITEM_ID_NEWWAND6",            ItemID::ITEM_ID_NEWWAND6},
+        {"ITEM_ID_NEWWAND7",            ItemID::ITEM_ID_NEWWAND7},
+        {"ITEM_ID_NEWWAND8",            ItemID::ITEM_ID_NEWWAND8},
+        {"ITEM_ID_NEWWAND9",            ItemID::ITEM_ID_NEWWAND9},
+        {"ITEM_ID_NEWWAND10",            ItemID::ITEM_ID_NEWWAND10},
+        {"ITEM_ID_NEWWAND11",            ItemID::ITEM_ID_NEWWAND11},
+        {"ITEM_ID_NEWWAND12",            ItemID::ITEM_ID_NEWWAND12},
+        {"ITEM_ID_NEWWAND13",            ItemID::ITEM_ID_NEWWAND13},
+        {"ITEM_ID_NEWWAND14",            ItemID::ITEM_ID_NEWWAND14},
+        {"ITEM_ID_NEWWAND15",            ItemID::ITEM_ID_NEWWAND15},
+        {"ITEM_ID_NEWWAND16",            ItemID::ITEM_ID_NEWWAND16},
+
+/*         {"ITEM_ID_MAGICMISSLE_WAND",            ItemID::ITEM_ID_MAGICMISSLE_WAND},
         {"ITEM_ID_FIREBALL_WAND",            ItemID::ITEM_ID_FIREBALL_WAND},
         {"ITEM_ID_LIGHTNING_WAND",            ItemID::ITEM_ID_LIGHTNING_WAND},
-        {"ITEM_ID_POISON_WAND",            ItemID::ITEM_ID_POISON_WAND},
+        {"ITEM_ID_POISON_WAND",            ItemID::ITEM_ID_POISON_WAND}, */
 
-        {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF},
-
+/* 
         {"ITEM_ID_MAGICMISSLE_STAFF",           ItemID::ITEM_ID_MAGICMISSLE_STAFF},
         {"ITEM_ID_FIREBALL_STAFF",           ItemID::ITEM_ID_FIREBALL_STAFF},
         {"ITEM_ID_LIGHTNING_STAFF",           ItemID::ITEM_ID_LIGHTNING_STAFF},
-        {"ITEM_ID_POISON_STAFF",           ItemID::ITEM_ID_POISON_STAFF},
+        {"ITEM_ID_POISON_STAFF",           ItemID::ITEM_ID_POISON_STAFF}, */
 
 
         {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
@@ -1642,38 +1553,12 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_GLOVES",   ItemID::ITEM_ID_GLOVES},
         {"ITEM_ID_LEGGINGS",   ItemID::ITEM_ID_LEGGINGS},
 
-
+/* 
         {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
         {"ITEM_ID_SWIFTNESS_SCROLL",          ItemID::ITEM_ID_SWIFTNESS_SCROLL},
         {"ITEM_ID_DAMAGE_SCROLL",          ItemID::ITEM_ID_DAMAGE_SCROLL},
         {"ITEM_ID_TOUGHNESS_SCROLL",          ItemID::ITEM_ID_TOUGHNESS_SCROLL},
-        {"ITEM_ID_RESIST_SCROLL",          ItemID::ITEM_ID_RESIST_SCROLL},
-
-        {"ITEM_ID_CHARM",          ItemID::ITEM_ID_CHARM},
-
-        {"ITEM_ID_SWIFTNESS_CHARM_1",          ItemID::ITEM_ID_SWIFTNESS_CHARM_1},
-        {"ITEM_ID_SWIFTNESS_CHARM_2",          ItemID::ITEM_ID_SWIFTNESS_CHARM_2},
-        {"ITEM_ID_SWIFTNESS_CHARM_3",          ItemID::ITEM_ID_SWIFTNESS_CHARM_3},
-        {"ITEM_ID_SWIFTNESS_CHARM_4",          ItemID::ITEM_ID_SWIFTNESS_CHARM_4},
-        {"ITEM_ID_SWIFTNESS_CHARM_5",          ItemID::ITEM_ID_SWIFTNESS_CHARM_5},
-
-        {"ITEM_ID_DAMAGE_CHARM_1",          ItemID::ITEM_ID_DAMAGE_CHARM_1},
-        {"ITEM_ID_DAMAGE_CHARM_2",          ItemID::ITEM_ID_DAMAGE_CHARM_2},
-        {"ITEM_ID_DAMAGE_CHARM_3",          ItemID::ITEM_ID_DAMAGE_CHARM_3},
-        {"ITEM_ID_DAMAGE_CHARM_4",          ItemID::ITEM_ID_DAMAGE_CHARM_4},
-        {"ITEM_ID_DAMAGE_CHARM_5",          ItemID::ITEM_ID_DAMAGE_CHARM_5},
-        
-        {"ITEM_ID_TOUGHNESS_CHARM_1",          ItemID::ITEM_ID_TOUGHNESS_CHARM_1},
-        {"ITEM_ID_TOUGHNESS_CHARM_2",          ItemID::ITEM_ID_TOUGHNESS_CHARM_2},
-        {"ITEM_ID_TOUGHNESS_CHARM_3",          ItemID::ITEM_ID_TOUGHNESS_CHARM_3},
-        {"ITEM_ID_TOUGHNESS_CHARM_4",          ItemID::ITEM_ID_TOUGHNESS_CHARM_4},
-        {"ITEM_ID_TOUGHNESS_CHARM_5",          ItemID::ITEM_ID_TOUGHNESS_CHARM_5},
-
-        {"ITEM_ID_RESIST_CHARM_1",          ItemID::ITEM_ID_RESIST_CHARM_1},
-        {"ITEM_ID_RESIST_CHARM_2",          ItemID::ITEM_ID_RESIST_CHARM_2},
-        {"ITEM_ID_RESIST_CHARM_3",          ItemID::ITEM_ID_RESIST_CHARM_3},
-        {"ITEM_ID_RESIST_CHARM_4",          ItemID::ITEM_ID_RESIST_CHARM_4},
-        {"ITEM_ID_RESIST_CHARM_5",          ItemID::ITEM_ID_RESIST_CHARM_5},
+        {"ITEM_ID_RESIST_SCROLL",          ItemID::ITEM_ID_RESIST_SCROLL}, */
 
         {"ITEM_ID_APPLE",           ItemID::ITEM_ID_APPLE},
         {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
@@ -1827,6 +1712,10 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_weapon.recoil = j["weapon_data"]["recoil"];        
         new_weapon.knockback = j["weapon_data"]["knockback"];
         new_weapon.mod_slots = j["weapon_data"]["mod_slots"];
+        new_weapon.pps = j["weapon_data"]["pps"];
+        new_weapon.shots = j["weapon_data"]["shots"];
+        new_weapon.spread = j["weapon_data"]["spread"];
+        new_weapon.accuracy = j["weapon_data"]["accuracy"];
         i.weapon_data = new_weapon;
         TraceLog(LOG_INFO, "loaded weapon data found for %s", i.item_name.c_str());
     } 
@@ -1854,9 +1743,6 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_spell.lifetime = j["spell_data"]["lifetime"];
         new_spell.radius = j["spell_data"]["radius"];
         new_spell.speed = j["spell_data"]["speed"];
-        new_spell.cooldown = j["spell_data"]["cooldown"];
-        new_spell.pps = j["spell_data"]["pps"];
-        new_spell.recoil = j["spell_data"]["recoil"];
         new_spell.knockback = j["spell_data"]["knockback"];
         i.spell_data = new_spell;
         TraceLog(LOG_INFO, "loaded spell data found for %s", i.item_name.c_str());
@@ -1873,17 +1759,6 @@ void from_json(const json &j, ItemInstanceData &i) {
     } 
 
     TraceLog(LOG_INFO, "Item loaded  %i", i.instance_id);
-}
-
-
-
-void from_json(const json &j, CharacterModData &i) {
-
-    j.at("mod_id").get_to(i.mod_id);
-    j.at("mod_name").get_to(i.mod_name);
-    j.at("speed").get_to(i.speed);
-    j.at("health").get_to(i.health);
-    j.at("rarity").get_to(i.rarity);
 }
 
 

@@ -64,14 +64,7 @@ void CharacterMessage::TakeDamage(DamagePayload _payload) {
 }
 
 
-
-
-
-
-
-
-
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data) {
     int damage = damage_payload.damage;
@@ -93,16 +86,16 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
         this_scene = g_current_scene.get();
     }
 
-    if(_data->spell_id == SPELL_ID_MAGICMISSLE_WAND or _data->spell_id == SPELL_ID_MAGICMISSLE_STAFF) {
+    if(_data->spell_id >= SPELL_ID_MAGICMISSLE_1 and _data->spell_id <= SPELL_ID_MAGICMISSLE_4) {
         this_spell = new MagicMissle(payload, _data);
     }
-    if(_data->spell_id == SPELL_ID_FIREBALL_WAND or _data->spell_id == SPELL_ID_FIREBALL_STAFF) {
+    if(_data->spell_id >= SPELL_ID_FIREBALL_1 and _data->spell_id <= SPELL_ID_FIREBALL_4) {
         this_spell = new FireBall(payload, _data);
     }
-    if(_data->spell_id == SPELL_ID_LIGHTNING_WAND or _data->spell_id == SPELL_ID_LIGHTNING_STAFF) {
+    if(_data->spell_id >= SPELL_ID_LIGHTNING_1 and _data->spell_id <= SPELL_ID_LIGHTNING_4) {
         this_spell = new Lightning(payload, _data);
     }
-    if(_data->spell_id == SPELL_ID_POISON_WAND or _data->spell_id == SPELL_ID_POISON_STAFF) {
+    if(_data->spell_id >= SPELL_ID_POISON_1 and _data->spell_id <= SPELL_ID_POISON_4) {
         this_spell = new Poison(payload, _data);
     }
 
@@ -110,7 +103,7 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
         DL_Add( this_scene->level_data.spell_list, this_spell);
     }
 
-    TraceLog(LOG_INFO, "entity list size  %i", _scene.level_data.entity_list.size()); 
+    TraceLog(LOG_INFO, "spell list size  %i", _scene.level_data.spell_list.size()); 
 }
 
 void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {

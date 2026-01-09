@@ -1086,9 +1086,7 @@
 			{ "id": "TYPE_CONSUMEABLE", "tileRect": null, "color": 16705377 },
 			{ "id": "TYPE_RESOURCE", "tileRect": null, "color": 6539085 },
 			{ "id": "TYPE_PLAN", "tileRect": null, "color": 4098376 },
-			{ "id": "TYPE_SCROLL", "tileRect": null, "color": 39387 },
 			{ "id": "TYPE_FOOD", "tileRect": null, "color": 2943221 },
-			{ "id": "TYPE_CHARM", "tileRect": null, "color": 1199753 },
 			{ "id": "TYPE_ALL", "tileRect": null, "color": 16777215 }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
 		{ "identifier": "CreatureTypes", "uid": 78, "values": [
@@ -1301,10 +1299,13 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_CHARM"], "__tile": null, "defUid": 72, "realEditorValues": [{
+								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": [ "TYPE_WEAPON", "TYPE_ARMOR" ], "__tile": null, "defUid": 72, "realEditorValues": [ {
 									"id": "V_String",
-									"params": ["TYPE_CHARM"]
-								}] }
+									"params": ["TYPE_WEAPON"]
+								}, {
+									"id": "V_String",
+									"params": ["TYPE_ARMOR"]
+								} ] }
 							],
 							"__worldX": -112,
 							"__worldY": 32

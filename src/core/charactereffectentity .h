@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 
 #include "gamedefs.h"
 #include "baseentity.h"
@@ -29,4 +29,4 @@ class MovementEffectEntity : public BaseCharacterEffectEntity {
 
     BaseEntity *target;
 
-};
+}; */

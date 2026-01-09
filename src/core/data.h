@@ -60,7 +60,7 @@ struct FoodModData {
 extern std::vector<FoodModData> g_food_mod_data;
 
 
-struct ItemModData {
+/* struct ItemModData {
     ItemModID mod_id;
     std::string mod_name;
 
@@ -74,7 +74,7 @@ struct ItemModData {
 };
 
 extern std::vector<ItemModData> g_equipment_mod_data;
-
+ */
 
 struct FoodData {
     ItemID food_id;
@@ -86,27 +86,6 @@ struct FoodData {
 
 extern std::vector<FoodData> g_food_data;
 
-
-struct CharacterEffectData {
-    CharEffectID effect_id;
-    std::string effect_name;
-    float durration;
-    int rarity;
-};
-
-extern std::vector<CharacterEffectData> g_char_effect_data;
-
-struct CharacterModData {
-    CharModID mod_id;
-    std::string mod_name;
-    int health;
-    float speed;
-    float stamina;
-    //float durration;
-    int rarity;
-};
-
-extern std::vector<CharacterModData> g_char_mod_data;
 
 struct ItemData {
     ItemID id;
@@ -130,6 +109,10 @@ struct WeaponData {
     float recoil;
     float knockback;
     int mod_slots;
+    float pps;
+    int shots;
+    float accuracy;
+    int spread;
 };
 
 extern std::vector<WeaponData> g_weapon_data;
@@ -146,7 +129,7 @@ struct ArmorData {
 extern std::vector<ArmorData> g_armor_data;
 
 
-struct CharmData {
+/* struct CharmData {
     std::string charm_name;
     ItemID charm_id;
     ItemModID mod_id;
@@ -155,7 +138,7 @@ struct CharmData {
 };
 
 extern std::vector<CharmData> g_charm_data;
-
+ */
 struct RecipieData {
     std::string recipie_name;
     RecipieID recipie_id;
@@ -177,9 +160,6 @@ extern std::vector<PlanData> g_plan_data;
 
 
 struct ItemInstanceData {
-    //std::vector<ItemModData> item_mods;
-    //std::vector<CharacterModData> char_mods;
-
     SpellID spell_id;
     SpellData spell_data;
     ItemID weapon_id;
@@ -392,8 +372,6 @@ RecipieID StrToRecipieId(const std::string& s);
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 
 void from_json(const json &j, ItemInstanceData &i);
-
-void from_json(const json &j, CharacterModData &i);
 
 void from_json(const json &j, ContainerData &i);
 

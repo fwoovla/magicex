@@ -3,18 +3,15 @@
 #include "gamedefs.h"
 
 struct SpellData {
-    int level;
+    std::string spell_name;
     SpellID spell_id;
     int shooter_id;
     float damage;
     float lifetime;
     float radius;
     float speed;
-    float cooldown;
-    float pps;
-    float recoil;
+    //float pps;
     float knockback;
-    std::string spell_name;
 };
 
 extern std::vector<SpellData> g_spell_data;
@@ -24,6 +21,7 @@ struct NewSpellPayload {
     Vector2 target_position;
     float rotation;
     int shooter_id;
+    int spread;
     //SpellData *spell_data;
 };
 

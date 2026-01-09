@@ -51,170 +51,105 @@
         },
 
 
-
         {
-            "item_name": "Wand",
-            "item_id":"ITEM_ID_WAND",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-
-
-
-
-
-
-
-        {
-            "item_name": "new wand1",
+            "item_name": "mm pistol",
             "item_id":"ITEM_ID_NEWWAND1",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
 
         {
-            "item_name": "new wand2",
+            "item_name": "mm shotgun",
             "item_id":"ITEM_ID_NEWWAND2",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand3",
+        {
+            "item_name": "mm mg1",
             "item_id":"ITEM_ID_NEWWAND3",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand4",
+        {
+            "item_name": "mm mg2",
             "item_id":"ITEM_ID_NEWWAND4",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand5",
+        {
+            "item_name": "fb pistol",
             "item_id":"ITEM_ID_NEWWAND5",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand6",
+        {
+            "item_name": "fb shotgun",
             "item_id":"ITEM_ID_NEWWAND6",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand7",
+        {
+            "item_name": "fb launcher",
             "item_id":"ITEM_ID_NEWWAND7",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand8",
+        {
+            "item_name": "fb mg",
             "item_id":"ITEM_ID_NEWWAND8",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand9",
+        {
+            "item_name": "lightning pistol",
             "item_id":"ITEM_ID_NEWWAND9",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand10",
+        {
+            "item_name": "lightning shotgun",
             "item_id":"ITEM_ID_NEWWAND10",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand1",
+        {
+            "item_name": "lightning chain",
             "item_id":"ITEM_ID_NEWWAND11",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand12",
+        {
+            "item_name": "lightning beam",
             "item_id":"ITEM_ID_NEWWAND12",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand13",
+        {
+            "item_name": "poison pistol",
             "item_id":"ITEM_ID_NEWWAND13",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-                {
-            "item_name": "new wand14",
+        {
+            "item_name": "poison shotgun",
             "item_id":"ITEM_ID_NEWWAND14",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
-
-
-
-
-
-
-
         {
-            "item_name": "Magic Missle Wand",
-            "item_id":"ITEM_ID_MAGICMISSLE_WAND",
+            "item_name": "poison launcher",
+            "item_id":"ITEM_ID_NEWWAND15",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
         {
-            "item_name": "Fireball Wand",
-            "item_id":"ITEM_ID_FIREBALL_WAND",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Lightning Wand",
-            "item_id":"ITEM_ID_LIGHTNING_WAND",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Poison Wand",
-            "item_id":"ITEM_ID_POISON_WAND",
+            "item_name": "poison beam",
+            "item_id":"ITEM_ID_NEWWAND16",
             "value":0,
             "item_type":"TYPE_WEAPON"
         },
 
 
-
-        {
-            "item_name": "Staff",
-            "item_id":"ITEM_ID_STAFF",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-
-        {
-            "item_name": "Magic Missle Staff",
-            "item_id":"ITEM_ID_MAGICMISSLE_STAFF",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Fireball Staff",
-            "item_id":"ITEM_ID_FIREBALL_STAFF",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Lightning Staff",
-            "item_id":"ITEM_ID_LIGHTNING_STAFF",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Poison Staff",
-            "item_id":"ITEM_ID_POISON_STAFF",
-            "value":0,
-            "item_type":"TYPE_WEAPON"
-        },
 
 
 
@@ -265,179 +200,6 @@
             "value":0,
             "item_type":"TYPE_LEG_ARMOR"
         },
-
-
-
-
-        {
-            "item_name": "Scroll",
-            "item_id":"ITEM_ID_SCROLL",
-            "value":0,
-            "item_type":"TYPE_SCROLL"
-        },
-        {
-            "item_name": "Swiftness Scroll",
-            "item_id":"ITEM_ID_SWIFTNESS_SCROLL",
-            "value":0,
-            "item_type":"TYPE_SCROLL"
-        },
-        {
-            "item_name": "Damage Scroll",
-            "item_id":"ITEM_ID_DAMAGE_SCROLL",
-            "value":0,
-            "item_type":"TYPE_SCROLL"
-        },
-        {
-            "item_name": "Toughness Scroll",
-            "item_id":"ITEM_ID_TOUGHNESS_SCROLL",
-            "value":0,
-            "item_type":"TYPE_SCROLL"
-        },
-        {
-            "item_name": "Resist Scroll",
-            "item_id":"ITEM_ID_RESIST_SCROLL",
-            "value":0,
-            "item_type":"TYPE_SCROLL"
-        },
-
-
-                {
-            "item_name": "Charm",
-            "item_id":"ITEM_ID_CHARM",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-        {
-            "item_name": "Swiftness Charm 1",
-            "item_id":"ITEM_ID_SWIFTNESS_CHARM_1",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-        {
-            "item_name": "Swiftness Charm 2",
-            "item_id":"ITEM_ID_SWIFTNESS_CHARM_2",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Swiftness Charm 3",
-            "item_id":"ITEM_ID_SWIFTNESS_CHARM_3",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Swiftness Charm 4",
-            "item_id":"ITEM_ID_SWIFTNESS_CHARM_4",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Swiftness Charm 5",
-            "item_id":"ITEM_ID_SWIFTNESS_CHARM_5",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-
-
-
-
-        {
-            "item_name": "Damage Charm 1",
-            "item_id":"ITEM_ID_DAMAGE_CHARM_1",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-        {
-            "item_name": "Damage Charm 2",
-            "item_id":"ITEM_ID_DAMAGE_CHARM_2",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Damage Charm 3",
-            "item_id":"ITEM_ID_DAMAGE_CHARM_3",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Damage Charm 4",
-            "item_id":"ITEM_ID_DAMAGE_CHARM_4",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Damage Charm 5",
-            "item_id":"ITEM_ID_DAMAGE_CHARM_5",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-
-
-
-        {
-            "item_name": "Toughness Charm 1",
-            "item_id":"ITEM_ID_TOUGHNESS_CHARM_1",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-        {
-            "item_name": "Toughness Charm 2",
-            "item_id":"ITEM_ID_TOUGHNESS_CHARM_2",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Toughness Charm 3",
-            "item_id":"ITEM_ID_TOUGHNESS_CHARM_3",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Toughness Charm 4",
-            "item_id":"ITEM_ID_TOUGHNESS_CHARM_4",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Toughness Charm 5",
-            "item_id":"ITEM_ID_TOUGHNESS_CHARM_5",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-
-
-
-        {
-            "item_name": "Resist Charm 1",
-            "item_id":"ITEM_ID_RESIST_CHARM_1",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-        {
-            "item_name": "Resist Charm 2",
-            "item_id":"ITEM_ID_RESIST_CHARM_2",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Resist Charm 3",
-            "item_id":"ITEM_ID_RESIST_CHARM_3",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Resist Charm 4",
-            "item_id":"ITEM_ID_RESIST_CHARM_4",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-                {
-            "item_name": "Resist Charm 5",
-            "item_id":"ITEM_ID_RESIST_CHARM_5",
-            "value":0,
-            "item_type":"TYPE_CHARM"
-        },
-
 
 
         {
@@ -563,132 +325,174 @@
 
 
 
-
-
     "spell_data": [
+
         {
-            "spell_id":"SPELL_ID_POISON_WAND",
-            "spell_name":"Poison w",
-            "level":1,
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":1,
-            "radius":2,
-            "cooldown":0.5,
-            "pps":0.5,
-            "recoil":20,
-            "knockback":30
-        },
-        {
-            "spell_id":"SPELL_ID_POISON_STAFF",
-            "spell_name":"Poison s",
-            "level":1,
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":5,
-            "radius":2,
-            "cooldown":0.5,
-            "pps":1.5,
-            "recoil":20,
-            "knockback":40
-        },
-        {
-            "spell_id":"SPELL_ID_MAGICMISSLE_WAND",
-            "spell_name":"Magic Missle",
-            "level":1,
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "spell_name":"Magic Missle Pistol",
             "lifetime":1.0,
             "speed": 250,
             "damage":1,
             "radius":2,
-            "cooldown":0.5,
-            "pps":0.1,
-            "recoil":15,
-            "knockback":30
+            "knockback":10
         },
-                {
-            "spell_id":"SPELL_ID_MAGICMISSLE_STAFF",
-            "spell_name":"Magic Missle",
-            "level":1,
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "spell_name":"MagicMissle Shotgun",
             "lifetime":1.0,
             "speed": 250,
             "damage":5,
             "radius":2,
-            "cooldown":0.15,
-            "pps":0.15,
-            "recoil":30,
-            "knockback":40
+            "knockback":30
         },
 
         {
-            "spell_id":"SPELL_ID_FIREBALL_WAND",
-            "spell_name":"Fireball",
-            "level":1,
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "spell_name":"MagicMissle Mg1",
             "lifetime":1.0,
-            "speed": 150,
+            "speed": 250,
+            "damage":2,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_4",
+            "spell_name":"MagicMissle Mg2",
+            "lifetime":1.0,
+            "speed": 250,
             "damage":5,
             "radius":2,
-            "cooldown":0.5,
-            "pps":0.5,
-            "recoil":30,
-            "knockback":40
-        },
-                {
-            "spell_id":"SPELL_ID_FIREBALL_STAFF",
-            "spell_name":"Fireball",
-            "level":1,
-            "lifetime":1.0,
-            "speed": 150,
-            "damage":10,
-            "radius":2,
-            "cooldown":0.5,
-            "pps":1.5,
-            "recoil":30,
-            "knockback":40
+            "knockback":30
         },
 
         {
-            "spell_id":"SPELL_ID_LIGHTNING_WAND",
-            "spell_name":"Lightning",
-            "level":1,
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "spell_name":"Fireball Pistol",
+            "lifetime":1.0,
+            "speed": 300,
+            "damage":5,
+            "radius":2,
+            "knockback":20
+        },
+                {
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "spell_name":"Fireball shotgun",
+            "lifetime":1.0,
+            "speed": 400,
+            "damage":4,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "spell_name":"Fireball Launcher",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":10,
+            "radius":2,
+            "knockback":40
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_4",
+            "spell_name":"Fireball Mg",
+            "lifetime":1.0,
+            "speed": 400,
+            "damage":5,
+            "radius":2,
+            "knockback":10
+        },
+
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "spell_name":"Lightning Pistol",
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
-            "cooldown":0.5,
-            "pps":0.5,
-            "recoil":40,
-            "knockback":60
+            "knockback":30
         },
                 {
-            "spell_id":"SPELL_ID_LIGHTNING_STAFF",
-            "spell_name":"Lightning",
-            "level":1,
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "spell_name":"Lightning Shotgun",
             "lifetime":1.0,
             "speed": 700,
-            "damage":10,
+            "damage":5,
             "radius":2,
-            "cooldown":1.0,
-            "pps":1.0,
-            "recoil":60,
-            "knockback":60
+            "knockback":30
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "spell_name":"Lightning Chain",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_4",
+            "spell_name":"Lightning Beam",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":40
+        },
+
+        {
+            "spell_id":"SPELL_ID_POISON_1",
+            "spell_name":"Poison Pistol",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":2,
+            "radius":2,
+            "knockback":10
+        },
+                {
+            "spell_id":"SPELL_ID_POISON_2",
+            "spell_name":"Poison Shotgun",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":5,
+            "radius":2,
+            "knockback":10
+        },
+        {
+            "spell_id":"SPELL_ID_POISON_3",
+            "spell_name":"Poison Launcher",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":8,
+            "radius":2,
+            "knockback":40
+        },
+        {
+            "spell_id":"SPELL_ID_POISON_4",
+            "spell_name":"Poison Beam",
+            "lifetime":1.0,
+            "speed": 300,
+            "damage":5,
+            "radius":2,
+            "knockback":10
         }
     ],
-
-
-
 
 
     "weapon_data": [
         {
             "weapon_id": "ITEM_ID_DAGGER",
             "weapon_name": "Dagger",
-            "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
+            "mod_slots":1,
+            "spread": 0,
+            "pps":0.0,
+            "cooldown": 0.80,
             "max_power":0,
             "damage":1,
             "recoil":20,
             "knockback":10,
-            "mod_slots":1
+            "shots":1,
+            "accuracy":0.0
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
@@ -699,7 +503,11 @@
             "damage":3,
             "recoil":20,
             "knockback":30,
-            "mod_slots":2
+            "mod_slots":2,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
@@ -710,7 +518,11 @@
             "damage":4,
             "recoil":20,
             "knockback":40,
-            "mod_slots":2
+            "mod_slots":2,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
         },
         {
             "weapon_id": "ITEM_ID_AXE",
@@ -721,7 +533,11 @@
             "damage":2,
             "recoil":20,
             "knockback":30,
-            "mod_slots":3
+            "mod_slots":3,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
         },
         {
             "weapon_id": "ITEM_ID_BOW",
@@ -732,157 +548,256 @@
             "damage":1,
             "recoil":30,
             "knockback":10,
-            "mod_slots":1
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
+        },
+
+
+        {
+            "weapon_id": "ITEM_ID_NEWWAND1",
+            "weapon_name": "mm pistol",
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "cooldown": 0.60,
+            "max_power":10,
+            "damage":2,
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.05,
+            "spread": 10
         },
         {
-            "weapon_id": "ITEM_ID_WAND",
-            "weapon_name": "Wand",
-            "cooldown": 0.60,
-            "spell_id":"SPELL_ID_NONE",
+            "weapon_id": "ITEM_ID_NEWWAND2",
+            "weapon_name": "mm shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":30,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.4,
+            "accuracy":0.1,
+            "spread": 40
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND3",
+            "weapon_name": "mm mg1",
+            "cooldown": 0.25,
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
             "max_power":10,
             "damage":2,
             "recoil":20,
             "knockback":10,
-            "mod_slots":2
+            "mod_slots":3,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.1,
+            "spread": 10
         },
         {
-            "weapon_id": "ITEM_ID_STAFF",
-            "weapon_name": "Staff",
-            "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
-            "max_power":20,
-            "damage":3,
+            "weapon_id": "ITEM_ID_NEWWAND4",
+            "weapon_name": "mm mg2",
+            "cooldown": 0.15,
+            "spell_id":"SPELL_ID_MAGICMISSLE_4",
+            "max_power":10,
+            "damage":2,
             "recoil":20,
-            "knockback":30,
-            "mod_slots":3
-        }
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.1,
+            "spread": 10
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND5",
+            "weapon_name": "fb pistol",
+            "cooldown": 0.60,
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.3,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND6",
+            "weapon_name": "fb shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":1.0,
+            "accuracy":0.15,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND7",
+            "weapon_name": "fb launcher",
+            "cooldown": 0.30,
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.15,
+            "spread": 0     
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND8",
+            "weapon_name": "fb mg",
+            "cooldown": 0.20,
+            "spell_id":"SPELL_ID_FIREBALL_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.4,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND9",
+            "weapon_name": "lightning pistol",
+            "cooldown": 0.10,
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.4,
+            "accuracy":0.1,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND10",
+            "weapon_name": "lightning shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.8,
+            "accuracy":0.15,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND11",
+            "weapon_name": "lightning chain",
+            "cooldown": 0.30,
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND12",
+            "weapon_name": "lightning beam",
+            "cooldown": 0.40,
+            "spell_id":"SPELL_ID_LIGHTNING_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.25,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND13",
+            "weapon_name": "poison pistol",
+            "cooldown": 0.60,
+            "spell_id":"SPELL_ID_POISON_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.3,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND14",
+            "weapon_name": "poison shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_POISON_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.8,
+            "accuracy":0.15,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND15",
+            "weapon_name": "poison launcher",
+            "cooldown": 0.30,
+            "spell_id":"SPELL_ID_POISON_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.15,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND16",
+            "weapon_name": "poison beam",
+            "cooldown": 0.20,
+            "spell_id":"SPELL_ID_POISON_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.8,
+            "accuracy":0.15,
+            "spread": 0
+        }        
     ],
 
-    "charm_data": [
-        {
-            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_1",
-            "charm_name": "cat charm",
-            "mod_id":"ITEMMOD_SWIFTNESS1",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_2",
-            "charm_name": "air charm",
-            "mod_id":"ITEMMOD_SWIFTNESS2",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_3",
-            "charm_name": "rabbit charm",
-            "mod_id":"ITEMMOD_SWIFTNESS3",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_4",
-            "charm_name": "wind charm",
-            "mod_id":"ITEMMOD_SWIFTNESS4",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_SWIFTNESS_CHARM_5",
-            "charm_name": "storm charm",
-            "mod_id":"ITEMMOD_SWIFTNESS5",
-            "use_type":"TYPE_WEAPON"
-        },
-
-        {
-            "charm_id": "ITEM_ID_DAMAGE_CHARM_1",
-            "charm_name": "thorn charm",
-            "mod_id":"ITEMMOD_DAMAGE1",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_DAMAGE_CHARM_2",
-            "charm_name": "glass charm",
-            "mod_id":"ITEMMOD_DAMAGE2",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_DAMAGE_CHARM_3",
-            "charm_name": "wolf charm",
-            "mod_id":"ITEMMOD_DAMAGE3",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_DAMAGE_CHARM_4",
-            "charm_name": "damage charm",
-            "mod_id":"ITEMMOD_DAMAGE4",
-            "use_type":"TYPE_WEAPON"
-        },
-        {
-            "charm_id": "ITEM_ID_DAMAGE_CHARM_5",
-            "charm_name": "damage charm",
-            "mod_id":"ITEMMOD_DAMAGE5",
-            "use_type":"TYPE_WEAPON"
-        },
-
-        {
-            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_1",
-            "charm_name": "leather charm",
-            "mod_id":"ITEMMOD_TOUGHNESS1",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_2",
-            "charm_name": "rock charm",
-            "mod_id":"ITEMMOD_TOUGHNESS2",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_3",
-            "charm_name": "armor charm",
-            "mod_id":"ITEMMOD_TOUGHNESSS3",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_4",
-            "charm_name": "badger charm",
-            "mod_id":"ITEMMOD_TOUGHNESS4",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_TOUGHNESS_CHARM_5",
-            "charm_name": "iron charm",
-            "mod_id":"ITEMMOD_TOUGHNESS5",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_RESIST_CHARM_1",
-            "charm_name": "rabbit charm",
-            "mod_id":"ITEMMOD_RESIST1",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_RESIST_CHARM_2",
-            "charm_name": "bat charm",
-            "mod_id":"ITEMMOD_RESIST2",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_RESIST_CHARM_3",
-            "charm_name": "shimmering charm",
-            "mod_id":"ITEMMOD_RESISTS",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_RESIST_CHARM_4",
-            "charm_name": "raven charm",
-            "mod_id":"ITEMMOD_RESIST4",
-            "use_type":"TYPE_ARMOR"
-        },
-        {
-            "charm_id": "ITEM_ID_RESIST_CHARM_5",
-            "charm_name": "void charm",
-            "mod_id":"ITEMMOD_RESIST5",
-            "use_type":"TYPE_ARMOR"
-        }
-        
-    ],
 
     "food_data": [
         {
@@ -1036,176 +951,6 @@
 
 
 
-
-    "weapon_modifiers": [
-        {
-            "mod_id":"ITEMMOD_SWIFTNESS1",
-            "mod_name":"swift 1",
-            "rarity":"RARITY_COMMON",
-            "cooldown": -0.1,
-            "max_power":0.0,
-            "damage":0.0
-        },
-        {
-            "mod_id":"ITEMMOD_SWIFTNESS2",
-            "mod_name":"swift 2",
-            "rarity":"RARITY_UNCOMMON",
-            "cooldown": -0.2,
-            "max_power":0.0,
-            "damage":0.0
-        },
-        {
-            "mod_id":"ITEMMOD_SWIFTNESS3",
-            "mod_name":"swift 3",
-            "rarity":"RARITY_RARE",
-            "cooldown": -0.3,
-            "max_power":0.0,
-            "damage":0.0
-        },
-        {
-            "mod_id":"ITEMMOD_SWIFTNESS4",
-            "mod_name":"swift 4",
-            "rarity":"RARITY_VERYRARE",
-            "cooldown": -0.4,
-            "max_power":0.0,
-            "damage":0.0
-        },
-        {
-            "mod_id":"ITEMMOD_SWIFTNESS5",
-            "mod_name":"swift 5",
-            "rarity":"RARITY_ULTRARARE",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":0.0
-        },
-
-
-        {
-            "mod_id":"ITEMMOD_DAMAGE1",
-            "mod_name":"damage 1",
-            "rarity":"RARITY_COMMON",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":1
-        },
-        {
-            "mod_id":"ITEMMOD_DAMAGE2",
-            "mod_name":"damage 2",
-            "rarity":"RARITY_UNCOMMON",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":2
-        },
-        {
-            "mod_id":"ITEMMOD_DAMAGE3",
-            "mod_name":"damage 3",
-            "rarity":"RARITY_RARE",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":3
-        },
-        {
-            "mod_id":"ITEMMOD_DAMAGE4",
-            "mod_name":"damage 4",
-            "rarity":"RARITY_VERYRARE",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":4
-        },
-        {
-            "mod_id":"ITEMMOD_DAMAGE5",
-            "mod_name":"damage 5",
-            "rarity":"RARITY_ULTRARARE",
-            "cooldown": 0.0,
-            "max_power":0.0,
-            "damage":5
-        }
-
-    ],
-
-
-
-
-    "armor_modifiers": [
-
-        {
-            "mod_id":"ITEMMOD_TOUGHNESS1",
-            "mod_name":"toughness 1",
-            "rarity":"RARITY_COMMON",
-            "defence":1,
-            "magic_defence":0
-        },
-        {
-            "mod_id":"ITEMMOD_TOUGHNESS2",
-            "mod_name":"toughness 2",
-            "rarity":"RARITY_UNCOMMON",
-            "defence":2,
-            "magic_defence":0
-        },
-        {
-            "mod_id":"ITEMMOD_TOUGHNESS3",
-            "mod_name":"toughness 3",
-            "rarity":"RARITY_RARE",
-            "defence":3,
-            "magic_defence":0
-        },
-        {
-            "mod_id":"ITEMMOD_TOUGHNESS4",
-            "mod_name":"toughness 4",
-            "rarity":"RARITY_VERYRARE",
-            "defence":5,
-            "magic_defence":0
-        },
-        {
-            "mod_id":"ITEMMOD_TOUGHNESS5",
-            "mod_name":"toughness 5",
-            "rarity":"RARITY_ULTRARARE",
-            "defence":5,
-            "magic_defence":0
-        },
-
-
-        {
-            "mod_id":"ITEMMOD_RESIST1",
-            "mod_name":"resist 1",
-            "rarity":"RARITY_COMMON",
-            "defence":0,
-            "magic_defence":1
-        },
-        {
-            "mod_id":"ITEMMOD_RESIST2",
-            "mod_name":"resist 2",
-            "rarity":"RARITY_UNCOMMON",
-            "defence":0,
-            "magic_defence":2
-        },
-        {
-            "mod_id":"ITEMMOD_RESIST3",
-            "mod_name":"resist 3",
-            "rarity":"RARITY_RARE",
-            "defence":0,
-            "magic_defence":3
-        },
-        {
-            "mod_id":"ITEMMOD_RESIST4",
-            "mod_name":"resist 4",
-            "rarity":"RARITY_VERYRARE",
-            "defence":0,
-            "magic_defence":4
-        },
-        {
-            "mod_id":"ITEMMOD_RESIST5",
-            "mod_name":"resist 5",
-            "rarity":"RARITY_ULTRARARE",
-            "defence":0,
-            "magic_defence":5
-        }
-    ],
-
-
-
-
-
     "food_modifiers": [
 
         {
@@ -1223,205 +968,6 @@
     ],
 
 
-
-
-
-    "character_modifiers": [
-        {
-            "mod_id":"CHARMOD_SPEED1",
-            "mod_name":"movement speed",
-            "rarity":"RARITY_COMMON",
-            "health":0.0,            
-            "speed":2.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_SPEED2",
-            "mod_name":"movement speed",
-            "rarity":"RARITY_UNCOMMON",
-            "health":0.0,            
-            "speed":4.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_SPEED3",
-            "mod_name":"movement speed",
-            "rarity":"RARITY_RARE",
-            "health":0.0,            
-            "speed":6.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_SPEED4",
-            "mod_name":"movement speed",
-            "rarity":"RARITY_VERYRARE",
-            "health":0.0,            
-            "speed":8.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_SPEED5",
-            "mod_name":"movement speed",
-            "rarity":"RARITY_ULTRARARE",
-            "health": 0.0,            
-            "speed":10.0,
-            "stamina":0.0
-        },
-
-
-        {
-            "mod_id":"CHARMOD_HEALTH1",
-            "mod_name":"character health",
-            "rarity":"RARITY_COMMON",
-            "health":1,
-            "speed":0.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_HEALTH2",
-            "mod_name":"character health",
-            "rarity":"RARITY_UNCOMMON",
-            "health":2,
-            "speed":0.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_HEALTH3",
-            "mod_name":"character health",
-            "rarity":"RARITY_RARE",
-            "health":3,
-            "speed":0.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_HEALTH4",
-            "mod_name":"character health",
-            "rarity":"RARITY_VERYRARE",
-            "health":4,
-            "speed":0.0,
-            "stamina":0.0
-        },
-        {
-            "mod_id":"CHARMOD_HEALTH5",
-            "mod_name":"character health",
-            "rarity":"RARITY_ULTRARARE",
-            "health":5,
-            "speed":0.0,
-            "stamina":0.0
-        },
-
-        {
-            "mod_id":"CHARMOD_STAMINA1",
-            "mod_name":"character stamina",
-            "rarity":"RARITY_COMMON",
-            "health":0.0,
-            "speed":0.0,
-            "stamina":2
-        },
-        {
-            "mod_id":"CHARMOD_STAMINA2",
-            "mod_name":"character stamina",
-            "rarity":"RARITY_UNCOMMON",
-            "health":0.0,
-            "speed":0.0,
-            "stamina":4.0
-        },
-        {
-            "mod_id":"CHARMOD_STAMINA3",
-            "mod_name":"character stamina",
-            "rarity":"RARITY_RARE",
-            "health":0.0,
-            "speed":0.0,
-            "stamina":6.0
-        },
-        {
-            "mod_id":"CHARMOD_STAMINA4",
-            "mod_name":"character stamina",
-            "rarity":"RARITY_VERYRARE",
-            "health":0.0,
-            "speed":0.0,
-            "stamina":8.0
-        },
-        {
-            "mod_id":"CHARMOD_STAMINA5",
-            "mod_name":"character stamina",
-            "rarity":"RARITY_ULTRARARE",
-            "health":0.0,
-            "speed":-0.0,
-            "stamina":10.0
-        }
-        
-    ],
-
-
-
-
-    
-
-        "character_effects": [
-        {
-            "effect_id":"CHAREFFECT_SPEED1",
-            "effect_name":"movement speed",
-            "rarity":"RARITY_COMMON",
-            "durration":10
-        },
-        {
-            "effect_id":"CHAREFFECT_SPEED2",
-            "effect_name":"movement speed",
-            "rarity":"RARITY_UNCOMMON",
-            "durration":20
-        },
-        {
-            "effect_id":"CHAREFFECT_SPEED3",
-            "effect_name":"movement speed",
-            "rarity":"RARITY_RARE",
-            "durration":30
-        },
-        {
-            "effect_id":"CHAREFFECT_SPEED4",
-            "effect_name":"movement speed",
-            "rarity":"RARITY_VERYRARE",
-            "durration":40
-        },
-        {
-            "effect_id":"CHAREFFECT_SPEED5",
-            "effect_name":"movement speed",
-            "rarity":"RARITY_ULTRARARE",
-            "durration":50
-        },
-
-
-        {
-            "effect_id":"CHAREFFECT_POISON1",
-            "effect_name":"poison",
-            "rarity":"RARITY_COMMON",
-            "durration":10
-        },
-        {
-            "effect_id":"CHAREFFECT_POISON2",
-            "effect_name":"poison",
-            "rarity":"RARITY_UNCOMMON",
-            "durration":20
-        },
-        {
-            "effect_id":"CHAREFFECT_POISON3",
-            "effect_name":"poison",
-            "rarity":"RARITY_RARE",
-            "durration":30
-        },
-        {
-            "effect_id":"CHAREFFECT_POISON4",
-            "effect_name":"poison",
-            "rarity":"RARITY_VERYRARE",
-            "durration":40
-        },
-        {
-            "effect_id":"CHAREFFECT_POISON5",
-            "effect_name":"poison",
-            "rarity":"RARITY_ULTRARARE",
-            "durration":50
-        }
-    ],
 
     "creature_data": [
 

@@ -351,9 +351,7 @@ void InstanceLevelObjects(LevelData &level_data) {
         }
     }
 
-
     for(int creature = 0; creature < level_data.creature_data.size(); creature++) {
-
         SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
     }
 

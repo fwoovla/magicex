@@ -15,9 +15,11 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     position = _position;
     rotation = 0.0f;
     velocity = {0,0};
+    aim_position = {0,0};
     
     LoadSpriteCentered(sprite, g_character_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
     LoadSpriteCentered(shadow_sprite, g_shadow_sprites[SPRITE_SHADOW_CHAR1], position);
+    LoadSpriteCentered(aim_sprite, g_ui_sprites[UI_ID_AIM], aim_position);
         
     collision_radius = 5;
     centered_offset = {0, 3};
@@ -93,7 +95,6 @@ void PlayerCharacter::Update() {
                 position.y -= (.2 * result.collision_dir.y);
             }
         }
-
     }
     else {
         if(!is_stunned) {
@@ -112,6 +113,7 @@ void PlayerCharacter::Update() {
     sprite.position = position;
     weapon_sprite.position = position;
     shadow_sprite.position =  Vector2Add( position, {0, 3});
+    aim_sprite.position = aim_position;
 
     if(is_stunned) {
         stun_timer.Update();
@@ -142,9 +144,10 @@ void PlayerCharacter::Update() {
         }
     }
     if(weapon_state == WSTATE_IDLE) {
-        Vector2 pp = GetWorldToScreen2D( position, g_camera);
-        pp = {pp.x * g_scale, pp.y*g_scale};
-        weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+        //Vector2 pp = GetWorldToScreen2D( position, g_camera);
+        //pp = {pp.x * g_scale, pp.y*g_scale};
+        //weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
+        weapon_sprite.rotation = GetAngleFromTo(position, aim_position) * RAD2DEG;
     }
     //TraceLog(LOG_INFO, "sprite rot  %0.2f", weapon_sprite.rotation);
 }
@@ -152,20 +155,26 @@ void PlayerCharacter::Update() {
 void PlayerCharacter::Draw() {
     
     DrawSprite(shadow_sprite);
-    DrawSprite(weapon_sprite);
     DrawSprite(sprite);
+    DrawSprite(weapon_sprite);
+
+    //DrawCircleV(aim_position, 5, BLUE);
+    //DrawSprite(aim_sprite);
+    //TraceLog(LOG_INFO, "aim pos  %0.2f  %0.2f", aim_position.x, aim_position.y);
+    Vector2 mp = g_input.world_mouse_position;
+    float width = Vector2Distance(aim_position, mp);
+    //DrawCircleLinesV(mp, width, WHITE);
+    DrawLineV( {mp.x - width, mp.y}, {mp.x - width -5, mp.y}, WHITE );
+
+    DrawLineV( {mp.x + width, mp.y}, {mp.x + width + 5, mp.y}, WHITE );
+
+    DrawLineV( {mp.x, mp.y - width}, {mp.x, mp.y - width - 5}, WHITE );
+
+    DrawLineV( {mp.x, mp.y + width}, {mp.x, mp.y + width + 5}, WHITE );
 
     if(weapon_state == WSTATE_MELE) {
     }
     if(g_game_settings.show_debug == true) {
-
-/*     Rectangle checker_rect = {
-        .x = position.x - collision_radius,
-        .y = position.y - collision_radius + 5,
-        .width = collision_radius * 2,
-        .height = collision_radius * 2
-    }; */
-        //DrawRectangleRec(checker_rect, RED);
         DrawCircleV(Vector2Add(position, centered_offset), collision_radius, RED);
         //DrawCircleV(Vector2Add(position, centered_offset), 2, WHITE);
         DrawCircleV(Vector2Add(position, ground_point_offset), 2, BLUE); 
@@ -209,7 +218,13 @@ void PlayerCharacter::CheckInput() {
         input_dir.x = 1;
     }
     
-    input_dir = Vector2Normalize(input_dir);
+
+    if(isnan(input_dir.x) || isnan(input_dir.y)) {
+        input_dir = {0,0};
+    }
+    if(input_dir.x != 0.0f || input_dir.y != 0.0f) {
+        input_dir = Vector2Normalize(input_dir);
+    }
 
     float speed = g_character_data[uid].current_speed;
 
@@ -227,12 +242,30 @@ void PlayerCharacter::CheckInput() {
         }
     }
 
+    if( isnan(velocity.x) || isnan(velocity.y)) {
+        velocity = {0,0};
+    }
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
     if(abs(velocity.x) < 4.0f) {
         velocity.x = {0.0};
     }
     if (abs(velocity.y) < 4.0f) {
         velocity.y = {0.0};
+    }
+    //aim_position.y = g_input.world_mouse_position.y;
+    //aim_position.x = g_input.world_mouse_position.x;
+    if(isnan(aim_position.x) || isnan(aim_position.y)) {
+        aim_position = g_input.world_mouse_position;
+    }
+    //TraceLog(LOG_INFO, "ap  %0.2f %0.2f", aim_position.x, aim_position.y);
+    //TraceLog(LOG_INFO, "wmp  %0.2f %0.2f", g_input.world_mouse_position.x, g_input.world_mouse_position.y);
+
+    if(current_primary_data != nullptr) {
+        aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.accuracy);
+        aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, current_primary_data->weapon_data.accuracy);
+    }
+    else {
+        aim_position = g_input.world_mouse_position;
     }
     
     if(g_input.key_switch_weapon and can_switch == true) {
@@ -258,6 +291,7 @@ void PlayerCharacter::CheckInput() {
                 TraceLog(LOG_INFO, "reloading");
                 can_reload = false;
                 g_character_data[uid].current_power = g_character_data[uid].max_power;
+                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power;
                 g_character_data[uid].inventory[item] = -1;
                 g_item_instances.erase(instance_id);
 
@@ -278,7 +312,6 @@ void PlayerCharacter::CheckInput() {
             can_mele = false;
             weapon_state = WSTATE_MELE;
             weapon_end_rotation = weapon_sprite.rotation + (400 * swing_dir);
-
             //velocity = Vector2Rotate( {-current_primary_data->recoil, 0}, weapon_sprite.rotation * DEG2RAD);
         }
     }
@@ -287,31 +320,46 @@ void PlayerCharacter::CheckInput() {
         if(current_primary_data != nullptr) {
             if(current_primary_data->spell_id != -1) {
                 
-                if(g_character_data[uid].current_power < current_primary_data->spell_data.pps) {
+                if(g_character_data[uid].current_power < current_primary_data->weapon_data.pps) {
                     return;
                 }
                 
-               //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
-
                 NewSpellPayload payload;
                 payload.position = position;
                 payload.rotation = weapon_sprite.rotation;
                 payload.shooter_id = uid;
-                payload.target_position = g_input.world_mouse_position;
+                payload.target_position = aim_position;//g_input.world_mouse_position;
+                payload.spread = current_primary_data->weapon_data.spread;
+                TraceLog(LOG_INFO, "casting spell id %i  shots %i", current_primary_data->spell_id, current_primary_data->weapon_data.shots);
 
-                if(g_game_data.is_in_sub_map) {
+                //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
+                //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
+
+                for(int shot = 0; shot < current_primary_data->weapon_data.shots; shot++) {
+                    if(g_game_data.is_in_sub_map) {
                         SpawnSpell(*g_sub_scene, payload, &current_primary_data->spell_data);
-                }
-                else {
-                        SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
-                }
-                g_character_data[uid].current_power -= current_primary_data->spell_data.pps;
-                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power; 
-                spell_timer.Start(current_primary_data->spell_data.cooldown, true);
-                can_use_spell = false;
-                velocity = Vector2Rotate( {-current_primary_data->spell_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
-                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
 
+                    }
+                    else {
+                        SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
+                    }
+                }
+
+                g_character_data[uid].current_power -= current_primary_data->weapon_data.pps;
+                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power;
+                spell_timer.Start(current_primary_data->weapon_data.cooldown, true);
+                can_use_spell = false;
+
+                int recoil = current_primary_data->weapon_data.recoil;
+                int dirx = 1;
+                int diry = 1;
+                if(GetRandomValue(0, 100) < 50) {dirx = -1;}
+                if(GetRandomValue(0, 100) < 50) {diry = -1;}
+
+                velocity = Vector2Rotate( {(float)-recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                Vector2 recoil_dir = { (float)recoil * dirx, (float)recoil * diry};
+                aim_position = Vector2Add( aim_position, recoil_dir );
+                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
             }
         }
     }
@@ -347,13 +395,7 @@ void PlayerCharacter::Equip(int item_id) {
             g_character_data[uid].magic_defence += item_it->second.armor_data.magic_defence;
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
-        
-/*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {
-            TraceLog(LOG_INFO, "character mod %i %s", item_it->second.char_mods[mod].mod_id, item_it->second.char_mods[mod].mod_name.c_str());
-            if(item_it->second.char_mods[mod].health != -1000){g_character_data[uid].max_health += item_it->second.char_mods[mod].health;}
-            if(item_it->second.char_mods[mod].speed != -1000){g_character_data[uid].current_speed += item_it->second.char_mods[mod].speed;}
-            if(item_it->second.char_mods[mod].stamina != -1000){g_character_data[uid].max_stamina += item_it->second.char_mods[mod].stamina;}
-        } */
+
     }
     TraceLog(LOG_INFO, "+++++++++++++");
 }

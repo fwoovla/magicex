@@ -179,6 +179,9 @@ void ItemGrid::DrawGrid() {
 }
 
 void ItemGrid::DrawItems() {
+    int hovered_id;
+    int hovered_index;
+
     for(int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++) {
             if(r * cols + c < item_sprites.size()) {
@@ -186,10 +189,19 @@ void ItemGrid::DrawItems() {
                 //TraceLog(LOG_INFO, "item sprite %i  %i", (int)(r*cols+c), item_sprites.size());
                 int item_id = (*item_list)[index];
                 if(item_id != -1){
+                    if(hovered_cell == (Vector2){(float)c,(float)r}){
+                        hovered_id = item_id;
+                        hovered_index = index;
+                    }
                     if(selected_cell == (Vector2){(float)c,(float)r}) {
                         item_sprites[index].position = { g_input.screen_mouse_position.x*g_inv_scale, g_input.screen_mouse_position.y*g_inv_scale };
                     }
                     DrawSprite(item_sprites[index]);
+                    for(int mod = 0; mod < g_item_instances[item_id].mod_slots; mod++) {
+                        Color _color = LIGHTGRAY;
+                        Vector2 corner = Vector2Add(item_sprites[index].position, {-(float)grid_size * 0.40f, -(float)grid_size * 0.40f});
+                        DrawCircleV( Vector2Add( corner, {(float)mod * 8, 0} ), 2, _color );
+                    }
                 }
             }
         }
@@ -343,27 +355,14 @@ void ItemGrid::RemoveItem(Vector2 source_cell) {
 
 std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
     std::string details;
-    std::string stat = "";
-    std::string value = "";
-
-/*     for(auto mod : item_data.item_mods) {
-        //TraceLog(LOG_INFO, "mod  %s", mod.mod_name.c_str());
-         if(mod.health != -1000) {stat = "health  "; value = std::to_string(mod.health);}
-        if(mod.speed != -1000) {stat = "speed  "; value = TextFormat("%0.02f", mod.speed);}
-        if(mod.stamina != -1000) {stat = "stamina  "; value = TextFormat("%0.02f", mod.stamina);}  
-
-        details += mod.mod_name + "\n"; 
-
-    }
-    for(int i = 0; i < item_data.mod_slots - item_data.item_mods.size(); i++) {
-        details += "- empty slot -\n";
-    }
-
-    if(item_data.mod_slots > 0) {details += "\n";} */
-    //details += "\n";
-    
     auto itter = g_item_instances.find(item_data.instance_id);
     if(itter != g_item_instances.end()) {
+        for(int mod = 0; mod < itter->second.mod_slots; mod++) {
+            details += "--empty slot--\n";
+        }
+        if(itter->second.mod_slots > 0) {
+            details += "\n";
+        }
     
         if(item_data.type == TYPE_WEAPON) {
             details += std::to_string(itter->second.weapon_data.damage) + "  damage\n";
@@ -409,30 +408,6 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
             if(item_data.item_id == ITEM_ID_MUSHROOM_JUICE) {
                 details += "  Recharge power\n";
             }
-        }
-        
-        if(item_data.type ==  TYPE_SCROLL) {
-        }
-
-        if(item_data.type ==  TYPE_CHARM) {
-
-            std::string use_string = ItemTypeToStr(g_charm_data[itter->second.item_id - ITEM_ID_SWIFTNESS_CHARM_1].use_type);
-            details += "useable with " + use_string + "\n";
-
-            int mod_id = g_charm_data[itter->second.item_id - ITEM_ID_SWIFTNESS_CHARM_1].mod_id;
-
-            std::string mod_name_string = g_equipment_mod_data[mod_id].mod_name;
-
-            std::string mod_stat_string = "";
-
-            if(g_equipment_mod_data[mod_id].cooldown != 0.0f) {mod_stat_string += "mele cooldown " + std::to_string(g_equipment_mod_data[mod_id].cooldown);}
-            if(g_equipment_mod_data[mod_id].damage != 0) {mod_stat_string += "mele damage " + std::to_string(g_equipment_mod_data[mod_id].damage);}
-            if(g_equipment_mod_data[mod_id].defence != 0) {mod_stat_string += "defence " + std::to_string(g_equipment_mod_data[mod_id].defence);}
-            if(g_equipment_mod_data[mod_id].magic_defence != 0) {mod_stat_string += "magic defence " + std::to_string(g_equipment_mod_data[mod_id].magic_defence);}
-            if(g_equipment_mod_data[mod_id].max_power != 0.0f) {mod_stat_string += " weapon power " + std::to_string(g_equipment_mod_data[mod_id].max_power);}
-
-            //TraceLog(LOG_INFO, "mod id %i  name  %s stats  %s", mod_id, mod_name_string.c_str(), mod_stat_string.c_str());
-            details += mod_stat_string + "\n";
         }
 
         details += "$" + std::to_string( itter->second.value);

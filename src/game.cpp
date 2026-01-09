@@ -13,11 +13,10 @@ std::vector<PlanData> g_plan_data;
 std::vector<ArmorData> g_armor_data;
 std::vector<FoodData> g_food_data;
 //std::vector<ArmorModData> g_armor_mod_data;
-std::vector<CharmData> g_charm_data;
+//std::vector<CharmData> g_charm_data;
 std::vector<FoodModData> g_food_mod_data;
-std::vector<ItemModData> g_equipment_mod_data;
-std::vector<CharacterEffectData> g_char_effect_data;
-std::vector<CharacterModData> g_char_mod_data;
+//std::vector<ItemModData> g_equipment_mod_data;
+
 std::vector<SpellData> g_spell_data;
 std::vector<ModuleData> g_module_data;
 std::vector<AiData> g_ai_data;

@@ -88,9 +88,9 @@ StagingUILayer::StagingUILayer() {
     };
 
     for(int index = 0; index < g_weapon_data.size(); index++) {
-        if(g_weapon_data[index].weapon_id == ITEM_ID_WAND or g_weapon_data[index].weapon_id == ITEM_ID_STAFF) {
-            choices.push_back(g_weapon_data[index].weapon_id);
-        }
+        choices.push_back(g_weapon_data[index].weapon_id);
+/*         if(g_weapon_data[index].weapon_id == ITEM_ID_WAND or g_weapon_data[index].weapon_id == ITEM_ID_STAFF) {
+        } */
     }
 
     for(int i = 0; i <= 3; i++) {
