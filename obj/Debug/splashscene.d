@@ -252,6 +252,7 @@ obj/Debug/splashscene.o: src/game/scenes/splashscene.cpp \
  src/game/scenes/../../core/baseentity.h \
  src/game/scenes/../../core/areas.h src/game/scenes/../../core/label.h \
  src/game/scenes/../../core/entities.h \
+ src/game/scenes/../../core/mapgen.h \
  src/game/scenes/../../core/resources.h \
  src/game/scenes/../../core/itemgenerator.h \
  src/game/scenes/../../core/data.h src/game/scenes/../../core/spells.h \
@@ -590,6 +591,7 @@ src/game/scenes/../../core/baseentity.h:
 src/game/scenes/../../core/areas.h:
 src/game/scenes/../../core/label.h:
 src/game/scenes/../../core/entities.h:
+src/game/scenes/../../core/mapgen.h:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/itemgenerator.h:
 src/game/scenes/../../core/data.h:

@@ -1,4 +1,4 @@
-obj/Debug/viewport.o: src/game/viewport.cpp /usr/include/stdc-predef.h \
+obj/Debug/mapgen.o: src/game/mapgen.cpp /usr/include/stdc-predef.h \
  src/game/../core/gamedefs.h /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  src/game/../core/sprite.h /usr/local/include/raymath.h \

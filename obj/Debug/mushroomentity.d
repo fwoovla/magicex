@@ -254,6 +254,7 @@ obj/Debug/mushroomentity.o: src/game/entities/mushroomentity.cpp \
  src/game/entities/../../core/areas.h \
  src/game/entities/../../core/label.h \
  src/game/entities/../../core/entities.h \
+ src/game/entities/../../core/mapgen.h \
  src/game/entities/../../core/resources.h \
  src/game/entities/../../core/itemgenerator.h \
  src/game/entities/../../core/data.h \
@@ -594,6 +595,7 @@ src/game/entities/../../core/baseentity.h:
 src/game/entities/../../core/areas.h:
 src/game/entities/../../core/label.h:
 src/game/entities/../../core/entities.h:
+src/game/entities/../../core/mapgen.h:
 src/game/entities/../../core/resources.h:
 src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/data.h:

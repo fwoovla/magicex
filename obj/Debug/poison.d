@@ -251,6 +251,7 @@ obj/Debug/poison.o: src/game/spells/poison.cpp /usr/include/stdc-predef.h \
  src/game/spells/../../core/baseentity.h \
  src/game/spells/../../core/areas.h src/game/spells/../../core/label.h \
  src/game/spells/../../core/entities.h \
+ src/game/spells/../../core/mapgen.h \
  src/game/spells/../../core/resources.h \
  src/game/spells/../../core/itemgenerator.h \
  src/game/spells/../../core/data.h src/game/spells/../../core/spells.h \
@@ -589,6 +590,7 @@ src/game/spells/../../core/baseentity.h:
 src/game/spells/../../core/areas.h:
 src/game/spells/../../core/label.h:
 src/game/spells/../../core/entities.h:
+src/game/spells/../../core/mapgen.h:
 src/game/spells/../../core/resources.h:
 src/game/spells/../../core/itemgenerator.h:
 src/game/spells/../../core/data.h:

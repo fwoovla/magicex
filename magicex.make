@@ -102,6 +102,7 @@ GENERATED += $(OBJDIR)/ldtk.o
 GENERATED += $(OBJDIR)/lightning.o
 GENERATED += $(OBJDIR)/magicmissle.o
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/mapgen.o
 GENERATED += $(OBJDIR)/mapmenu.o
 GENERATED += $(OBJDIR)/modulemenu.o
 GENERATED += $(OBJDIR)/modules.o
@@ -149,6 +150,7 @@ OBJECTS += $(OBJDIR)/ldtk.o
 OBJECTS += $(OBJDIR)/lightning.o
 OBJECTS += $(OBJDIR)/magicmissle.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/mapgen.o
 OBJECTS += $(OBJDIR)/mapmenu.o
 OBJECTS += $(OBJDIR)/modulemenu.o
 OBJECTS += $(OBJDIR)/modules.o
@@ -287,6 +289,9 @@ $(OBJDIR)/label.o: src/game/label.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/ldtk.o: src/game/ldtk.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/mapgen.o: src/game/mapgen.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/modules.o: src/game/modules.cpp

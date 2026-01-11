@@ -33,6 +33,7 @@ DebugData g_debug_data;
 LDTKMaps g_ldtk_maps;
 std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 std::vector<LDTKTileset> g_ldtk_tilesets;
+std::vector<WorldGenTileSet> g_worldgen_tilesets;
 
 std::vector<Color> g_item_type_colors;
 std::vector<Color> g_rarity_colors;

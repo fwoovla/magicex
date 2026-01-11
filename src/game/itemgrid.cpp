@@ -69,7 +69,7 @@ void ItemGrid::Update() {
                             i_name = itter->second.item_name;
                             color = g_item_type_colors[itter->second.type];
                             //TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
-                            CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
+                            //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
                                 shared_data->item_id = itter->second.instance_id;

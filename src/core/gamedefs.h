@@ -154,6 +154,7 @@ extern PlayerInput g_input;
 extern Viewport g_viewport;
 
 #include "ldtk.h"
+#include "mapgen.h"
 #include "resources.h"
 #include "itemgenerator.h"
 #include "data.h"

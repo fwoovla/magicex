@@ -12,7 +12,6 @@ void LDTKLoadTileSets(json &mj) {
                 std::filesystem::path pathObj(mj["defs"]["tilesets"][i]["relPath"]);
                 std::string texture_path = pathObj.filename().string();
 
-
                 if(std::filesystem::exists( "assets/maps/ldtk/" + texture_path)) {
                     TileSheetData this_sheet = {
                         .uid = mj["defs"]["tilesets"][i]["uid"],
@@ -33,6 +32,7 @@ void LDTKLoadTileSets(json &mj) {
                     .tile_grid_size = mj["defs"]["tilesets"][i]["tileGridSize"]  
                     
                 };
+
                 for(int tag = 0; tag < mj["defs"]["tilesets"][i]["enumTags"].size(); tag++) {
                     LDTKEnumTag new_tag;
                     new_tag.value_string = mj["defs"]["tilesets"][i]["enumTags"][tag]["enumValueId"];
@@ -44,11 +44,10 @@ void LDTKLoadTileSets(json &mj) {
 
                     }
                     this_tileset.enum_tags.push_back(new_tag);
-                    }
-                
+                }
                 g_ldtk_maps.tilesets.push_back(this_tileset);
-
             }
+
             TraceLog(LOG_INFO, "==========TILESETS LOADED %i", g_ldtk_maps.tilesets.size());
         }
     }
