@@ -336,7 +336,6 @@ int LDTKDrawMap(Vector2 focus_position) {
 
     int tiles_drawn = 0;
 
-    //invert layers for drawing
     int tilesheet_id = 0;
 
     LevelData *level_data = nullptr;
@@ -346,6 +345,7 @@ int LDTKDrawMap(Vector2 focus_position) {
     }
     else {
         level_data = &g_current_scene->level_data;
+        //TraceLog(LOG_INFO, "level:  %s  ", level_data., tile_y);
     }
 
     if(level_data == nullptr) {
@@ -353,28 +353,48 @@ int LDTKDrawMap(Vector2 focus_position) {
     }
 
     LDTKLevel *this_level = &g_ldtk_maps.levels[level_data->precalc.map_index];
+    //TraceLog(LOG_INFO, "drawing:  %s  %i", this_level->identifier.c_str(), this_level->layer_instances.size());
 
+
+    //invert layers for drawing
     for (int l = this_level->layer_instances.size() - 1; l >= 0; l--) {
         if(this_level->layer_instances[l].type == "IntGrid") {
-            break;
+            //TraceLog(LOG_INFO, "is collision");
+            //break;
         }
         if(level_data->precalc.foreground_layer_index == l) {
-            break;
+            //TraceLog(LOG_INFO, "is foreground");
+            //break;
         }
+        if(this_level->layer_instances[l].type == "Tiles") {
+            //TraceLog(LOG_INFO, "is tiles");
+            //break;
+        }
+        //TraceLog(LOG_INFO, "layer :  %i    %s", l, this_level->layer_instances[l].identifier.c_str());
+            
+     
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
+        //TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
         for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
             LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];
-
+            //TraceLog(LOG_INFO, "drawing tile %i", this_tile->t);
 
             int tile_id = this_tile->t;
 
-            int tile_x = this_tile->px[0] * g_viewport.inv_tile_size;
-            int tile_y = this_tile->px[1] * g_viewport.inv_tile_size;
+            float tile_x = (float)this_tile->px[0] * g_viewport.inv_tile_size;
+            float tile_y = (float)this_tile->px[1] * g_viewport.inv_tile_size;
+
+/*             TraceLog(LOG_INFO,
+                "tile %i px size %zu px0 %i",
+                tile,
+                this_tile->px.size(),
+                this_tile->px.empty() ? -1 : this_tile->px[0]
+            ); */
 
             if(tile_id == -1) {
-                TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %i  y %i", tile_x, tile_y);
-                break;
+                TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %0.0f  y %0.0f", tile_x, tile_y);
+                //break;
             }
 
             if((tile_x >= g_viewport.x_min) and (tile_x <= g_viewport.x_max) and (tile_y >= g_viewport.y_min) and (tile_y <= g_viewport.y_max)) {
@@ -392,9 +412,12 @@ int LDTKDrawMap(Vector2 focus_position) {
                     0.0,
                     color
                 );
+
+                //TraceLog(LOG_INFO, "%i drawing tile  px  %i %i    x:  %i  y %i", tile, this_tile->px[0], this_tile->px[1], tile_x, tile_y);
+
                 tiles_drawn++;
             }
-        }
+        } 
     }
     return tiles_drawn;
 }

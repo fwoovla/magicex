@@ -884,18 +884,32 @@ void ClearSubLevelData() {
 
 
 void LoadLevelData(LevelData &level_data) {
-    PrecalculateTileCollisionData(level_data);
-    PrecalculateShadowData(level_data);
+/*     PrecalculateTileCollisionData(level_data);
+    PrecalculateShadowData(level_data); */
 
-    int map_index = g_game_data.current_map_index;
+    int map_index = 0;
     
     if(g_game_data.is_in_sub_map) {
         map_index = g_game_data.sub_map_index;
     }
+    else if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
+        map_index = g_game_data.shelter_map_index;
+    }
 
-    LDTKLevel this_level = g_ldtk_maps.levels[map_index];
+    else {
+        //LDTKLevel new_level;
+        map_index = g_ldtk_maps.levels.size();
+        g_ldtk_maps.levels.emplace_back();
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid);
+        g_game_data.current_map_index = map_index;
+    }
+
+    LDTKLevel &this_level = g_ldtk_maps.levels[map_index];
 
     TraceLog(LOG_INFO, "LOADING LEVEL DATA %i  %s", map_index, this_level.identifier.c_str());
+    for(int layer = 0; layer < this_level.layer_instances.size(); layer++) {
+        TraceLog(LOG_INFO, "    layer  %s", this_level.layer_instances[layer].identifier.c_str());
+    }
 
     for(int layer_index = 0; layer_index < this_level.layer_instances.size(); layer_index++) {
         if(this_level.layer_instances[layer_index].type == "Entities") {
@@ -907,7 +921,7 @@ void LoadLevelData(LevelData &level_data) {
                     sp.x = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0]};
                     sp.y = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1]};
                     level_data.spawn_position = sp;
-                    TraceLog(LOG_INFO, "SPAWN POINT FOUND");
+                    TraceLog(LOG_INFO, "SPAWN POINT FOUND %0.0f %0.0f", sp.x, sp.y);
                 }
                 else {
                     //TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
@@ -1080,6 +1094,9 @@ void LoadLevelData(LevelData &level_data) {
             level_data.container_data.push_back(new_container);
         }
     }
+
+    PrecalculateTileCollisionData(level_data);
+    PrecalculateShadowData(level_data);
     TraceLog(LOG_INFO, "END LOAD LEVEL DATA ");
 }
 
@@ -1092,18 +1109,29 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 
     if(g_game_data.is_in_sub_map) {
         level_data.precalc.map_index = g_game_data.sub_map_index;
-        //TraceLog(LOG_INFO, "            map index sub map -- %i",level_data.precalc.map_index  );
     }
+/*     else if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
+        level_data.precalc.map_index = g_game_data.shelter_map_index;
+    }
+
+    else {
+        LDTKLevel new_level;
+        level_data.precalc.map_index = g_ldtk_maps.levels.size();
+        g_ldtk_maps.levels.push_back(new_level);
+        g_game_data.current_map_index = level_data.precalc.map_index;
+    } */
     //TraceLog(LOG_INFO, "            map index -- %i",level_data.precalc.map_index  );
 
     LDTKLevel this_level = g_ldtk_maps.levels[level_data.precalc.map_index];
     LDTKLayerInstance *col_layer = nullptr;
 
+    level_data.precalc.foreground_layer_index = -1;
+    level_data.precalc.collision_layer_index = -1;
     for (int l = 0; l < this_level.layer_instances.size(); l++) {
         if(this_level.layer_instances[l].type == "IntGrid") {
             level_data.precalc.collision_layer_index = l;
-            //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
             col_layer = &this_level.layer_instances[l];
+            TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
         }
         if(this_level.layer_instances[l].identifier == "Foreground") {
             level_data.precalc.foreground_layer_index = l;
@@ -1112,17 +1140,18 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 
     if(col_layer == nullptr) {
         TraceLog(LOG_INFO, "no collision layer in map data");
-        //level_data.tile_precalc.collision_layer_index = -1;
+    
+        return;
     }
 
     level_data.precalc.tile_size = col_layer->grid_size;
-    //TraceLog(LOG_INFO, "            tile size -- %i",level_data.precalc.tile_size  );
+    TraceLog(LOG_INFO, "            tile size -- %i",level_data.precalc.tile_size  );
 
     level_data.precalc.inv_tile_size = 1/(float)level_data.precalc.tile_size;
-    //TraceLog(LOG_INFO, "            inv tilesize -- %i",level_data.precalc.collision_layer_index  );
+    TraceLog(LOG_INFO, "            inv tilesize -- %0.5f",level_data.precalc.inv_tile_size  );
 
     level_data.precalc.map_width = col_layer->c_wid;
-    //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+    TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
 
     TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
 }

@@ -257,6 +257,9 @@ void ShelterScene::OnTransitionAreaActivated() {
     //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     if(return_scene != GAME_SCENE) {
         SaveGame(level_data);
+
+        
+
         return_scene = GAME_SCENE;
     }
 }

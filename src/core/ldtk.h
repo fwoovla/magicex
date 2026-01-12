@@ -121,19 +121,12 @@ struct LDTKFieldInstance {
 
 struct LDTKEntityInstance {
     std::string identifier;
-    //std::vector<int64_t> grid;
-    //std::vector<int64_t> pivot;
-    //std::vector<nlohmann::json> tags;
-    //nlohmann::json tile;
-    //std::string smart_color;
     std::string iid;
     int64_t width;
     int64_t height;
     int64_t def_uid;
     std::vector<int64_t> px;
     std::vector<LDTKFieldInstance> field_instances;
-    //int64_t world_x;
-    //int64_t world_y;
 };
 
 
@@ -143,22 +136,14 @@ struct LDTKLayerInstance {
     int64_t c_wid;
     int64_t c_hei;
     int64_t grid_size;
-    //int64_t opacity;
-    //int64_t px_total_offset_x;
-    //int64_t px_total_offset_y;
     int64_t tileset_def_uid;
     std::string tileset_rel_path;
-    //std::string iid;
     int64_t level_id;
     int64_t layer_def_uid;
     int64_t px_offset_x;
     int64_t px_offset_y;
-    //bool visible;
-    //std::vector<nlohmann::json> optional_rules;
     std::vector<int64_t> int_grid;
     std::vector<nlohmann::json> auto_layer_tiles;
-    //int64_t seed;
-    //nlohmann::json override_tileset_uid;
     std::vector<LDTKGridTile> grid_tiles;
     std::vector<LDTKEntityInstance> entity_instances;
 };
@@ -180,15 +165,9 @@ struct LDTKLevel {
     int64_t px_wid;
     int64_t px_hei;
     std::string bg_color;
-    //nlohmann::json level_bg_color;
     bool use_auto_identifier;
     nlohmann::json bg_rel_path;
     nlohmann::json level_bg_pos;
-    //double bg_pivot_x;
-    //double bg_pivot_y;
-    //std::string smart_color;
-    //nlohmann::json bg_pos;
-    //nlohmann::json external_rel_path;
     std::vector<nlohmann::json> field_instances;
     std::vector<LDTKLayerInstance> layer_instances;
     std::vector<LDTKEnvironmentData> environment_data;
@@ -275,6 +254,7 @@ extern LDTKMaps g_ldtk_maps;
 
 extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 //extern std::vector<LDTKLevel> g_ldtk_levels;
+
 
 
 void LDTKLoadTileSets (json &mj);

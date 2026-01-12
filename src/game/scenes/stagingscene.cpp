@@ -62,7 +62,8 @@ void StagingScene::OnPlayPressed() {
 
 
     GenerateWorldGenTilesets(world_gen_map_path);
-
+    /* LDTKLevel new_level;
+    GenerateMap(new_level, g_worldgen_tilesets[0].uid); */
 
     std::string ldtk_map_path = "assets/maps/ldtk/test.ldtk";
     int num_maps = load_ldtk_maps(ldtk_map_path);

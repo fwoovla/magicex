@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 84,
+	"nextUid": 85,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -16897,7 +16897,7 @@
 			"worldX": 16,
 			"worldY": -544,
 			"worldDepth": 0,
-			"pxWid": 16,
+			"pxWid": 32,
 			"pxHei": 16,
 			"__bgColor": "#696A79",
 			"bgColor": null,
@@ -16917,7 +16917,7 @@
 				{
 					"__identifier": "Entities2",
 					"__type": "Entities",
-					"__cWid": 8,
+					"__cWid": 16,
 					"__cHei": 8,
 					"__gridSize": 2,
 					"__opacity": 1,
@@ -16942,7 +16942,7 @@
 				{
 					"__identifier": "Entities",
 					"__type": "Entities",
-					"__cWid": 1,
+					"__cWid": 2,
 					"__cHei": 1,
 					"__gridSize": 16,
 					"__opacity": 1,
@@ -16967,7 +16967,7 @@
 				{
 					"__identifier": "Collision",
 					"__type": "IntGrid",
-					"__cWid": 1,
+					"__cWid": 2,
 					"__cHei": 1,
 					"__gridSize": 16,
 					"__opacity": 1,
@@ -16982,7 +16982,7 @@
 					"pxOffsetY": 0,
 					"visible": true,
 					"optionalRules": [],
-					"intGridCsv": [0],
+					"intGridCsv": [0,0],
 					"autoLayerTiles": [],
 					"seed": 6437371,
 					"overrideTilesetUid": null,
@@ -16992,7 +16992,7 @@
 				{
 					"__identifier": "Foreground",
 					"__type": "Tiles",
-					"__cWid": 2,
+					"__cWid": 4,
 					"__cHei": 2,
 					"__gridSize": 8,
 					"__opacity": 1,
@@ -17017,7 +17017,7 @@
 				{
 					"__identifier": "Structures",
 					"__type": "Tiles",
-					"__cWid": 1,
+					"__cWid": 2,
 					"__cHei": 1,
 					"__gridSize": 16,
 					"__opacity": 1,
@@ -17042,7 +17042,7 @@
 				{
 					"__identifier": "TerrainUpper",
 					"__type": "Tiles",
-					"__cWid": 1,
+					"__cWid": 2,
 					"__cHei": 1,
 					"__gridSize": 16,
 					"__opacity": 1,
@@ -17067,7 +17067,7 @@
 				{
 					"__identifier": "TerrainLower",
 					"__type": "Tiles",
-					"__cWid": 1,
+					"__cWid": 2,
 					"__cHei": 1,
 					"__gridSize": 16,
 					"__opacity": 1,
@@ -17086,7 +17086,10 @@
 					"autoLayerTiles": [],
 					"seed": 3011226,
 					"overrideTilesetUid": null,
-					"gridTiles": [{ "px": [0,0], "src": [0,0], "f": 0, "t": 0, "d": [0], "a": 1 }],
+					"gridTiles": [
+						{ "px": [0,0], "src": [0,0], "f": 0, "t": 0, "d": [0], "a": 1 },
+						{ "px": [16,0], "src": [16,144], "f": 0, "t": 361, "d": [1], "a": 1 }
+					],
 					"entityInstances": []
 				}
 			],
