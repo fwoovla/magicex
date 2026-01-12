@@ -127,8 +127,9 @@ void GenerateWorldGenTilesets(std::string _path) {
                             for(int tile_tag = 0; tile_tag < this_tileset->tile_tags.size(); tile_tag++) {
                                 //TraceLog(LOG_INFO, "looking for tile id  %i  ?  %i", tile_id, this_tileset->tile_tags[tile_tag].tile_ids[0]);
                                 if(tile_id == this_tileset->tile_tags[tile_tag].tile_ids[0]) {
-                                    this_tileset->tile_lookup[tile_id] = atlas_pos;
-                                    TraceLog(LOG_INFO, "tile found");
+                                    int alatered_id = StrToTileId(this_tileset->tile_tags[tile_tag].value_string);
+                                    this_tileset->tile_lookup[alatered_id] = atlas_pos;
+                                    TraceLog(LOG_INFO, "tile found id: %i  %0.0f  %0.0f", alatered_id, atlas_pos.x, atlas_pos.y);
                                 }
                             }
                         }
@@ -143,16 +144,17 @@ void GenerateWorldGenTilesets(std::string _path) {
         TraceLog(LOG_INFO, "set # %i", set);
         TraceLog(LOG_INFO, "-----uid %i", g_worldgen_tilesets[set].uid);
         TraceLog(LOG_INFO, "-----loaded tiles %i", g_worldgen_tilesets[set].tile_lookup.size());
-        for(int tile = 0; tile < g_worldgen_tilesets[set].tile_lookup.size(); tile++) {
-            if(g_worldgen_tilesets[set].tile_lookup[tile] != Vector2{-1, -1}) {
-                TraceLog(LOG_INFO, "------------tile %i %0.0f  %0.0f", tile, g_worldgen_tilesets[set].tile_lookup[tile].x, g_worldgen_tilesets[set].tile_lookup[tile].y);
+        
+        for(auto &tile : g_worldgen_tilesets[set].tile_lookup) {
+            if(tile.second.x >= 0 and tile.second.y >= 0) {
+                TraceLog(LOG_INFO, "------------tile %i %0.0f  %0.0f", tile.first, tile.second.x, tile.second.y);
             }
         }
     }
 
 }
 
-void GenerateMap(LDTKLevel &new_level, int tileset_uid) {
+void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
     WorldGenTileSet *this_tilset = nullptr;
 
@@ -166,72 +168,166 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid) {
         TraceLog(LOG_INFO, "could not find tileset %i", tileset_uid);
     }
 
-    Vector2 map_size = {10, 10};   
+    //Vector2 map_size = {10, 10};   
     
     new_level.identifier = "WORLD GEN LEVEL";
-    new_level.px_wid = map_size.x * this_tilset->tile_grid_size;
-    new_level.px_hei = map_size.y * this_tilset->tile_grid_size;
+    new_level.px_wid = _map_size.x * this_tilset->tile_grid_size;
+    new_level.px_hei = _map_size.y * this_tilset->tile_grid_size;
 
-    LDTKLayerInstance terrain_lower_ldtk;
-    terrain_lower_ldtk.identifier = "TerrainLower";
-    terrain_lower_ldtk.type = "Tiles";
-    terrain_lower_ldtk.tileset_def_uid = this_tilset->uid;
-    terrain_lower_ldtk.grid_size = this_tilset->tile_grid_size;
-    terrain_lower_ldtk.c_wid = map_size.x;
-    terrain_lower_ldtk.c_hei = map_size.y;
+    GenerateEntities(new_level, this_tilset, _map_size);
+
+    GenerateUpperTerrain(new_level, this_tilset, _map_size);
+
+    GenerateLowerTerrain(new_level, this_tilset, _map_size);
+
+    GenerateCollision(new_level, this_tilset, _map_size);
+
+}
+
+
+
+
+
+void GenerateLowerTerrain(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+
+    new_layer.identifier = "TerrainLower";
+    new_layer.type = "Tiles";
+    new_layer.tileset_def_uid = _tileset->uid;
+    new_layer.grid_size = _tileset->tile_grid_size;
+    new_layer.c_wid = _map_size.x;
+    new_layer.c_hei = _map_size.y;
     
-    for(int x = 0; x < map_size.x; x++) {
-        for(int y = 0; y < map_size.y; y++) {
+    for(int y = 0; y < _map_size.y; y++) {
+        for(int x = 0; x < _map_size.x; x++) {
             
             LDTKGridTile new_tile_ldtk;
             
-            new_tile_ldtk.px.push_back((float)x*this_tilset->tile_grid_size);//x*this_tilset->tile_grid_size;
-            new_tile_ldtk.px.push_back((float)y*this_tilset->tile_grid_size);//y*this_tilset->tile_grid_size;
+            new_tile_ldtk.px.push_back((float)x*_tileset->tile_grid_size);//x*this_tilset->tile_grid_size;
+            new_tile_ldtk.px.push_back((float)y*_tileset->tile_grid_size);//y*this_tilset->tile_grid_size;
             
             
             int tile_id = TILE_ID_GRASS_1;//GetRandomValue(0, TILE_ID_MAX -1);
             //TraceLog(LOG_INFO, "tile id  %i   lookup %0.0f %0.0f", tile_id, x, y);
             
-            new_tile_ldtk.src.push_back( this_tilset->tile_lookup[tile_id].x);
-            new_tile_ldtk.src.push_back(this_tilset->tile_lookup[tile_id].y);
+            new_tile_ldtk.src.push_back( _tileset->tile_lookup[tile_id].x);
+            new_tile_ldtk.src.push_back(_tileset->tile_lookup[tile_id].y);
             new_tile_ldtk.t = tile_id;
             
-            terrain_lower_ldtk.grid_tiles.push_back(new_tile_ldtk);
+            new_layer.grid_tiles.push_back(new_tile_ldtk);
 
-            TraceLog(LOG_INFO, "making tile %i %i    src  %i %i", new_tile_ldtk.px[0], new_tile_ldtk.px[1], new_tile_ldtk.src[0], new_tile_ldtk.src[1]);
+            TraceLog(LOG_INFO, "making tile   id: %i  px: %i %i    src  %i %i",tile_id, new_tile_ldtk.px[0], new_tile_ldtk.px[1], new_tile_ldtk.src[0], new_tile_ldtk.src[1]);
         }
     }
-            
-    new_level.layer_instances.push_back(terrain_lower_ldtk);
-            
-    LDTKLayerInstance eneities_ldtk;
+    _level.layer_instances.push_back(new_layer);
 
-    eneities_ldtk.identifier = "Entities";
-    eneities_ldtk.type = "Entities";
-    eneities_ldtk.tileset_def_uid = -1;
-    eneities_ldtk.grid_size = this_tilset->tile_grid_size;
-    eneities_ldtk.c_wid = map_size.x;
-    eneities_ldtk.c_hei = map_size.y;
+}
+
+void GenerateUpperTerrain(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+    new_layer.identifier = "TerrainUpper";
+    new_layer.type = "Tiles";
+    new_layer.tileset_def_uid = _tileset->uid;
+    new_layer.grid_size = _tileset->tile_grid_size;
+    new_layer.c_wid = _map_size.x;
+    new_layer.c_hei = _map_size.y;
+    
+    for(int y = 0; y < _map_size.y; y++) {
+        for(int x = 0; x < _map_size.x; x++) {
+            if(x == 0 or y == 0 or x == _map_size.x-1 or y == _map_size.y-1) {              
+                
+                LDTKGridTile new_tile_ldtk;
+                
+                new_tile_ldtk.px.push_back((float)x*_tileset->tile_grid_size);//x*this_tilset->tile_grid_size;
+                new_tile_ldtk.px.push_back((float)y*_tileset->tile_grid_size);//y*this_tilset->tile_grid_size;
+                
+                
+                int tile_id = TILE_ID_BORDER;//GetRandomValue(0, TILE_ID_MAX -1);
+                //TraceLog(LOG_INFO, "tile id  %i   lookup %0.0f %0.0f", tile_id, x, y);
+                
+                new_tile_ldtk.src.push_back( _tileset->tile_lookup[tile_id].x);
+                new_tile_ldtk.src.push_back(_tileset->tile_lookup[tile_id].y);
+                new_tile_ldtk.t = tile_id;
+                
+                new_layer.grid_tiles.push_back(new_tile_ldtk);
+                
+                TraceLog(LOG_INFO, "making border tile id: %i  px %i %i    src  %i %i", tile_id, new_tile_ldtk.px[0], new_tile_ldtk.px[1], new_tile_ldtk.src[0], new_tile_ldtk.src[1]);
+            }
+        }
+    }   
+    _level.layer_instances.push_back(new_layer);
+}
+
+void GenerateCollision(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+    
+    new_layer.identifier = "Collision";
+    new_layer.type = "IntGrid";
+    new_layer.tileset_def_uid = -1;
+    new_layer.grid_size = _tileset->tile_grid_size;
+    new_layer.c_wid = _map_size.x;
+    new_layer.c_hei = _map_size.y;
+    new_layer.int_grid.resize(_map_size.x*_map_size.y, 0);
+
+    int cols = _map_size.x;
+
+    for(int y = 0; y < _map_size.y; y++) {
+        for(int x = 0; x < _map_size.x; x++) {
+
+            if(x == 0 or y == 0 or x == _map_size.x-1 or y == _map_size.y-1) {
+                new_layer.int_grid[y * cols + x] = 1;
+            }
+        }
+    }
+    _level.layer_instances.push_back(new_layer);
+}
+
+
+void GenerateEntities(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+    new_layer.identifier = "Entities";
+    new_layer.type = "Entities";
+    new_layer.tileset_def_uid = -1;
+    new_layer.grid_size = _tileset->tile_grid_size;
+    new_layer.c_wid = _map_size.x;
+    new_layer.c_hei = _map_size.y;
 
     LDTKEntityInstance spawn_point;
-    spawn_point.px.push_back(5*this_tilset->tile_grid_size);
-    spawn_point.px.push_back(5*this_tilset->tile_grid_size);
+    spawn_point.px.push_back(5*_tileset->tile_grid_size);
+    spawn_point.px.push_back(5*_tileset->tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
-    eneities_ldtk.entity_instances.push_back(spawn_point);
+    new_layer.entity_instances.push_back(spawn_point);
+    _level.layer_instances.push_back(new_layer);
+}
 
 
-    new_level.layer_instances.push_back(eneities_ldtk);
+void GenerateStructures(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+
+    _level.layer_instances.push_back(new_layer);
+}
+
+void GenerateEnvironment(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size) {
+    LDTKLayerInstance new_layer;
+
+    _level.layer_instances.push_back(new_layer);
+}
 
 
-    LDTKLayerInstance collision_ldtk;
-    
-    collision_ldtk.identifier = "Collision";
-    collision_ldtk.type = "IntGrid";
-    collision_ldtk.tileset_def_uid = -1;
-    collision_ldtk.grid_size = this_tilset->tile_grid_size;
-    collision_ldtk.c_wid = map_size.x;
-    collision_ldtk.c_hei = map_size.y;
-    collision_ldtk.int_grid.resize(map_size.x*map_size.y, -1);
-    
-    new_level.layer_instances.push_back(collision_ldtk);
+
+
+
+
+TILEID StrToTileId(const std::string& s) {
+
+    static const std::unordered_map<std::string, TILEID> lookup_table = {
+        {"TILE_ID_GRASS_1",                      TILEID::TILE_ID_GRASS_1},
+        {"TILE_ID_BORDER",                          TILEID::TILE_ID_BORDER},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "tile ID not found ");
+    return TILEID::TILE_ID_NONE;
 }

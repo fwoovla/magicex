@@ -900,7 +900,7 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid);
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {10, 10});
         g_game_data.current_map_index = map_index;
     }
 

@@ -374,7 +374,7 @@ int LDTKDrawMap(Vector2 focus_position) {
             
      
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
-        //TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
+        TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
         for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
             LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];
@@ -413,7 +413,21 @@ int LDTKDrawMap(Vector2 focus_position) {
                     color
                 );
 
-                //TraceLog(LOG_INFO, "%i drawing tile  px  %i %i    x:  %i  y %i", tile, this_tile->px[0], this_tile->px[1], tile_x, tile_y);
+                
+                if(this_level->layer_instances[l].identifier == "TerrainUpper") {
+
+                        /* TraceLog(LOG_INFO, "%s: tid: %i %i drawing tile  px  %i %i    x:  %0.0f  y %0.0f  atlas:  %0.0f  y %0.0f",
+                        this_level->layer_instances[l].identifier.c_str(),
+                        tile_id, 
+                        tile, 
+                        this_tile->px[0], 
+                        this_tile->px[1], 
+                        tile_x, 
+                        tile_y, 
+                        atlas_pos.x, 
+                        atlas_pos.y); */
+                }
+
 
                 tiles_drawn++;
             }

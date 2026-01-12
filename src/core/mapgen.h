@@ -5,6 +5,7 @@
 enum TILEID {
     TILE_ID_NONE = -1,
     TILE_ID_GRASS_1,
+    TILE_ID_BORDER,
     TILE_ID_MAX,
 };
 
@@ -67,4 +68,18 @@ extern std::vector<WorldGenTileSet> g_worldgen_tilesets;
 
 void GenerateWorldGenTilesets(std::string _path);
 
-void GenerateMap(LDTKLevel &new_level, int tileset_id);
+void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size);
+
+void GenerateLowerTerrain(LDTKLevel &_level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+void GenerateUpperTerrain(LDTKLevel &level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+void GenerateCollision(LDTKLevel &level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+void GenerateEntities(LDTKLevel &level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+void GenerateStructures(LDTKLevel &level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+void GenerateEnvironment(LDTKLevel &level, WorldGenTileSet *_tileset, Vector2 _map_size);
+
+TILEID StrToTileId(const std::string& s);

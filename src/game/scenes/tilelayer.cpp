@@ -22,7 +22,7 @@ void TileLayer::Draw() {
 
 bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vector2 ckeck_position) {
     //================TILE COLLISION=========================
-    TraceLog(LOG_INFO, "collide and slide  checker pos %0.0f, %0.0f", ckeck_position.x, ckeck_position.y);
+    //TraceLog(LOG_INFO, "collide and slide  checker pos %0.0f, %0.0f", ckeck_position.x, ckeck_position.y);
     bool collided = false;
 
     LevelData *level_data = nullptr;
@@ -37,19 +37,19 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
     if(level_data == nullptr) {
         return -1;
     }
-    TraceLog(LOG_INFO, "level data found");
+    //TraceLog(LOG_INFO, "level data found");
 
     LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
 
-    TraceLog(LOG_INFO, "level %s", this_level.identifier.c_str());
+    //TraceLog(LOG_INFO, "level %s", this_level.identifier.c_str());
 
     if(level_data->precalc.collision_layer_index == -1) {
-        TraceLog(LOG_INFO, "no collision layer");
+        //TraceLog(LOG_INFO, "no collision layer");
         return false;
     }
     
     LDTKLayerInstance &col_layer = this_level.layer_instances[level_data->precalc.collision_layer_index];
-    TraceLog(LOG_INFO, "collision layer %s %i", this_level.layer_instances[level_data->precalc.collision_layer_index].identifier.c_str(), level_data->precalc.collision_layer_index);
+    //TraceLog(LOG_INFO, "collision layer %s %i", this_level.layer_instances[level_data->precalc.collision_layer_index].identifier.c_str(), level_data->precalc.collision_layer_index);
 
     int tile_size = level_data->precalc.tile_size;
     float inv_tile_size = level_data->precalc.inv_tile_size;
