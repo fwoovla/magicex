@@ -374,7 +374,7 @@ int LDTKDrawMap(Vector2 focus_position) {
             
      
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
-        TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
+        //TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
         for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
             LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];

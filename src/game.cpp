@@ -91,6 +91,8 @@ void Game::StartGame() {
 
     LoadResources();
     LoadGameData();
+    std::string world_gen_map_path = "assets/maps/ldtk/worldgen.ldtk";
+    GenerateWorldGenTilesets(world_gen_map_path);
 
     //g_player_data = g_class_data[0];
     g_current_player = nullptr;

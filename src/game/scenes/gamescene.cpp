@@ -186,10 +186,9 @@ void GameScene::DrawScene() {
             e->Draw();
         }
 
-        //LDTKDrawShadows(g_current_player->position);
+        LDTKDrawShadows(g_current_player->position);
         DL_Draw(level_data.ui_entities);
         EndMode2D();
-        TraceLog(LOG_INFO, "\n");
     }    
 }
 

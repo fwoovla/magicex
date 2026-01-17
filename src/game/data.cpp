@@ -900,7 +900,7 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {10, 10});
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {50, 50});
         g_game_data.current_map_index = map_index;
     }
 
@@ -1131,7 +1131,7 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
         if(this_level.layer_instances[l].type == "IntGrid") {
             level_data.precalc.collision_layer_index = l;
             col_layer = &this_level.layer_instances[l];
-            TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+            //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
         }
         if(this_level.layer_instances[l].identifier == "Foreground") {
             level_data.precalc.foreground_layer_index = l;
@@ -1145,13 +1145,13 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
     }
 
     level_data.precalc.tile_size = col_layer->grid_size;
-    TraceLog(LOG_INFO, "            tile size -- %i",level_data.precalc.tile_size  );
+    //TraceLog(LOG_INFO, "            tile size -- %i",level_data.precalc.tile_size  );
 
     level_data.precalc.inv_tile_size = 1/(float)level_data.precalc.tile_size;
-    TraceLog(LOG_INFO, "            inv tilesize -- %0.5f",level_data.precalc.inv_tile_size  );
+    //TraceLog(LOG_INFO, "            inv tilesize -- %0.5f",level_data.precalc.inv_tile_size  );
 
     level_data.precalc.map_width = col_layer->c_wid;
-    TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+    //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
 
     TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
 }
