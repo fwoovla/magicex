@@ -235,7 +235,7 @@ void GameScene::HandleCamera() {
 
     g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 
-    /* if(g_current_player->position.x - x_offset_f < 0) {
+    if(g_current_player->position.x - x_offset_f < 0) {
         float x_dif = x_offset_f - g_current_player->position.x;
         //TraceLog(LOG_INFO, "x_dif %0.2f   %0.2f, %0.2f", x_dif, g_camera.target.x, g_camera.target.x);
         g_camera.target.x = g_camera.target.x + x_dif;
@@ -256,7 +256,7 @@ void GameScene::HandleCamera() {
         //TraceLog(LOG_INFO, "y_dif %0.2f   %0.2f, %0.2f", y_dif, g_camera.target.y, g_camera.target.y);
         g_camera.target.y = g_camera.target.y - y_dif;
 
-    } */    
+    }    
 }
 
 

@@ -371,6 +371,8 @@ RecipieID StrToRecipieId(const std::string& s);
 
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 
+std::string EnvironmentalIdToStr(const int id);
+
 void from_json(const json &j, ItemInstanceData &i);
 
 void from_json(const json &j, ContainerData &i);

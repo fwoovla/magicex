@@ -1637,6 +1637,19 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
     return EnvironmentSpriteID::SPRITE_ENVIRO_ERROR;
 }
 
+std::string EnvironmentalIdToStr(const int id) {
+
+    static const std::unordered_map<int , std::string> lookup_table = {
+        {EnvironmentSpriteID::SPRITE_ENVIRO_TREE1,     "Tree1"},
+        {EnvironmentSpriteID::SPRITE_ENVIRO_TREE2,     "Tree2"},
+        {EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1,     "Grass1"},
+        {EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2,     "Grass2"},
+    };
+    if (auto it = lookup_table.find(id); it != lookup_table.end()) {
+        return it->second;
+    }
+    return "";
+}
 
 AIID StrToAiId(const std::string& s) {
     static const std::unordered_map<std::string, AIID> lookup_table = {

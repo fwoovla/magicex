@@ -98,6 +98,7 @@ GENERATED += $(OBJDIR)/input.o
 GENERATED += $(OBJDIR)/itemgenerator.o
 GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
+GENERATED += $(OBJDIR)/layergen.o
 GENERATED += $(OBJDIR)/ldtk.o
 GENERATED += $(OBJDIR)/lightning.o
 GENERATED += $(OBJDIR)/magicmissle.o
@@ -107,6 +108,7 @@ GENERATED += $(OBJDIR)/mapmenu.o
 GENERATED += $(OBJDIR)/modulemenu.o
 GENERATED += $(OBJDIR)/modules.o
 GENERATED += $(OBJDIR)/mushroomentity.o
+GENERATED += $(OBJDIR)/pathgen.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
 GENERATED += $(OBJDIR)/poison.o
@@ -146,6 +148,7 @@ OBJECTS += $(OBJDIR)/input.o
 OBJECTS += $(OBJDIR)/itemgenerator.o
 OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
+OBJECTS += $(OBJDIR)/layergen.o
 OBJECTS += $(OBJDIR)/ldtk.o
 OBJECTS += $(OBJDIR)/lightning.o
 OBJECTS += $(OBJDIR)/magicmissle.o
@@ -155,6 +158,7 @@ OBJECTS += $(OBJDIR)/mapmenu.o
 OBJECTS += $(OBJDIR)/modulemenu.o
 OBJECTS += $(OBJDIR)/modules.o
 OBJECTS += $(OBJDIR)/mushroomentity.o
+OBJECTS += $(OBJDIR)/pathgen.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
 OBJECTS += $(OBJDIR)/poison.o
@@ -292,6 +296,12 @@ $(OBJDIR)/ldtk.o: src/game/ldtk.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/mapgen.o: src/game/mapgen.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/layergen.o: src/game/mapgen/layergen.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/pathgen.o: src/game/mapgen/pathgen.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/modules.o: src/game/modules.cpp

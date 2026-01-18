@@ -3,6 +3,7 @@
 
 EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool _fadeable) {
     position = _position;
+    position.y += (GetRandomValue(-50,50) * 0.001); //prevent visual overlap
     //sprite_id = _sprite_id;
     rotation = 0.0f;
     y_sort = true;
