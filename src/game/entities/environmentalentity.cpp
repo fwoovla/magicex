@@ -58,9 +58,7 @@ void EnvironmentalEntity::Draw() {
 
     //DrawCircleV(sprite.position, 2, WHITE);
     if(fadeable) {
-                    
-        
-                    
+                         
         if( CheckCollisionPointRec(Vector2Add(g_current_player->position, g_current_player->ground_point_offset), collision_rect ) ) {
             float alpha_value = Lerp((float)sprite.modulate.a, 30.0f, 0.5f );
             sprite.modulate.a = (unsigned char)alpha_value;

@@ -87,6 +87,9 @@ enum MAPZONE {
     ZONE_GRASS,
     ZONE_DIRT,
     ZONE_PATH,
+    ZONE_PATH_SIDE,
+    ZONE_TREE,
+    ZONE_STRUCTURE,
     ZONE_BORDER,
 };
 
@@ -123,11 +126,15 @@ struct WorldGenTileSet {
     int px_hei;
     int tile_grid_size;
     int num_paths;
+    Vector2 map_size;
     std::vector <LDTKEnumTag> tile_tags;
     std::unordered_map <TILEID, WorldGenAutoTile> tile_lookup;
     SortedTiles sorted_tiles;
     std::vector<PathWorm> path_worms;
-    std::vector<MAPZONE> zone_grid;
+    std::vector<MAPZONE> lower_zone_grid;
+    std::vector<MAPZONE> upper_zone_grid;
+    std::vector< std::vector<Vector2> > paths;
+    std::vector<Vector2> structure_positions;
     //std::vector<WorldGenAutoTile> path_auto_tiles;
 
 };
@@ -142,16 +149,21 @@ void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size);
 
 //void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset, Vector2 _map_size);
 
+void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
-void GenerateDirtPatch(LDTKLayerInstance &_layer, WorldGenTileSet &_tileset, Vector2 _map_size);
+//void GenerateDirtPatch(LDTKLayerInstance &_layer, WorldGenTileSet &_tileset);
 
 //void GenerateUpperTerrainLayer(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
 
-void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
+//void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
 
 
-void GenerateGrass(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
+void PopulateGrass(LDTKLevel &level, WorldGenTileSet &_tileset);
 
+void PopulateTrees(LDTKLevel &level, WorldGenTileSet &_tileset);
+
+
+TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index);
 
 TILEID StrToTileId(const std::string& s);

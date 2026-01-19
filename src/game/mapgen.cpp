@@ -278,6 +278,7 @@ void GenerateWorldGenTilesets(std::string _path) {
 
                                         if(alatered_id > TILE_ID_PATH_START and alatered_id < TILE_ID_PATH_END) {
                                             if(alatered_id == TILE_ID_PATH_MID) {
+                                                TraceLog(LOG_INFO, "================================mid path found %i ", alatered_id);
                                                 new_tile.marked_sides[TILESIDE_UP] = 1;
                                                 new_tile.marked_sides[TILESIDE_RIGHT] = 1;
                                                 new_tile.marked_sides[TILESIDE_DOWN] = 1;
@@ -420,128 +421,269 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     
     }
 
+    this_tilset->map_size = _map_size;
+
+    this_tilset->sorted_tiles.grass_tiles.clear();
+    this_tilset->sorted_tiles.dirt_tiles.clear();
+    this_tilset->sorted_tiles.path_tiles.clear();
+    this_tilset->sorted_tiles.border_tiles.clear();
+
     for(auto &tile : this_tilset->tile_lookup) {
         TILEID tile_id = tile.first;
 
         if(tile_id > TILE_ID_GRASS_START and tile_id < TILE_ID_GRASS_END) {
             this_tilset->sorted_tiles.grass_tiles.push_back(tile_id);
         }
-        if(tile_id > TILE_ID_BORDER_START and tile_id < TILE_ID_DIRT_END) {
+        if(tile_id > TILE_ID_BORDER_START and tile_id < TILE_ID_BORDER_END) {
             this_tilset->sorted_tiles.border_tiles.push_back(tile_id);
         }
-        if(tile_id > TILE_ID_PATH_MID and tile_id < TILE_ID_PATH_END) {
+        if(tile_id > TILE_ID_PATH_START and tile_id < TILE_ID_PATH_END) {
             this_tilset->sorted_tiles.path_tiles.push_back(tile_id);
         }
         if(tile_id > TILE_ID_DIRT_START and tile_id < TILE_ID_DIRT_END) {
-            this_tilset->sorted_tiles.path_tiles.push_back(tile_id);
+            this_tilset->sorted_tiles.dirt_tiles.push_back(tile_id);
         }
-
     }
 
+    this_tilset->paths.clear();
+    this_tilset->path_worms.clear();
     this_tilset->num_paths = 3;
 
     for(int path = 0; path < this_tilset->num_paths; path++) {
         PathWorm worm;
         worm.locked_dir = {0,0};
-        worm.position = { _map_size.x/2, _map_size.y/2 };
+        worm.position = { this_tilset->map_size.x/2, this_tilset->map_size.y/2 };
 
         if(GetRandomValue(0, 100) > 50) {
             if(GetRandomValue(0, 100) > 50) {
                 worm.locked_dir.x = 1;
                 
-                TraceLog(LOG_INFO, "locked right");
+                //TraceLog(LOG_INFO, "locked right");
             }
             else {
                 worm.locked_dir.x = -1;
-                TraceLog(LOG_INFO, "locked left");
+                //TraceLog(LOG_INFO, "locked left");
             }
         }
         else {
             if(GetRandomValue(0, 100) > 50) {
                 worm.locked_dir.y = 1;
-                TraceLog(LOG_INFO, "locked down");
+                //TraceLog(LOG_INFO, "locked down");
             }
             else {
                 worm.locked_dir.y = -1;
-                TraceLog(LOG_INFO, "locked up");
+                //TraceLog(LOG_INFO, "locked up");
             }       
         }
         worm.last_locked_dir = worm.locked_dir;
         this_tilset->path_worms.push_back(worm);
+        std::vector<Vector2> new_path;
+        this_tilset->paths.push_back(new_path);
     }
 
-    this_tilset->zone_grid.resize((int)_map_size.x * (int)_map_size.y, ZONE_NONE);
-
+    this_tilset->lower_zone_grid.clear();
+    this_tilset->lower_zone_grid.resize((int)this_tilset->map_size.x * (int)this_tilset->map_size.y, ZONE_NONE);
+    this_tilset->upper_zone_grid.clear();
+    this_tilset->upper_zone_grid.resize((int)this_tilset->map_size.x * (int)this_tilset->map_size.y, ZONE_NONE);
 
     new_level.identifier = "WORLD GEN LEVEL";
-    new_level.px_wid = _map_size.x * this_tilset->tile_grid_size;
-    new_level.px_hei = _map_size.y * this_tilset->tile_grid_size;
+    new_level.px_wid = this_tilset->map_size.x * this_tilset->tile_grid_size;
+    new_level.px_hei = this_tilset->map_size.y * this_tilset->tile_grid_size;
 
 
     //grass layer                           X
     //border                                X
-    //structure areas                       -
-    //structure positions                   -
+    //structure areas                       X
+    //structure positions                   X
     //structure tiles                       -
     //dirt patches                          x
-    //paths connect structure areas         -
+    //paths connect structure areas         X
     //obsticles                             -
-    //trees                                 -
+    //trees                                 X
     //grass                                 X
     //spawn point                           X
     //transition areas                      -
     //lootables                             -
     //mobs                                  -
 
-    GenerateEntitiesLayer(new_level, *this_tilset, _map_size);
+    GenerateZones(new_level, *this_tilset);
 
-    GenerateStructuresLayer(new_level, *this_tilset, _map_size);
+    //GenerateMapWormPaths(*this_tilset);
 
-    GenerateUpperTerrainLayer(new_level, *this_tilset, _map_size);
+    ConnectStructuresWithPaths(*this_tilset);
 
-    GenerateLowerTerrainLayer(new_level, *this_tilset, _map_size);
+    GenerateEntitiesLayer(new_level, *this_tilset);
 
-    for(LDTKLayerInstance &layer : new_level.layer_instances) {
-        if(layer.identifier == "TerrainUpper") {
-            GenerateMapPaths(layer, *this_tilset, _map_size);
-        }
-    }
+    GenerateStructuresLayer(new_level, *this_tilset);
 
-    for(LDTKLayerInstance &layer : new_level.layer_instances) {
-        if(layer.identifier == "TerrainLower") {
-            GenerateDirtPatch(layer, *this_tilset, _map_size);
-        }
-    }
+    GenerateUpperTerrainLayer(new_level, *this_tilset);
 
-    GenerateCollisionLayer(new_level, *this_tilset, _map_size);
+    GenerateLowerTerrainLayer(new_level, *this_tilset);
 
-    GenerateGrass(new_level, *this_tilset, _map_size);
+    GenerateCollisionLayer(new_level, *this_tilset);
+
+    PopulateGrass(new_level, *this_tilset);
+
+    PopulateTrees(new_level, *this_tilset);
 
 }
 
 
 
 
+void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+    //baseline grass on lower
+    for(int y = 0; y < _tileset.map_size.y; y++) {
+        for(int x = 0; x < _tileset.map_size.x; x++) {
+            int index = y * _tileset.map_size.x + x;
+            _tileset.lower_zone_grid[index] = ZONE_GRASS;
+
+            if(x == 0 or y == 0 or x == _tileset.map_size.x-1 or y == _tileset.map_size.y-1) {              
+                _tileset.upper_zone_grid[index] = ZONE_BORDER;
+            }
+        }
+    }
+
+    std::vector<Rectangle> dirt_rects;
+
+    int num_dirt_patches = (level.px_wid/_tileset.tile_grid_size);
+
+    for(int patch = 0; patch < num_dirt_patches; patch++ ) {
+        Rectangle new_rect;
+        new_rect.x = (float)GetRandomValue(1, _tileset.map_size.x-5);
+        new_rect.y = (float)GetRandomValue(1, _tileset.map_size.y-5);
+        new_rect.width = (float)GetRandomValue(2, 10);
+        new_rect.height = (float)GetRandomValue(2, 10);
+
+        dirt_rects.push_back(new_rect);
+    }
+
+    for(Rectangle &patch : dirt_rects) {
+        for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
+            for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
+                int index = y * (int)_tileset.map_size.x + x;
+                if(index < _tileset.lower_zone_grid.size()-1) {
+
+                    _tileset.lower_zone_grid[index] = ZONE_DIRT;
+                }
+            }
+        }
+    }
+
+
+
+    std::vector<Rectangle> tree_rects;
+
+    int num_tree_patches = (level.px_wid/_tileset.tile_grid_size) / 5;
+    for(int patch = 0; patch < num_tree_patches; patch++ ) {
+        Rectangle new_rect;
+        new_rect.x = (float)GetRandomValue(15, _tileset.map_size.x-15);
+        new_rect.y = (float)GetRandomValue(15, _tileset.map_size.y-15);
+        new_rect.width = (float)GetRandomValue(2, 5);
+        new_rect.height = (float)GetRandomValue(2, 5);
+
+        tree_rects.push_back(new_rect);
+    }
+
+    for(Rectangle &patch : tree_rects) {
+        for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
+            for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
+                int index = y * (int)_tileset.map_size.x + x;
+                if(index < _tileset.upper_zone_grid.size()-1) {
+                    if(GetRandomValue(0, 100) >70) {
+                        _tileset.upper_zone_grid[index] = ZONE_TREE;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    std::vector<Rectangle> structure_rects;
+
+    int num_structure_patches = 1 + ((level.px_wid/_tileset.tile_grid_size)/50);
+    for(int patch = 0; patch < num_structure_patches; patch++ ) {
+        Rectangle new_rect;
+        new_rect.x = (float)GetRandomValue(1, _tileset.map_size.x-5);
+        new_rect.y = (float)GetRandomValue(1, _tileset.map_size.y-5);
+        new_rect.width = 10;
+        new_rect.height = 10;
+
+        structure_rects.push_back(new_rect);
+    }
+
+    for(Rectangle &patch : structure_rects) {
+        for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
+            for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
+                int index = y * (int)_tileset.map_size.x + x;
+                if(index < _tileset.upper_zone_grid.size()-1) {
+                    if(_tileset.upper_zone_grid[index] != ZONE_BORDER) {
+                        _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+                        _tileset.lower_zone_grid[index] = ZONE_DIRT;
+                    }
+
+                    if(x == (int)(patch.width/2) + (int)patch.x and y == (int)(patch.height/2) + (int)patch.y) {
+                        _tileset.structure_positions.push_back({(float)x,(float)y});
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 
 
-
-
-
-
-
-
-
-void GenerateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset, Vector2 _map_size) {
-
-    Vector2 temp_grid_size = {(_map_size.x*2), (_map_size.y*2)};
+void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+    Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
     std::vector<int> temp_grid;
     temp_grid.resize(temp_grid_size.x*temp_grid_size.y, SPRITE_ENVIRO_ERROR);
 
     int _grid_size = 8;
 
-    int num_grass = 4000;
+    int num_trees = 0.40 * _level.px_wid + 0.40 * _level.px_hei;
+
+    for(int i = 0; i < num_trees; i++) {
+        int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   
+        int y = GetRandomValue(4, (int)(temp_grid_size.y)-4);
+
+        int index = y * temp_grid_size.x + x;
+
+        int zone_index = y/2 * (_tileset.map_size.x) + x/2;
+
+        if(_tileset.upper_zone_grid[zone_index] == ZONE_NONE and _tileset.lower_zone_grid[zone_index] == ZONE_GRASS) {
+            
+            if(temp_grid[index] == SPRITE_ENVIRO_ERROR ) {
+                
+                int tree_id = GetRandomValue(SPRITE_ENVIRO_TREE_START +1, SPRITE_ENVIRO_TREE_END -1);
+                
+                temp_grid[index] = tree_id;
+                
+                LDTKEnvironmentData new_thing;
+                new_thing.item_string = EnvironmentalIdToStr( tree_id );
+                //new_thing.item_string = "Grass2";
+                new_thing.position = {(float)(x * _grid_size), (float)(y * _grid_size)};
+                _level.environment_data.push_back(new_thing);
+                
+                //TraceLog(LOG_INFO, "zone %i  id %i------------new grass %s  %0.0f %0.0f", _tileset.zone_grid[zone_index], StrToEnviroSpriteId(new_thing.item_string), new_thing.item_string.c_str(), new_thing.position.x, new_thing.position.y );
+            }
+        }
+    }
+}
+
+
+
+void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+
+    Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
+    std::vector<int> temp_grid;
+    temp_grid.resize(temp_grid_size.x*temp_grid_size.y, SPRITE_ENVIRO_ERROR);
+
+    int _grid_size = 8;
+
+    int num_grass =  5 * _level.px_wid + 5 * _level.px_hei;
 
     for(int i = 0; i < num_grass; i++) {
         int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   
@@ -549,9 +691,9 @@ void GenerateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset, Vector2 _map_si
 
         int index = y * temp_grid_size.x + x;
 
-        int zone_index = y/2 * (_map_size.x) + x/2;
+        int zone_index = y/2 * (_tileset.map_size.x) + x/2;
 
-        if(_tileset.zone_grid[zone_index] != ZONE_PATH and _tileset.zone_grid[zone_index] != ZONE_DIRT) {
+        if(_tileset.upper_zone_grid[zone_index] == ZONE_NONE and _tileset.lower_zone_grid[zone_index] == ZONE_GRASS) {
             
             if(temp_grid[index] == SPRITE_ENVIRO_ERROR ) {
                 
@@ -569,142 +711,125 @@ void GenerateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset, Vector2 _map_si
             }
         }
     }
-
 }
 
 
-
-
-
-
-//needs fully filled grid_tiles
-void GenerateDirtPatch(LDTKLayerInstance &_layer, WorldGenTileSet &_tileset, Vector2 _map_size) {
-    int num_patches = _layer.c_wid / 10;
-
-    std::vector<int> temp_grid;
-    temp_grid.resize(_map_size.x*_map_size.y, TILE_ID_NONE);
-
-
-    std::vector<Rectangle> dirt_rects;
-
-    for(int patch = 0; patch < num_patches; patch++ ) {
-        Rectangle new_rect;
-        new_rect.x = (float)GetRandomValue(1, _map_size.x-5);
-        new_rect.y = (float)GetRandomValue(1, _map_size.y-5);
-        new_rect.width = (float)GetRandomValue(2, 15);
-        new_rect.height = (float)GetRandomValue(2, 15);
-
-        dirt_rects.push_back(new_rect);
-    }
-
-    for(Rectangle &patch : dirt_rects) {
-        //TraceLog(LOG_INFO, "DIRT RECT  x %0.0f y %0.0f  w %0.0f  h %0.0f", patch.x, patch.y, patch.width + patch.x, patch.height + patch.y);
-        for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
-            for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
-                int index = y * (int)_map_size.x + x;
-                if(index < temp_grid.size()-1) {
-                    temp_grid[index] = 1;
-                    _tileset.zone_grid[index] = ZONE_DIRT;
-                }
-            }
-        }
-    }
-
-    for(int tile_index = 0; tile_index < temp_grid.size(); tile_index++) {
-        int x = tile_index%(int)_map_size.x;
-        int y = tile_index/(int)_map_size.x;
-
-        if(x < 1 or y < 1 or x > _map_size.x-1 or y > _map_size.y-1) {
-            continue;
-        }
-
-        if(temp_grid[tile_index] != -1) {
-            int index_right = y * _map_size.x + (x+1);
-            int index_left = y * _map_size.x + (x-1);
-            int index_up = (y-1) * _map_size.x + x;
-            int index_down = (y+1) * _map_size.x + x;
-
-            int index_ur = (y-1) * _map_size.x + (x+1);
-            int index_ul = (y-1) * _map_size.x + (x-1);
-            int index_lr = (y+1) * _map_size.x + (x+1);
-            int index_ll = (y+1) * _map_size.x + (x-1);
-
-            
-            bool this_tile_marked_sides[4] = {false, false, false, false};
-            
-            if (temp_grid[index_up] != TILE_ID_NONE) {
-                this_tile_marked_sides[TILESIDE_UP] = true;
-            }
-            if (temp_grid[index_right] != TILE_ID_NONE) {
-                this_tile_marked_sides[TILESIDE_RIGHT] = true;
-            }
-            if (temp_grid[index_down] != TILE_ID_NONE) {
-                this_tile_marked_sides[TILESIDE_DOWN] = true;
-            }
-            if (temp_grid[index_left] != TILE_ID_NONE) {
-                this_tile_marked_sides[TILESIDE_LEFT] = true;
-            }
-
-
-            TILEID tile_id = TILE_ID_DIRT_SINGLE;
-
-            for(auto &tile : _tileset.tile_lookup) {
-                if(tile.first > TILE_ID_DIRT_START and tile.first < TILE_ID_DIRT_END) {
-                    //TraceLog(LOG_INFO, "dirt TILE ? %i ", tile.first);
-
-                    bool up_ok = false;
-                    bool right_ok = false;
-                    bool down_ok = false;
-                    bool left_ok = false;
+TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index) {
+    //TraceLog(LOG_INFO, " do auto tile for  %i ", target_zone);
     
-                    if(tile.second.marked_sides[TILESIDE_UP] == true and this_tile_marked_sides[TILESIDE_UP] == true) {
-                        up_ok = true;
-                    }
-                    if(tile.second.marked_sides[TILESIDE_UP] == false and this_tile_marked_sides[TILESIDE_UP] == false) {
-                        up_ok = true;
-                    }
+    
+    //TraceLog(LOG_INFO, "target zone %i  | zone grid size  %i  | tile list size %i", target_zone, zone_grid.size(), tile_list.size());
+    TILEID id = TILE_ID_DIRT_MID;
+    bool tile_found = false; 
 
-                    if(tile.second.marked_sides[TILESIDE_RIGHT] == true and this_tile_marked_sides[TILESIDE_RIGHT] == true) {
-                        right_ok = true;
-                    }
-                    if(tile.second.marked_sides[TILESIDE_RIGHT] == false and this_tile_marked_sides[TILESIDE_RIGHT] == false) {
-                        right_ok = true;
-                    }
+    int x = grid_index%(int)_tileset.map_size.x;
+    int y = grid_index/(int)_tileset.map_size.x;
 
+    if(x < 0 or y < 0 or x > _tileset.map_size.x-1 or y > _tileset.map_size.y-1) {
+        return id;
+    }
 
-                    if(tile.second.marked_sides[TILESIDE_DOWN] == true and this_tile_marked_sides[TILESIDE_DOWN] == true) {
-                        down_ok = true;
-                    }
-                    if(tile.second.marked_sides[TILESIDE_DOWN] == false and this_tile_marked_sides[TILESIDE_DOWN] == false) {
-                        down_ok = true;
-                    }
-
-
-                    if(tile.second.marked_sides[TILESIDE_LEFT] == true and this_tile_marked_sides[TILESIDE_LEFT] == true) {
-                        left_ok = true;
-                    }
-                    if(tile.second.marked_sides[TILESIDE_LEFT] == false and this_tile_marked_sides[TILESIDE_LEFT] == false) {
-                        left_ok = true;
-                    }
-
-                    if(up_ok and right_ok and down_ok and left_ok) {
-                        tile_id = tile.first;
-                        //TraceLog(LOG_INFO, "dirt TILE found %i ", tile.first);
-                    }
-                }
+    if(zone_grid[grid_index] == target_zone) {
+        int index_right = y * _tileset.map_size.x + (x+1);
+        if(x+1 >= _tileset.map_size.x) {
+            index_right = y * _tileset.map_size.x + x;
+        }
+        int index_left = y * _tileset.map_size.x + (x-1);
+        if(x-1 < 0) {
+            index_left = y * _tileset.map_size.x + x;
+        }
+        int index_down = (y+1) * _tileset.map_size.x + x;
+        if(y+1 >= _tileset.map_size.y) {
+            index_down = y * _tileset.map_size.x + x;
+        }
+        int index_up = (y-1) * _tileset.map_size.x + x;
+        if(y-1 < 0) {
+            index_up = y * _tileset.map_size.x + x;
+        }
+        
+        bool this_tile_marked_sides[4] = {false, false, false, false};
+        if (zone_grid[index_up] == target_zone) {
+            this_tile_marked_sides[TILESIDE_UP] = true;
+        }
+        if (zone_grid[index_right] == target_zone) {
+            this_tile_marked_sides[TILESIDE_RIGHT] = true;
+        }
+        if (zone_grid[index_down] == target_zone) {
+            this_tile_marked_sides[TILESIDE_DOWN] = true;
+        }
+        if (zone_grid[index_left] == target_zone) {
+            this_tile_marked_sides[TILESIDE_LEFT] = true;
+        }
+        
+/*            if(target_zone == ZONE_BORDER) {
+            TraceLog(LOG_INFO, " TILE %i ? %i %i %i %i ", 
+                grid_index,
+                this_tile_marked_sides[TILESIDE_UP],
+                this_tile_marked_sides[TILESIDE_RIGHT],
+                this_tile_marked_sides[TILESIDE_DOWN],
+                this_tile_marked_sides[TILESIDE_LEFT]
+            );
+        } */
+        
+        for(TILEID &tile : tile_list) {
+            
+            bool up_ok = false;
+            bool right_ok = false;
+            bool down_ok = false;
+            bool left_ok = false;
+            
+            
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_UP] == true and this_tile_marked_sides[TILESIDE_UP] == true) {
+                up_ok = true;
+            }
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_UP] == false and this_tile_marked_sides[TILESIDE_UP] == false) {
+                up_ok = true;
             }
             
-            _layer.grid_tiles[tile_index].src[0] = _tileset.tile_lookup[tile_id].atlas_position.x;
-            _layer.grid_tiles[tile_index].src[1] = _tileset.tile_lookup[tile_id].atlas_position.y;
-            _layer.grid_tiles[tile_index].t = tile_id;
 
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_RIGHT] == true and this_tile_marked_sides[TILESIDE_RIGHT] == true) {
+                right_ok = true;
+            }
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_RIGHT] == false and this_tile_marked_sides[TILESIDE_RIGHT] == false) {
+                right_ok = true;
+            }
+            
+
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_DOWN] == true and this_tile_marked_sides[TILESIDE_DOWN] == true) {
+                down_ok = true;
+            }
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_DOWN] == false and this_tile_marked_sides[TILESIDE_DOWN] == false) {
+                down_ok = true;
+            }
+            
+
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_LEFT] == true and this_tile_marked_sides[TILESIDE_LEFT] == true) {
+                left_ok = true;
+            }
+            if(_tileset.tile_lookup[tile].marked_sides[TILESIDE_LEFT] == false and this_tile_marked_sides[TILESIDE_LEFT] == false) {
+                left_ok = true;
+            }
+            
+
+            if(up_ok and right_ok and down_ok and left_ok) {
+                id =  (TILEID)_tileset.tile_lookup[tile].tile_id;
+                tile_found = true;
+            }
         }
     }
 
-    //TraceLog(LOG_INFO, "tile  index %i  x %i y %i", index, x, y);
-    //_layer.grid_tiles[index].src[0] = _tileset.tile_lookup[TILE_ID_DIRT_MID].atlas_position.x;
-    //_layer.grid_tiles[index].src[1] = _tileset.tile_lookup[TILE_ID_DIRT_MID].atlas_position.y;
+    if(!tile_found) {
+        TraceLog(LOG_INFO, "================================(%i) zone auto TILE NOT found  ----default id %i   (%i, %i)", target_zone, id, x, y);
+    }
+    return id;
 }
+    
+        
+    
+    
+                
+
+
 
 
 

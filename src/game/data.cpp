@@ -900,7 +900,7 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {50, 50});
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200});
         g_game_data.current_map_index = map_index;
     }
 
@@ -1825,19 +1825,26 @@ void YSortEntities(LevelData & _level_data) {
     _level_data.draw_list.push_back(g_current_player);
 
     for (auto e : _level_data.environment_entities) {
-        _level_data.draw_list.push_back(e);
+        if(e->is_on_screen) {
+            _level_data.draw_list.push_back(e);
+        }
     }
 
     for (auto e : _level_data.entity_list) {
-        _level_data.draw_list.push_back(e);
+        if(e->is_on_screen) {
+            _level_data.draw_list.push_back(e);
+        }
     }
 
     for (auto e : _level_data.spell_list){
-        _level_data.draw_list.push_back(e);
+        if(e->is_on_screen) {
+            _level_data.draw_list.push_back(e);
+        }
     }
 
     std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
     [](BaseEntity* a, BaseEntity* b) {
         return a->GetYSort() < b->GetYSort();
     });
+    //TraceLog(LOG_INFO, "sorted entities  %i", _level_data.draw_list.size());
 }
