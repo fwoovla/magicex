@@ -859,10 +859,22 @@ int LoadGame() {
 }
 
 
+void SaveSubSceneState(LevelData &level_data, SubSceneState & sub_state) {
+
+    sub_state.container_data = level_data.container_data;
+
+}
+
+void LoadSubSceneState(SubSceneState & sub_state, LevelData &level_data) {
+    level_data.container_data =  sub_state.container_data;
+}
 
 void ClearLevelData(LevelData &level_data) {
 
     DL_Clear(level_data.entity_list);
+    DL_Clear(level_data.spell_list);
+    DL_Clear(level_data.ui_entities);
+    DL_Clear(level_data.environment_entities);
     level_data.level_transitions.clear();
     level_data.creature_data.clear();
     level_data.container_data.clear();
@@ -878,8 +890,12 @@ void ClearSubLevelData() {
         g_sub_scene_data[key]->container_data.clear();
         g_sub_scene_data[key]->game_areas.clear();
     }
-
     g_sub_scene_data.clear();
+
+    for (auto& [key, value] : g_sub_scene_state) {
+        g_sub_scene_state[key]->container_data.clear();
+    }
+    g_sub_scene_state.clear();
 }
 
 
@@ -900,7 +916,7 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200});
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {100, 100});
         g_game_data.current_map_index = map_index;
     }
 
@@ -953,11 +969,19 @@ void LoadLevelData(LevelData &level_data) {
                 }
                 if(identifier == "PermContainerEntity"){
 
-                    if(!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index ) {
+                    if( (!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index) and 
+                        (g_game_data.is_in_sub_map and !g_game_data.using_saved_data) ) {
 
+                            TraceLog(LOG_INFO, "usd %i  cmi %i == smi %i  (sm %i and usd %i)", 
+                                g_game_data.using_saved_data,
+                                g_game_data.current_map_index,
+                                g_game_data.shelter_map_index,
+                                g_game_data.is_in_sub_map,
+                                g_game_data.using_saved_data
+                            );
                         
                         ContainerData new_container;
-                        TraceLog(LOG_INFO, "CONTAINER FOUND %s", identifier.c_str());
+                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s", identifier.c_str());
                         
                         new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
                         new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -965,7 +989,13 @@ void LoadLevelData(LevelData &level_data) {
                         new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
                         new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
                         new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
-                        new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+                        if(g_game_data.is_in_sub_map) {
+                            std::string extra  = std::to_string(GetRandomValue(5000, 10000));
+                            new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid + "subcontainer" + extra ;
+                        }
+                        else {
+                            new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+                        }
                         
                         new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
                         new_container.loot_level = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
@@ -1012,7 +1042,14 @@ void LoadLevelData(LevelData &level_data) {
                         new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
                         new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
                         new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
-                        new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+
+                        if(g_game_data.is_in_sub_map) {
+                            std::string extra  = std::to_string(GetRandomValue(5000, 10000));
+                            new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid + "subgroundcontainer" + extra ;
+                        }
+                        else {
+                            new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid;
+                        }
                         
                         for(int item = 0; item < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size(); item++) {
                             //TraceLog(LOG_INFO, "GROUND CONTAINER DATA ADDED %i", this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list[item]);

@@ -1,0 +1,1051 @@
+{
+
+ "base_class": [
+        {
+            "max_health":15,
+            "base_speed":45.0,
+            "sprite_sheet_id":"SPRITE_APPRENTICE",
+            "portrait_id":0,
+            "class_name": "Apprentice",
+            "max_stamina":10
+        },
+        {
+            "max_health":10,
+            "base_speed":45.0,
+            "sprite_sheet_id":"SPRITE_NERD",
+            "portrait_id":1,
+            "class_name": "Nerd",
+            "max_stamina":10
+        }
+    ],
+ "item_data": [
+        {
+            "item_name": "Dagger",
+            "item_id":"ITEM_ID_DAGGER",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Sword",
+            "item_id":"ITEM_ID_SWORD",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Spear",
+            "item_id":"ITEM_ID_SPEAR",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Axe",
+            "item_id":"ITEM_ID_AXE",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Bow",
+            "item_id":"ITEM_ID_BOW",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+
+        {
+            "item_name": "mm pistol",
+            "item_id":"ITEM_ID_NEWWAND1",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+        {
+            "item_name": "mm shotgun",
+            "item_id":"ITEM_ID_NEWWAND2",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "mm mg1",
+            "item_id":"ITEM_ID_NEWWAND3",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "mm mg2",
+            "item_id":"ITEM_ID_NEWWAND4",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "fb pistol",
+            "item_id":"ITEM_ID_NEWWAND5",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "fb shotgun",
+            "item_id":"ITEM_ID_NEWWAND6",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "fb launcher",
+            "item_id":"ITEM_ID_NEWWAND7",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "fb mg",
+            "item_id":"ITEM_ID_NEWWAND8",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "lightning pistol",
+            "item_id":"ITEM_ID_NEWWAND9",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "lightning shotgun",
+            "item_id":"ITEM_ID_NEWWAND10",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "lightning chain",
+            "item_id":"ITEM_ID_NEWWAND11",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "lightning beam",
+            "item_id":"ITEM_ID_NEWWAND12",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "poison pistol",
+            "item_id":"ITEM_ID_NEWWAND13",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "poison shotgun",
+            "item_id":"ITEM_ID_NEWWAND14",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "poison launcher",
+            "item_id":"ITEM_ID_NEWWAND15",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "poison beam",
+            "item_id":"ITEM_ID_NEWWAND16",
+            "value":0,
+            "item_type":"TYPE_WEAPON"
+        },
+
+
+
+
+
+        {
+            "item_name": "Mushroom",
+            "item_id":"ITEM_ID_MUSHROOM",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Mushroom Juice",
+            "item_id":"ITEM_ID_MUSHROOM_JUICE",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+
+
+
+
+
+        {
+            "item_name": "Helmet",
+            "item_id":"ITEM_ID_HELMET",
+            "value":0,
+            "item_type":"TYPE_HEAD_ARMOR"
+        },
+        {
+            "item_name": "Boots",
+            "item_id":"ITEM_ID_BOOTS",
+            "value":0,
+            "item_type":"TYPE_FEET_ARMOR"
+        },
+        {
+            "item_name": "Chest Armor",
+            "item_id":"ITEM_ID_BODY",
+            "value":0,
+            "item_type":"TYPE_BODY_ARMOR"
+        },
+        {
+            "item_name": "Gloves",
+            "item_id":"ITEM_ID_GLOVES",
+            "value":0,
+            "item_type":"TYPE_HAND_ARMOR"
+        },
+        {
+            "item_name": "Leggings",
+            "item_id":"ITEM_ID_LEGGINGS",
+            "value":0,
+            "item_type":"TYPE_LEG_ARMOR"
+        },
+
+
+        {
+            "item_name": "Apple",
+            "item_id":"ITEM_ID_APPLE",
+            "value":0,
+            "item_type":"TYPE_FOOD"
+        },
+        {
+            "item_name": "Cheese",
+            "item_id":"ITEM_ID_CHEESE",
+            "value":0,
+            "item_type":"TYPE_FOOD"
+        },
+        {
+            "item_name": "Bread",
+            "item_id":"ITEM_ID_BREAD",
+            "value":0,
+            "item_type":"TYPE_FOOD"
+        },
+        {
+            "item_name": "Meat",
+            "item_id":"ITEM_ID_MEAT",
+            "value":0,
+            "item_type":"TYPE_FOOD"
+        },
+
+
+
+
+
+        {
+            "item_name": "Ring",
+            "item_id":"ITEM_ID_RING",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+
+
+
+
+
+        {
+            "item_name": "Stove Plan",
+            "item_id":"ITEM_ID_STOVE_PLAN",
+            "value":0,
+            "item_type":"TYPE_PLAN"
+        },
+        {
+            "item_name": "Mushroompress Plan",
+            "item_id":"ITEM_ID_MUSHROOMPRESS_PLAN",
+            "value":0,
+            "item_type":"TYPE_PLAN"
+        },
+
+
+
+
+
+
+        {
+            "item_name": "Hammer",
+            "item_id":"ITEM_ID_HAMMER",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Saw",
+            "item_id":"ITEM_ID_SAW",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Shovel",
+            "item_id":"ITEM_ID_SHOVEL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Tongs",
+            "item_id":"ITEM_ID_TONGS",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Anvil",
+            "item_id":"ITEM_ID_ANVIL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Charcoal",
+            "item_id":"ITEM_ID_CHARCOAL",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Resin",
+            "item_id":"ITEM_ID_RESIN",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Bone",
+            "item_id":"ITEM_ID_BONE",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Rope",
+            "item_id":"ITEM_ID_ROPE",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        },
+        {
+            "item_name": "Bucket",
+            "item_id":"ITEM_ID_BUCKET",
+            "value":0,
+            "item_type":"TYPE_RESOURCE"
+        }
+    ],
+
+
+
+
+    "spell_data": [
+
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "spell_name":"Magic Missle Pistol",
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":1,
+            "radius":2,
+            "knockback":10
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "spell_name":"MagicMissle Shotgun",
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":5,
+            "radius":2,
+            "knockback":30
+        },
+
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "spell_name":"MagicMissle Mg1",
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":2,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_MAGICMISSLE_4",
+            "spell_name":"MagicMissle Mg2",
+            "lifetime":1.0,
+            "speed": 250,
+            "damage":5,
+            "radius":2,
+            "knockback":30
+        },
+
+        {
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "spell_name":"Fireball Pistol",
+            "lifetime":1.0,
+            "speed": 300,
+            "damage":5,
+            "radius":2,
+            "knockback":20
+        },
+                {
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "spell_name":"Fireball shotgun",
+            "lifetime":1.0,
+            "speed": 400,
+            "damage":4,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "spell_name":"Fireball Launcher",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":10,
+            "radius":2,
+            "knockback":40
+        },
+        {
+            "spell_id":"SPELL_ID_FIREBALL_4",
+            "spell_name":"Fireball Mg",
+            "lifetime":1.0,
+            "speed": 400,
+            "damage":5,
+            "radius":2,
+            "knockback":10
+        },
+
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "spell_name":"Lightning Pistol",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":30
+        },
+                {
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "spell_name":"Lightning Shotgun",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":30
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "spell_name":"Lightning Chain",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":20
+        },
+        {
+            "spell_id":"SPELL_ID_LIGHTNING_4",
+            "spell_name":"Lightning Beam",
+            "lifetime":1.0,
+            "speed": 700,
+            "damage":5,
+            "radius":2,
+            "knockback":40
+        },
+
+        {
+            "spell_id":"SPELL_ID_POISON_1",
+            "spell_name":"Poison Pistol",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":2,
+            "radius":2,
+            "knockback":10
+        },
+                {
+            "spell_id":"SPELL_ID_POISON_2",
+            "spell_name":"Poison Shotgun",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":5,
+            "radius":2,
+            "knockback":10
+        },
+        {
+            "spell_id":"SPELL_ID_POISON_3",
+            "spell_name":"Poison Launcher",
+            "lifetime":1.0,
+            "speed": 200,
+            "damage":8,
+            "radius":2,
+            "knockback":40
+        },
+        {
+            "spell_id":"SPELL_ID_POISON_4",
+            "spell_name":"Poison Beam",
+            "lifetime":1.0,
+            "speed": 300,
+            "damage":5,
+            "radius":2,
+            "knockback":10
+        }
+    ],
+
+
+    "weapon_data": [
+        {
+            "weapon_id": "ITEM_ID_DAGGER",
+            "weapon_name": "Dagger",
+            "spell_id":"SPELL_ID_NONE",
+            "mod_slots":1,
+            "spread": 0,
+            "pps":0.0,
+            "cooldown": 0.80,
+            "max_power":0,
+            "damage":1,
+            "recoil":20,
+            "knockback":10,
+            "shots":1,
+            "accuracy":0.0
+        },
+        {
+            "weapon_id": "ITEM_ID_SWORD",
+            "weapon_name": "Sword",
+            "cooldown": 0.80,
+            "spell_id":"SPELL_ID_NONE",
+            "max_power":0,
+            "damage":3,
+            "recoil":20,
+            "knockback":30,
+            "mod_slots":2,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_SPEAR",
+            "weapon_name": "Spear",
+            "cooldown": 0.80,
+            "spell_id":"SPELL_ID_NONE",
+            "max_power":0,
+            "damage":4,
+            "recoil":20,
+            "knockback":40,
+            "mod_slots":2,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_AXE",
+            "weapon_name": "Axe",
+            "cooldown": 0.80,
+            "spell_id":"SPELL_ID_NONE",
+            "max_power":0,
+            "damage":2,
+            "recoil":20,
+            "knockback":30,
+            "mod_slots":3,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_BOW",
+            "weapon_name": "Bow",
+            "cooldown": 0.80,
+            "spell_id":"SPELL_ID_NONE",
+            "max_power":0,
+            "damage":1,
+            "recoil":30,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.0,
+            "accuracy":0.0,
+            "spread": 0
+        },
+
+
+        {
+            "weapon_id": "ITEM_ID_NEWWAND1",
+            "weapon_name": "mm pistol",
+            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "cooldown": 0.60,
+            "max_power":10,
+            "damage":2,
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.05,
+            "spread": 10
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND2",
+            "weapon_name": "mm shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":30,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.4,
+            "accuracy":0.04,
+            "spread": 40
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND3",
+            "weapon_name": "mm mg1",
+            "cooldown": 0.25,
+            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.06,
+            "spread": 10
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND4",
+            "weapon_name": "mm mg2",
+            "cooldown": 0.15,
+            "spell_id":"SPELL_ID_MAGICMISSLE_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.2,
+            "accuracy":0.04,
+            "spread": 10
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND5",
+            "weapon_name": "fb pistol",
+            "cooldown": 0.60,
+            "spell_id":"SPELL_ID_FIREBALL_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.3,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND6",
+            "weapon_name": "fb shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_FIREBALL_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":1.0,
+            "accuracy":0.04,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND7",
+            "weapon_name": "fb launcher",
+            "cooldown": 0.30,
+            "spell_id":"SPELL_ID_FIREBALL_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.03,
+            "spread": 0     
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND8",
+            "weapon_name": "fb mg",
+            "cooldown": 0.15,
+            "spell_id":"SPELL_ID_FIREBALL_4",
+            "max_power":20,
+            "damage":2,
+            "recoil":5,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.1,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND9",
+            "weapon_name": "lightning pistol",
+            "cooldown": 0.5,
+            "spell_id":"SPELL_ID_LIGHTNING_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.4,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND10",
+            "weapon_name": "lightning shotgun",
+            "cooldown": 0.6,
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.8,
+            "accuracy":0.04,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND11",
+            "weapon_name": "lightning chain",
+            "cooldown": 0.8,
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND12",
+            "weapon_name": "lightning beam",
+            "cooldown": 0.40,
+            "spell_id":"SPELL_ID_LIGHTNING_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.25,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND13",
+            "weapon_name": "poison pistol",
+            "cooldown": 0.60,
+            "spell_id":"SPELL_ID_POISON_1",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":1,
+            "shots":1,
+            "pps":0.3,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND14",
+            "weapon_name": "poison shotgun",
+            "cooldown": 0.50,
+            "spell_id":"SPELL_ID_POISON_2",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":2,
+            "shots":5,
+            "pps":0.8,
+            "accuracy":0.05,
+            "spread": 30
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND15",
+            "weapon_name": "poison launcher",
+            "cooldown": 0.6,
+            "spell_id":"SPELL_ID_POISON_3",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":3,
+            "shots":1,
+            "pps":1.0,
+            "accuracy":0.05,
+            "spread": 0
+        },
+        {
+            "weapon_id": "ITEM_ID_NEWWAND16",
+            "weapon_name": "poison beam",
+            "cooldown": 0.20,
+            "spell_id":"SPELL_ID_POISON_4",
+            "max_power":10,
+            "damage":2,
+            "recoil":20,
+            "knockback":10,
+            "mod_slots":4,
+            "shots":1,
+            "pps":0.8,
+            "accuracy":0.05,
+            "spread": 0
+        }        
+    ],
+
+
+    "food_data": [
+        {
+            "food_id": "ITEM_ID_APPLE",
+            "food_name": "Apple",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 0.5
+        },
+        {
+            "food_id": "ITEM_ID_CHEESE",
+            "food_name": "Cheese",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 1.0
+        },
+        {
+            "food_id": "ITEM_ID_BREAD",
+            "food_name": "Bread",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 2.0
+        },
+        {
+            "food_id": "ITEM_ID_MEAT",
+            "food_name": "Meat",
+            "spell_id":"SPELL_ID_NONE",
+            "saturation": 2.5
+        }
+    ],
+
+
+
+
+
+    "armor_data": [
+        {
+            "armor_id": "ITEM_ID_HELMET",
+            "armor_name": "Helmet",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0,
+            "mod_slots":1
+        },
+        {
+            "armor_id": "ITEM_ID_BODY",
+            "armor_name": "Chest Armor",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0,
+            "mod_slots":1
+        },
+        {
+            "armor_id": "ITEM_ID_GLOVES",
+            "armor_name": "Gloves",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0,
+            "mod_slots":1
+        },
+        {
+            "armor_id": "ITEM_ID_LEGGINGS",
+            "armor_name": "Leggings",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0,
+            "mod_slots":1
+        },
+        {
+            "armor_id": "ITEM_ID_BOOTS",
+            "armor_name": "Boots",
+            "spell_id":"SPELL_ID_NONE",
+            "defence": 1.0,
+            "magic_defence": 1.0,
+            "mod_slots":1
+        }
+    ],
+
+
+
+
+    "plan_data": [
+        
+        {
+            "plan_id": "ITEM_ID_STOVE_PLAN",
+            "plan_name": "Stove Plan",
+            "required_items":["ITEM_ID_TONGS", "ITEM_ID_CHARCOAL", "ITEM_ID_SAW", "ITEM_ID_HAMMER"],
+            "module_id":"MODULE_ID_STOVE"
+        },
+        {
+            "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
+            "plan_name": "Mushroompress Plan",
+            "required_items":["ITEM_ID_SAW", "ITEM_ID_BUCKET", "ITEM_ID_HAMMER" ],
+            "module_id":"MODULE_ID_WORKBENCH"
+        }
+
+    ],
+
+
+
+
+
+    "module_data": [
+        {
+            "module_id":"MODULE_ID_WORKBENCH",
+            "module_name":"Workbench",
+            "recipies":["RECIPIE_ID_STAFF", "RECIPIE_ID_WAND", "RECIPIE_ID_APPLE", "RECIPIE_ID_MUSHROOMJUICE"],
+            "accepted_plans":["ITEM_ID_MUSHROOMPRESS_PLAN", "ITEM_ID_STOVE_PLAN"]
+        },
+        {
+            "module_id":"MODULE_ID_STOVE",
+            "module_name":"Stove",
+            "recipies":["RECIPIE_ID_APPLE"],
+            "accepted_plans":[]
+        },
+        {
+            "module_id":"MODULE_ID_MUSHROOMPRESS",
+            "module_name":"MushroomPress",
+            "recipies":["RECIPIE_ID_MUSHROOMJUICE"],
+            "accepted_plans":[]
+        }
+    ],
+
+
+
+    "recipie_data": [
+        {
+            "recipie_id":"RECIPIE_ID_STAFF",
+            "recipie_name":"Staff",
+            "ingredients":["ITEM_ID_CHEESE"],
+            "produces":"ITEM_ID_STAFF"
+        },
+        {
+            "recipie_id":"RECIPIE_ID_WAND",
+            "recipie_name":"Wand",
+            "ingredients":["ITEM_ID_APPLE"],
+            "produces":"ITEM_ID_WAND"
+        },
+        {
+            "recipie_id":"RECIPIE_ID_APPLE",
+            "recipie_name":"Apple",
+            "ingredients":["ITEM_ID_APPLE"],
+            "produces":"ITEM_ID_APPLE"
+        },
+        {
+            "recipie_id":"RECIPIE_ID_MUSHROOMJUICE",
+            "recipie_name":"Mushroom Juice",
+            "ingredients":["ITEM_ID_MUSHROOM"],
+            "produces":"ITEM_ID_MUSHROOM_JUICE"
+        }
+    ],
+
+
+
+    "food_modifiers": [
+
+        {
+            "mod_id":"ITEMMOD_NUTRITIOUS",
+            "mod_name":"Nutritious",
+            "rarity":"RARITY_COMMON",
+            "saturation":0.4
+        },
+        {
+            "mod_id":"ITEMMOD_MOLDY",
+            "mod_name":"Moldy",
+            "rarity":"RARITY_COMMON",
+            "saturation":-0.4
+        }
+    ],
+
+
+
+    "creature_data": [
+
+        {
+            "creature_id":"CREATURE_TESTDUMMY",
+            "creature_name": "TestDummy",
+            "max_health":999999,
+            "base_speed":0.0,
+            "sprite_sheet_id":"SPRITE_TESTDUMMY",
+            "max_stamina":0,
+            "ai_id":"AI_PASSIVE",
+            "primary":"ITEM_ID_NONE"
+        },
+        {
+            "creature_id":"CREATURE_BUNNY",
+            "creature_name": "Bunny",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":"SPRITE_BUNNY",
+            "max_stamina":10,
+            "ai_id":"AI_FEARFULL",
+            "primary":"ITEM_ID_NONE"
+        },
+        {
+            "creature_id":"CREATURE_SCAVENGER",
+            "creature_name": "Scavenger",
+            "max_health":15,
+            "base_speed":30.0,
+            "sprite_sheet_id":"SPRITE_SCAVENGER",
+            "max_stamina":10,
+            "ai_id":"AI_AGGRESSIVE",
+            "primary":"ITEM_ID_NEWWAND4"
+        },
+        {
+            "creature_id":"CREATURE_TRADER",
+            "creature_name": "Trader",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":"SPRITE_TRADER",
+            "max_stamina":10,
+            "ai_id":"AI_TERRITORIAL",
+            "primary":"ITEM_ID_NONE"
+        },
+        {
+            "creature_id":"CREATURE_SLIME",
+            "creature_name": "Slime",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":"SPRITE_SLIME",
+            "max_stamina":10,
+            "ai_id":"AI_HOSTILE",
+            "primary":"ITEM_ID_NONE"
+        }
+    ],
+    "ai_data": [
+        {
+            "ai_id":"AI_FEARFULL",
+            "ai_name":"AI_FEARFULL",
+            "hostility":"AI_FEARFULL"
+        },
+        {
+            "ai_id":"AI_PASSIVE",
+            "ai_name":"AI_PASSIVE",
+            "hostility":"AI_PASSIVE"
+        },
+        {
+            "ai_id":"AI_TERRITORIAL",
+            "ai_name":"AI_TERRITORIAL",
+            "hostility":"AI_TERRITORIAL"
+        },
+        {
+            "ai_id":"AI_AGGRESSIVE",
+            "ai_name":"AI_AGGRESSIVE",
+            "hostility":"AI_AGGRESSIVE"
+        },
+        {
+            "ai_id":"AI_HOSTILE",
+            "ai_name":"AI_HOSTILE",
+            "hostility":"AI_HOSTILE"
+        }
+    ]
+}
+

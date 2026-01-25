@@ -13,7 +13,8 @@ MagicMissle::MagicMissle(NewSpellPayload payload, SpellData *_data){
     collision_radius = data->radius;
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
-                
+    is_on_screen = true;
+    
     shooter_id = payload.shooter_id;
 
     target_position = payload.target_position;

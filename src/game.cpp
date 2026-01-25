@@ -3,6 +3,7 @@
 std::unique_ptr<BaseScene> g_current_scene;
 std::unique_ptr<SubScene> g_sub_scene;
 std::unordered_map<std::string, std::unique_ptr<LevelData>> g_sub_scene_data;
+std::unordered_map<std::string, std::unique_ptr<SubSceneState>> g_sub_scene_state;
 
 std::unordered_map<int, CharacterData> g_class_data;
 std::unordered_map<int, CharacterData> g_creature_data;

@@ -327,7 +327,12 @@ void LDTKLoadMaps (json &mj) {
             TraceLog(LOG_INFO, "                    ++++++LEVEL ADDED: %i ++++++\n\n", g_ldtk_maps.levels.size());
         }
     }
+
+    for(int l = 0; l < g_ldtk_maps.levels.size(); l++) {
+        TraceLog(LOG_INFO, "level index: %i ++++++level name %s\n", l, g_ldtk_maps.levels[l].identifier.c_str());
+    }
 }
+
 
 
 int LDTKDrawMap(Vector2 focus_position) {
@@ -370,8 +375,11 @@ int LDTKDrawMap(Vector2 focus_position) {
             //TraceLog(LOG_INFO, "is tiles");
             //break;
         }
-        //TraceLog(LOG_INFO, "layer :  %i    %s", l, this_level->layer_instances[l].identifier.c_str());
-            
+/*         TraceLog(LOG_INFO, "layer :  %i    %s", l, this_level->layer_instances[l].identifier.c_str());
+        
+        if(this_level->layer_instances[l].identifier == "Structures") {
+            TraceLog(LOG_INFO, "structures gride tiles size:  %i", this_level->layer_instances[l].grid_tiles.size());
+        } */
      
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
         //TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
@@ -414,9 +422,9 @@ int LDTKDrawMap(Vector2 focus_position) {
                 );
 
                 
-                if(this_level->layer_instances[l].identifier == "TerrainUpper") {
+/*                 if(this_level->layer_instances[l].identifier == "Structures") {
 
-                        /* TraceLog(LOG_INFO, "%s: tid: %i %i drawing tile  px  %i %i    x:  %0.0f  y %0.0f  atlas:  %0.0f  y %0.0f",
+                        TraceLog(LOG_INFO, "%s: tid: %i %i drawing tile  px  %i %i    x:  %0.0f  y %0.0f  atlas:  %0.0f  y %0.0f",
                         this_level->layer_instances[l].identifier.c_str(),
                         tile_id, 
                         tile, 
@@ -425,14 +433,16 @@ int LDTKDrawMap(Vector2 focus_position) {
                         tile_x, 
                         tile_y, 
                         atlas_pos.x, 
-                        atlas_pos.y); */
-                }
+                        atlas_pos.y);
+                } */
 
 
                 tiles_drawn++;
             }
         } 
     }
+
+    //TraceLog(LOG_INFO,"\n");
     return tiles_drawn;
 }
 

@@ -114,6 +114,7 @@ GENERATED += $(OBJDIR)/playercharacter.o
 GENERATED += $(OBJDIR)/poison.o
 GENERATED += $(OBJDIR)/resources.o
 GENERATED += $(OBJDIR)/scenemanager.o
+GENERATED += $(OBJDIR)/scenerygen.o
 GENERATED += $(OBJDIR)/shelterscene.o
 GENERATED += $(OBJDIR)/shelteruilayer.o
 GENERATED += $(OBJDIR)/splashscene.o
@@ -164,6 +165,7 @@ OBJECTS += $(OBJDIR)/playercharacter.o
 OBJECTS += $(OBJDIR)/poison.o
 OBJECTS += $(OBJDIR)/resources.o
 OBJECTS += $(OBJDIR)/scenemanager.o
+OBJECTS += $(OBJDIR)/scenerygen.o
 OBJECTS += $(OBJDIR)/shelterscene.o
 OBJECTS += $(OBJDIR)/shelteruilayer.o
 OBJECTS += $(OBJDIR)/splashscene.o
@@ -302,6 +304,9 @@ $(OBJDIR)/layergen.o: src/game/mapgen/layergen.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/pathgen.o: src/game/mapgen/pathgen.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/scenerygen.o: src/game/mapgen/scenerygen.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/modules.o: src/game/modules.cpp

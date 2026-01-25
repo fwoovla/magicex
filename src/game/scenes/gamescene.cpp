@@ -45,17 +45,17 @@ GameScene::GameScene() {
         if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
             level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
             level_data.entity_list[entity_index]->identifier == "Mushroom") {
-             TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
+            //TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
             BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
             if(p_entity) {
-                TraceLog(LOG_INFO, "container connected");
+                //TraceLog(LOG_INFO, "container connected");
                 p_entity->open_container.Connect( [this](){OnContainerOpened();} );
             }
         }
         if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
             ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
             if(m_entity) {
-                TraceLog(LOG_INFO, "module connected");
+                //TraceLog(LOG_INFO, "module connected");
                 m_entity->open_module.Connect( [this](){OnModuleUsed();} );
             }
         }
@@ -315,24 +315,33 @@ void GameScene::OnHouseTransitionEntered() {
 void GameScene::OnHouseTransitionActivated() {
 
     TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss map index %i    ss uid %s", g_game_data.sub_map_index, g_game_data.sub_map_uid.c_str());
-
+    TraceLog(LOG_INFO, "+ player reset position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
     g_game_data.is_in_sub_map = true;
+    g_game_data.using_saved_data = false;
 
-    auto it = g_sub_scene_data.find(g_game_data.sub_map_uid);
-    if (it != g_sub_scene_data.end()) {
+    auto it = g_sub_scene_state.find(g_game_data.sub_map_uid);
+
+    if (it != g_sub_scene_state.end()) {
         TraceLog(LOG_INFO, "SUB MAP INSTANCE FOUND:  uid %s", g_game_data.sub_map_uid.c_str());
-        g_sub_scene = std::make_unique<SubScene>(g_sub_scene_data[g_game_data.sub_map_uid].get(), false);
+
+        g_game_data.using_saved_data = true;
+
+        g_sub_scene = std::make_unique<SubScene>(*g_sub_scene_state[g_game_data.sub_map_uid].get(), false);
+
         g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
     }
+
     else {
         TraceLog(LOG_INFO, "NEW SUB MAP INSTANCE :  uid %s", g_game_data.sub_map_uid.c_str());
 
-        g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>();
-        g_sub_scene = std::make_unique<SubScene>(g_sub_scene_data[g_game_data.sub_map_uid].get(), true);
+        g_sub_scene_state[g_game_data.sub_map_uid] = std::make_unique<SubSceneState>();
+
+        g_sub_scene = std::make_unique<SubScene>(*g_sub_scene_state[g_game_data.sub_map_uid].get(), true);
+
         g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
     }
 
-    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss instances %i", g_sub_scene_data.size());
+    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss instances %i", g_sub_scene_state.size());
 }
 
 void GameScene::OnSubSceneExited() {
@@ -348,6 +357,7 @@ void GameScene::OnSubSceneExited() {
     
     can_delete_sub = true;
     g_game_data.is_in_sub_map = false;
+    g_game_data.using_saved_data = false;
 
     TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
 }

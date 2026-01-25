@@ -321,7 +321,7 @@ void CharacterMenu::Update() {
 }
 
 void CharacterMenu::Open() {
-     TraceLog(LOG_INFO, "opening character menu with no container");
+    //TraceLog(LOG_INFO, "opening character menu with no container");
     inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
     hotbar_grid->SetItems(&g_character_data[g_current_player->uid].hotbar);
 

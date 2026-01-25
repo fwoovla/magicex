@@ -106,6 +106,14 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
     TraceLog(LOG_INFO, "spell list size  %i", _scene.level_data.spell_list.size()); 
 }
 
+
+
+
+
+
+
+
+
 void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
 
     if(g_game_data.is_in_sub_map) {

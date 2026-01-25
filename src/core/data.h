@@ -302,13 +302,21 @@ struct LevelData {
     std::vector<ModuleEntityData> module_data;
     std::vector<CharacterData> creature_data;
     std::vector<BaseArea*> game_areas;
+    std::vector<Polygon> collision_polys;
     std::vector<BaseEntity*> entity_list;
     std::vector<BaseEntity*> spell_list;
-    std::vector<Polygon> collision_polys;
     std::vector<BaseEntity *> environment_entities;
     std::vector<BaseEntity *> draw_list;
     std::vector<BaseEntity *> ui_entities;
 };
+
+
+struct SubSceneState {
+    std::vector<ContainerData> container_data;
+};
+
+
+
 
 extern std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
 
@@ -318,6 +326,9 @@ void SaveGame(LevelData &level_data);
 
 int LoadGame();
 
+void SaveSubSceneState(LevelData &level_data, SubSceneState & sub_state);
+
+void LoadSubSceneState(SubSceneState & sub_state, LevelData &level_data);
 
 void ClearLevelData(LevelData &level_data);
 

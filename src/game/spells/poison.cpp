@@ -13,8 +13,7 @@ Poison::Poison(NewSpellPayload payload, SpellData *_data){
     collision_radius = data->radius;
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
-             
-    
+    is_on_screen = true;    
     
     shooter_id =payload.shooter_id;
 
@@ -60,7 +59,7 @@ void Poison::Update() {
     if(CollideWithEntity(this, result)) {
         
         if(result.collider->uid != shooter_id) {
-            TraceLog(LOG_INFO, "collider %s", result.collider->identifier);
+            TraceLog(LOG_INFO, "collider %s", result.collider->identifier.c_str());
             DamagePayload new_payload;
             new_payload.attacker_id = data->shooter_id;
             new_payload.damage = data->damage;

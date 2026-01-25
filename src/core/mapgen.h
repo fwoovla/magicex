@@ -42,11 +42,6 @@ enum TILEID {
     TILE_ID_DIRT_UP_RIGHT_LEFT,
     TILE_ID_DIRT_RIGHT_UP,
     TILE_ID_DIRT_UP_RIGHT_DOWN,
-
-/*     TILE_ID_DIRT_UP_RIGHT_CORNER,
-    TILE_ID_DIRT_UP_LEFT_CORNER,
-    TILE_ID_DIRT_DOWN_RIGHT_CORNER,
-    TILE_ID_DIRT_DOWN_LEFT_CORNER, */
     TILE_ID_DIRT_END,
 
     TILE_ID_BORDER_START,
@@ -60,6 +55,15 @@ enum TILEID {
     TILE_ID_BORDER_UP_RIGHT_LEFT,
     TILE_ID_BORDER_RIGHT_UP,
     TILE_ID_BORDER_UP_RIGHT_DOWN,
+
+    TILE_ID_BORDER_END_LEFT,
+    TILE_ID_BORDER_END_RIGHT,
+    TILE_ID_BORDER_END_UP,
+    TILE_ID_BORDER_END_DOWN,
+
+    TILE_ID_BORDER_UP_DOWN,
+    TILE_ID_BORDER_RIGHT_LEFT,
+
     TILE_ID_BORDER_END,
 
 
@@ -67,8 +71,9 @@ enum TILEID {
 };
 
 enum AUTOTILE_TYPE {
-    AUTOTILE_PATH,
-    AUTOTILE_FENCE
+    AUTOTILE_TERRAIN,
+    AUTOTILE_SOLID,
+    AUTOTILE_SHADOW,
 };
 
 enum TILESIDE {
@@ -98,7 +103,8 @@ struct WorldGenAutoTile {
     int tile_id;
     Vector2 position;
     Vector2 atlas_position;
-    bool marked_sides[8];
+    std::array<bool,4> marked_sides;
+    bool has_collision;
 
 };
 
@@ -115,6 +121,14 @@ struct PathWorm {
     Vector2 position;
     Vector2 locked_dir;
     Vector2 last_locked_dir;
+};
+
+struct WorldGenStructureData {
+    std::vector<WorldGenAutoTile> structure_grid_tiles;
+    Vector2 position;
+    Vector2 structure_size;
+    int uid;
+
 };
 
 struct WorldGenTileSet {
@@ -135,35 +149,42 @@ struct WorldGenTileSet {
     std::vector<MAPZONE> upper_zone_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
-    //std::vector<WorldGenAutoTile> path_auto_tiles;
-
+    std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
+    std::vector<int> house_transition_tiles;
+    std::vector<int> shadow_tiles;
 };
 
 
 
 extern std::vector<WorldGenTileSet> g_worldgen_tilesets;
 
+
+//tileset
+
 void GenerateWorldGenTilesets(std::string _path);
 
-void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size);
+void EctractTileData(json &tj, WorldGenTileSet &this_tileset);
 
-//void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset, Vector2 _map_size);
+void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
+void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
+void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
+void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities);
+
+//worldgen
+void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size);
 
 void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
-
-//void GenerateDirtPatch(LDTKLayerInstance &_layer, WorldGenTileSet &_tileset);
-
-//void GenerateUpperTerrainLayer(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
-
-//void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset, Vector2 _map_size);
+void GenerateDirtZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
-void PopulateGrass(LDTKLevel &level, WorldGenTileSet &_tileset);
-
-void PopulateTrees(LDTKLevel &level, WorldGenTileSet &_tileset);
-
+//utils
 
 TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index);
 
 TILEID StrToTileId(const std::string& s);
+
+std::array<bool,4> TileIdGetAutotile(TILEID tile_id);

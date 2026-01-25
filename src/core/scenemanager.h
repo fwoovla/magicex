@@ -7,6 +7,8 @@ extern std::unique_ptr<BaseScene> g_current_scene;
 extern std::unordered_map<std::string, std::unique_ptr<LevelData>> g_sub_scene_data;
 extern std::unique_ptr<SubScene> g_sub_scene;
 
+extern std::unordered_map<std::string, std::unique_ptr<SubSceneState>> g_sub_scene_state;
+
 void InstanceLevelObjects(LevelData &level_data);
 
 class SceneManager{

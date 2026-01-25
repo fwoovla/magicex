@@ -466,6 +466,9 @@ void PlayerCharacter::OnHungerTimerTimeout() {
     if(g_character_data[uid].saturation < 0) {
         g_character_data[uid].saturation = 0;
         DamagePayload new_payload;
+        new_payload.damage = 1;
+        new_payload.attacker_id = uid;
+        new_payload.knockback = {0,0};
         TakeDamage(new_payload);
     }
     //TraceLog(LOG_INFO, "hunger");

@@ -120,7 +120,7 @@ class ShelterScene : public  BaseScene{
 
 class SubScene : public  BaseScene{
     public:
-        SubScene(LevelData *_level_data, bool is_new);
+        SubScene(SubSceneState &sub_state, bool is_new);
         ~SubScene() override;
         SCENE_ID Update() override;
         void Draw() override;

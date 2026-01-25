@@ -14,7 +14,7 @@ FireBall::FireBall(NewSpellPayload payload, SpellData *_data) {
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
              
-    
+    is_on_screen = true;
     
     shooter_id =payload.shooter_id;
 
@@ -26,7 +26,7 @@ FireBall::FireBall(NewSpellPayload payload, SpellData *_data) {
     
     target_dist = Vector2Distance(position, target_position);
     dist_scale = target_dist/data->speed;
-    //TraceLog(LOG_INFO, "scale %f", dist_scale);
+    TraceLog(LOG_INFO, "spell_id %i", data->spell_id);
 
     lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
     lifetime_timer.Start(data->lifetime * dist_scale, true);
@@ -59,7 +59,7 @@ void FireBall::Update() {
     if(CollideWithEntity(this, result)) {
         
         if(result.collider->uid != shooter_id) {
-            TraceLog(LOG_INFO, "collider %s", result.collider->identifier);
+            TraceLog(LOG_INFO, "collider %s", result.collider->identifier.c_str());
             DamagePayload new_payload;
             new_payload.attacker_id = data->shooter_id;
             new_payload.damage = data->damage;

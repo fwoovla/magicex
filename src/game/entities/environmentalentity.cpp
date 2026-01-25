@@ -39,7 +39,7 @@ EnvironmentalEntity::EnvironmentalEntity(Vector2 _position, int _sprite_id, bool
 
 EnvironmentalEntity::~EnvironmentalEntity() {
 
-    TraceLog(LOG_INFO, "ENVIRONMENTAL ENTITY DESTROYED");
+    //TraceLog(LOG_INFO, "ENVIRONMENTAL ENTITY DESTROYED");
 }
 
 void EnvironmentalEntity::Update() {

@@ -21,7 +21,7 @@ MushroomEntity::~MushroomEntity() {
         g_item_instances.erase(c_area.item_list[i]);
         TraceLog(LOG_INFO, "instance erased %i", g_item_instances.size());
     }
-    TraceLog(LOG_INFO, "MUSHROOM DESTROYED");    
+    //TraceLog(LOG_INFO, "MUSHROOM DESTROYED");    
 }
 
 void MushroomEntity::Update() {

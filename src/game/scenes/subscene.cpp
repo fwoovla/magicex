@@ -6,7 +6,7 @@
 
 
 
-SubScene::SubScene(LevelData *_level_data, bool is_new) {
+SubScene::SubScene(SubSceneState &sub_state, bool is_new) {
     scene_id = SUB_SCENE;
     return_scene = NO_SCENE;
     character_menu_visible = false;
@@ -19,9 +19,8 @@ SubScene::SubScene(LevelData *_level_data, bool is_new) {
         InstanceLevelObjects(level_data);
     }
     else {
-        //LoadLevelData(level_data);
-        //InstanceLevelObjects(level_data);
-        level_data = *_level_data;
+        LoadSubSceneState( sub_state, level_data);
+        LoadLevelData(level_data);
         InstanceLevelObjects(level_data);
     }
 
@@ -182,12 +181,49 @@ void SubScene::DrawUI() {
 
 
 SubScene::~SubScene() {
+    sub_scene_exited.DisconnectAll();
+
+        for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
+        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
+            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
+            //TraceLog(LOG_INFO, "+ connect map");
+            t_area->area_entered.DisconnectAll();
+            t_area->area_activated.DisconnectAll();
+        }
+
+    }
+    for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
+        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
+            level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
+            level_data.entity_list[entity_index]->identifier == "Mushroom") {
+            TraceLog(LOG_INFO, "container area identified  for disconnection%s", level_data.entity_list[entity_index]->identifier.c_str());
+            BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
+            if(p_entity) {
+                TraceLog(LOG_INFO, "container disconnected");
+                p_entity->open_container.DisconnectAll();
+            }
+        }
+        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
+            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
+            if(m_entity) {
+                TraceLog(LOG_INFO, "module disconnected");
+                m_entity->open_module.DisconnectAll();
+            }
+        }
+    }
+
     delete ui_layer;
     delete tile_layer;
     delete character_menu;
     delete module_menu;
-    g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>(level_data);
-    //ClearLevelData(level_data);
+
+    //g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>(level_data);
+
+    SubSceneState state;
+    SaveSubSceneState(level_data, state);
+
+    g_sub_scene_state[g_game_data.sub_map_uid] = std::make_unique<SubSceneState>(state);
+
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SUB SCENE");
 }
@@ -199,11 +235,11 @@ void SubScene::OnQuitPressed() {
 void SubScene::OnMapTransitionEntered() {
 
 
-    TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    //TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
 }
 
 void SubScene::OnMapTransitionActivated() {
-    TraceLog(LOG_INFO, "SUB TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
+    TraceLog(LOG_INFO, "MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
     
     sub_scene_exited.EmitSignal();
 }
