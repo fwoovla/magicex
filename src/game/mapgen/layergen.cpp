@@ -97,9 +97,14 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                 }
                 else {
                     _tileset.upper_zone_grid[index] = ZONE_NONE;
+                    _tileset.collision_grid[index] = 0;
                 }
 
             }
+
+            /* if(_tileset.upper_zone_grid[index] == ZONE_STRUCTURE) {
+                _tileset.upper_zone_grid[index] = ZONE_NONE;
+            } */
 
             if(_tileset.upper_zone_grid[index] == ZONE_BORDER) {
                 //TraceLog(LOG_INFO, "BORDER zone  %i-  %i %i", index, x, y);
@@ -107,6 +112,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
                 if(id == -1) {
                     _tileset.upper_zone_grid[index] = ZONE_NONE;
+                    _tileset.collision_grid[index] = 0;
                     TraceLog(LOG_INFO, "no tile found  %i", id);
                 }
                 else {
@@ -121,10 +127,6 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                     
                     new_layer.grid_tiles.push_back(new_tile_ldtk);
                 }
-            }
-
-            if(_tileset.upper_zone_grid[index] == ZONE_STRUCTURE) {
-                _tileset.upper_zone_grid[index] = ZONE_BORDER;
             }
         }
     }
@@ -198,18 +200,30 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                 int x = new_tile_ldtk.px[0]/current_tileset.tile_grid_size;
                 int y = new_tile_ldtk.px[1]/current_tileset.tile_grid_size;
                 
-                int index = (y * new_layer.c_wid + x);
+
+                if(x >= current_tileset.map_size.x) {
+                    x = current_tileset.map_size.x - 1;
+                }
+
+                if(y >= current_tileset.map_size.y) {
+                    y = current_tileset.map_size.y - 1;
+                }
+
+
+                int index = (y * current_tileset.map_size.x + x);
                 
-                //TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+                TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
                 
                 if(tile.has_collision == true) {
                     //TraceLog(LOG_INFO, "structure tile");
-                    current_tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+                    current_tileset.upper_zone_grid[index] = ZONE_NONE;
                     current_tileset.lower_zone_grid[index] = ZONE_DIRT;
+                    current_tileset.collision_grid[index] = 1;
                 }
                 else {
                     //TraceLog(LOG_INFO, "shadow tile");
                     current_tileset.upper_zone_grid[index] = ZONE_NONE;
+                    current_tileset.collision_grid[index] = 0;
                 }
 
                 for(int tile_tag = 0; tile_tag < structure_tileset.tile_tags.size(); tile_tag++) {
@@ -274,7 +288,7 @@ void GenerateCollisionLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         for(int x = 0; x < _tileset.map_size.x; x++) { 
             int index = y * cols + x;
 
-            if(_tileset.upper_zone_grid[index] == ZONE_BORDER) {
+            if(_tileset.collision_grid[index] == 1) {
                 new_layer.int_grid[index] = 1;
                 //TraceLog(LOG_INFO, "BORdER TILE found %i %i", x, y);
             }
@@ -294,12 +308,55 @@ void GenerateEntitiesLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     new_layer.c_wid = _tileset.map_size.x;
     new_layer.c_hei = _tileset.map_size.y;
 
-    LDTKEntityInstance spawn_point;
-    spawn_point.px.push_back( _level.px_wid/2);
-    spawn_point.px.push_back( _level.px_hei/2);
-    spawn_point.identifier = "SpawnPoint";
-    new_layer.entity_instances.push_back(spawn_point);
     _level.layer_instances.push_back(new_layer);
+
+
+
+}
+
+
+void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+    //shelter trantsition
+    //lootables
+    //mobs
+
+    LDTKLayerInstance *entity_layer = nullptr;
+
+    for(LDTKLayerInstance &layer : level.layer_instances) {
+        if(layer.type == "Entities") {
+            entity_layer = &layer;
+        }
+    }
+
+    if(entity_layer == nullptr) {
+        TraceLog(LOG_INFO, "no entities layer");
+        return;
+    }
+
+
+    LDTKEntityInstance spawn_point;
+    spawn_point.px.push_back( level.px_wid/2);
+    spawn_point.px.push_back( level.px_hei/2);
+    spawn_point.identifier = "SpawnPoint";
+    entity_layer->entity_instances.push_back(spawn_point);
+
+
+    LDTKEntityInstance shelter_transition;
+    shelter_transition.px.push_back( level.px_wid/2);
+    shelter_transition.px.push_back( level.px_hei/2);
+    shelter_transition.width = _tileset.tile_grid_size;
+    shelter_transition.height = _tileset.tile_grid_size;
+    shelter_transition.identifier = "ShelterTransition";
+    shelter_transition.iid = "mapgensheltertransition" + std::to_string(GetRandomValue(1000, 100000));
+
+    LDTKFieldInstance new_field;
+    new_field.identifier = "DestMapString";
+    new_field.value_s = "StartingShelter";
+    
+    shelter_transition.field_instances.push_back(new_field);
+
+    entity_layer->entity_instances.push_back(shelter_transition);
 
 
 }

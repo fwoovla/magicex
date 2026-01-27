@@ -11,7 +11,7 @@ ShelterScene::ShelterScene() {
     g_input.world_mouse_position.y = 100;
 
 
-    ClearSubLevelData();
+    //ClearSubLevelData();
 
     scene_id = SHELTER_SCENE;
     return_scene = NO_SCENE;
@@ -26,32 +26,22 @@ ShelterScene::ShelterScene() {
 
 
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
-        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
+        if (auto* transition_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index].get())) {
+            transition_area->area_entered.Connect( [this](){OnTransitionAreaEntered();} );
+            transition_area->area_activated.Connect( [this](){OnTransitionAreaActivated();} );
 
-            t_area->area_entered.Connect( [this](){OnTransitionAreaEntered();} );
-            t_area->area_activated.Connect( [this](){OnTransitionAreaActivated();} );
         }
     }
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        std::string identifier = level_data.entity_list[entity_index]->identifier;
-        if(identifier == "PermContainerEntity" or identifier == "GroundContainerEntity" or identifier == "Mushroom") {
-            TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
-            BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
 
+        if (auto* container_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index].get())) {
+            container_entity->open_container.Connect( [this](){OnContainerOpened();} );
+        }
 
-            if(p_entity) {
-                TraceLog(LOG_INFO, "container connected");
-                p_entity->open_container.Connect( [this](){OnContainerOpened();} );
-            }
+        if (auto* module_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index].get())) {
+            module_entity->open_module.Connect( [this](){OnModuleUsed();} );
         }
-        if(identifier == "ModuleEntity") {
-            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
-            if(m_entity) {
-                TraceLog(LOG_INFO, "module connected");
-                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
-            }
-        }
+
     }
 
     ui_layer = new GameUILayer();
@@ -64,8 +54,8 @@ ShelterScene::ShelterScene() {
     module_menu = new ModuleMenu();
     //character_menu->Open();
     
-    map_menu = new MapMenu();
-    map_menu->map_selected.Connect( [this](){OnMapSelected();} );
+/*     map_menu = new MapMenu();
+    map_menu->map_selected.Connect( [this](){OnMapSelected();} ); */
 
     show_map_menu = false;
 
@@ -85,6 +75,7 @@ ShelterScene::ShelterScene() {
 
 
 SCENE_ID ShelterScene::Update() {
+    //TraceLog(LOG_INFO, "shelter update");
     if(show_map_menu == true) {
         map_menu->Update();
     }
@@ -134,8 +125,8 @@ SCENE_ID ShelterScene::Update() {
                         }
                     }
                     if(spi != -1) {
-                        GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
-                        DL_Add(level_data.entity_list, new_container);
+                        std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
+                        DL_Add(level_data.entity_list, std::move(new_container));
                         new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
                         new_container->identifier = "GroundContainerEntity";
                         new_container->c_area.identifier = "GroundContainerEntity";
@@ -223,13 +214,12 @@ void ShelterScene::DrawUI() {
 ShelterScene::~ShelterScene() {
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR CALLED:  SHELTER return scene %i", return_scene);
     //SaveGame();
-    ClearLevelData(level_data);
     delete ui_layer;
     delete character_menu;
     delete tile_layer;
-    delete map_menu;
     delete module_menu;
-
+    
+    ClearLevelData(level_data);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SHELTER");
 }
 
@@ -243,8 +233,8 @@ void ShelterScene::OnStartPressed() {
 }
 
 void ShelterScene::OnMapSelected() {
-    return_scene = GAME_SCENE;
-    TraceLog(LOG_INFO, "MAP SELECTED:  %i", g_game_data.current_map_index);
+    //return_scene = GAME_SCENE;
+    //TraceLog(LOG_INFO, "MAP SELECTED:  %i", g_game_data.current_map_index);
 }
 
 
@@ -255,12 +245,9 @@ void ShelterScene::OnTransitionAreaEntered() {
 }
 
 void ShelterScene::OnTransitionAreaActivated() {
-    //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
     if(return_scene != GAME_SCENE) {
         SaveGame(level_data);
-
-        
-
         return_scene = GAME_SCENE;
     }
 }

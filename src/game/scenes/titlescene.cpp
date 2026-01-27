@@ -82,8 +82,8 @@ void TitleScene::OnQuitPressed() {
 void TitleScene::OnContinuePressed() {
 
     int uid = LoadGame();
+    g_current_player = std::make_unique<PlayerCharacter>((Vector2){0,0}, uid);
 
-    g_current_player = new PlayerCharacter({0,0}, uid);
     return_scene = SHELTER_SCENE;
     g_game_data.next_map_index = g_game_data.shelter_map_index;
 }

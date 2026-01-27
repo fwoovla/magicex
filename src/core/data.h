@@ -44,6 +44,7 @@ enum ItemType {
     TYPE_FOOD,
     TYPE_CHARM,
     TYPE_ALL,
+    TYPE_MAX
 };
 
 extern std::vector<Color> g_item_type_colors;
@@ -185,7 +186,6 @@ struct ItemInstanceData {
 
 extern std::unordered_map<int, ItemInstanceData> g_item_instances;
 
-
 struct AiData {
     AIID ai_id;
     std::string ai_name;
@@ -281,6 +281,7 @@ struct ContainerData {
 };
 
 extern std::unordered_map<std::string, ContainerData> g_persistant_containers;
+extern std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
 struct LevelPrecalcData {
     int collision_layer_index;
@@ -301,13 +302,15 @@ struct LevelData {
     std::vector<ContainerData> container_data;
     std::vector<ModuleEntityData> module_data;
     std::vector<CharacterData> creature_data;
-    std::vector<BaseArea*> game_areas;
     std::vector<Polygon> collision_polys;
-    std::vector<BaseEntity*> entity_list;
-    std::vector<BaseEntity*> spell_list;
-    std::vector<BaseEntity *> environment_entities;
+
     std::vector<BaseEntity *> draw_list;
-    std::vector<BaseEntity *> ui_entities;
+    
+    std::vector<std::unique_ptr<BaseEntity>> entity_list;
+    std::vector<std::unique_ptr<BaseEntity>> spell_list;
+    std::vector<std::unique_ptr<BaseEntity>> environment_entities;
+    std::vector<std::unique_ptr<BaseEntity>> ui_entities;
+    std::vector<std::unique_ptr<BaseArea>> game_areas;
 };
 
 
@@ -332,7 +335,7 @@ void LoadSubSceneState(SubSceneState & sub_state, LevelData &level_data);
 
 void ClearLevelData(LevelData &level_data);
 
-void ClearSubLevelData();
+//void ClearSubLevelData();
 
 void LoadLevelData(LevelData &level_data);
 

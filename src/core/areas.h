@@ -20,9 +20,9 @@ class BaseArea {
         std::string identifier;
         Vector2 position;
         Vector2 size;
-        bool collided;
-        bool hovered;
-        bool in_range;
+        bool collided = false;
+        bool hovered = false;
+        bool in_range = false;
 
         float time_pressed;
         

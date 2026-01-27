@@ -26,34 +26,29 @@ SubScene::SubScene(SubSceneState &sub_state, bool is_new) {
 
     TraceLog(LOG_INFO, "SPAWN POSITION, %0.02f %0.02f", level_data.spawn_position.x, level_data.spawn_position.y);
 
+
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
-        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
-            //TraceLog(LOG_INFO, "+ connect map");
-            t_area->area_entered.Connect( [this](){OnMapTransitionEntered();} );
-            t_area->area_activated.Connect( [this](){OnMapTransitionActivated();} );
+        if (auto* transition_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index].get())) {
+            if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
+                transition_area->area_entered.Connect( [this](){OnMapTransitionEntered();} );
+                transition_area->area_activated.Connect( [this](){OnMapTransitionActivated();} );
+
+            }
+        }
+    }
+    for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
+
+        if (auto* container_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index].get())) {
+            container_entity->open_container.Connect( [this](){OnContainerOpened();} );
+        }
+
+        if (auto* module_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index].get())) {
+            module_entity->open_module.Connect( [this](){OnModuleUsed();} );
         }
 
     }
-    for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "Mushroom") {
-            TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
-            BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
-            if(p_entity) {
-                TraceLog(LOG_INFO, "container connected");
-                p_entity->open_container.Connect( [this](){OnContainerOpened();} );
-            }
-        }
-        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
-            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
-            if(m_entity) {
-                TraceLog(LOG_INFO, "module connected");
-                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
-            }
-        }
-    }
+
+
 
     ui_layer = new GameUILayer();
     ui_layer->quit_pressed.Connect( [this](){OnQuitPressed();} );
@@ -115,8 +110,8 @@ SCENE_ID SubScene::Update() {
                         }
                     }
                     if(spi != -1) {
-                        GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
-                        DL_Add(level_data.entity_list, new_container);
+                        std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
+                        DL_Add(level_data.entity_list, std::move(new_container));
                         new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
                         new_container->identifier = "GroundContainerEntity";
                         new_container->c_area.identifier = "GroundContainerEntity";
@@ -183,47 +178,43 @@ void SubScene::DrawUI() {
 SubScene::~SubScene() {
     sub_scene_exited.DisconnectAll();
 
-        for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
-        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
-            //TraceLog(LOG_INFO, "+ connect map");
-            t_area->area_entered.DisconnectAll();
-            t_area->area_activated.DisconnectAll();
-        }
-
-    }
-    for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "Mushroom") {
-            TraceLog(LOG_INFO, "container area identified  for disconnection%s", level_data.entity_list[entity_index]->identifier.c_str());
-            BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
-            if(p_entity) {
-                TraceLog(LOG_INFO, "container disconnected");
-                p_entity->open_container.DisconnectAll();
-            }
-        }
-        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
-            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
-            if(m_entity) {
-                TraceLog(LOG_INFO, "module disconnected");
-                m_entity->open_module.DisconnectAll();
-            }
-        }
-    }
-
     delete ui_layer;
     delete tile_layer;
     delete character_menu;
     delete module_menu;
 
-    //g_sub_scene_data[g_game_data.sub_map_uid] = std::make_unique<LevelData>(level_data);
-
     SubSceneState state;
     SaveSubSceneState(level_data, state);
 
+    
+    for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
+        if (auto* container_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index].get())) {
+            if(container_entity->is_persistant) {
+
+                json container = {
+                    {"iid", container_entity->iid},
+                    {"is_persistant", container_entity->is_persistant},
+                    {"identifier", container_entity->identifier},
+                    {"loot_table_id", container_entity->loot_table_id},
+                    {"position_x", container_entity->position.x},
+                    {"position_y", container_entity->position.y},
+                    {"size_x", container_entity->c_area.size.x},
+                    {"size_y", container_entity->c_area.size.y},
+                    {"sprite_id", container_entity->sprite_id},
+                    {"level_index", container_entity->level_index},
+                };
+
+                ContainerData container_data = container.get<ContainerData>();
+                g_sub_temp_containers[container_data.iid] = container_data;
+            }
+        }
+    }
+
+
+
     g_sub_scene_state[g_game_data.sub_map_uid] = std::make_unique<SubSceneState>(state);
 
+    ClearLevelData(level_data);
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SUB SCENE");
 }

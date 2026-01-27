@@ -8,7 +8,7 @@ void LoadGameData() {
     TraceLog(LOG_INFO, "LOADING GAME DATA....data.json");
 
 
-    g_item_type_colors.resize(TYPE_ALL);
+    g_item_type_colors.resize(TYPE_MAX);
     g_item_type_colors[TYPE_WEAPON] = WEAPONCOLOR;
     g_item_type_colors[TYPE_HEAD_ARMOR] = ARMORCOLOR;
     g_item_type_colors[TYPE_BODY_ARMOR] = ARMORCOLOR;
@@ -25,12 +25,12 @@ void LoadGameData() {
     g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
 
 
-    g_rarity_colors.resize(RARITY_ULTRARARE);
-    g_rarity_colors[RARITY_COMMON] = COMMONCOLOR;
-    g_rarity_colors[RARITY_UNCOMMON] = UNCOMMONCOLOR;
-    g_rarity_colors[RARITY_RARE] = RARECOLOR;
-    g_rarity_colors[RARITY_VERYRARE] = VERYRARECOLOR;
-    g_rarity_colors[RARITY_ULTRARARE] = ULTRARARECOLOR;
+    g_rarity_colors.resize(10);
+    g_rarity_colors[0] = COMMONCOLOR;
+    g_rarity_colors[1] = UNCOMMONCOLOR;
+    g_rarity_colors[2] = RARECOLOR;
+    g_rarity_colors[3] = VERYRARECOLOR;
+    g_rarity_colors[4] = ULTRARARECOLOR;
 
 
     g_font = LoadFontEx("assets/FFatF.ttf", 128, nullptr, 0);
@@ -702,7 +702,7 @@ void SaveGame(LevelData &level_data) {
         if(level_data.entity_list[entity]->identifier == "PermContainerEntity" or level_data.entity_list[entity]->identifier == "GroundContainerEntity") {
 
             if (level_data.entity_list[entity]->is_persistant) {
-                BaseContainerEntity* c_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity]);
+                BaseContainerEntity* c_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity].get());
                 
                 json container = {
                     {"iid", c_entity->iid},
@@ -871,10 +871,11 @@ void LoadSubSceneState(SubSceneState & sub_state, LevelData &level_data) {
 
 void ClearLevelData(LevelData &level_data) {
 
-    DL_Clear(level_data.entity_list);
-    DL_Clear(level_data.spell_list);
-    DL_Clear(level_data.ui_entities);
-    DL_Clear(level_data.environment_entities);
+    level_data.entity_list.clear();
+    level_data.spell_list.clear();
+    level_data.ui_entities.clear();
+    level_data.environment_entities.clear();
+
     level_data.level_transitions.clear();
     level_data.creature_data.clear();
     level_data.container_data.clear();
@@ -883,9 +884,13 @@ void ClearLevelData(LevelData &level_data) {
 }
 
 
-void ClearSubLevelData() {
+/* void ClearSubLevelData() {
     for (auto& [key, value] : g_sub_scene_data) {
         DL_Clear(g_sub_scene_data[key]->entity_list);
+        g_sub_scene_data[key]->entity_list
+        g_sub_scene_data[key]->entity_list
+        g_sub_scene_data[key]->entity_list
+        g_sub_scene_data[key]->entity_list
         g_sub_scene_data[key]->level_transitions.clear();
         g_sub_scene_data[key]->container_data.clear();
         g_sub_scene_data[key]->game_areas.clear();
@@ -896,7 +901,7 @@ void ClearSubLevelData() {
         g_sub_scene_state[key]->container_data.clear();
     }
     g_sub_scene_state.clear();
-}
+} */
 
 
 void LoadLevelData(LevelData &level_data) {
@@ -916,15 +921,15 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {100, 100});
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200});
         g_game_data.current_map_index = map_index;
     }
 
     LDTKLevel &this_level = g_ldtk_maps.levels[map_index];
 
-    TraceLog(LOG_INFO, "LOADING LEVEL DATA %i  %s", map_index, this_level.identifier.c_str());
+    TraceLog(LOG_INFO, "\nLOADING LEVEL DATA\n index: %i name: %s", map_index, this_level.identifier.c_str());
     for(int layer = 0; layer < this_level.layer_instances.size(); layer++) {
-        TraceLog(LOG_INFO, "    layer  %s", this_level.layer_instances[layer].identifier.c_str());
+        //TraceLog(LOG_INFO, "    layer  %s", this_level.layer_instances[layer].identifier.c_str());
     }
 
     for(int layer_index = 0; layer_index < this_level.layer_instances.size(); layer_index++) {
@@ -940,7 +945,7 @@ void LoadLevelData(LevelData &level_data) {
                     TraceLog(LOG_INFO, "SPAWN POINT FOUND %0.0f %0.0f", sp.x, sp.y);
                 }
                 else {
-                    //TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
+                    TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
                 }
 
                 std::string identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -965,11 +970,12 @@ void LoadLevelData(LevelData &level_data) {
                     }
 
                     level_data.level_transitions.push_back(new_transition);
-                    //TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
+                    TraceLog(LOG_INFO, "TRANSITION dest string ADDED, %s", new_transition.dest_string.c_str());
                 }
+
                 if(identifier == "PermContainerEntity"){
 
-                    if( (!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index) and 
+                    if( (!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index) or 
                         (g_game_data.is_in_sub_map and !g_game_data.using_saved_data) ) {
 
                             TraceLog(LOG_INFO, "usd %i  cmi %i == smi %i  (sm %i and usd %i)", 
@@ -981,14 +987,14 @@ void LoadLevelData(LevelData &level_data) {
                             );
                         
                         ContainerData new_container;
-                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s", identifier.c_str());
-                        
+                                                
                         new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
-                        new_container.identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
+                        new_container.identifier = identifier;
                         new_container.position_i.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
                         new_container.position_i.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
                         new_container.position_f.x = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[0] * tile_size;
                         new_container.position_f.y = (float)this_level.layer_instances[layer_index].entity_instances[entity_index].px[1] * tile_size;
+
                         if(g_game_data.is_in_sub_map) {
                             std::string extra  = std::to_string(GetRandomValue(5000, 10000));
                             new_container.iid = this_level.layer_instances[layer_index].entity_instances[entity_index].iid + "subcontainer" + extra ;
@@ -999,6 +1005,8 @@ void LoadLevelData(LevelData &level_data) {
                         
                         new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
                         new_container.loot_level = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
+
+                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s", new_container.iid.c_str());
 
                         for(int t = 0; t < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list.size(); t++) {
                             ItemType type = (ItemType)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list[t];
@@ -1033,7 +1041,9 @@ void LoadLevelData(LevelData &level_data) {
                 }
 
                 if(identifier == "GroundContainerEntity" and !g_game_data.using_saved_data) {
-                    if(!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index ) {
+
+                    if( (!g_game_data.using_saved_data or g_game_data.current_map_index != g_game_data.shelter_map_index) and
+                            !g_game_data.is_in_sub_map ) {
                         ContainerData new_container;
                         //TraceLog(LOG_INFO, "GROUND CONTAINER FOUND %s %i", identifier.c_str(), this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].i_list.size());
                         new_container.size = {(float)this_level.layer_instances[layer_index].entity_instances[entity_index].width, (float)this_level.layer_instances[layer_index].entity_instances[entity_index].height};
@@ -1104,60 +1114,62 @@ void LoadLevelData(LevelData &level_data) {
         }
     }
 
-
     for(int thing = 0; thing < this_level.environment_data.size(); thing++) {
         //TraceLog(LOG_INFO, "-----environment sprite %s %0.0f %0.0f", this_level.environment_data[thing].item_string.c_str(), this_level.environment_data[thing].position.x, this_level.environment_data[thing].position.y);
         int id = StrToEnviroSpriteId(this_level.environment_data[thing].item_string);
 
         
         if(id < SPRITE_ENVIRO_GRASS1) {
-            EnvironmentalEntity *new_entity = new EnvironmentalEntity(this_level.environment_data[thing].position, id, true);
-            level_data.environment_entities.push_back(new_entity);
+            std::unique_ptr<EnvironmentalEntity> new_entity = std::make_unique<EnvironmentalEntity>(this_level.environment_data[thing].position, id, true);
+            level_data.environment_entities.push_back(std::move(new_entity));
         }
         else {
-            EnvironmentalEntity *new_entity = new EnvironmentalEntity(this_level.environment_data[thing].position, id, false);
-            level_data.environment_entities.push_back(new_entity);
+            std::unique_ptr<EnvironmentalEntity> new_entity = std::make_unique<EnvironmentalEntity>(this_level.environment_data[thing].position, id, false);
+            level_data.environment_entities.push_back(std::move(new_entity));
         }
         //TraceLog(LOG_INFO, "-----\n");
     }
 
-    TraceLog(LOG_INFO, "PERSISTANT CONTAINER LIST SIZE %i", g_persistant_containers.size());
+    //check for saved items 
+    TraceLog(LOG_INFO, "\n\nPERSISTANT CONTAINER LIST SIZE %i", g_persistant_containers.size());
     for(const auto & container : g_persistant_containers) {
-        TraceLog(LOG_INFO, "LOOKING FOR SAVED SAVED CONTAINER DATA %s", container.second.identifier.c_str());
-         if(container.second.level_index == g_game_data.current_map_index) {
-            TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND %s", container.second.iid.c_str());
+        TraceLog(LOG_INFO, "LOOKING FOR SAVED SAVED CONTAINER DATA FOR %s", container.second.iid.c_str());
+        if(container.second.level_index == g_game_data.current_map_index) {
+            TraceLog(LOG_INFO, "SAVED CONTAINER DATA FOUND FOR %s", container.second.iid.c_str());
             ContainerData new_container = container.second;
 
             level_data.container_data.push_back(new_container);
         }
     }
 
+    TraceLog(LOG_INFO, "\nSUB CONTAINER LIST SIZE %i", g_sub_temp_containers.size());
+    for(const auto & container : g_sub_temp_containers) {
+        TraceLog(LOG_INFO, "LOOKING FOR SAVED SAVED SUB CONTAINER DATA FOR %s", container.second.iid.c_str());
+        if(container.second.level_index == g_game_data.current_map_index) {
+            TraceLog(LOG_INFO, "SAVED SUB CONTAINER DATA FOUND FOR %s", container.second.iid.c_str());
+            ContainerData new_container = container.second;
+
+            level_data.container_data.push_back(new_container);
+        }
+    
+    }
+
     PrecalculateTileCollisionData(level_data);
     PrecalculateShadowData(level_data);
-    TraceLog(LOG_INFO, "END LOAD LEVEL DATA ");
+    TraceLog(LOG_INFO, "\nEND LOAD LEVEL DATA \n\n");
 }
 
 
 
 void PrecalculateTileCollisionData(LevelData &level_data) {
-    TraceLog(LOG_INFO, " PRECALCULATING TILE COLLISION DATA ");
+    //TraceLog(LOG_INFO, " PRECALCULATING TILE COLLISION DATA ");
 
     level_data.precalc.map_index = g_game_data.current_map_index;
 
     if(g_game_data.is_in_sub_map) {
         level_data.precalc.map_index = g_game_data.sub_map_index;
     }
-/*     else if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
-        level_data.precalc.map_index = g_game_data.shelter_map_index;
-    }
 
-    else {
-        LDTKLevel new_level;
-        level_data.precalc.map_index = g_ldtk_maps.levels.size();
-        g_ldtk_maps.levels.push_back(new_level);
-        g_game_data.current_map_index = level_data.precalc.map_index;
-    } */
-    //TraceLog(LOG_INFO, "            map index -- %i",level_data.precalc.map_index  );
 
     LDTKLevel this_level = g_ldtk_maps.levels[level_data.precalc.map_index];
     LDTKLayerInstance *col_layer = nullptr;
@@ -1189,13 +1201,12 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 
     level_data.precalc.map_width = col_layer->c_wid;
     //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
-
-    TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
+    //TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
 }
 
 
 void PrecalculateShadowData(LevelData &level_data) {
-    TraceLog(LOG_INFO, "CALCULATING SHADOW DATA ");
+    //TraceLog(LOG_INFO, "CALCULATING SHADOW DATA ");
 
     level_data.collision_polys.clear();
 
@@ -1244,7 +1255,7 @@ void PrecalculateShadowData(LevelData &level_data) {
             level_data.collision_polys.push_back(new_poly);
         }
     }
-    TraceLog(LOG_INFO, "FINISHED CALCULATING SHADOW DATA  # polygons %i", level_data.collision_polys.size());
+    //TraceLog(LOG_INFO, "FINISHED CALCULATING SHADOW DATA  # polygons %i", level_data.collision_polys.size());
 }
 
 
@@ -1263,7 +1274,7 @@ void InstanceItemList(std::vector<int> &source_list, std::vector<int> &dest_list
 
 void InstanceRandomItemsFromList(std::vector<int> &source_list, std::vector<int> &dest_list, std::string container_id, int loot_level) {
 
-    TraceLog(LOG_INFO, "instancing item list   size: %i container iid  %s ", source_list.size(), container_id.c_str());
+    TraceLog(LOG_INFO, "instancing item list   size: %i to container iid  %s ", source_list.size(), container_id.c_str());
 
     for(int item = 0; item < source_list.size(); item++) {
         int uid = GetRandomValue(1000, 1000000000);
@@ -1859,23 +1870,25 @@ void from_json(const json &j, ContainerData &i) {
 void YSortEntities(LevelData & _level_data) {
     _level_data.draw_list.clear();
 
-    _level_data.draw_list.push_back(g_current_player);
+    //_level_data.draw_list.push_back(g_current_player);
 
-    for (auto e : _level_data.environment_entities) {
+    _level_data.draw_list.push_back(g_current_player.get());
+
+    for (auto &e : _level_data.environment_entities) {
         if(e->is_on_screen) {
-            _level_data.draw_list.push_back(e);
+            _level_data.draw_list.push_back(e.get());
         }
     }
 
-    for (auto e : _level_data.entity_list) {
+    for (auto &e : _level_data.entity_list) {
         if(e->is_on_screen) {
-            _level_data.draw_list.push_back(e);
+            _level_data.draw_list.push_back(e.get());
         }
     }
 
-    for (auto e : _level_data.spell_list){
+    for (auto &e : _level_data.spell_list){
         if(e->is_on_screen) {
-            _level_data.draw_list.push_back(e);
+            _level_data.draw_list.push_back(e.get());
         }
     }
 

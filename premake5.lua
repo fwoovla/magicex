@@ -20,9 +20,23 @@ project "magicex"
         'cp -r assets "%{cfg.targetdir}/assets"'
     } 
 
-   filter "configurations:Debug"
-      defines { "DEBUG" }
-      symbols "On"
+filter "configurations:Debug"
+    kind "ConsoleApp"
+    symbols "Full"
+    optimize "Off"
+
+    buildoptions {
+        "-g3",
+        "-O0",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address",
+        "-fsanitize=leak"
+    }
+
+    linkoptions {
+        "-fsanitize=address",
+        "-fsanitize=leak"
+    }
 
    filter "configurations:Release"
       defines { "NDEBUG" }

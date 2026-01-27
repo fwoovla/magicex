@@ -415,7 +415,10 @@ class StagingUILayer : public BaseUILayer {
 
     std::vector<UnitPortrait > portraits;
 
-    ItemGrid *inventory_grid;
+    std::unique_ptr<ItemGrid> inventory_grid;
+
+    //ItemGrid *inventory_grid;
+    
     SharedItemData shared_data;
 
     Vector2 tw_offset;

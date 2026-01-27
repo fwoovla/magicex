@@ -21,13 +21,12 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
 
 PermContainerEntity::~PermContainerEntity() {
 
-    if(!is_persistant) {
+    if(!is_persistant) { //not shelter or sub
         for(int i = 0; i < c_area.item_list.size(); i++) {
             g_item_instances.erase(c_area.item_list[i]);
             TraceLog(LOG_INFO, "perm container instance  #%i   erased %i", c_area.item_list[i], g_item_instances.size());
         }
     }
-
     TraceLog(LOG_INFO, "CONTAINER DESTROYED");
 }
 

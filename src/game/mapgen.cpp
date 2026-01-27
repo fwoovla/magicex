@@ -59,8 +59,9 @@ void GenerateWorldGenTilesets(std::string _path) {
         TraceLog(LOG_INFO, "-----uid %i", g_worldgen_tilesets[set].uid);
         TraceLog(LOG_INFO, "-----tile tag size %i", g_worldgen_tilesets[set].tile_tags.size());
         for(int tag = 0; tag < g_worldgen_tilesets[set].tile_tags.size(); tag++) {
+            TraceLog(LOG_INFO, "-------tag # %i", tag);
             for(int id = 0; id < g_worldgen_tilesets[set].tile_tags[tag].tile_ids.size(); id++) {
-                TraceLog(LOG_INFO, "------------id %i %i", tag, g_worldgen_tilesets[set].tile_tags[tag].tile_ids[id]);
+                TraceLog(LOG_INFO, "------------tile # %i", g_worldgen_tilesets[set].tile_tags[tag].tile_ids[id]);
             }
         }
     }
@@ -163,7 +164,7 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     this_tilset->sorted_tiles.border_tiles.clear();
 
     for(auto &tile : this_tilset->tile_lookup) {
-        TILEID tile_id = tile.first;
+        TILEID tile_id = (TILEID)tile.first;
 
         if(tile_id > TILE_ID_GRASS_START and tile_id < TILE_ID_GRASS_END) {
             this_tilset->sorted_tiles.grass_tiles.push_back(tile_id);
@@ -181,10 +182,12 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
     this_tilset->paths.clear();
 
+    this_tilset->collision_grid.clear();
+    this_tilset->collision_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), 0);
     this_tilset->lower_zone_grid.clear();
-    this_tilset->lower_zone_grid.resize((int)this_tilset->map_size.x * (int)this_tilset->map_size.y, ZONE_NONE);
+    this_tilset->lower_zone_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), ZONE_NONE);
     this_tilset->upper_zone_grid.clear();
-    this_tilset->upper_zone_grid.resize((int)this_tilset->map_size.x * (int)this_tilset->map_size.y, ZONE_NONE);
+    this_tilset->upper_zone_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), ZONE_NONE);
 
     new_level.identifier = "WORLD GEN LEVEL";
     new_level.px_wid = this_tilset->map_size.x * this_tilset->tile_grid_size;
@@ -198,13 +201,15 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     //structure tiles                       X
     //dirt patches                          x
     //paths connect structure areas         X
-    //obsticles                             -
+    //obsticles                             X
     //trees                                 X
     //grass                                 X
     //spawn point                           X
-    //transition areas                      -
+    //transition areas                      1/2
     //lootables                             -
     //mobs                                  -
+    //fix sub maps                          X
+    //fix paths                             -
 
     GenerateZones(new_level, *this_tilset);
 
@@ -224,6 +229,8 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
     PopulateTrees(new_level, *this_tilset);
 
+    PlaceEntities(new_level, *this_tilset);
+
 }
 
 
@@ -239,6 +246,7 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
             if(x == 0 or y == 0 or x == _tileset.map_size.x-1 or y == _tileset.map_size.y-1) {              
                 _tileset.upper_zone_grid[index] = ZONE_BORDER;
+                 _tileset.collision_grid[index] = 1;
             }
         }
     }
@@ -247,7 +255,7 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     GenerateTreeZones(level, _tileset);
     GenerateStructureZones(level, _tileset);
     GenerateHillZones(level, _tileset);
-    GenerateDirtZones(level, _tileset);
+    //GenerateDirtZones(level, _tileset);
 
 }
 
@@ -329,8 +337,8 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     std::vector<Rectangle> structure_rects;
     
 
-    int x_patches = 4;
-    int y_patches = 4;
+    int x_patches = 3;
+    int y_patches = 3;
     int num_structure_patches = x_patches + y_patches;
 
     int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
@@ -339,17 +347,21 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
         for(int x_patch = 0; x_patch < x_patches; x_patch++) {
 
-            int x_pos = x_patch * x_patch_size;
-            int y_pos = y_patch * y_patch_size;
+            if(y_patch != 1 or  x_patch != 1) {
 
-            Rectangle new_rect;
-
-            new_rect.x = (float)GetRandomValue(x_pos, x_pos + x_patch_size);
-            new_rect.y = (float)GetRandomValue(y_pos, y_pos + y_patch_size);
-            new_rect.width = 10;
-            new_rect.height = 10;
-            
-            structure_rects.push_back(new_rect);
+                
+                int x_pos = x_patch * x_patch_size;
+                int y_pos = y_patch * y_patch_size;
+                
+                Rectangle new_rect;
+                
+                new_rect.x = (float)GetRandomValue(x_pos, x_pos + x_patch_size);
+                new_rect.y = (float)GetRandomValue(y_pos, y_pos + y_patch_size);
+                new_rect.width = 10 + GetRandomValue(5, 10);
+                new_rect.height = 10 + GetRandomValue(5, 10);
+                
+                structure_rects.push_back(new_rect);
+            }
         }
            
     }
@@ -361,7 +373,7 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                 int index = y * (int)_tileset.map_size.x + x;
                 if(index < _tileset.upper_zone_grid.size()-1) {
                     if(_tileset.upper_zone_grid[index] != ZONE_BORDER) {
-                        //_tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+                        _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
                         _tileset.lower_zone_grid[index] = ZONE_DIRT;
                     }
 
@@ -397,20 +409,13 @@ void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                 if(index < _tileset.upper_zone_grid.size()-1) {
                     if(_tileset.upper_zone_grid[index] != ZONE_STRUCTURE) {
                         _tileset.upper_zone_grid[index] = ZONE_BORDER;
-                        //_tileset.lower_zone_grid[index] = ZONE_DIRT;
+                        _tileset.collision_grid[index] = 1;
                     }
-
-                    /* if(x == (int)(patch.width/2) + (int)patch.x and y == (int)(patch.height/2) + (int)patch.y) {
-                        _tileset.structure_positions.push_back({(float)x,(float)y});
-                    } */
                 }
             }
         }
     }
 }
-
-
-
 
 
 
@@ -542,16 +547,16 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
     for(int tag = 0; tag < tj["enumTags"].size(); tag++) {
         LDTKEnumTag new_tag;
         new_tag.value_string = tj["enumTags"][tag]["enumValueId"];
-        TraceLog(LOG_INFO, "====enum tag           _____________ %s", new_tag.value_string.c_str());
+        TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
 
         for(int tid = 0; tid <  tj["enumTags"][tag]["tileIds"].size(); tid++) {
             int id = tj["enumTags"][tag]["tileIds"][tid];
             new_tag.tile_ids.push_back(id);
-            TraceLog(LOG_INFO, "====tile id         _____________ %i", id);
+            TraceLog(LOG_INFO, "====tile id %i", id);
             
         }
         this_tileset.tile_tags.push_back(new_tag);
-        TraceLog(LOG_INFO, "====tiles tags loaded        _____________ %i", this_tileset.tile_tags.size());
+        TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
         
     }
 } 
@@ -608,6 +613,8 @@ void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
         atlas_pos.y = grid_tiles[tile]["src"][1];
         int tile_id = grid_tiles[tile]["t"];
 
+        TraceLog(LOG_INFO, "tile t = %i", tile_id);
+
         WorldGenAutoTile new_tile;
         new_tile.atlas_position = atlas_pos;
         new_tile.position = {0,0};
@@ -625,9 +632,8 @@ void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
                 }
             }
         }
-        //snew_tile.has_collision = true;
 
-        this_tileset.tile_lookup[(TILEID)tile_id] = new_tile;
+        this_tileset.tile_lookup[tile_id] = new_tile;
     }
 }
 
@@ -817,10 +823,10 @@ std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
 
         {TILE_ID_PATH_SINGLE,          {false, false, false, false}},
         {TILE_ID_PATH_MID,          {true, true, true, true}},
-        {TILE_ID_PATH_END_UP,          {true, false, false, false}},
-        {TILE_ID_PATH_END_RIGHT,          {false, true, false, false}},
-        {TILE_ID_PATH_END_DOWN,          {false, false, true, false}},
-        {TILE_ID_PATH_END_LEFT,          {false, false, false, true}},
+        {TILE_ID_PATH_END_UP,          {false, false, true, false}},
+        {TILE_ID_PATH_END_RIGHT,          {false, false, false, true}},
+        {TILE_ID_PATH_END_DOWN,          {true, false, false, false}},
+        {TILE_ID_PATH_END_LEFT,          {false, true, false, false}},
         {TILE_ID_PATH_UP_RIGHT,          {true, true, false, false}},
         {TILE_ID_PATH_UP_DOWN,          {true, false, true, false}},
         {TILE_ID_PATH_UP_LEFT,          {true, false, false, true}},

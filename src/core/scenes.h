@@ -106,13 +106,13 @@ class ShelterScene : public  BaseScene{
         GameUILayer *ui_layer;
 
         CharacterMenu *character_menu;
-        bool character_menu_visible;
+        bool character_menu_visible = false;
     
         ModuleMenu *module_menu;
-        bool module_menu_visible;
+        bool module_menu_visible = false;
 
         MapMenu *map_menu;
-        bool show_map_menu;
+        bool show_map_menu = false;
 
         TileLayer *tile_layer;
 
@@ -183,17 +183,17 @@ class GameScene : public  BaseScene{
 
 
         CharacterMenu *character_menu;
-        bool character_menu_visible;
+        bool character_menu_visible = false;
 
         ModuleMenu *module_menu;
-        bool module_menu_visible;
+        bool module_menu_visible = false;
 
         GameUILayer *ui_layer;
 
         TileLayer *tile_layer;
 
         //std::unique_ptr<SubScene> sub_scene;
-        bool can_delete_sub;
+        bool can_delete_sub = false;
 
         Vector2 saved_player_position;
 

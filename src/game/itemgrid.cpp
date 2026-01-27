@@ -1,6 +1,7 @@
 #include "../core/gamedefs.h"
 
-ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) : shared_data(sd) {
+ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) {
+    shared_data = sd;
     rows = r;
     cols = c;
     grid_size = s;

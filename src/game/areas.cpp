@@ -8,6 +8,7 @@ TransitionArea::~TransitionArea() {
 }
 
 void TransitionArea::Update() {
+    hovered = false;
     
     Rectangle area_rect = {
         .x = position.x,
@@ -106,6 +107,7 @@ ContainerArea::~ContainerArea() {
 }
 
 void ContainerArea::Update() {
+    hovered = false;
     
     float max_time_to_press = 1.0f;
     Rectangle area_rect = {
@@ -169,7 +171,6 @@ void ContainerArea::Update() {
 
 void ContainerArea::Draw() {
     
-
     if(hovered) {
         if(in_range) {
             label.default_color = GREEN;

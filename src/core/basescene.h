@@ -12,7 +12,7 @@ class BaseScene  {
     
     LevelData level_data;
     SCENE_ID scene_id;
-    SCENE_ID return_scene;
+    SCENE_ID return_scene = NO_SCENE;
         
 };
 

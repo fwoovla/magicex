@@ -94,15 +94,15 @@ void SetCursorPosition(Vector2 _pos);
 
 
 
-void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity);
+void DL_Add(std::vector<std::unique_ptr<BaseEntity>> &_draw_list, std::unique_ptr<BaseEntity> new_entity);
 
-void DL_Draw(std::vector<BaseEntity *> &_draw_list);
+void DL_Draw(std::vector<std::unique_ptr<BaseEntity>> &_draw_list);
 
-void DL_DrawUI(std::vector<BaseEntity *> &_draw_list);
+void DL_DrawUI(std::vector<std::unique_ptr<BaseEntity>> &_draw_list);
 
-void DL_Update(std::vector<BaseEntity *> &_draw_list);
+void DL_Update(std::vector<std::unique_ptr<BaseEntity>> &_draw_list);
 
-void DL_Clear(std::vector<BaseEntity *> &_draw_list);
+void DL_Clear(std::vector<std::unique_ptr<BaseEntity>> &_draw_list);
 
 bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range);
 

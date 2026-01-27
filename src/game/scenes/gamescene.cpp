@@ -17,50 +17,39 @@ GameScene::GameScene() {
     InstanceLevelObjects(level_data);
 
 
+
+
+
     for(int area_index = 0; area_index < level_data.game_areas.size(); area_index++) {
-        if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
-            //TraceLog(LOG_INFO, "+ connect map");
-            t_area->area_entered.Connect( [this](){OnMapTransitionEntered();} );
-            t_area->area_activated.Connect( [this](){OnMapTransitionActivated();} );
-        }
+        if (auto* transition_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index].get())) {
+            if(level_data.game_areas[area_index]->identifier == "LevelTransition") {
+                transition_area->area_entered.Connect( [this](){OnMapTransitionEntered();} );
+                transition_area->area_activated.Connect( [this](){OnMapTransitionActivated();} );
 
-        if(level_data.game_areas[area_index]->identifier == "ShelterTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
-            //TransitionArea* t_area = dynamic_cast<TransitionArea*>( g_level_data.game_areas[area_index]);
-            //TraceLog(LOG_INFO, "+ connect shelter");
-            t_area->area_entered.Connect( [this](){OnShelterTransitionEntered();} );
-            t_area->area_activated.Connect( [this](){OnShelterTransitionActivated();} );
-        }
-        if(level_data.game_areas[area_index]->identifier == "HouseTransition") {
-            TransitionArea* t_area = dynamic_cast<TransitionArea*>(level_data.game_areas[area_index]);
-            //TraceLog(LOG_INFO, "+ connect house");
+            }
+            if(level_data.game_areas[area_index]->identifier == "ShelterTransition") {
+                transition_area->area_entered.Connect( [this](){OnShelterTransitionEntered();} );
+                transition_area->area_activated.Connect( [this](){OnShelterTransitionActivated();} );
+            }
+            if(level_data.game_areas[area_index]->identifier == "HouseTransition") {
+                transition_area->area_entered.Connect( [this](){OnHouseTransitionEntered();} );
+                transition_area->area_activated.Connect( [this](){OnHouseTransitionActivated();} );
+            }
 
-            t_area->area_entered.Connect( [this](){OnHouseTransitionEntered();} );
-            t_area->area_activated.Connect( [this](){OnHouseTransitionActivated();} );
-        }
 
+        }
     }
     for(int entity_index = 0; entity_index < level_data.entity_list.size(); entity_index++) {
-        if(level_data.entity_list[entity_index]->identifier == "PermContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "GroundContainerEntity" or 
-            level_data.entity_list[entity_index]->identifier == "Mushroom") {
-            //TraceLog(LOG_INFO, "container area identified  %s", level_data.entity_list[entity_index]->identifier.c_str());
-            BaseContainerEntity* p_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index]);
-            if(p_entity) {
-                //TraceLog(LOG_INFO, "container connected");
-                p_entity->open_container.Connect( [this](){OnContainerOpened();} );
-            }
+
+        if (auto* container_entity = dynamic_cast<BaseContainerEntity*>(level_data.entity_list[entity_index].get())) {
+            container_entity->open_container.Connect( [this](){OnContainerOpened();} );
         }
-        if(level_data.entity_list[entity_index]->identifier == "ModuleEntity") {
-            ModuleEntity* m_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index]);
-            if(m_entity) {
-                //TraceLog(LOG_INFO, "module connected");
-                m_entity->open_module.Connect( [this](){OnModuleUsed();} );
-            }
+
+        if (auto* module_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index].get())) {
+            module_entity->open_module.Connect( [this](){OnModuleUsed();} );
         }
+
     }
-    
 
     tile_layer = new TileLayer();
     
@@ -136,8 +125,8 @@ SCENE_ID GameScene::Update() {
                         }
                     }
                     if(spi != -1) {
-                        GroundContainerEntity *new_container = new GroundContainerEntity(pos, spi);
-                        DL_Add(level_data.entity_list, new_container);
+                        std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
+                        DL_Add(level_data.entity_list, std::move(new_container));
                         new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
                         new_container->identifier = "GroundContainerEntity";
                         new_container->c_area.identifier = "GroundContainerEntity";
@@ -186,7 +175,7 @@ void GameScene::DrawScene() {
             e->Draw();
         }
 
-        LDTKDrawShadows(g_current_player->position);
+        //LDTKDrawShadows(g_current_player->position);
         DL_Draw(level_data.ui_entities);
         EndMode2D();
     }    
@@ -268,9 +257,32 @@ GameScene::~GameScene() {
     delete module_menu;
     g_sub_scene.reset();
     //DL_Clear(entity_draw_list);
+
+
+    TraceLog(LOG_INFO, "\n\n");
+    std::vector<int> item_ids_to_delete;
+
+    for(auto &item : g_item_instances ) {
+        std::string container_id = item.second.container_id;
+
+        for(auto &sub_container : g_sub_temp_containers) {
+            if(item.second.container_id == sub_container.first) {
+                item_ids_to_delete.push_back(item.second.instance_id);
+            }
+        }
+    }
+    
+    for(int instance_id : item_ids_to_delete) {
+        TraceLog(LOG_INFO, "deleting sub item instance %i", instance_id);
+        g_item_instances.erase(instance_id);
+    }
+
+    g_sub_temp_containers.clear();
+
     ClearLevelData(level_data);
     
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
+    TraceLog(LOG_INFO, "\n\n");
 }
 
 void GameScene::OnQuitPressed() {
@@ -302,6 +314,7 @@ void GameScene::OnShelterTransitionEntered() {
 void GameScene::OnShelterTransitionActivated() {
 
     //TraceLog(LOG_INFO, "TRANSITION ACTIVATED:  %i", g_game_data.current_map_index);
+    g_game_data.using_saved_data = true;
     return_scene = SHELTER_SCENE;
 
 }
@@ -314,6 +327,7 @@ void GameScene::OnHouseTransitionEntered() {
 
 void GameScene::OnHouseTransitionActivated() {
 
+    TraceLog(LOG_INFO, "\n\n");
     TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss map index %i    ss uid %s", g_game_data.sub_map_index, g_game_data.sub_map_uid.c_str());
     TraceLog(LOG_INFO, "+ player reset position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
     g_game_data.is_in_sub_map = true;
@@ -341,10 +355,12 @@ void GameScene::OnHouseTransitionActivated() {
         g_sub_scene->sub_scene_exited.Connect( [this](){OnSubSceneExited();} );
     }
 
-    TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss instances %i", g_sub_scene_state.size());
+    //TraceLog(LOG_INFO, "SUB MAP TRANSITION ACTIVATED:  ss instances %i", g_sub_scene_state.size());
+    TraceLog(LOG_INFO, "\n\n");
 }
 
 void GameScene::OnSubSceneExited() {
+    TraceLog(LOG_INFO, "\n\n");
     TraceLog(LOG_INFO, "SUB MAP EXITED %i", g_game_data.current_map_index);
 
     //g_sub_scene_data[g_game_data.sub_map_uid] = &g_sub_scene->level_data;
@@ -360,6 +376,7 @@ void GameScene::OnSubSceneExited() {
     g_game_data.using_saved_data = false;
 
     TraceLog(LOG_INFO, "+ reset player position %0.0f, %0.0f", g_game_data.sub_return_position.x, g_game_data.sub_return_position.y);
+    TraceLog(LOG_INFO, "\n\n");
 }
 
 

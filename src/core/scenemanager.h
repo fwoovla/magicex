@@ -26,16 +26,17 @@ class SceneManager{
     void OnSavePressed();
     void OnBackToMenuPressed();
 
-    void OnTransitionEnded();
-    void OnTransitionMidpoint();
+/*     void OnTransitionEnded();
+    void OnTransitionMidpoint(); */
 
     /* std::unique_ptr<BaseScene> current_scene; */
     //BaseScene *current_scene;
-    PauseMenu *pause_menu;
+    std::unique_ptr<PauseMenu> pause_menu;
 
-    FadeTransition *fade_transition;
+    std::unique_ptr<FadeTransition> fade_transition;
 
     bool is_transitioning;
+    bool can_delete_transition;
 
     SCENE_ID next_scene_id;
 

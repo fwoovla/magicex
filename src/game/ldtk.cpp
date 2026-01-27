@@ -375,14 +375,7 @@ int LDTKDrawMap(Vector2 focus_position) {
             //TraceLog(LOG_INFO, "is tiles");
             //break;
         }
-/*         TraceLog(LOG_INFO, "layer :  %i    %s", l, this_level->layer_instances[l].identifier.c_str());
-        
-        if(this_level->layer_instances[l].identifier == "Structures") {
-            TraceLog(LOG_INFO, "structures gride tiles size:  %i", this_level->layer_instances[l].grid_tiles.size());
-        } */
-     
         tilesheet_id = this_level->layer_instances[l].tileset_def_uid;
-        //TraceLog(LOG_INFO, "drawing layer :  %s  #of tiles %i  tileset id %i", this_level->layer_instances[l].identifier.c_str(), this_level->layer_instances[l].grid_tiles.size(), tilesheet_id);
         for(int tile = 0; tile < this_level->layer_instances[l].grid_tiles.size(); tile++) {
 
             LDTKGridTile *this_tile = &this_level->layer_instances[l].grid_tiles[tile];
@@ -392,13 +385,6 @@ int LDTKDrawMap(Vector2 focus_position) {
 
             float tile_x = (float)this_tile->px[0] * g_viewport.inv_tile_size;
             float tile_y = (float)this_tile->px[1] * g_viewport.inv_tile_size;
-
-/*             TraceLog(LOG_INFO,
-                "tile %i px size %zu px0 %i",
-                tile,
-                this_tile->px.size(),
-                this_tile->px.empty() ? -1 : this_tile->px[0]
-            ); */
 
             if(tile_id == -1) {
                 TraceLog(LOG_INFO, "GRID TILES||| is not valid tile.... x:  %0.0f  y %0.0f", tile_x, tile_y);
@@ -421,24 +407,10 @@ int LDTKDrawMap(Vector2 focus_position) {
                     color
                 );
 
-                
-/*                 if(this_level->layer_instances[l].identifier == "Structures") {
-
-                        TraceLog(LOG_INFO, "%s: tid: %i %i drawing tile  px  %i %i    x:  %0.0f  y %0.0f  atlas:  %0.0f  y %0.0f",
-                        this_level->layer_instances[l].identifier.c_str(),
-                        tile_id, 
-                        tile, 
-                        this_tile->px[0], 
-                        this_tile->px[1], 
-                        tile_x, 
-                        tile_y, 
-                        atlas_pos.x, 
-                        atlas_pos.y);
-                } */
-
 
                 tiles_drawn++;
             }
+            
         } 
     }
 
@@ -478,7 +450,7 @@ void LDTKDrawShadows(Vector2 focus_position) {
     if(g_game_settings.show_debug) { //Draw Polys
 
         for(auto &poly : level_data->collision_polys) {
-
+                    
             int p_n = poly.points.size();
             if(p_n >= 3) {
                 for(int i = 1; i < p_n - 1; ++i) {
@@ -499,38 +471,46 @@ void LDTKDrawShadows(Vector2 focus_position) {
     for (auto &poly : level_data->collision_polys) {
         int p_n = poly.points.size();
          if(p_n > 2) {
+            Vector2 sample_point = {poly.points[0].x * level_data->precalc.inv_tile_size, poly.points[0].y * level_data->precalc.inv_tile_size};
+            if((sample_point.x >= g_viewport.x_min) and (sample_point.x <= g_viewport.x_max) and (sample_point.y >= g_viewport.y_min) and (sample_point.y <= g_viewport.y_max)  ) {
 
-            for (int i = 0; i < p_n; ++i) {
-                 Vector2 v1 = poly.points[i];
-                Vector2 v2 = poly.points[(i+1) % p_n];
-
-                Vector2 edge = v2 - v1;
-
-                Vector2 normal = { -edge.y, edge.x };
-
-
-                float facing = Vector2DotProduct( normal, v1 - focus_position );
-
-                if (facing > 0.0f) {
-                    //TraceLog(LOG_INFO, "drawing triangle.... ");
-                    Vector2 dir1 = Vector2Normalize(v1 - focus_position);
-                    Vector2 dir2 = Vector2Normalize(v2 - focus_position);
-                    Vector2 v1_ext = v1 + dir1 * extrudeDist;
-                    Vector2 v2_ext = v2 + dir2 * extrudeDist;
-
-                    if(g_game_settings.show_debug) {
-
-                        DrawLineV(v1, v2, RED);
-                        DrawLineV(v1, v1_ext, shadowColor);
-                        DrawLineV(v2, v2_ext, shadowColor);
+                
+                
+                for (int i = 0; i < p_n; ++i) {
+                    Vector2 v1 = poly.points[i];
+                    Vector2 v2 = poly.points[(i+1) % p_n];
+                    
+                    Vector2 edge = v2 - v1;
+                    
+                    Vector2 normal = { -edge.y, edge.x };
+                    
+                    
+                    float facing = Vector2DotProduct( normal, v1 - focus_position );
+                    
+                    if (facing > 0.0f) {
+                        //TraceLog(LOG_INFO, "drawing triangle.... ");
+                        Vector2 dir1 = Vector2Normalize(v1 - focus_position);
+                        Vector2 dir2 = Vector2Normalize(v2 - focus_position);
+                        Vector2 v1_ext = v1 + dir1 * extrudeDist;
+                        Vector2 v2_ext = v2 + dir2 * extrudeDist;
+                        
+                        if(g_game_settings.show_debug) {
+                            
+                            DrawLineV(v1, v2, RED);
+                            DrawLineV(v1, v1_ext, shadowColor);
+                            DrawLineV(v2, v2_ext, shadowColor);
+                        }
+                        
+                        DrawTriangle({v1.x, v1.y}, {v2_ext.x, v2_ext.y}, {v2.x, v2.y}, shadowColor);
+                        DrawTriangle({v1.x, v1.y}, {v1_ext.x, v1_ext.y}, {v2_ext.x, v2_ext.y}, shadowColor); 
+                        
+                        
                     }
-
-                    DrawTriangle({v1.x, v1.y}, {v2_ext.x, v2_ext.y}, {v2.x, v2.y}, shadowColor);
-                    DrawTriangle({v1.x, v1.y}, {v1_ext.x, v1_ext.y}, {v2_ext.x, v2_ext.y}, shadowColor); 
-
-
+                    
                 }
-
+            }
+            else {
+                TraceLog(LOG_INFO, "skipping poly.... ");
             }
         }
     }

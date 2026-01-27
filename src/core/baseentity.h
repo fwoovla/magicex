@@ -29,9 +29,9 @@ class BaseEntity  {
     //Sprite sprite;
 
     int uid;
-    bool should_delete;
+    bool should_delete = false;
     Rectangle collision_rect;
-    bool collided;
+    bool collided = false;
     Vector2 position;
     float rotation;
     Vector2 centered_offset;
@@ -39,12 +39,12 @@ class BaseEntity  {
     float collision_radius;
     std::string identifier;
 
-    bool is_persistant;
-    bool is_obstructable;
-    bool is_obstructed;
-    bool y_sort;
-    bool can_take_damage;
-    bool is_on_screen;
+    bool is_persistant = false;
+    bool is_obstructable = false;
+    bool is_obstructed = false;
+    bool y_sort = false;
+    bool can_take_damage = false;
+    bool is_on_screen = false;
 
     CharacterEntity *character_entity = nullptr;
 };

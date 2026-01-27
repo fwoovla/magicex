@@ -339,12 +339,12 @@ void CreatureEntity::OnDetectTimerTimeout() {
     bool target_found = false;
 
     for(auto &creature : detected_creatures) {
-        if(creature == g_current_player) {
+        if(creature == g_current_player.get()) {
             target_found = true;
             if(target_creature == nullptr) {
                 if(!is_obstructed) {
 
-                    target_creature = g_current_player;
+                    target_creature = g_current_player.get();
                     path_index = 0;
                     obstructed_count = 0;
                     target_path.clear();

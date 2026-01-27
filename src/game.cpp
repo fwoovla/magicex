@@ -24,6 +24,7 @@ std::vector<AiData> g_ai_data;
 
 std::unordered_map<int, ItemInstanceData> g_item_instances;
 std::unordered_map<std::string, ContainerData> g_persistant_containers;
+std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
 std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
 //std::vector<std::vector<int>> g_loot_tables;
@@ -61,7 +62,7 @@ Texture2D g_module_sprites[MAX_SPRITES];
 
 std::unordered_map< int, CharacterData> g_character_data;
 
-PlayerCharacter *g_current_player;
+std::unique_ptr<PlayerCharacter> g_current_player;
 
 bool game_running;
 float g_scale;
@@ -172,10 +173,16 @@ void Game::StartGame() {
 }
 
 void Game::CleanUp() {
+    g_current_player.reset();
+    g_sub_scene.reset();
+    g_current_scene.reset();
+    g_item_instances.clear();
+    g_ldtk_maps.levels.clear();
+
     scene_manager.CleanUp();
     UnloadResources();
     TraceLog(LOG_INFO, "cleaning up game.");
     if(IsWindowFullscreen()) {  
         ToggleFullscreen();
-    } 
+    }
 }

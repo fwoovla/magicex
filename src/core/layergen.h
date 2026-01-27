@@ -10,3 +10,5 @@ void GenerateStructuresLayer(LDTKLevel &level, WorldGenTileSet &current_tileset,
 void GenerateCollisionLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
+
+void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset);

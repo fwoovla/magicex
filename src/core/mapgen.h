@@ -142,11 +142,12 @@ struct WorldGenTileSet {
     int num_paths;
     Vector2 map_size;
     std::vector <LDTKEnumTag> tile_tags;
-    std::unordered_map <TILEID, WorldGenAutoTile> tile_lookup;
+    std::unordered_map <int, WorldGenAutoTile> tile_lookup;
     SortedTiles sorted_tiles;
     std::vector<PathWorm> path_worms;
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
+    std::vector<int> collision_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;

@@ -44,10 +44,10 @@ ifeq ($(config),debug)
 TARGETDIR = bin/Debug
 TARGET = $(TARGETDIR)/magicex
 OBJDIR = obj/Debug
-DEFINES += -DDEBUG
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -g
-ALL_LDFLAGS += $(LDFLAGS)
+DEFINES +=
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O0 -g -g3 -O0 -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O0 -g -g3 -O0 -fno-omit-frame-pointer -fsanitize=address -fsanitize=leak
+ALL_LDFLAGS += $(LDFLAGS) -fsanitize=address -fsanitize=leak
 define POSTBUILDCMDS
 	@echo Running postbuild commands
 	cp -r assets "bin/Debug/assets"

@@ -73,7 +73,7 @@ StagingUILayer::StagingUILayer() {
     ts_offset = {g_screen_center.x, 225};
     tf_offset = {g_screen_center.x, 400};
 
-    inventory_grid = new ItemGrid(5, 6, 50, {tw_offset.x - 275, tw_offset.y + 50}, &shared_data);
+    inventory_grid = std::make_unique<ItemGrid>(5, 6, 50, (Vector2){tw_offset.x - 275, tw_offset.y + 50}, &shared_data);
 
     int choice_index = 0;
     std::vector<int> choices;

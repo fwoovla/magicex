@@ -131,16 +131,16 @@ void SetCursorPosition(Vector2 _pos) {
 }
 
 
-void DL_Add(std::vector<BaseEntity *> &_draw_list, BaseEntity *new_entity) {
+void DL_Add(std::vector<std::unique_ptr<BaseEntity>> &_draw_list, std::unique_ptr<BaseEntity> new_entity) {
 
-    _draw_list.push_back(new_entity);
+    _draw_list.push_back(std::move(new_entity));
     //TraceLog(LOG_INFO, "ADDING DRAWABLE AT INDEX %i", _draw_list.size());
 
    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
 }
 
 
-void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
+void DL_Draw(std::vector<std::unique_ptr<BaseEntity>> &_draw_list) {
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
@@ -150,7 +150,7 @@ void DL_Draw(std::vector<BaseEntity *> &_draw_list) {
 }
 
 
-void DL_DrawUI(std::vector<BaseEntity *> &_draw_list) {
+void DL_DrawUI(std::vector<std::unique_ptr<BaseEntity>> &_draw_list) {
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE draw %i", _draw_list.size());
     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
@@ -159,29 +159,30 @@ void DL_DrawUI(std::vector<BaseEntity *> &_draw_list) {
     }
 }
 
-void DL_Update(std::vector<BaseEntity *> &_draw_list) {
+void DL_Update(std::vector<std::unique_ptr<BaseEntity>> &_draw_list) {
     //TraceLog(LOG_INFO, "ENTITY LIST SIZE update %i", _draw_list.size());
 
     for(int i = 0; i < _draw_list.size(); i++) {
-        if(_draw_list[i] != nullptr){
-            if(_draw_list[i] != g_current_player) {
+        _draw_list[i]->Update();
+        if(_draw_list[i]->should_delete) {
+            if(_draw_list[i] != nullptr){
+                _draw_list.erase(_draw_list.begin() + i);
+                --i;
+        }
+            //if(_draw_list[i] != g_current_player) {
 
-                _draw_list[i]->Update();
-                if(_draw_list[i]->should_delete) {
                     //TraceLog(LOG_INFO, "DELETING ENTITY");
-                    delete _draw_list[i];
-                    _draw_list.erase(_draw_list.begin() + i);
+            //        delete _draw_list[i];
                     //_draw_list[i] = nullptr;
-                    --i;
                 }
-            }
+            //}
         }
     }
-}
+
 
 void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
 
-    for(int i = 0; i < _draw_list.size(); i++) {
+/*     for(int i = 0; i < _draw_list.size(); i++) {
         if(_draw_list[i] != nullptr){
             if(_draw_list[i] != g_current_player) {
                 delete _draw_list[i];
@@ -193,21 +194,21 @@ void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
         }
     }
     _draw_list.clear();
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size());
+    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size()); */
 }
 
 void DL_Sort(LevelData &_level_data) {
 
     _level_data.draw_list.clear();
 
-    _level_data.draw_list.push_back(g_current_player);
+    _level_data.draw_list.push_back(g_current_player.get());
 
-    for (auto e : _level_data.environment_entities)
-        _level_data.draw_list.push_back(e);
+    for (auto &e : _level_data.environment_entities)
+        _level_data.draw_list.push_back(e.get());
 
 
-    for (auto e : _level_data.entity_list)
-        _level_data.draw_list.push_back(e);
+    for (auto &e : _level_data.entity_list)
+        _level_data.draw_list.push_back(e.get());
 
     //std::sort(level_data.draw_list.begin(), level_data.draw_list.end());
 
@@ -271,11 +272,11 @@ bool CollideWithEntity(BaseEntity *checker, CollisionResult &collision_result) {
         this_scene = g_sub_scene.get();
     }
 
-    for(auto entity : this_scene->level_data.entity_list) {
-        if(entity->can_take_damage) {
+    for(auto &entity : this_scene->level_data.entity_list) {
+        if(entity->can_take_damage and entity->is_on_screen) {
             collided = CheckCollisionCircles( checker->position, checker->collision_radius, entity->position, entity->collision_radius);
             if(collided) {
-                collision_result.collider = entity;
+                collision_result.collider = entity.get();
                 return collided;
             }
         }
@@ -294,12 +295,12 @@ bool CollideWithEntity(Vector2 c_pos, float c_radius, CollisionResult &collision
     }
 
     for(auto &entity : this_scene->level_data.entity_list) {
-        if(entity->can_take_damage) {
+        if(entity->can_take_damage and entity->is_on_screen) {
             //TraceLog(LOG_INFO, "CHECKING COLLISION WITH? %s ", entity->identifier.c_str());
             //TraceLog(LOG_INFO, "entity position? %0.2f  %0.2f      radius %0.2f", entity->position.x, entity->position.y, entity->collision_radius);
             collided = CheckCollisionCircles( c_pos, c_radius, entity->position, entity->collision_radius);
             if(collided) {
-                collision_result.collider = entity;
+                collision_result.collider = entity.get();
                 return collided;
             }
         }
@@ -330,7 +331,7 @@ void DetectCreatures(CharacterEntity &checker, float c_radius, EntityDetectResul
         }
     }
     if(CheckCollisionCircles( checker.position, c_radius, g_current_player->position, g_current_player->collision_radius)) {
-        _result.detected_creatures.push_back(g_current_player);
+        _result.detected_creatures.push_back(g_current_player.get());
     }
     //TraceLog(LOG_INFO, "\n");
 }

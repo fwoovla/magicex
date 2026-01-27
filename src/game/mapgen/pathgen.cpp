@@ -42,6 +42,7 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
             int index = p.y * _tileset.map_size.x + p.x;
 
             _tileset.upper_zone_grid[index] = ZONE_PATH;
+            _tileset.collision_grid[index] = 0;
 
             int index_right = p.y * _tileset.map_size.x + (p.x+1);
 
@@ -63,15 +64,19 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
 
             if(_tileset.upper_zone_grid[index_up] != ZONE_PATH){
                 _tileset.upper_zone_grid[index_up] = ZONE_PATH_SIDE;
+                _tileset.collision_grid[index_up] = 0;
             }
             if(_tileset.upper_zone_grid[index_right] != ZONE_PATH){
                 _tileset.upper_zone_grid[index_right] = ZONE_PATH_SIDE;
+                _tileset.collision_grid[index_right] = 0;
             }
             if(_tileset.upper_zone_grid[index_down] != ZONE_PATH){
                 _tileset.upper_zone_grid[index_down] = ZONE_PATH_SIDE;
+                _tileset.collision_grid[index_down] = 0;
             }
             if(_tileset.upper_zone_grid[index_left] != ZONE_PATH){
                 _tileset.upper_zone_grid[index_left] = ZONE_PATH_SIDE;
+                _tileset.collision_grid[index_left] = 0;
             }
             
         }

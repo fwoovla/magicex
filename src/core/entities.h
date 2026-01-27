@@ -34,7 +34,7 @@ class EnvironmentalEntity : public SpriteEntity {
     void TakeDamage(DamagePayload _payload) override;
 
     Sprite shadow_sprite;
-    bool fadeable;
+    bool fadeable = false;
 };
 
 

@@ -19,5 +19,7 @@ int main(int argc, char *argv[]){
     
     game.CleanUp();
 
+    CloseWindow();
+
     return 0;
 }

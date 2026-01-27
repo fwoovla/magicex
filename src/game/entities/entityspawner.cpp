@@ -77,7 +77,7 @@ int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data
 void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
 
     BaseScene *this_scene = nullptr;
-    BaseSpell *this_spell = nullptr;
+    std::unique_ptr<BaseSpell> this_spell = nullptr;
 
     if(g_game_data.is_in_sub_map) {
         this_scene = g_sub_scene.get();
@@ -87,20 +87,20 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
     }
 
     if(_data->spell_id >= SPELL_ID_MAGICMISSLE_1 and _data->spell_id <= SPELL_ID_MAGICMISSLE_4) {
-        this_spell = new MagicMissle(payload, _data);
+        this_spell = std::make_unique<MagicMissle>(payload, _data);
     }
     if(_data->spell_id >= SPELL_ID_FIREBALL_1 and _data->spell_id <= SPELL_ID_FIREBALL_4) {
-        this_spell = new FireBall(payload, _data);
+        this_spell = std::make_unique<FireBall>(payload, _data);
     }
     if(_data->spell_id >= SPELL_ID_LIGHTNING_1 and _data->spell_id <= SPELL_ID_LIGHTNING_4) {
-        this_spell = new Lightning(payload, _data);
+        this_spell = std::make_unique<Lightning>(payload, _data);
     }
     if(_data->spell_id >= SPELL_ID_POISON_1 and _data->spell_id <= SPELL_ID_POISON_4) {
-        this_spell = new Poison(payload, _data);
+        this_spell = std::make_unique<Poison>(payload, _data);
     }
 
     if(this_scene and this_spell) {
-        DL_Add( this_scene->level_data.spell_list, this_spell);
+        DL_Add( this_scene->level_data.spell_list, std::move(this_spell));
     }
 
     TraceLog(LOG_INFO, "spell list size  %i", _scene.level_data.spell_list.size()); 
@@ -117,19 +117,19 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
 void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
 
     if(g_game_data.is_in_sub_map) {
-        CharacterMessage *new_msg = new CharacterMessage( _position, _text, _color, _delay_seconds);
-        DL_Add( g_sub_scene->level_data.ui_entities, new_msg);
+        std::unique_ptr<CharacterMessage> new_msg = std::make_unique<CharacterMessage>( _position, _text, _color, _delay_seconds);
+        DL_Add( g_sub_scene->level_data.ui_entities, std::move(new_msg));
     }
     else {
-        CharacterMessage *new_msg = new CharacterMessage( _position, _text, _color, _delay_seconds);
-        DL_Add( g_current_scene->level_data.ui_entities, new_msg);
+        std::unique_ptr<CharacterMessage> new_msg = std::make_unique<CharacterMessage>( _position, _text, _color, _delay_seconds);
+        DL_Add( g_current_scene->level_data.ui_entities, std::move(new_msg));
     }
 }
 
 
 void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index) {
 
-    CharacterEntity  *new_creature;
+    std::unique_ptr<CharacterEntity> new_creature;
     int uid = GetRandomValue(1000, 1000000);
 
     g_character_data[uid] = level_data.creature_data[_creature_index];
@@ -145,8 +145,8 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
 
     TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
 
-    new_creature = new CreatureEntity(g_character_data[uid].spawn_position, uid);
+    new_creature = std::make_unique<CreatureEntity>(g_character_data[uid].spawn_position, uid);
     new_creature->identifier = g_character_data[uid].name;
-    DL_Add(level_data.entity_list, new_creature);
+    DL_Add(level_data.entity_list, std::move(new_creature));
 
 }

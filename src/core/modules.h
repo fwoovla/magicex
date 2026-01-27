@@ -20,10 +20,10 @@ class BaseModuleEntity : public SpriteEntity {
     
 
     std::string iid;
-    int level_index;
-    int loot_table_id;
-    int module_id;
-    bool is_open;
+    int level_index = 0;
+    int loot_table_id = 0;
+    int module_id = 0;
+    bool is_open = false;
     
     ModuleArea m_area;
 
