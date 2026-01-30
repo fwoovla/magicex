@@ -7,7 +7,7 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
     int _grid_size = 8;
 
-    int num_trees = 0.40 * _level.px_wid + 0.40 * _level.px_hei;
+    int num_trees =_tileset.max_trees;
 
     for(int i = 0; i < num_trees; i++) {
         int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   
@@ -19,7 +19,7 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
         if(_tileset.upper_zone_grid[zone_index] == ZONE_NONE and _tileset.lower_zone_grid[zone_index] == ZONE_GRASS) {
             
-            if(temp_grid[index]     == SPRITE_ENVIRO_ERROR ) {
+            if(temp_grid[index] == SPRITE_ENVIRO_ERROR ) {
                 
                 int tree_id = GetRandomValue(SPRITE_ENVIRO_TREE_START +1, SPRITE_ENVIRO_TREE_END -1);
                 
@@ -46,7 +46,7 @@ void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
     int _grid_size = 8;
 
-    int num_grass =  5 * _level.px_wid + 5 * _level.px_hei;
+    int num_grass = _tileset.max_grass;
 
     for(int i = 0; i < num_grass; i++) {
         int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   

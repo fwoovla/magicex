@@ -255,8 +255,8 @@ obj/Debug/layergen.o: src/game/mapgen/layergen.cpp \
  src/game/mapgen/../../core/mapgen.h \
  src/game/mapgen/../../core/resources.h \
  src/game/mapgen/../../core/itemgenerator.h \
- src/game/mapgen/../../core/data.h src/game/mapgen/../../core/spells.h \
- src/game/mapgen/../../core/events.h \
+ src/game/mapgen/../../core/data.h /usr/include/c++/13/span \
+ src/game/mapgen/../../core/spells.h src/game/mapgen/../../core/events.h \
  src/game/mapgen/../../core/viewport.h src/game/mapgen/../../core/input.h \
  src/game/mapgen/../../core/button.h \
  src/game/mapgen/../../core/charactereffectentity\ .h \
@@ -596,6 +596,7 @@ src/game/mapgen/../../core/mapgen.h:
 src/game/mapgen/../../core/resources.h:
 src/game/mapgen/../../core/itemgenerator.h:
 src/game/mapgen/../../core/data.h:
+/usr/include/c++/13/span:
 src/game/mapgen/../../core/spells.h:
 src/game/mapgen/../../core/events.h:
 src/game/mapgen/../../core/viewport.h:

@@ -257,7 +257,7 @@ obj/Debug/creatureentity.o: src/game/entities/creatureentity.cpp \
  src/game/entities/../../core/mapgen.h \
  src/game/entities/../../core/resources.h \
  src/game/entities/../../core/itemgenerator.h \
- src/game/entities/../../core/data.h \
+ src/game/entities/../../core/data.h /usr/include/c++/13/span \
  src/game/entities/../../core/spells.h \
  src/game/entities/../../core/events.h \
  src/game/entities/../../core/viewport.h \
@@ -599,6 +599,7 @@ src/game/entities/../../core/mapgen.h:
 src/game/entities/../../core/resources.h:
 src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/data.h:
+/usr/include/c++/13/span:
 src/game/entities/../../core/spells.h:
 src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:

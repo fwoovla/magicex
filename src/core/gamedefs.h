@@ -53,6 +53,8 @@ struct GameSettings {
 struct DebugData {
     float tile_dt;
     int tiles_drawn;
+    int entities_drawn;
+    int collisions_checked;
 };
 
 extern DebugData g_debug_data;

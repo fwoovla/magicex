@@ -2,6 +2,7 @@
 
 //#include <raylib.h>
 #include <vector>
+#include <span>
 #include <string>
 #include <unordered_map>
 #include <fstream>

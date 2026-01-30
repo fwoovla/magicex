@@ -94,12 +94,17 @@ SCENE_ID GameScene::Update() {
             for(int i = 0; i < level_data.game_areas.size(); i++) {
                 level_data.game_areas[i]->Update();
             }
+            g_current_player->Update();
             DL_Update(level_data.entity_list);
             DL_Update(level_data.spell_list);
             DL_Update(level_data.ui_entities);
+            
+            //maybe divide envirinmental entities into groups for better preformance
             DL_Update(level_data.environment_entities);
+            //----------------------- performance hit at > 2000 env entities onscreen 
+            //-----------------------               
+            
             ui_layer->Update();
-            g_current_player->Update();
             HandleCamera();
         }
 
@@ -169,11 +174,12 @@ void GameScene::DrawScene() {
         //TraceLog(LOG_INFO, "GAME SCENE DRAW, %i", g_game_data.current_map_index);
 
         BeginMode2D(g_camera);
-        LDTKDrawMap(g_current_player->position);
+        g_debug_data.tiles_drawn =  LDTKDrawMap(g_current_player->position);
 
         for(auto e: level_data.draw_list) {
             e->Draw();
         }
+        g_debug_data.entities_drawn = level_data.draw_list.size();
 
         //LDTKDrawShadows(g_current_player->position);
         DL_Draw(level_data.ui_entities);

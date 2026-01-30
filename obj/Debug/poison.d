@@ -254,8 +254,8 @@ obj/Debug/poison.o: src/game/spells/poison.cpp /usr/include/stdc-predef.h \
  src/game/spells/../../core/mapgen.h \
  src/game/spells/../../core/resources.h \
  src/game/spells/../../core/itemgenerator.h \
- src/game/spells/../../core/data.h src/game/spells/../../core/spells.h \
- src/game/spells/../../core/events.h \
+ src/game/spells/../../core/data.h /usr/include/c++/13/span \
+ src/game/spells/../../core/spells.h src/game/spells/../../core/events.h \
  src/game/spells/../../core/viewport.h src/game/spells/../../core/input.h \
  src/game/spells/../../core/button.h \
  src/game/spells/../../core/charactereffectentity\ .h \
@@ -594,6 +594,7 @@ src/game/spells/../../core/mapgen.h:
 src/game/spells/../../core/resources.h:
 src/game/spells/../../core/itemgenerator.h:
 src/game/spells/../../core/data.h:
+/usr/include/c++/13/span:
 src/game/spells/../../core/spells.h:
 src/game/spells/../../core/events.h:
 src/game/spells/../../core/viewport.h:

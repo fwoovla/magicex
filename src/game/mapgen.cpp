@@ -59,9 +59,9 @@ void GenerateWorldGenTilesets(std::string _path) {
         TraceLog(LOG_INFO, "-----uid %i", g_worldgen_tilesets[set].uid);
         TraceLog(LOG_INFO, "-----tile tag size %i", g_worldgen_tilesets[set].tile_tags.size());
         for(int tag = 0; tag < g_worldgen_tilesets[set].tile_tags.size(); tag++) {
-            TraceLog(LOG_INFO, "-------tag # %i", tag);
+            //TraceLog(LOG_INFO, "-------tag # %i", tag);
             for(int id = 0; id < g_worldgen_tilesets[set].tile_tags[tag].tile_ids.size(); id++) {
-                TraceLog(LOG_INFO, "------------tile # %i", g_worldgen_tilesets[set].tile_tags[tag].tile_ids[id]);
+                //TraceLog(LOG_INFO, "------------tile # %i", g_worldgen_tilesets[set].tile_tags[tag].tile_ids[id]);
             }
         }
     }
@@ -142,57 +142,75 @@ void GenerateWorldGenTilesets(std::string _path) {
 
 void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
-    WorldGenTileSet *this_tilset = nullptr;
+    WorldGenTileSet *this_tileset = nullptr;
 
     for(int ts = 0; ts < g_worldgen_tilesets.size(); ts++) {
         if(g_worldgen_tilesets[ts].uid == tileset_uid) {
-            this_tilset = &g_worldgen_tilesets[ts];
+            this_tileset = &g_worldgen_tilesets[ts];
         }
     }
 
-    if(this_tilset == nullptr) {
+    if(this_tileset == nullptr) {
         TraceLog(LOG_INFO, "could not find tileset %i", tileset_uid);
         return;
     
     }
 
-    this_tilset->map_size = _map_size;
+    new_level.identifier = "WORLD GEN LEVEL";
+    new_level.px_wid = _map_size.x * this_tileset->tile_grid_size;
+    new_level.px_hei = _map_size.y * this_tileset->tile_grid_size;
 
-    this_tilset->sorted_tiles.grass_tiles.clear();
-    this_tilset->sorted_tiles.dirt_tiles.clear();
-    this_tilset->sorted_tiles.path_tiles.clear();
-    this_tilset->sorted_tiles.border_tiles.clear();
 
-    for(auto &tile : this_tilset->tile_lookup) {
+    this_tileset->map_size = _map_size;
+
+    this_tileset->max_grass = 5 * new_level.px_wid + 5 * new_level.px_hei;
+    this_tileset->max_trees = 0.40 * new_level.px_wid + 0.40 * new_level.px_hei;
+
+    this_tileset->max_structures = (_map_size.x/50) + (_map_size.y/100);
+
+    this_tileset->max_hills = 1 + ((new_level.px_wid/this_tileset->tile_grid_size)/5);
+
+    this_tileset->sorted_tiles.grass_tiles.clear();
+    this_tileset->sorted_tiles.dirt_tiles.clear();
+    this_tileset->sorted_tiles.path_tiles.clear();
+    this_tileset->sorted_tiles.border_tiles.clear();
+
+    for(auto &tile : this_tileset->tile_lookup) {
         TILEID tile_id = (TILEID)tile.first;
 
         if(tile_id > TILE_ID_GRASS_START and tile_id < TILE_ID_GRASS_END) {
-            this_tilset->sorted_tiles.grass_tiles.push_back(tile_id);
+            this_tileset->sorted_tiles.grass_tiles.push_back(tile_id);
         }
         if(tile_id > TILE_ID_BORDER_START and tile_id < TILE_ID_BORDER_END) {
-            this_tilset->sorted_tiles.border_tiles.push_back(tile_id);
+            this_tileset->sorted_tiles.border_tiles.push_back(tile_id);
         }
         if(tile_id > TILE_ID_PATH_START and tile_id < TILE_ID_PATH_END) {
-            this_tilset->sorted_tiles.path_tiles.push_back(tile_id);
+            this_tileset->sorted_tiles.path_tiles.push_back(tile_id);
         }
         if(tile_id > TILE_ID_DIRT_START and tile_id < TILE_ID_DIRT_END) {
-            this_tilset->sorted_tiles.dirt_tiles.push_back(tile_id);
+            this_tileset->sorted_tiles.dirt_tiles.push_back(tile_id);
+        }
+
+        if(tile_id > TILE_ID_FENCE_START and tile_id < TILE_ID_FENCE_END) {
+            this_tileset->sorted_tiles.fence_tiles.push_back(tile_id);
         }
     }
 
-    this_tilset->paths.clear();
+    this_tileset->paths.clear();
 
-    this_tilset->collision_grid.clear();
-    this_tilset->collision_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), 0);
-    this_tilset->lower_zone_grid.clear();
-    this_tilset->lower_zone_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), ZONE_NONE);
-    this_tilset->upper_zone_grid.clear();
-    this_tilset->upper_zone_grid.resize((int)(this_tilset->map_size.x + 1) * (int)(this_tilset->map_size.y + 1), ZONE_NONE);
+    this_tileset->collision_grid.clear();
+    this_tileset->collision_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), 0);
+    this_tileset->lower_zone_grid.clear();
+    this_tileset->lower_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
+    this_tileset->upper_zone_grid.clear();
+    this_tileset->upper_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
 
-    new_level.identifier = "WORLD GEN LEVEL";
-    new_level.px_wid = this_tilset->map_size.x * this_tilset->tile_grid_size;
-    new_level.px_hei = this_tilset->map_size.y * this_tilset->tile_grid_size;
 
+    TraceLog(LOG_INFO, "-------------max_grass %i", this_tileset->max_grass);
+    TraceLog(LOG_INFO, "-------------max_trees %i", this_tileset->max_trees);
+    TraceLog(LOG_INFO, "-------------max_hills %i", this_tileset->max_hills);
+    TraceLog(LOG_INFO, "-------------max_structures %i", this_tileset->max_structures);
+    TraceLog(LOG_INFO, "-------TILESET #%i READY TO BUILD MAP------", tileset_uid);
 
     //grass layer                           X
     //border                                X
@@ -205,31 +223,34 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     //trees                                 X
     //grass                                 X
     //spawn point                           X
-    //transition areas                      1/2
+    //transition areas                      X
     //lootables                             -
     //mobs                                  -
     //fix sub maps                          X
     //fix paths                             -
+    //fences around structures              X
 
-    GenerateZones(new_level, *this_tilset);
+    GenerateZones(new_level, *this_tileset);
 
-    GenerateEntitiesLayer(new_level, *this_tilset);
+    GenerateEntitiesLayer(new_level, *this_tileset);
 
-    ConnectStructuresWithPaths(*this_tilset);
+    ConnectStructuresWithPaths(*this_tileset);
 
-    GenerateStructuresLayer(new_level, *this_tilset,  g_worldgen_tilesets[1]);
+    GenerateStructuresLayer(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
-    GenerateUpperTerrainLayer(new_level, *this_tilset);
+    GenerateUpperTerrainLayer(new_level, *this_tileset);
 
-    GenerateLowerTerrainLayer(new_level, *this_tilset);
+    //GenerateUpperTerrainLayer(new_level, *this_tileset);
 
-    GenerateCollisionLayer(new_level, *this_tilset);
+    GenerateLowerTerrainLayer(new_level, *this_tileset);
 
-    PopulateGrass(new_level, *this_tilset);
+    GenerateCollisionLayer(new_level, *this_tileset);
 
-    PopulateTrees(new_level, *this_tilset);
+    PopulateGrass(new_level, *this_tileset);
 
-    PlaceEntities(new_level, *this_tilset);
+    PopulateTrees(new_level, *this_tileset);
+
+    PlaceEntities(new_level, *this_tileset);
 
 }
 
@@ -255,8 +276,6 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     GenerateTreeZones(level, _tileset);
     GenerateStructureZones(level, _tileset);
     GenerateHillZones(level, _tileset);
-    //GenerateDirtZones(level, _tileset);
-
 }
 
 
@@ -337,8 +356,8 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     std::vector<Rectangle> structure_rects;
     
 
-    int x_patches = 3;
-    int y_patches = 3;
+    int x_patches = _tileset.max_structures/2;
+    int y_patches = _tileset.max_structures/2;
     int num_structure_patches = x_patches + y_patches;
 
     int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
@@ -356,30 +375,55 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                 Rectangle new_rect;
                 
                 new_rect.x = (float)GetRandomValue(x_pos, x_pos + x_patch_size);
+                if(new_rect.x < 2) {new_rect.x = 2; }
+
                 new_rect.y = (float)GetRandomValue(y_pos, y_pos + y_patch_size);
+                if(new_rect.y < 2) {new_rect.y = 2; }
+
                 new_rect.width = 10 + GetRandomValue(5, 10);
+                if(new_rect.x + new_rect.width > _tileset.map_size.x - 5) {new_rect.width = new_rect.width - (new_rect.x + new_rect.width - _tileset.map_size.x); }
+
                 new_rect.height = 10 + GetRandomValue(5, 10);
-                
+                if(new_rect.y + new_rect.height > _tileset.map_size.y - 5) {new_rect.height = new_rect.height - (new_rect.y + new_rect.height - _tileset.map_size.y); }
+
                 structure_rects.push_back(new_rect);
             }
         }
-           
     }
 
+    //spawn position
     _tileset.structure_positions.push_back({ (float)(level.px_wid/_tileset.tile_grid_size)/2, (float)(level.px_hei/_tileset.tile_grid_size)/2});
+
+
     for(Rectangle &patch : structure_rects) {
         for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
             for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
                 int index = y * (int)_tileset.map_size.x + x;
+
                 if(index < _tileset.upper_zone_grid.size()-1) {
                     if(_tileset.upper_zone_grid[index] != ZONE_BORDER) {
                         _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
                         _tileset.lower_zone_grid[index] = ZONE_DIRT;
                     }
-
                     if(x == (int)(patch.width/2) + (int)patch.x and y == (int)(patch.height/2) + (int)patch.y) {
                         _tileset.structure_positions.push_back({(float)x,(float)y});
                     }
+                }
+            }
+        }
+        //make fence
+        Rectangle fr = patch; //fence rect
+        fr.x -=1;
+        fr.y -=1;
+        fr.width +=2;
+        fr.height +=2;
+
+        for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
+            for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
+                if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
+                    int index = y * (int)_tileset.map_size.x + x;
+                     _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                    _tileset.collision_grid[index] = 1;
                 }
             }
         }
@@ -552,11 +596,11 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
         for(int tid = 0; tid <  tj["enumTags"][tag]["tileIds"].size(); tid++) {
             int id = tj["enumTags"][tag]["tileIds"][tid];
             new_tag.tile_ids.push_back(id);
-            TraceLog(LOG_INFO, "====tile id %i", id);
+            //TraceLog(LOG_INFO, "====tile id %i", id);
             
         }
         this_tileset.tile_tags.push_back(new_tag);
-        TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
+        //TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
         
     }
 } 
@@ -590,13 +634,13 @@ void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
                         
                         new_tile.marked_sides = TileIdGetAutotile((TILEID)new_tile.tile_id);
                         this_tileset.tile_lookup[(TILEID)alatered_id] = new_tile;
-                        TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
+/*                         TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
                             alatered_id, 
                             new_tile.marked_sides[0],
                             new_tile.marked_sides[1],
                             new_tile.marked_sides[2],
                             new_tile.marked_sides[3]
-                            );
+                            ); */
                     }
                 }
             }
@@ -613,7 +657,7 @@ void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
         atlas_pos.y = grid_tiles[tile]["src"][1];
         int tile_id = grid_tiles[tile]["t"];
 
-        TraceLog(LOG_INFO, "tile t = %i", tile_id);
+        //TraceLog(LOG_INFO, "tile t = %i", tile_id);
 
         WorldGenAutoTile new_tile;
         new_tile.atlas_position = atlas_pos;
@@ -705,7 +749,7 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
                 new_tile.has_collision = this_tileset.tile_lookup[(TILEID)new_tile.tile_id].has_collision;
 
                 new_structure.structure_grid_tiles.push_back(new_tile);
-                TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
+                //TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
             }
         }
         this_tileset.structure_lookup[structure_id_string] = new_structure;
@@ -715,10 +759,122 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         TraceLog(LOG_INFO, "structure loaded  %s", structure.first.c_str());
         TraceLog(LOG_INFO, "structure tiles  %i", structure.second.structure_grid_tiles.size());
         for(WorldGenAutoTile &tile : structure.second.structure_grid_tiles) {
-            TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
+            //TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
         }
     }    
 }
+
+
+
+TILEID GetFenceTileTop(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y) {
+
+    TILEID id = TILE_ID_NONE;
+
+    int index = tile_y * _tileset.map_size.x + tile_x;
+
+    int index_up = (tile_y-1) * _tileset.map_size.x + tile_x;
+
+    int index_right = tile_y * _tileset.map_size.x + (tile_x+1);
+
+    int index_down = (tile_y+1) * _tileset.map_size.x + tile_x;
+
+    int index_left = tile_y * _tileset.map_size.x + (tile_x-1);
+
+    bool has_up = false;
+    bool has_right = false;
+    bool has_down = false;
+    bool has_left = false;
+
+
+    if(zone_grid[index_right] == ZONE_FENCE/*  or zone_grid[index_right] == ZONE_FENCE_BOTTOM */) {has_right = true;}
+
+    if(zone_grid[index_left] == ZONE_FENCE/*  or zone_grid[index_left] == ZONE_FENCE_BOTTOM */) {has_left = true;}
+
+    if(zone_grid[index_up] == ZONE_FENCE or zone_grid[index_up] == ZONE_FENCE_BOTTOM) {has_up = true;}
+
+    if(zone_grid[index_down] == ZONE_FENCE or zone_grid[index_down] == ZONE_FENCE_BOTTOM) {has_down = true;}
+
+
+    if(!has_up and !has_right and has_down and has_left) {id = TILE_ID_FENCE_TOP_RIGHT_CORNER; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(!has_up and has_right and has_down and !has_left) {id = TILE_ID_FENCE_TOP_LEFT_CORNER; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(has_up and has_right and !has_down and !has_left) {id = TILE_ID_FENCE_BOTTOM_LEFT_CORNER; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(has_up and !has_right and !has_down and has_left) {id = TILE_ID_FENCE_BOTTOM_RIGHT_CORNER; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(has_up and !has_right and has_down and !has_left) {id = TILE_ID_FENCE_MID_VERTICAL;}
+
+    else if(!has_up and has_right and !has_down and has_left) {id = TILE_ID_FENCE_MID_HORIZANTAL; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(has_up and !has_right and !has_down and !has_left) {id = TILE_ID_FENCE_END_DOWN; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(!has_up and !has_right and has_down and !has_left) {id = TILE_ID_FENCE_END_UP;}
+
+    else if(!has_up and has_right and !has_down and !has_left) {id = TILE_ID_FENCE_END_LEFT; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    else if(!has_up and !has_right and !has_down and has_left) {id = TILE_ID_FENCE_END_RIGHT; zone_grid[index_down] = ZONE_FENCE_BOTTOM;}
+
+    //TraceLog(LOG_INFO, "------fence tile  %i", id);
+    return id;
+
+}
+
+
+
+TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y) {
+
+    TILEID id = TILE_ID_NONE;
+
+    int index = tile_y * _tileset.map_size.x + tile_x;
+
+    int top_index = (tile_y-1) * _tileset.map_size.x + tile_x;
+
+    int top_index_up = (tile_y-2) * _tileset.map_size.x + tile_x;
+
+    int top_index_right = (tile_y-1) * _tileset.map_size.x + (tile_x+1);
+
+    int top_index_down = (tile_y) * _tileset.map_size.x + tile_x;
+
+    int index_down = (tile_y+1) * _tileset.map_size.x + tile_x;
+
+    int top_index_left = (tile_y-1) * _tileset.map_size.x + (tile_x-1);
+
+    bool has_up = false;
+    bool has_right = false;
+    bool has_down = false;
+    bool has_left = false;
+
+    if(zone_grid[top_index_right] == ZONE_FENCE) {has_right = true;}
+    if(zone_grid[top_index_left] == ZONE_FENCE) {has_left = true;}
+    if(zone_grid[top_index_up] == ZONE_FENCE) {has_up = true;}
+    if(zone_grid[index_down] == ZONE_FENCE) {has_down = true;}
+    
+
+
+    if(has_up and has_right and !has_down and !has_left) {id = TILE_ID_FENCE_BOTTOM_LEFT_CORNER_LOWER;}
+
+    else if(has_up and !has_right and !has_down and has_left) {id = TILE_ID_FENCE_BOTTOM_RIGHT_CORNER_LOWER;}
+
+    else if(!has_up and !has_right and has_down and has_left) {id = TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER;}
+
+    else if(!has_up and has_right and has_down and !has_left) {id = TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER;}
+
+
+    else if(!has_up and has_right and !has_down and has_left) {id = TILE_ID_FENCE_MID_HORIZANTAL_LOWER;}
+
+
+    else if(has_up and !has_right and !has_down and !has_left) {id = TILE_ID_FENCE_END_DOWN_LOWER;}
+
+    else if(!has_up and has_right and !has_down and !has_left) {id = TILE_ID_FENCE_END_LEFT_LOWER;}
+
+    else if(!has_up and !has_right and !has_down and has_left) {id = TILE_ID_FENCE_END_RIGHT_LOWER;}
+
+    TraceLog(LOG_INFO, "------fence tile bottom  %i\n", id);
+    return id;
+
+}
+
 
 TILEID StrToTileId(const std::string& s) {
 
@@ -768,18 +924,32 @@ TILEID StrToTileId(const std::string& s) {
         {"TILE_ID_BORDER_RIGHT_UP",               TILEID::TILE_ID_BORDER_RIGHT_UP},
         {"TILE_ID_BORDER_UP_RIGHT_DOWN",          TILEID::TILE_ID_BORDER_UP_RIGHT_DOWN}, 
 
-/*         {"TILE_ID_BORDER_END_LEFT",          TILEID::TILE_ID_BORDER_END_LEFT},
-        {"TILE_ID_BORDER_END_RIGHT",          TILEID::TILE_ID_BORDER_END_RIGHT},
-        {"TILE_ID_BORDER_END_UP",          TILEID::TILE_ID_BORDER_END_UP},
-        {"TILE_ID_BORDER_END_DOWN",          TILEID::TILE_ID_BORDER_END_DOWN},
-        {"TILE_ID_BORDER_UP_DOWN",          TILEID::TILE_ID_BORDER_UP_DOWN},
-        {"TILE_ID_BORDER_RIGHT_LEFT",          TILEID::TILE_ID_BORDER_RIGHT_LEFT}, */
+        {"TILE_ID_FENCE_TOP_LEFT_CORNER",          TILEID::TILE_ID_FENCE_TOP_LEFT_CORNER},
+        {"TILE_ID_FENCE_TOP_RIGHT_CORNER",          TILEID::TILE_ID_FENCE_TOP_RIGHT_CORNER},
+        {"TILE_ID_FENCE_BOTTOM_LEFT_CORNER",          TILEID::TILE_ID_FENCE_BOTTOM_LEFT_CORNER},
+        {"TILE_ID_FENCE_BOTTOM_RIGHT_CORNER",          TILEID::TILE_ID_FENCE_BOTTOM_RIGHT_CORNER},
+        {"TILE_ID_FENCE_END_UP",          TILEID::TILE_ID_FENCE_END_UP},
+        {"TILE_ID_FENCE_END_RIGHT",          TILEID::TILE_ID_FENCE_END_RIGHT},
+        {"TILE_ID_FENCE_END_DOWN",          TILEID::TILE_ID_FENCE_END_DOWN},
+        {"TILE_ID_FENCE_END_LEFT",          TILEID::TILE_ID_FENCE_END_LEFT},
+        {"TILE_ID_FENCE_MID_VERTICAL",          TILEID::TILE_ID_FENCE_MID_VERTICAL},
+        {"TILE_ID_FENCE_MID_HORIZANTAL",          TILEID::TILE_ID_FENCE_MID_HORIZANTAL},
+
+        {"TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER},
+        {"TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER},
+        {"TILE_ID_FENCE_BOTTOM_LEFT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_BOTTOM_LEFT_CORNER_LOWER},
+        {"TILE_ID_FENCE_BOTTOM_RIGHT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_BOTTOM_RIGHT_CORNER_LOWER},
+        {"TILE_ID_FENCE_END_RIGHT_LOWER",          TILEID::TILE_ID_FENCE_END_RIGHT_LOWER},
+        {"TILE_ID_FENCE_END_DOWN_LOWER",          TILEID::TILE_ID_FENCE_END_DOWN_LOWER},
+        {"TILE_ID_FENCE_END_LEFT_LOWER",          TILEID::TILE_ID_FENCE_END_LEFT_LOWER},
+        {"TILE_ID_FENCE_MID_HORIZANTAL_LOWER",          TILEID::TILE_ID_FENCE_MID_HORIZANTAL_LOWER},
+
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
         return it->second;
     }
-    //TraceLog(LOG_INFO, "the tile ID is not found ---- %s", s.c_str());
+    TraceLog(LOG_INFO, "the tile ID is not found ---- %s", s.c_str());
     return TILEID::TILE_ID_NONE;
 }
 

@@ -168,37 +168,19 @@ void DL_Update(std::vector<std::unique_ptr<BaseEntity>> &_draw_list) {
             if(_draw_list[i] != nullptr){
                 _draw_list.erase(_draw_list.begin() + i);
                 --i;
-        }
-            //if(_draw_list[i] != g_current_player) {
-
-                    //TraceLog(LOG_INFO, "DELETING ENTITY");
-            //        delete _draw_list[i];
-                    //_draw_list[i] = nullptr;
-                }
-            //}
-        }
+            }
+        }      
     }
+}
 
 
 void DL_Clear(std::vector<BaseEntity *> &_draw_list) {
 
-/*     for(int i = 0; i < _draw_list.size(); i++) {
-        if(_draw_list[i] != nullptr){
-            if(_draw_list[i] != g_current_player) {
-                delete _draw_list[i];
-            }
-            //TraceLog(LOG_INFO, "DELETING ENTITY");
-            //_draw_list.erase(_draw_list.begin() + i);
-                //_draw_list[i] = nullptr;
-            //--i;
-        }
-    }
-    _draw_list.clear();
-    //TraceLog(LOG_INFO, "ENTITY LIST SIZE %i", _draw_list.size()); */
+
 }
 
 void DL_Sort(LevelData &_level_data) {
-
+/* 
     _level_data.draw_list.clear();
 
     _level_data.draw_list.push_back(g_current_player.get());
@@ -210,12 +192,10 @@ void DL_Sort(LevelData &_level_data) {
     for (auto &e : _level_data.entity_list)
         _level_data.draw_list.push_back(e.get());
 
-    //std::sort(level_data.draw_list.begin(), level_data.draw_list.end());
-
     std::sort(_level_data.draw_list.begin(), _level_data.draw_list.end(),
     [](BaseEntity* a, BaseEntity* b) {
         return a->GetYSort() < b->GetYSort();
-    });
+    }); */
 }
 
 
@@ -321,7 +301,7 @@ void DetectCreatures(CharacterEntity &checker, float c_radius, EntityDetectResul
         this_scene = g_sub_scene.get();
     }
 
-    for(auto &entity : this_scene->level_data.entity_list) {
+    for(auto &entity : this_scene->level_data.draw_list) {
         collided = false;
         if(entity->can_take_damage and entity->character_entity and &checker != entity->character_entity) {
             collided = CheckCollisionCircles( checker.position, c_radius, entity->position, entity->collision_radius);

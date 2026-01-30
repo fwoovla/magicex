@@ -255,8 +255,8 @@ obj/Debug/enduilayer.o: src/game/scenes/enduilayer.cpp \
  src/game/scenes/../../core/mapgen.h \
  src/game/scenes/../../core/resources.h \
  src/game/scenes/../../core/itemgenerator.h \
- src/game/scenes/../../core/data.h src/game/scenes/../../core/spells.h \
- src/game/scenes/../../core/events.h \
+ src/game/scenes/../../core/data.h /usr/include/c++/13/span \
+ src/game/scenes/../../core/spells.h src/game/scenes/../../core/events.h \
  src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
  src/game/scenes/../../core/button.h \
  src/game/scenes/../../core/charactereffectentity\ .h \
@@ -595,6 +595,7 @@ src/game/scenes/../../core/mapgen.h:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/itemgenerator.h:
 src/game/scenes/../../core/data.h:
+/usr/include/c++/13/span:
 src/game/scenes/../../core/spells.h:
 src/game/scenes/../../core/events.h:
 src/game/scenes/../../core/viewport.h:

@@ -66,6 +66,32 @@ enum TILEID {
 
     TILE_ID_BORDER_END,
 
+    TILE_ID_FENCE_START,
+
+    TILE_ID_FENCE_TOP_LEFT_CORNER,
+    TILE_ID_FENCE_TOP_RIGHT_CORNER,
+    TILE_ID_FENCE_BOTTOM_LEFT_CORNER,
+    TILE_ID_FENCE_BOTTOM_RIGHT_CORNER,
+    TILE_ID_FENCE_END_UP,
+    TILE_ID_FENCE_END_RIGHT,
+    TILE_ID_FENCE_END_DOWN,
+    TILE_ID_FENCE_END_LEFT,
+    TILE_ID_FENCE_MID_VERTICAL,
+    TILE_ID_FENCE_MID_HORIZANTAL,
+
+    TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER,
+    TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER,
+    TILE_ID_FENCE_BOTTOM_LEFT_CORNER_LOWER,
+    TILE_ID_FENCE_BOTTOM_RIGHT_CORNER_LOWER,
+    //TILE_ID_FENCE_END_UP_LOWER,
+    TILE_ID_FENCE_END_RIGHT_LOWER,
+    TILE_ID_FENCE_END_DOWN_LOWER,
+    TILE_ID_FENCE_END_LEFT_LOWER,
+    TILE_ID_FENCE_MID_HORIZANTAL_LOWER,
+
+
+    TILE_ID_FENCE_END,
+
 
     TILE_ID_MAX,
 };
@@ -96,6 +122,8 @@ enum MAPZONE {
     ZONE_TREE,
     ZONE_STRUCTURE,
     ZONE_BORDER,
+    ZONE_FENCE,
+    ZONE_FENCE_BOTTOM,
 };
 
 
@@ -114,6 +142,7 @@ struct SortedTiles {
     std::vector<TILEID> border_tiles;
     std::vector<TILEID> path_tiles;
     std::vector<TILEID> dirt_tiles;
+    std::vector<TILEID> fence_tiles;
 };
 
 
@@ -141,9 +170,16 @@ struct WorldGenTileSet {
     int tile_grid_size;
     int num_paths;
     Vector2 map_size;
+
+    int max_grass;
+    int max_trees;
+    int max_structures;
+    int max_hills;
+
+
+    SortedTiles sorted_tiles;
     std::vector <LDTKEnumTag> tile_tags;
     std::unordered_map <int, WorldGenAutoTile> tile_lookup;
-    SortedTiles sorted_tiles;
     std::vector<PathWorm> path_worms;
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
@@ -185,6 +221,10 @@ void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 //utils
 
 TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index);
+
+TILEID GetFenceTileTop(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y);
+
+TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y);
 
 TILEID StrToTileId(const std::string& s);
 

@@ -57,13 +57,15 @@ void SceneManager::UpdateScene() {
     }
 
     if(g_game_settings.show_debug) {
-        debug_label.text = TextFormat( "mmp %0.2f  %0.2f \n  player pos  %0.2f   %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i\n", 
+        debug_label.text = TextFormat( "mmp %0.2f  %0.2f \n  player pos  %0.2f   %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i\ntiles drawn %i\nentities drawn %i\n", 
         g_input.world_mouse_position.x, g_input.world_mouse_position.y,
         g_current_player->position.x, g_current_player->position.y,
         (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
         (int)g_camera.target.x, (int)g_camera.target.y,
         g_camera.target.x, g_camera.target.y,
-        GetFPS());
+        GetFPS(),
+        g_debug_data.tiles_drawn,
+        g_debug_data.entities_drawn);
     }
 }
 
