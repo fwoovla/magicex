@@ -224,6 +224,7 @@ struct CharacterData {
     float max_stamina = 0.0f;
     float current_stamina = 0.0f;
     AiData ai_data;
+    bool is_npc = false;
 
     int sprite_sheet_id = -1;
     int portrait_id = -1;

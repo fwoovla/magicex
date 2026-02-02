@@ -231,6 +231,7 @@ void InstanceLevelObjects(LevelData &level_data) {
         new_area->size = {level_data.level_transitions[t_index].size.x, level_data.level_transitions[t_index].size.y};
         new_area->payload_s = level_data.level_transitions[t_index].dest_string;
         new_area->uid = level_data.level_transitions[t_index].uid;
+        new_area->payload_i = -1;
         
         if(level_data.level_transitions[t_index].identifier == "HouseTransition") {
             new_area->payload_v = level_data.level_transitions[t_index].return_position;
@@ -239,9 +240,9 @@ void InstanceLevelObjects(LevelData &level_data) {
         for(int level_index = 0; level_index < g_ldtk_maps.levels.size(); level_index++) {
             if(g_ldtk_maps.levels[level_index].identifier == new_area->payload_s) {
                 new_area->payload_i = level_index;
-                //TraceLog(LOG_INFO, "transition to level index %i found", level_index);
             }
         }
+        TraceLog(LOG_INFO, "-- transition to level index %i --", new_area->payload_i);
 
 
         //TraceLog(LOG_INFO, "instacing transition %s  level index %i  uid %s", new_area->identifier.c_str(), new_area->payload_i, new_area->uid.c_str());
@@ -273,9 +274,9 @@ void InstanceLevelObjects(LevelData &level_data) {
             
             if( (g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) or (g_game_data.is_in_sub_map and g_game_data.using_saved_data) )  {
                 for (auto& [key, value] : g_item_instances) {
-                    TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
                     if(key, value.container_id == new_container->iid) {
-                        TraceLog(LOG_INFO, "ITEM FOUND");
+                        //TraceLog(LOG_INFO, "ITEM FOUND");
                         new_container->c_area.item_list.push_back(value.instance_id);
                     }
                 }
@@ -387,7 +388,7 @@ void InstanceLevelObjects(LevelData &level_data) {
     }
 
     for(int creature = 0; creature < level_data.creature_data.size(); creature++) {
-        //SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
+        SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
     }
 
     TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   level_data.entity_list size %i", level_data.entity_list.size());

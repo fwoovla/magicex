@@ -81,7 +81,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
             if(_tileset.upper_zone_grid[index] == ZONE_PATH) {
 
                 TILEID id =  GetAutoTile(_tileset.sorted_tiles.path_tiles, _tileset, _tileset.upper_zone_grid, ZONE_PATH, index);
-                if(id != -1) {
+                if(id != TILE_ID_NONE) {
                     //TraceLog(LOG_INFO, "PATH zone  %i ", index);
                     
                     LDTKGridTile new_tile_ldtk;
@@ -106,7 +106,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                 //TraceLog(LOG_INFO, "BORDER zone  %i-  %i %i", index, x, y);
                 TILEID id =  GetAutoTile(_tileset.sorted_tiles.border_tiles, _tileset, _tileset.upper_zone_grid, ZONE_BORDER, index);
 
-                if(id == -1) {
+                if(id == TILE_ID_NONE) {
                     _tileset.upper_zone_grid[index] = ZONE_NONE;
                     _tileset.collision_grid[index] = 0;
                     //TraceLog(LOG_INFO, "no tile found  %i", id);
@@ -129,7 +129,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
                 TILEID id =  GetFenceTileTop(_tileset, _tileset.upper_zone_grid, x, y); //TILE_ID_FENCE_END_DOWN;
 
-                if(id == -1) {
+                if(id == TILE_ID_NONE) {
                     //_tileset.upper_zone_grid[index] = ZONE_NONE;
                     //_tileset.collision_grid[index] = 0;
                     //TraceLog(LOG_INFO, "no tile found  %i", id);
@@ -205,6 +205,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
     std::vector<std::string>  structure_names;
 
     for(auto &structure :structure_tileset.structure_lookup) {
+        if(structure.first != "STARTINGSHELTER")
         structure_names.push_back(structure.first);
     }
 
@@ -281,7 +282,8 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                             else {
                                 new_entity.identifier = "HouseTransition";
                             }
-                                //TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_entity.identifier.c_str());
+
+                            TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_entity.identifier.c_str());
 
                             new_entity.iid = "housetransition_" + std::to_string( GetRandomValue(100, 10000));
                             new_entity.px.push_back(new_tile_ldtk.px[0]);
@@ -291,10 +293,10 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
 
                             LDTKFieldInstance dest_map_field;
                             dest_map_field.identifier = "DestMapString";
-                                //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
                             
                             if(name_choice == "STARTINGSHELTER") {
                                 dest_map_field.value_s = "StartingShelter";
+                                //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
                             }
                             else {
                                 

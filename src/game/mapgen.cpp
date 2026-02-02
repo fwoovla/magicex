@@ -140,7 +140,7 @@ void GenerateWorldGenTilesets(std::string _path) {
     }
 }
 
-void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
+void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::string map_name) {
 
     WorldGenTileSet *this_tileset = nullptr;
 
@@ -156,7 +156,8 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     
     }
 
-    new_level.identifier = "WORLD GEN LEVEL";
+    new_level.identifier = map_name;
+    new_level.is_worldgen = true;
     new_level.px_wid = _map_size.x * this_tileset->tile_grid_size;
     new_level.px_hei = _map_size.y * this_tileset->tile_grid_size;
 
@@ -168,7 +169,7 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
     this_tileset->max_structures = (_map_size.x/50) + (_map_size.y/100);
 
-    this_tileset->max_hills = 1 + ((new_level.px_wid/this_tileset->tile_grid_size)/5);
+    this_tileset->max_hills = 1 + (_map_size.x/2);
 
     this_tileset->sorted_tiles.grass_tiles.clear();
     this_tileset->sorted_tiles.dirt_tiles.clear();
@@ -197,6 +198,8 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
     }
 
     this_tileset->paths.clear();
+
+    this_tileset->structure_positions.clear();
 
     this_tileset->collision_grid.clear();
     this_tileset->collision_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), 0);
@@ -240,8 +243,6 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size) {
 
     GenerateUpperTerrainLayer(new_level, *this_tileset);
 
-    //GenerateUpperTerrainLayer(new_level, *this_tileset);
-
     GenerateLowerTerrainLayer(new_level, *this_tileset);
 
     GenerateCollisionLayer(new_level, *this_tileset);
@@ -272,10 +273,12 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
         }
     }
 
-    GenerateDirtZones(level, _tileset);
+    //GenerateDirtZonesRect(level, _tileset);
+    GenerateDirtZonesBrush(level, _tileset, 3);
     GenerateTreeZones(level, _tileset);
     GenerateStructureZones(level, _tileset);
-    GenerateHillZones(level, _tileset);
+    //GenerateHillZonesRect(level, _tileset);
+    GenerateHillZonesBrush(level, _tileset, 4);
 }
 
 
@@ -283,8 +286,8 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 
-
-void GenerateDirtZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
+//stamp rectangles of dirt
+void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
     std::vector<Rectangle> dirt_rects;
 
@@ -319,6 +322,91 @@ void GenerateDirtZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
         }
     }
 }
+
+
+//uses rect as a brush
+void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size) {
+
+
+    //Vector2 start_position = {10,10};
+
+    std::vector<Vector2> start_positions;
+
+    int x_patches = _tileset.map_size.x/50;
+    int y_patches = _tileset.map_size.y/50;
+    int num_structure_patches = x_patches + y_patches;
+
+    int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
+    int y_patch_size = (level.px_hei/_tileset.tile_grid_size)/y_patches;
+
+    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+            int x_pos = 10 + (x_patch * x_patch_size);
+            int y_pos = 10 + (y_patch * y_patch_size);
+            start_positions.push_back(Vector2{(float)x_pos, (float)y_pos});
+        }
+    }
+    start_positions.push_back(Vector2{_tileset.map_size.x/2, _tileset.map_size.y/2});
+
+
+    Rectangle brush;
+    brush.x = 0;
+    brush.y = 0;
+    brush.width = brush_size;
+    brush.height = brush_size;
+
+    int max_loops = 250;
+
+    for(Vector2 position :start_positions) {
+        brush.x = position.x;
+        brush.y = position.y;
+        bool running = true;
+        int loops = 0;
+
+        //TraceLog(LOG_INFO, "brush start pos %0.0f %0.0f", brush.x, brush.y);
+        while(running) {
+            
+            for(int y = (int)brush.y; y < (int)brush.height + (int)brush.y; y++) {
+                for(int x = (int)brush.x; x < (int)brush.width + (int)brush.x; x++) {
+                    int index = y * (int)_tileset.map_size.x + x;
+                    if(index < _tileset.lower_zone_grid.size()-1) {
+                        _tileset.lower_zone_grid[index] = ZONE_DIRT;
+                    }
+                }
+            }
+
+            brush.x += GetRandomValue(-3, 3);
+
+            if(brush.x < 1) {
+                brush.x = 1;
+                //running = false;
+            }
+            if(brush.x + brush.width >= _tileset.map_size.x-2) {
+                brush.x -= ((brush.x + brush.width) - _tileset.map_size.x-3);
+                //running = false;
+            }
+            
+            brush.y += GetRandomValue(-3, 3);
+
+            if(brush.y < 1) {
+                brush.y = 1;
+                //running = false;
+            }
+            if(brush.y + brush.height >= _tileset.map_size.y-2) {
+                brush.y -= ((brush.y + brush.height) - _tileset.map_size.y-3);
+                //running = false;
+            }
+            loops++;
+            if(loops > max_loops) {
+                running = false;
+            }
+        }
+    }
+}
+
+
+
+
 
 
 void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
@@ -422,7 +510,8 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
             for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
                 if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
                     int index = y * (int)_tileset.map_size.x + x;
-                     _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                    _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                    _tileset.lower_zone_grid[index] = ZONE_DIRT;
                     _tileset.collision_grid[index] = 1;
                 }
             }
@@ -432,16 +521,16 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 }
 
 
-void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
+void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset) {
     std::vector<Rectangle> hill_rects;
-    int num_hill_patches = 1 + ((level.px_wid/_tileset.tile_grid_size)/5);
+    int num_hill_patches = _tileset.max_hills;
 
     for(int patch = 0; patch < num_hill_patches; patch++ ) {
         Rectangle new_rect;
         new_rect.x = (float)GetRandomValue(1, _tileset.map_size.x-5);
         new_rect.y = (float)GetRandomValue(1, _tileset.map_size.y-5);
-        new_rect.width = GetRandomValue(2, 20);
-        new_rect.height = GetRandomValue(2, 20);
+        new_rect.width = GetRandomValue(6, 25);
+        new_rect.height = GetRandomValue(6, 25);
 
         hill_rects.push_back(new_rect);
     }
@@ -456,6 +545,85 @@ void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                         _tileset.collision_grid[index] = 1;
                     }
                 }
+            }
+        }
+    }
+}
+
+
+
+void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size) {
+
+    std::vector<Vector2> start_positions;
+
+    int x_patches = _tileset.map_size.x/30;
+    int y_patches = _tileset.map_size.y/30;
+    int num_structure_patches = x_patches + y_patches;
+
+    int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
+    int y_patch_size = (level.px_hei/_tileset.tile_grid_size)/y_patches;
+
+    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+            int x_pos = 10 + (x_patch * x_patch_size);
+            int y_pos = 10 + (y_patch * y_patch_size);
+            start_positions.push_back(Vector2{(float)x_pos + GetRandomValue(-5, 5), (float)y_pos + GetRandomValue(-5, 5)});
+        }
+    }
+
+
+    Rectangle brush;
+    brush.x = 0;
+    brush.y = 0;
+    brush.width = brush_size;
+    brush.height = brush_size;
+
+    int max_loops = 200;
+
+    for(Vector2 position :start_positions) {
+        brush.x = position.x;
+        brush.y = position.y;
+        bool running = true;
+        int loops = 0;
+
+        //TraceLog(LOG_INFO, "brush start pos %0.0f %0.0f", brush.x, brush.y);
+        while(running) {
+            
+            for(int y = (int)brush.y; y < (int)brush.height + (int)brush.y; y++) {
+                for(int x = (int)brush.x; x < (int)brush.width + (int)brush.x; x++) {
+                    int index = y * (int)_tileset.map_size.x + x;
+                    if(index < _tileset.upper_zone_grid.size()-1) {
+                        if(_tileset.upper_zone_grid[index] != ZONE_STRUCTURE) {
+                            _tileset.upper_zone_grid[index] = ZONE_BORDER;
+                        }
+                    }
+                }
+            }
+
+            brush.x += GetRandomValue(-1, 1);
+
+            if(brush.x < 1) {
+                brush.x = 1;
+                //running = false;
+            }
+            if(brush.x + brush.width >= _tileset.map_size.x-2) {
+                brush.x -= ((brush.x + brush.width) - _tileset.map_size.x-3);
+                //running = false;
+            }
+            
+            brush.y += GetRandomValue(-1, 1);
+
+            if(brush.y < 1) {
+                brush.y = 1;
+                //running = false;
+            }
+            if(brush.y + brush.height >= _tileset.map_size.y-2) {
+                brush.y -= ((brush.y + brush.height) - _tileset.map_size.y-3);
+                //running = false;
+            }
+            loops++;
+            if(loops > max_loops) {
+                running = false;
             }
         }
     }
@@ -870,7 +1038,7 @@ TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_
 
     else if(!has_up and !has_right and !has_down and has_left) {id = TILE_ID_FENCE_END_RIGHT_LOWER;}
 
-    TraceLog(LOG_INFO, "------fence tile bottom  %i\n", id);
+    //TraceLog(LOG_INFO, "------fence tile bottom  %i\n", id);
     return id;
 
 }

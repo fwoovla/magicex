@@ -76,7 +76,7 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
     int index = cell_pos_y_i * map_width + left_i;
     int value = col_layer.int_grid[index];
     //TraceLog(LOG_INFO, "checking l %i, %i  | index %i   | value %i", left_i, c_pos_y_i , index, value);
-    if(value == 1) {
+    if(value == 1 or value == 2) {
         if(CheckCollisionCircleRec( checker_pos, c_rad, { (float)left_i * tile_size, (float)cell_pos_y_i * tile_size, (float)tile_size, (float)tile_size } )) {
             //TraceLog(LOG_INFO, "COLLISON LEFT");
             collision_result.collision_dir.x = -1;
@@ -87,7 +87,7 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
     index = cell_pos_y_i * map_width + right_i;
     value = col_layer.int_grid[index];
     //TraceLog(LOG_INFO, "checking r %i, %i  | index %i   | value %i", right_i, c_pos_y_i , index, value);
-    if(value == 1) {
+    if(value == 1 or value == 2) {
         if(CheckCollisionCircleRec( checker_pos, c_rad, { (float)right_i * tile_size, (float)cell_pos_y_i * tile_size, (float)tile_size, (float)tile_size } )) {
             //TraceLog(LOG_INFO, "COLLISON RIGHT");
             collision_result.collision_dir.x = 1;
@@ -99,7 +99,7 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
     index = top_i * map_width + cell_pos_x_i;
     value = col_layer.int_grid[index];
     //TraceLog(LOG_INFO, "checking t %i, %i  | index %i   | value %i", c_pos_x_i, top_i , index, value);
-    if(value == 1) {
+    if(value == 1 or value == 2) {
         if(CheckCollisionCircleRec( checker_pos, c_rad, { (float)cell_pos_x_i * tile_size, (float)top_i * tile_size, (float)tile_size, (float)tile_size } )) {
             //TraceLog(LOG_INFO, "COLLISON TOP");
             collision_result.collision_dir.y = -1;
@@ -111,7 +111,7 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
     value = col_layer.int_grid[index];
 
     //TraceLog(LOG_INFO, "checking b %i, %i  | index %i   | value %i", c_pos_x_i, bottom_i, index, value);
-    if(value == 1) {
+    if(value == 1 or value == 2) {
         if(CheckCollisionCircleRec( checker_pos, c_rad, { (float)cell_pos_x_i * tile_size, (float)bottom_i * tile_size, (float)tile_size, (float)tile_size } )) {
             //TraceLog(LOG_INFO, "COLLISON BOTTOM");
             collision_result.collision_dir.y = 1;

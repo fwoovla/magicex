@@ -977,7 +977,8 @@
             "sprite_sheet_id":"SPRITE_TESTDUMMY",
             "max_stamina":0,
             "ai_id":"AI_PASSIVE",
-            "primary":"ITEM_ID_NONE"
+            "primary":"ITEM_ID_NONE",
+            "is_npc":false
         },
         {
             "creature_id":"CREATURE_BUNNY",
@@ -987,7 +988,8 @@
             "sprite_sheet_id":"SPRITE_BUNNY",
             "max_stamina":10,
             "ai_id":"AI_FEARFULL",
-            "primary":"ITEM_ID_NONE"
+            "primary":"ITEM_ID_NONE",
+            "is_npc":false
         },
         {
             "creature_id":"CREATURE_SCAVENGER",
@@ -997,7 +999,8 @@
             "sprite_sheet_id":"SPRITE_SCAVENGER",
             "max_stamina":10,
             "ai_id":"AI_AGGRESSIVE",
-            "primary":"ITEM_ID_NEWWAND4"
+            "primary":"ITEM_ID_NEWWAND4",
+            "is_npc":false
         },
         {
             "creature_id":"CREATURE_TRADER",
@@ -1007,7 +1010,19 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
-            "primary":"ITEM_ID_NONE"
+            "primary":"ITEM_ID_NONE",
+            "is_npc":false
+        },
+        {
+            "creature_id":"CREATURE_NPC_1",
+            "creature_name": "NPC",
+            "max_health":15,
+            "base_speed":20.0,
+            "sprite_sheet_id":"SPRITE_TRADER",
+            "max_stamina":10,
+            "ai_id":"AI_TERRITORIAL",
+            "primary":"ITEM_ID_NONE",
+            "is_npc":true
         },
         {
             "creature_id":"CREATURE_SLIME",
@@ -1017,7 +1032,8 @@
             "sprite_sheet_id":"SPRITE_SLIME",
             "max_stamina":10,
             "ai_id":"AI_HOSTILE",
-            "primary":"ITEM_ID_NONE"
+            "primary":"ITEM_ID_NONE",
+            "is_npc":false
         }
     ],
     "ai_data": [

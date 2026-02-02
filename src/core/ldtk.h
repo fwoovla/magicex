@@ -154,20 +154,21 @@ struct LDTKEnvironmentData {
 };
 
 struct LDTKLevel {
-    bool is_shelter;
-    bool is_sub_map;
+    bool is_shelter = false;
+    bool is_sub_map = false;
+    bool is_worldgen = false;
     std::string identifier;
     std::string iid;
     int64_t uid;
-    int64_t world_x;
-    int64_t world_y;
-    int64_t world_depth;
+    //int64_t world_x;
+    //int64_t world_y;
+    //int64_t world_depth;
     int64_t px_wid;
     int64_t px_hei;
-    std::string bg_color;
-    bool use_auto_identifier;
-    nlohmann::json bg_rel_path;
-    nlohmann::json level_bg_pos;
+    //std::string bg_color;
+    //bool use_auto_identifier;
+    //nlohmann::json bg_rel_path;
+    //nlohmann::json level_bg_pos;
     std::vector<nlohmann::json> field_instances;
     std::vector<LDTKLayerInstance> layer_instances;
     std::vector<LDTKEnvironmentData> environment_data;
@@ -231,6 +232,8 @@ struct GameData {
     bool using_saved_data;
     bool paused = false;
     SCENE_ID current_scene_id;
+
+    std::string level_name_to_create;
 
     int current_map_index;
     int next_map_index;

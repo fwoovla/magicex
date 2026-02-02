@@ -180,15 +180,15 @@ struct WorldGenTileSet {
     SortedTiles sorted_tiles;
     std::vector <LDTKEnumTag> tile_tags;
     std::unordered_map <int, WorldGenAutoTile> tile_lookup;
-    std::vector<PathWorm> path_worms;
+    //std::vector<PathWorm> path_worms;
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
     std::vector<int> collision_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
-    std::vector<int> house_transition_tiles;
-    std::vector<int> shadow_tiles;
+    //std::vector<int> house_transition_tiles;
+    //std::vector<int> shadow_tiles;
 };
 
 
@@ -208,14 +208,16 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
 void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities);
 
 //worldgen
-void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size);
+void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size, std::string map_name);
 
 void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
-void GenerateDirtZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateHillZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 
 
 //utils

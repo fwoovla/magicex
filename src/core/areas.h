@@ -97,11 +97,11 @@ class ModuleArea : public BaseArea {
 };
 
 
-/* class CreatureDetectArea : public BaseArea {
+class DialogeArea : public BaseArea {
 
     public:
-        CreatureDetectArea(){};
-        ~CreatureDetectArea() override;
+        DialogeArea(){};
+        ~DialogeArea() override;
         void Update() override;
         void Draw() override;
         //void Activate() override;
@@ -111,8 +111,5 @@ class ModuleArea : public BaseArea {
 
         Label label;
 
-        CharacterEntity *target_creature;
+};
 
-        std::vector<CharacterEntity *> detected_creatures;
-
-}; */

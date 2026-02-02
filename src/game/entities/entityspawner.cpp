@@ -144,8 +144,18 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
     }
 
     TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
+    TraceLog(LOG_INFO, "SpawnCreature is_npc = %i", g_character_data[uid].is_npc);
 
-    new_creature = std::make_unique<CreatureEntity>(g_character_data[uid].spawn_position, uid);
+    //std::unique_ptr<CreatureEntity> new_creature;
+
+    if(g_character_data[uid].is_npc) {
+        new_creature = std::make_unique<NpcEntity>(g_character_data[uid].spawn_position, uid);
+        //new_creature->identifier = g_character_data[uid].name;
+    }
+    else {
+        new_creature = std::make_unique<CreatureEntity>(g_character_data[uid].spawn_position, uid);
+        //DL_Add(level_data.entity_list, std::move(new_creature));
+    }
     new_creature->identifier = g_character_data[uid].name;
     DL_Add(level_data.entity_list, std::move(new_creature));
 

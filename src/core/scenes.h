@@ -102,6 +102,8 @@ class ShelterScene : public  BaseScene{
         void OnTransitionAreaEntered();
         void OnTransitionAreaActivated();
 
+        void OnStartDialogue();
+
         //ShelterUILayer *ui_layer;
         GameUILayer *ui_layer;
 
@@ -110,6 +112,9 @@ class ShelterScene : public  BaseScene{
     
         ModuleMenu *module_menu;
         bool module_menu_visible = false;
+
+        DialogueMenu *dialogue_menu;
+        bool dialogue_menu_visible = false;
 
         MapMenu *map_menu;
         bool show_map_menu = false;
@@ -137,11 +142,16 @@ class SubScene : public  BaseScene{
         void OnMapTransitionEntered();
         void OnMapTransitionActivated();
 
+        void OnStartDialogue();
+
         CharacterMenu *character_menu;
         bool character_menu_visible;
 
         ModuleMenu *module_menu;
         bool module_menu_visible;
+
+        DialogueMenu *dialogue_menu;
+        bool dialogue_menu_visible = false;
 
         GameUILayer *ui_layer;
 
@@ -181,12 +191,17 @@ class GameScene : public  BaseScene{
 
         void OnSubSceneExited();
 
+        void OnStartDialogue();
+
 
         CharacterMenu *character_menu;
         bool character_menu_visible = false;
 
         ModuleMenu *module_menu;
         bool module_menu_visible = false;
+
+        DialogueMenu *dialogue_menu;
+        bool dialogue_menu_visible = false;
 
         GameUILayer *ui_layer;
 

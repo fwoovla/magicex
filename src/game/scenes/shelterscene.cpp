@@ -17,6 +17,7 @@ ShelterScene::ShelterScene() {
     return_scene = NO_SCENE;
     character_menu_visible = false;
     module_menu_visible = false;
+    dialogue_menu_visible = false;
     
     LoadLevelData(level_data);
 
@@ -41,7 +42,9 @@ ShelterScene::ShelterScene() {
         if (auto* module_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index].get())) {
             module_entity->open_module.Connect( [this](){OnModuleUsed();} );
         }
-
+        if (auto* npc_entity = dynamic_cast<NpcEntity*>(level_data.entity_list[entity_index].get())) {
+            npc_entity->start_dialogue.Connect( [this](){OnStartDialogue();} );
+        }
     }
 
     ui_layer = new GameUILayer();
@@ -52,10 +55,8 @@ ShelterScene::ShelterScene() {
     character_menu = new CharacterMenu();
 
     module_menu = new ModuleMenu();
-    //character_menu->Open();
-    
-/*     map_menu = new MapMenu();
-    map_menu->map_selected.Connect( [this](){OnMapSelected();} ); */
+
+    dialogue_menu = new DialogueMenu();
 
     show_map_menu = false;
 
@@ -86,6 +87,9 @@ SCENE_ID ShelterScene::Update() {
         else if(module_menu_visible) {
             module_menu->Update();
         }
+        else if(dialogue_menu_visible) {
+            dialogue_menu->Update();
+        }
         else {
             ui_layer->Update();
             for(int i = 0; i < level_data.game_areas.size(); i++) {
@@ -101,7 +105,7 @@ SCENE_ID ShelterScene::Update() {
 
 
 
-        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible) {
+        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
 
@@ -119,14 +123,14 @@ SCENE_ID ShelterScene::Update() {
                             auto item_it = g_item_instances.find(character_menu->blank_list[item]);
                             if(item_it != g_item_instances.end()) {
                                 spi = item_it->second.item_id;
+                                //TraceLog(LOG_INFO, "found item  %i", spi);
+                                break;
                             }
-
-                            break;
                         }
                     }
                     if(spi != -1) {
+                        TraceLog(LOG_INFO, "dropping item  %i", spi);
                         std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
-                        DL_Add(level_data.entity_list, std::move(new_container));
                         new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
                         new_container->identifier = "GroundContainerEntity";
                         new_container->c_area.identifier = "GroundContainerEntity";
@@ -136,6 +140,7 @@ SCENE_ID ShelterScene::Update() {
                         new_container->iid = character_menu->default_iid;
                         new_container->is_persistant = true;
                         new_container->level_index = g_game_data.current_map_index;
+                        DL_Add(level_data.entity_list, std::move(new_container));
                     }
                 }
                 else { //was existing container
@@ -153,6 +158,9 @@ SCENE_ID ShelterScene::Update() {
         }
         if(g_input.keys_pressed[0] == KEY_E and module_menu_visible) {
             module_menu_visible = false;
+        }
+        if(g_input.keys_pressed[0] == KEY_E and dialogue_menu_visible) {
+            dialogue_menu_visible = false;
         }
     }
 
@@ -198,6 +206,9 @@ void ShelterScene::DrawUI() {
     else if(character_menu_visible) {
         character_menu->Draw();
     }
+    else if(dialogue_menu_visible) {
+        dialogue_menu->Draw();
+    }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
             level_data.game_areas[i]->Draw();
@@ -218,6 +229,7 @@ ShelterScene::~ShelterScene() {
     delete character_menu;
     delete tile_layer;
     delete module_menu;
+    delete dialogue_menu;
     
     ClearLevelData(level_data);
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  SHELTER");
@@ -295,4 +307,10 @@ void ShelterScene::OnModuleUsed() {
     module_menu->OpenModule();
     module_menu_visible = true;
 
+}
+
+void ShelterScene::OnStartDialogue() {
+    TraceLog(LOG_INFO, "STARTING DIALOGUE");
+    dialogue_menu-> Open();
+    dialogue_menu_visible = true;
 }

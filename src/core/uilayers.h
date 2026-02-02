@@ -249,6 +249,67 @@ class ModuleMenu : public BaseUILayer {
 
 };
 
+class DialogueMenu : public BaseUILayer {
+
+    public:
+    DialogueMenu();
+    ~DialogueMenu() override;
+    void Update() override;
+    void Draw() override;
+    void DrawHotBarOnly();
+    void Open();
+    void OpenWith(BaseContainerEntity *container);
+
+    void OnItemSelected();
+    void OnItemDeselected();
+
+    void OnTransferItem();
+
+    void OnPickup();
+    void OnPutDownOrEquip();
+
+    void OnUseItem();
+
+    void OnOpenDetails();
+    void OnCloseDetails();
+
+
+    bool use_ground;
+    std::vector<int> blank_list;
+    std::string default_iid;
+
+
+    SharedItemData shared_data;
+    std::vector<ItemGrid *> grid_list;
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    Label ground_header_label;
+    Label character_header_label;
+    Label inventory_label_header;
+
+    
+    Vector2 gpo; // ground position offset
+    ItemGrid *ground_grid;
+    std::vector<int> g_item_list;
+    
+    Vector2 cpo;
+    Vector2 ppo; //portrait offset
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+    Label character_label;
+    Label character_stat_label;
+
+    
+    Vector2 ipo;
+    ItemGrid *inventory_grid;
+
+    bool show_details;
+    DetailsPanel *details_panel;
+};
 
 class CharacterMenu : public BaseUILayer {
 

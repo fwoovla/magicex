@@ -226,7 +226,7 @@ bool CreatureEntity::CanEquip(int item_id) {
 
 
 void CreatureEntity::Equip(int item_id) {
-    TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
+    //TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
 
     int _id = ITEM_ID_NONE;
 

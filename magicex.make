@@ -85,6 +85,7 @@ GENERATED += $(OBJDIR)/containerentity.o
 GENERATED += $(OBJDIR)/creatureentity.o
 GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/detailspanel.o
+GENERATED += $(OBJDIR)/dialguemenu.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/entityspawner.o
@@ -108,6 +109,7 @@ GENERATED += $(OBJDIR)/mapmenu.o
 GENERATED += $(OBJDIR)/modulemenu.o
 GENERATED += $(OBJDIR)/modules.o
 GENERATED += $(OBJDIR)/mushroomentity.o
+GENERATED += $(OBJDIR)/npcentity.o
 GENERATED += $(OBJDIR)/pathgen.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
@@ -136,6 +138,7 @@ OBJECTS += $(OBJDIR)/containerentity.o
 OBJECTS += $(OBJDIR)/creatureentity.o
 OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/detailspanel.o
+OBJECTS += $(OBJDIR)/dialguemenu.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/entityspawner.o
@@ -159,6 +162,7 @@ OBJECTS += $(OBJDIR)/mapmenu.o
 OBJECTS += $(OBJDIR)/modulemenu.o
 OBJECTS += $(OBJDIR)/modules.o
 OBJECTS += $(OBJDIR)/mushroomentity.o
+OBJECTS += $(OBJDIR)/npcentity.o
 OBJECTS += $(OBJDIR)/pathgen.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
@@ -273,6 +277,9 @@ $(OBJDIR)/environmentalentity.o: src/game/entities/environmentalentity.cpp
 $(OBJDIR)/mushroomentity.o: src/game/entities/mushroomentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/npcentity.o: src/game/entities/npcentity.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/playercharacter.o: src/game/entities/playercharacter.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -322,6 +329,9 @@ $(OBJDIR)/charactermenu.o: src/game/scenes/charactermenu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/detailspanel.o: src/game/scenes/detailspanel.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/dialguemenu.o: src/game/scenes/dialguemenu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/endscene.o: src/game/scenes/endscene.cpp

@@ -95,9 +95,9 @@ void LDTKLoadMaps (json &mj) {
             
             this_level.identifier = mj["levels"][level]["identifier"];
             
-            this_level.bg_color = mj["levels"][level]["__bgColor"];
+            /* this_level.bg_color = mj["levels"][level]["__bgColor"];
             this_level.world_x = mj["levels"][level]["worldX"];
-            this_level.world_y = mj["levels"][level]["worldY"];
+            this_level.world_y = mj["levels"][level]["worldY"]; */
             this_level.uid = mj["levels"][level]["uid"];
             this_level.px_wid = mj["levels"][level]["pxWid"];
             this_level.px_hei = mj["levels"][level]["pxHei"];
@@ -152,10 +152,10 @@ void LDTKLoadMaps (json &mj) {
                         this_tile.px.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["px"][1]);
                         this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][0]);
                         this_tile.src.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["src"][1]);
-                        this_tile.f = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["f"];
-                        this_tile.a = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["a"];
+                        //this_tile.f = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["f"];
+                        //this_tile.a = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["a"];
                         this_tile.t = mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["t"];
-                        this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
+                        //this_tile.d.push_back(mj["levels"][level]["layerInstances"][layer]["gridTiles"][tile]["d"][0]);
                         this_layer.grid_tiles[tile] = this_tile;
 
                         for(int ts = 0; ts < g_ldtk_maps.tilesets.size(); ts++) {
@@ -223,6 +223,20 @@ void LDTKLoadMaps (json &mj) {
                             }
                         }
 
+
+                        if(new_entity.identifier == "EnvEntity") {
+
+
+                            LDTKEnvironmentData new_data;
+                            new_data.item_string = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__value"];
+
+                            Vector2 pos = {};
+                            pos.x = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][0];
+                            pos.y = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["px"][1];
+
+                            new_data.position = {pos.x + (g_ldtk_maps.default_grid_size/2), pos.y + (g_ldtk_maps.default_grid_size)};
+                            this_level.environment_data.push_back(new_data);
+                        }
 
                         if(new_entity.identifier == "PermContainerEntity") {
                             //new_entity.iid = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["iid"];
@@ -509,9 +523,9 @@ void LDTKDrawShadows(Vector2 focus_position) {
                     
                 }
             }
-            else {
-                TraceLog(LOG_INFO, "skipping poly.... ");
-            }
+/*             else {
+                //TraceLog(LOG_INFO, "skipping poly.... ");
+            } */
         }
     }
 }

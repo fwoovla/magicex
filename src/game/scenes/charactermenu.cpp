@@ -341,6 +341,7 @@ void CharacterMenu::Open() {
     shared_data.item_id = -1;
     shared_data.use_id = -1;
     shared_data.showing_details = false;
+    show_details = false;
 
     blank_list.clear();
     blank_list.push_back(-1);
@@ -366,6 +367,7 @@ void CharacterMenu::OpenWith(BaseContainerEntity *container) {
     use_ground = false;
     ground_grid->container_iid = container->iid;
     ground_grid->SetItems(&container->c_area.item_list);
+    show_details = false;
 
 }
 

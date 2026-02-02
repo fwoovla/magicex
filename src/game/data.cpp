@@ -1,7 +1,8 @@
 #include "../core/gamedefs.h"
 #include "../core/utils.h"
 
-static const std::string save_path = "saves/save.json";
+static const std::string data_save_path = "saves/save.json";
+static const std::string worldgen_save_path = "saves/worldgen_save.json";
 
 
 void LoadGameData() {
@@ -458,6 +459,8 @@ void LoadGameData() {
         float max_stamina = cj["creature_data"][i]["max_stamina"];
 
         AIID ai_id = StrToAiId( cj["creature_data"][i]["ai_id"]);
+
+        bool is_npc = cj["creature_data"][i]["is_npc"];
         
         std::vector<int> inv;
         inv.push_back(-1);
@@ -516,6 +519,7 @@ void LoadGameData() {
             .max_stamina = max_stamina,
             .current_stamina = max_stamina,
             .ai_data = g_ai_data[ai_id],
+            .is_npc = is_npc,
             .sprite_sheet_id = sprite_sheet_id,
             .portrait_id = portrait_id,
             .name = name,
@@ -530,7 +534,7 @@ void LoadGameData() {
  
     //TraceLog(LOG_INFO, "==========check save data================");
 
-    if(std::filesystem::exists(save_path)) {
+    if(std::filesystem::exists(data_save_path)) {
         g_game_data.save_available = true;
         TraceLog(LOG_INFO, "SAVE FILE FOUND");
     }
@@ -540,8 +544,8 @@ void LoadGameData() {
 void SaveGame(LevelData &level_data) {
 
     TraceLog(LOG_INFO, "----------------------SAVING GAME------------------------" );
-    g_game_data.using_saved_data = true;
-    std::ofstream file(save_path);
+    
+    std::ofstream file(data_save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "filed to open save file");
         return;
@@ -636,7 +640,7 @@ void SaveGame(LevelData &level_data) {
             };
             
             instance["weapon_data"] = new_weapon;
-            TraceLog(LOG_INFO, "saving weapon data %s", new_weapon["weapon_name"]);
+            //TraceLog(LOG_INFO, "saving weapon data %s", new_weapon["weapon_name"]);
         }
     
         instance["armor_id"] = inst.armor_id;
@@ -652,7 +656,7 @@ void SaveGame(LevelData &level_data) {
             };
             
             instance["armor_data"] = new_armor;
-            TraceLog(LOG_INFO, "saving armor data %s", new_armor["armor_name"]);
+            //TraceLog(LOG_INFO, "saving armor data %s", new_armor["armor_name"]);
         }
     
         instance["food_id"] = inst.food_id;
@@ -665,7 +669,7 @@ void SaveGame(LevelData &level_data) {
             };
             
             instance["food_data"] = new_food;
-            TraceLog(LOG_INFO, "saving food data %s", new_food["food_name"]);
+            //TraceLog(LOG_INFO, "saving food data %s", new_food["food_name"]);
         }
     
     
@@ -684,7 +688,7 @@ void SaveGame(LevelData &level_data) {
             };
 
             instance["spell_data"] = new_spell;
-            TraceLog(LOG_INFO, "saving spell data %s", inst.spell_data.spell_name.c_str());
+            //TraceLog(LOG_INFO, "saving spell data %s", inst.spell_data.spell_name.c_str());
         }
 
 
@@ -734,10 +738,176 @@ void SaveGame(LevelData &level_data) {
     file.close();
 
     //save map file
-    std::ifstream src("assets/maps/ldtk/test.ldtk", std::ios::binary);
-    std::ofstream dst("saves/saved_map.ldtk", std::ios::binary);
+    //json j;
 
-    dst << src.rdbuf();
+
+    if(!g_game_data.using_saved_data) {
+   
+        std::ifstream src("assets/maps/ldtk/test.ldtk", std::ios::binary);
+        std::ofstream dst("saves/saved_map.json", std::ios::binary);
+        
+        dst << src.rdbuf();
+        dst.close();
+    }
+
+
+/*     std::ifstream wgsrc("saves/saved_map.ldtk", std::ios::binary);
+    std::ofstream wgdst(worldgen_save_path, std::ios::binary);
+
+    wgdst << wgsrc.rdbuf();
+    wgdst.close(); */
+
+    
+    std::ifstream wgfile("saves/saved_map.json");
+    if (!wgfile.is_open()) {
+        TraceLog(LOG_INFO, "filed to open map save file");
+        return;
+        }
+        
+    json wgj;
+    wgfile >> wgj;
+    wgfile.close(); 
+
+/*     
+        */
+        
+
+    for(LDTKLevel &level : g_ldtk_maps.levels) {
+
+        bool already_saved = false;
+
+        for(int _l = 0; _l < wgj["levels"].size(); _l++) {
+            if(level.identifier == wgj["levels"][_l]["identifier"]) {
+                already_saved = true;
+            }
+        }
+
+        if (level.is_worldgen and !already_saved) {
+            TraceLog(LOG_INFO, "SAVING LEVEL  %s", level.identifier.c_str());
+            json level_j;
+
+            level_j["identifier"] = level.identifier;
+            level_j["uid"] = level.uid;
+            level_j["pxWid"] = level.px_wid;
+            level_j["pxHei"] = level.px_hei;
+            level_j["is_shelter"] = level.is_shelter;
+            level_j["is_sub_map"] = level.is_sub_map;
+            level_j["is_worldgen"] = level.is_worldgen;
+
+            level_j["layerInstances"] = json::array();
+
+            for(LDTKLayerInstance layer : level.layer_instances) {
+                json layer_j;
+
+                layer_j["__identifier"] = layer.identifier;
+                layer_j["__type"] = layer.type;
+                layer_j["__tilesetDefUid"] = layer.tileset_def_uid;
+                layer_j["__cHei"] = layer.c_hei;
+                layer_j["__cWid"] = layer.c_wid;
+                layer_j["__gridSize"] = layer.grid_size;
+
+    //TILE GRID
+                json grid_array =  json::array();
+                for(LDTKGridTile tile : layer.grid_tiles) {
+                    json tile_j;
+                    tile_j["px"] = {tile.px[0], tile.px[1]};
+                    tile_j["src"] = {tile.src[0], tile.src[1]};;
+                    tile_j["t"] = tile.t;
+
+                    grid_array.push_back(tile_j);
+                }
+                layer_j["gridTiles"] = grid_array;
+    //-------------------------
+
+
+    //INT GRID
+                json int_grid =  json::array();
+                for(int tile : layer.int_grid) {
+                    int_grid.push_back(tile);
+                }
+                layer_j["intGridCsv"] = int_grid;
+    //-------------------------
+
+    //ENTITIE INSTANCES  
+                layer_j["entityInstances"] = json::array();
+                for(LDTKEntityInstance entity : layer.entity_instances) {
+                    json entity_j;
+
+                    entity_j["__identifier"] = entity.identifier;
+
+                    entity_j["iid"] = entity.iid;
+                    entity_j["width"] = entity.width;
+                    entity_j["height"] = entity.height;
+                    entity_j["px"] = {entity.px[0], entity.px[1]};
+
+                    
+                    entity_j["fieldInstances"] = json::array();
+                    for(LDTKFieldInstance field : entity.field_instances) {
+                        json field_j;
+
+                        field_j["__identifier"] = field.identifier;
+
+                        if(field.identifier == "DestMapString") {
+                            field_j["__value"] = field.value_s;
+
+                        }
+                        if (field.identifier == "ReturnPosition") {
+                            field_j["__value"]["cx"] = (int)field.value_v.x;
+                            field_j["__value"]["cy"] = (int)field.value_v.y;
+                        }
+                        field_j["__identifier"] = field.identifier;
+                        field_j["__identifier"] = field.identifier;
+
+                        entity_j["fieldInstances"].push_back(field_j);
+
+                    }
+
+
+                    layer_j["entityInstances"].push_back(entity_j);
+                }
+
+                //get all environmental entities
+                if(layer.identifier == "Entities") {
+                    for(LDTKEnvironmentData env_entity : level.environment_data ) {
+
+                        json entity_j;
+
+                        entity_j["__identifier"] = "EnvEntity";
+                        entity_j["iid"] = "env";
+                        entity_j["width"] = 0;
+                        entity_j["height"] = 0;
+                        entity_j["px"] = {(int)env_entity.position.x, (int)env_entity.position.y};
+
+                        entity_j["fieldInstances"] = json::array();
+
+                        json field_j;
+                        field_j["__identifier"] = "id";
+                        field_j["__value"] = env_entity.item_string;
+                        
+                        entity_j["fieldInstances"].push_back(field_j);
+
+
+                        layer_j["entityInstances"].push_back(entity_j);
+                        //TraceLog(LOG_INFO, "env entity saved");
+                    }
+                }
+    //------------------------
+
+
+                level_j["layerInstances"].push_back(layer_j);
+                
+            }
+            wgj["levels"].push_back(level_j);
+            TraceLog(LOG_INFO, "LEVEL SAVED");
+        }
+    }
+
+   
+    std::ofstream wgout("saves/saved_map.json");
+    wgout << wgj.dump();
+    wgout.close(); 
+
+    g_game_data.using_saved_data = true;
 
 }
 
@@ -749,7 +919,7 @@ int LoadGame() {
 
     g_game_data.using_saved_data = true;
 
-    std::ifstream file(save_path);
+    std::ifstream file(data_save_path);
     if (!file.is_open()) {
         TraceLog(LOG_INFO, "CANNOT OPEN FILE");
         return uid;
@@ -849,7 +1019,7 @@ int LoadGame() {
 
     TraceLog(LOG_INFO, "==========LOADING SAVED LDTK MAPS================");
 
-    std::string ldtk_map_path = "saves/saved_map.ldtk";
+    std::string ldtk_map_path = "saves/saved_map.json";
     int num_maps = load_ldtk_maps(ldtk_map_path);
 
     TraceLog(LOG_INFO, "==========END LOADING LDTK MAPS================  loaded %i maps", num_maps);
@@ -880,6 +1050,7 @@ void ClearLevelData(LevelData &level_data) {
     level_data.creature_data.clear();
     level_data.container_data.clear();
     level_data.game_areas.clear();
+
 
 }
 
@@ -917,12 +1088,17 @@ void LoadLevelData(LevelData &level_data) {
         map_index = g_game_data.shelter_map_index;
     }
 
-    else {
+    else if (g_game_data.next_map_index == -1) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200});
+        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200}, g_game_data.level_name_to_create);
         g_game_data.current_map_index = map_index;
+        TraceLog(LOG_INFO, "==========GENERATING NEW MAP================");
+    }
+    else {
+        map_index = g_game_data.next_map_index;
+        TraceLog(LOG_INFO, "==========FOUND EXISTING MAP================");
     }
 
     LDTKLevel &this_level = g_ldtk_maps.levels[map_index];
@@ -945,7 +1121,7 @@ void LoadLevelData(LevelData &level_data) {
                     TraceLog(LOG_INFO, "SPAWN POINT FOUND %0.0f %0.0f", sp.x, sp.y);
                 }
                 else {
-                    TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
+                    //TraceLog(LOG_INFO, "SPAWN POINT NOT FOUND");
                 }
 
                 std::string identifier = this_level.layer_instances[layer_index].entity_instances[entity_index].identifier;
@@ -1180,7 +1356,7 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
         if(this_level.layer_instances[l].type == "IntGrid") {
             level_data.precalc.collision_layer_index = l;
             col_layer = &this_level.layer_instances[l];
-            //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
+            TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
         }
         if(this_level.layer_instances[l].identifier == "Foreground") {
             level_data.precalc.foreground_layer_index = l;
@@ -1569,6 +1745,7 @@ CreatureID StrToCreatureId(const std::string& s) {
         {"CREATURE_SCAVENGER",                      CreatureID::CREATURE_SCAVENGER},
         {"CREATURE_TRADER",                      CreatureID::CREATURE_TRADER},
         {"CREATURE_SLIME",                      CreatureID::CREATURE_SLIME},
+        {"CREATURE_NPC_1",                      CreatureID::CREATURE_NPC_1},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {

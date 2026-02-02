@@ -116,6 +116,8 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     is_obstructable = true;
     is_obstructed = false;
     can_take_damage = false;
+    is_on_screen = true;
+    //TraceLog(LOG_INFO, "GroundContainerEntity CREATED");
 }
 
 GroundContainerEntity::~GroundContainerEntity() {
@@ -158,6 +160,7 @@ void GroundContainerEntity::Update() {
 
 void GroundContainerEntity::Draw() {
     if(!is_obstructed) {
+        //TraceLog(LOG_INFO, "GroundContainerEntity DRAW");
         DrawSprite(sprite);
     }
 

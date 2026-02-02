@@ -59,6 +59,8 @@ SubScene::SubScene(SubSceneState &sub_state, bool is_new) {
     character_menu->Open();
 
     module_menu = new ModuleMenu();
+
+    dialogue_menu = new DialogueMenu();
     
     g_current_player->position = level_data.spawn_position;
 
@@ -72,67 +74,83 @@ SubScene::SubScene(SubSceneState &sub_state, bool is_new) {
 
 
 SCENE_ID SubScene::Update() {
-    //TraceLog(LOG_INFO, "SUB SCENE UPDATE, %i", g_game_data.current_map_index);
+    //TraceLog(LOG_INFO, "shelter update");
 
     if(character_menu_visible) {
         character_menu->Update();
     }
     else if(module_menu_visible) {
-            module_menu->Update();
+        module_menu->Update();
+    }
+    else if(dialogue_menu_visible) {
+        dialogue_menu->Update();
     }
     else {
+        ui_layer->Update();
         for(int i = 0; i < level_data.game_areas.size(); i++) {
             level_data.game_areas[i]->Update();
-        }
+        } 
         DL_Update(level_data.entity_list);
         DL_Update(level_data.spell_list);
-        ui_layer->Update();
         DL_Update(level_data.ui_entities);
         DL_Update(level_data.environment_entities);
         g_current_player->Update();
         HandleCamera();
     }
-
-    if(g_input.keys_pressed[0] == KEY_E) {
-            character_menu_visible = !character_menu_visible;
-            if(character_menu_visible) {  //open
-
-                character_menu->Open();
-            }
-            else { //closed
-                if(character_menu->use_ground) { //was picked off ground
-                    int spi = -1;
-                    Vector2 pos = g_current_player->position;
-                    for(int item = 0; item < character_menu->blank_list.size(); item++) {
-                        if(character_menu->blank_list[item] != -1) {
-                            spi = g_item_data[ character_menu->blank_list[item]].id;
-                            break;
+    if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible) {
+        character_menu_visible = !character_menu_visible;
+        if(character_menu_visible) {  //open
+            character_menu->Open();
+        }
+        else { //closed
+            if(character_menu->use_ground) { //was picked off ground
+                int spi = -1;
+                Vector2 pos = g_current_player->position;
+                for(int item = 0; item < character_menu->blank_list.size(); item++) {
+                    if(character_menu->blank_list[item] != -1) {
+                        //dfgg
+                        auto item_it = g_item_instances.find(character_menu->blank_list[item]);
+                        if(item_it != g_item_instances.end()) {
+                            spi = item_it->second.item_id;
                         }
-                    }
-                    if(spi != -1) {
-                        std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
-                        DL_Add(level_data.entity_list, std::move(new_container));
-                        new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
-                        new_container->identifier = "GroundContainerEntity";
-                        new_container->c_area.identifier = "GroundContainerEntity";
-                        new_container->c_area.position = pos;
-                        new_container->c_area.item_list = character_menu->blank_list;
-                        new_container->c_area.size = {8, 8};    
+                        break;
                     }
                 }
-                else { //was existing container
-                    //if ground container
-                    if(g_game_data.return_container != nullptr) {
-                        if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {
-                            //if empty
-                            if(g_game_data.return_container->IsEmpty()) {
-                                g_game_data.return_container->should_delete = true;
-                            }
+                if(spi != -1) {
+                    std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
+                    new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
+                    new_container->identifier = "GroundContainerEntity";
+                    new_container->c_area.identifier = "GroundContainerEntity";
+                    new_container->c_area.position = pos;
+                    new_container->c_area.item_list = character_menu->blank_list;
+                    new_container->c_area.size = {8, 8};
+                    new_container->iid = character_menu->default_iid;
+                    new_container->is_persistant = true;
+                    new_container->level_index = g_game_data.current_map_index;
+                    DL_Add(level_data.entity_list, std::move(new_container));
+                }
+            }
+            else { //was existing container
+                //if ground container
+                if(g_game_data.return_container != nullptr) {
+                    if(g_game_data.return_container->identifier == "GroundContainerEntity" or g_game_data.return_container->identifier == "Mushroom") {
+                        //if empty
+                        if(g_game_data.return_container->IsEmpty()) {
+                            g_game_data.return_container->should_delete = true;
                         }
                     }
                 }
             }
         }
+    }
+    if(g_input.keys_pressed[0] == KEY_E and module_menu_visible) {
+        module_menu_visible = false;
+    }
+    if(g_input.keys_pressed[0] == KEY_E and dialogue_menu_visible) {
+        dialogue_menu_visible = false;
+    }
+    
+
     YSortEntities(level_data);
     return return_scene;
 }
@@ -163,6 +181,9 @@ void SubScene::DrawUI() {
     else if (module_menu_visible) {
         module_menu->Draw();
     }
+    else if(dialogue_menu_visible) {
+            dialogue_menu->Update();
+        }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
             level_data.game_areas[i]->Draw();
@@ -182,6 +203,7 @@ SubScene::~SubScene() {
     delete tile_layer;
     delete character_menu;
     delete module_menu;
+    delete dialogue_menu;
 
     SubSceneState state;
     SaveSubSceneState(level_data, state);
@@ -275,4 +297,11 @@ void SubScene::OnModuleUsed() {
     module_menu->OpenModule();
     module_menu_visible = true;
 
+}
+
+
+void SubScene::OnStartDialogue() {
+    TraceLog(LOG_INFO, "STARTING DIALOGUE");
+    dialogue_menu-> Open();
+    dialogue_menu_visible = true;
 }

@@ -62,6 +62,9 @@ GameScene::GameScene() {
 
     module_menu = new ModuleMenu();
 
+    dialogue_menu = new DialogueMenu();
+
+
     g_current_player->position = level_data.spawn_position;
 
     g_camera = { 0 };
@@ -108,7 +111,7 @@ SCENE_ID GameScene::Update() {
             HandleCamera();
         }
 
-        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible) {
+        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
 
@@ -131,7 +134,6 @@ SCENE_ID GameScene::Update() {
                     }
                     if(spi != -1) {
                         std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
-                        DL_Add(level_data.entity_list, std::move(new_container));
                         new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
                         new_container->identifier = "GroundContainerEntity";
                         new_container->c_area.identifier = "GroundContainerEntity";
@@ -141,6 +143,7 @@ SCENE_ID GameScene::Update() {
                         new_container->iid = character_menu->default_iid;
                         new_container->is_persistant = true;
                         new_container->level_index = g_game_data.current_map_index;
+                        DL_Add(level_data.entity_list, std::move(new_container));
                     }
                 }
                 else { //was existing container
@@ -156,8 +159,14 @@ SCENE_ID GameScene::Update() {
                 }
             }
         }
-        YSortEntities(level_data);
+        if(g_input.keys_pressed[0] == KEY_E and module_menu_visible) {
+            module_menu_visible = false;
+        }
+        if(g_input.keys_pressed[0] == KEY_E and dialogue_menu_visible) {
+            dialogue_menu_visible = false;
+        }
     }
+    YSortEntities(level_data);
     return return_scene;
 }
 
@@ -199,6 +208,9 @@ void GameScene::DrawUI() {
     else if(character_menu_visible) {
         character_menu->Draw();
     }
+    else if(dialogue_menu_visible) {
+            dialogue_menu->Update();
+        }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
             level_data.game_areas[i]->Draw();
@@ -261,6 +273,7 @@ GameScene::~GameScene() {
     delete character_menu;
     delete tile_layer;
     delete module_menu;
+    delete dialogue_menu;
     g_sub_scene.reset();
     //DL_Clear(entity_draw_list);
 
@@ -405,4 +418,10 @@ void GameScene::OnModuleUsed() {
     module_menu->OpenModule();
     module_menu_visible = true;
 
+}
+
+void GameScene::OnStartDialogue() {
+    TraceLog(LOG_INFO, "STARTING DIALOGUE");
+    dialogue_menu-> Open();
+    dialogue_menu_visible = true;
 }

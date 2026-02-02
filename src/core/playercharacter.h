@@ -141,6 +141,22 @@ class CreatureEntity : public CharacterEntity {
 };
 
 
+
+class NpcEntity : public CreatureEntity {
+    public :
+    NpcEntity(Vector2 _position, int uid);
+
+    void Update() override;
+    void DrawUI()override;
+
+    void OnStartDialogue();
+
+    DialogeArea d_area;
+
+    Signal start_dialogue;
+};
+
+
 class PlayerCharacter : public CharacterEntity {
     public:
     PlayerCharacter(Vector2 _position, int uid);

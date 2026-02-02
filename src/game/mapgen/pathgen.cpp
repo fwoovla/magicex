@@ -2,10 +2,14 @@
 
 
 void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
+
     for(int structure_index = 0; structure_index < _tileset.structure_positions.size()-1; structure_index++) {
         //Vector2 start_position = _tileset.structure_positions[structure_index];
-        Vector2 start_position = _tileset.structure_positions[0];
-        Vector2 end_position = _tileset.structure_positions[(structure_index +1)];
+        //Vector2 start_position = _tileset.structure_positions[0];
+        //Vector2 end_position = _tileset.structure_positions[(structure_index +1)];
+
+        Vector2 end_position = _tileset.structure_positions[0];
+        Vector2 start_position = _tileset.structure_positions[(structure_index +1)];
 
         std::vector<Vector2> new_path;
         Vector2 p = start_position;
@@ -25,7 +29,9 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
             if (p.x > end_position.x){  
                 //choices.push_back({ p.x - 1, p.y });
                 choices.push_back({ -1, 0 });
-            } 
+            }   
+
+
             if (p.y < end_position.y) {
                 //choices.push_back({ p.x, p.y + 1 });
                 choices.push_back({ 0, 1 });
@@ -78,7 +84,6 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 _tileset.upper_zone_grid[index_left] = ZONE_PATH_SIDE;
                 _tileset.collision_grid[index_left] = 0;
             }
-            
         }
     }
 }
