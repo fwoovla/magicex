@@ -136,10 +136,10 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
 
     ItemInstanceData *this_data;
 
-    for(int item : g_character_data[uid].primary) {
+    for(int item : g_character_data[uid].inventory){
         if(item != -1) {
             this_data = InstanceRandomCharacterItem((ItemID)item, uid, 2);
-            g_character_data[uid].primary[0] = this_data->instance_id;
+            g_character_data[uid].inventory[0] = this_data->instance_id;
         }
     }
 

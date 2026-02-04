@@ -27,6 +27,7 @@ std::unordered_map<std::string, ContainerData> g_persistant_containers;
 std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
 std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
+std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
 //std::vector<std::vector<int>> g_loot_tables;
 
 GameData g_game_data;

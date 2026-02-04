@@ -977,7 +977,6 @@
             "sprite_sheet_id":"SPRITE_TESTDUMMY",
             "max_stamina":0,
             "ai_id":"AI_PASSIVE",
-            "inventory":"ITEM_ID_NONE",
             "is_npc":false
         },
         {
@@ -988,7 +987,6 @@
             "sprite_sheet_id":"SPRITE_BUNNY",
             "max_stamina":10,
             "ai_id":"AI_FEARFULL",
-            "inventory":"ITEM_ID_NONE",
             "is_npc":false
         },
         {
@@ -999,7 +997,6 @@
             "sprite_sheet_id":"SPRITE_SCAVENGER",
             "max_stamina":10,
             "ai_id":"AI_AGGRESSIVE",
-            "inventory":"ITEM_ID_NEWWAND4",
             "is_npc":false
         },
         {
@@ -1010,7 +1007,6 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
-            "inventory":"ITEM_ID_NONE",
             "is_npc":false
         },
         {
@@ -1021,7 +1017,6 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
-            "inventory":"ITEM_ID_DAGGER",
             "is_npc":true
         },
         {
@@ -1032,7 +1027,6 @@
             "sprite_sheet_id":"SPRITE_SLIME",
             "max_stamina":10,
             "ai_id":"AI_HOSTILE",
-            "inventory":"ITEM_ID_NONE",
             "is_npc":false
         }
     ],

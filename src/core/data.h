@@ -324,6 +324,8 @@ struct SubSceneState {
 
 
 extern std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
+extern std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
+
 
 void LoadGameData();
 

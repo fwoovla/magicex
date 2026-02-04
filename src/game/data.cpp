@@ -442,6 +442,21 @@ void LoadGameData() {
         g_ai_data[new_ai.ai_id] = new_ai;
     }
 
+    //--------------------creature loot tables
+    for(int table = 0; table < cj["creature_loot_tables"].size(); table++) {
+        int creature_id = StrToCreatureId( cj["creature_loot_tables"][table]["creature_id"]);
+        std::vector<ItemID> table_choices;
+
+        for(int choice = 0; choice < cj["creature_loot_tables"][table]["item_selection"].size(); choice++ ) {
+            int new_item_id =  StrToItemId(cj["creature_loot_tables"][table]["item_selection"][choice]);
+            table_choices.push_back((ItemID)new_item_id);
+            TraceLog(LOG_INFO, "---- loot added to table  iitem_d: %i", new_item_id);
+        }
+
+        g_creature_loot_tables[(CreatureID)creature_id] = table_choices;
+        TraceLog(LOG_INFO, "creature loot table data  Loaded  id: %i", creature_id);
+    }
+
 
     //--------------------creature data
 
