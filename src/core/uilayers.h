@@ -90,12 +90,13 @@ class ItemGrid {
 
     SharedItemData *shared_data;
 
-    int rows;
-    int cols;
-    int grid_size;
+    int rows = 0;
+    int cols = 0;
+    int grid_size = 0;
     float hovered_time;
     Vector2 position;
 
+    bool grid_is_selectable;
     bool can_select;
     bool cell_hovered;
     bool cell_selected;
@@ -258,7 +259,7 @@ class DialogueMenu : public BaseUILayer {
     void Draw() override;
     void DrawHotBarOnly();
     void Open();
-    void OpenWith(BaseContainerEntity *container);
+    void OpenWith(NpcEntity  *npc_entity);
 
     void OnItemSelected();
     void OnItemDeselected();

@@ -2,7 +2,8 @@
 
 DialogueMenu::DialogueMenu() {
 
-    grid_list.resize(GRID_NUM_GRIDS);
+    grid_list.resize(GRID_NUM_GRIDS, nullptr);
+
     use_ground = false;
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 30/g_scale, BLACK, "HI THERE");
     panel_bg = g_ui_panels[PANEL_CHAR_SCREEN];
@@ -18,6 +19,12 @@ DialogueMenu::DialogueMenu() {
     ground_grid = new ItemGrid(5, 6, 50, {gpo.x + 25, gpo.y + 20}, &shared_data);
     ground_grid->this_grid = GRID_GROUND;
     ground_grid->accepted_type = TYPE_ALL;
+
+    ground_grid->selecting.Connect( [&](){OnItemSelected();} );
+    ground_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
+    ground_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    ground_grid->pickup.Connect( [&](){OnPickup();} );
+
     ground_grid->open_details.Connect( [&](){OnOpenDetails();} );
     ground_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_GROUND] = ground_grid;
@@ -31,11 +38,16 @@ DialogueMenu::DialogueMenu() {
     inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 25, ipo.y + 20}, &shared_data);
     inventory_grid->this_grid = GRID_INVENTORY;
     inventory_grid->accepted_type = TYPE_ALL;
+
+    inventory_grid->selecting.Connect( [&](){OnItemSelected();} );
+    inventory_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
+    inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
+    inventory_grid->use_item.Connect( [&](){OnUseItem();} );
+    inventory_grid->putdown_or_equip.Connect( [&](){OnPutDownOrEquip();} );
+
     inventory_grid->open_details.Connect( [&](){OnOpenDetails();} );
     inventory_grid->close_details.Connect( [&](){OnCloseDetails();} );
     grid_list[GRID_INVENTORY] = inventory_grid;
-
-
 
     details_panel  = new DetailsPanel();
     show_details = false;
@@ -90,14 +102,13 @@ void DialogueMenu::Update() {
         details_panel->Update();
     }
 
-    //ground_grid->Update();
-    //inventory_grid->Update();
+    ground_grid->Update();
+    inventory_grid->Update();
     //hotbar_grid->Update();
 
 }
 
 void DialogueMenu::Open() {
-    //TraceLog(LOG_INFO, "opening character menu with no container");
     inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
 
     use_ground = true;
@@ -118,13 +129,14 @@ void DialogueMenu::Open() {
 }
 
 
-void DialogueMenu::OpenWith(BaseContainerEntity *container) {
-    TraceLog(LOG_INFO, "OPENING CONTAINER %s", container->iid.c_str());
+void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
+    TraceLog(LOG_INFO, "OPENING DIALOGUE WITH %i", npc_entity->uid);
+
     inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
 
     use_ground = false;
-    ground_grid->container_iid = container->iid;
-    ground_grid->SetItems(&container->c_area.item_list);
+    ground_grid->container_iid = "npc_" + std::to_string(npc_entity->uid);
+    ground_grid->SetItems(& g_creature_data[npc_entity->uid].inventory);
     show_details = false;
 
 }
@@ -132,14 +144,18 @@ void DialogueMenu::OpenWith(BaseContainerEntity *container) {
 
 void DialogueMenu::OnItemSelected() {
     for(auto &grid : grid_list) {
-        grid->can_select = false;
+        if(grid != nullptr) {
+            grid->can_select = false;
+        }
     }
 
 }
 
 void DialogueMenu::OnItemDeselected() {
     for(auto &grid :grid_list) {
-        grid->can_select = true;
+        if(grid != nullptr) {
+            grid->can_select = true;
+        }
     }
 
 }
@@ -173,24 +189,33 @@ void DialogueMenu::OnPickup() {
 
 
 void DialogueMenu::OnPutDownOrEquip() {
-    TraceLog(LOG_INFO, "put down or equip item %i  %i", shared_data.item_id, grid_list.size());
-    int item_id = shared_data.item_id;
+    /* int item_id = shared_data.item_id;
     int source_grid = shared_data.source_grid;
     int dest_grid =  GRID_GROUND;
     Vector2 source_cell = shared_data.source_cell;
     Vector2 dest_cell = shared_data.dest_cell;
+    
+    TraceLog(LOG_INFO, "put down or equip item %i", shared_data.item_id);
+
+    auto i_itter = g_item_instances.find(shared_data.item_id);
+    if(i_itter == g_item_instances.end()) {
+        TraceLog(LOG_INFO, "item not found!!!");
+        return;
+    }
+
 
 
     for(int i = 0; i < grid_list.size(); i++) {
-        //TraceLog(LOG_INFO, "put down or equip item list / %i   type %i", i, grid_list[i]->this_grid);
+        TraceLog(LOG_INFO, "put down or equip item list / %i   type %i   ?  %i", i, grid_list[i]->accepted_type, g_item_instances[shared_data.item_id].type);
 
         if(grid_list[i]->accepted_type == g_item_instances[shared_data.item_id].type) {
             dest_grid = i;
+            TraceLog(LOG_INFO, "found grid!!!");
             break;
         }
     }
 
-
+    TraceLog(LOG_INFO, "inserting into grid %i", dest_grid);
     TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
     TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
     TraceLog(LOG_INFO, "try to move %i  from %i %i", item_id, source_grid, dest_grid);
@@ -210,7 +235,7 @@ void DialogueMenu::OnPutDownOrEquip() {
             grid_list[dest_grid]->AddItem(item_id);
             grid_list[source_grid]->RemoveItem(shared_data.source_cell);
         }
-    }
+    } */
     TraceLog(LOG_INFO, "---------------------------------\n");
 }
 
@@ -234,10 +259,10 @@ void DialogueMenu::OnTransferItem() {
             grid_list[source_grid]->RemoveItem(source_cell);
             
             if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
-                g_current_player->Equip(item_id);    
+                //g_current_player->Equip(item_id);    
             }
             if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
-                g_current_player->UnEquip(item_id);
+                //g_current_player->UnEquip(item_id);
             }
         }
         else {
@@ -258,7 +283,7 @@ void DialogueMenu::OnTransferItem() {
 }
 
 void DialogueMenu::OnUseItem() {
-    int item_id = shared_data.item_id;
+/*     int item_id = shared_data.item_id;
     int source_grid = shared_data.source_grid;
     int dest_grid =  shared_data.dest_grid;
     Vector2 source_cell = shared_data.source_cell;
@@ -293,7 +318,7 @@ void DialogueMenu::OnUseItem() {
     shared_data.source_grid = GRID_NONE;
     shared_data.item_id = -1;
     shared_data.use_id = -1;
-    shared_data.showing_details = false;
+    shared_data.showing_details = false; */
 
 }
 

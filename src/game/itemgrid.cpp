@@ -12,6 +12,7 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) {
     hovered_cell = {-1,-1};
     can_select = true;
     show_details = false;
+    grid_is_selectable = true;
     
 
     CreateLabel(details_label, {0,0}, FONTSIZE_24, WHITE, "");
@@ -19,16 +20,15 @@ ItemGrid::ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) {
 
 ItemGrid::~ItemGrid() {
     //TraceLog(LOG_INFO, "DESTRUCTOR ITEMGRID");
-    container_iid = "n/a";
+    //container_iid = "n/a";
 }
 
 void ItemGrid::Update() {
+    if (!item_list) {return;}
 
     cell_hovered = false;
     hovered_cell = {-1,-1};
     
-    
-
     for (int c = 0; c < cols; c++) { 
         for(int r = 0; r < rows; r++) {
             Vector2 cell_pos;
@@ -70,7 +70,6 @@ void ItemGrid::Update() {
                             i_name = itter->second.item_name;
                             color = g_item_type_colors[itter->second.type];
                             //TraceLog(LOG_INFO, "item id %i instance id %i type %i ", itter->second.item_id, itter->second.instance_id, itter->second.type);
-                            //CreateLabel(name_label, {g_input.screen_mouse_position.x*g_inv_scale, (g_input.screen_mouse_position.y- 35)*g_inv_scale}, FONTSIZE_30, color, i_name.c_str());
                             
                             if(show_details == true) {
                                 shared_data->item_id = itter->second.instance_id;
@@ -80,7 +79,7 @@ void ItemGrid::Update() {
                                 open_details.EmitSignal();
 
                             }
-                            if(g_input.mouse_right and this_grid == GRID_INVENTORY) {
+                            if(g_input.mouse_right and this_grid == GRID_INVENTORY and grid_is_selectable) {
                                 if(itter->second.type == TYPE_FOOD) {
                                     shared_data->item_id = itter->second.instance_id;
                                     shared_data->source_grid = this_grid;
@@ -95,7 +94,7 @@ void ItemGrid::Update() {
                         //TraceLog(LOG_INFO, "item id %i  at %i %i", item_id, c, r);
                     }
                         
-                    if(g_input.selecting and can_select) {
+                    if(g_input.selecting and can_select and grid_is_selectable) {
                         cell_selected = true;
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
@@ -103,7 +102,7 @@ void ItemGrid::Update() {
                         shared_data->item_id = instance_id;
                         selecting.EmitSignal();
                     }
-                    if(g_input.mouse_right and can_select) {
+                    if(g_input.mouse_right and can_select and grid_is_selectable) {
                         selected_cell = hovered_cell;
                         shared_data->source_grid = this_grid;
                         shared_data->source_cell = selected_cell;
@@ -218,14 +217,6 @@ void ItemGrid::DrawItems() {
             }
         }
     }
-
-/*     if(cell_hovered and can_select) {
-        DrawLabelCenteredWithBG(name_label, BLACK);
-        if(show_details) {
-            DrawLabelCenteredWithBG(details_label, BLACK);
-            
-        }
-    } */
 }
 
 
@@ -355,8 +346,7 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
 }
 
 bool ItemGrid::CanRemoveItem(Vector2 source_cell) {
-    int index = source_cell.y * cols + source_cell.x;
-    return (*item_list)[index] == -1;;
+    return true;
 }
 
 void ItemGrid::RemoveItem(Vector2 source_cell) {
@@ -402,29 +392,22 @@ std::string ItemGrid::CreateDetails(ItemInstanceData &item_data) {
                 
             }
         }
-
         if(item_data.type ==  TYPE_CONSUMEABLE) {
-
         }
-
         if(item_data.type ==  TYPE_FOOD) {
             std::string sat = TextFormat("%0.2f", itter->second.food_data.saturation);
             details += "saturation: " + sat + "\n";
             details += "  [ RMB ] to eat\n";
         }
-   
         if(item_data.type ==  TYPE_PLAN) {
             details += "use with " +  ModuleIdToStr(  g_plan_data[item_data.item_id - ITEM_ID_STOVE_PLAN].module_id) + "\n";
         }
-        
         if(item_data.type ==  TYPE_RESOURCE) {
             if(item_data.item_id == ITEM_ID_MUSHROOM_JUICE) {
-                details += "  Recharge power\n";
+                details += "'R'- Recharge power\n";
             }
         }
-
         details += "$" + std::to_string( itter->second.value);
     }
-
     return details;
 }

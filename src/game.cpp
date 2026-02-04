@@ -93,6 +93,8 @@ void Game::StartGame() {
 
     LoadResources();
     LoadGameData();
+    LoadDialogue();
+    
     std::string world_gen_map_path = "assets/maps/ldtk/worldgen.ldtk";
     GenerateWorldGenTilesets(world_gen_map_path);
 

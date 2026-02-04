@@ -30,5 +30,8 @@ void NpcEntity::DrawUI() {
 }
 
 void NpcEntity::OnStartDialogue() {
+
+    g_game_data.return_npc = this;
+
     start_dialogue.EmitSignal();
 }

@@ -306,6 +306,24 @@ void ModuleArea::Draw() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 DialogeArea::~DialogeArea() {
     TraceLog(LOG_INFO, "TransitionArea AREA DESTROYED, %s", identifier.c_str());
 }
@@ -332,9 +350,7 @@ void DialogeArea::Update() {
         CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "talk");
 
         if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
-            //g_game_data.sub_return_position = payload_v * 2;
-            //g_game_data.sub_map_index = payload_i;
-            //g_game_data.sub_map_uid = uid ;
+
             in_range = true;
         }
     }

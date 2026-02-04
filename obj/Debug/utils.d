@@ -248,8 +248,9 @@ obj/Debug/utils.o: src/core/utils.cpp /usr/include/stdc-predef.h \
  src/core/utils.h src/core/baseentity.h src/core/areas.h src/core/label.h \
  src/core/entities.h src/core/mapgen.h src/core/resources.h \
  src/core/itemgenerator.h src/core/data.h /usr/include/c++/13/span \
- src/core/spells.h src/core/events.h src/core/viewport.h src/core/input.h \
- src/core/button.h src/core/charactereffectentity\ .h src/core/modules.h \
+ src/core/spells.h src/core/dialogue.h src/core/events.h \
+ src/core/viewport.h src/core/input.h src/core/button.h \
+ src/core/charactereffectentity\ .h src/core/modules.h \
  src/core/playercharacter.h src/core/entityspawner.h src/core/basescene.h \
  src/core/tilelayer.h src/core/uilayers.h src/core/scenes.h \
  src/core/scenemanager.h src/core/game.h
@@ -581,6 +582,7 @@ src/core/itemgenerator.h:
 src/core/data.h:
 /usr/include/c++/13/span:
 src/core/spells.h:
+src/core/dialogue.h:
 src/core/events.h:
 src/core/viewport.h:
 src/core/input.h:

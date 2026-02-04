@@ -888,7 +888,7 @@
             "plan_id": "ITEM_ID_MUSHROOMPRESS_PLAN",
             "plan_name": "Mushroompress Plan",
             "required_items":["ITEM_ID_SAW", "ITEM_ID_BUCKET", "ITEM_ID_HAMMER" ],
-            "module_id":"MODULE_ID_WORKBENCH"
+            "module_id":"MODULE_ID_MUSHROOMPRESS"
         }
 
     ],
@@ -1021,7 +1021,7 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
-            "primary":"ITEM_ID_NONE",
+            "primary":"ITEM_ID_DAGGER",
             "is_npc":true
         },
         {

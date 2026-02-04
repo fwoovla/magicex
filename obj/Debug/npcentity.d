@@ -259,6 +259,7 @@ obj/Debug/npcentity.o: src/game/entities/npcentity.cpp \
  src/game/entities/../../core/itemgenerator.h \
  src/game/entities/../../core/data.h /usr/include/c++/13/span \
  src/game/entities/../../core/spells.h \
+ src/game/entities/../../core/dialogue.h \
  src/game/entities/../../core/events.h \
  src/game/entities/../../core/viewport.h \
  src/game/entities/../../core/input.h \
@@ -601,6 +602,7 @@ src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/data.h:
 /usr/include/c++/13/span:
 src/game/entities/../../core/spells.h:
+src/game/entities/../../core/dialogue.h:
 src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:
 src/game/entities/../../core/input.h:

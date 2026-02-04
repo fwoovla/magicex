@@ -160,6 +160,7 @@ extern Viewport g_viewport;
 #include "resources.h"
 #include "itemgenerator.h"
 #include "data.h"
+#include "dialogue.h"
 #include "spells.h"
 #include "utils.h"
 #include "events.h"

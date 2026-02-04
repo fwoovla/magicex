@@ -311,6 +311,6 @@ void ShelterScene::OnModuleUsed() {
 
 void ShelterScene::OnStartDialogue() {
     TraceLog(LOG_INFO, "STARTING DIALOGUE");
-    dialogue_menu-> Open();
+    dialogue_menu-> OpenWith(g_game_data.return_npc);
     dialogue_menu_visible = true;
 }

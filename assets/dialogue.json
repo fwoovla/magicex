@@ -1,0 +1,8 @@
+{
+    "npc_topics": [
+        {
+            "creature_id":"CREATURE_NPC_1",
+            "topics":["TOPIC_GENERAL", "TOPIC_TRADE"]
+        }
+    ]
+}

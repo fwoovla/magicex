@@ -1377,22 +1377,6 @@
 						},
 						{
 							"__identifier": "CreatureEntity",
-							"__grid": [9,6],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#E4A672",
-							"iid": "76714d40-fa90-11f0-99c6-515e1d9397b6",
-							"width": 16,
-							"height": 16,
-							"defUid": 77,
-							"px": [144,96],
-							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
-							"__worldX": 144,
-							"__worldY": 96
-						},
-						{
-							"__identifier": "CreatureEntity",
 							"__grid": [12,6],
 							"__pivot": [0,0],
 							"__tags": [],
@@ -1409,7 +1393,7 @@
 						},
 						{
 							"__identifier": "CreatureEntity",
-							"__grid": [19,19],
+							"__grid": [12,30],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 25, "x": 176, "y": 0, "w": 16, "h": 16 },
@@ -1418,10 +1402,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 77,
-							"px": [304,304],
+							"px": [192,480],
 							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
-							"__worldX": 304,
-							"__worldY": 304
+							"__worldX": 192,
+							"__worldY": 480
 						},
 						{
 							"__identifier": "CreatureEntity",
@@ -1438,6 +1422,22 @@
 							"fieldInstances": [{ "__identifier": "CreatureType", "__type": "LocalEnum.CreatureTypes", "__value": "CREATURE_TESTDUMMY", "__tile": null, "defUid": 79, "realEditorValues": [] }],
 							"__worldX": 304,
 							"__worldY": 336
+						},
+						{
+							"__identifier": "ModuleEntity",
+							"__grid": [17,22],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#17CFC5",
+							"iid": "c2ce7c60-fa90-11f0-b125-6d689a144354",
+							"width": 16,
+							"height": 16,
+							"defUid": 66,
+							"px": [272,352],
+							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 67, "realEditorValues": [{ "id": "V_Int", "params": [0] }] }],
+							"__worldX": 272,
+							"__worldY": 352
 						}
 					]
 				},

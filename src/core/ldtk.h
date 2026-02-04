@@ -249,6 +249,9 @@ struct GameData {
     int loot_table_id;
     std::vector<int> *loot_table;
     BaseContainerEntity *return_container;
+
+    NpcEntity *return_npc;
+    
 };
 
 extern GameData g_game_data;

@@ -16,6 +16,8 @@ struct DamagePayload{
 };
 
 class CharacterEntity;
+class NpcEntity;
+
 
 class BaseEntity  {
     public:
