@@ -95,7 +95,7 @@ SCENE_ID SubScene::Update() {
         DL_Update(level_data.ui_entities);
         DL_Update(level_data.environment_entities);
         g_current_player->Update();
-        HandleCamera();
+        HandleCamera2();
     }
     if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible) {
         character_menu_visible = !character_menu_visible;
@@ -104,31 +104,8 @@ SCENE_ID SubScene::Update() {
         }
         else { //closed
             if(character_menu->use_ground) { //was picked off ground
-                int spi = -1;
-                Vector2 pos = g_current_player->position;
-                for(int item = 0; item < character_menu->blank_list.size(); item++) {
-                    if(character_menu->blank_list[item] != -1) {
-                        //dfgg
-                        auto item_it = g_item_instances.find(character_menu->blank_list[item]);
-                        if(item_it != g_item_instances.end()) {
-                            spi = item_it->second.item_id;
-                        }
-                        break;
-                    }
-                }
-                if(spi != -1) {
-                    std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
-                    new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
-                    new_container->identifier = "GroundContainerEntity";
-                    new_container->c_area.identifier = "GroundContainerEntity";
-                    new_container->c_area.position = pos;
-                    new_container->c_area.item_list = character_menu->blank_list;
-                    new_container->c_area.size = {8, 8};
-                    new_container->iid = character_menu->default_iid;
-                    new_container->is_persistant = true;
-                    new_container->level_index = g_game_data.current_map_index;
-                    DL_Add(level_data.entity_list, std::move(new_container));
-                }
+                SpawnGroundContainer(g_current_player->position, character_menu->blank_list);
+            
             }
             else { //was existing container
                 //if ground container
@@ -255,26 +232,6 @@ void SubScene::OnMapTransitionActivated() {
     TraceLog(LOG_INFO, "MAP TRANSITION ACTIVATED:  %i", g_game_data.sub_map_index);
     
     sub_scene_exited.EmitSignal();
-}
-
-
-void SubScene::HandleCamera() {
-
-    Vector2 worldPosBeforeZoom = GetScreenToWorld2D(g_input.world_mouse_position, g_camera);
-    g_camera.zoom += g_input.mouse_wheel * ZOOM_STEP;
-    if(g_camera.zoom < MIN_ZOOM) {
-        g_camera.zoom = MIN_ZOOM;
-    }
-    if(g_camera.zoom > MAX_ZOOM) {
-        g_camera.zoom = MAX_ZOOM;
-    }
-
-    CalculateViewport();
-
-    float x_offset_f = g_viewport.x_offset_f;
-    float y_offset_f = g_viewport.y_offset_f;
-
-    g_camera.target = Vector2Subtract(g_current_player->position, {x_offset_f, y_offset_f} );
 }
 
 

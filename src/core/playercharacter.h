@@ -40,6 +40,8 @@ class CharacterEntity : public AnimatedSpriteEntity {
     virtual void OnStunTimerTimeout() = 0;
     virtual void OnHungerTimerTimeout() = 0;
 
+    virtual void Die() {};
+
     //int uid;
     Vector2 velocity;
     Sprite weapon_sprite;
@@ -95,6 +97,7 @@ class TestDummyEntity : public CharacterEntity {
     void OnMeleTimerTimeout() override;
     void OnStunTimerTimeout() override;
     void OnHungerTimerTimeout() override;
+
 };
 
 
@@ -120,6 +123,9 @@ class CreatureEntity : public CharacterEntity {
     void OnHungerTimerTimeout() override;
     void OnDetectTimerTimeout();
     void OnActionTimerTimeout();
+
+    void Die() override;
+
 
     Vector2 GetDirToPlayer();
     void MoveCreature(Vector2 _input_dir);
@@ -149,6 +155,8 @@ class NpcEntity : public CreatureEntity {
     void Update() override;
     void DrawUI()override;
 
+    //void Die() override;
+
     void OnStartDialogue();
 
     DialogeArea d_area;
@@ -177,6 +185,8 @@ class PlayerCharacter : public CharacterEntity {
     void OnMeleTimerTimeout() override;
     void OnStunTimerTimeout() override;
     void OnHungerTimerTimeout() override;
+
+    void Die() override;
     
     void CheckInput();
 

@@ -339,13 +339,8 @@ void PlayerCharacter::CheckInput() {
                 //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
 
                 for(int shot = 0; shot < current_primary_data->weapon_data.shots; shot++) {
-                    if(g_game_data.is_in_sub_map) {
-                        SpawnSpell(*g_sub_scene, payload, &current_primary_data->spell_data);
+                    SpawnSpell(payload, &current_primary_data->spell_data);
 
-                    }
-                    else {
-                        SpawnSpell(*g_current_scene, payload, &current_primary_data->spell_data);
-                    }
                 }
 
                 g_character_data[uid].current_power -= current_primary_data->weapon_data.pps;
@@ -499,4 +494,8 @@ void PlayerCharacter::TakeDamage(DamagePayload _payload) {
 
     std::string damage_string = std::to_string(damage);
     SpawnCharacterMessage (position, damage_string, DARKRED, 0.3f);
+}
+
+void PlayerCharacter::Die() {
+
 }

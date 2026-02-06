@@ -74,7 +74,7 @@ int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data
 
 
 
-void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
+void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
 
     BaseScene *this_scene = nullptr;
     std::unique_ptr<BaseSpell> this_spell = nullptr;
@@ -103,7 +103,7 @@ void SpawnSpell(BaseScene &_scene, NewSpellPayload payload, SpellData *_data) {
         DL_Add( this_scene->level_data.spell_list, std::move(this_spell));
     }
 
-    TraceLog(LOG_INFO, "spell list size  %i", _scene.level_data.spell_list.size()); 
+    TraceLog(LOG_INFO, "spell list size  %i", this_scene->level_data.spell_list.size()); 
 }
 
 
@@ -134,29 +134,88 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
 
     g_character_data[uid] = level_data.creature_data[_creature_index];
 
-    ItemInstanceData *this_data;
 
-    for(int item : g_character_data[uid].inventory){
+    std::vector<int> initial_inv = g_character_data[uid].inventory;
+    g_character_data[uid].inventory.clear();
+    
+    ItemInstanceData *this_data = nullptr;
+    
+    for(int item : initial_inv){
         if(item != -1) {
             this_data = InstanceRandomCharacterItem((ItemID)item, uid, 2);
-            g_character_data[uid].inventory[0] = this_data->instance_id;
+            //g_character_data[uid].inventory.push_back(this_data->instance_id);
         }
     }
 
-    TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
-    TraceLog(LOG_INFO, "SpawnCreature is_npc = %i", g_character_data[uid].is_npc);
+    //TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
+    //TraceLog(LOG_INFO, "SpawnCreature is_npc = %i  inv size %i", g_character_data[uid].is_npc, g_character_data[uid].inventory.size());
 
-    //std::unique_ptr<CreatureEntity> new_creature;
 
     if(g_character_data[uid].is_npc) {
         new_creature = std::make_unique<NpcEntity>(g_character_data[uid].spawn_position, uid);
-        //new_creature->identifier = g_character_data[uid].name;
     }
     else {
         new_creature = std::make_unique<CreatureEntity>(g_character_data[uid].spawn_position, uid);
-        //DL_Add(level_data.entity_list, std::move(new_creature));
     }
     new_creature->identifier = g_character_data[uid].name;
     DL_Add(level_data.entity_list, std::move(new_creature));
+
+}
+
+
+
+void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {
+
+
+    //TraceLog(LOG_INFO, "looking through creatures inventory  (size) %i", item_list.size());
+    int sprite_id = -1;
+    Vector2 pos = g_current_player->position;
+    for(int item = 0; item < item_list.size(); item++) {
+        //TraceLog(LOG_INFO, "index %i  id %i", item, item_list[item]);
+        if(item_list[item] != -1) {
+            auto item_it = g_item_instances.find(item_list[item]);
+            if(item_it != g_item_instances.end()) {
+                sprite_id = item_it->second.item_id;
+                break;
+            }
+        }
+    }
+
+    if(sprite_id == -1) {
+        TraceLog(LOG_INFO, "could not spawn ground container");
+        return;
+    }
+
+    //TraceLog(LOG_INFO, "dropping item(s) on ground %i", sprite_id);
+    std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(_position, sprite_id);
+
+    new_container->identifier = "GroundContainerEntity";
+    new_container->c_area.identifier = "GroundContainerEntity";
+    new_container->c_area.position = _position;
+    new_container->c_area.item_list = item_list;
+    new_container->c_area.size = {8, 8};
+    new_container->iid = "ground" + std::to_string(GetRandomValue(1000, 1000000));
+    new_container->is_persistant =(g_game_data.current_scene_id == SHELTER_SCENE);
+    new_container->level_index = g_game_data.current_map_index;
+
+    for(int item : item_list) {
+        if(item != -1) {
+            g_item_instances[item].container_id = new_container->iid;
+        }
+    }
+
+
+    BaseScene *this_scene = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        this_scene = g_sub_scene.get();
+    }
+    else {
+        this_scene = g_current_scene.get();
+    }
+
+    new_container->c_area.area_activated.Connect( [this_scene](){this_scene->OnContainerOpened();} );
+
+    DL_Add(this_scene->level_data.entity_list, std::move(new_container));
 
 }

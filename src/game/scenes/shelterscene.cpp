@@ -4,6 +4,7 @@
 #define MIN_ZOOM 1.8f
 #define ZOOM_STEP 0.20f
 
+bool first_run = true;
 
 ShelterScene::ShelterScene() {
 
@@ -63,7 +64,7 @@ ShelterScene::ShelterScene() {
     g_current_player->position = level_data.spawn_position;
 
     g_camera = { 0 };
-    g_camera.target = (Vector2){0,0};
+    g_camera.target = g_current_player->position;
     g_camera.offset = (Vector2){0,0};
     g_camera.rotation = 0.0f;
     g_camera.zoom = 2.4f; 
@@ -100,7 +101,12 @@ SCENE_ID ShelterScene::Update() {
             DL_Update(level_data.ui_entities);
             DL_Update(level_data.environment_entities);
             g_current_player->Update();
-            HandleCamera();
+
+            if(!first_run) {
+                HandleCamera4();
+            }
+            else { g_camera.target =   Vector2Subtract(g_current_player->position, {150, 150});}
+
         }
 
 
@@ -113,35 +119,7 @@ SCENE_ID ShelterScene::Update() {
             }
             else { //closed
                 if(character_menu->use_ground) { //was picked off ground
-                    int spi = -1;
-                    Vector2 pos = g_current_player->position;
-                    for(int item = 0; item < character_menu->blank_list.size(); item++) {
-                        if(character_menu->blank_list[item] != -1) {
-
-                            //dfgg
-
-                            auto item_it = g_item_instances.find(character_menu->blank_list[item]);
-                            if(item_it != g_item_instances.end()) {
-                                spi = item_it->second.item_id;
-                                //TraceLog(LOG_INFO, "found item  %i", spi);
-                                break;
-                            }
-                        }
-                    }
-                    if(spi != -1) {
-                        TraceLog(LOG_INFO, "dropping item  %i", spi);
-                        std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
-                        new_container->c_area.area_activated.Connect( [this](){OnContainerOpened();} );
-                        new_container->identifier = "GroundContainerEntity";
-                        new_container->c_area.identifier = "GroundContainerEntity";
-                        new_container->c_area.position = pos;
-                        new_container->c_area.item_list = character_menu->blank_list;
-                        new_container->c_area.size = {8, 8};
-                        new_container->iid = character_menu->default_iid;
-                        new_container->is_persistant = true;
-                        new_container->level_index = g_game_data.current_map_index;
-                        DL_Add(level_data.entity_list, std::move(new_container));
-                    }
+                    SpawnGroundContainer(g_current_player->position, character_menu->blank_list);
                 }
                 else { //was existing container
                     //if ground container
@@ -165,6 +143,7 @@ SCENE_ID ShelterScene::Update() {
     }
 
     YSortEntities(level_data);
+    first_run = false;
     return return_scene;
 }
 
@@ -262,28 +241,6 @@ void ShelterScene::OnTransitionAreaActivated() {
         SaveGame(level_data);
         return_scene = GAME_SCENE;
     }
-}
-
-
-void ShelterScene::HandleCamera() {
-
-    Vector2 worldPosBeforeZoom = GetScreenToWorld2D(g_input.world_mouse_position, g_camera);
-
-    g_camera.zoom += g_input.mouse_wheel * ZOOM_STEP;
-    if(g_camera.zoom < MIN_ZOOM) {
-        g_camera.zoom = MIN_ZOOM;
-    }
-    if(g_camera.zoom > MAX_ZOOM) {
-        g_camera.zoom = MAX_ZOOM;
-    }
-
-    CalculateViewport();
-
-    float x_offset_f = g_viewport.x_offset_f;
-    float y_offset_f = g_viewport.y_offset_f;
-
-    g_camera.target = Vector2Subtract( g_current_player->position, {x_offset_f, y_offset_f} );
-
 }
 
 

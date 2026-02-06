@@ -6,13 +6,18 @@ void GetInputFromPlayer() {
     //float screen2world = 1/g_world2screen;
     //g_world2screen = g_camera.zoom * g_scale;
 
+    
     Vector2 m_pos = GetMousePosition();
+
     
     g_input.screen_mouse_position =  m_pos;
 
 //this took way too long!!!!!
     g_input.world_mouse_position.x = (m_pos.x * g_screen2world) + (g_camera.target.x);
+    if(g_input.world_mouse_position.x != g_input.world_mouse_position.x) {g_input.world_mouse_position.x = 0.0f;}
+
     g_input.world_mouse_position.y = (m_pos.y * g_screen2world) + (g_camera.target.y);
+    if(g_input.world_mouse_position.y != g_input.world_mouse_position.y) {g_input.world_mouse_position.y = 0.0f;}
 //----
     
     g_input.mouse_left = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

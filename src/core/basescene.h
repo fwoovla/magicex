@@ -9,6 +9,8 @@ class BaseScene  {
     virtual void Draw() = 0;    
     virtual void DrawScene() = 0;
     virtual void DrawUI() = 0;
+
+    virtual void OnContainerOpened() {};
     
     LevelData level_data;
     SCENE_ID scene_id;

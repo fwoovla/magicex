@@ -89,13 +89,13 @@ class ShelterScene : public  BaseScene{
         void Draw() override;
         void DrawScene() override;
         void DrawUI() override;
-        void HandleCamera();
+        //void HandleCamera();
 
         void OnQuitPressed();
         void OnStartPressed();
         void OnMapSelected();
 
-        void OnContainerOpened();
+        void OnContainerOpened() override;
         
         void OnModuleUsed();
 
@@ -131,11 +131,11 @@ class SubScene : public  BaseScene{
         void Draw() override;
         void DrawScene() override;
         void DrawUI() override;
-        void HandleCamera();
+        //void HandleCamera();
 
         void OnQuitPressed();
 
-        void OnContainerOpened();
+        void OnContainerOpened() override;
 
         void OnModuleUsed();
 
@@ -171,11 +171,12 @@ class GameScene : public  BaseScene{
         void DrawScene() override;
         void DrawUI() override;
 
-        void HandleCamera();
+/*         void HandleCamera();
+        void HandleCamera2(); */
 
         void OnQuitPressed();
 
-        void OnContainerOpened();
+        void OnContainerOpened() override;
 
         void OnModuleUsed();
         

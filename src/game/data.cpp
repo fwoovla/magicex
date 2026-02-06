@@ -477,14 +477,22 @@ void LoadGameData() {
 
         bool is_npc = cj["creature_data"][i]["is_npc"];
         
+        TraceLog(LOG_INFO, "creature : %i", creature_id);
         std::vector<int> inv;
-        inv.push_back(-1);
+        for(auto &table :g_creature_loot_tables) {
+            if(table.first == creature_id) {
+                for(ItemID item : table.second) {
+                    inv.push_back(item);
+                    //TraceLog(LOG_INFO, "creature inventory item added  (not instance id)  id: %i", item);
+                }
+            }
+        }
         
         std::vector<int> hot;
         hot.push_back(-1);
 
         std::vector<int> p;
-        p.push_back(StrToItemId(cj["creature_data"][i]["primary"]));
+        p.push_back(-1);
 
         std::vector<int> s;
         s.push_back(-1);

@@ -759,7 +759,7 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
     for(int tag = 0; tag < tj["enumTags"].size(); tag++) {
         LDTKEnumTag new_tag;
         new_tag.value_string = tj["enumTags"][tag]["enumValueId"];
-        TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
+        //TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
 
         for(int tid = 0; tid <  tj["enumTags"][tag]["tileIds"].size(); tid++) {
             int id = tj["enumTags"][tag]["tileIds"][tid];

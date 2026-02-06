@@ -972,7 +972,7 @@
         {
             "creature_id":"CREATURE_TESTDUMMY",
             "creature_name": "TestDummy",
-            "max_health":999999,
+            "max_health":10,
             "base_speed":0.0,
             "sprite_sheet_id":"SPRITE_TESTDUMMY",
             "max_stamina":0,
@@ -1061,7 +1061,7 @@
     "creature_loot_tables": [
         {
             "creature_id":"CREATURE_TESTDUMMY",
-            "item_selection":[]
+            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
         },
         {
             "creature_id":"CREATURE_BUNNY",
@@ -1077,7 +1077,7 @@
         },
         {
             "creature_id":"CREATURE_NPC_1",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE", "ITEM_ID_DAGGER", "ITEM_ID_BOOTS"]
+            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE", "ITEM_ID_NEWWAND9", "ITEM_ID_BOOTS"]
         },
         {
             "creature_id":"CREATURE_SLIME",
