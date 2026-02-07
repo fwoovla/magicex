@@ -122,6 +122,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                     new_tile_ldtk.t = id;
                     
                     new_layer.grid_tiles.push_back(new_tile_ldtk);
+                    _tileset.collision_grid[index] = 1;
                 }
             }
 
@@ -145,6 +146,7 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                     new_tile_ldtk.t = id;
                     
                     new_layer.grid_tiles.push_back(new_tile_ldtk);
+                    _tileset.collision_grid[index] = 1;
                 }
             }
 
@@ -346,7 +348,7 @@ void GenerateCollisionLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
             if(_tileset.collision_grid[index] == 1) {
                 new_layer.int_grid[index] = 1;
-                //TraceLog(LOG_INFO, "BORdER TILE found %i %i", x, y);
+                TraceLog(LOG_INFO, "BORdER TILE found %i %i", x, y);
             }
         }
     }

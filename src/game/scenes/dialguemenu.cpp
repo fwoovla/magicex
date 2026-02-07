@@ -30,6 +30,15 @@ DialogueMenu::DialogueMenu() {
     grid_list[GRID_GROUND] = ground_grid;
     
 
+//character
+    cpo = {panel_rect.x + 300, panel_rect.y + 45};
+    CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "");
+    
+    ppo = {cpo.x + 130, cpo.y + 130}; //portrait offset
+
+    CreateLabel(character_dialogue_label, {ppo.x, ppo.y + 100}, FONTSIZE_30, WHITE, "");
+
+    
 //end character
 
     ipo = {panel_rect.x + 560, panel_rect.y + 80};
@@ -51,6 +60,19 @@ DialogueMenu::DialogueMenu() {
 
     details_panel  = new DetailsPanel();
     show_details = false;
+
+    
+    response_buttons.resize(10);
+
+    float _y = ppo.y + 150;
+    for(Button &button : response_buttons) {
+        CreateButton(button, {ppo.x, _y}, {100, 40}, DARKYELLOW, "choice");
+        button.default_color = DARKERGRAY;
+        button.text_size = FONTSIZE_24;
+        _y += 45;
+    }
+
+
 }
 
 DialogueMenu::~DialogueMenu() {
@@ -69,6 +91,15 @@ void DialogueMenu::Draw() {
 
 
     DrawSprite(character_sprite);
+
+    DrawLabel(character_header_label);
+    DrawLabelCentered(character_dialogue_label);
+
+    for(Button &button : response_buttons) {
+        if(button.text != "") {
+            DrawButton(button);
+        }
+    }
 
 
     DrawLabel(ground_header_label);
@@ -97,6 +128,10 @@ void DialogueMenu::DrawHotBarOnly() {
 
 
 void DialogueMenu::Update() {
+
+    if(g_active_dialogue.tree == nullptr) {
+        return;
+    }
     
     if(show_details) {
         details_panel->Update();
@@ -106,10 +141,24 @@ void DialogueMenu::Update() {
     inventory_grid->Update();
     //hotbar_grid->Update();
 
+    for(Button &button : response_buttons) {
+
+        if(IsButtonHovered(button, g_scale)){
+            if(button.already_hovered == false) {
+                //PlaySound(button_sound);
+            }
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                TraceLog(LOG_INFO, "BUTTON PRESSED ");
+                //play_pressed.EmitSignal();
+                //quit_pressed.EmitSignal();
+            }        
+        }
+    }
+
 }
 
 void DialogueMenu::Open() {
-    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
 
     use_ground = true;
     shared_data.dest_cell = {-1,-1};
@@ -130,15 +179,50 @@ void DialogueMenu::Open() {
 
 
 void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
-    TraceLog(LOG_INFO, "OPENING DIALOGUE WITH %i", npc_entity->uid);
+    int sprite_id = g_active_creature_data[npc_entity->uid].sprite_sheet_id;
 
-    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
+    TraceLog(LOG_INFO, "OPENING DIALOGUE WITH %i  sprite %i", npc_entity->uid, sprite_id);
+
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
 
     use_ground = false;
     ground_grid->container_iid = "npc_" + std::to_string(npc_entity->uid);
-    ground_grid->SetItems(& g_creature_data[npc_entity->uid].inventory);
-    show_details = false;
+    ground_grid->SetItems(&g_active_creature_data[npc_entity->uid].inventory);
 
+    
+    for(Button &button : response_buttons) {
+        button.text = "";
+    }
+
+    auto d_itter = g_dialogues.find(g_active_creature_data[npc_entity->uid].dialogue_id);
+    if(d_itter != g_dialogues.end()) {
+        g_active_dialogue.tree = &d_itter->second;
+        g_active_dialogue.active_node = &g_active_dialogue.tree->nodes[g_active_dialogue.tree->start_node];
+        character_dialogue_label.text = g_active_dialogue.active_node->text;
+
+        TraceLog(LOG_INFO, "----DIALOGUE OPTIONS %i", g_active_dialogue.active_node->options.size());
+
+        for(int r = 0; r < g_active_dialogue.active_node->options.size(); r++) {
+            TraceLog(LOG_INFO, "----DIALOGUE OPTION");
+            response_buttons[r].text = g_active_dialogue.active_node->options[r].text;
+        }
+
+        TraceLog(LOG_INFO, "----DIALOGUE FOUND");
+    }
+    else {
+        TraceLog(LOG_INFO, "!!! DIALOGUE NOT FOUND !!!!");
+    }
+
+
+
+
+    LoadSpriteCentered(character_sprite, g_creature_sprite_sheets[ g_active_creature_data[npc_entity->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
+    ScaleSprite(character_sprite, {5,5});
+
+    character_header_label.text = g_active_creature_data[npc_entity->uid].name;
+
+
+    show_details = false;
 }
 
 
@@ -148,7 +232,6 @@ void DialogueMenu::OnItemSelected() {
             grid->can_select = false;
         }
     }
-
 }
 
 void DialogueMenu::OnItemDeselected() {
@@ -157,7 +240,6 @@ void DialogueMenu::OnItemDeselected() {
             grid->can_select = true;
         }
     }
-
 }
 
 
@@ -189,54 +271,8 @@ void DialogueMenu::OnPickup() {
 
 
 void DialogueMenu::OnPutDownOrEquip() {
-    /* int item_id = shared_data.item_id;
-    int source_grid = shared_data.source_grid;
-    int dest_grid =  GRID_GROUND;
-    Vector2 source_cell = shared_data.source_cell;
-    Vector2 dest_cell = shared_data.dest_cell;
-    
-    TraceLog(LOG_INFO, "put down or equip item %i", shared_data.item_id);
 
-    auto i_itter = g_item_instances.find(shared_data.item_id);
-    if(i_itter == g_item_instances.end()) {
-        TraceLog(LOG_INFO, "item not found!!!");
-        return;
-    }
-
-
-
-    for(int i = 0; i < grid_list.size(); i++) {
-        TraceLog(LOG_INFO, "put down or equip item list / %i   type %i   ?  %i", i, grid_list[i]->accepted_type, g_item_instances[shared_data.item_id].type);
-
-        if(grid_list[i]->accepted_type == g_item_instances[shared_data.item_id].type) {
-            dest_grid = i;
-            TraceLog(LOG_INFO, "found grid!!!");
-            break;
-        }
-    }
-
-    TraceLog(LOG_INFO, "inserting into grid %i", dest_grid);
-    TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
-    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
-    TraceLog(LOG_INFO, "try to move %i  from %i %i", item_id, source_grid, dest_grid);
-
-    if(grid_list[dest_grid]->HasRoom()) {
-        grid_list[dest_grid]->AddItem(item_id);
-        grid_list[source_grid]->RemoveItem(shared_data.source_cell);
-        if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
-            g_current_player->Equip(item_id);    
-        }
-        TraceLog(LOG_INFO, "move succsessfull!!!");
-    }
-    else if (dest_grid != GRID_GROUND) {
-        dest_grid = GRID_GROUND;
-        if(grid_list[dest_grid]->HasRoom()) {
-            TraceLog(LOG_INFO, "moving to ground!!!");
-            grid_list[dest_grid]->AddItem(item_id);
-            grid_list[source_grid]->RemoveItem(shared_data.source_cell);
-        }
-    } */
-    TraceLog(LOG_INFO, "---------------------------------\n");
+    TraceLog(LOG_INFO, "-----------pd_or_eq----------------------\n");
 }
 
 
@@ -300,9 +336,9 @@ void DialogueMenu::OnUseItem() {
         if(source_itter->second.type == TYPE_FOOD) {
             TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
             TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.food_data.saturation);
-            g_character_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
-            if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
-                g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
+            g_active_creature_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
+            if(g_active_creature_data[g_current_player->uid].saturation > g_active_creature_data[g_current_player->uid].max_saturation) {
+                g_active_creature_data[g_current_player->uid].saturation = g_active_creature_data[g_current_player->uid].max_saturation;
             }
             grid_list[source_grid]->RemoveItem(source_cell);
         }

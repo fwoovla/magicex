@@ -1,9 +1,40 @@
 {
-    "npc_topics": [
-        {
-            "creature_id":"CREATURE_NPC_1",
-            "topics":["TOPIC_GENERAL", "TOPIC_TRADE"]
-        }
-    ]
+    "dialogues": {
+        "TOPIC_TRADE": {
+            "start": "greeting",
 
+            "nodes": {
+                "greeting": {
+                "text": "Welcome to my shop!",
+                "choices": [
+                        { "text": "Let's trade.", "next": "shop" },
+                        { "text": "Who are you?", "next": "who" },
+                        { "text": "Later tater!", "next": "end" }
+                    ]
+                },
+
+                "who": {
+                "text": "I'm a humble merchant.",
+                "choices": [
+                        { "text": "Back.", "next": "greeting" }
+                    ]
+                },
+
+                "shop": {
+                "text": "Take a look.",
+                "action": "open_shop",
+                "choices": [
+                        { "text": "Thanks.", "next": "end" }
+                    ]
+                },
+
+                "end": {
+                "text": "Come again!"
+                }
+            }
+        }
+    }
 }
+
+
+

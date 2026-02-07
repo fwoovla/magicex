@@ -345,7 +345,7 @@ void StagingUILayer::DrawCharacterInfo() {
 
 
 void StagingUILayer::SetPlayer(int uid) {
-    inventory_grid->SetItems(&g_character_data[uid].inventory);
+    inventory_grid->SetItems(&g_active_creature_data[uid].inventory);
 }
 
 void StagingUILayer::ItemSelected(int item_id) {

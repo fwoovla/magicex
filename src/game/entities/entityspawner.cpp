@@ -132,41 +132,36 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
     std::unique_ptr<CharacterEntity> new_creature;
     int uid = GetRandomValue(1000, 1000000);
 
-    g_character_data[uid] = level_data.creature_data[_creature_index];
+    g_active_creature_data[uid] = level_data.creature_data[_creature_index];
 
 
-    std::vector<int> initial_inv = g_character_data[uid].inventory;
-    g_character_data[uid].inventory.clear();
+    std::vector<int> initial_inv = g_active_creature_data[uid].inventory;
+    g_active_creature_data[uid].inventory.clear();
     
     ItemInstanceData *this_data = nullptr;
     
     for(int item : initial_inv){
         if(item != -1) {
             this_data = InstanceRandomCharacterItem((ItemID)item, uid, 2);
-            //g_character_data[uid].inventory.push_back(this_data->instance_id);
+            //g_active_creature_data[uid].inventory.push_back(this_data->instance_id);
         }
     }
 
-    //TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_character_data[uid].name.c_str(), uid, g_character_data[uid].creature_id, g_character_data[uid].sprite_sheet_id);
-    //TraceLog(LOG_INFO, "SpawnCreature is_npc = %i  inv size %i", g_character_data[uid].is_npc, g_character_data[uid].inventory.size());
+    //TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_active_creature_data[uid].name.c_str(), uid, g_active_creature_data[uid].creature_id, g_active_creature_data[uid].sprite_sheet_id);
+    //TraceLog(LOG_INFO, "SpawnCreature is_npc = %i  inv size %i", g_active_creature_data[uid].is_npc, g_active_creature_data[uid].inventory.size());
 
-
-    if(g_character_data[uid].is_npc) {
-        new_creature = std::make_unique<NpcEntity>(g_character_data[uid].spawn_position, uid);
+    if(g_active_creature_data[uid].is_npc) {
+        new_creature = std::make_unique<NpcEntity>(g_active_creature_data[uid].spawn_position, uid);
     }
     else {
-        new_creature = std::make_unique<CreatureEntity>(g_character_data[uid].spawn_position, uid);
+        new_creature = std::make_unique<CreatureEntity>(g_active_creature_data[uid].spawn_position, uid);
     }
-    new_creature->identifier = g_character_data[uid].name;
+    new_creature->identifier = g_active_creature_data[uid].name;
     DL_Add(level_data.entity_list, std::move(new_creature));
-
 }
 
 
-
 void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {
-
-
     //TraceLog(LOG_INFO, "looking through creatures inventory  (size) %i", item_list.size());
     int sprite_id = -1;
     Vector2 pos = g_current_player->position;
@@ -194,7 +189,7 @@ void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {
     new_container->c_area.position = _position;
     new_container->c_area.item_list = item_list;
     new_container->c_area.size = {8, 8};
-    new_container->iid = "ground" + std::to_string(GetRandomValue(1000, 1000000));
+    new_container->iid = "ground_" + std::to_string(GetRandomValue(1000, 1000000));
     new_container->is_persistant =(g_game_data.current_scene_id == SHELTER_SCENE);
     new_container->level_index = g_game_data.current_map_index;
 
@@ -203,7 +198,6 @@ void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {
             g_item_instances[item].container_id = new_container->iid;
         }
     }
-
 
     BaseScene *this_scene = nullptr;
 

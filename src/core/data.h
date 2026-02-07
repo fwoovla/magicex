@@ -233,6 +233,8 @@ struct CharacterData {
     std::string name = "";
     std::string class_name = "";
 
+    DIALOGUE_TOPIC dialogue_id;
+
 };
 
 extern std::unordered_map<int, CharacterData> g_class_data;

@@ -144,7 +144,7 @@ void ModuleMenu::Update() {
 }
 
 void ModuleMenu::OpenModule() {
-    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
     selected_button_index = -1;
     recipie_buttons.clear();
     button_lookup.clear();
@@ -175,8 +175,8 @@ void ModuleMenu::OpenModule() {
             TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
 
 
-            for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
-                auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+            for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+                auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
                 if(i_itter != g_item_instances.end()) {
                     if(ingredient_id == i_itter->second.item_id) {
                         TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
@@ -235,9 +235,9 @@ void ModuleMenu::OpenModule() {
             TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
 
 
-            for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
+            for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
 
-                auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+                auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
                 if(i_itter != g_item_instances.end()) {
                     if(ingredient_id == i_itter->second.item_id) {
                         TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
@@ -290,8 +290,8 @@ void ModuleMenu::RecipieSelected() {
         int num_needed = 1;
         int num_found = 0;
 
-        for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
-            auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+        for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
             if(i_itter != g_item_instances.end() and num_found < num_needed) {
                 item_id = i_itter->second.item_id;
                 instance_id = i_itter->second.instance_id;
@@ -299,7 +299,7 @@ void ModuleMenu::RecipieSelected() {
                 for(int ingredient = 0; ingredient < g_recipie_data[module_data.recipies[selected_button_index]].ingredients.size(); ingredient++) {
                     if(item_id == g_recipie_data[module_data.recipies[selected_button_index]].ingredients[ingredient]) {
                         g_item_instances.erase(instance_id);
-                        g_character_data[g_current_player->uid].inventory[item] = -1;
+                        g_active_creature_data[g_current_player->uid].inventory[item] = -1;
                         num_found++;
                     }
                 }
@@ -315,8 +315,8 @@ void ModuleMenu::RecipieSelected() {
         int instance_id;
         int item_id;
 
-        for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
-            auto i_itter = g_item_instances.find(g_character_data[g_current_player->uid].inventory[item]);
+        for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
             if(i_itter != g_item_instances.end()) {
                 item_id = i_itter->second.item_id;
                 instance_id = i_itter->second.instance_id;
@@ -324,7 +324,7 @@ void ModuleMenu::RecipieSelected() {
                 for(int ingredient = 0; ingredient < g_plan_data[module_data.accepted_plans[lookup]].ingredients.size(); ingredient++) {
                     if(item_id == g_plan_data[module_data.accepted_plans[lookup]].ingredients[ingredient]) {
                         g_item_instances.erase(instance_id);
-                        g_character_data[g_current_player->uid].inventory[item] = -1;
+                        g_active_creature_data[g_current_player->uid].inventory[item] = -1;
                         break;
                     }
                 }
@@ -334,8 +334,8 @@ void ModuleMenu::RecipieSelected() {
     }
 
 
-    for(int item = 0; item < g_character_data[g_current_player->uid].inventory.size(); item++) {
-        TraceLog(LOG_INFO, "player has %i in inventory", g_character_data[g_current_player->uid].inventory[item]);        
+    for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+        TraceLog(LOG_INFO, "player has %i in inventory", g_active_creature_data[g_current_player->uid].inventory[item]);        
     }
     OpenModule();
 }

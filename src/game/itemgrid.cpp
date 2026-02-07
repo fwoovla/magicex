@@ -225,7 +225,7 @@ void ItemGrid::SetItems(std::vector<int> *list) {
     item_sprites.clear();
     int item_count = item_list->size();
 
-    //TraceLog(LOG_INFO, "setting items --list size %i  %s", item_list->size(), container_iid.c_str());
+    TraceLog(LOG_INFO, "setting items --list size %i  %s", item_list->size(), container_iid.c_str());
 
     for(int i = 0; i < cols*rows; i++) {
         if(i < item_count) {
@@ -235,8 +235,9 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 Sprite sp;
                 int x = i%(cols);
                 int y = i/(cols);
-                auto itter = g_item_instances.find((*item_list)[i]);
                 int _id = ITEM_ID_ERROR;
+                
+                auto itter = g_item_instances.find((*item_list)[i]);
                 if(itter != g_item_instances.end()) {
                     _id = itter->second.icon_id;
 

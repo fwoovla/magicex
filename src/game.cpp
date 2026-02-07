@@ -7,6 +7,9 @@ std::unordered_map<std::string, std::unique_ptr<SubSceneState>> g_sub_scene_stat
 
 std::unordered_map<int, CharacterData> g_class_data;
 std::unordered_map<int, CharacterData> g_creature_data;
+std::unordered_map<DIALOGUE_TOPIC, DialogueTree> g_dialogues;
+ActiveDialogue g_active_dialogue;
+
 std::vector<ItemData> g_item_data;
 std::vector<WeaponData> g_weapon_data;
 std::vector<RecipieData> g_recipie_data;
@@ -61,7 +64,7 @@ Texture2D g_module_sprites[MAX_SPRITES];
 
 //PlayerData g_player_data;
 
-std::unordered_map< int, CharacterData> g_character_data;
+std::unordered_map< int, CharacterData> g_active_creature_data;
 
 std::unique_ptr<PlayerCharacter> g_current_player;
 

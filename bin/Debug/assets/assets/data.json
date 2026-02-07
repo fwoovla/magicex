@@ -3,7 +3,7 @@
  "base_class": [
         {
             "max_health":15,
-            "base_speed":45.0,
+            "base_speed":60.0,
             "sprite_sheet_id":"SPRITE_APPRENTICE",
             "portrait_id":0,
             "class_name": "Apprentice",
@@ -11,7 +11,7 @@
         },
         {
             "max_health":10,
-            "base_speed":45.0,
+            "base_speed":60.0,
             "sprite_sheet_id":"SPRITE_NERD",
             "portrait_id":1,
             "class_name": "Nerd",
@@ -1017,7 +1017,9 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
-            "is_npc":true
+            "is_npc":true,
+            "dialogue_id":"TOPIC_TRADE"
+
         },
         {
             "creature_id":"CREATURE_SLIME",

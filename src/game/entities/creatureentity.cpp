@@ -9,7 +9,7 @@
 CreatureEntity::CreatureEntity(Vector2 _position, int _uid): CharacterEntity() {
     
     uid = _uid;
-    data = &g_character_data[uid];
+    data = &g_active_creature_data[uid];
     character_entity = this;
 
     position = _position;
@@ -56,13 +56,13 @@ CreatureEntity::CreatureEntity(Vector2 _position, int _uid): CharacterEntity() {
 
     //int _id = ITEM_ID_ERROR;
 
-    for(int i = 0; i < g_character_data[uid].inventory.size(); i++) {
-        int instance_id = g_character_data[uid].inventory[i];
+    for(int i = 0; i < g_active_creature_data[uid].inventory.size(); i++) {
+        int instance_id = g_active_creature_data[uid].inventory[i];
         if(instance_id != -1) {
             TraceLog(LOG_INFO, "item instance id %i", instance_id);
             if(g_item_instances[instance_id].type == TYPE_WEAPON) {
-                g_character_data[uid].inventory[i] = -1;
-                g_character_data[uid].primary[0] = instance_id;
+                g_active_creature_data[uid].inventory[i] = -1;
+                g_active_creature_data[uid].primary[0] = instance_id;
                 break;
             }
         }
@@ -139,7 +139,7 @@ void CreatureEntity::Update() {
                 if(current_primary_data->spell_id != -1) {
                     TraceLog(LOG_INFO, "casting spell");
                     
-                    if(g_character_data[uid].current_power < current_primary_data->weapon_data.pps) {
+                    if(g_active_creature_data[uid].current_power < current_primary_data->weapon_data.pps) {
                         return;
                     }
                     
@@ -157,8 +157,8 @@ void CreatureEntity::Update() {
                         SpawnSpell(payload, &current_primary_data->spell_data);
 
                     }
-                    g_character_data[uid].current_power -= current_primary_data->weapon_data.pps;
-                    current_primary_data->weapon_data.current_power = g_character_data[uid].current_power; 
+                    g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
+                    current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power; 
                     spell_timer.Start(current_primary_data->weapon_data.cooldown, true);
                     can_use_spell = false;
                     should_use_spell = false;
@@ -412,9 +412,10 @@ void CreatureEntity::OnActionTimerTimeout() {
 
 CreatureEntity::~CreatureEntity()
 {
-    /* TraceLog(LOG_INFO, "deleting creature !!!!!!!!!!!!!!!!!!!! %i", uid);
+    TraceLog(LOG_INFO, "deleting creature !!!!!!!!!!!!!!!!!!!! %i", uid);
+/*
     for(int i = 0; i < data->primary.size(); i++) {
-            //g_item_instances.erase(data->primary[i]);
+            g_item_instances.erase(data->primary[i]);
             //TraceLog(LOG_INFO, "entity primary instance  #%i   erased %i", data->primary[i], g_item_instances.size());
     } */
 }
@@ -428,7 +429,7 @@ float CreatureEntity::GetYSort() {
 void CreatureEntity::TakeDamage(DamagePayload _payload) {
     //TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
 
-    int damage = CalculateDamage(_payload, g_character_data[uid]);
+    int damage = CalculateDamage(_payload, g_active_creature_data[uid]);
 
     is_stunned = true;
     //sprite.modulate = RED;
@@ -532,35 +533,35 @@ void CreatureEntity::MoveCreature(Vector2 _input_dir) {
 void CreatureEntity::Die() {
 
 
-    g_character_data[uid].inventory.erase(
-        std::remove(g_character_data[uid].inventory.begin(), g_character_data[uid].inventory.end(), -1),
-        g_character_data[uid].inventory.end()
+    g_active_creature_data[uid].inventory.erase(
+        std::remove(g_active_creature_data[uid].inventory.begin(), g_active_creature_data[uid].inventory.end(), -1),
+        g_active_creature_data[uid].inventory.end()
     );
 
-    if(g_character_data[uid].primary[0] != -1) {
+    if(g_active_creature_data[uid].primary[0] != -1) {
         //TraceLog(LOG_INFO, "moving %i from primary to inventory", g_character_data[uid].primary[0]);
-        g_character_data[uid].inventory.push_back(g_character_data[uid].primary[0]);
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].primary[0]);
     }
-    if(g_character_data[uid].secondary[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].secondary[0]);
+    if(g_active_creature_data[uid].secondary[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].secondary[0]);
     }
-    if(g_character_data[uid].head[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].head[0]);
+    if(g_active_creature_data[uid].head[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].head[0]);
     }
-    if(g_character_data[uid].body[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].body[0]);
+    if(g_active_creature_data[uid].body[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].body[0]);
     }
-    if(g_character_data[uid].legs[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].legs[0]);
+    if(g_active_creature_data[uid].legs[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].legs[0]);
     }
-    if(g_character_data[uid].feet[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].feet[0]);
+    if(g_active_creature_data[uid].feet[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].feet[0]);
     }
-    if(g_character_data[uid].hands[0] != -1) {
-        g_character_data[uid].inventory.push_back(g_character_data[uid].hands[0]);
+    if(g_active_creature_data[uid].hands[0] != -1) {
+        g_active_creature_data[uid].inventory.push_back(g_active_creature_data[uid].hands[0]);
     }
 
-    SpawnGroundContainer(position, g_character_data[uid].inventory);
+    SpawnGroundContainer(position, g_active_creature_data[uid].inventory);
 
     should_delete = true;
 }

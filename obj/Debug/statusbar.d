@@ -248,10 +248,10 @@ obj/Debug/statusbar.o: src/game/statusbar.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/game/../core/utils.h src/game/../core/baseentity.h \
  src/game/../core/areas.h src/game/../core/label.h \
- src/game/../core/entities.h src/game/../core/mapgen.h \
- src/game/../core/resources.h src/game/../core/itemgenerator.h \
- src/game/../core/data.h /usr/include/c++/13/span \
- src/game/../core/spells.h src/game/../core/dialogue.h \
+ src/game/../core/entities.h src/game/../core/dialogue.h \
+ src/game/../core/mapgen.h src/game/../core/resources.h \
+ src/game/../core/itemgenerator.h src/game/../core/data.h \
+ /usr/include/c++/13/span src/game/../core/spells.h \
  src/game/../core/events.h src/game/../core/viewport.h \
  src/game/../core/input.h src/game/../core/button.h \
  src/game/../core/charactereffectentity\ .h src/game/../core/modules.h \
@@ -581,13 +581,13 @@ src/game/../core/baseentity.h:
 src/game/../core/areas.h:
 src/game/../core/label.h:
 src/game/../core/entities.h:
+src/game/../core/dialogue.h:
 src/game/../core/mapgen.h:
 src/game/../core/resources.h:
 src/game/../core/itemgenerator.h:
 src/game/../core/data.h:
 /usr/include/c++/13/span:
 src/game/../core/spells.h:
-src/game/../core/dialogue.h:
 src/game/../core/events.h:
 src/game/../core/viewport.h:
 src/game/../core/input.h:

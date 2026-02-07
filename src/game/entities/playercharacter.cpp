@@ -10,14 +10,14 @@
 PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity() {
 
     uid = _uid;
-    data = &g_character_data[uid];
+    data = &g_active_creature_data[uid];
     character_entity = this;
     position = _position;
     rotation = 0.0f;
     velocity = {0,0};
     aim_position = {0,0};
     
-    LoadSpriteCentered(sprite, g_character_sprite_sheets[g_character_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(sprite, g_character_sprite_sheets[g_active_creature_data[uid].sprite_sheet_id], position, 4, 16.0f, 0.10f);
     LoadSpriteCentered(shadow_sprite, g_shadow_sprites[SPRITE_SHADOW_CHAR1], position);
     LoadSpriteCentered(aim_sprite, g_ui_sprites[UI_ID_AIM], aim_position);
         
@@ -43,19 +43,19 @@ PlayerCharacter::PlayerCharacter(Vector2 _position, int _uid): CharacterEntity()
     stun_timer.timer_timeout.Connect( [&](){OnStunTimerTimeout();} );
 
     int _id = ITEM_ID_ERROR;
-    auto item_it = g_item_instances.find(g_character_data[uid].primary[0]);
+    auto item_it = g_item_instances.find(g_active_creature_data[uid].primary[0]);
     if(item_it != g_item_instances.end()) {
-        Equip(g_character_data[uid].primary[0]);
+        Equip(g_active_creature_data[uid].primary[0]);
 
     }
     else {
     }
 
-    Equip(g_character_data[uid].head[0]);
-    Equip(g_character_data[uid].body[0]);
-    Equip(g_character_data[uid].legs[0]);
-    Equip(g_character_data[uid].feet[0]);
-    Equip(g_character_data[uid].hands[0]);
+    Equip(g_active_creature_data[uid].head[0]);
+    Equip(g_active_creature_data[uid].body[0]);
+    Equip(g_active_creature_data[uid].legs[0]);
+    Equip(g_active_creature_data[uid].feet[0]);
+    Equip(g_active_creature_data[uid].hands[0]);
 }
 
 void PlayerCharacter::Update() {
@@ -229,19 +229,19 @@ void PlayerCharacter::CheckInput() {
         input_dir = Vector2Normalize(input_dir);
     }
 
-    float speed = g_character_data[uid].current_speed;
+    float speed = g_active_creature_data[uid].current_speed;
 
-    if(g_input.key_sprint and g_character_data[uid].current_stamina > 0.1) {
+    if(g_input.key_sprint and g_active_creature_data[uid].current_stamina > 0.1) {
         speed = speed + (speed * 0.8f);
-        g_character_data[uid].current_stamina -= 5.0f * GetFrameTime();
-        if(g_character_data[uid].current_stamina < 0.0f) {
-            g_character_data[uid].current_stamina = 0.0f;
+        g_active_creature_data[uid].current_stamina -= 5.0f * GetFrameTime();
+        if(g_active_creature_data[uid].current_stamina < 0.0f) {
+            g_active_creature_data[uid].current_stamina = 0.0f;
         }
     }
     else {
-        g_character_data[uid].current_stamina += 2.0f * GetFrameTime();
-        if(g_character_data[uid].current_stamina > g_character_data[uid].max_stamina) {
-            g_character_data[uid].current_stamina = g_character_data[uid].max_stamina;
+        g_active_creature_data[uid].current_stamina += 2.0f * GetFrameTime();
+        if(g_active_creature_data[uid].current_stamina > g_active_creature_data[uid].max_stamina) {
+            g_active_creature_data[uid].current_stamina = g_active_creature_data[uid].max_stamina;
         }
     }
 
@@ -272,13 +272,13 @@ void PlayerCharacter::CheckInput() {
     }
     
     if(g_input.key_switch_weapon and can_switch == true) {
-        if(CanEquip(g_character_data[uid].secondary[0]) and CanUnEquip(g_character_data[uid].primary[0])) {
+        if(CanEquip(g_active_creature_data[uid].secondary[0]) and CanUnEquip(g_active_creature_data[uid].primary[0])) {
             TraceLog(LOG_INFO, "switching primary weapon");
-            UnEquip(g_character_data[uid].primary[0]);
-            Equip(g_character_data[uid].secondary[0]);
-            int temp_primary = g_character_data[uid].primary[0];
-            g_character_data[uid].primary[0] = g_character_data[uid].secondary[0];
-            g_character_data[uid].secondary[0] = temp_primary;
+            UnEquip(g_active_creature_data[uid].primary[0]);
+            Equip(g_active_creature_data[uid].secondary[0]);
+            int temp_primary = g_active_creature_data[uid].primary[0];
+            g_active_creature_data[uid].primary[0] = g_active_creature_data[uid].secondary[0];
+            g_active_creature_data[uid].secondary[0] = temp_primary;
             can_switch = false;
         }
     }
@@ -288,14 +288,14 @@ void PlayerCharacter::CheckInput() {
 
     if(g_input.key_reload and can_reload) {            
         //TraceLog(LOG_INFO, "reload");
-        for(int item = 0; item < g_character_data[uid].inventory.size(); item++) {
-            int instance_id = g_character_data[uid].inventory[item];
+        for(int item = 0; item < g_active_creature_data[uid].inventory.size(); item++) {
+            int instance_id = g_active_creature_data[uid].inventory[item];
             if(g_item_instances[instance_id].item_id == ITEM_ID_MUSHROOM_JUICE) {
                 TraceLog(LOG_INFO, "reloading");
                 can_reload = false;
-                g_character_data[uid].current_power = g_character_data[uid].max_power;
-                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power;
-                g_character_data[uid].inventory[item] = -1;
+                g_active_creature_data[uid].current_power = g_active_creature_data[uid].max_power;
+                current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;
+                g_active_creature_data[uid].inventory[item] = -1;
                 g_item_instances.erase(instance_id);
 
                 SpawnCharacterMessage (position, "reload", WHITE, 0.3f);
@@ -323,7 +323,7 @@ void PlayerCharacter::CheckInput() {
         if(current_primary_data != nullptr) {
             if(current_primary_data->spell_id != -1) {
                 
-                if(g_character_data[uid].current_power < current_primary_data->weapon_data.pps) {
+                if(g_active_creature_data[uid].current_power < current_primary_data->weapon_data.pps) {
                     return;
                 }
                 
@@ -343,8 +343,8 @@ void PlayerCharacter::CheckInput() {
 
                 }
 
-                g_character_data[uid].current_power -= current_primary_data->weapon_data.pps;
-                current_primary_data->weapon_data.current_power = g_character_data[uid].current_power;
+                g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
+                current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;
                 spell_timer.Start(current_primary_data->weapon_data.cooldown, true);
                 can_use_spell = false;
 
@@ -357,7 +357,7 @@ void PlayerCharacter::CheckInput() {
                 velocity = Vector2Rotate( {(float)-recoil, 0}, weapon_sprite.rotation * DEG2RAD);
                 Vector2 recoil_dir = { (float)recoil * dirx, (float)recoil * diry};
                 aim_position = Vector2Add( aim_position, recoil_dir );
-                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_character_data[uid].current_power, g_character_data[uid].max_power);
+                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_active_creature_data[uid].current_power, g_active_creature_data[uid].max_power);
             }
         }
     }
@@ -377,8 +377,8 @@ void PlayerCharacter::Equip(int item_id) {
     auto item_it = g_item_instances.find(item_id);
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            g_character_data[uid].current_power += item_it->second.weapon_data.current_power;
-            g_character_data[uid].max_power += item_it->second.weapon_data.max_power;
+            g_active_creature_data[uid].current_power += item_it->second.weapon_data.current_power;
+            g_active_creature_data[uid].max_power += item_it->second.weapon_data.max_power;
 
             _id = item_it->second.sprite_id;
             LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
@@ -389,8 +389,8 @@ void PlayerCharacter::Equip(int item_id) {
         
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             _id = item_it->second.sprite_id;
-            g_character_data[uid].defence += item_it->second.armor_data.defence;
-            g_character_data[uid].magic_defence += item_it->second.armor_data.magic_defence;
+            g_active_creature_data[uid].defence += item_it->second.armor_data.defence;
+            g_active_creature_data[uid].magic_defence += item_it->second.armor_data.magic_defence;
             TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
         }
 
@@ -410,30 +410,30 @@ void PlayerCharacter::UnEquip(int item_id) {
 
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
-            TraceLog(LOG_INFO, "%i unequiping primary weapon %i %i", uid, item_id, g_character_data[uid].primary[0]);
+            TraceLog(LOG_INFO, "%i unequiping primary weapon %i %i", uid, item_id, g_active_creature_data[uid].primary[0]);
             Texture2D t;
             LoadSpriteCentered(weapon_sprite, t, position);
             current_primary_data = nullptr;
 
-            g_character_data[uid].max_power -= item_it->second.weapon_data.max_power;
-            g_character_data[uid].current_power -= item_it->second.weapon_data.max_power;
+            g_active_creature_data[uid].max_power -= item_it->second.weapon_data.max_power;
+            g_active_creature_data[uid].current_power -= item_it->second.weapon_data.max_power;
 
-            if(g_character_data[uid].max_power < 0) {
-                g_character_data[uid].max_power = 0;
+            if(g_active_creature_data[uid].max_power < 0) {
+                g_active_creature_data[uid].max_power = 0;
             }
 
             if(item_it->second.weapon_data.current_power > item_it->second.weapon_data.max_power) {
                 item_it->second.weapon_data.current_power = item_it->second.weapon_data.max_power;
             }
-            if(g_character_data[uid].current_power < 0) {
-                g_character_data[uid].current_power = 0;
+            if(g_active_creature_data[uid].current_power < 0) {
+                g_active_creature_data[uid].current_power = 0;
             }
         }
 
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
             TraceLog(LOG_INFO, "unequiping armor %i", item_id);
-            g_character_data[uid].defence -= item_it->second.armor_data.defence;
-            g_character_data[uid].magic_defence -= item_it->second.armor_data.magic_defence;
+            g_active_creature_data[uid].defence -= item_it->second.armor_data.defence;
+            g_active_creature_data[uid].magic_defence -= item_it->second.armor_data.magic_defence;
         }
         
     }
@@ -457,9 +457,9 @@ void PlayerCharacter::OnStunTimerTimeout() {
 }
 
 void PlayerCharacter::OnHungerTimerTimeout() {
-    g_character_data[uid].saturation -= hunger_rate;
-    if(g_character_data[uid].saturation < 0) {
-        g_character_data[uid].saturation = 0;
+    g_active_creature_data[uid].saturation -= hunger_rate;
+    if(g_active_creature_data[uid].saturation < 0) {
+        g_active_creature_data[uid].saturation = 0;
         DamagePayload new_payload;
         new_payload.damage = 1;
         new_payload.attacker_id = uid;
@@ -482,7 +482,7 @@ float PlayerCharacter::GetYSort() {
 void PlayerCharacter::TakeDamage(DamagePayload _payload) {
     //TraceLog(LOG_INFO, "%i: taking damage %i", uid, _payload.damage);
     
-    int damage = CalculateDamage(_payload, g_character_data[uid]);
+    int damage = CalculateDamage(_payload, g_active_creature_data[uid]);
 
     is_stunned = true;
     //sprite.modulate = RED;

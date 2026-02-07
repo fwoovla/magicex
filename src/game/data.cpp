@@ -476,6 +476,12 @@ void LoadGameData() {
         AIID ai_id = StrToAiId( cj["creature_data"][i]["ai_id"]);
 
         bool is_npc = cj["creature_data"][i]["is_npc"];
+
+        DIALOGUE_TOPIC dialogue_id = TOPIC_NONE;
+
+        if(is_npc) {
+            dialogue_id = StrToDialogueId(cj["creature_data"][i]["dialogue_id"]);
+        }
         
         TraceLog(LOG_INFO, "creature : %i", creature_id);
         std::vector<int> inv;
@@ -547,6 +553,7 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = name,
             .class_name = name,
+            .dialogue_id = dialogue_id
         };
 
         g_creature_data[this_creature.creature_id] = this_creature;
@@ -576,50 +583,50 @@ void SaveGame(LevelData &level_data) {
 
     json j;
     int uid = g_current_player->uid;
-    j["health"] = g_character_data[uid].health;
-    j["max_health"] = g_character_data[uid].max_health;
-    j["exp"] = g_character_data[uid].exp;
-    j["max_power"] = g_character_data[uid].max_power;
-    j["current_power"] = g_character_data[uid].current_power;
-    j["defence"] = g_character_data[uid].defence;
-    j["magic_defence"] = g_character_data[uid].magic_defence;
-    j["base_speed"] = g_character_data[uid].base_speed;
-    j["saturation"] = g_character_data[uid].saturation;
-    j["sprite_sheet_id"] = g_character_data[uid].sprite_sheet_id;
-    j["portrait_id"] = g_character_data[uid].portrait_id;
-    j["name"] = g_character_data[uid].name;
-    j["class_name"] = g_character_data[uid].class_name;
-    j["max_saturation"] = g_character_data[uid].max_saturation;
-    j["max_stamina"] = g_character_data[uid].max_stamina;
+    j["health"] = g_active_creature_data[uid].health;
+    j["max_health"] = g_active_creature_data[uid].max_health;
+    j["exp"] = g_active_creature_data[uid].exp;
+    j["max_power"] = g_active_creature_data[uid].max_power;
+    j["current_power"] = g_active_creature_data[uid].current_power;
+    j["defence"] = g_active_creature_data[uid].defence;
+    j["magic_defence"] = g_active_creature_data[uid].magic_defence;
+    j["base_speed"] = g_active_creature_data[uid].base_speed;
+    j["saturation"] = g_active_creature_data[uid].saturation;
+    j["sprite_sheet_id"] = g_active_creature_data[uid].sprite_sheet_id;
+    j["portrait_id"] = g_active_creature_data[uid].portrait_id;
+    j["name"] = g_active_creature_data[uid].name;
+    j["class_name"] = g_active_creature_data[uid].class_name;
+    j["max_saturation"] = g_active_creature_data[uid].max_saturation;
+    j["max_stamina"] = g_active_creature_data[uid].max_stamina;
 
     //j["inventory"] = {};
-    for(int i = 0; i < g_character_data[uid].inventory.size(); i++) {
-        j["inventory"][i] = g_character_data[uid].inventory[i];
+    for(int i = 0; i < g_active_creature_data[uid].inventory.size(); i++) {
+        j["inventory"][i] = g_active_creature_data[uid].inventory[i];
     }
-    for(int i = 0; i < g_character_data[uid].hotbar.size(); i++) {
-        j["hotbar"][i] = g_character_data[uid].hotbar[i];
+    for(int i = 0; i < g_active_creature_data[uid].hotbar.size(); i++) {
+        j["hotbar"][i] = g_active_creature_data[uid].hotbar[i];
     }
 
-    for(int i = 0; i < g_character_data[uid].primary.size(); i++) {
-        j["primary"][i] = g_character_data[uid].primary[i];
+    for(int i = 0; i < g_active_creature_data[uid].primary.size(); i++) {
+        j["primary"][i] = g_active_creature_data[uid].primary[i];
     }
-    for(int i = 0; i < g_character_data[uid].secondary.size(); i++) {
-        j["secondary"][i] = g_character_data[uid].secondary[i];
+    for(int i = 0; i < g_active_creature_data[uid].secondary.size(); i++) {
+        j["secondary"][i] = g_active_creature_data[uid].secondary[i];
     }
-    for(int i = 0; i < g_character_data[uid].head.size(); i++) {
-        j["head"][i] = g_character_data[uid].head[i];
+    for(int i = 0; i < g_active_creature_data[uid].head.size(); i++) {
+        j["head"][i] = g_active_creature_data[uid].head[i];
     }
-    for(int i = 0; i < g_character_data[uid].body.size(); i++) {
-        j["body"][i] = g_character_data[uid].body[i];
+    for(int i = 0; i < g_active_creature_data[uid].body.size(); i++) {
+        j["body"][i] = g_active_creature_data[uid].body[i];
     }
-    for(int i = 0; i < g_character_data[uid].legs.size(); i++) {
-        j["legs"][i] = g_character_data[uid].legs[i];
+    for(int i = 0; i < g_active_creature_data[uid].legs.size(); i++) {
+        j["legs"][i] = g_active_creature_data[uid].legs[i];
     }
-    for(int i = 0; i < g_character_data[uid].feet.size(); i++) {
-        j["feet"][i] = g_character_data[uid].feet[i];
+    for(int i = 0; i < g_active_creature_data[uid].feet.size(); i++) {
+        j["feet"][i] = g_active_creature_data[uid].feet[i];
     }
-    for(int i = 0; i < g_character_data[uid].hands.size(); i++) {
-        j["hands"][i] = g_character_data[uid].hands[i];
+    for(int i = 0; i < g_active_creature_data[uid].hands.size(); i++) {
+        j["hands"][i] = g_active_creature_data[uid].hands[i];
     }
 
     json json_item_instances = json::array();
@@ -951,23 +958,23 @@ int LoadGame() {
     json j;
     file>>j;
 
-    g_character_data[uid].creature_id = 0;
-    g_character_data[uid].health = j["health"];
-    g_character_data[uid].max_health = j["max_health"];
-    g_character_data[uid].exp = j["exp"];
-    g_character_data[uid].saturation = j["saturation"];
-    g_character_data[uid].max_saturation= j["max_saturation"];
-    g_character_data[uid].max_stamina= j["max_stamina"];
-    g_character_data[uid].current_stamina= j["max_stamina"];
-    g_character_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
-    g_character_data[uid].portrait_id = j["portrait_id"];
-    g_character_data[uid].name = j["name"];
-    g_character_data[uid].class_name = j["class_name"];
+    g_active_creature_data[uid].creature_id = 0;
+    g_active_creature_data[uid].health = j["health"];
+    g_active_creature_data[uid].max_health = j["max_health"];
+    g_active_creature_data[uid].exp = j["exp"];
+    g_active_creature_data[uid].saturation = j["saturation"];
+    g_active_creature_data[uid].max_saturation= j["max_saturation"];
+    g_active_creature_data[uid].max_stamina= j["max_stamina"];
+    g_active_creature_data[uid].current_stamina= j["max_stamina"];
+    g_active_creature_data[uid].sprite_sheet_id = j["sprite_sheet_id"];
+    g_active_creature_data[uid].portrait_id = j["portrait_id"];
+    g_active_creature_data[uid].name = j["name"];
+    g_active_creature_data[uid].class_name = j["class_name"];
     
-    g_character_data[uid].base_speed = j["base_speed"];
-    g_character_data[uid].current_speed = j["base_speed"];
+    g_active_creature_data[uid].base_speed = j["base_speed"];
+    g_active_creature_data[uid].current_speed = j["base_speed"];
 
-    g_character_data[uid].creature_id = -1;
+    g_active_creature_data[uid].creature_id = -1;
 
     std::vector<int> inv;
     for(int i = 0; i < j["inventory"].size(); i++) {
@@ -1014,16 +1021,16 @@ int LoadGame() {
         hs.push_back(j["hands"][i]);
     }
 
-    g_character_data[uid].inventory = inv;
-    g_character_data[uid].hotbar = hot;
+    g_active_creature_data[uid].inventory = inv;
+    g_active_creature_data[uid].hotbar = hot;
 
-    g_character_data[uid].primary = p;
-    g_character_data[uid].secondary = s;
-    g_character_data[uid].head = hd;
-    g_character_data[uid].body = bd;
-    g_character_data[uid].legs = lg;
-    g_character_data[uid].feet = ft;
-    g_character_data[uid].hands = hs;
+    g_active_creature_data[uid].primary = p;
+    g_active_creature_data[uid].secondary = s;
+    g_active_creature_data[uid].head = hd;
+    g_active_creature_data[uid].body = bd;
+    g_active_creature_data[uid].legs = lg;
+    g_active_creature_data[uid].feet = ft;
+    g_active_creature_data[uid].hands = hs;
 
 
     g_item_instances.clear();
@@ -1491,19 +1498,19 @@ ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid) {
     TraceLog(LOG_INFO, "instancing item %i with uid %i  to character %i ", item_id, uid, character_uid);
     
     int found_spot = -1;
-    for(int slot = 0; slot < g_character_data[character_uid].inventory.size(); slot++) {
-        if(g_character_data[character_uid].inventory[slot] == -1) {
+    for(int slot = 0; slot < g_active_creature_data[character_uid].inventory.size(); slot++) {
+        if(g_active_creature_data[character_uid].inventory[slot] == -1) {
             found_spot = slot;
             break;
         }
     }
 
     if(found_spot != -1) {
-        g_character_data[character_uid].inventory[found_spot] = uid;
+        g_active_creature_data[character_uid].inventory[found_spot] = uid;
         //TraceLog(LOG_INFO, "item id %i  item uid %i  spot %i",item_id, uid, found_spot);
     }
     else {
-        g_character_data[character_uid].inventory.push_back(uid);
+        g_active_creature_data[character_uid].inventory.push_back(uid);
         //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
     }
     return &g_item_instances[uid];
@@ -1517,19 +1524,19 @@ ItemInstanceData* InstanceRandomCharacterItem(ItemID item_id, int character_uid,
     g_item_instances[uid] = GenerateRandomItem(item_id, uid, "", _level);
 
     int found_spot = -1;
-    for(int slot = 0; slot < g_character_data[character_uid].inventory.size(); slot++) {
-        if(g_character_data[character_uid].inventory[slot] == -1) {
+    for(int slot = 0; slot < g_active_creature_data[character_uid].inventory.size(); slot++) {
+        if(g_active_creature_data[character_uid].inventory[slot] == -1) {
             found_spot = slot;
             break;
         }
     }
 
     if(found_spot != -1) {
-        g_character_data[character_uid].inventory[found_spot] = uid;
+        g_active_creature_data[character_uid].inventory[found_spot] = uid;
         //TraceLog(LOG_INFO, "item id %i  item uid %i  spot %i",item_id, uid, found_spot);
     }
     else {
-        g_character_data[character_uid].inventory.push_back(uid);
+        g_active_creature_data[character_uid].inventory.push_back(uid);
         //TraceLog(LOG_INFO, "item id %i  item uid %i  adding to end",item_id, uid);
     }
     return &g_item_instances[uid];

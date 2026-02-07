@@ -195,4 +195,4 @@ class PlayerCharacter : public CharacterEntity {
 }; 
 
 extern std::unique_ptr<PlayerCharacter> g_current_player;
-extern std::unordered_map< int, CharacterData> g_character_data;
+extern std::unordered_map< int, CharacterData> g_active_creature_data;

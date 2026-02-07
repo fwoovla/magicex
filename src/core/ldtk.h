@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "areas.h"
 #include "entities.h"
+#include "dialogue.h"
 
 
 #define MAX_TILE_SHEETS 10
@@ -251,6 +252,8 @@ struct GameData {
     BaseContainerEntity *return_container;
 
     NpcEntity *return_npc;
+
+    std::vector<DIALOGUE_TOPIC> return_topics;
     
 };
 

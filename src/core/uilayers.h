@@ -301,8 +301,13 @@ class DialogueMenu : public BaseUILayer {
     Vector2 ppo; //portrait offset
     Sprite character_panel_sprite;
     AnimatedSprite character_sprite;
-    Label character_label;
-    Label character_stat_label;
+
+    Label character_name_label;
+
+    Label character_dialogue_label;
+
+
+    std::vector<Button> response_buttons;
 
     
     Vector2 ipo;
@@ -310,6 +315,11 @@ class DialogueMenu : public BaseUILayer {
 
     bool show_details;
     DetailsPanel *details_panel;
+
+
+    //ActiveDialogue this_dialogue;
+
+
 };
 
 class CharacterMenu : public BaseUILayer {

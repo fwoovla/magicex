@@ -254,12 +254,12 @@ obj/Debug/entityspawner.o: src/game/entities/entityspawner.cpp \
  src/game/entities/../../core/areas.h \
  src/game/entities/../../core/label.h \
  src/game/entities/../../core/entities.h \
+ src/game/entities/../../core/dialogue.h \
  src/game/entities/../../core/mapgen.h \
  src/game/entities/../../core/resources.h \
  src/game/entities/../../core/itemgenerator.h \
  src/game/entities/../../core/data.h /usr/include/c++/13/span \
  src/game/entities/../../core/spells.h \
- src/game/entities/../../core/dialogue.h \
  src/game/entities/../../core/events.h \
  src/game/entities/../../core/viewport.h \
  src/game/entities/../../core/input.h \
@@ -596,13 +596,13 @@ src/game/entities/../../core/baseentity.h:
 src/game/entities/../../core/areas.h:
 src/game/entities/../../core/label.h:
 src/game/entities/../../core/entities.h:
+src/game/entities/../../core/dialogue.h:
 src/game/entities/../../core/mapgen.h:
 src/game/entities/../../core/resources.h:
 src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/data.h:
 /usr/include/c++/13/span:
 src/game/entities/../../core/spells.h:
-src/game/entities/../../core/dialogue.h:
 src/game/entities/../../core/events.h:
 src/game/entities/../../core/viewport.h:
 src/game/entities/../../core/input.h:

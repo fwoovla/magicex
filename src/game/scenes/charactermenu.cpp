@@ -50,7 +50,7 @@ CharacterMenu::CharacterMenu() {
 
     ppo = {cpo.x + 130, cpo.y + 130}; //portrait offset
 
-    LoadSpriteCentered(character_sprite, g_character_sprite_sheets[ g_character_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
+    LoadSpriteCentered(character_sprite, g_character_sprite_sheets[ g_active_creature_data[g_current_player->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
 
     CreateLabel(primary_header_label, {ppo.x - 75, ppo.y - 10}, FONTSIZE_24, WHITE, "primary");
@@ -294,44 +294,44 @@ void CharacterMenu::Update() {
     feet_grid->Update();
     hands_grid->Update();
 
-    std::string speed = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_speed);
+    std::string speed = TextFormat("%0.2f", g_active_creature_data[g_current_player->uid].current_speed);
     speed_label.text = "speed:  " + speed;
 
-    std::string max_health = TextFormat("%i", g_character_data[g_current_player->uid].max_health);
-    std::string health = TextFormat("%i", g_character_data[g_current_player->uid].health);
+    std::string max_health = TextFormat("%i", g_active_creature_data[g_current_player->uid].max_health);
+    std::string health = TextFormat("%i", g_active_creature_data[g_current_player->uid].health);
     health_label.text = "health:  " + health + "/" + max_health;
 
-    std::string exp = TextFormat("%i", g_character_data[g_current_player->uid].exp);
+    std::string exp = TextFormat("%i", g_active_creature_data[g_current_player->uid].exp);
     exp_label.text = "exp:  " + exp;
 
-    std::string defence = TextFormat("%i", g_character_data[g_current_player->uid].defence);
+    std::string defence = TextFormat("%i", g_active_creature_data[g_current_player->uid].defence);
     defence_label.text = "defence:  " + defence;
 
-    std::string magic_defence = TextFormat("%i", g_character_data[g_current_player->uid].magic_defence);
+    std::string magic_defence = TextFormat("%i", g_active_creature_data[g_current_player->uid].magic_defence);
     magic_defence_label.text = "magic defence:  " + magic_defence;
 
-    std::string max_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].max_power);
+    std::string max_power = TextFormat("%0.2f", g_active_creature_data[g_current_player->uid].max_power);
     //max_power_label.text = "max power: " + max_power;
-    std::string current_power = TextFormat("%0.2f", g_character_data[g_current_player->uid].current_power);
+    std::string current_power = TextFormat("%0.2f", g_active_creature_data[g_current_player->uid].current_power);
     current_power_label.text = "power:  " + current_power + "/" + max_power;
 
-    std::string max_sat = TextFormat("%0.2f", g_character_data[g_current_player->uid].max_saturation);
-    std::string sat = TextFormat("%0.2f", g_character_data[g_current_player->uid].saturation);
+    std::string max_sat = TextFormat("%0.2f", g_active_creature_data[g_current_player->uid].max_saturation);
+    std::string sat = TextFormat("%0.2f", g_active_creature_data[g_current_player->uid].saturation);
     sat_label.text = "sat:  " + sat + "/" + max_sat;
 }
 
 void CharacterMenu::Open() {
     //TraceLog(LOG_INFO, "opening character menu with no container");
-    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
-    hotbar_grid->SetItems(&g_character_data[g_current_player->uid].hotbar);
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
+    hotbar_grid->SetItems(&g_active_creature_data[g_current_player->uid].hotbar);
 
-    primary_grid->SetItems(&g_character_data[g_current_player->uid].primary);
-    secondary_grid->SetItems(&g_character_data[g_current_player->uid].secondary);
-    head_grid->SetItems(&g_character_data[g_current_player->uid].head);
-    body_grid->SetItems(&g_character_data[g_current_player->uid].body);
-    legs_grid->SetItems(&g_character_data[g_current_player->uid].legs);
-    feet_grid->SetItems(&g_character_data[g_current_player->uid].feet);
-    hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
+    primary_grid->SetItems(&g_active_creature_data[g_current_player->uid].primary);
+    secondary_grid->SetItems(&g_active_creature_data[g_current_player->uid].secondary);
+    head_grid->SetItems(&g_active_creature_data[g_current_player->uid].head);
+    body_grid->SetItems(&g_active_creature_data[g_current_player->uid].body);
+    legs_grid->SetItems(&g_active_creature_data[g_current_player->uid].legs);
+    feet_grid->SetItems(&g_active_creature_data[g_current_player->uid].feet);
+    hands_grid->SetItems(&g_active_creature_data[g_current_player->uid].hands);
 
     use_ground = true;
     shared_data.dest_cell = {-1,-1};
@@ -353,16 +353,16 @@ void CharacterMenu::Open() {
 
 void CharacterMenu::OpenWith(BaseContainerEntity *container) {
     TraceLog(LOG_INFO, "OPENING CONTAINER %s", container->iid.c_str());
-    inventory_grid->SetItems(&g_character_data[g_current_player->uid].inventory);
-    hotbar_grid->SetItems(&g_character_data[g_current_player->uid].hotbar);
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
+    hotbar_grid->SetItems(&g_active_creature_data[g_current_player->uid].hotbar);
 
-    primary_grid->SetItems(&g_character_data[g_current_player->uid].primary);
-    secondary_grid->SetItems(&g_character_data[g_current_player->uid].secondary);
-    head_grid->SetItems(&g_character_data[g_current_player->uid].head);
-    body_grid->SetItems(&g_character_data[g_current_player->uid].body);
-    legs_grid->SetItems(&g_character_data[g_current_player->uid].legs);
-    feet_grid->SetItems(&g_character_data[g_current_player->uid].feet);
-    hands_grid->SetItems(&g_character_data[g_current_player->uid].hands);
+    primary_grid->SetItems(&g_active_creature_data[g_current_player->uid].primary);
+    secondary_grid->SetItems(&g_active_creature_data[g_current_player->uid].secondary);
+    head_grid->SetItems(&g_active_creature_data[g_current_player->uid].head);
+    body_grid->SetItems(&g_active_creature_data[g_current_player->uid].body);
+    legs_grid->SetItems(&g_active_creature_data[g_current_player->uid].legs);
+    feet_grid->SetItems(&g_active_creature_data[g_current_player->uid].feet);
+    hands_grid->SetItems(&g_active_creature_data[g_current_player->uid].hands);
 
     use_ground = false;
     ground_grid->container_iid = container->iid;
@@ -517,9 +517,9 @@ void CharacterMenu::OnUseItem() {
         if(source_itter->second.type == TYPE_FOOD) {
             TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
             TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.food_data.saturation);
-            g_character_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
-            if(g_character_data[g_current_player->uid].saturation > g_character_data[g_current_player->uid].max_saturation) {
-                g_character_data[g_current_player->uid].saturation = g_character_data[g_current_player->uid].max_saturation;
+            g_active_creature_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
+            if(g_active_creature_data[g_current_player->uid].saturation > g_active_creature_data[g_current_player->uid].max_saturation) {
+                g_active_creature_data[g_current_player->uid].saturation = g_active_creature_data[g_current_player->uid].max_saturation;
             }
             grid_list[source_grid]->RemoveItem(source_cell);
         }
