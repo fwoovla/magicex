@@ -11,19 +11,19 @@ enum DIALOGUE_TOPIC {
 struct DialogueNode;
 
 struct DialogueResponse {
-    std::string text;
-    std::string next_node;
+    std::string text = "";
+    std::string next_node = "";
 };
 
 struct DialogueNode {
-    std::string node_id;
-    std::string text;
+    std::string node_id = "";
+    std::string text = "";
     std::vector<DialogueResponse> options; 
 };
 
 struct DialogueTree {
     DIALOGUE_TOPIC topic;
-    std::string start_node;
+    std::string start_node = "";
     //std::vector<DialogueNode> nodes;
     std::unordered_map<std::string, DialogueNode> nodes;
 };

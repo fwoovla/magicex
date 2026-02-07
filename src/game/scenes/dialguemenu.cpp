@@ -5,6 +5,11 @@ DialogueMenu::DialogueMenu() {
     grid_list.resize(GRID_NUM_GRIDS, nullptr);
 
     use_ground = false;
+    trading = false;
+
+    buy_items_value = 0;
+    sell_items_value = 0;
+
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 30/g_scale, BLACK, "HI THERE");
     panel_bg = g_ui_panels[PANEL_CHAR_SCREEN];
     panel_rect = {
@@ -16,14 +21,12 @@ DialogueMenu::DialogueMenu() {
 
     gpo = {panel_rect.x, panel_rect.y + 80};
     CreateLabel(ground_header_label, {gpo.x + 90, gpo.y - 30}, FONTSIZE_50, WHITE, "TRADE");
-    ground_grid = new ItemGrid(5, 6, 50, {gpo.x + 25, gpo.y + 20}, &shared_data);
+    ground_grid = new TradeGrid(5, 6, 50, {gpo.x + 25, gpo.y + 20}, &shared_data);
     ground_grid->this_grid = GRID_GROUND;
     ground_grid->accepted_type = TYPE_ALL;
 
-    ground_grid->selecting.Connect( [&](){OnItemSelected();} );
-    ground_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
-    ground_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    ground_grid->pickup.Connect( [&](){OnPickup();} );
+    ground_grid->selected.Connect( [&](){OnItemSelected();} );
+    
 
     ground_grid->open_details.Connect( [&](){OnOpenDetails();} );
     ground_grid->close_details.Connect( [&](){OnCloseDetails();} );
@@ -34,25 +37,22 @@ DialogueMenu::DialogueMenu() {
     cpo = {panel_rect.x + 300, panel_rect.y + 45};
     CreateLabel(character_header_label, {cpo.x + 60, cpo.y - 30}, FONTSIZE_50, WHITE, "");
     
-    ppo = {cpo.x + 130, cpo.y + 130}; //portrait offset
+    ppo = {cpo.x + 130, cpo.y + 80}; //portrait offset
 
     CreateLabel(character_dialogue_label, {ppo.x, ppo.y + 100}, FONTSIZE_30, WHITE, "");
 
     
 //end character
 
-    ipo = {panel_rect.x + 560, panel_rect.y + 80};
+    ipo = {panel_rect.x + 560, panel_rect.y + 60};
     CreateLabel(inventory_label_header, {ipo.x + 60, ipo.y - 30}, FONTSIZE_50, WHITE, "INVENTORY");
 
-    inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 25, ipo.y + 20}, &shared_data);
+    inventory_grid = new TradeGrid(5, 6, 50, {ipo.x + 25, ipo.y + 20}, &shared_data);
     inventory_grid->this_grid = GRID_INVENTORY;
     inventory_grid->accepted_type = TYPE_ALL;
 
-    inventory_grid->selecting.Connect( [&](){OnItemSelected();} );
-    inventory_grid->not_selecting.Connect( [&](){OnItemDeselected();} );
-    inventory_grid->transfer_item.Connect( [&](){OnTransferItem();} );
-    inventory_grid->use_item.Connect( [&](){OnUseItem();} );
-    inventory_grid->putdown_or_equip.Connect( [&](){OnPutDownOrEquip();} );
+    inventory_grid->selected.Connect( [&](){OnItemSelected();} );
+    inventory_grid->selected.Connect( [&](){OnItemSelected();} );
 
     inventory_grid->open_details.Connect( [&](){OnOpenDetails();} );
     inventory_grid->close_details.Connect( [&](){OnCloseDetails();} );
@@ -60,9 +60,8 @@ DialogueMenu::DialogueMenu() {
 
     details_panel  = new DetailsPanel();
     show_details = false;
-
     
-    response_buttons.resize(10);
+    response_buttons.resize(5);
 
     float _y = ppo.y + 150;
     for(Button &button : response_buttons) {
@@ -72,7 +71,10 @@ DialogueMenu::DialogueMenu() {
         _y += 45;
     }
 
-
+    CreateLabel(sale_label, {ppo.x, panel_rect.height - 80}, FONTSIZE_30, RAYWHITE, "*/*");
+    CreateButton(clear_sale_button, {ppo.x, panel_rect.height-50}, {100, 40}, DARKYELLOW, "clear sale");
+    CreateButton(buy_button, {ppo.x, panel_rect.height}, {100, 40}, DARKRED, "purchase");
+    buy_button.default_color = DARKERGRAY;
 }
 
 DialogueMenu::~DialogueMenu() {
@@ -89,7 +91,6 @@ void DialogueMenu::Draw() {
     DrawRectangleRec({0,0,g_resolution.x,g_resolution.y}, TRANSDARKERGRAY);
     DrawTexturePro(panel_bg, {0,0,(float)panel_bg.width, (float)panel_bg.height}, panel_rect, {0,0}, 0.0f, WHITE);
 
-
     DrawSprite(character_sprite);
 
     DrawLabel(character_header_label);
@@ -101,17 +102,20 @@ void DialogueMenu::Draw() {
         }
     }
 
+    if(trading) {
+        DrawLabel(ground_header_label);
+        ground_grid->DrawGrid();
+        DrawLabel(inventory_label_header);
+        inventory_grid->DrawGrid();
+           
+        ground_grid->DrawItems();
+        inventory_grid->DrawItems();
+        DrawLabelCentered(sale_label);
+        DrawButton(clear_sale_button);
+        DrawButton(buy_button);
 
-    DrawLabel(ground_header_label);
-    ground_grid->DrawGrid();
-    DrawLabel(inventory_label_header);
-    inventory_grid->DrawGrid();
+    }
 
-
-
-    ground_grid->DrawItems();
-    inventory_grid->DrawItems();
-    //hotbar_grid->DrawItems();
 
     if(show_details) {
         details_panel->Draw();
@@ -121,10 +125,7 @@ void DialogueMenu::Draw() {
     }
 }
 
-void DialogueMenu::DrawHotBarOnly() {
-    //hotbar_grid->DrawGrid();
-    //hotbar_grid->DrawItems();
-}
+void DialogueMenu::DrawHotBarOnly() {}
 
 
 void DialogueMenu::Update() {
@@ -139,28 +140,86 @@ void DialogueMenu::Update() {
 
     ground_grid->Update();
     inventory_grid->Update();
-    //hotbar_grid->Update();
 
+    int option = 0;
     for(Button &button : response_buttons) {
 
-        if(IsButtonHovered(button, g_scale)){
+        if(IsButtonHovered(button, g_scale) and button.text != ""){
             if(button.already_hovered == false) {
                 //PlaySound(button_sound);
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                TraceLog(LOG_INFO, "BUTTON PRESSED ");
-                //play_pressed.EmitSignal();
-                //quit_pressed.EmitSignal();
+
+                std::string next_node = g_active_dialogue.active_node->options[option].next_node;
+
+                g_active_dialogue.active_node = &g_active_dialogue.tree->nodes[next_node];
+                character_dialogue_label.text = g_active_dialogue.active_node->text;
+                
+                for(Button &button : response_buttons) {
+                    button.text = "";
+                }
+
+                for(int i = 0; i < g_active_dialogue.active_node->options.size(); i++) {
+                    if(i < response_buttons.size()) {
+                        response_buttons[i].text = g_active_dialogue.active_node->options[i].text;
+                    }
+                }
+                if(next_node == "shop") {trading = true;}
+                else {
+                    trading = false;
+                    ClearTrade();
+                }
+            }        
+        }
+        option++;
+    }
+
+    if(IsButtonHovered(clear_sale_button, g_scale) and trading){
+        if(clear_sale_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            TraceLog(LOG_INFO, "clear sale ");
+            ClearTrade();
+        }        
+    }
+
+    if(IsButtonHovered(buy_button, g_scale) and trading){
+        if(clear_sale_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+
+        if(buy_items_value < sell_items_value) {
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                TraceLog(LOG_INFO, "buy ");
+
+                for(int item_id : items_to_buy) {
+                    inventory_grid->AddItem(item_id);
+                    ground_grid->RemoveItem(item_id);
+                }
+                for (int item_id : items_to_sell) {
+                    ground_grid->AddItem(item_id);
+                    inventory_grid->RemoveItem(item_id);
+                }
+
+                ClearTrade();
+                
             }        
         }
     }
 
+    sale_label.text = std::to_string(buy_items_value) + "/" + std::to_string(sell_items_value);
 }
 
 void DialogueMenu::Open() {
     inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
 
-    use_ground = true;
+    use_ground = false;
+    trading = false;
+    show_details = false;
+
+    ClearTrade();
+
     shared_data.dest_cell = {-1,-1};
     shared_data.dest_grid = GRID_NONE;
     shared_data.source_cell = {-1,-1};
@@ -168,7 +227,6 @@ void DialogueMenu::Open() {
     shared_data.item_id = -1;
     shared_data.use_id = -1;
     shared_data.showing_details = false;
-    show_details = false;
 
     blank_list.clear();
     blank_list.push_back(-1);
@@ -179,6 +237,8 @@ void DialogueMenu::Open() {
 
 
 void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
+    g_active_dialogue.active_node = nullptr;
+    g_active_dialogue.tree = nullptr;
     int sprite_id = g_active_creature_data[npc_entity->uid].sprite_sheet_id;
 
     TraceLog(LOG_INFO, "OPENING DIALOGUE WITH %i  sprite %i", npc_entity->uid, sprite_id);
@@ -186,6 +246,11 @@ void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
     inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
 
     use_ground = false;
+    trading = false;
+    show_details = false;
+
+    ClearTrade();
+
     ground_grid->container_iid = "npc_" + std::to_string(npc_entity->uid);
     ground_grid->SetItems(&g_active_creature_data[npc_entity->uid].inventory);
 
@@ -204,7 +269,9 @@ void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
 
         for(int r = 0; r < g_active_dialogue.active_node->options.size(); r++) {
             TraceLog(LOG_INFO, "----DIALOGUE OPTION");
-            response_buttons[r].text = g_active_dialogue.active_node->options[r].text;
+            if(r < response_buttons.size()) {
+                response_buttons[r].text = g_active_dialogue.active_node->options[r].text;
+            }
         }
 
         TraceLog(LOG_INFO, "----DIALOGUE FOUND");
@@ -213,149 +280,55 @@ void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
         TraceLog(LOG_INFO, "!!! DIALOGUE NOT FOUND !!!!");
     }
 
-
-
-
     LoadSpriteCentered(character_sprite, g_creature_sprite_sheets[ g_active_creature_data[npc_entity->uid].sprite_sheet_id], ppo, 4, 16.0f, 0.10f);
     ScaleSprite(character_sprite, {5,5});
 
     character_header_label.text = g_active_creature_data[npc_entity->uid].name;
-
-
-    show_details = false;
 }
 
 
 void DialogueMenu::OnItemSelected() {
-    for(auto &grid : grid_list) {
-        if(grid != nullptr) {
-            grid->can_select = false;
-        }
+
+    if(shared_data.source_grid == GRID_GROUND) {
+        items_to_buy.push_back(shared_data.item_id);
+        buy_items_value += g_item_instances[shared_data.item_id].value;
     }
-}
-
-void DialogueMenu::OnItemDeselected() {
-    for(auto &grid :grid_list) {
-        if(grid != nullptr) {
-            grid->can_select = true;
-        }
-    }
-}
-
-
-void DialogueMenu::OnPickup() {
-    TraceLog(LOG_INFO, "pickup");
-    int item_id = shared_data.item_id;
-    int source_grid = shared_data.source_grid;
-
-    int dest_grid = GRID_INVENTORY;
-    if(source_grid == GRID_INVENTORY) {
-        dest_grid = GRID_GROUND;
+    else if(shared_data.source_grid == GRID_INVENTORY) {
+        items_to_sell.push_back(shared_data.item_id);
+        sell_items_value += g_item_instances[shared_data.item_id].value;
     }
 
-    Vector2 source_cell = shared_data.source_cell;
-    Vector2 dest_cell = shared_data.dest_cell;
-
-    TraceLog(LOG_INFO, "dest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
-    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
-    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
-
-    if(grid_list[dest_grid]->HasRoom()) {
-        grid_list[dest_grid]->AddItem(item_id);
-        grid_list[source_grid]->RemoveItem(source_cell);
-        if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
-            g_current_player->UnEquip(item_id);
-        }
+    if(buy_items_value <= sell_items_value) {
+        buy_button.focus_color = DARKGREEN;
+    }
+    else {
+        buy_button.focus_color = DARKRED;
     }
 }
 
 
-void DialogueMenu::OnPutDownOrEquip() {
-
-    TraceLog(LOG_INFO, "-----------pd_or_eq----------------------\n");
-}
-
-
-
-void DialogueMenu::OnTransferItem() {
-
-    int item_id = shared_data.item_id;
-    int source_grid = shared_data.source_grid;
-    int dest_grid =  shared_data.dest_grid;
-    Vector2 source_cell = shared_data.source_cell;
-    Vector2 dest_cell = shared_data.dest_cell;
-
-    TraceLog(LOG_INFO, "\ntransfer items \ndest cell %0.0f %0.0f", dest_cell.x, dest_cell.y);
-    TraceLog(LOG_INFO, "source cell %0.0f %0.0f", source_cell.x, source_cell.y);
-    TraceLog(LOG_INFO, "move %i  from %i %i", item_id, source_grid, dest_grid);
-
-    if(source_grid != -1 and dest_grid != -1) {
-        if(grid_list[dest_grid]->CanAddItem(item_id, dest_cell)) {
-            grid_list[dest_grid]->AddItem(item_id, dest_cell);
-            grid_list[source_grid]->RemoveItem(source_cell);
-            
-            if(dest_grid != GRID_GROUND and dest_grid != GRID_INVENTORY and dest_grid != GRID_SECONDARY) {
-                //g_current_player->Equip(item_id);    
-            }
-            if(source_grid != GRID_GROUND and source_grid != GRID_INVENTORY and source_grid != GRID_SECONDARY) {
-                //g_current_player->UnEquip(item_id);
-            }
+void DialogueMenu::OnItemUnSelected() {
+    if(shared_data.source_grid == GRID_GROUND) {
+        for(int &item :items_to_buy) {
+            if(item == shared_data.item_id) {item = -1;}
         }
-        else {
-            grid_list[source_grid]->AddItem(item_id, source_cell);
+        //items_to_buy.erase(shared_data.item_id);
+        buy_items_value -= g_item_instances[shared_data.item_id].value;
+    }
+    else if(shared_data.source_grid == GRID_INVENTORY) {
+        for(int &item :items_to_sell) {
+            if(item == shared_data.item_id) {item = -1;}
         }
+        //items_to_sell.push_back(shared_data.item_id);
+        sell_items_value -= g_item_instances[shared_data.item_id].value;
     }
 
-
-    shared_data.dest_cell = {-1,-1};
-    shared_data.dest_grid = GRID_NONE;
-    shared_data.source_cell = {-1,-1};
-    shared_data.source_grid = GRID_NONE;
-    shared_data.item_id = -1;
-    shared_data.use_id = -1;
-    shared_data.showing_details = false;
-
-    TraceLog(LOG_INFO, "---------------------------------\n");
-}
-
-void DialogueMenu::OnUseItem() {
-/*     int item_id = shared_data.item_id;
-    int source_grid = shared_data.source_grid;
-    int dest_grid =  shared_data.dest_grid;
-    Vector2 source_cell = shared_data.source_cell;
-    Vector2 dest_cell = shared_data.dest_cell;
-
-    TraceLog(LOG_INFO, "--------------using %i  -------------------", item_id);
-    TraceLog(LOG_INFO, "--------------source grid %i  dest grid %i-------------------", source_grid, dest_grid);
-    TraceLog(LOG_INFO, "--------------source cell %0.0f %0.0f-------------------", source_cell.x, source_cell.y);
-    TraceLog(LOG_INFO, "--------------dest cell %0.0f %0.0f-------------------", dest_cell.x, dest_cell.y);
-
-
-    auto source_itter = g_item_instances.find(shared_data.item_id);
-    if(source_itter != g_item_instances.end()) {
-        if(source_itter->second.type == TYPE_FOOD) {
-            TraceLog(LOG_INFO, "-------using food  %s-------", source_itter->second.item_name.c_str());
-            TraceLog(LOG_INFO, "------- saturation  %0.02f-------", source_itter->second.food_data.saturation);
-            g_active_creature_data[g_current_player->uid].saturation += source_itter->second.food_data.saturation;
-            if(g_active_creature_data[g_current_player->uid].saturation > g_active_creature_data[g_current_player->uid].max_saturation) {
-                g_active_creature_data[g_current_player->uid].saturation = g_active_creature_data[g_current_player->uid].max_saturation;
-            }
-            grid_list[source_grid]->RemoveItem(source_cell);
-        }
+    if(buy_items_value <= sell_items_value) {
+        buy_button.focus_color = DARKGREEN;
     }
-
-    for(auto &grid :grid_list) {
-        grid->can_select = true;
+    else {
+        buy_button.focus_color = DARKRED;
     }
-
-    shared_data.dest_cell = {-1,-1};
-    shared_data.dest_grid = GRID_NONE;
-    shared_data.source_cell = {-1,-1};
-    shared_data.source_grid = GRID_NONE;
-    shared_data.item_id = -1;
-    shared_data.use_id = -1;
-    shared_data.showing_details = false; */
-
 }
 
 
@@ -382,4 +355,18 @@ void DialogueMenu::OnCloseDetails() {
         shared_data.showing_details = false;
         TraceLog(LOG_INFO, "--------------close details %i  ------------------- %i", shared_data.item_id, shared_data.source_grid);
     }
+}
+
+void DialogueMenu::ClearTrade() {
+    for(TradeGrid *grid : grid_list) {
+        if(grid != nullptr) {
+            grid->selected_cells.clear();
+        }
+    }
+    buy_items_value = 0;
+    sell_items_value = 0;
+    buy_button.focus_color = DARKRED;
+    items_to_buy.clear();
+    items_to_sell.clear();
+
 }

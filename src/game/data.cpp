@@ -518,6 +518,9 @@ void LoadGameData() {
         std::vector<int> hs;
         hs.push_back(-1);
 
+        std::vector<int> ti;
+        ti.push_back(-1);
+
 
         CharacterData this_creature = {
             
@@ -532,6 +535,8 @@ void LoadGameData() {
             .legs = lg,
             .feet = ft,
             .hands = hs,
+
+            .trade_items = ti,
 
             .creature_id = creature_id,
             .health = health,

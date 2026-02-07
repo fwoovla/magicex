@@ -22,19 +22,19 @@
         {
             "item_name": "Dagger",
             "item_id":"ITEM_ID_DAGGER",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Sword",
             "item_id":"ITEM_ID_SWORD",
-            "value":0,
+            "value":13,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Spear",
             "item_id":"ITEM_ID_SPEAR",
-            "value":0,
+            "value":20,
             "item_type":"TYPE_WEAPON"
         },
         {
@@ -103,7 +103,7 @@
         {
             "item_name": "lightning pistol",
             "item_id":"ITEM_ID_NEWWAND9",
-            "value":0,
+            "value":40,
             "item_type":"TYPE_WEAPON"
         },
         {
@@ -179,7 +179,7 @@
         {
             "item_name": "Boots",
             "item_id":"ITEM_ID_BOOTS",
-            "value":0,
+            "value":110,
             "item_type":"TYPE_FEET_ARMOR"
         },
         {

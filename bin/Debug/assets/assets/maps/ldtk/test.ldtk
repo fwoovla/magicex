@@ -1297,7 +1297,7 @@
 						},
 						{
 							"__identifier": "SpawnPoint",
-							"__grid": [14,4],
+							"__grid": [15,18],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -1306,10 +1306,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 21,
-							"px": [224,64],
+							"px": [240,288],
 							"fieldInstances": [],
-							"__worldX": 224,
-							"__worldY": 64
+							"__worldX": 240,
+							"__worldY": 288
 						},
 						{
 							"__identifier": "CreatureEntity",

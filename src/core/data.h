@@ -209,6 +209,8 @@ struct CharacterData {
     std::vector<int> feet;
     std::vector<int> hands;
 
+    std::vector<int> trade_items;
+
     int creature_id = -1;
     int health = 0;
     int max_health;

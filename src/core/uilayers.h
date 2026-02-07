@@ -127,6 +127,66 @@ class ItemGrid {
 
 };
 
+class TradeGrid {
+
+    public:
+    TradeGrid(int c, int r, int s, Vector2 p, SharedItemData *sd);
+    ~TradeGrid();
+    void Update();
+    void DrawGrid();
+    void DrawItems();
+    void SetItems(std::vector<int> *list);
+
+    bool CanAddItem(int item_id, Vector2 dest_cell);
+    bool HasRoom();
+    void AddItem(int item_id, Vector2 dest_cell);
+    void AddItem(int item_id);
+    bool CanRemoveItem(Vector2 source_cell);
+    void RemoveItem(Vector2 source_cell);
+    void RemoveItem(int item_id);
+
+    std::string CreateDetails(ItemInstanceData &item_data);
+
+    INVENTORYGRIDS this_grid;
+    ItemType accepted_type;
+
+    SharedItemData *shared_data;
+
+    int rows = 0;
+    int cols = 0;
+    int grid_size = 0;
+    float hovered_time;
+    Vector2 position;
+
+    bool grid_is_selectable;
+    bool can_select;
+    bool cell_hovered;
+    bool cell_selected;
+    bool show_details;
+    //bool is_using;
+    Vector2 hovered_cell;
+    Vector2 last_hovered_cell;
+    Vector2 selected_cell;
+
+    std::string container_iid;
+    //Vector2 return_position;
+
+    std::vector<Sprite> item_sprites;
+
+    std::vector<int> *item_list;
+    std::vector<Vector2> selected_cells;
+
+    Label name_label;
+    Label details_label;
+
+    Signal selected;
+    Signal unselected;
+    Signal open_details;
+    Signal close_details;
+
+};
+
+
 class DetailsPanel : public BaseUILayer {
 
     public:
@@ -262,26 +322,23 @@ class DialogueMenu : public BaseUILayer {
     void OpenWith(NpcEntity  *npc_entity);
 
     void OnItemSelected();
-    void OnItemDeselected();
-
-    void OnTransferItem();
-
-    void OnPickup();
-    void OnPutDownOrEquip();
-
-    void OnUseItem();
-
+    void OnItemUnSelected();
+    
     void OnOpenDetails();
     void OnCloseDetails();
+    void ClearTrade();
 
 
     bool use_ground;
+
+    bool trading;
+
     std::vector<int> blank_list;
     std::string default_iid;
 
 
     SharedItemData shared_data;
-    std::vector<ItemGrid *> grid_list;
+    std::vector<TradeGrid *> grid_list;
 
     Label title_label;
 
@@ -294,7 +351,7 @@ class DialogueMenu : public BaseUILayer {
 
     
     Vector2 gpo; // ground position offset
-    ItemGrid *ground_grid;
+    TradeGrid *ground_grid;
     std::vector<int> g_item_list;
     
     Vector2 cpo;
@@ -309,12 +366,22 @@ class DialogueMenu : public BaseUILayer {
 
     std::vector<Button> response_buttons;
 
+    Button clear_sale_button;
+    Button buy_button;
     
     Vector2 ipo;
-    ItemGrid *inventory_grid;
+    TradeGrid *inventory_grid;
 
     bool show_details;
     DetailsPanel *details_panel;
+
+    std::vector<int> items_to_buy;
+    std::vector<int> items_to_sell;
+
+    Label sale_label;
+
+    int buy_items_value;
+    int sell_items_value;
 
 
     //ActiveDialogue this_dialogue;

@@ -129,6 +129,7 @@ GENERATED += $(OBJDIR)/testdummy.o
 GENERATED += $(OBJDIR)/tilelayer.o
 GENERATED += $(OBJDIR)/titlescene.o
 GENERATED += $(OBJDIR)/titleuilayer.o
+GENERATED += $(OBJDIR)/tradegrid.o
 GENERATED += $(OBJDIR)/transitions.o
 GENERATED += $(OBJDIR)/utils.o
 GENERATED += $(OBJDIR)/viewport.o
@@ -183,6 +184,7 @@ OBJECTS += $(OBJDIR)/testdummy.o
 OBJECTS += $(OBJDIR)/tilelayer.o
 OBJECTS += $(OBJDIR)/titlescene.o
 OBJECTS += $(OBJDIR)/titleuilayer.o
+OBJECTS += $(OBJDIR)/tradegrid.o
 OBJECTS += $(OBJDIR)/transitions.o
 OBJECTS += $(OBJDIR)/utils.o
 OBJECTS += $(OBJDIR)/viewport.o
@@ -403,6 +405,9 @@ $(OBJDIR)/poison.o: src/game/spells/poison.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/statusbar.o: src/game/statusbar.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/tradegrid.o: src/game/tradegrid.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/viewport.o: src/game/viewport.cpp

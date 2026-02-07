@@ -24,7 +24,8 @@
                 "text": "Take a look.",
                 "action": "open_shop",
                 "choices": [
-                        { "text": "Thanks.", "next": "end" }
+                        { "text": "Ok Bye.", "next": "end" },
+                        { "text": "Back.", "next": "greeting" }
                     ]
                 },
 
