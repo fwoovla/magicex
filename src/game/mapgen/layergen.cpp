@@ -301,8 +301,13 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                                 //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
                             }
                             else {
-                                
-                                dest_map_field.value_s = "House_1";
+                                TraceLog(LOG_INFO, "++++++--------- sub map names %i", g_sub_map_string_names.size());
+                                for(std::string &map : g_sub_map_string_names) {
+                                    TraceLog(LOG_INFO, "++++++--------- sub map %s", map.c_str());
+                                }
+                                std::string sub_map_choice = g_sub_map_string_names[GetRandomValue(0, g_sub_map_string_names.size()-1)];
+
+                                dest_map_field.value_s = sub_map_choice;
                             }
                             
 
@@ -348,7 +353,7 @@ void GenerateCollisionLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
             if(_tileset.collision_grid[index] == 1) {
                 new_layer.int_grid[index] = 1;
-                TraceLog(LOG_INFO, "BORdER TILE found %i %i", x, y);
+                //TraceLog(LOG_INFO, "BORdER TILE found %i %i", x, y);
             }
         }
     }

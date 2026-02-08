@@ -2,6 +2,35 @@
 
 #include "gamedefs.h"
 
+
+
+enum SpellID {
+    SPELL_ID_NONE = -1,
+    SPELL_ID_MAGICMISSLE_1,
+    SPELL_ID_MAGICMISSLE_2,
+    SPELL_ID_MAGICMISSLE_3,
+    SPELL_ID_MAGICMISSLE_4,
+
+    SPELL_ID_FIREBALL_1,
+    SPELL_ID_FIREBALL_2,
+    SPELL_ID_FIREBALL_3,
+    SPELL_ID_FIREBALL_4,
+
+    SPELL_ID_LIGHTNING_1,
+    SPELL_ID_LIGHTNING_2,
+    SPELL_ID_LIGHTNING_3,
+    SPELL_ID_LIGHTNING_4,
+
+    SPELL_ID_POISON_1,
+    SPELL_ID_POISON_2,
+    SPELL_ID_POISON_3,
+    SPELL_ID_POISON_4,
+
+};
+
+
+
+
 struct SpellData {
     std::string spell_name;
     SpellID spell_id;

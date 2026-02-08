@@ -492,7 +492,7 @@
             "recoil":20,
             "knockback":10,
             "shots":1,
-            "accuracy":0.0
+            "accuracy":1.0
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
@@ -506,7 +506,7 @@
             "mod_slots":2,
             "shots":1,
             "pps":0.0,
-            "accuracy":0.0,
+            "accuracy":1.0,
             "spread": 0
         },
         {
@@ -521,7 +521,7 @@
             "mod_slots":2,
             "shots":1,
             "pps":0.0,
-            "accuracy":0.0,
+            "accuracy":1.0,
             "spread": 0
         },
         {
@@ -536,7 +536,7 @@
             "mod_slots":3,
             "shots":1,
             "pps":0.0,
-            "accuracy":0.0,
+            "accuracy":1.0,
             "spread": 0
         },
         {
@@ -551,7 +551,7 @@
             "mod_slots":1,
             "shots":1,
             "pps":0.0,
-            "accuracy":0.0,
+            "accuracy":1.0,
             "spread": 0
         },
 
@@ -835,40 +835,40 @@
             "armor_id": "ITEM_ID_HELMET",
             "armor_name": "Helmet",
             "spell_id":"SPELL_ID_NONE",
-            "defence": 1.0,
-            "magic_defence": 1.0,
+            "defence": 1,
+            "magic_defence": 1,
             "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_BODY",
             "armor_name": "Chest Armor",
             "spell_id":"SPELL_ID_NONE",
-            "defence": 1.0,
-            "magic_defence": 1.0,
+            "defence": 1,
+            "magic_defence": 1,
             "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_GLOVES",
             "armor_name": "Gloves",
             "spell_id":"SPELL_ID_NONE",
-            "defence": 1.0,
-            "magic_defence": 1.0,
+            "defence": 1,
+            "magic_defence": 1,
             "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_LEGGINGS",
             "armor_name": "Leggings",
             "spell_id":"SPELL_ID_NONE",
-            "defence": 1.0,
-            "magic_defence": 1.0,
+            "defence": 1,
+            "magic_defence": 1,
             "mod_slots":1
         },
         {
             "armor_id": "ITEM_ID_BOOTS",
             "armor_name": "Boots",
             "spell_id":"SPELL_ID_NONE",
-            "defence": 1.0,
-            "magic_defence": 1.0,
+            "defence": 1,
+            "magic_defence": 1,
             "mod_slots":1
         }
     ],
@@ -977,6 +977,7 @@
             "sprite_sheet_id":"SPRITE_TESTDUMMY",
             "max_stamina":0,
             "ai_id":"AI_PASSIVE",
+            "loot_table_id":"LT_NONE",
             "is_npc":false
         },
         {
@@ -987,6 +988,7 @@
             "sprite_sheet_id":"SPRITE_BUNNY",
             "max_stamina":10,
             "ai_id":"AI_FEARFULL",
+            "loot_table_id":"LT_ANIMAL",
             "is_npc":false
         },
         {
@@ -997,6 +999,7 @@
             "sprite_sheet_id":"SPRITE_SCAVENGER",
             "max_stamina":10,
             "ai_id":"AI_AGGRESSIVE",
+            "loot_table_id":"LT_SCAVENGER",
             "is_npc":false
         },
         {
@@ -1007,6 +1010,7 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
+            "loot_table_id":"LT_SCAVENGER",
             "is_npc":false
         },
         {
@@ -1017,6 +1021,7 @@
             "sprite_sheet_id":"SPRITE_TRADER",
             "max_stamina":10,
             "ai_id":"AI_TERRITORIAL",
+            "loot_table_id":"LT_SCAVENGER",
             "is_npc":true,
             "dialogue_id":"TOPIC_TRADE"
 
@@ -1029,6 +1034,7 @@
             "sprite_sheet_id":"SPRITE_SLIME",
             "max_stamina":10,
             "ai_id":"AI_HOSTILE",
+            "loot_table_id":"LT_ANIMAL",
             "is_npc":false
         }
     ],
@@ -1060,31 +1066,155 @@
         }
     ],
 
-    "creature_loot_tables": [
+    "loot_pools":[
         {
-            "creature_id":"CREATURE_TESTDUMMY",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
+          "pool_id":"POOL_WEAPONS",
+          "rolls_min":1,
+          "rolls_max":3,
+          "entries":[
+            {
+              "item_id":"ITEM_ID_DAGGER",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_SPEAR",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_SWORD",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_NEWWAND1",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_NEWWAND4",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_NEWWAND8",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_NEWWAND12",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            }
+          ]
+          
         },
         {
-            "creature_id":"CREATURE_BUNNY",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
+          "pool_id":"POOL_ARMOR",
+          "rolls_min":1,
+          "rolls_max":3,
+          "entries":[
+            {
+              "item_id":"ITEM_ID_BOOTS",
+              "weight":40,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_LEGGINGS",
+              "weight":15,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_BODY",
+              "weight":15,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_GLOVES",
+              "weight":15,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_HELMET",
+              "weight":15,
+              "min_rarity":"LOOTRARITY_COMMON"
+            }
+          ]
+          
         },
         {
-            "creature_id":"CREATURE_SCAVENGER",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
+          "pool_id":"POOL_RESOURCE",
+          "rolls_min":1,
+          "rolls_max":2,
+          "entries":[
+            {
+              "item_id":"ITEM_ID_MUSHROOM",
+              "weight":40,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_MUSHROOM_JUICE",
+              "weight":15,
+              "min_rarity":"LOOTRARITY_COMMON"
+            }
+          ]
+          
         },
         {
-            "creature_id":"CREATURE_TRADER",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
-        },
-        {
-            "creature_id":"CREATURE_NPC_1",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE", "ITEM_ID_NEWWAND10", "ITEM_ID_BOOTS"]
-        },
-        {
-            "creature_id":"CREATURE_SLIME",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE"]
+          "pool_id":"POOL_FOOD",
+          "rolls_min":1,
+          "rolls_max":3,
+          "entries":[
+            {
+              "item_id":"ITEM_ID_APPLE",
+              "weight":20,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_BREAD",
+              "weight":20,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_MEAT",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },
+            {
+              "item_id":"ITEM_ID_CHEESE",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            }
+          ]
         }
-    ]
+    ],
+
+
+  "loot_tables":[
+    {
+      "table_id":"LT_SCAVENGER",
+      "pools":[
+        "POOL_WEAPONS",
+        "POOL_FOOD"
+      ]
+    },
+        {
+      "table_id":"LT_ANIMAL",
+      "pools":[
+        "POOL_FOOD"
+      ]
+    },
+    {
+      "table_id":"LT_COMMON_CHEST",
+      "pools":[
+        "POOL_WEAPONS",
+        "POOL_FOOD",
+        "POOL_RESOURCE",
+        "POOL_ARMOR"
+      ]
+    }
+  ]
+
 }
 

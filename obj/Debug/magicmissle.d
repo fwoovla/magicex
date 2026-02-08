@@ -256,6 +256,7 @@ obj/Debug/magicmissle.o: src/game/spells/magicmissle.cpp \
  src/game/spells/../../core/mapgen.h \
  src/game/spells/../../core/resources.h \
  src/game/spells/../../core/itemgenerator.h \
+ src/game/spells/../../core/loottables.h \
  src/game/spells/../../core/data.h /usr/include/c++/13/span \
  src/game/spells/../../core/spells.h src/game/spells/../../core/events.h \
  src/game/spells/../../core/viewport.h src/game/spells/../../core/input.h \
@@ -596,6 +597,7 @@ src/game/spells/../../core/dialogue.h:
 src/game/spells/../../core/mapgen.h:
 src/game/spells/../../core/resources.h:
 src/game/spells/../../core/itemgenerator.h:
+src/game/spells/../../core/loottables.h:
 src/game/spells/../../core/data.h:
 /usr/include/c++/13/span:
 src/game/spells/../../core/spells.h:

@@ -30,7 +30,9 @@ std::unordered_map<std::string, ContainerData> g_persistant_containers;
 std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
 std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
-std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
+//std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
+std::unordered_map<LootTableID, LootTable> g_creature_loot_tables;
+std::unordered_map<LootPoolID, LootPool> g_creature_loot_pools;
 //std::vector<std::vector<int>> g_loot_tables;
 
 GameData g_game_data;
@@ -43,6 +45,7 @@ std::vector<WorldGenTileSet> g_worldgen_tilesets;
 
 std::vector<Color> g_item_type_colors;
 std::vector<Color> g_rarity_colors;
+std::vector<std::string> g_sub_map_string_names;
 Font g_font;
 
 Texture2D g_main_sprite_sheet;

@@ -258,6 +258,7 @@ obj/Debug/testdummy.o: src/game/entities/testdummy.cpp \
  src/game/entities/../../core/mapgen.h \
  src/game/entities/../../core/resources.h \
  src/game/entities/../../core/itemgenerator.h \
+ src/game/entities/../../core/loottables.h \
  src/game/entities/../../core/data.h /usr/include/c++/13/span \
  src/game/entities/../../core/spells.h \
  src/game/entities/../../core/events.h \
@@ -600,6 +601,7 @@ src/game/entities/../../core/dialogue.h:
 src/game/entities/../../core/mapgen.h:
 src/game/entities/../../core/resources.h:
 src/game/entities/../../core/itemgenerator.h:
+src/game/entities/../../core/loottables.h:
 src/game/entities/../../core/data.h:
 /usr/include/c++/13/span:
 src/game/entities/../../core/spells.h:

@@ -65,6 +65,7 @@ void LDTKLoadMaps (json &mj) {
         for(int level = 0; level < mj["levels"].size(); level++) {
 
             LDTKLevel this_level;
+            this_level.identifier = mj["levels"][level]["identifier"];
 
             if(mj["levels"][level].contains("fieldInstances")) {
                 for (int field = 0; field < mj["levels"][level]["fieldInstances"].size(); field++) {
@@ -81,6 +82,8 @@ void LDTKLoadMaps (json &mj) {
                     if(mj["levels"][level]["fieldInstances"][field]["__identifier"] == "is_sub_map") {
                         if(mj["levels"][level]["fieldInstances"][field]["__value"] == true) {
                             TraceLog(LOG_INFO, "Level loaded as sub map: %i", level);
+
+                            g_sub_map_string_names.push_back(this_level.identifier);
                             this_level.is_sub_map = true;
                         }
                         else {
@@ -255,12 +258,10 @@ void LDTKLoadMaps (json &mj) {
                                     new_field.value_i = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"];
                                     TraceLog(LOG_INFO, "++++++--------------------------------loot level %i", new_field.value_i);
                                 }
-                                if(new_field.identifier == "ItemTypes" ) {
-                                    for(int j = 0; j < mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"].size(); j++) {
-                                        ItemType type = StrToItemType (mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"][j]);
-                                        new_field.i_list.push_back(type);
-                                        TraceLog(LOG_INFO, "++++++--------------------------------type added %i", type);
-                                    }
+                                if(new_field.identifier == "loot_table" ) {
+                                    LootTableID table = StrToLootTableId (mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][_i]["__value"]);
+                                    new_field.value_i = table;
+                                    TraceLog(LOG_INFO, "++++++--------------------------------loot table added %i", table);
                                 }
                                 
 

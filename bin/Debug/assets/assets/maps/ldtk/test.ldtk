@@ -11,7 +11,7 @@
 	"iid": "79a162f0-ac70-11f0-97b6-6b209409ff39",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 87,
+	"nextUid": 91,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -690,12 +690,12 @@
 					"tilesetUid": null
 				},
 				{
-					"identifier": "ItemTypes",
+					"identifier": "loot_table",
 					"doc": null,
-					"__type": "Array<LocalEnum.ItemTypes>",
-					"uid": 72,
-					"type": "F_Enum(71)",
-					"isArray": true,
+					"__type": "LocalEnum.LootTables",
+					"uid": 90,
+					"type": "F_Enum(87)",
+					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
@@ -718,7 +718,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": {
 						"id": "V_String",
-						"params": ["TYPE_ALL"]
+						"params": ["LT_NONE"]
 					},
 					"textLanguageMode": null,
 					"symmetricalRef": false,
@@ -1122,7 +1122,12 @@
 			{ "id": "CREATURE_SLIME", "tileRect": null, "color": 7552569 },
 			{ "id": "CREATURE_NPC_1", "tileRect": null, "color": 4073265 }
 		], "iconTilesetUid": 25, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
-		{ "identifier": "WorldGen", "uid": 82, "values": [ { "id": "GRASS_1", "tileRect": null, "color": 12470831 }, { "id": "DIRT_1", "tileRect": null, "color": 14120515 } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
+		{ "identifier": "WorldGen", "uid": 82, "values": [ { "id": "GRASS_1", "tileRect": null, "color": 12470831 }, { "id": "DIRT_1", "tileRect": null, "color": 14120515 } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
+		{ "identifier": "LootTables", "uid": 87, "values": [
+			{ "id": "LT_NONE", "tileRect": null, "color": 15389866 },
+			{ "id": "LT_TESTDUMMY", "tileRect": null, "color": 12470831 },
+			{ "id": "LT_COMMON_CHEST", "tileRect": null, "color": 14120515 }
+		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "is_shelter",
@@ -1342,16 +1347,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": [ "TYPE_ARMOR", "TYPE_WEAPON", "TYPE_CONSUMEABLE" ], "__tile": null, "defUid": 72, "realEditorValues": [ {
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["TYPE_ARMOR"]
-								}, {
-									"id": "V_String",
-									"params": ["TYPE_WEAPON"]
-								}, {
-									"id": "V_String",
-									"params": ["TYPE_CONSUMEABLE"]
-								} ] }
+									"params": ["LT_COMMON_CHEST"]
+								}] }
 							],
 							"__worldX": 288,
 							"__worldY": 208
@@ -3054,10 +3053,7 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 4, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [4] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["TYPE_ALL"]
-								}] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_NONE", "__tile": null, "defUid": 90, "realEditorValues": [] }
 							],
 							"__worldX": 96,
 							"__worldY": -984
@@ -3201,10 +3197,7 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_RESOURCE"], "__tile": null, "defUid": 72, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["TYPE_RESOURCE"]
-								}] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_NONE", "__tile": null, "defUid": 90, "realEditorValues": [] }
 							],
 							"__worldX": 736,
 							"__worldY": -1224
@@ -3224,10 +3217,7 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_FOOD"], "__tile": null, "defUid": 72, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["TYPE_FOOD"]
-								}] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_NONE", "__tile": null, "defUid": 90, "realEditorValues": [] }
 							],
 							"__worldX": 1056,
 							"__worldY": -1256
@@ -3247,10 +3237,7 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ARMOR"], "__tile": null, "defUid": 72, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["TYPE_ARMOR"]
-								}] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_NONE", "__tile": null, "defUid": 90, "realEditorValues": [] }
 							],
 							"__worldX": 144,
 							"__worldY": -920
@@ -8711,7 +8698,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["LT_COMMON_CHEST"]
+								}] }
 							],
 							"__worldX": 912,
 							"__worldY": 32
@@ -9328,7 +9318,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["LT_COMMON_CHEST"]
+								}] }
 							],
 							"__worldX": 552,
 							"__worldY": 32
@@ -9927,7 +9920,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["LT_COMMON_CHEST"]
+								}] }
 							],
 							"__worldX": 1504,
 							"__worldY": 80
@@ -9963,7 +9959,10 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_ALL"], "__tile": null, "defUid": 72, "realEditorValues": [null] }
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["LT_COMMON_CHEST"]
+								}] }
 							],
 							"__worldX": 1424,
 							"__worldY": 176
@@ -9983,9 +9982,9 @@
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 1, "__tile": null, "defUid": 48, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 0, "__tile": null, "defUid": 69, "realEditorValues": [] },
-								{ "__identifier": "ItemTypes", "__type": "Array<LocalEnum.ItemTypes>", "__value": ["TYPE_FOOD"], "__tile": null, "defUid": 72, "realEditorValues": [{
+								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["TYPE_FOOD"]
+									"params": ["LT_COMMON_CHEST"]
 								}] }
 							],
 							"__worldX": 1472,

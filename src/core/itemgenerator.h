@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gamedefs.h"
+#include "loottables.h"
 #include "data.h"
 
 

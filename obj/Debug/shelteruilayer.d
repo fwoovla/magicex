@@ -256,6 +256,7 @@ obj/Debug/shelteruilayer.o: src/game/scenes/shelteruilayer.cpp \
  src/game/scenes/../../core/mapgen.h \
  src/game/scenes/../../core/resources.h \
  src/game/scenes/../../core/itemgenerator.h \
+ src/game/scenes/../../core/loottables.h \
  src/game/scenes/../../core/data.h /usr/include/c++/13/span \
  src/game/scenes/../../core/spells.h src/game/scenes/../../core/events.h \
  src/game/scenes/../../core/viewport.h src/game/scenes/../../core/input.h \
@@ -596,6 +597,7 @@ src/game/scenes/../../core/dialogue.h:
 src/game/scenes/../../core/mapgen.h:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/itemgenerator.h:
+src/game/scenes/../../core/loottables.h:
 src/game/scenes/../../core/data.h:
 /usr/include/c++/13/span:
 src/game/scenes/../../core/spells.h:

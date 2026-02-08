@@ -52,6 +52,8 @@ extern std::vector<Color> g_item_type_colors;
 
 extern std::vector<Color> g_rarity_colors;
 
+extern std::vector<std::string> g_sub_map_string_names;
+
 struct FoodModData {
     ItemModID mod_id;
     std::string mod_name;
@@ -235,7 +237,9 @@ struct CharacterData {
     std::string name = "";
     std::string class_name = "";
 
-    DIALOGUE_TOPIC dialogue_id;
+    DIALOGUE_TOPIC dialogue_id = TOPIC_NONE;
+
+    LootTableID loot_table_id = LT_NONE;
 
 };
 
@@ -277,7 +281,7 @@ struct ContainerData {
     std::string identifier;
     std::string iid;
     int level_index;
-    int loot_table_id;
+    LootTableID loot_table_id;
     int sprite_id;
     Vector2 position_i;
     Vector2 position_f;
@@ -328,7 +332,7 @@ struct SubSceneState {
 
 
 extern std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
-extern std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
+//extern std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
 
 
 void LoadGameData();

@@ -144,12 +144,9 @@ void PlayerCharacter::Update() {
         }
     }
     if(weapon_state == WSTATE_IDLE) {
-        //Vector2 pp = GetWorldToScreen2D( position, g_camera);
-        //pp = {pp.x * g_scale, pp.y*g_scale};
-        //weapon_sprite.rotation = GetAngleFromTo(pp, g_input.screen_mouse_position) * RAD2DEG;
         weapon_sprite.rotation = GetAngleFromTo(position, aim_position) * RAD2DEG;
+        //TraceLog(LOG_INFO, "sprite rot  %0.2f", weapon_sprite.rotation);
     }
-    //TraceLog(LOG_INFO, "sprite rot  %0.2f", weapon_sprite.rotation);
 }
 
 void PlayerCharacter::Draw() {
@@ -158,13 +155,11 @@ void PlayerCharacter::Draw() {
     DrawSprite(sprite);
     DrawSprite(weapon_sprite);
 
-    //DrawCircleV(aim_position, 5, BLUE);
-    //DrawSprite(aim_sprite);
     //TraceLog(LOG_INFO, "aim pos  %0.2f  %0.2f", aim_position.x, aim_position.y);
     Vector2 mp = g_input.world_mouse_position;
     float width = Vector2Distance(aim_position, mp);
     if(width > 20.0f) {width = 20.0f; }
-    //DrawCircleLinesV(mp, width, WHITE);
+
     DrawLineV( {mp.x - width, mp.y}, {mp.x - width -5, mp.y}, WHITE );
 
     DrawLineV( {mp.x + width, mp.y}, {mp.x + width + 5, mp.y}, WHITE );
@@ -175,9 +170,9 @@ void PlayerCharacter::Draw() {
 
     if(weapon_state == WSTATE_MELE) {
     }
+
     if(g_game_settings.show_debug == true) {
         DrawCircleV(Vector2Add(position, centered_offset), collision_radius, RED);
-        //DrawCircleV(Vector2Add(position, centered_offset), 2, WHITE);
         DrawCircleV(Vector2Add(position, ground_point_offset), 2, BLUE); 
 
         DrawCircleV(position,3, RED);
@@ -205,29 +200,18 @@ void PlayerCharacter::CheckInput() {
 
     Vector2 input_dir = {0,0};
 
-    if(g_input.key_up) {
-        input_dir.y = -1;
-    }
+    if(g_input.key_up) {input_dir.y = -1;}
 
-    if(g_input.key_down) {
-        input_dir.y = 1;
-    }
+    if(g_input.key_down) {input_dir.y = 1;}
 
-    if(g_input.key_left) {
-        input_dir.x = -1;
-    }
+    if(g_input.key_left) {input_dir.x = -1;}
 
-    if(g_input.key_right) {
-        input_dir.x = 1;
-    }
-    
+    if(g_input.key_right) {input_dir.x = 1;}    
 
-    if(isnan(input_dir.x) || isnan(input_dir.y)) {
-        input_dir = {0,0};
-    }
-    if(input_dir.x != 0.0f || input_dir.y != 0.0f) {
-        input_dir = Vector2Normalize(input_dir);
-    }
+    if(isnan(input_dir.x) || isnan(input_dir.y)) {input_dir = {0,0};}
+
+    if(input_dir.x != 0.0f || input_dir.y != 0.0f) {input_dir = Vector2Normalize(input_dir);}
+
 
     float speed = g_active_creature_data[uid].current_speed;
 
@@ -245,23 +229,20 @@ void PlayerCharacter::CheckInput() {
         }
     }
 
-    if( isnan(velocity.x) || isnan(velocity.y)) {
-        velocity = {0,0};
-    }
+    if( isnan(velocity.x) || isnan(velocity.y)) {velocity = {0,0};}
+
     velocity = Vector2Lerp(velocity, input_dir * speed, .15);
+
     if(abs(velocity.x) < 4.0f) {
         velocity.x = {0.0};
     }
     if (abs(velocity.y) < 4.0f) {
         velocity.y = {0.0};
     }
-    //aim_position.y = g_input.world_mouse_position.y;
-    //aim_position.x = g_input.world_mouse_position.x;
+
     if(isnan(aim_position.x) || isnan(aim_position.y)) {
         aim_position = g_input.world_mouse_position;
     }
-    //TraceLog(LOG_INFO, "ap  %0.2f %0.2f", aim_position.x, aim_position.y);
-    //TraceLog(LOG_INFO, "wmp  %0.2f %0.2f", g_input.world_mouse_position.x, g_input.world_mouse_position.y);
 
     if(current_primary_data != nullptr) {
         aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.accuracy);
@@ -340,7 +321,6 @@ void PlayerCharacter::CheckInput() {
 
                 for(int shot = 0; shot < current_primary_data->weapon_data.shots; shot++) {
                     SpawnSpell(payload, &current_primary_data->spell_data);
-
                 }
 
                 g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;

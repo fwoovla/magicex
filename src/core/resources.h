@@ -219,7 +219,7 @@ enum AIID {
 
 
 
-enum SpellID {
+/* enum SpellID {
     SPELL_ID_NONE = -1,
     SPELL_ID_MAGICMISSLE_1,
     SPELL_ID_MAGICMISSLE_2,
@@ -241,7 +241,7 @@ enum SpellID {
     SPELL_ID_POISON_3,
     SPELL_ID_POISON_4,
 
-};
+}; */
 
 extern Texture2D g_spell_sprites[MAX_SPRITES];
 

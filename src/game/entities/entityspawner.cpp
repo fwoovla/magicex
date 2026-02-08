@@ -168,20 +168,10 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
     g_active_creature_data[uid] = level_data.creature_data[_creature_index];
 
 
-    std::vector<int> initial_inv = g_active_creature_data[uid].inventory;
-    g_active_creature_data[uid].inventory.clear();
-    
-    ItemInstanceData *this_data = nullptr;
-    
-    for(int item : initial_inv){
-        if(item != -1) {
-            this_data = InstanceRandomCharacterItem((ItemID)item, uid, 2);
-            //g_active_creature_data[uid].inventory.push_back(this_data->instance_id);
-        }
-    }
-
-    //TraceLog(LOG_INFO, "new creature  %s  uid %i  creature id %i   sprite id %i", g_active_creature_data[uid].name.c_str(), uid, g_active_creature_data[uid].creature_id, g_active_creature_data[uid].sprite_sheet_id);
-    //TraceLog(LOG_INFO, "SpawnCreature is_npc = %i  inv size %i", g_active_creature_data[uid].is_npc, g_active_creature_data[uid].inventory.size());
+//load from loot tables
+    LootTableID lt_id = g_active_creature_data[uid].loot_table_id;
+    g_active_creature_data[uid].inventory = GenerateItemsFromLootTable(lt_id, "", 1);
+//
 
     if(g_active_creature_data[uid].is_npc) {
         new_creature = std::make_unique<NpcEntity>(g_active_creature_data[uid].spawn_position, uid);
@@ -192,12 +182,6 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
     new_creature->identifier = g_active_creature_data[uid].name;
     DL_Add(level_data.entity_list, std::move(new_creature));
 }
-
-
-
-
-
-
 
 
 

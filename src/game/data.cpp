@@ -152,15 +152,15 @@ void LoadGameData() {
 
         g_item_data[(int)id] = new_item;
 
-        g_loot_tables[type].push_back(id);
+        /* g_loot_tables[type].push_back(id);
         g_loot_tables[TYPE_ALL].push_back(id);
 
         if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
             g_loot_tables[TYPE_ARMOR].push_back(id);
-        }
+        } */
     }
 
-    TraceLog(LOG_INFO, "-----------------------------");
+/*     TraceLog(LOG_INFO, "-----------------------------");
     TraceLog(LOG_INFO, "-------LOOT TABLES-----------");
     TraceLog(LOG_INFO, "-----------------------------");
     for(auto &table : g_loot_tables) {
@@ -168,7 +168,7 @@ void LoadGameData() {
         for(int item = 0; item < table.second.size(); item++) {
             TraceLog(LOG_INFO, "    in table: %s",  g_item_data[table.second[item]].item_name.c_str());
         }
-    }
+    } */
 //---------------------spell data
     g_spell_data.resize(cj["spell_data"].size());
 
@@ -442,23 +442,7 @@ void LoadGameData() {
         g_ai_data[new_ai.ai_id] = new_ai;
     }
 
-    //--------------------creature loot tables
-    for(int table = 0; table < cj["creature_loot_tables"].size(); table++) {
-        int creature_id = StrToCreatureId( cj["creature_loot_tables"][table]["creature_id"]);
-        std::vector<ItemID> table_choices;
 
-        for(int choice = 0; choice < cj["creature_loot_tables"][table]["item_selection"].size(); choice++ ) {
-            int new_item_id =  StrToItemId(cj["creature_loot_tables"][table]["item_selection"][choice]);
-            table_choices.push_back((ItemID)new_item_id);
-            TraceLog(LOG_INFO, "---- loot added to table  iitem_d: %i", new_item_id);
-        }
-
-        g_creature_loot_tables[(CreatureID)creature_id] = table_choices;
-        TraceLog(LOG_INFO, "creature loot table data  Loaded  id: %i", creature_id);
-    }
-
-
-    //--------------------creature data
 
     for(int i = 0; i < cj["creature_data"].size(); i++) {
         int creature_id = StrToCreatureId( cj["creature_data"][i]["creature_id"] );
@@ -475,6 +459,10 @@ void LoadGameData() {
 
         AIID ai_id = StrToAiId( cj["creature_data"][i]["ai_id"]);
 
+
+        LootTableID loot_table_id = StrToLootTableId( cj["creature_data"][i]["loot_table_id"]);;
+
+ 
         bool is_npc = cj["creature_data"][i]["is_npc"];
 
         DIALOGUE_TOPIC dialogue_id = TOPIC_NONE;
@@ -485,14 +473,7 @@ void LoadGameData() {
         
         TraceLog(LOG_INFO, "creature : %i", creature_id);
         std::vector<int> inv;
-        for(auto &table :g_creature_loot_tables) {
-            if(table.first == creature_id) {
-                for(ItemID item : table.second) {
-                    inv.push_back(item);
-                    //TraceLog(LOG_INFO, "creature inventory item added  (not instance id)  id: %i", item);
-                }
-            }
-        }
+        inv.push_back(-1);
         
         std::vector<int> hot;
         hot.push_back(-1);
@@ -558,15 +539,26 @@ void LoadGameData() {
             .portrait_id = portrait_id,
             .name = name,
             .class_name = name,
-            .dialogue_id = dialogue_id
+            .dialogue_id = dialogue_id,
+            .loot_table_id = loot_table_id
         };
 
         g_creature_data[this_creature.creature_id] = this_creature;
         TraceLog(LOG_INFO, "CREATURE Data  Loaded  id: %i  %s", this_creature.creature_id, this_creature.name.c_str());
     }
 
+
+        //--------------------creature loot tables
+
+    LoadLootTables(cj["loot_tables"]);
+
+    LoadLootPools(cj["loot_pools"]);
+
+
     cfile.close();
  
+
+
     //TraceLog(LOG_INFO, "==========check save data================");
 
     if(std::filesystem::exists(data_save_path)) {
@@ -1217,34 +1209,12 @@ void LoadLevelData(LevelData &level_data) {
                         new_container.sprite_id = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
                         new_container.loot_level = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[1].value_i;
 
-                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s", new_container.iid.c_str());
+                        LootTableID table = (LootTableID)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].value_i;
+                        new_container.loot_table_id = table;
 
-                        for(int t = 0; t < this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list.size(); t++) {
-                            ItemType type = (ItemType)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].i_list[t];
+                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s with loot table %i", new_container.iid.c_str(), table);
 
-                            auto l_itter = g_loot_tables.find(type);
-                            if(l_itter != g_loot_tables.end()) {
-                                TraceLog(LOG_INFO, "loot table size %i", l_itter->second.size());
-                                if(g_game_data.current_map_index == g_game_data.shelter_map_index) {
-
-                                    for(int loot = 0; loot < l_itter->second.size(); loot++) {
-                                        new_container.item_list.push_back(l_itter->second[loot]);
-                                        TraceLog(LOG_INFO, "item added to container %i", l_itter->second[loot]);
-                                    }
-                                }
-                                else {
-                                    int num_items = GetRandomValue(0, 5 + (new_container.loot_level * 5));
-                                    TraceLog(LOG_INFO, "container will have %i items", num_items);
-
-                                    for(int item = 0; item < num_items; item++) {
-                                        int index = GetRandomValue( 0, l_itter->second.size() - 1);
-                                        int id = l_itter->second[index];
-                                        new_container.item_list.push_back(id);
-                                        TraceLog(LOG_INFO, "     item added %i ", id);
-                                    }
-                                }
-                            }
-                        }
+                        
                         //TraceLog(LOG_INFO, "PERM CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
                         level_data.container_data.push_back(new_container);
                     }

@@ -275,13 +275,13 @@ void InstanceLevelObjects(LevelData &level_data) {
             }
             else {
                 int loot_level = level_data.container_data[c_index].loot_level;
-                InstanceRandomItemsFromList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid, loot_level);
-                //InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid);
+
+                new_container->c_area.item_list = GenerateItemsFromLootTable((LootTableID)level_data.container_data[c_index].loot_table_id, new_container->iid, loot_level);
+
             }
             
             level_data.entity_list.push_back(std::move(new_container));
 
-            //DL_Add(level_data.entity_list, std::move(new_container));
         }
 
         if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
