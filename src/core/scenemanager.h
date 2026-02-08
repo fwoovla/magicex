@@ -25,6 +25,7 @@ class SceneManager{
     void OnPausePressed();
     void OnSavePressed();
     void OnBackToMenuPressed();
+    void OnQuitPressed();
 
 /*     void OnTransitionEnded();
     void OnTransitionMidpoint(); */

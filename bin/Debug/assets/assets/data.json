@@ -28,25 +28,25 @@
         {
             "item_name": "Sword",
             "item_id":"ITEM_ID_SWORD",
-            "value":13,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Spear",
             "item_id":"ITEM_ID_SPEAR",
-            "value":20,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Axe",
             "item_id":"ITEM_ID_AXE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "Bow",
             "item_id":"ITEM_ID_BOW",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
 
@@ -54,98 +54,98 @@
         {
             "item_name": "mm pistol",
             "item_id":"ITEM_ID_NEWWAND1",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
 
         {
             "item_name": "mm shotgun",
             "item_id":"ITEM_ID_NEWWAND2",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "mm mg1",
             "item_id":"ITEM_ID_NEWWAND3",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "mm mg2",
             "item_id":"ITEM_ID_NEWWAND4",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "fb pistol",
             "item_id":"ITEM_ID_NEWWAND5",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "fb shotgun",
             "item_id":"ITEM_ID_NEWWAND6",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "fb launcher",
             "item_id":"ITEM_ID_NEWWAND7",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "fb mg",
             "item_id":"ITEM_ID_NEWWAND8",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "lightning pistol",
             "item_id":"ITEM_ID_NEWWAND9",
-            "value":40,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "lightning shotgun",
             "item_id":"ITEM_ID_NEWWAND10",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "lightning chain",
             "item_id":"ITEM_ID_NEWWAND11",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "lightning beam",
             "item_id":"ITEM_ID_NEWWAND12",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "poison pistol",
             "item_id":"ITEM_ID_NEWWAND13",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "poison shotgun",
             "item_id":"ITEM_ID_NEWWAND14",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "poison launcher",
             "item_id":"ITEM_ID_NEWWAND15",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
         {
             "item_name": "poison beam",
             "item_id":"ITEM_ID_NEWWAND16",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_WEAPON"
         },
 
@@ -156,13 +156,13 @@
         {
             "item_name": "Mushroom",
             "item_id":"ITEM_ID_MUSHROOM",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Mushroom Juice",
             "item_id":"ITEM_ID_MUSHROOM_JUICE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
 
@@ -173,31 +173,31 @@
         {
             "item_name": "Helmet",
             "item_id":"ITEM_ID_HELMET",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_HEAD_ARMOR"
         },
         {
             "item_name": "Boots",
             "item_id":"ITEM_ID_BOOTS",
-            "value":110,
+            "value":10,
             "item_type":"TYPE_FEET_ARMOR"
         },
         {
             "item_name": "Chest Armor",
             "item_id":"ITEM_ID_BODY",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_BODY_ARMOR"
         },
         {
             "item_name": "Gloves",
             "item_id":"ITEM_ID_GLOVES",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_HAND_ARMOR"
         },
         {
             "item_name": "Leggings",
             "item_id":"ITEM_ID_LEGGINGS",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_LEG_ARMOR"
         },
 
@@ -205,25 +205,25 @@
         {
             "item_name": "Apple",
             "item_id":"ITEM_ID_APPLE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "Cheese",
             "item_id":"ITEM_ID_CHEESE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "Bread",
             "item_id":"ITEM_ID_BREAD",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_FOOD"
         },
         {
             "item_name": "Meat",
             "item_id":"ITEM_ID_MEAT",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_FOOD"
         },
 
@@ -234,7 +234,7 @@
         {
             "item_name": "Ring",
             "item_id":"ITEM_ID_RING",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
 
@@ -245,13 +245,13 @@
         {
             "item_name": "Stove Plan",
             "item_id":"ITEM_ID_STOVE_PLAN",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_PLAN"
         },
         {
             "item_name": "Mushroompress Plan",
             "item_id":"ITEM_ID_MUSHROOMPRESS_PLAN",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_PLAN"
         },
 
@@ -263,61 +263,61 @@
         {
             "item_name": "Hammer",
             "item_id":"ITEM_ID_HAMMER",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Saw",
             "item_id":"ITEM_ID_SAW",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Shovel",
             "item_id":"ITEM_ID_SHOVEL",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Tongs",
             "item_id":"ITEM_ID_TONGS",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Anvil",
             "item_id":"ITEM_ID_ANVIL",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Charcoal",
             "item_id":"ITEM_ID_CHARCOAL",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Resin",
             "item_id":"ITEM_ID_RESIN",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Bone",
             "item_id":"ITEM_ID_BONE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Rope",
             "item_id":"ITEM_ID_ROPE",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         },
         {
             "item_name": "Bucket",
             "item_id":"ITEM_ID_BUCKET",
-            "value":0,
+            "value":10,
             "item_type":"TYPE_RESOURCE"
         }
     ],
@@ -1079,7 +1079,7 @@
         },
         {
             "creature_id":"CREATURE_NPC_1",
-            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE", "ITEM_ID_NEWWAND9", "ITEM_ID_BOOTS"]
+            "item_selection":["ITEM_ID_MEAT", "ITEM_ID_APPLE", "ITEM_ID_NEWWAND10", "ITEM_ID_BOOTS"]
         },
         {
             "creature_id":"CREATURE_SLIME",

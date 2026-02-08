@@ -76,7 +76,7 @@ void TitleScene::OnSettingsPressed() {
 }
 
 void TitleScene::OnQuitPressed() {
-    
+    g_game_running = false;   
 }
 
 void TitleScene::OnContinuePressed() {

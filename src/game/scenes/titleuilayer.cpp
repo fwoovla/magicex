@@ -12,7 +12,7 @@ TitleUILayer::TitleUILayer() {
     start_button.default_color = DARKGREEN;
     start_button.text_size = 40/g_scale;
 
-    CreateButton(settings_button, {g_screen_center.x,g_screen_center.y + (105/g_scale)}, {200/g_scale , 100/g_scale}, YELLOW, "settings");
+    CreateButton(settings_button, {g_screen_center.x,g_screen_center.y + (105/g_scale)}, {200/g_scale , 100/g_scale}, YELLOW, "settings/\nfullscreen");
     settings_button.default_color = DARKYELLOW;
     settings_button.text_size = 25/g_scale;
 

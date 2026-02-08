@@ -43,7 +43,7 @@ void SceneManager::UpdateScene() {
         }
     }
 
-    if(g_input.keys_pressed[0] == KEY_P) {
+    if(g_input.keys_pressed[0] == KEY_ESCAPE) {
         g_game_data.paused = !g_game_data.paused;
     }
 
@@ -83,6 +83,7 @@ void SceneManager::Init() {
     pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
     pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
     pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
+    pause_menu->quit_pressed.Connect( [&](){OnQuitPressed();} );
 
     LoadSpriteCentered( g_cursor.sprite, g_ui_sprites[UI_ID_CROSSHAIR], {0,0} );
     CreateLabel(debug_label, {20 / g_scale}, 40/g_scale, RAYWHITE, "DEBUG");
@@ -193,16 +194,9 @@ void SceneManager::OnBackToMenuPressed() {
 }
 
 
-/* void SceneManager::OnTransitionMidpoint() {
-    ChangeSceneTo(next_scene_id);
-    g_current_scene->return_scene = NO_SCENE;
+void SceneManager::OnQuitPressed() {
+    g_game_running = false;
 }
-
-void SceneManager::OnTransitionEnded() {
-    is_transitioning = false;
-    //delete fade_transition;
-    //fade_transition = nullptr;
-} */
 
 
 void InstanceLevelObjects(LevelData &level_data) {
@@ -217,8 +211,6 @@ void InstanceLevelObjects(LevelData &level_data) {
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
     TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   transition  size %i", level_data.level_transitions.size());
 
-
-    //DL_Add(level_data.entity_list, g_current_player);
 
 //transition areas
     for(int t_index = 0; t_index < level_data.level_transitions.size(); t_index++) {

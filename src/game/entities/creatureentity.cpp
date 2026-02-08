@@ -53,17 +53,39 @@ CreatureEntity::CreatureEntity(Vector2 _position, int _uid): CharacterEntity() {
     can_mele = true;
     should_mele = true;
 
-
     //int _id = ITEM_ID_ERROR;
 
     for(int i = 0; i < g_active_creature_data[uid].inventory.size(); i++) {
         int instance_id = g_active_creature_data[uid].inventory[i];
         if(instance_id != -1) {
             TraceLog(LOG_INFO, "item instance id %i", instance_id);
-            if(g_item_instances[instance_id].type == TYPE_WEAPON) {
+            ItemType type = g_item_instances[instance_id].type;
+            if(type == TYPE_WEAPON) {
                 g_active_creature_data[uid].inventory[i] = -1;
                 g_active_creature_data[uid].primary[0] = instance_id;
-                break;
+            }
+            if(type  >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
+
+                if(type == TYPE_HEAD_ARMOR) {
+                    g_active_creature_data[uid].inventory[i] = -1;
+                    g_active_creature_data[uid].head[0] = instance_id;
+                }
+                if(type == TYPE_BODY_ARMOR) {
+                    g_active_creature_data[uid].inventory[i] = -1;
+                    g_active_creature_data[uid].body[0] = instance_id;
+                }
+                if(type == TYPE_LEG_ARMOR) {
+                    g_active_creature_data[uid].inventory[i] = -1;
+                    g_active_creature_data[uid].legs[0] = instance_id;
+                }
+                if(type == TYPE_FEET_ARMOR) {
+                    g_active_creature_data[uid].inventory[i] = -1;
+                    g_active_creature_data[uid].feet[0] = instance_id;
+                }
+                if(type == TYPE_HAND_ARMOR) {
+                    g_active_creature_data[uid].inventory[i] = -1;
+                    g_active_creature_data[uid].hands[0] = instance_id;
+                }
             }
         }
     }
@@ -84,6 +106,7 @@ CreatureEntity::CreatureEntity(Vector2 _position, int _uid): CharacterEntity() {
 
     TraceLog(LOG_INFO, "CREATURE CREATED uid %i   creature id %i  name %s speed  %0.2f", _uid, data->creature_id, data->name.c_str(), data->base_speed);
 }
+
 
 void CreatureEntity::Update() {
 
@@ -194,6 +217,7 @@ void CreatureEntity::Update() {
     is_obstructed = GetRayCollisionWithLevel(raycast, result, 0);
 }
 
+
 void CreatureEntity::Draw() {
     //TraceLog(LOG_INFO, "+++++++draw++++++");
     if(!is_on_screen) {
@@ -222,6 +246,7 @@ void CreatureEntity::Draw() {
         DrawLineV(raycast.position, {raycast.position.x + raycast.direction.x, raycast.position.y + raycast.direction.y}, line_color);
     }
 }
+
 
 void CreatureEntity::DrawUI() {
 
@@ -318,13 +343,15 @@ void CreatureEntity::UnEquip(int item_id) {
 
 void CreatureEntity::OnSpellTimerTimeout() {
     can_use_spell = true;
-    TraceLog(LOG_INFO, "can_use_spell");
+    //TraceLog(LOG_INFO, "can_use_spell");
 }
+
 
 void CreatureEntity::OnMeleTimerTimeout() {
     can_mele = true;
-    TraceLog(LOG_INFO, "can_mele");
+    //TraceLog(LOG_INFO, "can_mele");
 }
+
 
 void CreatureEntity::OnStunTimerTimeout() {
     is_stunned = false;
@@ -332,6 +359,7 @@ void CreatureEntity::OnStunTimerTimeout() {
     SetAmination(sprite, ANIM_IDLE);
     //TraceLog(LOG_INFO, "un stunned");
 }
+
 
 void CreatureEntity::OnHungerTimerTimeout() {
 
@@ -381,6 +409,7 @@ void CreatureEntity::OnDetectTimerTimeout() {
     //TraceLog(LOG_INFO, "%s detected: %i\n", data->name.c_str(), target_path.size());
 }
 
+
 void CreatureEntity::OnActionTimerTimeout() {
     //TraceLog(LOG_INFO, "action time %s health %i", data->name.c_str(), data->health);
 
@@ -410,14 +439,35 @@ void CreatureEntity::OnActionTimerTimeout() {
     }
 }
 
+
 CreatureEntity::~CreatureEntity()
 {
     TraceLog(LOG_INFO, "deleting creature !!!!!!!!!!!!!!!!!!!! %i", uid);
-/*
+
     for(int i = 0; i < data->primary.size(); i++) {
             g_item_instances.erase(data->primary[i]);
-            //TraceLog(LOG_INFO, "entity primary instance  #%i   erased %i", data->primary[i], g_item_instances.size());
-    } */
+    }
+    for(int i = 0; i < data->secondary.size(); i++) {
+        g_item_instances.erase(data->secondary[i]);
+    }
+    for(int i = 0; i < data->head.size(); i++) {
+            g_item_instances.erase(data->head[i]);
+    }
+    for(int i = 0; i < data->body.size(); i++) {
+            g_item_instances.erase(data->body[i]);
+    }
+    for(int i = 0; i < data->legs.size(); i++) {
+            g_item_instances.erase(data->legs[i]);
+    }
+    for(int i = 0; i < data->feet.size(); i++) {
+            g_item_instances.erase(data->feet[i]);
+    }
+    for(int i = 0; i < data->hands.size(); i++) {
+            g_item_instances.erase(data->hands[i]);
+    }
+    for(int i = 0; i < data->inventory.size(); i++) {
+            g_item_instances.erase(data->inventory[i]);
+    }
 }
 
 
@@ -463,6 +513,7 @@ Vector2 CreatureEntity::GetDirToPlayer() {
     float rot = GetAngleFromTo(position, target_path[path_index]);
     return Vector2Rotate({1, 0}, rot);
 }
+
 
 void CreatureEntity::MoveCreature(Vector2 _input_dir) {
 
@@ -530,6 +581,7 @@ void CreatureEntity::MoveCreature(Vector2 _input_dir) {
     shadow_sprite.position =  Vector2Add( position, {0, 3});
 }
 
+
 void CreatureEntity::Die() {
 
 
@@ -562,6 +614,31 @@ void CreatureEntity::Die() {
     }
 
     SpawnGroundContainer(position, g_active_creature_data[uid].inventory);
+
+    for(int i = 0; i < data->primary.size(); i++) {
+         data->primary[i] = -1;
+    }
+    for(int i = 0; i < data->secondary.size(); i++) {
+        data->secondary[i] = -1;
+    }
+    for(int i = 0; i < data->head.size(); i++) {
+        data->head[i] = -1;
+    }
+    for(int i = 0; i < data->body.size(); i++) {
+        data->body[i] = -1;
+    }
+    for(int i = 0; i < data->legs.size(); i++) {
+        data->legs[i] = -1;
+    }
+    for(int i = 0; i < data->feet.size(); i++) {
+        data->feet[i] = -1;
+    }
+    for(int i = 0; i < data->hands.size(); i++) {
+        data->hands[i] = -1;
+    }
+    for(int i = 0; i < data->inventory.size(); i++) {
+            data->inventory[i] = -1;
+    }
 
     should_delete = true;
 }

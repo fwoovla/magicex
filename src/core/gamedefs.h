@@ -138,6 +138,7 @@ struct Cursor {
 
 };
 
+extern bool g_game_running;
 extern Cursor g_cursor;
 
 extern GameSettings g_game_settings;

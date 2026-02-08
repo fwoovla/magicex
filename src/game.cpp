@@ -68,7 +68,7 @@ std::unordered_map< int, CharacterData> g_active_creature_data;
 
 std::unique_ptr<PlayerCharacter> g_current_player;
 
-bool game_running;
+bool g_game_running;
 float g_scale;
 float g_inv_scale;
 float g_world2screen;
@@ -105,7 +105,7 @@ void Game::StartGame() {
     //g_player_data = g_class_data[0];
     g_current_player = nullptr;
     
-    game_running = true;
+    g_game_running = true;
     
     SetTextureFilter(scene_render_texture.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(ui_render_texture.texture, TEXTURE_FILTER_BILINEAR);
@@ -132,7 +132,7 @@ void Game::StartGame() {
     scene_manager.Init();
 
 
-    while(game_running) {
+    while(g_game_running) {
 
         scene_manager.UpdateScene();
         
@@ -173,7 +173,7 @@ void Game::StartGame() {
         EndDrawing();
 
         if(WindowShouldClose()) {
-            game_running = false;
+            g_game_running = false;
         }
     }
 }

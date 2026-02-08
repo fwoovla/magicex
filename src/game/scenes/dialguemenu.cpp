@@ -26,6 +26,7 @@ DialogueMenu::DialogueMenu() {
     ground_grid->accepted_type = TYPE_ALL;
 
     ground_grid->selected.Connect( [&](){OnItemSelected();} );
+    ground_grid->unselected.Connect( [&](){OnItemUnSelected();} );
     
 
     ground_grid->open_details.Connect( [&](){OnOpenDetails();} );
@@ -52,7 +53,7 @@ DialogueMenu::DialogueMenu() {
     inventory_grid->accepted_type = TYPE_ALL;
 
     inventory_grid->selected.Connect( [&](){OnItemSelected();} );
-    inventory_grid->selected.Connect( [&](){OnItemSelected();} );
+    inventory_grid->unselected.Connect( [&](){OnItemUnSelected();} );
 
     inventory_grid->open_details.Connect( [&](){OnOpenDetails();} );
     inventory_grid->close_details.Connect( [&](){OnCloseDetails();} );
@@ -189,7 +190,7 @@ void DialogueMenu::Update() {
             //PlaySound(button_sound);
         }
 
-        if(buy_items_value < sell_items_value) {
+        if(buy_items_value <= sell_items_value) {
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 TraceLog(LOG_INFO, "buy ");
 
@@ -289,6 +290,7 @@ void DialogueMenu::OpenWith(NpcEntity  *npc_entity) {
 
 void DialogueMenu::OnItemSelected() {
 
+    TraceLog(LOG_INFO, "----SELECT ITEM");
     if(shared_data.source_grid == GRID_GROUND) {
         items_to_buy.push_back(shared_data.item_id);
         buy_items_value += g_item_instances[shared_data.item_id].value;
@@ -308,6 +310,7 @@ void DialogueMenu::OnItemSelected() {
 
 
 void DialogueMenu::OnItemUnSelected() {
+    TraceLog(LOG_INFO, "----UNSELECT ITEM");
     if(shared_data.source_grid == GRID_GROUND) {
         for(int &item :items_to_buy) {
             if(item == shared_data.item_id) {item = -1;}

@@ -242,6 +242,9 @@ class PauseMenu : public BaseUILayer {
     Button save_button;
     Signal save_pressed;
 
+    Button quit_button;
+    Signal quit_pressed;
+
 };
 
 class MapMenu : public BaseUILayer {

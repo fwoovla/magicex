@@ -1,9 +1,6 @@
 #include "../../core/gamedefs.h"
 
 
-#include "../../core/gamedefs.h"
-
-
 CharacterMessage::CharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
     position = _position;
     //sprite_id = _sprite_id;
@@ -64,13 +61,35 @@ void CharacterMessage::TakeDamage(DamagePayload _payload) {
 }
 
 
+
+
+
+
+
+
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 
 int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data) {
     int damage = damage_payload.damage;
     //do stuff
     return damage;
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -114,6 +133,10 @@ void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
 
 
 
+
+
+
+
 void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds) {
 
     if(g_game_data.is_in_sub_map) {
@@ -125,6 +148,16 @@ void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, f
         DL_Add( g_current_scene->level_data.ui_entities, std::move(new_msg));
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index) {
@@ -159,6 +192,18 @@ void SpawnCreature(LevelData &level_data, Vector2 _position, int _creature_index
     new_creature->identifier = g_active_creature_data[uid].name;
     DL_Add(level_data.entity_list, std::move(new_creature));
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {

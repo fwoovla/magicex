@@ -1,7 +1,5 @@
 #include "../core/gamedefs.h"
 
-#include "../core/gamedefs.h"
-
 TradeGrid::TradeGrid(int c, int r, int s, Vector2 p, SharedItemData *sd) {
     shared_data = sd;
     rows = r;
@@ -90,8 +88,9 @@ void TradeGrid::Update() {
                         selected_cell = hovered_cell;
 
                         bool found = false;
+                        int foud_cell_index = -1;
                         for(int c = 0; c < selected_cells.size(); c++) {
-                            if(selected_cells[c] == selected_cell) {found = true;}
+                            if(selected_cells[c] == selected_cell) {found = true; foud_cell_index = c;}
                         }
                         
                         if(!found) {
@@ -102,7 +101,13 @@ void TradeGrid::Update() {
                             selected.EmitSignal();
                         }
                         else {
+                            shared_data->source_grid = this_grid;
+                            shared_data->source_cell = selected_cell;
+                            shared_data->item_id = instance_id;
+                            selected_cells[foud_cell_index] = {-1, -1};
                             unselected.EmitSignal();
+
+                            
                         }
                     }
                 }
