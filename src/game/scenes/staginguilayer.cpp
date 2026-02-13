@@ -149,35 +149,11 @@ void StagingUILayer::Draw() {
     }
 
     else {
-        DrawRectangleRec(take_weapon_rect, TRANSDARKERGRAY);
-        DrawRectangleRec(take_spell_rect, TRANSDARKERGRAY);
-        DrawRectangleRec(take_food_rect, TRANSDARKERGRAY );
 
+        
         DrawCharacterInfo();
-        if(show_weapons) { 
-            DrawLabel(take_weapon_label);
-            for(int i = 0; i < take_weapon_buttons.size(); i++) {
-                DrawButton(*take_weapon_buttons[i]);
-            }
-        }
 
-/*         if(show_spells) {
-            DrawLabel(take_spell_label);
-            for(int i = 0; i < take_weapon_buttons.size(); i++) {
-                DrawButton(*take_spell_buttons[i]);
-            }
-        } */
-
-        if(show_food) {
-            DrawLabel(take_food_label);
-            for(int i = 0; i < take_weapon_buttons.size(); i++) {
-                DrawButton(*take_food_buttons[i]);
-            }
-        }
-
-        inventory_grid->DrawGrid();
-        inventory_grid->DrawItems();
-    }
+    } 
 }
 
 void StagingUILayer::Update() {
@@ -291,35 +267,7 @@ void StagingUILayer::UpdateCharacterInfo() {
         }        
     }
 
-    if(show_weapons) {
 
-        for(int i = 0; i <  take_weapon_buttons.size(); i++)
-        {
-            if(IsButtonHovered(*take_weapon_buttons[i], g_scale)){
-                if(take_weapon_buttons[i]->already_hovered == false) {
-                    //PlaySound(button_sound);
-                }
-                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    show_weapons = false;
-                    ItemSelected(weapon_ids[i]);
-                }        
-            }
-        }
-    }
-
-    if(show_food) {
-        for(int i = 0; i <  take_food_buttons.size(); i++) {
-            if(IsButtonHovered(*take_food_buttons[i], g_scale)){
-                if(take_food_buttons[i]->already_hovered == false) {
-                    //PlaySound(button_sound);
-                }
-                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    show_food = false;
-                    ItemSelected(food_ids[i]);
-                }        
-            }
-        }
-    } 
         
     character_stat_label.text = TextFormat("health: %i\nspeed: %0.2f\nexp: %i", g_class_data[select_index].health, g_class_data[select_index].base_speed, g_class_data[select_index].exp);
 }
@@ -360,20 +308,5 @@ void StagingUILayer::ItemSelected(int item_id) {
 
 
 void StagingUILayer::SpellSelected(int spell_id) {
-/*     TraceLog(LOG_INFO, "selected spell: %i", spell_id);
 
-    //create scroll
-    for(auto inst_id : g_current_player->data->inventory) {
-        auto i_itter =  g_item_instances.find(inst_id);
-        if(i_itter != g_item_instances.end()) {
-            if(i_itter->second.type == TYPE_WEAPON) {
-                //found weapon to add spell to 
-                AddSpellToItem( i_itter->second, (SpellID)spell_id);
-            }
-        }
-
-    }
-    //ItemInstanceData *new_instance =  InstanceCharacterItem(ITEM_ID_SCROLL, g_current_player->uid);
-    //GenerateScroll(*new_instance, (SpellID)spell_id, "");
-    SetPlayer(g_current_player->uid); */
 }

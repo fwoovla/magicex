@@ -252,6 +252,7 @@ struct GameData {
     BaseContainerEntity *return_container;
 
     NpcEntity *return_npc;
+    Vector2 return_door_pos;
 
     std::vector<DIALOGUE_TOPIC> return_topics;
     
@@ -269,6 +270,10 @@ extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
 void LDTKLoadTileSets (json &mj);
 void LDTKLoadMaps (json &mj);
 int LDTKDrawMap(Vector2 focus_position);
+
+void LDTKToggleColision(Vector2 position);
+
+void LDTKSetColision(Vector2 position, bool value);
 
 //void LDTKDrawForegroundLayer(Vector2 focus_position);
 

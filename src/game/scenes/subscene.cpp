@@ -45,6 +45,12 @@ SubScene::SubScene(SubSceneState &sub_state, bool is_new) {
         if (auto* module_entity = dynamic_cast<ModuleEntity*>(level_data.entity_list[entity_index].get())) {
             module_entity->open_module.Connect( [this](){OnModuleUsed();} );
         }
+        if (auto* npc_entity = dynamic_cast<NpcEntity*>(level_data.entity_list[entity_index].get())) {
+            npc_entity->start_dialogue.Connect( [this](){OnStartDialogue();} );
+        }
+        if (auto* door_entity = dynamic_cast<DoorEntity*>(level_data.entity_list[entity_index].get())) {
+            door_entity->open_door.Connect( [this](){OnDoorOpened();} );
+        }
 
     }
 
@@ -244,6 +250,13 @@ void SubScene::OnContainerOpened() {
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;
 }
+
+
+void SubScene::OnDoorOpened() {
+    TraceLog(LOG_INFO, "DOOR OPENED");
+}
+
+
 
 void SubScene::OnModuleUsed() {
     if(module_menu_visible) {

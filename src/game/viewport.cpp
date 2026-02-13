@@ -5,7 +5,7 @@
 #define ZOOM_STEP 0.20f
 
 
-float max_dist_sqr = 100*100;
+float max_dist_sqr = 150*150;
 float min_dist_sqr = 50*50;
 
 void CalculateViewport() {
@@ -193,11 +193,12 @@ void HandleCamera4() {
         mouse_offset.y = 0.0f;
     }
 
-    if(mouse_offset.x < -80) {mouse_offset.x = -80;}
-    else if(mouse_offset.x > 80) {mouse_offset.x = 80;}
 
-    if(mouse_offset.y < -60) {mouse_offset.y = -60;}
-    else if(mouse_offset.y > 60) {mouse_offset.y = 60;}
+    if(mouse_offset.x < -115) {mouse_offset.x = -115;}
+    else if(mouse_offset.x > 115) {mouse_offset.x = 115;}
+
+    if(mouse_offset.y < -70) {mouse_offset.y = -70;}
+    else if(mouse_offset.y > 70) {mouse_offset.y = 70;} 
     
     new_camera_target = Vector2Add(new_camera_target, mouse_offset);
 
@@ -205,8 +206,8 @@ void HandleCamera4() {
     new_camera_target.x = std::clamp(new_camera_target.x, 0.0f, level_w - (half_w*2));
     new_camera_target.y = std::clamp(new_camera_target.y, 0.0f, level_h - (half_h*2));
     
-    g_camera.target.x = Lerp(g_camera.target.x, new_camera_target.x, 0.03f);
-    g_camera.target.y = Lerp(g_camera.target.y, new_camera_target.y, 0.03f);
+    g_camera.target.x = Lerp(g_camera.target.x, new_camera_target.x, 0.04f);
+    g_camera.target.y = Lerp(g_camera.target.y, new_camera_target.y, 0.04f);
 
     //TraceLog(LOG_INFO, "dist %0.02f, max dist %0.02f mouse_offset  x %0.2f  y %0.2f     half w %0.2f   half h %0.2f\n\n", dist, max_dist_sqr, mouse_offset.x, mouse_offset.y, half_w, half_h);
 }

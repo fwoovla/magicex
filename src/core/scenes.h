@@ -96,6 +96,7 @@ class ShelterScene : public  BaseScene{
         void OnMapSelected();
 
         void OnContainerOpened() override;
+        void OnDoorOpened() override;
         
         void OnModuleUsed();
 
@@ -136,6 +137,7 @@ class SubScene : public  BaseScene{
         void OnQuitPressed();
 
         void OnContainerOpened() override;
+        void OnDoorOpened() override;
 
         void OnModuleUsed();
 
@@ -177,6 +179,7 @@ class GameScene : public  BaseScene{
         void OnQuitPressed();
 
         void OnContainerOpened() override;
+        void OnDoorOpened() override;
 
         void OnModuleUsed();
         

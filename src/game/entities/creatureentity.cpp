@@ -172,14 +172,12 @@ void CreatureEntity::Update() {
                     payload.rotation = weapon_sprite.rotation;
                     payload.shooter_id = uid;
                     payload.target_position = target_creature->position;
-                    payload.spread = current_primary_data->weapon_data.spread;
-                    TraceLog(LOG_INFO, "casting spell id %i  shots %i", current_primary_data->spell_id, current_primary_data->weapon_data.shots);
+                    payload.spread = 0.0f;
+                    TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
                     //TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
 
-                    for(int shot = 0; shot <= current_primary_data->weapon_data.shots; shot++) {
-                        SpawnSpell(payload, &current_primary_data->spell_data);
+                    SpawnSpell(payload, &current_primary_data->spell_data);
 
-                    }
                     g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                     current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power; 
                     spell_timer.Start(current_primary_data->weapon_data.cooldown, true);

@@ -245,8 +245,8 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(current_primary_data != nullptr) {
-        aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.accuracy);
-        aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, current_primary_data->weapon_data.accuracy);
+        aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.accuracy * 0.1f);
+        aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, current_primary_data->weapon_data.accuracy * 0.1f);
     }
     else {
         aim_position = g_input.world_mouse_position;
@@ -313,15 +313,13 @@ void PlayerCharacter::CheckInput() {
                 payload.rotation = weapon_sprite.rotation;
                 payload.shooter_id = uid;
                 payload.target_position = aim_position;//g_input.world_mouse_position;
-                payload.spread = current_primary_data->weapon_data.spread;
-                TraceLog(LOG_INFO, "casting spell id %i  shots %i", current_primary_data->spell_id, current_primary_data->weapon_data.shots);
+                payload.spread = 0.0f;
+                TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
 
                 //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
                 //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
-
-                for(int shot = 0; shot < current_primary_data->weapon_data.shots; shot++) {
-                    SpawnSpell(payload, &current_primary_data->spell_data);
-                }
+                
+                SpawnSpell(payload, &current_primary_data->spell_data);
 
                 g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                 current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;

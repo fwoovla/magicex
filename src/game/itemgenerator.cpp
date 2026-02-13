@@ -80,7 +80,7 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     new_instance.food_data = {};
     new_instance.sprite_id = item_id;
     new_instance.icon_id = item_id;
-    new_instance.level = 0;
+    new_instance.level = loot_level;
 
     new_instance.mod_slots = 0;
 
@@ -107,27 +107,59 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
 void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     instance.weapon_id = (ItemID)(instance.item_id - ITEM_ID_DAGGER);
     instance.weapon_data = g_weapon_data[instance.weapon_id];
-    instance.weapon_data.current_power = instance.weapon_data.max_power;
-    instance.mod_slots = instance.weapon_data.mod_slots;
 
-    //TraceLog(LOG_INFO, "making new weapon %s  %i  wid %i", instance.item_name.c_str(), instance.item_id, instance.weapon_id);
 
-    instance.spell_id = instance.weapon_data.spell_id;
-    if(instance.spell_id != SPELL_ID_NONE) {
-        instance.spell_id = instance.spell_id;
-        instance.spell_data = g_spell_data[instance.spell_id];
+    //power
+    if(instance.weapon_data.max_power > 0) {
+
+        float base_power = instance.weapon_data.max_power + (loot_level * 5);
+        int twenty_percent = (int)(base_power * 0.2f);
+        int ten_percent = (int)(base_power * 0.1f);
+        int adjustment = GetRandomValue(-twenty_percent, ten_percent);
+        float adjusted_power = base_power -  adjustment;
+        instance.weapon_data.max_power = adjusted_power;
+        instance.weapon_data.current_power = instance.weapon_data.max_power;
+        
+        float base_pps = instance.weapon_data.pps;
+        float adjusted_pps = base_pps - (loot_level);
+        instance.weapon_data.pps = adjusted_pps;
     }
 
-    //TraceLog(LOG_INFO, "-item %i", instance.item_id );
-    //TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    //TraceLog(LOG_INFO, "-cooldown %0.3f", instance.weapon_data.cooldown );
-    //TraceLog(LOG_INFO, "-damage %i", instance.weapon_data.damage );
-    //TraceLog(LOG_INFO, "-recoil %f", instance.weapon_data.recoil );
-    //TraceLog(LOG_INFO, "-knockback %f", instance.weapon_data.knockback );
-    //TraceLog(LOG_INFO, "-max power %f", instance.weapon_data.max_power );
-    //TraceLog(LOG_INFO, "-spell id %i", instance.spell_id );
-    //TraceLog(LOG_INFO, "-mod slots %i", instance.mod_slots );
-    //TraceLog(LOG_INFO, "-shots %i", instance.weapon_data.shots );
+    //damage (if mele)
+    int base_damage = instance.weapon_data.damage;
+    int adjusted_damage = base_damage * loot_level;
+    instance.weapon_data.damage = adjusted_damage;
+
+    //recoil
+    if(instance.weapon_data.recoil > 0) {
+        int base_recoil = instance.weapon_data.recoil - loot_level;
+        int recoil_adjustment = GetRandomValue(0, loot_level );
+        instance.weapon_data.recoil = base_recoil - recoil_adjustment;
+    }
+
+    //accuracy
+    float base_accuracy = instance.weapon_data.accuracy;
+    float _a = GetRandomValue(0, loot_level * 50) * 0.001f;
+    instance.weapon_data.accuracy = base_accuracy + _a;
+    if(instance.weapon_data.accuracy > 1.0f) {instance.weapon_data.accuracy = 1.0f;}
+
+
+    instance.mod_slots = GetRandomValue(0, (loot_level));
+
+    
+    instance.spell_id = instance.weapon_data.spell_id;
+    
+    if(instance.spell_id != SPELL_ID_NONE) {
+
+        //instance.spell_id = instance.spell_id;
+        instance.spell_data = g_spell_data[instance.spell_id];
+        
+        instance.spell_data.damage = instance.spell_data.damage * loot_level;
+        
+        instance.item_name += " " + std::to_string(loot_level);
+        
+    }
+    //TraceLog(LOG_INFO, "making new weapon %s  %i  wid %i", instance.item_name.c_str(), instance.item_id, instance.weapon_id);
 
 }
 
@@ -142,12 +174,6 @@ void GenerateArmor(ItemInstanceData &instance, int loot_level, bool random) {
     instance.icon_id = g_armor_data[instance.armor_id].armor_id;
     instance.mod_slots = g_armor_data[instance.armor_id].mod_slots;
     instance.mod_slots = instance.armor_data.mod_slots;
-
-    //TraceLog(LOG_INFO, "-icon_id %i", instance.icon_id );
-    //TraceLog(LOG_INFO, "-sprite_id %i", instance.sprite_id );
-    //TraceLog(LOG_INFO, "-defence %i", instance.armor_data.defence );
-    //TraceLog(LOG_INFO, "-magic_defence %0.3f", instance.armor_data.magic_defence );
-    //TraceLog(LOG_INFO, "-mod slots %i", instance.mod_slots );
 
 }
 

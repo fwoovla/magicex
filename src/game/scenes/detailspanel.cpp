@@ -21,12 +21,12 @@ DetailsPanel::DetailsPanel() {
     CreateLabel(saturation_label, {g_screen_center.x, panel_rect.y + 100}, FONTSIZE_30, RAYWHITE, "");
 
     CreateLabel(power_label, {g_screen_center.x, panel_rect.y + 100}, FONTSIZE_30, RAYWHITE, "");
+    CreateLabel(pps_label, {g_screen_center.x, panel_rect.y + 130}, FONTSIZE_30, RAYWHITE, "");
     CreateLabel(damage_label, {g_screen_center.x, panel_rect.y + 180}, FONTSIZE_30, RAYWHITE, "");
-    CreateLabel(recoil_label, {g_screen_center.x, panel_rect.y + 210}, FONTSIZE_30, RAYWHITE, "");
-    CreateLabel(accuracy_label, {g_screen_center.x, panel_rect.y + 240}, FONTSIZE_30, RAYWHITE, "");
-    CreateLabel(pps_label, {g_screen_center.x, panel_rect.y + 270}, FONTSIZE_30, RAYWHITE, "");
-    CreateLabel(cooldown_label, {g_screen_center.x, panel_rect.y + 300}, FONTSIZE_30, RAYWHITE, "");
-    CreateLabel(knockback_label, {g_screen_center.x, panel_rect.y + 330}, FONTSIZE_30, RAYWHITE, "");
+    CreateLabel(knockback_label, {g_screen_center.x, panel_rect.y + 210}, FONTSIZE_30, RAYWHITE, "");
+    CreateLabel(recoil_label, {g_screen_center.x, panel_rect.y + 240}, FONTSIZE_30, RAYWHITE, "");
+    CreateLabel(accuracy_label, {g_screen_center.x, panel_rect.y + 270}, FONTSIZE_30, RAYWHITE, "");
+    //CreateLabel(cooldown_label, {g_screen_center.x, panel_rect.y + 300}, FONTSIZE_30, RAYWHITE, "");
 
     CreateLabel(defence_label, {g_screen_center.x, panel_rect.y + 150}, FONTSIZE_30, RAYWHITE, "");
     CreateLabel(magicdefence_label, {g_screen_center.x, panel_rect.y + 180}, FONTSIZE_30, RAYWHITE, "");
@@ -50,22 +50,20 @@ void DetailsPanel::Draw() {
 
     if(item_data->type == TYPE_WEAPON) {
         //DrawLabel(power_label);
-        DrawLabelCentered(power_label);
+        if(item_data->weapon_data.max_power != 0) {
+            DrawLabelCentered(power_label);
+            DrawLabelCentered(pps_label);
+        }
 
         DrawLabel(damage_label);
-        //DrawLabelCentered(damage_label);
 
-        DrawLabel(pps_label);
-        //DrawLabelCentered(pps_label);
-
-        DrawLabel(recoil_label);
-        //DrawLabelCentered(recoil_label);
+        if(item_data->weapon_data.recoil != 0) {
+            DrawLabel(recoil_label);
+        }
 
         DrawLabel(accuracy_label);
-        //DrawLabelCentered(accuracy_label);
 
         DrawLabel(knockback_label);
-        //DrawLabelCentered(knockback_label);
 
         DrawLabelCentered(slot_label);
     }
@@ -100,27 +98,41 @@ void DetailsPanel::Update() {
     }
 
     if(item_data->type == TYPE_WEAPON) {
-        std::string mpower = TextFormat("%0.2f",item_data->weapon_data.max_power);
-        std::string cpower = TextFormat("%0.2f",item_data->weapon_data.current_power);
+        std::string mpower = TextFormat("%i",(int)item_data->weapon_data.max_power);
+        std::string cpower = TextFormat("%i",(int)item_data->weapon_data.current_power);
         power_label.text = "power: " + cpower + "/" + mpower;
 
-        std::string damage = TextFormat("%i", item_data->weapon_data.damage);
-        damage_label.text = "damage: " + damage;
+
+        if(item_data->spell_id != SPELL_ID_NONE) {
+            std::string damage = TextFormat("%i", (int)item_data->spell_data.damage);
+            damage_label.text = "damage: " + damage;
+
+            std::string knock = TextFormat("%0.2f",item_data->spell_data.knockback);
+            knockback_label.text = "knockback: " + knock;
+        }
+        else {
+            std::string damage = TextFormat("%i", item_data->weapon_data.damage);
+            damage_label.text = "damage: " + damage;
+
+            std::string knock = TextFormat("%0.2f",item_data->weapon_data.knockback);
+            knockback_label.text = "knockback: " + knock;
+        }
+
 
         std::string cool = TextFormat("%0.2f",item_data->weapon_data.cooldown);
         cooldown_label.text = "cooldown: " + cool;
 
-        std::string recoil = TextFormat("%0.2f",item_data->weapon_data.recoil);
+        std::string recoil = TextFormat("%0.0f",item_data->weapon_data.recoil);
         recoil_label.text = "recoil: " + recoil;
 
-        std::string accuracy = TextFormat("%0.2f",item_data->weapon_data.accuracy);
-        accuracy_label.text = "accuracy: " + accuracy;
+        std::string accuracy = TextFormat("%0.0f", (item_data->weapon_data.accuracy * 100));
+        accuracy_label.text = "accuracy: " + accuracy + "%";
 
-        std::string pps = TextFormat("%0.2f",item_data->weapon_data.pps);
-        pps_label.text = "pps: " + pps;
+        int s = item_data->weapon_data.max_power / item_data->weapon_data.pps;
+        std::string shots = TextFormat("%i", s );
+        pps_label.text = "shots: " + shots;
+        //TraceLog(LOG_INFO, "SHOTS %s", shots.c_str());
 
-        std::string knock = TextFormat("%0.2f",item_data->weapon_data.knockback);
-        pps_label.text = "knockback: " + knock;
     }
 
 
@@ -138,6 +150,8 @@ void DetailsPanel::Update() {
     }
 
 }
+
+
 
 void DetailsPanel::OpenPanel(ItemInstanceData *_data) {
     item_data = _data;

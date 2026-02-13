@@ -242,3 +242,25 @@ void SpawnGroundContainer(Vector2 _position, std::vector<int> item_list) {
     DL_Add(this_scene->level_data.entity_list, std::move(new_container));
 
 }
+
+
+
+void SpawnDoor(LevelData &level_data, Vector2 _position) {
+
+
+    std::unique_ptr<DoorEntity> new_door = std::make_unique<DoorEntity>(_position);
+
+
+    new_door->identifier = "DoorEntity";
+    new_door->d_area.identifier = "DoorEntity";
+    new_door->d_area.position = _position;
+    new_door->d_area.size = {16, 16};
+    new_door->iid = "door_" + std::to_string(GetRandomValue(1000, 1000000));
+    new_door->is_persistant =false;
+    new_door->level_index = g_game_data.current_map_index;
+
+
+    DL_Add(level_data.entity_list, std::move(new_door));
+
+}
+   

@@ -136,15 +136,14 @@ void ContainerArea::Update() {
             int count = 0;
             for(int i = 0; i < item_list.size(); i++) {
                 if(item_list[i] != -1) {
-                    //text = "ground";
                     text += g_item_instances[item_list[i]].item_name + "\n";
-                    //text += g_item_instances[item_list[i]].item_name + "\n";
                 }
             }
             text.pop_back();
-            max_time_to_press = 0.5f;
+            max_time_to_press = 0.4f;
         }
         else if(identifier == "Mushroom") { 
+            max_time_to_press = 0.4f;
             text = "mushroom";
         }
         else {
@@ -325,7 +324,7 @@ void ModuleArea::Draw() {
 
 
 DialogeArea::~DialogeArea() {
-    TraceLog(LOG_INFO, "TransitionArea AREA DESTROYED, %s", identifier.c_str());
+    TraceLog(LOG_INFO, "dialogue AREA DESTROYED, %s", identifier.c_str());
 }
 
 void DialogeArea::Update() {
@@ -361,7 +360,7 @@ void DialogeArea::Update() {
     if(hovered and g_input.key_use and in_range) {
         time_pressed += 1.0f * GetFrameTime();
         if(time_pressed > 1.0f) {
-            time_pressed = 1.0f;
+            time_pressed = 0.0f;
             area_activated.EmitSignal();
         }
     }
@@ -394,4 +393,82 @@ void DialogeArea::Draw() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+DoorArea::~DoorArea() {
+    TraceLog(LOG_INFO, "Door AREA DESTROYED, %s", identifier.c_str());
+}
+
+void DoorArea::Update() {
+    //TraceLog(LOG_INFO, "dialige area update %0.0f %0.0f", size.x, size.y);
+    hovered = false;
+    
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        hovered = true;
+        in_range = false;
+        int grid_size = g_ldtk_maps.default_grid_size;
+
+        float lx = g_input.screen_mouse_position.x * g_inv_scale;
+        float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "open door");
+
+        if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+
+            in_range = true;
+        }
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > 1.0f) {
+            time_pressed = 0.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void DoorArea::Draw() {
+    if(hovered) {
+        //TraceLog(LOG_INFO, "dialige area draw");
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        //DrawLabelCentered(label);
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
 

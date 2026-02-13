@@ -66,16 +66,24 @@ DialogueMenu::DialogueMenu() {
 
     float _y = ppo.y + 150;
     for(Button &button : response_buttons) {
-        CreateButton(button, {ppo.x, _y}, {100, 40}, DARKYELLOW, "choice");
-        button.default_color = DARKERGRAY;
+        CreateButton(button, {ppo.x, _y}, {100, 40}, BLANK, "choice");
+        button.text_color_focus = YELLOW;
+        button.text_color = DARKGRAY;
+        button.default_color = BLANK;
         button.text_size = FONTSIZE_24;
         _y += 45;
     }
 
     CreateLabel(sale_label, {ppo.x, panel_rect.height - 80}, FONTSIZE_30, RAYWHITE, "*/*");
-    CreateButton(clear_sale_button, {ppo.x, panel_rect.height-50}, {100, 40}, DARKYELLOW, "clear sale");
-    CreateButton(buy_button, {ppo.x, panel_rect.height}, {100, 40}, DARKRED, "purchase");
-    buy_button.default_color = DARKERGRAY;
+
+    CreateButton(clear_sale_button, {ppo.x, panel_rect.height-50}, {150, 40}, BLANK, "clear sale");
+    clear_sale_button.default_color = BLANK;
+    clear_sale_button.text_color = DARKGRAY;
+    clear_sale_button.text_color_focus = RAYWHITE;
+
+    CreateButton(buy_button, {ppo.x, panel_rect.height}, {100, 40}, BLANK, "purchase");
+    //buy_button.default_color = DARKERGRAY;
+    buy_button.default_color = BLANK;
 }
 
 DialogueMenu::~DialogueMenu() {
@@ -301,10 +309,16 @@ void DialogueMenu::OnItemSelected() {
     }
 
     if(buy_items_value <= sell_items_value) {
-        buy_button.focus_color = DARKGREEN;
+        //buy_button.focus_color = DARKGREEN;
+        buy_button.text = "Good Deal";
+        buy_button.text_color_focus = GREEN;
+        buy_button.text_color = DARKGREEN;
     }
     else {
-        buy_button.focus_color = DARKRED;
+        //buy_button.focus_color = DARKRED;
+        buy_button.text = "No Deal";
+        buy_button.text_color_focus = RED;
+        buy_button.text_color = DARKRED;
     }
 }
 
@@ -327,10 +341,16 @@ void DialogueMenu::OnItemUnSelected() {
     }
 
     if(buy_items_value <= sell_items_value) {
-        buy_button.focus_color = DARKGREEN;
+        //buy_button.focus_color = DARKGREEN;
+        buy_button.text = "Good Deal";
+        buy_button.text_color_focus = GREEN;
+        buy_button.text_color = DARKGREEN;
     }
     else {
-        buy_button.focus_color = DARKRED;
+        //buy_button.focus_color = DARKRED;
+        buy_button.text = "No Deal";
+        buy_button.text_color_focus = RED;
+        buy_button.text_color = DARKRED;
     }
 }
 
@@ -368,7 +388,12 @@ void DialogueMenu::ClearTrade() {
     }
     buy_items_value = 0;
     sell_items_value = 0;
-    buy_button.focus_color = DARKRED;
+    //buy_button.focus_color = DARKRED;
+
+    buy_button.text = "No Deal";
+    buy_button.text_color_focus = RED;
+    buy_button.text_color = DARKRED;
+    
     items_to_buy.clear();
     items_to_sell.clear();
 

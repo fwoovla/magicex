@@ -383,6 +383,13 @@ void InstanceLevelObjects(LevelData &level_data) {
         SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
     }
 
+
+    for(int door = 0; door < level_data.door_data.size(); door++) {
+        SpawnDoor(level_data, level_data.door_data[door].position);
+        //LDTKSetColision(level_data.door_data[door].position, true);
+    }
+
+
     TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   level_data.entity_list size %i", level_data.entity_list.size());
     for(auto &entity : level_data.entity_list) {
         TraceLog(LOG_INFO, "  entity %s", entity->identifier.c_str());

@@ -13,7 +13,15 @@ MushroomEntity::MushroomEntity(Vector2 _position) {
     
     should_delete = false;
 
-    c_area.area_activated.Connect( [&](){OnContainerOpened();} );
+
+    is_persistant = false;
+    is_obstructable = true;
+    is_obstructed = false;
+    can_take_damage = false;
+    is_on_screen = false;
+
+
+    c_area.area_activated.Connect( [&](){OnEntityActivated();} );
 }
 
 MushroomEntity::~MushroomEntity() {
@@ -25,19 +33,48 @@ MushroomEntity::~MushroomEntity() {
 }
 
 void MushroomEntity::Update() {
+
+    is_on_screen = IsOnScreen(position, sprite.size);
+
+    if(!is_on_screen) {
+        return;
+    }
+
+
     c_area.Update();
+
+    raycast.position = {position.x + (sprite.size.x * 0.5f), position.y + (sprite.size.y * 0.5f)};
+    float rot = GetAngleFromTo(raycast.position, g_current_player->position);
+    float dist = Vector2Distance(raycast.position, g_current_player->position);
+    raycast.direction = Vector2Rotate({dist,0}, rot);
+
+    CollisionResult result;
+    is_obstructed = GetRayCollisionWithLevel(raycast, result, 0);
 }
 
 void MushroomEntity::Draw() {
-    //DrawRectangle(c_area.position.x, c_area.position.y, c_area.size.x, c_area.size.y, RED);
-    DrawSprite(sprite);
+    if(!is_on_screen) {
+        return;
+    }
+    if(!is_obstructed) {
+        DrawSprite(sprite);
+    }
+
+        if(g_game_settings.show_debug) {
+        Color color = WHITE;
+        if(is_obstructed) {
+            color = RED;
+        }
+        DrawRectangle(c_area.position.x, c_area.position.y, c_area.size.x, c_area.size.y, DARKBLUE);
+        DrawLineV(raycast.position, {raycast.position.x + raycast.direction.x, raycast.position.y + raycast.direction.y}, color);
+    }
 }
 
 void MushroomEntity::DrawUI() {
     c_area.Draw();
 }
 
-void MushroomEntity::OnContainerOpened() {
+void MushroomEntity::OnEntityActivated() {
     g_game_data.return_container = this;
     open_container.EmitSignal();
 

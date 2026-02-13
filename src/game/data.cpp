@@ -192,7 +192,6 @@ void LoadGameData() {
         new_spell.radius = radius;
         new_spell.speed = speed;
         new_spell.spell_name = name;
-        //new_spell.pps = pps;
         new_spell.knockback = knockback;
         
         g_spell_data[spell_id] = new_spell;
@@ -253,9 +252,7 @@ void LoadGameData() {
 
         int mod_slots = cj["weapon_data"][i]["mod_slots"];
         float pps = cj["weapon_data"][i]["pps"];
-        int shots = cj["weapon_data"][i]["shots"];
         float accuracy = cj["weapon_data"][i]["accuracy"];
-        int spread = cj["weapon_data"][i]["spread"];
 
 
         WeaponData new_weapon = {
@@ -269,9 +266,7 @@ void LoadGameData() {
             .knockback = knockback,
             .mod_slots = mod_slots,
             .pps = pps,
-            .shots = shots,
             .accuracy = accuracy,
-            .spread = spread,
         };
 
         TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s  power %f", w_id, name.c_str(), max_power);
@@ -661,8 +656,6 @@ void SaveGame(LevelData &level_data) {
                 {"knockback", inst.weapon_data.knockback},
                 {"mod_slots", inst.weapon_data.mod_slots},
                 {"pps", inst.weapon_data.pps},
-                {"shots", inst.weapon_data.shots},
-                {"spread", inst.weapon_data.spread},
                 {"accuracy", inst.weapon_data.accuracy},
             };
             
@@ -1212,7 +1205,7 @@ void LoadLevelData(LevelData &level_data) {
                         LootTableID table = (LootTableID)this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[2].value_i;
                         new_container.loot_table_id = table;
 
-                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s with loot table %i", new_container.iid.c_str(), table);
+                        TraceLog(LOG_INFO, "MAKING NEW CONTAINER %s with loot table %i  loot level %i", new_container.iid.c_str(), table, new_container.loot_level);
 
                         
                         //TraceLog(LOG_INFO, "PERM CONTAINER DATA ADDED IID %s", new_container.iid.c_str());
@@ -1290,6 +1283,17 @@ void LoadLevelData(LevelData &level_data) {
                     TraceLog(LOG_INFO, "NEW CREATURE DATA %i    %s  ", creature_id, g_creature_data[creature_id].name.c_str());
 
                     level_data.creature_data.push_back(new_creature);
+                }
+
+                if(identifier == "DoorEntity") {
+                    DoorData new_door;
+                    new_door.is_locked = this_level.layer_instances[layer_index].entity_instances[entity_index].field_instances[0].value_i;
+                    new_door.position.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
+                    new_door.position.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
+
+
+                    TraceLog(LOG_INFO, "NEW DOOR DATA locked ? %i ", new_door.is_locked);
+                    level_data.door_data.push_back(new_door);
                 }
             }
         }
@@ -1382,7 +1386,7 @@ void PrecalculateTileCollisionData(LevelData &level_data) {
 
     level_data.precalc.map_width = col_layer->c_wid;
     //TraceLog(LOG_INFO, "            collision layer -- %i",level_data.precalc.collision_layer_index  );
-    //TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA ");
+    TraceLog(LOG_INFO, "FINISHED PRECALCULATING TILE COLLISION DATA  for map index %i", level_data.precalc.map_index);
 }
 
 
@@ -1985,8 +1989,6 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_weapon.knockback = j["weapon_data"]["knockback"];
         new_weapon.mod_slots = j["weapon_data"]["mod_slots"];
         new_weapon.pps = j["weapon_data"]["pps"];
-        new_weapon.shots = j["weapon_data"]["shots"];
-        new_weapon.spread = j["weapon_data"]["spread"];
         new_weapon.accuracy = j["weapon_data"]["accuracy"];
         i.weapon_data = new_weapon;
         TraceLog(LOG_INFO, "loaded weapon data found for %s", i.item_name.c_str());

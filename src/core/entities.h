@@ -40,12 +40,40 @@ class EnvironmentalEntity : public SpriteEntity {
 
 
 
+class DoorEntity : public SpriteEntity {
+    public:
+    DoorEntity(Vector2 _position);
+    ~DoorEntity();
+
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void TakeDamage(DamagePayload _payload) override;
+    
+    void OnEntityActivated();
+    bool IsLocked();
+
+    std::string iid;
+    int level_index;
+    bool is_locked;
+    bool is_open;
+    
+    DoorArea d_area;
+
+    Signal open_door;
+
+    RayCast raycast;
+
+};
+
+
 
 class BaseContainerEntity : public SpriteEntity {
     public:
 
     ~BaseContainerEntity() = default;
-    virtual void OnContainerOpened() = 0;
+    virtual void OnEntityActivated() = 0;
     virtual bool IsEmpty() = 0;
 
     std::string iid;
@@ -70,7 +98,7 @@ class PermContainerEntity : public BaseContainerEntity {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
-    void OnContainerOpened() override;
+    void OnEntityActivated() override;
     bool IsEmpty() override;
     float GetYSort() override;
     void TakeDamage(DamagePayload _payload) override;
@@ -83,7 +111,7 @@ class GroundContainerEntity : public BaseContainerEntity {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
-    void OnContainerOpened() override;
+    void OnEntityActivated() override;
     bool IsEmpty() override;
     float GetYSort() override;
     void SetSprite(int sprite_id);
@@ -99,7 +127,7 @@ class MushroomEntity : public BaseContainerEntity {
     void Update() override;
     void Draw() override;
     void DrawUI() override;
-    void OnContainerOpened() override;
+    void OnEntityActivated() override;
     bool IsEmpty() override;
     float GetYSort() override;
     void TakeDamage(DamagePayload _payload) override;

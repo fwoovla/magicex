@@ -65,7 +65,7 @@ std::vector<int> GenerateItemsFromLootTable(LootTableID table_id, std::string co
     
     LootTable &table = g_creature_loot_tables[table_id];
     
-    TraceLog(LOG_INFO, "-----------------generating loot from table: %i  #pools %i", table_id, table.pool_ids.size());
+    TraceLog(LOG_INFO, "-----------------generating loot from table: %i  #pools %i loot level %i", table_id, table.pool_ids.size(), level);
 
     for(LootPoolID &pool_id : table.pool_ids) {
         TraceLog(LOG_INFO, "-----------------pool id: %i  ", pool_id);
@@ -78,7 +78,7 @@ std::vector<int> GenerateItemsFromLootTable(LootTableID table_id, std::string co
             ItemID entry = RollWeighted(pool.entries, 2);
 
             int instance_id = GetRandomValue(10000, 10000000);
-            ItemInstanceData new_inst = GenerateRandomItem(entry, instance_id, container_id, 0);
+            ItemInstanceData new_inst = GenerateRandomItem(entry, instance_id, container_id, level);
             g_item_instances[instance_id] = new_inst;
     
             item_list.push_back(instance_id);
@@ -127,6 +127,7 @@ LootTableID StrToLootTableId(const std::string& s) {
         {"LT_ANIMAL",        LootTableID::LT_ANIMAL},
         {"LT_COMMON_CHEST",        LootTableID::LT_COMMON_CHEST},
         {"LT_SCAVENGER",        LootTableID::LT_SCAVENGER},
+        {"LT_STARTINGCHEST",        LootTableID::LT_STARTINGCHEST},
 
     };
 
@@ -145,6 +146,7 @@ LootPoolID StrToLootPoolId(const std::string& s) {
         {"POOL_FOOD",             LootPoolID::POOL_FOOD},
         {"POOL_RESOURCE",             LootPoolID::POOL_RESOURCE},
         {"POOL_ARMOR",             LootPoolID::POOL_ARMOR},
+        {"POOL_STARTINGCHEST",             LootPoolID::POOL_STARTINGCHEST},
 
     };
 

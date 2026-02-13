@@ -1,0 +1,439 @@
+Story Ideas for "House of the Last"
+
+Setting:
+In a post-apocalyptic world where magic flows through the remnants of ancient battles, a tavern stands as a sanctuary amidst chaos. 
+The land is scarred by factions that misunderstand or misuse magic, leading to conflict. Your character awakens in this isolated tavern, 
+saved by the owner, who is determined to restore balance.
+
+
+Story Overview
+
+You are a member of "The House of the Last," a dwindling faction of guardians dedicated to preserving ancient knowledge of magic and the 
+fallen wizards. The tavern’s owner, a former member of the House, tasks you with reigniting the beacons that once protected the realm 
+and summoned the ancestors to vanquish the purists who threaten peace.
+
+
+
+Gameplay Mechanics
+Skills
+
+Players can choose skills upon leveling up that affect their playstyle:
+
+    Brewing: Create powerful potions using found mushrooms, enhancing your abilities and strategic options.
+    Cooking: Prepare meals that provide buffs and can be sold for trade.
+    Tracking: Hunt for resources and locate hidden secrets or enemies.
+    Crafting: (No!) Not available, adding a limiting factor to force players to explore for items rather than creating them.
+
+Passive Skills
+
+Passive skills enhance base stats as players progress:
+
+    Stamina/Recovery: Increases endurance and accelerates health regeneration.
+    Health: Boosts maximum health pool.
+    Movement: Enhances speed and agility for dodging or exploration.
+    Strength: Increases melee damage and carrying capacity.
+
+Experience Points (XP)
+
+XP can be gained through:
+
+    Completing quests provided by the tavern owner and other NPCs.
+    Defeating enemies, especially those guarding ancient ruins or mushroom sites.
+    Discovering hidden areas and lore-rich ruins.
+
+Economy and Trade
+
+The economy revolves around trade value, with items like potions, meals, and crafted gear having fluctuating worth. Players must 
+strategically manage resources and negotiate with NPCs or other players.
+
+
+
+Magic and Equipment
+
+Magic is prevalent but often misunderstood:
+
+    Wands and Staves: Primary weapons that carry magical spells and can be imbued with charms or mods to increase specific stats 
+    (e.g., damage, cooldown reduce).
+
+    Dead Wands: Found in ruins, these wands can be "pressed" to imbue spells or powers.
+
+    Mushrooms: Found at old battle sites, used for brewing potions that grant temporary buffs, poison defenses, or recharge wand power.
+
+Mushroom Varities
+
+Mushrooms vary in potency, influenced by the brewing skill level. Some examples:
+
+    Redcaps: Provide minor health regeneration.
+    Poison Caps: Boost poison defense.
+    Guardian Mushrooms: Enhance cooldown recovery.
+
+Quests and Progression
+
+After awakening in the tavern, players engage in quests such as:
+
+    Basic Protection: Help the owner fend off bandits who threaten the tavern.
+    Gathering Resources: Venture into nearby ruins or old battle sites for mushrooms and items.
+    Beacons Quest: Travel to distant towns to reactivate beacons, dispelling the purists and granting safety from prying eyes.
+
+Main Conflict
+
+The purists have turned off the beacons to hide their nefarious activities of enslaving "un-pures." As players successfully reignite the beacons, 
+they will summon the ancestors—powerful beings that once ruled, leading to confrontations and ultimately a climactic battle to reclaim the land.
+
+
+Additional Features
+
+    Fast Travel: Use a map on the wall in the tavern to unlock and fast travel to explored sites, facilitating exploration and quest progression.
+
+    Environmental Storytelling: Lore-rich areas yield spells, enchanted items, and crucial backstory to the world, allowing deeper immersion.
+
+    Character Creation: Players start by defining their background and skills, choosing how they relate to the broader conflict.
+
+
+
+
+
+
+
+
+
+
+
+    Spellpress Overview
+
+Spellpress serves as a crucial mechanic in "House of the Last," allowing players to imbue blank wands with spells. The quality and 
+potency of the spells transferred depend on several factors, including player skill, the quality of the spellpress, and the nature 
+of the spells being used.
+
+
+Spellpress Mechanics
+Pressing Spells
+
+    Blank Wands: Obtainable through exploration, these wands serve as the foundation for imbuing spells.
+    Spell Transfer: Players can press spells into blank wands using the Spellpress, transforming them into offensive or defensive tools.
+
+Factors Affecting Spell Quality
+
+    Player Skill Level: Higher Spellpress skill increases the quality of the imbuement, yielding wands with enhanced stats.
+    Quality of Spells: Spells of higher rarity or power result in stronger effects when pressed. Common spells yield 
+    lower-quality wands, while rare spells produce top-tier wands.
+
+
+Stat Range Variability
+
+The result of pressing a spell into a wand comes with a specific range of attributes, which can include:
+
+    Damage Output: The amount of damage a spell deals.
+    Cooldown Time: How quickly the spell can be used again.
+    Mana Cost: The amount of mana required to cast the spell.
+    Stat Modifier: Percentage increases (or decreases) for attributes like critical chance or elemental affinity tied to the spell.
+
+Upgrading Spellpress Quality
+Scavenging Components
+
+To improve the quality of the Spellpress, players can gather rare components from:
+
+    Ruins: Explore abandoned towns, battle sites, and ancient wizard towers to find specialized components such as:
+        Arcane Crystals: Enhances the spell’s magical affinity.
+        Urns of Sealed Energy: Increases the overall potency of the Spellpress.
+        Essence of Ancients: Tied to the land's magical heritage, boosts the skill quality.
+
+    Specialty Traders: Certain NPCs or traveling merchants offer unique components exclusively for upgrading the Spellpress. These can include:
+        Enchanted Tools: Improve the effectiveness of the Spellpress.
+        Crafted Additives: Allow for one-time boosts when imbuing spells, guaranteeing better results for specific pressing actions.
+
+
+Practical Implications in Gameplay
+
+    Exploration: Players will be encouraged to explore for both blank wands and components, fostering a deeper interaction with the game world.
+    Strategic Choices: Players can specialize in certain spells, leading to diverse playstyles based on their Spellpress abilities.
+    Economic Earnings: Enhanced wands can be sold or traded, creating a robust economy where players can profit from their crafting prowess.
+
+By integrating these mechanics, "House of the Last" will provide players with a dynamic and rewarding experience, allowing them 
+to create personalized, powerful wands that reflect their unique choices and skills. This deepens the narrative of rebuilding 
+a world where knowledge and magic intertwine.
+
+
+Spell System for "House of the Last"
+
+In "House of the Last," spells are categorized into offensive and defensive types. Each spell has unique properties, levels, and 
+can be pressed into wands to enhance their capabilities. Below is a structured overview of the spell system, including categories, 
+types, and examples of unique spells.
+
+Offensive Spells
+Spell Sources
+
+    Force
+    Fire
+    Lightning
+    Poison
+
+Spell Types
+
+    Pistol: Quick, single-target spells.
+    force bolt, fire bolt, lightning bolt, poison bolt
+
+    Machine Gun (MG): Rapid-firing spells with moderate damage.
+    force rain, fire rain, lightning rain, poison rain
+
+    Grenade: Area effect spells that deal damage to multiple targets.
+    force smash, fire ball, chain lightning, contaigous gas
+
+    Instant Area Effect: Immediate damage in a defined area.
+    force fist, inferno burst, storm, toxic cloud
+
+Unique Offensive Spells
+
+    Force Bolt
+        Type: Pistol
+        Effect: Deals base damage that pushes enemies back.
+        Level Progression: Damage increases by 10% per level.
+
+    Inferno Burst
+        Type: Grenade
+        Effect: AoE fire damage with a chance to ignite enemies.
+        Level Progression: AoE radius and damage increase by 15% per level.
+
+    Lightning Strike
+        Type: MG
+        Effect: Rapid lightning bolts that deal chain damage to multiple targets.
+        Level Progression: Increases chain target limit by 1 per level.
+
+    Toxic Rain
+        Type: Instant Area Effect
+        Effect: Deals poison damage over time in a designated area.
+        Level Progression: Damage per tick increases by 5% per level.
+
+Defensive Spells
+Spell Sources
+
+    Simple Defense
+    Spell Effect Defense
+    Health Drain
+    Recharge Effects
+
+Unique Defensive Spells
+
+    Barrier Shield
+        Source: Simple Defense
+        Effect: Absorbs a percentage of incoming damage.
+        Level Progression: Absorption percentage increases by 2% per level.
+
+    Reflective Aura
+        Source: Spell Effect Defense
+        Effect: Reflects a portion of damage back to attackers.
+        Level Progression: Reflection percentage increases by 1% per level.
+
+    Vitality Drain
+        Source: Health Drain
+        Effect: Steals health from a target and heals the caster.
+        Level Progression: Health stolen increases by 5% per level.
+
+    Mana Recharge
+        Source: Recharge Effects
+        Effect: Restores a portion of mana over time.
+        Level Progression: Mana restoration rate increases by 1% per level.
+
+Spell Levels and Enhancements
+
+Each spell has five levels, which incrementally increase their potency:
+
+    Level 1: Base spell stats.
+    Level 2: Damage or effectiveness increase based on the level's stats.
+    Level 3: Further increases in potency and range.
+    Level 4: Near-max efficiency with added effects.
+    Level 5: Maximum stats and effects, providing the strongest version of the spell.
+
+Example of Spell Pressing
+
+When pressing a spell, the final stats will take into account:
+
+    Base Spell Damage: The initial damage of the spell.
+    Level Damage Increase: Each level provides incremental enhancements.
+    Skill Modifier: A bonus applied based on the player's skill in Spellpress.
+
+For example, a Force Bolt Level 2 pressed onto a wand might deal:
+
+Damage Calculation:
+
+    Base Damage: 30
+    Level 2 Damage Increase: 30 * 10% = 3
+    Skill Modifier: +5 (based on player’s skill)
+
+Total Damage: 30 + 3 + 5 = 38
+
+This structured spell system adds significant variety and strategic depth to "House of the Last," enabling players to tailor 
+their magical arsenal to fit their playstyle while fostering exploration and skill progression. The balance between offensive 
+and defensive spells ensures players can adapt to various challenges, encouraging them to explore and master their abilities.
+
+
+
+
+
+
+
+=============================================================end=============================================
+
+
+
+||                              ||
+|| rough outline (do not read)  ||
+VV                              VV
+
+
+story ideas 
+
+
+post apocolyptic fantasy rpg/shooter
+
+house of the last.
+
+
+skills:
+
+choose between on level up:
+    brewing
+    cooking
+    crafting --NO!
+    tracking
+
+
+passive?:
+    physical
+        stamina/recovery
+        health
+        movement
+        strength
+
+
+abilities:? too much?
+
+training:
+    trade in xp for + to skill
+
+xp:
+    get from quests and kills and other?
+
+
+ecconomy based on trade value
+
+
+
+magic is common but not understood
+
+
+
+wands and staves are the pramary method of protection/offence
+
+carired like guns
+
+knives and swords ok too for close combat
+
+mushrooms grow at old battle sites where the old wizards fell
+
+mushrooms come in varieties and sizes to make potions
+
+mushroom recipies:
+    poison defence 
+    poison recharge % of power
+
+mushroom potencies depend on brewing skill
+
+
+potions for refilling wands
+potions for other....
+
+
+
+
+
+spells are imbued with spellpress.
+spellpress needs spellbooks which can be found in maps.
+
+wands also have mods slots to increase stat %
+
+example:
+
+spell of magic missle can be placed on a wand
+the wand can get a charm or wrap or other mod which will increase or decrease one stat by a cretain %.
+
+"dead wands" can be pressed.
+
+dead wands and mushroom varieties are found in ruins  and are rare-ish
+can come with attached mods
+
+
+
+cooking:
+
+    better meals
+    can sell meals
+
+
+mele and armor can also get magic enhancements
+
+
+
+you wake up in tavern
+
+owner saved you from bandits
+
+you tell the owner who you are (character creation, skill selection)
+
+owner sells basics and has quests.
+
+tavern is isolated due to purists.  tavern is run down.  
+
+owner is happy to provide shelter for basic quests.
+
+main story to travel to towns and turn on the beacons
+
+beacons have been turned of by purists to hide what they are doing from ancestors who will not like what they are doing
+    which is slavery and killing of un-pures
+
+
+beacons will summon ancestors who will force the purists to flee.  end game.
+
+
+large map on the wall can act as fast travel to unlocked destinations
+
+
+
+spellpress will press spell into blank wands
+result will have stat range depending on skill, quality of spellpress.
+
+spellpress quality can be upgraded with parts scavenged from ruins of other towns or specialty traders.  
+
+
+spells:
+
+offensive vs defensive
+
+offensive categories:
+    force, fire, lightning, poison
+    "pistol" "mg" "grenade" "instant area effect"
+
+defensive:
+    simple defense
+    spell effect defence
+    other effects like:
+        steal health from enemy
+        recharge power
+        
+    spell increase stat effect:
+        stamina
+        strength
+        etc
+
+need enough variety
+    4 spell "source"
+    4 spell "type"
+
+    8 unique spells
+
+    spells also have levels 1-5 which increase spell stats incrimentaly
+    when pressing the final wand is also effected by player's skill
+    
+    example: 
+    force bolt level 2 spell pressed onto wand might have a damage of: base spell damage + level 2 damage increase +/- skill midifier
+

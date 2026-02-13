@@ -113,3 +113,18 @@ class DialogeArea : public BaseArea {
 
 };
 
+class DoorArea : public BaseArea {
+
+    public:
+        DoorArea(){};
+        ~DoorArea() override;
+        void Update() override;
+        void Draw() override;
+        //void Activate() override;
+
+        Signal area_entered;
+        Signal area_activated;
+
+        Label label;
+
+};

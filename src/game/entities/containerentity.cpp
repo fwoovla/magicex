@@ -10,7 +10,7 @@ PermContainerEntity::PermContainerEntity(Vector2 _position, int _s_id, int _lt_i
     collided = false;
     y_sort = true;
 
-    c_area.area_activated.Connect( [&](){OnContainerOpened();} );
+    c_area.area_activated.Connect( [&](){OnEntityActivated();} );
     
     should_delete = false;
     is_persistant = false;
@@ -72,7 +72,7 @@ void PermContainerEntity::DrawUI() {
 }
 
 
-void PermContainerEntity::OnContainerOpened() {
+void PermContainerEntity::OnEntityActivated() {
     TraceLog(LOG_INFO, "CONTAINER OPEN");
     g_game_data.return_container = this;
     open_container.EmitSignal();
@@ -108,7 +108,7 @@ GroundContainerEntity::GroundContainerEntity(Vector2 _position, int _s_id) {
     collided = false;
     y_sort = true;
 
-    c_area.area_activated.Connect( [&](){OnContainerOpened();} );
+    c_area.area_activated.Connect( [&](){OnEntityActivated();} );
     c_area.list_changed.Connect( [&](){OnListChanged();} );
 
     should_delete = false;
@@ -178,7 +178,7 @@ void GroundContainerEntity::DrawUI() {
     c_area.Draw();
 }
 
-void GroundContainerEntity::OnContainerOpened() {
+void GroundContainerEntity::OnEntityActivated() {
     TraceLog(LOG_INFO, "CONTAINER OPEN");
     g_game_data.return_container = this;
     open_container.EmitSignal();

@@ -19,7 +19,8 @@ enum LootTableID {
     LT_NONE = -1,
     LT_COMMON_CHEST,
     LT_SCAVENGER,
-    LT_ANIMAL
+    LT_ANIMAL,
+    LT_STARTINGCHEST
 };
 
 enum LootPoolID {
@@ -28,6 +29,7 @@ enum LootPoolID {
     POOL_FOOD,
     POOL_RESOURCE,
     POOL_ARMOR,
+    POOL_STARTINGCHEST
 };
 
 

@@ -211,11 +211,12 @@ bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range)
     }
 
     
-    LDTKLevel &this_level = g_ldtk_maps.levels[this_scene->level_data.precalc.map_index];
-
+    
     if(this_scene->level_data.precalc.collision_layer_index == -1) {
         return false;
     }
+    
+    LDTKLevel &this_level = g_ldtk_maps.levels[this_scene->level_data.precalc.map_index];
     
     LDTKLayerInstance &col_layer = this_level.layer_instances[this_scene->level_data.precalc.collision_layer_index];
 

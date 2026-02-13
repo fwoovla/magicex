@@ -114,9 +114,7 @@ struct WeaponData {
     float knockback;
     int mod_slots;
     float pps;
-    int shots;
     float accuracy;
-    int spread;
 };
 
 extern std::vector<WeaponData> g_weapon_data;
@@ -290,6 +288,12 @@ struct ContainerData {
     int loot_level;
 };
 
+
+struct DoorData {
+    Vector2 position;
+    bool is_locked;
+};
+
 extern std::unordered_map<std::string, ContainerData> g_persistant_containers;
 extern std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
@@ -312,6 +316,7 @@ struct LevelData {
     std::vector<ContainerData> container_data;
     std::vector<ModuleEntityData> module_data;
     std::vector<CharacterData> creature_data;
+    std::vector<DoorData> door_data;
     std::vector<Polygon> collision_polys;
 
     std::vector<BaseEntity *> draw_list;

@@ -870,6 +870,17 @@ void LoadResources() {
     TraceLog(LOG_INFO, "SPRITES   SPRITE_CONTAINER_BARREL");
 
 
+//doors
+
+
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {30,23};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});
+    g_door_sprites[SPRITE_DOOR_1] = LoadTextureFromImage(item_image);
+    UnloadImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_DOOR_1");
+
+
 //modules
     TraceLog(LOG_INFO, "LOADING MODULE SPRITES");
     item_image = LoadImageFromTexture(g_main_sprite_sheet);
@@ -1000,5 +1011,10 @@ void UnloadResources() {
     TraceLog(LOG_INFO, "UNLOADING MODULE SPRITES");
     for(int i = 0; i < MAX_SPRITES; i++) {
         UnloadTexture(g_module_sprites[i]);
+    }
+
+    TraceLog(LOG_INFO, "UNLOADING DOOR SPRITES");
+    for(int i = 0; i < MAX_SPRITES; i++) {
+        UnloadTexture(g_door_sprites[i]);
     }
 }

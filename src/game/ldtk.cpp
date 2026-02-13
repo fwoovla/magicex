@@ -327,8 +327,18 @@ void LDTKLoadMaps (json &mj) {
                             TraceLog(LOG_INFO, "++++++--------type %i", type);
                             new_entity.field_instances.push_back(new_field);                  
                         }
-                        
-                        
+
+
+                        if(new_entity.identifier == "DoorEntity") {
+                            TraceLog(LOG_INFO, "++++++----------------------DOOR FOUND");
+                            LDTKFieldInstance new_field;
+                            new_field.identifier = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__identifier"];
+                            bool is_locked = mj["levels"][level]["layerInstances"][layer]["entityInstances"][entity]["fieldInstances"][0]["__value"];
+                            new_field.value_i = is_locked;
+
+                            new_entity.field_instances.push_back(new_field);                  
+                        }
+
                         this_layer.entity_instances.push_back(new_entity);
                         TraceLog(LOG_INFO, "++++++--------------------------------ENTITY ADDED %i", this_layer.entity_instances.size());
                     }
@@ -433,6 +443,84 @@ int LDTKDrawMap(Vector2 focus_position) {
     return tiles_drawn;
 }
 
+
+
+void LDTKToggleColision(Vector2 position) {
+
+
+
+    LevelData *level_data = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
+        return;
+    }
+
+    LDTKLevel *this_level = &g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
+        return;
+    }
+
+    LDTKLayerInstance &col_layer = this_level->layer_instances[level_data->precalc.collision_layer_index];
+
+
+    int x = (int)position.x * level_data->precalc.inv_tile_size;
+    int y = (int)position.y * level_data->precalc.inv_tile_size;
+
+    int index = y * level_data->precalc.map_width + x;
+
+    if(col_layer.int_grid[index] == 0) {
+        col_layer.int_grid[index] = 1;
+    }
+    else {
+         col_layer.int_grid[index] = 0;
+    }
+
+}
+
+
+
+void LDTKSetColision(Vector2 position, bool value) {
+/* 
+    TraceLog(LOG_INFO, "collision layer %i  map ind", level_data->precalc.collision_layer_index);
+
+    LevelData *level_data = nullptr;
+    
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+    
+    if(level_data == nullptr) {
+        return;
+    }
+
+    LDTKLevel *this_level = &g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
+        return;
+    }
+
+    LDTKLayerInstance &col_layer = this_level->layer_instances[level_data->precalc.collision_layer_index];
+
+
+    int x = (int)position.x * level_data->precalc.inv_tile_size;
+    int y = (int)position.y * level_data->precalc.inv_tile_size;
+
+    int index = y * level_data->precalc.map_width + x;
+
+    col_layer.int_grid[index] = value; */
+
+}
 
 
 void LDTKDrawShadows(Vector2 focus_position) {

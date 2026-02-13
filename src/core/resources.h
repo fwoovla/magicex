@@ -219,30 +219,6 @@ enum AIID {
 
 
 
-/* enum SpellID {
-    SPELL_ID_NONE = -1,
-    SPELL_ID_MAGICMISSLE_1,
-    SPELL_ID_MAGICMISSLE_2,
-    SPELL_ID_MAGICMISSLE_3,
-    SPELL_ID_MAGICMISSLE_4,
-
-    SPELL_ID_FIREBALL_1,
-    SPELL_ID_FIREBALL_2,
-    SPELL_ID_FIREBALL_3,
-    SPELL_ID_FIREBALL_4,
-
-    SPELL_ID_LIGHTNING_1,
-    SPELL_ID_LIGHTNING_2,
-    SPELL_ID_LIGHTNING_3,
-    SPELL_ID_LIGHTNING_4,
-
-    SPELL_ID_POISON_1,
-    SPELL_ID_POISON_2,
-    SPELL_ID_POISON_3,
-    SPELL_ID_POISON_4,
-
-}; */
-
 extern Texture2D g_spell_sprites[MAX_SPRITES];
 
 
@@ -254,6 +230,19 @@ enum ContainerSprites {
 };
 
 extern Texture2D g_container_sprites[MAX_SPRITES];
+
+
+
+enum DoorSprites {
+    SPRITE_DOOR_1,
+    SPRITE_DOOR_2,
+    SPRITE_NUM_DOORS
+};
+
+extern Texture2D g_door_sprites[MAX_SPRITES];
+
+
+
 
 enum PortraitSpriteID {
     PORTRAIT_BASE_CHAR,

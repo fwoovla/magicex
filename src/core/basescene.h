@@ -11,6 +11,7 @@ class BaseScene  {
     virtual void DrawUI() = 0;
 
     virtual void OnContainerOpened() {};
+    virtual void OnDoorOpened() {};
     
     LevelData level_data;
     SCENE_ID scene_id;

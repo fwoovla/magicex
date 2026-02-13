@@ -42,3 +42,8 @@ extern std::unordered_map<DIALOGUE_TOPIC, DialogueTree> g_dialogues;
 DIALOGUE_TOPIC StrToDialogueId(std::string id_str);
 
 void LoadDialogue();
+
+
+
+
+

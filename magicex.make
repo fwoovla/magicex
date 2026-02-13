@@ -87,6 +87,7 @@ GENERATED += $(OBJDIR)/data.o
 GENERATED += $(OBJDIR)/detailspanel.o
 GENERATED += $(OBJDIR)/dialguemenu.o
 GENERATED += $(OBJDIR)/dialogue.o
+GENERATED += $(OBJDIR)/doorentity.o
 GENERATED += $(OBJDIR)/endscene.o
 GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/entityspawner.o
@@ -143,6 +144,7 @@ OBJECTS += $(OBJDIR)/data.o
 OBJECTS += $(OBJDIR)/detailspanel.o
 OBJECTS += $(OBJDIR)/dialguemenu.o
 OBJECTS += $(OBJDIR)/dialogue.o
+OBJECTS += $(OBJDIR)/doorentity.o
 OBJECTS += $(OBJDIR)/endscene.o
 OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/entityspawner.o
@@ -275,6 +277,9 @@ $(OBJDIR)/containerentity.o: src/game/entities/containerentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/creatureentity.o: src/game/entities/creatureentity.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/doorentity.o: src/game/entities/doorentity.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/entityspawner.o: src/game/entities/entityspawner.cpp

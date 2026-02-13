@@ -19,6 +19,7 @@ ShelterScene::ShelterScene() {
     character_menu_visible = false;
     module_menu_visible = false;
     dialogue_menu_visible = false;
+    g_game_data.is_in_sub_map = false;
     
     LoadLevelData(level_data);
 
@@ -45,6 +46,9 @@ ShelterScene::ShelterScene() {
         }
         if (auto* npc_entity = dynamic_cast<NpcEntity*>(level_data.entity_list[entity_index].get())) {
             npc_entity->start_dialogue.Connect( [this](){OnStartDialogue();} );
+        }
+        if (auto* door_entity = dynamic_cast<DoorEntity*>(level_data.entity_list[entity_index].get())) {
+            door_entity->open_door.Connect( [this](){OnDoorOpened();} );
         }
     }
 
@@ -252,6 +256,13 @@ void ShelterScene::OnContainerOpened() {
 
     character_menu->OpenWith(g_game_data.return_container);
     character_menu_visible = true;
+
+}
+
+void ShelterScene::OnDoorOpened() {
+    TraceLog(LOG_INFO, "DOOR OPENED %0.0f %0.0f", g_game_data.return_door_pos.x, g_game_data.return_door_pos.y);
+
+    LDTKToggleColision(g_game_data.return_door_pos);
 
 }
 

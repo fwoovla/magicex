@@ -63,6 +63,7 @@ Texture2D g_spell_sprites[MAX_SPRITES];
 Texture2D g_environment_sprites[MAX_SPRITES];
 Texture2D g_shadow_sprites[MAX_SPRITES];
 Texture2D g_module_sprites[MAX_SPRITES];
+Texture2D g_door_sprites[MAX_SPRITES];
 
 
 //PlayerData g_player_data;
