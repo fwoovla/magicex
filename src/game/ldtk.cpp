@@ -481,6 +481,7 @@ void LDTKToggleColision(Vector2 position) {
     }
     else {
          col_layer.int_grid[index] = 0;
+
     }
 
 }
@@ -488,18 +489,19 @@ void LDTKToggleColision(Vector2 position) {
 
 
 void LDTKSetColision(Vector2 position, bool value) {
-/* 
-    TraceLog(LOG_INFO, "collision layer %i  map ind", level_data->precalc.collision_layer_index);
 
+
+    //broken
+/*     
     LevelData *level_data = nullptr;
-    
+
     if(g_game_data.is_in_sub_map) {
         level_data = &g_sub_scene->level_data;
     }
     else {
         level_data = &g_current_scene->level_data;
     }
-    
+
     if(level_data == nullptr) {
         return;
     }

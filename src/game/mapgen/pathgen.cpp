@@ -41,31 +41,43 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 choices.push_back({ 0, -1 });
             }
 
+
+
+
             int choice = rand() % choices.size();
             p = Vector2Add(p, choices[choice]);
+
+            if (p.x < 0) {p.x = 0;}
+            if (p.x > _tileset.map_size.x-1) {p.x = _tileset.map_size.x-1;}
+            if (p.y < 0) {p.y = 0;}
+            if (p.y > _tileset.map_size.y-1) {p.y = _tileset.map_size.y-1;}
+
             new_path.push_back(p);
 
             int index = p.y * _tileset.map_size.x + p.x;
+
 
             _tileset.upper_zone_grid[index] = ZONE_PATH;
             _tileset.collision_grid[index] = 0;
 
             int index_right = p.y * _tileset.map_size.x + (p.x+1);
-
             if(p.x+1 >= _tileset.map_size.x) {
-                index_right = p.y * _tileset.map_size.x + p.x;
+                index_right = index;
             }
+
             int index_left = p.y * _tileset.map_size.x + (p.x-1);
             if(p.x-1 < 0) {
-                index_left = p.y * _tileset.map_size.x + p.x;
+                index_left = index;
             }
+
             int index_down = (p.y+1) * _tileset.map_size.x + p.x;
             if(p.y+1 >= _tileset.map_size.y) {
-                index_down = p.y * _tileset.map_size.x + p.x;
+                index_down = index;
             }
+
             int index_up = (p.y-1) * _tileset.map_size.x + p.x;
             if(p.y-1 < 0) {
-                index_up = p.y * _tileset.map_size.x + p.x;
+                index_up = index;
             }
 
             if(_tileset.upper_zone_grid[index_up] != ZONE_PATH){

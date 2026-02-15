@@ -124,6 +124,7 @@ enum MAPZONE {
     ZONE_BORDER,
     ZONE_FENCE,
     ZONE_FENCE_BOTTOM,
+    ZONE_MUSHROOM,
 };
 
 
@@ -176,6 +177,7 @@ struct WorldGenTileSet {
     int max_structures;
     int max_hills;
 
+    int collision_layer_index = -1;
 
     SortedTiles sorted_tiles;
     std::vector <LDTKEnumTag> tile_tags;
@@ -186,6 +188,7 @@ struct WorldGenTileSet {
     std::vector<int> collision_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
+    std::vector<Rectangle> shroom_rects;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
     //std::vector<int> house_transition_tiles;
     //std::vector<int> shadow_tiles;
@@ -205,6 +208,7 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset);
 void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
 void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
 void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
+void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
 void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities);
 
 //worldgen
@@ -216,8 +220,12 @@ void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
+void GenerateMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
 //utils

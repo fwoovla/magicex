@@ -386,6 +386,8 @@ void InstanceLevelObjects(LevelData &level_data) {
 
     for(int door = 0; door < level_data.door_data.size(); door++) {
         SpawnDoor(level_data, level_data.door_data[door].position);
+        
+        //make sure collision is set by this point  --maybe fix function?  idk
         //LDTKSetColision(level_data.door_data[door].position, true);
     }
 

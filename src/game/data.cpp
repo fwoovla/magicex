@@ -1096,8 +1096,8 @@ void ClearLevelData(LevelData &level_data) {
 
 
 void LoadLevelData(LevelData &level_data) {
-/*     PrecalculateTileCollisionData(level_data);
-    PrecalculateShadowData(level_data); */
+
+
 
     int map_index = 0;
     
@@ -1120,6 +1120,12 @@ void LoadLevelData(LevelData &level_data) {
         map_index = g_game_data.next_map_index;
         TraceLog(LOG_INFO, "==========FOUND EXISTING MAP================");
     }
+
+
+    PrecalculateTileCollisionData(level_data);
+    PrecalculateShadowData(level_data);
+
+
 
     LDTKLevel &this_level = g_ldtk_maps.levels[map_index];
 
@@ -1339,8 +1345,7 @@ void LoadLevelData(LevelData &level_data) {
     
     }
 
-    PrecalculateTileCollisionData(level_data);
-    PrecalculateShadowData(level_data);
+    
     TraceLog(LOG_INFO, "\nEND LOAD LEVEL DATA \n\n");
 }
 

@@ -125,6 +125,22 @@ void GenerateWorldGenTilesets(std::string _path) {
                                 BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, structure_bounding_entities);
                             }
                         }
+                        /* else if(this_layer.identifier == "StructureDecco") {
+                            json *bounds_layer = nullptr;
+
+                            for(int l = 0; l < j["levels"][level]["layerInstances"].size(); l++) {
+                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "DeccoBounds") {
+                                    bounds_layer = &j["levels"][level]["layerInstances"][l];
+                                    break;
+                                }
+                            }
+
+                            if(bounds_layer) {
+                                std::vector<LDTKEntityInstance> part_bounding_entities;
+                                ExtractStructureBounds(*bounds_layer, part_bounding_entities);
+                                BuildStructureParts(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, part_bounding_entities);
+                            }
+                        } */
                     }
                 }
             }
@@ -170,6 +186,8 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
     this_tileset->max_structures = (_map_size.x/50) + (_map_size.y/100);
 
     this_tileset->max_hills = 1 + (_map_size.x/2);
+
+    this_tileset->collision_layer_index = -1;
 
     this_tileset->sorted_tiles.grass_tiles.clear();
     this_tileset->sorted_tiles.dirt_tiles.clear();
@@ -230,7 +248,7 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
     //lootables                             -
     //mobs                                  -
     //fix sub maps                          X
-    //fix paths                             -
+    //fix paths                             X
     //fences around structures              X
 
     GenerateZones(new_level, *this_tileset);
@@ -238,6 +256,8 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
     GenerateEntitiesLayer(new_level, *this_tileset);
 
     ConnectStructuresWithPaths(*this_tileset);
+
+    AddMushroomZones(new_level, *this_tileset);
 
     GenerateStructuresLayer(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
@@ -273,16 +293,14 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
         }
     }
 
-    //GenerateDirtZonesRect(level, _tileset);
     GenerateDirtZonesBrush(level, _tileset, 3);
+    GenerateStartingShelter(level, _tileset);
     GenerateTreeZones(level, _tileset);
-    GenerateStructureZones(level, _tileset);
-    //GenerateHillZonesRect(level, _tileset);
+    GenerateVillageZone(level, _tileset);
+    GenerateStructureZone(level, _tileset);
     GenerateHillZonesBrush(level, _tileset, 4);
+    GenerateMushroomZones(level, _tileset);
 }
-
-
-
 
 
 
@@ -410,7 +428,10 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
 
 
 void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
-
+/////
+//// I dont think this does anything
+//// the final algorythm does not use this unformation.
+/////
     std::vector<Rectangle> tree_rects;
 
     int num_tree_patches = (level.px_wid/_tileset.tile_grid_size) / 5;
@@ -436,6 +457,233 @@ void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
             }
         }
     }
+}
+
+
+
+
+
+void GenerateMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
+    std::vector<Rectangle> shroom_rects;
+
+    int num_shroom_patches = (_tileset.map_size.x / 20);
+
+    for(int patch = 0; patch < num_shroom_patches; patch++ ) {
+        Rectangle new_rect;
+        new_rect.x = (float)GetRandomValue(1, _tileset.map_size.x-5);
+        new_rect.y = (float)GetRandomValue(1, _tileset.map_size.y-5);
+        new_rect.width = (float)GetRandomValue(8, 15);
+        new_rect.height = (float)GetRandomValue(8, 15);
+
+        _tileset.shroom_rects.push_back(new_rect);
+    }
+
+
+    for(Rectangle &patch : shroom_rects) {
+        for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
+            for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
+                int index = y * (int)_tileset.map_size.x + x;
+                if(index < _tileset.upper_zone_grid.size()-1) {
+                    _tileset.upper_zone_grid[index] = ZONE_MUSHROOM;
+                    //_tileset.lower_zone_grid[index] = ZONE_MUSHROOM;
+                }
+            }
+        }
+    }
+}
+
+
+void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+    Rectangle shelter_rect;
+                
+    shelter_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
+    shelter_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
+
+    
+    
+    shelter_rect.width = 12;// + GetRandomValue(5, 10);
+    shelter_rect.height = 12;// + GetRandomValue(5, 10);
+
+
+    Vector2 rect_center = {shelter_rect.x + (shelter_rect.width/2), shelter_rect.y + (shelter_rect.height/2)};
+
+    //should be at the first index
+    _tileset.structure_positions.push_back( rect_center );
+
+
+
+    for(int y = 0; y < shelter_rect.height; y++) {
+        for(int x = 0; x < shelter_rect.width; x++) {
+
+            Vector2 position;
+            position.x = x + shelter_rect.x;
+            position.y = y + shelter_rect.y;
+
+            if(position.x < 0){position.x = 0;}
+            if(position.x > _tileset.map_size.x-1) {position.x = _tileset.map_size.x-1;}
+
+            if(position.y < 0){position.y = 0;}
+            if(position.y > _tileset.map_size.y-1) {position.y = _tileset.map_size.y-1;}
+
+
+            int index = position.y * _tileset.map_size.x + position.x;
+
+            _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+            _tileset.lower_zone_grid[index] = ZONE_DIRT;
+
+            TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
+            
+        }
+    }
+    /* Rectangle fr = shelter_rect; //fence rect
+    fr.x -=1;
+    fr.y -=1;
+    fr.width +=2;
+    fr.height +=2;
+    for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
+        for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
+            if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
+                int index = y * (int)_tileset.map_size.x + x;
+                _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                //_tileset.lower_zone_grid[index] = ZONE_GRASS;
+                _tileset.collision_grid[index] = 1;
+            }
+        }
+    } */
+
+
+
+}
+
+
+void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+
+    Rectangle new_rect;
+                
+    new_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
+    new_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
+
+    
+    
+    new_rect.width = 40;// + GetRandomValue(5, 10);
+    new_rect.height = 40;// + GetRandomValue(5, 10);
+    //clamp
+    if(new_rect.x + new_rect.width > _tileset.map_size.x - 5) {new_rect.width = new_rect.width - (new_rect.x + new_rect.width - _tileset.map_size.x); };
+    if(new_rect.y + new_rect.height > _tileset.map_size.y - 5) {new_rect.height = new_rect.height - (new_rect.y + new_rect.height - _tileset.map_size.y); }
+    
+    Vector2 rect_center = {new_rect.x + (new_rect.width/2), new_rect.y + (new_rect.height/2)};
+
+    _tileset.structure_positions.push_back( rect_center );
+
+
+    for(int y = 0; y < new_rect.height; y++) {
+        for(int x = 0; x < new_rect.width; x++) {
+
+            Vector2 position;
+            position.x = x + new_rect.x;
+            position.y = y + new_rect.y;
+
+            if(position.x < 0){position.x = 0;}
+            if(position.x > _tileset.map_size.x-1) {position.x = _tileset.map_size.x-1;}
+
+            if(position.y < 0){position.y = 0;}
+            if(position.y > _tileset.map_size.y-1) {position.y = _tileset.map_size.y-1;}
+
+
+            int index = position.y * _tileset.map_size.x + position.x;
+
+            if(_tileset.upper_zone_grid[index] != ZONE_BORDER) {
+                _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+                //_tileset.lower_zone_grid[index] = ZONE_DIRT;
+            }
+
+        }
+    }
+
+    Rectangle fr = new_rect; //fence rect
+    fr.x -=1;
+    fr.y -=1;
+    fr.width +=2;
+    fr.height +=2;
+    for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
+        for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
+            if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
+                int index = y * (int)_tileset.map_size.x + x;
+                _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                //_tileset.lower_zone_grid[index] = ZONE_GRASS;
+                _tileset.collision_grid[index] = 1;
+            }
+        }
+    }
+
+}
+
+
+
+
+void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+    Rectangle structure_rect;
+                
+    structure_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
+    structure_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
+
+    
+    
+    structure_rect.width = 12;// + GetRandomValue(5, 10);
+    structure_rect.height = 12;// + GetRandomValue(5, 10);
+
+
+    Vector2 rect_center = {structure_rect.x + (structure_rect.width/2), structure_rect.y + (structure_rect.height/2)};
+
+    //should be at the first index
+    _tileset.structure_positions.push_back( rect_center );
+
+
+
+    for(int y = 0; y < structure_rect.height; y++) {
+        for(int x = 0; x < structure_rect.width; x++) {
+
+            Vector2 position;
+            position.x = x + structure_rect.x;
+            position.y = y + structure_rect.y;
+
+            if(position.x < 0){position.x = 0;}
+            if(position.x > _tileset.map_size.x-1) {position.x = _tileset.map_size.x-1;}
+
+            if(position.y < 0){position.y = 0;}
+            if(position.y > _tileset.map_size.y-1) {position.y = _tileset.map_size.y-1;}
+
+
+            int index = position.y * _tileset.map_size.x + position.x;
+
+            _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+            _tileset.lower_zone_grid[index] = ZONE_DIRT;
+
+            TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
+            
+        }
+    }
+    /* Rectangle fr = shelter_rect; //fence rect
+    fr.x -=1;
+    fr.y -=1;
+    fr.width +=2;
+    fr.height +=2;
+    for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
+        for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
+            if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
+                int index = y * (int)_tileset.map_size.x + x;
+                _tileset.upper_zone_grid[index] = ZONE_FENCE;
+                //_tileset.lower_zone_grid[index] = ZONE_GRASS;
+                _tileset.collision_grid[index] = 1;
+            }
+        }
+    } */
+
+
+
 }
 
 
@@ -902,8 +1150,8 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
             int tile_x = grid_tiles[tile]["px"][0];
             int tile_y = grid_tiles[tile]["px"][1];
 
-            if( (tile_x >= (int)new_rect.x and tile_x <= (int)(new_rect.x + new_rect.width))
-                    and (tile_y >= (int)new_rect.y and tile_y <= (int)(new_rect.y + new_rect.height)) ) {
+            if( (tile_x >= (int)new_rect.x and tile_x < (int)(new_rect.x + new_rect.width))
+                    and (tile_y >= (int)new_rect.y and tile_y < (int)(new_rect.y + new_rect.height)) ) {
                    
                 Vector2 atlas_pos;
                 atlas_pos.x = grid_tiles[tile]["src"][0];
@@ -931,6 +1179,64 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         }
     }    
 }
+
+
+
+void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities){
+
+std::vector<Rectangle> bounding_rects;
+
+    for(int r = 0; r < structure_bounding_entities.size(); r++) {
+        Rectangle new_rect;
+
+        new_rect.x = structure_bounding_entities[r].px[0];
+        new_rect.y = structure_bounding_entities[r].px[1];
+        new_rect.width = structure_bounding_entities[r].width;
+        new_rect.height = structure_bounding_entities[r].height;
+
+        std::string structure_id_string = structure_bounding_entities[r].field_instances[0].value_s;
+
+        TraceLog(LOG_INFO, "%s structure rect at x:%0.0f y:%0.0f w:%0.0f h:%0.0f", structure_id_string.c_str() , new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+
+        WorldGenStructureData new_part;
+        new_part.position = {0,0};
+        new_part.structure_size = {new_rect.width/this_tileset.tile_grid_size, new_rect.height/this_tileset.tile_grid_size};
+
+        for( int tile = 0; tile < grid_tiles.size(); tile++) {
+            int tile_x = grid_tiles[tile]["px"][0];
+            int tile_y = grid_tiles[tile]["px"][1];
+
+            if( (tile_x >= (int)new_rect.x and tile_x <= (int)(new_rect.x + new_rect.width))
+                    and (tile_y >= (int)new_rect.y and tile_y <= (int)(new_rect.y + new_rect.height)) ) {
+                   
+                Vector2 atlas_pos;
+                atlas_pos.x = grid_tiles[tile]["src"][0];
+                atlas_pos.y = grid_tiles[tile]["src"][1];
+                        
+                WorldGenAutoTile new_tile;
+                new_tile.position = {(float)tile_x - new_rect.x, (float)tile_y - new_rect.y};
+                new_tile.atlas_position = atlas_pos;
+                new_tile.tile_id = grid_tiles[tile]["t"];
+                new_tile.marked_sides.fill(false);
+                new_tile.has_collision = this_tileset.tile_lookup[(TILEID)new_tile.tile_id].has_collision;
+
+                new_part.structure_grid_tiles.push_back(new_tile);
+                //TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
+            }
+        }
+        this_tileset.structure_lookup[structure_id_string] = new_part;
+    }
+
+    for(auto &structure : this_tileset.structure_lookup) {
+        TraceLog(LOG_INFO, "structure loaded  %s", structure.first.c_str());
+        TraceLog(LOG_INFO, "structure tiles  %i", structure.second.structure_grid_tiles.size());
+        for(WorldGenAutoTile &tile : structure.second.structure_grid_tiles) {
+            //TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
+        }
+    }    
+
+}
+
 
 
 

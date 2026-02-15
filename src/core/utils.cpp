@@ -1,5 +1,10 @@
 #include "gamedefs.h"
 
+#define RAY_STEP_RESOLUTION 20
+#define RAY_STEP 1/RAY_STEP_RESOLUTION
+
+
+
 void Timer::Start(double _wait_time, bool _one_shot) {
 
     active = true;
@@ -201,7 +206,7 @@ void DL_Sort(LevelData &_level_data) {
 
 bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range) {
     Vector2 end = Vector2Add(_ray.position, _ray.direction);
-    Vector2 step = _ray.direction * 0.1;
+    Vector2 step = _ray.direction * RAY_STEP;
 
     BaseScene *this_scene = g_current_scene.get();
     //TraceLog(LOG_INFO, "RAY CHECKING %i ", this_scene->level_data.precalc.map_index);
@@ -226,18 +231,21 @@ bool GetRayCollisionWithLevel(RayCast &_ray, CollisionResult &result, int range)
 
     //Vector2 mid = Vector2Add(_ray.position, _ray.direction * 0.5f);
 
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= RAY_STEP_RESOLUTION; i++) {
 
         int ix = ( ((step.x * i) + _ray.position.x) * this_scene->level_data.precalc.inv_tile_size);
         int iy = ( ((step.y * i) + _ray.position.y) * this_scene->level_data.precalc.inv_tile_size);
 
         int index = iy * this_scene->level_data.precalc.map_width + ix;
-        int value = col_layer.int_grid[index];
-
-        //TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
-
-        if(value == 1) {
-            return true;
+        if(index < col_layer.int_grid.size()-1) {
+        
+            int value = col_layer.int_grid[index];
+            
+            //TraceLog(LOG_INFO, "RAY CHECKING %i %i %i  step %f %f", i, ix, iy, step.x, step.y);
+            
+            if(value == 1) {
+                return true;
+            }
         }
     }
     return false;

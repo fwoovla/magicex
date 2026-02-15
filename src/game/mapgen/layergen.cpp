@@ -218,17 +218,19 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
 
 
         if(s_pos != current_tileset.structure_positions[0]) {
-            name_choice = structure_names[GetRandomValue(0, structure_names.size() -1 )];
+            name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
         }
         else {
             name_choice = "STARTINGSHELTER";
-            s_pos.y -= 3;
+            //s_pos.y -= 3;
         }
 
 
         int half_width = structure_tileset.structure_lookup[name_choice].structure_size.x/2;
         int half_height = structure_tileset.structure_lookup[name_choice].structure_size.y/2;
+
         Vector2 corner_offset = {s_pos.x - half_width, s_pos.y - half_height};
+
         for(WorldGenAutoTile tile : structure_tileset.structure_lookup[name_choice].structure_grid_tiles) { 
             
             LDTKGridTile new_tile_ldtk;
@@ -254,7 +256,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
             int index = (y * current_tileset.map_size.x + x);
 
 
-            //TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+            TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
 
 
             if(tile.has_collision == true) {
@@ -265,7 +267,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
             }
             else {
                     //TraceLog(LOG_INFO, "shadow tile");
-                current_tileset.upper_zone_grid[index] = ZONE_NONE;
+                //AWcurrent_tileset.upper_zone_grid[index] = ZONE_NONE;
                 current_tileset.collision_grid[index] = 0;
             }
 
@@ -326,6 +328,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                 }
             }
         }
+        TraceLog(LOG_INFO, "++++++---------\n");
     }
      _level.layer_instances.push_back(new_layer);
 }
@@ -373,6 +376,7 @@ void GenerateEntitiesLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
     _level.layer_instances.push_back(new_layer);
 
+    _tileset.collision_layer_index = _level.layer_instances.size() - 1;
 }
 
 
@@ -398,7 +402,7 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
     LDTKEntityInstance spawn_point;
     spawn_point.px.push_back( _tileset.structure_positions[0].x * _tileset.tile_grid_size);
-    spawn_point.px.push_back( _tileset.structure_positions[0].y * _tileset.tile_grid_size);
+    spawn_point.px.push_back( (_tileset.structure_positions[0].y + 4) * _tileset.tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
     entity_layer->entity_instances.push_back(spawn_point);
 

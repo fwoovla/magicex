@@ -68,6 +68,9 @@ TitleScene::~TitleScene() {
 
 void TitleScene::OnPlayPressed() {
 
+    g_game_data.using_saved_data = false;
+    g_ldtk_maps.levels.clear();
+    g_ldtk_maps.tilesets.clear();
     return_scene = STAGING_SCENE;
 }
 

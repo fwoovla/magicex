@@ -1,8 +1,8 @@
 #include "../core/gamedefs.h"
 
 #define MAX_ZOOM 2.4f
-#define MIN_ZOOM 1.5f
-#define ZOOM_STEP 0.20f
+#define MIN_ZOOM 0.05f
+#define ZOOM_STEP 0.05f
 
 
 float max_dist_sqr = 150*150;

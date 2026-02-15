@@ -1,8 +1,8 @@
 #include "../../core/gamedefs.h"
-
-#define MAX_ZOOM 1.8f
+/* 
+#define MAX_ZOOM 3.8f
 #define MIN_ZOOM 0.05f
-#define ZOOM_STEP 0.05f
+#define ZOOM_STEP 0.05f */
 
 GameScene::GameScene()
 {

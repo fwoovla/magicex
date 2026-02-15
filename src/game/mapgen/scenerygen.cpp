@@ -38,6 +38,40 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
 
 
+
+
+void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+
+
+
+    for(Rectangle patch : _tileset.shroom_rects) {
+        LDTKEntityInstance new_shroom_zone;
+        new_shroom_zone.identifier = "MushroomZone";
+
+
+        new_shroom_zone.iid = "shroomzone_" + std::to_string(GetRandomValue(100, 1000000));
+
+        new_shroom_zone.px.push_back(patch.x * _tileset.tile_grid_size);
+        new_shroom_zone.px.push_back(patch.y * _tileset.tile_grid_size);
+        new_shroom_zone.width = patch.width * _tileset.tile_grid_size;
+        new_shroom_zone.height = patch.height * _tileset.tile_grid_size;
+        LDTKFieldInstance new_field;
+
+        new_field.identifier = "max_mushrooms";
+        new_field.value_i = GetRandomValue(1*patch.width, 1*patch.height);
+        new_shroom_zone.field_instances.push_back(new_field);
+        _level.layer_instances[_tileset.collision_layer_index].entity_instances.push_back(new_shroom_zone);
+
+        
+        TraceLog(LOG_INFO, "shroom zone");
+    }
+
+}
+
+
+
+
+
 void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
     Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
