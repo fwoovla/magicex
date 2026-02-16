@@ -96,6 +96,13 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 _tileset.upper_zone_grid[index_left] = ZONE_PATH_SIDE;
                 _tileset.collision_grid[index_left] = 0;
             }
+
+            if(GetRandomValue(0, 1000) > 980 ) {
+                WorldGenDeccoEntityData new_decco_entity;
+                new_decco_entity.decco_name = "DeccoEntity_2";
+                new_decco_entity.position = {p.x+ GetRandomValue(-1,1), p.y+ GetRandomValue(-1,1)};
+                _tileset.entity_decco_data.push_back(new_decco_entity);
+            }
         }
     }
 }

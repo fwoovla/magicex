@@ -1,4 +1,30 @@
 {
+"map_gen":[
+    {
+        "map_name":"ForrestWG",
+        "has_shelter": true,
+        "map_w":200,
+        "map_h":200,
+        "tileset_terrain_name":"Forrest",
+        "tileset_structure_name":"Forrest_structures",
+        "tree_coverage":0.10,
+        "grass_coverage":0.7,
+        "village_count":1,
+        "structure_count":3
+    },
+    {
+        "map_name":"DesertWG",
+        "has_shelter": true,
+        "map_w":100,
+        "map_h":100,
+        "tileset_terrain_name":"Forrest",
+        "tileset_structure_name":"Forrest_structures",
+        "tree_coverage":0.05,
+        "grass_coverage":0.5,
+        "village_count":1,
+        "structure_count":3
+    }
+],
 
  "base_class": [
         {

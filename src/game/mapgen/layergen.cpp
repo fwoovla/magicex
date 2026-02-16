@@ -48,9 +48,8 @@ void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                     new_layer.grid_tiles.push_back(new_tile_ldtk);
                 }
                 else {
-                    _tileset.lower_zone_grid[index] = ZONE_NONE;
+                    _tileset.lower_zone_grid[index] = ZONE_GRASS;
                 }
-
             }
             //TraceLog(LOG_INFO, "making tile   id: %i  px: %i %i    src  %i %i",tile_id, new_tile_ldtk.px[0], new_tile_ldtk.px[1], new_tile_ldtk.src[0], new_tile_ldtk.src[1]);
         }
@@ -61,7 +60,75 @@ void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 }
 
 
+void GenerateLowerDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset) {
 
+    LDTKLayerInstance new_layer;
+
+    new_layer.identifier = "LowerDeccoLayer";
+    new_layer.type = "Tiles";
+    new_layer.tileset_def_uid = structure_tileset.uid;
+    new_layer.grid_size = current_tileset.tile_grid_size;
+    new_layer.c_wid = current_tileset.map_size.x;
+    new_layer.c_hei = current_tileset.map_size.y;
+
+
+    std::vector<std::string>  structure_names;
+
+    for(auto &structure :structure_tileset.layer_decco_lookup) {
+        structure_names.push_back(structure.first);
+    }
+
+    for(Vector2 structure_pos : current_tileset.layer_decco_positions) {
+        std::string name_choice;
+
+        Vector2 s_pos = structure_pos;
+
+        name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
+
+        int half_width = structure_tileset.layer_decco_lookup[name_choice].structure_size.x/2;
+        int half_height = structure_tileset.layer_decco_lookup[name_choice].structure_size.y/2;
+
+        Vector2 corner_offset = {s_pos.x - half_width, s_pos.y - half_height};
+
+        for(WorldGenAutoTile tile : structure_tileset.layer_decco_lookup[name_choice].structure_grid_tiles) { 
+            
+            LDTKGridTile new_tile_ldtk;
+            new_tile_ldtk.px.push_back( (corner_offset.x * current_tileset.tile_grid_size) + tile.position.x );
+            new_tile_ldtk.px.push_back( (corner_offset.y * current_tileset.tile_grid_size) + tile.position.y);
+            new_tile_ldtk.src.push_back( tile.atlas_position.x);
+            new_tile_ldtk.src.push_back(tile.atlas_position.y);
+            new_tile_ldtk.t = tile.tile_id;
+                
+            new_layer.grid_tiles.push_back(new_tile_ldtk);
+                
+                
+            int x = new_tile_ldtk.px[0]/current_tileset.tile_grid_size;
+            int y = new_tile_ldtk.px[1]/current_tileset.tile_grid_size;
+
+            if(x <  1) {x = 1;}
+            if(y <  1) {y = 1;}
+            if(x >= current_tileset.map_size.x) {x = current_tileset.map_size.x - 1;}
+            if(y >= current_tileset.map_size.y) {y = current_tileset.map_size.y - 1;}
+
+            int index = (y * current_tileset.map_size.x + x);
+
+            //TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+
+            if(tile.has_collision == true) {
+                    //TraceLog(LOG_INFO, "structure tile");
+                current_tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
+                //current_tileset.lower_zone_grid[index] = ZONE_DIRT;
+                current_tileset.collision_grid[index] = 1;
+            }
+            else {
+                    //TraceLog(LOG_INFO, "shadow tile");
+                //AWcurrent_tileset.upper_zone_grid[index] = ZONE_NONE;
+                current_tileset.collision_grid[index] = 0;
+            }
+        }
+    }
+    _level.layer_instances.push_back(new_layer);
+}
 
 void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     LDTKLayerInstance new_layer;
@@ -178,8 +245,6 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 }
 
 
-
-
 void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset) {
 
     LDTKLayerInstance *entities_layer = nullptr;
@@ -246,17 +311,15 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
             int x = new_tile_ldtk.px[0]/current_tileset.tile_grid_size;
             int y = new_tile_ldtk.px[1]/current_tileset.tile_grid_size;
 
-            if(x >= current_tileset.map_size.x) {
-                x = current_tileset.map_size.x - 1;
-            }
-            if(y >= current_tileset.map_size.y) {
-                y = current_tileset.map_size.y - 1;
-            }
+            if(x <  1) {x = 1;}
+            if(y <  1) {y = 1;}
+            if(x >= current_tileset.map_size.x) {x = current_tileset.map_size.x - 1;}
+            if(y >= current_tileset.map_size.y) {y = current_tileset.map_size.y - 1;}
 
             int index = (y * current_tileset.map_size.x + x);
 
 
-            TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+            //TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
 
 
             if(tile.has_collision == true) {
@@ -287,7 +350,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                                 new_entity.identifier = "HouseTransition";
                             }
 
-                            TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_entity.identifier.c_str());
+                            //TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_entity.identifier.c_str());
 
                             new_entity.iid = "housetransition_" + std::to_string( GetRandomValue(100, 10000));
                             new_entity.px.push_back(new_tile_ldtk.px[0]);
@@ -303,9 +366,9 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                                 //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
                             }
                             else {
-                                TraceLog(LOG_INFO, "++++++--------- sub map names %i", g_sub_map_string_names.size());
+                                //TraceLog(LOG_INFO, "++++++--------- sub map names %i", g_sub_map_string_names.size());
                                 for(std::string &map : g_sub_map_string_names) {
-                                    TraceLog(LOG_INFO, "++++++--------- sub map %s", map.c_str());
+                                    //TraceLog(LOG_INFO, "++++++--------- sub map %s", map.c_str());
                                 }
                                 std::string sub_map_choice = g_sub_map_string_names[GetRandomValue(0, g_sub_map_string_names.size()-1)];
 
@@ -328,16 +391,26 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                 }
             }
         }
-        TraceLog(LOG_INFO, "++++++---------\n");
+        //TraceLog(LOG_INFO, "++++++---------\n");
     }
      _level.layer_instances.push_back(new_layer);
 }
             
 
-
-
-
 void GenerateCollisionLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+
+    for(int y = 0; y < _tileset.map_size.y; y++) {
+        for(int x = 0; x < _tileset.map_size.x; x++) {
+            int index = y * _tileset.map_size.x + x;
+            _tileset.lower_zone_grid[index] = ZONE_GRASS;
+            
+            if(x == 0 or y == 0 or x == _tileset.map_size.x-1 or y == _tileset.map_size.y-1) {              
+                _tileset.upper_zone_grid[index] = ZONE_BORDER;
+                _tileset.collision_grid[index] = 1;
+            }
+        }
+    }
+
     LDTKLayerInstance new_layer;
     
     new_layer.identifier = "Collision";

@@ -36,8 +36,6 @@ void LoadGameData() {
 
     g_font = LoadFontEx("assets/FFatF.ttf", 128, nullptr, 0);
     SetTextureFilter(g_font.texture, TEXTURE_FILTER_POINT);
-    //TraceLog(LOG_INFO, "font id = %u %i", g_font.texture.id, g_font.baseSize);
-    //TraceLog(LOG_INFO, "baseSize = %i, glyphCount = %i", g_font.baseSize, g_font.glyphCount);
 
     std::ifstream cfile("assets/data.json");
     if (!cfile.is_open()) {
@@ -152,23 +150,9 @@ void LoadGameData() {
 
         g_item_data[(int)id] = new_item;
 
-        /* g_loot_tables[type].push_back(id);
-        g_loot_tables[TYPE_ALL].push_back(id);
-
-        if(type >= TYPE_HEAD_ARMOR and type <= TYPE_HAND_ARMOR) {
-            g_loot_tables[TYPE_ARMOR].push_back(id);
-        } */
     }
 
-/*     TraceLog(LOG_INFO, "-----------------------------");
-    TraceLog(LOG_INFO, "-------LOOT TABLES-----------");
-    TraceLog(LOG_INFO, "-----------------------------");
-    for(auto &table : g_loot_tables) {
-        TraceLog(LOG_INFO, "loot table  id: %i", table.first);
-        for(int item = 0; item < table.second.size(); item++) {
-            TraceLog(LOG_INFO, "    in table: %s",  g_item_data[table.second[item]].item_name.c_str());
-        }
-    } */
+
 //---------------------spell data
     g_spell_data.resize(cj["spell_data"].size());
 
@@ -550,6 +534,12 @@ void LoadGameData() {
     LoadLootPools(cj["loot_pools"]);
 
 
+
+    LoadMapGenData(cj["map_gen"]);
+
+
+
+
     cfile.close();
  
 
@@ -757,10 +747,6 @@ void SaveGame(LevelData &level_data) {
     file<<j.dump(4);
     file.close();
 
-    //save map file
-    //json j;
-
-
     if(!g_game_data.using_saved_data) {
    
         std::ifstream src("assets/maps/ldtk/test.ldtk", std::ios::binary);
@@ -769,13 +755,6 @@ void SaveGame(LevelData &level_data) {
         dst << src.rdbuf();
         dst.close();
     }
-
-
-/*     std::ifstream wgsrc("saves/saved_map.ldtk", std::ios::binary);
-    std::ofstream wgdst(worldgen_save_path, std::ios::binary);
-
-    wgdst << wgsrc.rdbuf();
-    wgdst.close(); */
 
     
     std::ifstream wgfile("saves/saved_map.json");
@@ -1075,25 +1054,6 @@ void ClearLevelData(LevelData &level_data) {
 }
 
 
-/* void ClearSubLevelData() {
-    for (auto& [key, value] : g_sub_scene_data) {
-        DL_Clear(g_sub_scene_data[key]->entity_list);
-        g_sub_scene_data[key]->entity_list
-        g_sub_scene_data[key]->entity_list
-        g_sub_scene_data[key]->entity_list
-        g_sub_scene_data[key]->entity_list
-        g_sub_scene_data[key]->level_transitions.clear();
-        g_sub_scene_data[key]->container_data.clear();
-        g_sub_scene_data[key]->game_areas.clear();
-    }
-    g_sub_scene_data.clear();
-
-    for (auto& [key, value] : g_sub_scene_state) {
-        g_sub_scene_state[key]->container_data.clear();
-    }
-    g_sub_scene_state.clear();
-} */
-
 
 void LoadLevelData(LevelData &level_data) {
 
@@ -1112,7 +1072,11 @@ void LoadLevelData(LevelData &level_data) {
         //LDTKLevel new_level;
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
-        GenerateMap(g_ldtk_maps.levels.back(), g_worldgen_tilesets[0].uid, {200, 200}, g_game_data.level_name_to_create);
+
+        //find tilesheets
+        
+        GenerateMap(g_ldtk_maps.levels.back(), g_game_data.level_name_to_create);
+
         g_game_data.current_map_index = map_index;
         TraceLog(LOG_INFO, "==========GENERATING NEW MAP================");
     }
@@ -1305,12 +1269,13 @@ void LoadLevelData(LevelData &level_data) {
         }
     }
 
+    //WHY DO THIS HERE?
     for(int thing = 0; thing < this_level.environment_data.size(); thing++) {
         //TraceLog(LOG_INFO, "-----environment sprite %s %0.0f %0.0f", this_level.environment_data[thing].item_string.c_str(), this_level.environment_data[thing].position.x, this_level.environment_data[thing].position.y);
         int id = StrToEnviroSpriteId(this_level.environment_data[thing].item_string);
 
         
-        if(id < SPRITE_ENVIRO_GRASS1) {
+        if(id < SPRITE_ENVIRO_GRASS_START or id > SPRITE_ENVIRO_GRASS_END) {
             std::unique_ptr<EnvironmentalEntity> new_entity = std::make_unique<EnvironmentalEntity>(this_level.environment_data[thing].position, id, true);
             level_data.environment_entities.push_back(std::move(new_entity));
         }
@@ -1318,6 +1283,7 @@ void LoadLevelData(LevelData &level_data) {
             std::unique_ptr<EnvironmentalEntity> new_entity = std::make_unique<EnvironmentalEntity>(this_level.environment_data[thing].position, id, false);
             level_data.environment_entities.push_back(std::move(new_entity));
         }
+        
         //TraceLog(LOG_INFO, "-----\n");
     }
 
@@ -1864,15 +1830,18 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
     static const std::unordered_map<std::string, EnvironmentSpriteID> lookup_table = {
         {"Tree1",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE1},
         {"Tree2",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE2},
-        {"Grass1",                        EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
-        {"Grass2",                        EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2},
+        {"Grass1",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
+        {"Grass2",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2},
+        {"DeccoEntity_1",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1},
+        {"DeccoEntity_2",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2},
+        
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
         //TraceLog(LOG_INFO, "enviro ID found %i", it->second);
         return it->second;
     }
-    //TraceLog(LOG_INFO, "Spell ID not found ");
+    TraceLog(LOG_INFO, "Decco ID not found ");
     return EnvironmentSpriteID::SPRITE_ENVIRO_ERROR;
 }
 
@@ -1883,6 +1852,8 @@ std::string EnvironmentalIdToStr(const int id) {
         {EnvironmentSpriteID::SPRITE_ENVIRO_TREE2,     "Tree2"},
         {EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1,     "Grass1"},
         {EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2,     "Grass2"},
+        {EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1,     "DeccoEntity_1"},
+        {EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2,     "DeccoEntity_2"},
     };
     if (auto it = lookup_table.find(id); it != lookup_table.end()) {
         return it->second;

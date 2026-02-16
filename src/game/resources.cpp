@@ -846,6 +846,44 @@ void LoadResources() {
     UnloadImage(item_image);
     TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_GRASS2");
 
+
+
+
+    /* 
+    item_pos = {40,1};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16 * 2, 16 * 8});
+    g_environment_sprites[SPRITE_ENVIRO_DECCO_1] = LoadTextureFromImage(item_image);
+    */
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {43,10};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16*4, 16*4});
+    g_environment_sprites[SPRITE_ENVIRO_DECCO_1] = LoadTextureFromImage(item_image);
+    UnloadImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_DECCO_1");
+
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {43,14};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16*4, 16});
+    g_shadow_sprites[SPRITE_SHADOW_DECCO_1] = LoadTextureFromImage(item_image);
+    UnloadImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_DECCO_1");
+
+
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {45,15};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16*2, 16*4});
+    g_environment_sprites[SPRITE_ENVIRO_DECCO_2] = LoadTextureFromImage(item_image);
+    UnloadImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_ENVIRO_DECCO_2");
+
+    item_image = LoadImageFromTexture(g_main_sprite_sheet);
+    item_pos = {45,19};
+    ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16*2, 16*2});
+    g_shadow_sprites[SPRITE_SHADOW_DECCO_2] = LoadTextureFromImage(item_image);
+    UnloadImage(item_image);
+    TraceLog(LOG_INFO, "SPRITES   SPRITE_SHADOW_DECCO_2");
+
+
     item_image = LoadImageFromTexture(g_main_sprite_sheet);
     item_pos = {24,6};
     ImageCrop(&item_image, {item_pos.x * 16, item_pos.y * 16, 16, 16});

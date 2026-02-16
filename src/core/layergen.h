@@ -1,6 +1,8 @@
 #pragma once
 #include "gamedefs.h"
 
+void GenerateLowerDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
+
 void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset);
 
 void GenerateUpperTerrainLayer(LDTKLevel &level, WorldGenTileSet &_tileset);

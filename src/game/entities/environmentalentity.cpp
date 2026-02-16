@@ -46,6 +46,7 @@ void EnvironmentalEntity::Update() {
 
     is_on_screen = IsOnScreen(position, sprite.size);
 
+    //TraceLog(LOG_INFO, "ENVIRONMENTAL ENTITY UPDATE");
     if(!is_on_screen) {
         return;
     }
@@ -56,7 +57,9 @@ void EnvironmentalEntity::Draw() {
         return;
     }
 
-    //DrawCircleV(sprite.position, 2, WHITE);
+    //TraceLog(LOG_INFO, "ENVIRONMENTAL ENTITY DRAW");
+    //DrawCircleV(sprite.position, 5, WHITE);
+
     if(fadeable) {
                          
         if( CheckCollisionPointRec(Vector2Add(g_current_player->position, g_current_player->ground_point_offset), collision_rect ) ) {

@@ -28,6 +28,7 @@ void GenerateWorldGenTilesets(std::string _path) {
 
                 //int uid = GetRandomValue(100, 1000);
                 int uid = j["defs"]["tilesets"][i]["uid"];
+                std::string identifier = j["defs"]["tilesets"][i]["identifier"];
 
                 std::filesystem::path pathObj(j["defs"]["tilesets"][i]["relPath"]);
                 std::string texture_path = pathObj.filename().string();
@@ -122,25 +123,43 @@ void GenerateWorldGenTilesets(std::string _path) {
                             if(bounds_layer) {
                                 std::vector<LDTKEntityInstance> structure_bounding_entities;
                                 ExtractStructureBounds(*bounds_layer, structure_bounding_entities);
-                                BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, structure_bounding_entities);
+                                BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, structure_bounding_entities, this_tileset->structure_lookup);
                             }
                         }
-                        /* else if(this_layer.identifier == "StructureDecco") {
+                        else if(this_layer.identifier == "LayerDecco") {
                             json *bounds_layer = nullptr;
 
                             for(int l = 0; l < j["levels"][level]["layerInstances"].size(); l++) {
-                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "DeccoBounds") {
+                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "LayerDeccoBounds") {
                                     bounds_layer = &j["levels"][level]["layerInstances"][l];
                                     break;
                                 }
                             }
 
                             if(bounds_layer) {
-                                std::vector<LDTKEntityInstance> part_bounding_entities;
-                                ExtractStructureBounds(*bounds_layer, part_bounding_entities);
-                                BuildStructureParts(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, part_bounding_entities);
+                                std::vector<LDTKEntityInstance> decco_bounding_entities;
+                                ExtractStructureBounds(*bounds_layer, decco_bounding_entities);
+                                BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, decco_bounding_entities, this_tileset->layer_decco_lookup);
+                                //BuildDeccoStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, decco_bounding_entities);
                             }
-                        } */
+                        }
+                        else if(this_layer.identifier == "EntityDecco") {
+                            json *bounds_layer = nullptr;
+
+                            for(int l = 0; l < j["levels"][level]["layerInstances"].size(); l++) {
+                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "EntityDeccoBounds") {
+                                    bounds_layer = &j["levels"][level]["layerInstances"][l];
+                                    break;
+                                }
+                            }
+
+                            if(bounds_layer) {
+                                std::vector<LDTKEntityInstance> entity_bounding_entities;
+                                ExtractStructureBounds(*bounds_layer, entity_bounding_entities);
+                                BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, entity_bounding_entities, this_tileset->entity_decco_lookup);
+                                //BuildDeccoStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, decco_bounding_entities);
+                            }
+                        }
                     }
                 }
             }
@@ -156,36 +175,55 @@ void GenerateWorldGenTilesets(std::string _path) {
     }
 }
 
-void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::string map_name) {
+void GenerateMap(LDTKLevel &new_level, std::string map_name) {
+
+    int tileset_terrain_uid = -1;
+    int tileset_structure_uid = -1;
+
+    WorldGenData *wg_data = nullptr;
+
+    for(WorldGenData &data : g_worldgen_data) {
+        if(data.map_name == map_name) {
+            wg_data = &data;
+        }
+    }
+
+    if(wg_data == nullptr) {
+        TraceLog(LOG_INFO, "WORLD GEN DATA NOT FOUND %s", map_name.c_str());
+        return;
+    }
 
     WorldGenTileSet *this_tileset = nullptr;
 
     for(int ts = 0; ts < g_worldgen_tilesets.size(); ts++) {
-        if(g_worldgen_tilesets[ts].uid == tileset_uid) {
+        TraceLog(LOG_INFO, "looking for tileset %s  %s", wg_data->terrrain_set_name.c_str(), g_worldgen_tilesets[ts].identifier.c_str());
+        if(g_worldgen_tilesets[ts].identifier == wg_data->terrrain_set_name) {
             this_tileset = &g_worldgen_tilesets[ts];
         }
     }
 
     if(this_tileset == nullptr) {
-        TraceLog(LOG_INFO, "could not find tileset %i", tileset_uid);
+        TraceLog(LOG_INFO, "could not find tileset %s  %s", map_name.c_str(), wg_data->terrrain_set_name.c_str());
         return;
     
     }
 
     new_level.identifier = map_name;
     new_level.is_worldgen = true;
-    new_level.px_wid = _map_size.x * this_tileset->tile_grid_size;
-    new_level.px_hei = _map_size.y * this_tileset->tile_grid_size;
+    new_level.px_wid = wg_data->map_width * this_tileset->tile_grid_size;
+    new_level.px_hei = wg_data->map_height * this_tileset->tile_grid_size;
 
 
-    this_tileset->map_size = _map_size;
+    this_tileset->map_size = {(float)wg_data->map_width, (float)wg_data->map_height};
 
-    this_tileset->max_grass = 5 * new_level.px_wid + 5 * new_level.px_hei;
-    this_tileset->max_trees = 0.40 * new_level.px_wid + 0.40 * new_level.px_hei;
+    this_tileset->grass_coverage = wg_data->grass_coverage;
+    this_tileset->tree_coverage = wg_data->tree_coverage;
 
-    this_tileset->max_structures = (_map_size.x/50) + (_map_size.y/100);
+    this_tileset->max_structures = wg_data->structure_count;
+    this_tileset->max_villages = wg_data->village_count;
 
-    this_tileset->max_hills = 1 + (_map_size.x/2);
+
+    this_tileset->has_shelter = wg_data->has_shelter;
 
     this_tileset->collision_layer_index = -1;
 
@@ -225,13 +263,15 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
     this_tileset->lower_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
     this_tileset->upper_zone_grid.clear();
     this_tileset->upper_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
+    this_tileset->spawn_zone_grid.clear();
+    this_tileset->spawn_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
 
 
-    TraceLog(LOG_INFO, "-------------max_grass %i", this_tileset->max_grass);
-    TraceLog(LOG_INFO, "-------------max_trees %i", this_tileset->max_trees);
-    TraceLog(LOG_INFO, "-------------max_hills %i", this_tileset->max_hills);
+    TraceLog(LOG_INFO, "-------------max_grass %0.0f", this_tileset->grass_coverage);
+    TraceLog(LOG_INFO, "-------------max_trees %0.0f", this_tileset->tree_coverage);
+    //TraceLog(LOG_INFO, "-------------max_hills %i", this_tileset->max_hills);
     TraceLog(LOG_INFO, "-------------max_structures %i", this_tileset->max_structures);
-    TraceLog(LOG_INFO, "-------TILESET #%i READY TO BUILD MAP------", tileset_uid);
+    TraceLog(LOG_INFO, "-------TILESET #%s READY TO BUILD MAP------", map_name.c_str());
 
     //grass layer                           X
     //border                                X
@@ -251,6 +291,12 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
     //fix paths                             X
     //fences around structures              X
 
+
+    CreatePoiPatches(*this_tileset, 50);
+    CreateSpawnPatches(*this_tileset, 10);
+
+
+
     GenerateZones(new_level, *this_tileset);
 
     GenerateEntitiesLayer(new_level, *this_tileset);
@@ -263,16 +309,19 @@ void GenerateMap(LDTKLevel &new_level, int tileset_uid, Vector2 _map_size, std::
 
     GenerateUpperTerrainLayer(new_level, *this_tileset);
 
+    GenerateLowerDeccoLayer(new_level, *this_tileset,  g_worldgen_tilesets[1]);
+
     GenerateLowerTerrainLayer(new_level, *this_tileset);
 
-    GenerateCollisionLayer(new_level, *this_tileset);
+    PopulateDeccoEntities(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
     PopulateGrass(new_level, *this_tileset);
-
+    
     PopulateTrees(new_level, *this_tileset);
-
+    
     PlaceEntities(new_level, *this_tileset);
-
+    
+    GenerateCollisionLayer(new_level, *this_tileset);
 }
 
 
@@ -294,12 +343,25 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 
     GenerateDirtZonesBrush(level, _tileset, 3);
-    GenerateStartingShelter(level, _tileset);
-    GenerateTreeZones(level, _tileset);
-    GenerateVillageZone(level, _tileset);
-    GenerateStructureZone(level, _tileset);
+
+    if(_tileset.has_shelter) {
+        GenerateStartingShelter(level, _tileset);
+    }
+    else {
+        //make extraction point
+    }
+
+    for(int i = 0; i < _tileset.max_villages; i++) {
+        GenerateVillageZone(level, _tileset);
+    }
+
+    for(int i = 0; i < _tileset.max_structures; i++) {
+        GenerateStructureZone(level, _tileset);
+    }
+
+    GenerateRuinsZones(level, _tileset);
+
     GenerateHillZonesBrush(level, _tileset, 4);
-    GenerateMushroomZones(level, _tileset);
 }
 
 
@@ -422,11 +484,6 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
     }
 }
 
-
-
-
-
-
 void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 /////
 //// I dont think this does anything
@@ -459,34 +516,40 @@ void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 }
 
+void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
+    TraceLog(LOG_INFO, "GENERATING SHROOM ZONES ");
+    /* std::vector<Rectangle> shroom_rects; */
 
+    int num_ruins_patches = 4;
 
+    for(int patch = 0; patch < num_ruins_patches; patch++ ) {
+        Rectangle new_rect = GetAvailableSpawnPatch(_tileset);
 
-void GenerateMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
-    std::vector<Rectangle> shroom_rects;
+        _tileset.ruins_rects.push_back(new_rect);
 
-    int num_shroom_patches = (_tileset.map_size.x / 20);
+        //_tileset.layer_decco_positions.push_back({new_rect.x + (new_rect.width/2), new_rect.y + (new_rect.height/2)});
 
-    for(int patch = 0; patch < num_shroom_patches; patch++ ) {
-        Rectangle new_rect;
-        new_rect.x = (float)GetRandomValue(1, _tileset.map_size.x-5);
-        new_rect.y = (float)GetRandomValue(1, _tileset.map_size.y-5);
-        new_rect.width = (float)GetRandomValue(8, 15);
-        new_rect.height = (float)GetRandomValue(8, 15);
+        WorldGenDeccoEntityData new_decco_entity;
+        new_decco_entity.decco_name = "DeccoEntity_1";
+        new_decco_entity.position = {new_rect.x + (new_rect.width/2), new_rect.y + (new_rect.height/2)};
 
-        _tileset.shroom_rects.push_back(new_rect);
+        _tileset.entity_decco_data.push_back(new_decco_entity);
     }
 
 
-    for(Rectangle &patch : shroom_rects) {
+    for(Rectangle &patch : _tileset.ruins_rects) {
         for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
             for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
                 int index = y * (int)_tileset.map_size.x + x;
-                if(index < _tileset.upper_zone_grid.size()-1) {
-                    _tileset.upper_zone_grid[index] = ZONE_MUSHROOM;
-                    //_tileset.lower_zone_grid[index] = ZONE_MUSHROOM;
+
+                //TraceLog(LOG_INFO, "shroom  pos %i %i", x, y);
+                if(_tileset.upper_zone_grid[index] != ZONE_STRUCTURE) {
+                    _tileset.spawn_zone_grid[index] = ZONE_MUSHROOM;
+                    //_tileset.upper_zone_grid[index] = ZONE_NONE;
+                    _tileset.lower_zone_grid[index] = ZONE_DIRT;
                 }
+
             }
         }
     }
@@ -495,18 +558,15 @@ void GenerateMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
-    Rectangle shelter_rect;
-                
-    shelter_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
-    shelter_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
 
-    
-    
-    shelter_rect.width = 12;// + GetRandomValue(5, 10);
-    shelter_rect.height = 12;// + GetRandomValue(5, 10);
-
+    Rectangle shelter_rect = GetAvailablePoiPatch(_tileset);
 
     Vector2 rect_center = {shelter_rect.x + (shelter_rect.width/2), shelter_rect.y + (shelter_rect.height/2)};
+
+    shelter_rect.x = rect_center.x - 5;
+    shelter_rect.y = rect_center.y - 5;
+    shelter_rect.width = 10;
+    shelter_rect.height = 10;
 
     //should be at the first index
     _tileset.structure_positions.push_back( rect_center );
@@ -532,7 +592,7 @@ void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
             _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
             _tileset.lower_zone_grid[index] = ZONE_DIRT;
 
-            TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
+            //TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
             
         }
     }
@@ -541,6 +601,13 @@ void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
     fr.y -=1;
     fr.width +=2;
     fr.height +=2;
+
+    if(fr.x < 1) {fr.x = 1;};
+    if(fr.y < 1) {fr.y = 1;};
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+    if(fr.x + fr.width > _tileset.map_size.x - 1) {fr.width = fr.width - (fr.x + fr.width - _tileset.map_size.x - 1); };
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+
     for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
         for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
             if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
@@ -560,15 +627,9 @@ void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
 void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
-    Rectangle new_rect;
+    Rectangle new_rect = GetAvailablePoiPatch(_tileset);
                 
-    new_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
-    new_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
 
-    
-    
-    new_rect.width = 40;// + GetRandomValue(5, 10);
-    new_rect.height = 40;// + GetRandomValue(5, 10);
     //clamp
     if(new_rect.x + new_rect.width > _tileset.map_size.x - 5) {new_rect.width = new_rect.width - (new_rect.x + new_rect.width - _tileset.map_size.x); };
     if(new_rect.y + new_rect.height > _tileset.map_size.y - 5) {new_rect.height = new_rect.height - (new_rect.y + new_rect.height - _tileset.map_size.y); }
@@ -607,8 +668,20 @@ void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
     fr.y -=1;
     fr.width +=2;
     fr.height +=2;
+
+
+        //clamp
+    if(fr.x < 1) {fr.x = 1;};
+    if(fr.y < 1) {fr.y = 1;};
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+    if(fr.x + fr.width > _tileset.map_size.x - 1) {fr.width = fr.width - (fr.x + fr.width - _tileset.map_size.x - 1); };
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+    
+
     for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
         for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
+
+
             if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
                 int index = y * (int)_tileset.map_size.x + x;
                 _tileset.upper_zone_grid[index] = ZONE_FENCE;
@@ -618,29 +691,24 @@ void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
         }
     }
 
+
 }
-
-
 
 
 void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
-    Rectangle structure_rect;
-                
-    structure_rect.x = (float)GetRandomValue(30, _tileset.map_size.x - 30);
-    structure_rect.y = (float)GetRandomValue(30, _tileset.map_size.y - 30);
 
-    
-    
-    structure_rect.width = 12;// + GetRandomValue(5, 10);
-    structure_rect.height = 12;// + GetRandomValue(5, 10);
-
+    Rectangle structure_rect = GetAvailablePoiPatch(_tileset);
 
     Vector2 rect_center = {structure_rect.x + (structure_rect.width/2), structure_rect.y + (structure_rect.height/2)};
 
+
+    structure_rect.x = rect_center.x - 5;
+    structure_rect.y = rect_center.y - 5;
+    structure_rect.width = 10;
+    structure_rect.height = 10;
     //should be at the first index
     _tileset.structure_positions.push_back( rect_center );
-
 
 
     for(int y = 0; y < structure_rect.height; y++) {
@@ -662,7 +730,7 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
             _tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
             _tileset.lower_zone_grid[index] = ZONE_DIRT;
 
-            TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
+            //TraceLog(LOG_INFO, "structure  pos %0.0f %0.0f", position.x, position.y);
             
         }
     }
@@ -671,6 +739,13 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
     fr.y -=1;
     fr.width +=2;
     fr.height +=2;
+
+    if(fr.x < 1) {fr.x = 1;};
+    if(fr.y < 1) {fr.y = 1;};
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+    if(fr.x + fr.width > _tileset.map_size.x - 1) {fr.width = fr.width - (fr.x + fr.width - _tileset.map_size.x - 1); };
+    if(fr.y + fr.height > _tileset.map_size.y - 1) {fr.height = fr.height - (fr.y + fr.height - _tileset.map_size.y - 1); }
+
     for(int y = (int)fr.y; y < (int)fr.height + (int)fr.y; y++) {
         for(int x = (int)fr.x; x < (int)fr.width + (int)fr.x; x++) {
             if(x == (int)fr.x or y == (int)fr.y or x == (int)fr.width - 1 + (int)fr.x or y == (int)fr.height - 1 + (int)fr.y) {
@@ -681,9 +756,6 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
             }
         }
     } */
-
-
-
 }
 
 
@@ -771,7 +843,7 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset) {
     std::vector<Rectangle> hill_rects;
-    int num_hill_patches = _tileset.max_hills;
+    int num_hill_patches = 5;
 
     for(int patch = 0; patch < num_hill_patches; patch++ ) {
         Rectangle new_rect;
@@ -828,7 +900,7 @@ void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
 
     int max_loops = 200;
 
-    for(Vector2 position :start_positions) {
+    for(Vector2 position : start_positions) {
         brush.x = position.x;
         brush.y = position.y;
         bool running = true;
@@ -839,9 +911,10 @@ void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
             
             for(int y = (int)brush.y; y < (int)brush.height + (int)brush.y; y++) {
                 for(int x = (int)brush.x; x < (int)brush.width + (int)brush.x; x++) {
+
                     int index = y * (int)_tileset.map_size.x + x;
                     if(index < _tileset.upper_zone_grid.size()-1) {
-                        if(_tileset.upper_zone_grid[index] != ZONE_STRUCTURE) {
+                        if(_tileset.upper_zone_grid[index] != ZONE_STRUCTURE and _tileset.spawn_zone_grid[index] != ZONE_MUSHROOM) {
                             _tileset.upper_zone_grid[index] = ZONE_BORDER;
                         }
                     }
@@ -990,12 +1063,10 @@ TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, st
     return id;
 }
     
-        
-    
-    
               
 void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
 
+    this_tileset.identifier = tj["identifier"];
     this_tileset.c_wid = tj["__cWid"];
     this_tileset.c_hei = tj["__cHei"];
     this_tileset.rel_path = tj["relPath"];
@@ -1124,7 +1195,7 @@ void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bound
     }
 }
 
-void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities){
+void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities, std::unordered_map<std::string, WorldGenStructureData> &structure_lookup){
 
     TraceLog(LOG_INFO, "building premade structuires  # of tiles in grid  %i", grid_tiles.size());
 
@@ -1168,7 +1239,7 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
                 //TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
             }
         }
-        this_tileset.structure_lookup[structure_id_string] = new_structure;
+        structure_lookup[structure_id_string] = new_structure;
     }
 
     for(auto &structure : this_tileset.structure_lookup) {
@@ -1179,8 +1250,6 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         }
     }    
 }
-
-
 
 void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities){
 
@@ -1234,9 +1303,192 @@ std::vector<Rectangle> bounding_rects;
             //TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
         }
     }    
+}
+
+void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> decco_bounding_entities, std::unordered_map<std::string, WorldGenStructureData> &lookup){
+
+    std::vector<Rectangle> bounding_rects;
+
+    for(int r = 0; r < decco_bounding_entities.size(); r++) {
+        Rectangle new_rect;
+
+        new_rect.x = decco_bounding_entities[r].px[0];
+        new_rect.y = decco_bounding_entities[r].px[1];
+        new_rect.width = decco_bounding_entities[r].width;
+        new_rect.height = decco_bounding_entities[r].height;
+
+        std::string structure_id_string = decco_bounding_entities[r].field_instances[0].value_s;
+
+        TraceLog(LOG_INFO, "%s decco rect at x:%0.0f y:%0.0f w:%0.0f h:%0.0f", structure_id_string.c_str() , new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+
+        WorldGenStructureData new_structure;
+        new_structure.position = {0,0};
+        new_structure.structure_size = {new_rect.width/this_tileset.tile_grid_size, new_rect.height/this_tileset.tile_grid_size};
+
+        for( int tile = 0; tile < grid_tiles.size(); tile++) {
+            int tile_x = grid_tiles[tile]["px"][0];
+            int tile_y = grid_tiles[tile]["px"][1];
+
+            if( (tile_x >= (int)new_rect.x and tile_x <= (int)(new_rect.x + new_rect.width))
+                    and (tile_y >= (int)new_rect.y and tile_y <= (int)(new_rect.y + new_rect.height)) ) {
+                   
+                Vector2 atlas_pos;
+                atlas_pos.x = grid_tiles[tile]["src"][0];
+                atlas_pos.y = grid_tiles[tile]["src"][1];
+                        
+                WorldGenAutoTile new_tile;
+                new_tile.position = {(float)tile_x - new_rect.x, (float)tile_y - new_rect.y};
+                new_tile.atlas_position = atlas_pos;
+                new_tile.tile_id = grid_tiles[tile]["t"];
+                new_tile.marked_sides.fill(false);
+                new_tile.has_collision = this_tileset.tile_lookup[(TILEID)new_tile.tile_id].has_collision;
+
+                new_structure.structure_grid_tiles.push_back(new_tile);
+                //TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
+            }
+        }
+        lookup[structure_id_string] = new_structure;
+    }
+
+    for(auto &structure : this_tileset.layer_decco_lookup) {
+        TraceLog(LOG_INFO, "decco loaded  %s", structure.first.c_str());
+        TraceLog(LOG_INFO, "decco tiles  %i", structure.second.structure_grid_tiles.size());
+        for(WorldGenAutoTile &tile : structure.second.structure_grid_tiles) {
+            //TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
+        }
+    }    
+}
+
+
+void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size) {
+
+    int x_patches = _tileset.map_size.x/patch_size;
+    int y_patches = _tileset.map_size.y/patch_size;
+
+    TraceLog(LOG_INFO, "------ x patches %i   y patches %i  ", x_patches, y_patches);
+    //int num_structure_patches = x_patches + y_patches;
+
+    int x_patch_size = patch_size;
+    int y_patch_size = patch_size;
+
+    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+            int x_pos = (x_patch * x_patch_size);
+            int y_pos = (y_patch * y_patch_size);
+
+            Rectangle new_patch;
+            new_patch.x = x_pos;
+            new_patch.y = y_pos;
+            new_patch.width = patch_size;
+            new_patch.height = patch_size;
+
+            _tileset.poi_patches.push_back(new_patch);
+
+            TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
+                new_patch.x,
+                new_patch.y,
+                new_patch.width,
+                new_patch.height);
+        }
+    }
+}
+
+
+Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset) {
+
+
+    std::vector<int> index_choices;
+
+    for(int i = 0; i < _tileset.poi_patches.size(); i++ ) {
+        bool found = false;
+        for(int patch : _tileset.used_poi_patches) {
+            if(i == patch) {
+                found = true;
+            }
+        }
+
+        if(!found) {index_choices.push_back(i);}
+    }
+
+
+    if(index_choices.size() < 1) {
+        Rectangle empty_rect;
+        return empty_rect;
+    }
+    
+    int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
+
+    _tileset.used_poi_patches.push_back(choice);
+
+    return _tileset.poi_patches[choice];
+
 
 }
 
+
+
+void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
+
+    int x_patches = _tileset.map_size.x/patch_size;
+    int y_patches = _tileset.map_size.y/patch_size;
+
+    TraceLog(LOG_INFO, "------ x patches %i   y patches %i  ", x_patches, y_patches);
+    //int num_structure_patches = x_patches + y_patches;
+
+    int x_patch_size = patch_size;
+    int y_patch_size = patch_size;
+
+    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+            int x_pos = (x_patch * x_patch_size);
+            int y_pos = (y_patch * y_patch_size);
+
+            Rectangle new_patch;
+            new_patch.x = x_pos;
+            new_patch.y = y_pos;
+            new_patch.width = patch_size;
+            new_patch.height = patch_size;
+
+            _tileset.spawn_patches.push_back(new_patch);
+
+            TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
+                new_patch.x,
+                new_patch.y,
+                new_patch.width,
+                new_patch.height);
+        }
+    }
+}
+
+
+Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
+
+    std::vector<int> index_choices;
+
+    for(int i = 0; i < _tileset.spawn_patches.size(); i++ ) {
+        bool found = false;
+        for(int patch : _tileset.used_spawn_patches) {
+            if(i == patch) {
+                found = true;
+            }
+        }
+
+        if(!found) {index_choices.push_back(i);}
+    }
+
+
+    if(index_choices.size() < 1) {
+        Rectangle empty_rect;
+        return empty_rect;
+    }
+    
+    int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
+
+    _tileset.used_spawn_patches.push_back(choice);
+
+    return _tileset.spawn_patches[choice];
+
+}
 
 
 
@@ -1353,28 +1605,28 @@ TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_
 TILEID StrToTileId(const std::string& s) {
 
     static const std::unordered_map<std::string, TILEID> lookup_table = {
-        {"TILE_ID_GRASS_1",                      TILEID::TILE_ID_GRASS_1},
-        {"TILE_ID_GRASS_2",                      TILEID::TILE_ID_GRASS_2},
-        {"TILE_ID_GRASS_3",                      TILEID::TILE_ID_GRASS_3},
-        {"TILE_ID_GRASS_4",                      TILEID::TILE_ID_GRASS_4},
-        {"TILE_ID_BORDER",                       TILEID::TILE_ID_BORDER},
+        {"TILE_ID_GRASS_1",                     TILEID::TILE_ID_GRASS_1},
+        {"TILE_ID_GRASS_2",                     TILEID::TILE_ID_GRASS_2},
+        {"TILE_ID_GRASS_3",                     TILEID::TILE_ID_GRASS_3},
+        {"TILE_ID_GRASS_4",                     TILEID::TILE_ID_GRASS_4},
+        {"TILE_ID_BORDER",                      TILEID::TILE_ID_BORDER},
 
-        {"TILE_ID_PATH_MID",                     TILEID::TILE_ID_PATH_MID},
-        {"TILE_ID_PATH_END_LEFT",                TILEID::TILE_ID_PATH_END_LEFT},
-        {"TILE_ID_PATH_END_RIGHT",               TILEID::TILE_ID_PATH_END_RIGHT},
-        {"TILE_ID_PATH_END_UP",                  TILEID::TILE_ID_PATH_END_UP},
-        {"TILE_ID_PATH_END_DOWN",                TILEID::TILE_ID_PATH_END_DOWN},
-        {"TILE_ID_PATH_SINGLE",                  TILEID::TILE_ID_PATH_SINGLE},
-        {"TILE_ID_PATH_UP_RIGHT",                 TILEID::TILE_ID_PATH_UP_RIGHT},
-        {"TILE_ID_PATH_UP_DOWN",                  TILEID::TILE_ID_PATH_UP_DOWN},
-        {"TILE_ID_PATH_UP_LEFT",                  TILEID::TILE_ID_PATH_UP_LEFT},
-        {"TILE_ID_PATH_UP_RIGHT_DOWN",            TILEID::TILE_ID_PATH_UP_RIGHT_DOWN},
-        {"TILE_ID_PATH_UP_DOWN_LEFT",             TILEID::TILE_ID_PATH_UP_DOWN_LEFT},
-        {"TILE_ID_PATH_RIGHT_LEFT",               TILEID::TILE_ID_PATH_RIGHT_LEFT},
-        {"TILE_ID_PATH_UP_RIGHT_LEFT",            TILEID::TILE_ID_PATH_UP_RIGHT_LEFT},
-        {"TILE_ID_PATH_RIGHT_DOWN_LEFT",          TILEID::TILE_ID_PATH_RIGHT_DOWN_LEFT},
-        {"TILE_ID_PATH_DOWN_LEFT",                TILEID::TILE_ID_PATH_DOWN_LEFT},
-        {"TILE_ID_PATH_RIGHT_DOWN",               TILEID::TILE_ID_PATH_RIGHT_DOWN},
+        {"TILE_ID_PATH_MID",                    TILEID::TILE_ID_PATH_MID},
+        {"TILE_ID_PATH_END_LEFT",               TILEID::TILE_ID_PATH_END_LEFT},
+        {"TILE_ID_PATH_END_RIGHT",              TILEID::TILE_ID_PATH_END_RIGHT},
+        {"TILE_ID_PATH_END_UP",                 TILEID::TILE_ID_PATH_END_UP},
+        {"TILE_ID_PATH_END_DOWN",               TILEID::TILE_ID_PATH_END_DOWN},
+        {"TILE_ID_PATH_SINGLE",                 TILEID::TILE_ID_PATH_SINGLE},
+        {"TILE_ID_PATH_UP_RIGHT",               TILEID::TILE_ID_PATH_UP_RIGHT},
+        {"TILE_ID_PATH_UP_DOWN",                TILEID::TILE_ID_PATH_UP_DOWN},
+        {"TILE_ID_PATH_UP_LEFT",                TILEID::TILE_ID_PATH_UP_LEFT},
+        {"TILE_ID_PATH_UP_RIGHT_DOWN",          TILEID::TILE_ID_PATH_UP_RIGHT_DOWN},
+        {"TILE_ID_PATH_UP_DOWN_LEFT",           TILEID::TILE_ID_PATH_UP_DOWN_LEFT},
+        {"TILE_ID_PATH_RIGHT_LEFT",             TILEID::TILE_ID_PATH_RIGHT_LEFT},
+        {"TILE_ID_PATH_UP_RIGHT_LEFT",          TILEID::TILE_ID_PATH_UP_RIGHT_LEFT},
+        {"TILE_ID_PATH_RIGHT_DOWN_LEFT",        TILEID::TILE_ID_PATH_RIGHT_DOWN_LEFT},
+        {"TILE_ID_PATH_DOWN_LEFT",              TILEID::TILE_ID_PATH_DOWN_LEFT},
+        {"TILE_ID_PATH_RIGHT_DOWN",             TILEID::TILE_ID_PATH_RIGHT_DOWN},
 
         {"TILE_ID_DIRT_SINGLE",                 TILEID::TILE_ID_DIRT_SINGLE},
         {"TILE_ID_DIRT_MID",                    TILEID::TILE_ID_DIRT_MID},
@@ -1387,27 +1639,27 @@ TILEID StrToTileId(const std::string& s) {
         {"TILE_ID_DIRT_RIGHT_UP",               TILEID::TILE_ID_DIRT_RIGHT_UP},
         {"TILE_ID_DIRT_UP_RIGHT_DOWN",          TILEID::TILE_ID_DIRT_UP_RIGHT_DOWN},
 
-        {"TILE_ID_BORDER_SINGLE",                 TILEID::TILE_ID_BORDER_SINGLE},
-        {"TILE_ID_BORDER_MID",                    TILEID::TILE_ID_BORDER_MID},
-        {"TILE_ID_BORDER_RIGHT_DOWN",             TILEID::TILE_ID_BORDER_RIGHT_DOWN},
-        {"TILE_ID_BORDER_RIGHT_DOWN_LEFT",        TILEID::TILE_ID_BORDER_RIGHT_DOWN_LEFT},
-        {"TILE_ID_BORDER_DOWN_LEFT",              TILEID::TILE_ID_BORDER_DOWN_LEFT},
-        {"TILE_ID_BORDER_UP_DOWN_LEFT",           TILEID::TILE_ID_BORDER_UP_DOWN_LEFT},
-        {"TILE_ID_BORDER_UP_LEFT",                TILEID::TILE_ID_BORDER_UP_LEFT},
-        {"TILE_ID_BORDER_UP_RIGHT_LEFT",          TILEID::TILE_ID_BORDER_UP_RIGHT_LEFT},
-        {"TILE_ID_BORDER_RIGHT_UP",               TILEID::TILE_ID_BORDER_RIGHT_UP},
-        {"TILE_ID_BORDER_UP_RIGHT_DOWN",          TILEID::TILE_ID_BORDER_UP_RIGHT_DOWN}, 
+        {"TILE_ID_BORDER_SINGLE",               TILEID::TILE_ID_BORDER_SINGLE},
+        {"TILE_ID_BORDER_MID",                  TILEID::TILE_ID_BORDER_MID},
+        {"TILE_ID_BORDER_RIGHT_DOWN",           TILEID::TILE_ID_BORDER_RIGHT_DOWN},
+        {"TILE_ID_BORDER_RIGHT_DOWN_LEFT",      TILEID::TILE_ID_BORDER_RIGHT_DOWN_LEFT},
+        {"TILE_ID_BORDER_DOWN_LEFT",            TILEID::TILE_ID_BORDER_DOWN_LEFT},
+        {"TILE_ID_BORDER_UP_DOWN_LEFT",         TILEID::TILE_ID_BORDER_UP_DOWN_LEFT},
+        {"TILE_ID_BORDER_UP_LEFT",              TILEID::TILE_ID_BORDER_UP_LEFT},
+        {"TILE_ID_BORDER_UP_RIGHT_LEFT",        TILEID::TILE_ID_BORDER_UP_RIGHT_LEFT},
+        {"TILE_ID_BORDER_RIGHT_UP",             TILEID::TILE_ID_BORDER_RIGHT_UP},
+        {"TILE_ID_BORDER_UP_RIGHT_DOWN",        TILEID::TILE_ID_BORDER_UP_RIGHT_DOWN}, 
 
-        {"TILE_ID_FENCE_TOP_LEFT_CORNER",          TILEID::TILE_ID_FENCE_TOP_LEFT_CORNER},
-        {"TILE_ID_FENCE_TOP_RIGHT_CORNER",          TILEID::TILE_ID_FENCE_TOP_RIGHT_CORNER},
-        {"TILE_ID_FENCE_BOTTOM_LEFT_CORNER",          TILEID::TILE_ID_FENCE_BOTTOM_LEFT_CORNER},
-        {"TILE_ID_FENCE_BOTTOM_RIGHT_CORNER",          TILEID::TILE_ID_FENCE_BOTTOM_RIGHT_CORNER},
-        {"TILE_ID_FENCE_END_UP",          TILEID::TILE_ID_FENCE_END_UP},
-        {"TILE_ID_FENCE_END_RIGHT",          TILEID::TILE_ID_FENCE_END_RIGHT},
-        {"TILE_ID_FENCE_END_DOWN",          TILEID::TILE_ID_FENCE_END_DOWN},
-        {"TILE_ID_FENCE_END_LEFT",          TILEID::TILE_ID_FENCE_END_LEFT},
+        {"TILE_ID_FENCE_TOP_LEFT_CORNER",       TILEID::TILE_ID_FENCE_TOP_LEFT_CORNER},
+        {"TILE_ID_FENCE_TOP_RIGHT_CORNER",      TILEID::TILE_ID_FENCE_TOP_RIGHT_CORNER},
+        {"TILE_ID_FENCE_BOTTOM_LEFT_CORNER",    TILEID::TILE_ID_FENCE_BOTTOM_LEFT_CORNER},
+        {"TILE_ID_FENCE_BOTTOM_RIGHT_CORNER",   TILEID::TILE_ID_FENCE_BOTTOM_RIGHT_CORNER},
+        {"TILE_ID_FENCE_END_UP",                TILEID::TILE_ID_FENCE_END_UP},
+        {"TILE_ID_FENCE_END_RIGHT",             TILEID::TILE_ID_FENCE_END_RIGHT},
+        {"TILE_ID_FENCE_END_DOWN",              TILEID::TILE_ID_FENCE_END_DOWN},
+        {"TILE_ID_FENCE_END_LEFT",              TILEID::TILE_ID_FENCE_END_LEFT},
         {"TILE_ID_FENCE_MID_VERTICAL",          TILEID::TILE_ID_FENCE_MID_VERTICAL},
-        {"TILE_ID_FENCE_MID_HORIZANTAL",          TILEID::TILE_ID_FENCE_MID_HORIZANTAL},
+        {"TILE_ID_FENCE_MID_HORIZANTAL",        TILEID::TILE_ID_FENCE_MID_HORIZANTAL},
 
         {"TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_TOP_LEFT_CORNER_LOWER},
         {"TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER",          TILEID::TILE_ID_FENCE_TOP_RIGHT_CORNER_LOWER},
@@ -1429,58 +1681,57 @@ TILEID StrToTileId(const std::string& s) {
 
 
 
-
 std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
     
     std::unordered_map<TILEID, std::array<bool,4>> side_map = {
 
-        {TILE_ID_DIRT_SINGLE,          {false, false, false, false}},
-        {TILE_ID_DIRT_MID,          {true, true, true, true}},
-        {TILE_ID_DIRT_RIGHT_DOWN,          {false, true, true, false}},
-        {TILE_ID_DIRT_RIGHT_DOWN_LEFT,          {false, true, true, true}},
-        {TILE_ID_DIRT_DOWN_LEFT,          {false, false, true, true}},
-        {TILE_ID_DIRT_UP_DOWN_LEFT,          {true, false, true, true}},
-        {TILE_ID_DIRT_UP_LEFT,          {true, false, false, true}},
-        {TILE_ID_DIRT_UP_RIGHT_LEFT,          {true, true, false, true}},
-        {TILE_ID_DIRT_RIGHT_UP,          {true, true, false, false}},
-        {TILE_ID_DIRT_UP_RIGHT_DOWN,          {true, true, true, false}},
+        {TILE_ID_DIRT_SINGLE,               {false, false, false, false}},
+        {TILE_ID_DIRT_MID,                  {true, true, true, true}},
+        {TILE_ID_DIRT_RIGHT_DOWN,           {false, true, true, false}},
+        {TILE_ID_DIRT_RIGHT_DOWN_LEFT,      {false, true, true, true}},
+        {TILE_ID_DIRT_DOWN_LEFT,            {false, false, true, true}},
+        {TILE_ID_DIRT_UP_DOWN_LEFT,         {true, false, true, true}},
+        {TILE_ID_DIRT_UP_LEFT,              {true, false, false, true}},
+        {TILE_ID_DIRT_UP_RIGHT_LEFT,        {true, true, false, true}},
+        {TILE_ID_DIRT_RIGHT_UP,             {true, true, false, false}},
+        {TILE_ID_DIRT_UP_RIGHT_DOWN,        {true, true, true, false}},
 
-        {TILE_ID_BORDER_SINGLE,          {false, false, false, false}},
-        {TILE_ID_BORDER_MID,          {true, true, true, true}},
-        {TILE_ID_BORDER_RIGHT_DOWN,          {false, true, true, false}},
-        {TILE_ID_BORDER_RIGHT_DOWN_LEFT,          {false, true, true, true}},
+        {TILE_ID_BORDER_SINGLE,             {false, false, false, false}},
+        {TILE_ID_BORDER_MID,                {true, true, true, true}},
+        {TILE_ID_BORDER_RIGHT_DOWN,         {false, true, true, false}},
+        {TILE_ID_BORDER_RIGHT_DOWN_LEFT,    {false, true, true, true}},
         {TILE_ID_BORDER_DOWN_LEFT,          {false, false, true, true}},
-        {TILE_ID_BORDER_UP_DOWN_LEFT,          {true, false, true, true}},
-        {TILE_ID_BORDER_UP_LEFT,          {true, false, false, true}},
-        {TILE_ID_BORDER_UP_RIGHT_LEFT,          {true, true, false, true}},
-        {TILE_ID_BORDER_RIGHT_UP,          {true, true, false, false}},
-        {TILE_ID_BORDER_UP_RIGHT_DOWN,          {true, true, true, false}},
+        {TILE_ID_BORDER_UP_DOWN_LEFT,       {true, false, true, true}},
+        {TILE_ID_BORDER_UP_LEFT,            {true, false, false, true}},
+        {TILE_ID_BORDER_UP_RIGHT_LEFT,      {true, true, false, true}},
+        {TILE_ID_BORDER_RIGHT_UP,           {true, true, false, false}},
+        {TILE_ID_BORDER_UP_RIGHT_DOWN,      {true, true, true, false}},
 
-        {TILE_ID_BORDER_END_LEFT,          {false, false, false, true}},
+        {TILE_ID_BORDER_END_LEFT,           {false, false, false, true}},
         {TILE_ID_BORDER_END_RIGHT,          {false, true, false, false}},
-        {TILE_ID_BORDER_END_UP,          {true, false, false, false}},
-        {TILE_ID_BORDER_END_DOWN,          {false, false, true, false}},
+        {TILE_ID_BORDER_END_UP,             {true, false, false, false}},
+        {TILE_ID_BORDER_END_DOWN,           {false, false, true, false}},
 
-        {TILE_ID_BORDER_UP_DOWN,          {true, false, true, false}},
-        {TILE_ID_BORDER_RIGHT_LEFT,          {false, true, false, true}},
+        {TILE_ID_BORDER_UP_DOWN,            {true, false, true, false}},
+        {TILE_ID_BORDER_RIGHT_LEFT,         {false, true, false, true}},
 
 
-        {TILE_ID_PATH_SINGLE,          {false, false, false, false}},
-        {TILE_ID_PATH_MID,          {true, true, true, true}},
-        {TILE_ID_PATH_END_UP,          {false, false, true, false}},
-        {TILE_ID_PATH_END_RIGHT,          {false, false, false, true}},
-        {TILE_ID_PATH_END_DOWN,          {true, false, false, false}},
-        {TILE_ID_PATH_END_LEFT,          {false, true, false, false}},
-        {TILE_ID_PATH_UP_RIGHT,          {true, true, false, false}},
-        {TILE_ID_PATH_UP_DOWN,          {true, false, true, false}},
-        {TILE_ID_PATH_UP_LEFT,          {true, false, false, true}},
-        {TILE_ID_PATH_UP_RIGHT_DOWN,          {true, true, true, false}},
-        {TILE_ID_PATH_UP_DOWN_LEFT,          {true, false, true, true}},
-        {TILE_ID_PATH_RIGHT_LEFT,          {false, true, false, true}},
-        {TILE_ID_PATH_UP_RIGHT_LEFT,          {true, true, false, true}},
-        {TILE_ID_PATH_RIGHT_DOWN_LEFT,          {false, true, true, true}},
-        {TILE_ID_PATH_DOWN_LEFT,          {false, false, true, true}},
-        {TILE_ID_PATH_RIGHT_DOWN,          {false, true, true, false}},
+        {TILE_ID_PATH_SINGLE,               {false, false, false, false}},
+        {TILE_ID_PATH_MID,                  {true, true, true, true}},
+        {TILE_ID_PATH_END_UP,               {false, false, true, false}},
+        {TILE_ID_PATH_END_RIGHT,            {false, false, false, true}},
+        {TILE_ID_PATH_END_DOWN,             {true, false, false, false}},
+        {TILE_ID_PATH_END_LEFT,             {false, true, false, false}},
+        {TILE_ID_PATH_UP_RIGHT,             {true, true, false, false}},
+        {TILE_ID_PATH_UP_DOWN,              {true, false, true, false}},
+        {TILE_ID_PATH_UP_LEFT,              {true, false, false, true}},
+        {TILE_ID_PATH_UP_RIGHT_DOWN,        {true, true, true, false}},
+        {TILE_ID_PATH_UP_DOWN_LEFT,         {true, false, true, true}},
+        {TILE_ID_PATH_RIGHT_LEFT,           {false, true, false, true}},
+        {TILE_ID_PATH_UP_RIGHT_LEFT,        {true, true, false, true}},
+        {TILE_ID_PATH_RIGHT_DOWN_LEFT,      {false, true, true, true}},
+        {TILE_ID_PATH_DOWN_LEFT,            {false, false, true, true}},
+        {TILE_ID_PATH_RIGHT_DOWN,           {false, true, true, false}},
     };
 
     if (auto it = side_map.find(tile_id); it != side_map.end()) {
@@ -1492,4 +1743,22 @@ std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
 
 
 
+void LoadMapGenData(json &j) {
 
+    for(int map = 0; map < j.size(); map++) {
+        WorldGenData new_data;
+        new_data.map_name = j[map]["map_name"];
+        new_data.map_width = j[map]["map_w"];
+        new_data.map_height = j[map]["map_h"];   
+        new_data.tree_coverage = j[map]["tree_coverage"];   
+        new_data.grass_coverage = j[map]["grass_coverage"];        
+        new_data.terrrain_set_name = j[map]["tileset_terrain_name"];
+        new_data.structure_set_name = j[map]["tileset_structure_name"];
+        new_data.village_count = j[map]["village_count"];
+        new_data.structure_count = j[map]["structure_count"];
+        new_data.has_shelter = j[map]["has_shelter"];
+        
+        g_worldgen_data.push_back(new_data);
+    }
+
+}

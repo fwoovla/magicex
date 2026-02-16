@@ -351,10 +351,10 @@ void InstanceLevelObjects(LevelData &level_data) {
 
         int num_mushrooms = GetRandomValue(1, level_data.mushroom_zones[zone].max_mushrooms);
 
-        int min_x = level_data.mushroom_zones[zone].position_i.x;
-        int min_y = level_data.mushroom_zones[zone].position_i.y;
-        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x;
-        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y;
+        int min_x = level_data.mushroom_zones[zone].position_i.x +1;
+        int min_y = level_data.mushroom_zones[zone].position_i.y +1;
+        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x-1;
+        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y-1;
 
         for(int i = 0; i < num_mushrooms; i++) {
             int x = GetRandomValue(min_x, max_x);
@@ -392,9 +392,10 @@ void InstanceLevelObjects(LevelData &level_data) {
     }
 
 
+
     TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   level_data.entity_list size %i", level_data.entity_list.size());
     for(auto &entity : level_data.entity_list) {
-        TraceLog(LOG_INFO, "  entity %s", entity->identifier.c_str());
+        //TraceLog(LOG_INFO, "  entity %s", entity->identifier.c_str());
     }
 }
 

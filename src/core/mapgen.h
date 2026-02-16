@@ -125,6 +125,7 @@ enum MAPZONE {
     ZONE_FENCE,
     ZONE_FENCE_BOTTOM,
     ZONE_MUSHROOM,
+    ZONE_DECCO_ENTITY,
 };
 
 
@@ -161,7 +162,31 @@ struct WorldGenStructureData {
 
 };
 
+struct WorldGenDeccoEntityData {
+
+    std::string decco_name;
+    Vector2 position;
+
+};
+
+struct WorldGenData {
+    std::string map_name;
+    int map_width;
+    int map_height;
+    int village_count;
+    int structure_count;
+    float tree_coverage;
+    float grass_coverage;
+    bool has_shelter;
+    std::string terrrain_set_name;
+    std::string structure_set_name;
+};
+
+extern std::vector<WorldGenData> g_worldgen_data;
+
+
 struct WorldGenTileSet {
+    std::string identifier;
     int c_wid;
     int c_hei;
     int uid;
@@ -172,11 +197,22 @@ struct WorldGenTileSet {
     int num_paths;
     Vector2 map_size;
 
-    int max_grass;
-    int max_trees;
-    int max_structures;
-    int max_hills;
 
+    float tree_coverage;
+    float grass_coverage;
+    
+    int max_villages;
+    int max_structures;
+
+    std::vector<Rectangle> poi_patches;
+    std::vector<int> used_poi_patches;
+
+    std::vector<Rectangle> spawn_patches;
+    std::vector<int> used_spawn_patches;
+
+    bool has_shelter;
+
+    int tilesheet_uid;
     int collision_layer_index = -1;
 
     SortedTiles sorted_tiles;
@@ -185,11 +221,16 @@ struct WorldGenTileSet {
     //std::vector<PathWorm> path_worms;
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
+    std::vector<MAPZONE> spawn_zone_grid;
     std::vector<int> collision_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
-    std::vector<Rectangle> shroom_rects;
+    std::vector<Rectangle> ruins_rects;
+    std::vector<Vector2> layer_decco_positions;
+    std::vector<WorldGenDeccoEntityData> entity_decco_data;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> layer_decco_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> entity_decco_lookup;
     //std::vector<int> house_transition_tiles;
     //std::vector<int> shadow_tiles;
 };
@@ -207,12 +248,13 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset);
 
 void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
 void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
-void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
-void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
+void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities, std::unordered_map<std::string, WorldGenStructureData> &structure_lookup);
+//void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
+//void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> decco_bounding_entities);
 void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities);
 
 //worldgen
-void GenerateMap(LDTKLevel &new_level, int tileset_id, Vector2 _map_size, std::string map_name);
+void GenerateMap(LDTKLevel &new_level, std::string map_name);
 
 void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
@@ -225,10 +267,17 @@ void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
-void GenerateMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
 //utils
+
+void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
+Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset);
+
+void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size);
+Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset);
+
 
 TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index);
 
@@ -239,3 +288,5 @@ TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_
 TILEID StrToTileId(const std::string& s);
 
 std::array<bool,4> TileIdGetAutotile(TILEID tile_id);
+
+void LoadMapGenData(json &j);
