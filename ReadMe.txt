@@ -8,6 +8,8 @@ Main Engine Features
 custom LDTK level importer
 custom LDTK tileset creator
 proceedural level generation
+vission occlusion 
+shadow system
 save game
 inventory system
 saved persistant storage
@@ -19,4 +21,11 @@ spell wand system
 working doors
 level transitions
 explorable structures
+lootable containers
+random loot
+passive/npc/hostile mobs
+player tracking ai
+mob vision tracking
+loot drops
+
 
