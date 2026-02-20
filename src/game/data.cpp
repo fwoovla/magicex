@@ -1261,7 +1261,6 @@ void LoadLevelData(LevelData &level_data) {
                     new_door.position.x = this_level.layer_instances[layer_index].entity_instances[entity_index].px[0];
                     new_door.position.y = this_level.layer_instances[layer_index].entity_instances[entity_index].px[1];
 
-
                     TraceLog(LOG_INFO, "NEW DOOR DATA locked ? %i ", new_door.is_locked);
                     level_data.door_data.push_back(new_door);
                 }
@@ -1283,7 +1282,6 @@ void LoadLevelData(LevelData &level_data) {
             std::unique_ptr<EnvironmentalEntity> new_entity = std::make_unique<EnvironmentalEntity>(this_level.environment_data[thing].position, id, false);
             level_data.environment_entities.push_back(std::move(new_entity));
         }
-        
         //TraceLog(LOG_INFO, "-----\n");
     }
 
@@ -1308,10 +1306,8 @@ void LoadLevelData(LevelData &level_data) {
 
             level_data.container_data.push_back(new_container);
         }
-    
     }
 
-    
     TraceLog(LOG_INFO, "\nEND LOAD LEVEL DATA \n\n");
 }
 
@@ -1833,8 +1829,7 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
         {"Grass1",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
         {"Grass2",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2},
         {"DeccoEntity_1",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1},
-        {"DeccoEntity_2",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2},
-        
+        {"DeccoEntity_2",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2},        
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {

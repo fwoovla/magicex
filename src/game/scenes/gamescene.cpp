@@ -80,7 +80,7 @@ GameScene::GameScene()
     g_camera.target = Vector2Subtract(g_current_player->position, {200, 200});
     g_camera.offset = (Vector2){0, 0};
     g_camera.rotation = 0.0f;
-    g_camera.zoom = 1.8f;
+    g_camera.zoom = 2.0f;
     g_world2screen = (g_scale * g_camera.zoom);
 }
 

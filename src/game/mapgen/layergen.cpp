@@ -60,7 +60,7 @@ void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 }
 
 
-void GenerateLowerDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset) {
+void GenerateDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset) {
 
     LDTKLayerInstance new_layer;
 
@@ -78,30 +78,27 @@ void GenerateLowerDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
         structure_names.push_back(structure.first);
     }
 
-    for(Vector2 structure_pos : current_tileset.layer_decco_positions) {
+    for(WorldGenDeccoEntityData &layer_entity : current_tileset.layer_decco_data) {
+
         std::string name_choice;
 
-        Vector2 s_pos = structure_pos;
-
-        name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
+        Vector2 s_pos = layer_entity.position;
+        name_choice = layer_entity.decco_name;
 
         int half_width = structure_tileset.layer_decco_lookup[name_choice].structure_size.x/2;
         int half_height = structure_tileset.layer_decco_lookup[name_choice].structure_size.y/2;
 
         Vector2 corner_offset = {s_pos.x - half_width, s_pos.y - half_height};
+        Vector2 bottom_offset = {s_pos.x + half_width, s_pos.y + (half_height*2)};
 
-        for(WorldGenAutoTile tile : structure_tileset.layer_decco_lookup[name_choice].structure_grid_tiles) { 
-            
+        for(WorldGenAutoTile &tile : structure_tileset.layer_decco_lookup[name_choice].structure_grid_tiles) {
             LDTKGridTile new_tile_ldtk;
             new_tile_ldtk.px.push_back( (corner_offset.x * current_tileset.tile_grid_size) + tile.position.x );
-            new_tile_ldtk.px.push_back( (corner_offset.y * current_tileset.tile_grid_size) + tile.position.y);
+            new_tile_ldtk.px.push_back( (corner_offset.y * current_tileset.tile_grid_size) + tile.position.y );
             new_tile_ldtk.src.push_back( tile.atlas_position.x);
             new_tile_ldtk.src.push_back(tile.atlas_position.y);
             new_tile_ldtk.t = tile.tile_id;
-                
-            new_layer.grid_tiles.push_back(new_tile_ldtk);
-                
-                
+
             int x = new_tile_ldtk.px[0]/current_tileset.tile_grid_size;
             int y = new_tile_ldtk.px[1]/current_tileset.tile_grid_size;
 
@@ -478,6 +475,77 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
     spawn_point.px.push_back( (_tileset.structure_positions[0].y + 4) * _tileset.tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
     entity_layer->entity_instances.push_back(spawn_point);
+
+
+    for(int exit  = 0; exit < _tileset.exit_positions.size(); exit++) {
+        if(exit < _tileset.exit_dest_strings.size()) {
+
+            LDTKEntityInstance new_entity;
+            new_entity.identifier = "LevelTransition";
+            new_entity.iid = "leveltransition_" + std::to_string( GetRandomValue(100, 10000));
+            
+            new_entity.px.push_back( (int)_tileset.exit_positions[exit].x * _tileset.tile_grid_size);
+            new_entity.px.push_back( (int)_tileset.exit_positions[exit].y * _tileset.tile_grid_size);
+            new_entity.width = _tileset.tile_grid_size;
+            new_entity.height = _tileset.tile_grid_size * 2;
+            LDTKFieldInstance new_field;
+            new_field.identifier = "DestMapString";
+            new_field.value_s = _tileset.exit_dest_strings[exit];
+
+            TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_field.value_s.c_str());
+
+            new_entity.field_instances.push_back(new_field);
+
+            entity_layer->entity_instances.push_back(new_entity);
+            
+        }
+    }
+
+}
+
+
+void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
+    LDTKLayerInstance *entity_layer = nullptr;
+
+    for(LDTKLayerInstance &layer : level.layer_instances) {
+        if(layer.type == "Entities") {
+            entity_layer = &layer;
+        }
+    }
+
+    if(entity_layer == nullptr) {
+        TraceLog(LOG_INFO, "no entities layer");
+        return;
+    }
+
+
+    for(int index = 0; index < _tileset.spawn_zone_grid.size(); index++) {
+        if(_tileset.spawn_zone_grid[index] == ZONE_CREATURE) {
+            int x = index%(int)_tileset.map_size.x;
+            int y = index/(int)_tileset.map_size.x;
+
+            LDTKEntityInstance new_creature;
+            new_creature.identifier = "CreatureEntity";
+
+
+            new_creature.iid = "creature_" + std::to_string(GetRandomValue(100, 1000000));
+
+            new_creature.px.push_back(x * _tileset.tile_grid_size);
+            new_creature.px.push_back(y * _tileset.tile_grid_size);
+            new_creature.width = _tileset.tile_grid_size;
+            new_creature.height = _tileset.tile_grid_size;
+            LDTKFieldInstance new_field;
+
+            new_field.identifier = "CreatureType";
+            new_field.value_i = CREATURE_BUNNY;
+            new_creature.field_instances.push_back(new_field);
+            entity_layer->entity_instances.push_back(new_creature);
+            entity_layer->entity_instances.push_back(new_creature);
+
+            TraceLog(LOG_INFO, "ADDING CREATURE DATA");
+        }
+    }
 
 
 }

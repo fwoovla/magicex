@@ -91,7 +91,7 @@ void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, 
 
             int index = (y * current_tileset.map_size.x + x);
 
-            TraceLog(LOG_INFO, "------fake decco entity tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+            //TraceLog(LOG_INFO, "------fake decco entity tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
 
             if(tile.has_collision == true) {
                     //TraceLog(LOG_INFO, "structure tile");
@@ -120,7 +120,18 @@ void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, 
 
 void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
+    LDTKLayerInstance *entity_layer = nullptr;
 
+    for(LDTKLayerInstance &layer : _level.layer_instances) {
+        if(layer.type == "Entities") {
+            entity_layer = &layer;
+        }
+    }
+
+    if(entity_layer == nullptr) {
+        TraceLog(LOG_INFO, "no entities layer");
+        return;
+    }
 
     for(Rectangle patch : _tileset.ruins_rects) {
         LDTKEntityInstance new_shroom_zone;
@@ -138,7 +149,7 @@ void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         new_field.identifier = "max_mushrooms";
         new_field.value_i = GetRandomValue(1*patch.width, 1*patch.height);
         new_shroom_zone.field_instances.push_back(new_field);
-        _level.layer_instances[_tileset.collision_layer_index].entity_instances.push_back(new_shroom_zone);
+        entity_layer->entity_instances.push_back(new_shroom_zone);
 
         
         //TraceLog(LOG_INFO, "shroom zone");

@@ -26,6 +26,7 @@ void TransitionArea::Update() {
             float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
 
             CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "open");
+
             if(identifier == "HouseTransition") {
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
                     g_game_data.sub_return_position = payload_v * 2;
@@ -34,13 +35,14 @@ void TransitionArea::Update() {
                     in_range = true;
                 }
             }
-            else {
+            else if (identifier == "LevelTransition"){
+                label.text = "go to " + payload_s;
                 if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
-                        g_game_data.next_map_index = payload_i;
-                        if(identifier == "LevelTransition") {
-                            g_game_data.level_name_to_create = payload_s;
-                        }
-                        in_range = true;
+                    g_game_data.next_map_index = payload_i;
+                    g_game_data.level_name_to_create = payload_s;
+                    //if(identifier == "LevelTransition") {
+                    //}
+                    in_range = true;
                 }
             }
     }

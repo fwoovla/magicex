@@ -1,7 +1,7 @@
 #pragma once
 #include "gamedefs.h"
 
-void GenerateLowerDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
+void GenerateDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
 
 void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset);
 
@@ -14,3 +14,5 @@ void GenerateCollisionLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset);
+
+void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset);

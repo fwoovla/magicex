@@ -88,10 +88,15 @@ enum TILEID {
     TILE_ID_FENCE_END_DOWN_LOWER,
     TILE_ID_FENCE_END_LEFT_LOWER,
     TILE_ID_FENCE_MID_HORIZANTAL_LOWER,
-
-
     TILE_ID_FENCE_END,
 
+    TILE_ID_ROAD_START,
+    TILE_ID_ROAD_UP_RIGHT_DOWN,
+    TILE_ID_ROAD_UP_DOWN_LEFT,
+    TILE_ID_ROAD_RIGHT_DOWN_LEFT,
+    TILE_ID_ROAD_UP_RIGHT_LEFT,
+    TILE_ID_ROAD_CENTER,
+    TILE_ID_ROAD_END,
 
     TILE_ID_MAX,
 };
@@ -121,11 +126,15 @@ enum MAPZONE {
     ZONE_PATH_SIDE,
     ZONE_TREE,
     ZONE_STRUCTURE,
+    ZONE_STRUCTURE_SIDE,
     ZONE_BORDER,
     ZONE_FENCE,
     ZONE_FENCE_BOTTOM,
     ZONE_MUSHROOM,
+    ZONE_RUINS,
     ZONE_DECCO_ENTITY,
+    ZONE_CREATURE,
+    ZONE_ROAD,
 };
 
 
@@ -180,6 +189,7 @@ struct WorldGenData {
     bool has_shelter;
     std::string terrrain_set_name;
     std::string structure_set_name;
+    std::vector<std::string> exit_dest_strings;
 };
 
 extern std::vector<WorldGenData> g_worldgen_data;
@@ -225,12 +235,14 @@ struct WorldGenTileSet {
     std::vector<int> collision_grid;
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
+    std::vector<Vector2> exit_positions;
     std::vector<Rectangle> ruins_rects;
-    std::vector<Vector2> layer_decco_positions;
+    std::vector<WorldGenDeccoEntityData> layer_decco_data;
     std::vector<WorldGenDeccoEntityData> entity_decco_data;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
     std::unordered_map<std::string, WorldGenStructureData> layer_decco_lookup;
     std::unordered_map<std::string, WorldGenStructureData> entity_decco_lookup;
+    std::vector<std::string> exit_dest_strings;
     //std::vector<int> house_transition_tiles;
     //std::vector<int> shadow_tiles;
 };
@@ -268,6 +280,10 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
 void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateExits(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateCreatureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void FillWithHillZone(LDTKLevel &level, WorldGenTileSet &_tileset);
+void CarveEmptySpace(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
 //utils

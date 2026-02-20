@@ -10,7 +10,9 @@
         "tree_coverage":0.10,
         "grass_coverage":0.7,
         "village_count":1,
-        "structure_count":4
+        "structure_count":10,
+        "exits":["DesertWG","SwampWG"]
+
     },
     {
         "map_name":"DesertWG",
@@ -22,7 +24,8 @@
         "tree_coverage":0.05,
         "grass_coverage":0.5,
         "village_count":1,
-        "structure_count":3
+        "structure_count":3,
+        "exits":["SwampWG"]
     }
 ],
 
@@ -267,7 +270,6 @@
 
 
 
-
         {
             "item_name": "Stove Plan",
             "item_id":"ITEM_ID_STOVE_PLAN",
@@ -280,8 +282,6 @@
             "value":10,
             "item_type":"TYPE_PLAN"
         },
-
-
 
 
 

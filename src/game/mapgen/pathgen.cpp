@@ -3,16 +3,22 @@
 
 void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
 
-    for(int structure_index = 0; structure_index < _tileset.structure_positions.size()-1; structure_index++) {
+    std::vector<Vector2> positions;
+
+    for(Vector2 position : _tileset.structure_positions){ positions.push_back(position);}
+    for(Vector2 position : _tileset.exit_positions){ positions.push_back(position);}
+
+    for(int position_index = 0; position_index < positions.size()-1; position_index++) {
         //Vector2 start_position = _tileset.structure_positions[structure_index];
         //Vector2 start_position = _tileset.structure_positions[0];
         //Vector2 end_position = _tileset.structure_positions[(structure_index +1)];
 
-        Vector2 end_position = _tileset.structure_positions[0];
-        Vector2 start_position = _tileset.structure_positions[(structure_index +1)];
+        Vector2 end_position = positions[0];
+        Vector2 start_position = positions[(position_index +1)];
 
         std::vector<Vector2> new_path;
         Vector2 p = start_position;
+
 
         new_path.push_back(p);
 
@@ -97,13 +103,22 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 _tileset.collision_grid[index_left] = 0;
             }
 
-            if(GetRandomValue(0, 1000) > 980 ) {
+
+
+            if(GetRandomValue(0, 1000) > 985 ) {
                 WorldGenDeccoEntityData new_decco_entity;
                 new_decco_entity.decco_name = "DeccoEntity_2";
                 new_decco_entity.position = {p.x+ GetRandomValue(-1,1), p.y+ GetRandomValue(-1,1)};
                 _tileset.entity_decco_data.push_back(new_decco_entity);
             }
         }
+
+
+
+
+
+
+
     }
 }
 

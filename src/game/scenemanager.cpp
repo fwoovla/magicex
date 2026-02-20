@@ -351,10 +351,10 @@ void InstanceLevelObjects(LevelData &level_data) {
 
         int num_mushrooms = GetRandomValue(1, level_data.mushroom_zones[zone].max_mushrooms);
 
-        int min_x = level_data.mushroom_zones[zone].position_i.x +1;
-        int min_y = level_data.mushroom_zones[zone].position_i.y +1;
-        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x-1;
-        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y-1;
+        int min_x = level_data.mushroom_zones[zone].position_i.x + 1;
+        int min_y = level_data.mushroom_zones[zone].position_i.y + 1;
+        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x-2;
+        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y-2;
 
         for(int i = 0; i < num_mushrooms; i++) {
             int x = GetRandomValue(min_x, max_x);
