@@ -5,8 +5,8 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
 
     std::vector<Vector2> positions;
 
-    for(Vector2 position : _tileset.structure_positions){ positions.push_back(position);}
-    for(Vector2 position : _tileset.exit_positions){ positions.push_back(position);}
+    for(Vector2 position : _tileset.wg_plan.structure_positions){ positions.push_back(position);}
+    //for(Vector2 position : _tileset.exit_positions){ positions.push_back(position);}
 
     for(int position_index = 0; position_index < positions.size()-1; position_index++) {
         //Vector2 start_position = _tileset.structure_positions[structure_index];
@@ -112,15 +112,78 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 _tileset.entity_decco_data.push_back(new_decco_entity);
             }
         }
-
-
-
-
-
-
-
     }
 }
 
 
 
+void BuildRoads(WorldGenTileSet &_tileset) {
+
+    for(int position_index = 0; position_index < _tileset.wg_plan.exit_positions.size(); position_index++) {
+    //for(Vector2 exit_pos :_tileset.exit_positions) {
+
+        Vector2 dir = {0,0};
+
+        if(_tileset.wg_plan.exit_positions[position_index].y == _tileset.wg_plan.road_midpoint.y) {
+            if(_tileset.wg_plan.exit_positions[position_index].x < _tileset.wg_plan.road_midpoint.x) {
+                dir.x = 1;
+            }
+            else {
+                dir.x = -1;
+            }
+        }
+        else {
+            if(_tileset.wg_plan.exit_positions[position_index].y < _tileset.wg_plan.road_midpoint.y) {
+                dir.y = 1;
+            }
+            else {
+                dir.y = -1; 
+            }
+        }
+
+
+        Vector2 end_position = _tileset.wg_plan.road_midpoint;
+        Vector2 start_position = _tileset.wg_plan.exit_positions[(position_index)];
+
+        std::vector<Vector2> new_path;
+        Vector2 p = start_position;
+
+
+        new_path.push_back(p);
+
+
+        while(p.x != end_position.x or p.y != end_position.y) {
+
+            p = Vector2Add(p, dir);
+
+            if (p.x < 0) {p.x = 0;}
+            if (p.x > _tileset.map_size.x-1) {p.x = _tileset.map_size.x-1;}
+            if (p.y < 0) {p.y = 0;}
+            if (p.y > _tileset.map_size.y-1) {p.y = _tileset.map_size.y-1;}
+
+            new_path.push_back(p);
+
+            //int index = p.y * _tileset.map_size.x + p.x;
+
+            for(int y = 0; y < 2; y++) {
+                for (int x = 0; x < 2; x++) {
+                    int _x = p.x+x;
+                    int _y = p.y+y;
+                    
+                    if ((p.x+x) < 1) {_x = 1;}
+                    if ((p.x+x) > _tileset.map_size.x-1) {_x = _tileset.map_size.x-1;}
+                    if ((p.y+y) < 1) {_y = 1;}
+                    if ((p.y+y) > _tileset.map_size.y-1) {_y = _tileset.map_size.y-1;}
+                    
+                    int _index = _y * _tileset.map_size.x + _x;
+                    _tileset.upper_zone_grid[_index] = ZONE_ROAD;
+                    _tileset.collision_grid[_index] = 0;
+                    //sTraceLog(LOG_INFO, "road pos %i %i", _x, _y);
+                }
+            }
+        }
+ 
+
+
+    }
+}

@@ -3,10 +3,9 @@
 void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
     std::vector<int> temp_grid;
-    temp_grid.resize(temp_grid_size.x*temp_grid_size.y, SPRITE_ENVIRO_ERROR);
+    temp_grid.resize(temp_grid_size.x*temp_grid_size.y, -1);
 
     int _grid_size = 8;
-
 
     int free_tiles = 0;
 
@@ -17,32 +16,38 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     }
 
 
-    int num_trees = free_tiles * _tileset.tree_coverage;
+    int num_trees = free_tiles * _tileset.wg_data.tree_coverage;
 
     for(int i = 0; i < num_trees; i++) {
         int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   
         int y = GetRandomValue(4, (int)(temp_grid_size.y)-4);
-
         int index = y * temp_grid_size.x + x;
-
         int zone_index = y/2 * (_tileset.map_size.x) + x/2;
 
-        if(_tileset.upper_zone_grid[zone_index] == ZONE_NONE and _tileset.lower_zone_grid[zone_index] == ZONE_GRASS) {
-            
-            if(temp_grid[index] == SPRITE_ENVIRO_ERROR ) {
-                
-                //_tileset.collision_grid[zone_index] = 1;
+        //WorldGenBiome *this_biome = nullptr;
+    /*         
+        for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
+            if( (x/2 > biome.rect.x and x/2 < biome.rect.x + biome.rect.width ) and (y/2 > biome.rect.y and y/2 < biome.rect.y + biome.rect.height)  ) {
+                this_biome = &biome;
+            }
+        }
+    */
+               
+        WorldGenBiome *this_biome = GetBiome((Vector2){(float)x/2,(float)y/2}, _tileset);
 
-                int tree_id = GetRandomValue(SPRITE_ENVIRO_TREE_START +1, SPRITE_ENVIRO_TREE_END -1);
-                
-                temp_grid[index] = tree_id;
-                
-                LDTKEnvironmentData new_thing;
-                new_thing.item_string = EnvironmentalIdToStr( tree_id );
-                new_thing.position = {(float)(x * _grid_size), (float)((y+1) * _grid_size)};
-                _level.environment_data.push_back(new_thing);
-                
-                //TraceLog(LOG_INFO, "zone %i  id %i------------new grass %s  %0.0f %0.0f", _tileset.zone_grid[zone_index], StrToEnviroSpriteId(new_thing.item_string), new_thing.item_string.c_str(), new_thing.position.x, new_thing.position.y );
+        if(this_biome != nullptr) {
+            //TraceLog(LOG_INFO, "------------populate biome %i ", this_biome->type);
+            if(this_biome->type == BIOME_FORREST) {
+                if(_tileset.lower_zone_grid[zone_index] == ZONE_GRASS and _tileset.upper_zone_grid[zone_index] == ZONE_NONE) {
+
+                    int grass_id = GetRandomValue(SPRITE_ENVIRO_TREE_START +1, SPRITE_ENVIRO_TREE_END -1);
+                    temp_grid[index] = grass_id;
+                    LDTKEnvironmentData new_thing;
+                    new_thing.item_string = EnvironmentalIdToStr( grass_id );
+                    //new_thing.item_string = "Grass2";
+                    new_thing.position = {(float)(x * _grid_size), (float)(y * _grid_size)};
+                    _level.environment_data.push_back(new_thing);
+                }
             }
         }
     }
@@ -119,7 +124,6 @@ void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, 
 
 
 void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
-
     LDTKLayerInstance *entity_layer = nullptr;
 
     for(LDTKLayerInstance &layer : _level.layer_instances) {
@@ -133,10 +137,9 @@ void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         return;
     }
 
-    for(Rectangle patch : _tileset.ruins_rects) {
+    for(Rectangle patch : _tileset.wg_plan.ruins_rects) {
         LDTKEntityInstance new_shroom_zone;
         new_shroom_zone.identifier = "MushroomZone";
-
 
         new_shroom_zone.iid = "shroomzone_" + std::to_string(GetRandomValue(100, 1000000));
 
@@ -150,8 +153,6 @@ void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         new_field.value_i = GetRandomValue(1*patch.width, 1*patch.height);
         new_shroom_zone.field_instances.push_back(new_field);
         entity_layer->entity_instances.push_back(new_shroom_zone);
-
-        
         //TraceLog(LOG_INFO, "shroom zone");
     }
 
@@ -165,10 +166,9 @@ void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
     Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
     std::vector<int> temp_grid;
-    temp_grid.resize(temp_grid_size.x*temp_grid_size.y, SPRITE_ENVIRO_ERROR);
+    temp_grid.resize(temp_grid_size.x*temp_grid_size.y, -1);
 
     int _grid_size = 8;
-
     int free_tiles = 0;
 
     for(int tile : _tileset.upper_zone_grid) {
@@ -177,8 +177,7 @@ void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         }
     }
 
-
-    int num_grass = free_tiles * _tileset.grass_coverage;
+    int num_grass = free_tiles * _tileset.wg_data.grass_coverage;
 
     for(int i = 0; i < num_grass; i++) {
         int x = GetRandomValue(4, (int)(temp_grid_size.x)-4);   
@@ -188,21 +187,29 @@ void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
         int zone_index = y/2 * (_tileset.map_size.x) + x/2;
 
-        if(_tileset.upper_zone_grid[zone_index] == ZONE_NONE and _tileset.lower_zone_grid[zone_index] == ZONE_GRASS) {
-            
-            if(temp_grid[index] == SPRITE_ENVIRO_ERROR ) {
-                
-                int grass_id = GetRandomValue(SPRITE_ENVIRO_GRASS_START +1, SPRITE_ENVIRO_GRASS_END -1);
-                
-                temp_grid[index] = grass_id;
-                
-                LDTKEnvironmentData new_thing;
-                new_thing.item_string = EnvironmentalIdToStr( grass_id );
-                //new_thing.item_string = "Grass2";
-                new_thing.position = {(float)(x * _grid_size), (float)(y * _grid_size)};
-                _level.environment_data.push_back(new_thing);
-                
-                //TraceLog(LOG_INFO, "zone %i  id %i------------new grass %s  %0.0f %0.0f", _tileset.zone_grid[zone_index], StrToEnviroSpriteId(new_thing.item_string), new_thing.item_string.c_str(), new_thing.position.x, new_thing.position.y );
+        //WorldGenBiome *this_biome = nullptr;
+        /* 
+        for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
+            if( (x/2 > biome.rect.x and x/2 < biome.rect.x + biome.rect.width ) and (y/2 > biome.rect.y and y/2 < biome.rect.y + biome.rect.height)  ) {
+                this_biome = &biome;
+                }
+            }
+         */
+
+        WorldGenBiome *this_biome = GetBiome((Vector2){(float)x/2,(float)y/2}, _tileset);
+
+        if(this_biome != nullptr) {
+            //TraceLog(LOG_INFO, "------------populate biome %i ", this_biome->type);
+            if(this_biome->type == BIOME_PLAINS or this_biome->type == BIOME_FORREST) {
+                if(_tileset.lower_zone_grid[zone_index] == ZONE_GRASS and  _tileset.upper_zone_grid[zone_index] == ZONE_NONE) {
+                    int grass_id = GetRandomValue(SPRITE_ENVIRO_GRASS_START +1, SPRITE_ENVIRO_GRASS_END -1);
+                    temp_grid[index] = grass_id;
+                    LDTKEnvironmentData new_thing;
+                    new_thing.item_string = EnvironmentalIdToStr( grass_id );
+                    //new_thing.item_string = "Grass2";
+                    new_thing.position = {(float)(x * _grid_size), (float)(y * _grid_size)};
+                    _level.environment_data.push_back(new_thing);
+                }
             }
         }
     }

@@ -3,3 +3,5 @@
 
 
 void ConnectStructuresWithPaths(WorldGenTileSet &_tileset);
+
+void BuildRoads(WorldGenTileSet &_tileset);

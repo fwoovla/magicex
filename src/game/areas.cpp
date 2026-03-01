@@ -45,6 +45,16 @@ void TransitionArea::Update() {
                     in_range = true;
                 }
             }
+            else if (identifier == "ShelterTransition"){
+                label.text = "go to " + payload_s;
+                if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+                    g_game_data.next_map_index = payload_i;
+                    g_game_data.level_name_to_create = payload_s;
+                    //if(identifier == "LevelTransition") {
+                    //}
+                    in_range = true;
+                }
+            }
     }
     else {
         hovered = false;

@@ -142,6 +142,29 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 
             int index = y * _tileset.map_size.x + x;
 
+
+            if(_tileset.upper_zone_grid[index] == ZONE_ROAD) {
+                TILEID id =  GetAutoTile(_tileset.sorted_tiles.road_tiles, _tileset, _tileset.upper_zone_grid, ZONE_ROAD, index);
+                if(id != TILE_ID_NONE) {
+                    //TraceLog(LOG_INFO, "PATH zone  %i ", index);
+                    
+                    LDTKGridTile new_tile_ldtk;
+                    
+                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
+                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
+                    //TILEID id = TILE_ID_DIRT_MID;
+                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
+                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
+                    new_tile_ldtk.t = id;
+                    
+                    new_layer.grid_tiles.push_back(new_tile_ldtk);
+                }
+                else {
+                    //_tileset.upper_zone_grid[index] = ZONE_NONE;
+                    _tileset.collision_grid[index] = 0;
+                }
+            }
+
             if(_tileset.upper_zone_grid[index] == ZONE_PATH) {
 
                 TILEID id =  GetAutoTile(_tileset.sorted_tiles.path_tiles, _tileset, _tileset.upper_zone_grid, ZONE_PATH, index);
@@ -273,13 +296,13 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
         structure_names.push_back(structure.first);
     }
 
-    for(Vector2 structure_pos : current_tileset.structure_positions) {
+    for(Vector2 structure_pos : current_tileset.wg_plan.structure_positions) {
         std::string name_choice;
 
         Vector2 s_pos = structure_pos;
 
 
-        if(s_pos != current_tileset.structure_positions[0]) {
+        if(s_pos != current_tileset.wg_plan.structure_positions[0]) {
             name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
         }
         else {
@@ -327,7 +350,8 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
             }
             else {
                     //TraceLog(LOG_INFO, "shadow tile");
-                //AWcurrent_tileset.upper_zone_grid[index] = ZONE_NONE;
+                current_tileset.upper_zone_grid[index] = ZONE_NONE;
+                current_tileset.lower_zone_grid[index] = ZONE_DIRT;
                 current_tileset.collision_grid[index] = 0;
             }
 
@@ -470,27 +494,28 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 
 
+    TraceLog(LOG_INFO, "++++++------------structure position size %i", _tileset.wg_plan.structure_positions.size());
     LDTKEntityInstance spawn_point;
-    spawn_point.px.push_back( _tileset.structure_positions[0].x * _tileset.tile_grid_size);
-    spawn_point.px.push_back( (_tileset.structure_positions[0].y + 4) * _tileset.tile_grid_size);
+    spawn_point.px.push_back( _tileset.wg_plan.structure_positions[0].x * _tileset.tile_grid_size);
+    spawn_point.px.push_back( (_tileset.wg_plan.structure_positions[0].y + 4) * _tileset.tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
     entity_layer->entity_instances.push_back(spawn_point);
 
 
-    for(int exit  = 0; exit < _tileset.exit_positions.size(); exit++) {
-        if(exit < _tileset.exit_dest_strings.size()) {
+    for(int exit  = 0; exit < _tileset.wg_plan.exit_positions.size(); exit++) {
+        if(exit < _tileset.wg_plan.exit_dest_strings.size()) {
 
             LDTKEntityInstance new_entity;
             new_entity.identifier = "LevelTransition";
             new_entity.iid = "leveltransition_" + std::to_string( GetRandomValue(100, 10000));
             
-            new_entity.px.push_back( (int)_tileset.exit_positions[exit].x * _tileset.tile_grid_size);
-            new_entity.px.push_back( (int)_tileset.exit_positions[exit].y * _tileset.tile_grid_size);
+            new_entity.px.push_back( (int)_tileset.wg_plan.exit_positions[exit].x * _tileset.tile_grid_size);
+            new_entity.px.push_back( (int)_tileset.wg_plan.exit_positions[exit].y * _tileset.tile_grid_size);
             new_entity.width = _tileset.tile_grid_size;
             new_entity.height = _tileset.tile_grid_size * 2;
             LDTKFieldInstance new_field;
             new_field.identifier = "DestMapString";
-            new_field.value_s = _tileset.exit_dest_strings[exit];
+            new_field.value_s = _tileset.wg_plan.exit_dest_strings[exit];
 
             TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_field.value_s.c_str());
 
@@ -505,6 +530,7 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
+
 
     LDTKLayerInstance *entity_layer = nullptr;
 
@@ -549,3 +575,52 @@ void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 }
+
+
+
+
+
+void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
+    for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
+        for(int y = biome.rect.y; y < biome.rect.y + biome.rect.height; y++) {
+            for(int x = biome.rect.x; x < biome.rect.x + biome.rect.width; x++) {
+                int index = y * _tileset.map_size.x + x;
+
+                if (biome.type == BIOME_PLAINS) {
+                    _tileset.lower_zone_grid[index] = ZONE_GRASS;
+                }
+                else if(biome.type == BIOME_FORREST) {
+                    _tileset.lower_zone_grid[index] = ZONE_GRASS;
+                }
+                else if(biome.type == BIOME_HILLS) {
+                    _tileset.lower_zone_grid[index] = ZONE_GRASS;
+                    _tileset.upper_zone_grid[index] = ZONE_BORDER;
+                }
+
+            }
+
+        }
+    }
+}
+
+
+
+
+
+
+void GenerateDebugLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+    LDTKLayerInstance new_layer;
+    new_layer.identifier = "TerrainDebug";
+    new_layer.type = "Tiles";
+    new_layer.tileset_def_uid = _tileset.uid;
+    new_layer.grid_size = _tileset.tile_grid_size;
+    new_layer.c_wid = _tileset.map_size.x;
+    new_layer.c_hei = _tileset.map_size.y;
+
+     _level.layer_instances.push_back(new_layer);
+
+
+}
+
+
+

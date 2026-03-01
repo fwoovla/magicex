@@ -2,6 +2,8 @@
 #include "../core/layergen.h"
 #include "../core/pathgen.h"
 #include "../core/scenerygen.h"
+#include <algorithm>
+#include <random>
 
 void GenerateWorldGenTilesets(std::string _path) {
 
@@ -110,11 +112,11 @@ void GenerateWorldGenTilesets(std::string _path) {
                         else if(this_layer.identifier == "StructureTiles") {
                             BuildStructureTileSet(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset);
                         }
-                        else if(this_layer.identifier == "PremadeStructures") {
+                        else if(this_layer.identifier == "ForrestHouses") {
                             json *bounds_layer = nullptr;
 
                             for(int l = 0; l < j["levels"][level]["layerInstances"].size(); l++) {
-                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "PremadeStructureBounds") {
+                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "ForrestHouseBounds") {
                                     bounds_layer = &j["levels"][level]["layerInstances"][l];
                                     break;
                                 }
@@ -202,30 +204,29 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
             this_tileset = &g_worldgen_tilesets[ts];
         }
     }
-
+    
     if(this_tileset == nullptr) {
         TraceLog(LOG_INFO, "could not find tileset %s  %s", map_name.c_str(), wg_data->terrrain_set_name.c_str());
         return;
-    
+        
     }
+    
+    this_tileset->wg_data = *wg_data;
 
     new_level.identifier = map_name;
     new_level.is_worldgen = true;
     new_level.px_wid = wg_data->map_width * this_tileset->tile_grid_size;
     new_level.px_hei = wg_data->map_height * this_tileset->tile_grid_size;
 
-    this_tileset->map_size = {(float)wg_data->map_width, (float)wg_data->map_height};
+    
 
-    this_tileset->exit_dest_strings.clear();
-    this_tileset->exit_positions.clear();
+
+    this_tileset->map_size = {(float)this_tileset->wg_data.map_width, (float)this_tileset->wg_data.map_height};
+
     this_tileset->sorted_tiles.grass_tiles.clear();
     this_tileset->sorted_tiles.dirt_tiles.clear();
     this_tileset->sorted_tiles.path_tiles.clear();
     this_tileset->sorted_tiles.border_tiles.clear();
-
-    this_tileset->paths.clear();
-
-    this_tileset->structure_positions.clear();
 
     this_tileset->collision_grid.clear();
     this_tileset->collision_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), 0);
@@ -236,22 +237,10 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
     this_tileset->spawn_zone_grid.clear();
     this_tileset->spawn_zone_grid.resize((int)(this_tileset->map_size.x + 1) * (int)(this_tileset->map_size.y + 1), ZONE_NONE);
 
-    
-
-    this_tileset->grass_coverage = wg_data->grass_coverage;
-    this_tileset->tree_coverage = wg_data->tree_coverage;
-
-    this_tileset->max_structures = wg_data->structure_count;
-    this_tileset->max_villages = wg_data->village_count;
-
-    this_tileset->exit_dest_strings = wg_data->exit_dest_strings;
-
-    this_tileset->has_shelter = wg_data->has_shelter;
 
     this_tileset->collision_layer_index = -1;
 
     
-
     for(auto &tile : this_tileset->tile_lookup) {
         TILEID tile_id = (TILEID)tile.first;
 
@@ -267,43 +256,25 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
         if(tile_id > TILE_ID_DIRT_START and tile_id < TILE_ID_DIRT_END) {
             this_tileset->sorted_tiles.dirt_tiles.push_back(tile_id);
         }
-
         if(tile_id > TILE_ID_FENCE_START and tile_id < TILE_ID_FENCE_END) {
             this_tileset->sorted_tiles.fence_tiles.push_back(tile_id);
         }
+        if(tile_id > TILE_ID_ROAD_START and tile_id < TILE_ID_ROAD_END) {
+            this_tileset->sorted_tiles.road_tiles.push_back(tile_id);
+        }
     }
 
-    
 
 
-    TraceLog(LOG_INFO, "-------------max_grass %0.0f", this_tileset->grass_coverage);
-    TraceLog(LOG_INFO, "-------------max_trees %0.0f", this_tileset->tree_coverage);
-    //TraceLog(LOG_INFO, "-------------max_hills %i", this_tileset->max_hills);
-    TraceLog(LOG_INFO, "-------------max_structures %i", this_tileset->max_structures);
+    TraceLog(LOG_INFO, "-------------------------------------------");
     TraceLog(LOG_INFO, "-------TILESET #%s READY TO BUILD MAP------", map_name.c_str());
+    TraceLog(LOG_INFO, "-------------------------------------------");
 
-    //grass layer                           X
-    //border                                X
-    //structure areas                       X
-    //structure positions                   X
-    //structure tiles                       X
-    //dirt patches                          x
-    //paths connect structure areas         X
-    //obsticles                             X
-    //trees                                 X
-    //grass                                 X
-    //spawn point                           X
-    //transition areas                      X
-    //lootables                             -
-    //mobs                                  -
-    //fix sub maps                          X
-    //fix paths                             X
-    //fences around structures              X
+    this_tileset->wg_plan = GenerateWorldGenPlan(this_tileset->wg_data);
 
-
-    CreatePoiPatches(*this_tileset, 50);
+    //CreatePoiPatches(*this_tileset, 20);
     
-    CreateSpawnPatches(*this_tileset, 10);
+    //CreateSpawnPatches(*this_tileset, 10);
 
     GenerateEntitiesLayer(new_level, *this_tileset);
 
@@ -311,7 +282,9 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
 
     //ConnectStructuresWithPaths(*this_tileset);
 
-    AddMushroomZones(new_level, *this_tileset);
+    BuildRoads(*this_tileset);
+
+    //AddMushroomZones(new_level, *this_tileset);
 
     GenerateStructuresLayer(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
@@ -321,11 +294,11 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
 
     GenerateLowerTerrainLayer(new_level, *this_tileset);
 
-    PopulateDeccoEntities(new_level, *this_tileset,  g_worldgen_tilesets[1]);
+    //PopulateDeccoEntities(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
     PopulateGrass(new_level, *this_tileset);
     
-    //PopulateTrees(new_level, *this_tileset);
+    PopulateTrees(new_level, *this_tileset);
     
     PlaceEntities(new_level, *this_tileset);
 
@@ -343,7 +316,7 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     for(int y = 0; y < _tileset.map_size.y; y++) {
         for(int x = 0; x < _tileset.map_size.x; x++) {
             int index = y * _tileset.map_size.x + x;
-            _tileset.lower_zone_grid[index] = ZONE_GRASS;
+            _tileset.lower_zone_grid[index] = ZONE_NONE;
 
             if(x < 4 or y < 4 or x > _tileset.map_size.x-5 or y > _tileset.map_size.y-5) {              
                 _tileset.upper_zone_grid[index] = ZONE_BORDER;
@@ -351,34 +324,29 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
             }
         }
     }
+    GenerateTerrainZones(level, _tileset);
+    //GenerateDirtZonesBrush(level, _tileset, _tileset.dirt_size);
 
-    //FillWithHillZone(level, _tileset);
-
-    //CarveEmptySpace(level, _tileset);
-
-
-    GenerateDirtZonesBrush(level, _tileset, 3);
-
-    if(_tileset.has_shelter) {
+/*     if(_tileset.wg_data.has_shelter) {
         GenerateStartingShelter(level, _tileset);
     }
     else {
         //make extraction point
-    }
+    } */
 
-    for(int i = 0; i < _tileset.max_villages; i++) {
+/*     for(int i = 0; i < _tileset.wg_data.landmarks.size(); i++) {
         //GenerateVillageZone(level, _tileset);
-    }
+    } */
 
-    for(int i = 0; i < _tileset.max_structures; i++) {
-        //GenerateStructureZone(level, _tileset);
-    }
+/*     for(int i = 0; i < _tileset.wg_data.max_structures; i++) {
+        GenerateStructureZone(level, _tileset);
+    } */
 
     //GenerateRuinsZones(level, _tileset);
 
-    GenerateExits(level, _tileset);
+    //GenerateExits(level, _tileset);
     
-    GenerateHillZonesBrush(level, _tileset, 3);
+    //GenerateHillZonesBrush(level, _tileset, _tileset.hill_size);
     
 
     //GenerateCreatureZones(level, _tileset);
@@ -427,26 +395,31 @@ void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset) {
 //uses rect as a brush
 void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size) {
 
+    std::vector<Vector2> dirt_positions;
+    std::vector<Vector2> patch_positions;
 
-    //Vector2 start_position = {10,10};
-
-    std::vector<Vector2> start_positions;
-
-    int x_patches = _tileset.map_size.x/50;
-    int y_patches = _tileset.map_size.y/50;
+    int x_patches = _tileset.map_size.x/10;
+    int y_patches = _tileset.map_size.y/10;
     int num_structure_patches = x_patches + y_patches;
 
     int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
     int y_patch_size = (level.px_hei/_tileset.tile_grid_size)/y_patches;
 
-    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
-        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+    for(int y_patch = 0; y_patch <= y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch <= x_patches; x_patch++) {
             int x_pos = 10 + (x_patch * x_patch_size);
             int y_pos = 10 + (y_patch * y_patch_size);
-            start_positions.push_back(Vector2{(float)x_pos, (float)y_pos});
+            patch_positions.push_back(Vector2{(float)x_pos, (float)y_pos});
         }
     }
-    start_positions.push_back(Vector2{_tileset.map_size.x/2, _tileset.map_size.y/2});
+
+
+    for(int i = 0; i < _tileset.wg_data.terrain.dirt_patches; i++ ) {
+        Vector2 selection = patch_positions[GetRandomValue(0, patch_positions.size() -1)];
+        dirt_positions.push_back(selection);
+    }
+
+    patch_positions.push_back(Vector2{_tileset.map_size.x/2, _tileset.map_size.y/2});
 
 
     Rectangle brush;
@@ -455,9 +428,9 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
     brush.width = brush_size;
     brush.height = brush_size;
 
-    int max_loops = 250;
+    int max_loops = 150;
 
-    for(Vector2 position :start_positions) {
+    for(Vector2 position : dirt_positions) {
         brush.x = position.x;
         brush.y = position.y;
         bool running = true;
@@ -475,7 +448,7 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
                 }
             }
 
-            brush.x += GetRandomValue(-3, 3);
+            brush.x += GetRandomValue(-1, 1);
 
             if(brush.x < 1) {
                 brush.x = 1;
@@ -486,7 +459,7 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
                 //running = false;
             }
             
-            brush.y += GetRandomValue(-3, 3);
+            brush.y += GetRandomValue(-1, 1);
 
             if(brush.y < 1) {
                 brush.y = 1;
@@ -546,7 +519,7 @@ void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     for(int patch = 0; patch < num_ruins_patches; patch++ ) {
         Rectangle new_rect = GetAvailableSpawnPatch(_tileset);
 
-        _tileset.ruins_rects.push_back(new_rect);
+        _tileset.wg_plan.ruins_rects.push_back(new_rect);
 
         //_tileset.layer_decco_positions.push_back({new_rect.x + (new_rect.width/2), new_rect.y + (new_rect.height/2)});
 
@@ -564,7 +537,7 @@ void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 
 
-    for(Rectangle &patch : _tileset.ruins_rects) {
+    for(Rectangle &patch : _tileset.wg_plan.ruins_rects) {
         for(int y = (int)patch.y; y < (int)patch.height + (int)patch.y; y++) {
             for(int x = (int)patch.x; x < (int)patch.width + (int)patch.x; x++) {
                 int index = y * (int)_tileset.map_size.x + x;
@@ -626,7 +599,7 @@ void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset) {
     shelter_rect.height = 10;
 
     //should be at the first index
-    _tileset.structure_positions.push_back( rect_center );
+    _tileset.wg_plan.structure_positions.push_back( rect_center );
 
 
 
@@ -693,7 +666,7 @@ void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
     
     Vector2 rect_center = {new_rect.x + (new_rect.width/2), new_rect.y + (new_rect.height/2)};
 
-    _tileset.structure_positions.push_back( rect_center );
+    _tileset.wg_plan.structure_positions.push_back( rect_center );
 
 
     for(int y = 0; y < new_rect.height; y++) {
@@ -765,7 +738,7 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
     structure_rect.width = 10;
     structure_rect.height = 10;
     //should be at the first index
-    _tileset.structure_positions.push_back( rect_center );
+    _tileset.wg_plan.structure_positions.push_back( rect_center );
 
 
     for(int y = 0; y < structure_rect.height; y++) {
@@ -818,7 +791,7 @@ void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
-    std::vector<Rectangle> structure_rects;
+   /*  std::vector<Rectangle> structure_rects;
     
 
     int x_patches = _tileset.max_structures/2;
@@ -893,7 +866,7 @@ void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                 }
             }
         }
-    }
+    } */
 
 }
 
@@ -933,75 +906,45 @@ void GenerateExits(LDTKLevel &level, WorldGenTileSet &_tileset) {
     int fourty_percent_x = (int)(_tileset.map_size.x * 0.4f);
     int fourty_percent_y = (int)(_tileset.map_size.y * 0.4f);
 
-    int max_exits = _tileset.exit_dest_strings.size();
+    int max_exits = _tileset.wg_plan.exit_dest_strings.size();
     
-    Vector2 mid_point;
-    mid_point.x = GetRandomValue(fourty_percent_x, _tileset.map_size.x - fourty_percent_x);
-    mid_point.y = GetRandomValue(fourty_percent_y, _tileset.map_size.y - fourty_percent_y);
+    //Vector2 mid_point;
+    _tileset.wg_plan.road_midpoint.x = GetRandomValue(fourty_percent_x, _tileset.map_size.x - fourty_percent_x);
+    _tileset.wg_plan.road_midpoint.y = GetRandomValue(fourty_percent_y, _tileset.map_size.y - fourty_percent_y);
 
 
-    std::vector<Rectangle> road_rects;
+    std::vector<Vector2> exit_positions;
+ 
+    Vector2 up = {_tileset.wg_plan.road_midpoint.x, 1};
+    Vector2 right = { _tileset.map_size.x - 1, _tileset.wg_plan.road_midpoint.y};
+    Vector2 down = {_tileset.wg_plan.road_midpoint.x, _tileset.map_size.y - 1};
+    Vector2 left = {1, _tileset.wg_plan.road_midpoint.y};
 
+    exit_positions.push_back(up);
+    exit_positions.push_back(right);
+    exit_positions.push_back(down);
+    exit_positions.push_back(left);
 
-    Rectangle up_rect = {
-        .x = mid_point.x,
-        .y = 1,
-        .width = 2,
-        .height = mid_point.y
-    };
-    road_rects.push_back(up_rect);
-
-    Rectangle right_rect = {
-        .x = mid_point.x,
-        .y = mid_point.y,
-        .width = (_tileset.map_size.x - mid_point.x) - 1,
-        .height = 2
-    };
-    road_rects.push_back(right_rect);
-
-    Rectangle down_rect = {
-        .x = mid_point.x,
-        .y = (_tileset.map_size.y - mid_point.y) - 1,
-        .width = 2,
-        .height = mid_point.x
-    };
-    road_rects.push_back(down_rect);
-
-    Rectangle left_rect = {
-        .x = 1,
-        .y = mid_point.y,
-        .width = mid_point.x,
-        .height = 2
-    };
-    road_rects.push_back(left_rect);
-
-/* 
-
-    for(Rectangle _rect : road_rects) {
-        for(int y = _rect.y; y < _rect.y + _rect.height-2; y++) {
-            for(int x = _rect.x; x < _rect.x + _rect.width-2; x++) {
-                int index = y * _tileset.map_size.x + x;
-                _tileset.upper_zone_grid[index] = ZONE_PATH;
-            }
-        }
+    for(int i = 0; i < exit_positions.size(); i++) {
+        int j = GetRandomValue(0, i);
+        std::swap(exit_positions[i], exit_positions[j]);
     }
 
- */
+
+    //std::shuffle(exit_positions.begin(), exit_positions.end(), GetRandomValue(0, 10000));
 
 
-    for(int exit = 0; exit < _tileset.exit_dest_strings.size(); exit++) {
-        int dir = GetRandomValue(0, road_rects.size() - 1);
+    for(int exit = 0; exit < _tileset.wg_plan.exit_dest_strings.size(); exit++) {
+        //int dir = GetRandomValue(0, exit_positions.size() - 1);
         
+        Vector2 exit_pos = exit_positions[exit];
 
+/*         if(dir == 0) {exit_pos = {_tileset.road_midpoint.x, 1};}
+        if(dir == 1) {exit_pos = {_tileset.map_size.x - 1, _tileset.road_midpoint.y};}
+        if(dir == 2) {exit_pos = {_tileset.road_midpoint.x, _tileset.map_size.y - 1};}
+        if(dir == 3) {exit_pos = {1, _tileset.road_midpoint.y};} */
 
-        Vector2 exit_pos = {0,0};
-
-        if(dir == 0) {exit_pos = {mid_point.x, 1};}
-        if(dir == 1) {exit_pos = {_tileset.map_size.x - 1, mid_point.y};}
-        if(dir == 2) {exit_pos = {mid_point.x, _tileset.map_size.y - 1};}
-        if(dir == 3) {exit_pos = {1, mid_point.y};}
-
-        _tileset.exit_positions.push_back(exit_pos);
+        _tileset.wg_plan.exit_positions.push_back(exit_pos);
     }
 }
 
@@ -1009,21 +952,29 @@ void GenerateExits(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size) {
 
-    std::vector<Vector2> start_positions;
+    std::vector<Vector2> hill_positions;
+    std::vector<Vector2> patch_positions;
 
-    int x_patches = _tileset.map_size.x/30;
-    int y_patches = _tileset.map_size.y/30;
-    int num_structure_patches = x_patches + y_patches;
+
+    int x_patches = _tileset.map_size.x/50;
+    int y_patches = _tileset.map_size.y/50;
 
     int x_patch_size = (level.px_wid/_tileset.tile_grid_size)/x_patches;
     int y_patch_size = (level.px_hei/_tileset.tile_grid_size)/y_patches;
 
-    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
-        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+
+    for(int y_patch = 0; y_patch <= y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch <= x_patches; x_patch++) {
             int x_pos = 10 + (x_patch * x_patch_size);
             int y_pos = 10 + (y_patch * y_patch_size);
-            start_positions.push_back(Vector2{(float)x_pos + GetRandomValue(-5, 5), (float)y_pos + GetRandomValue(-5, 5)});
+            patch_positions.push_back(Vector2{(float)x_pos + GetRandomValue(-5, 5), (float)y_pos + GetRandomValue(-5, 5)});
         }
+    }
+
+
+    for(int i = 0; i < _tileset.wg_data.terrain.hill_patches; i++ ) {
+        Vector2 selection = patch_positions[GetRandomValue(0, patch_positions.size() -1)];
+        hill_positions.push_back(selection);
     }
 
 
@@ -1033,9 +984,9 @@ void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
     brush.width = brush_size;
     brush.height = brush_size;
 
-    int max_loops = 200;
+    int max_loops = 150;
 
-    for(Vector2 position : start_positions) {
+    for(Vector2 position : hill_positions) {
         brush.x = position.x;
         brush.y = position.y;
         bool running = true;
@@ -1277,7 +1228,7 @@ TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, st
     }
 
     if(!tile_found) {
-        TraceLog(LOG_INFO, "=====u%i=r%i=d%i=l%i=======================(ZONE %i) zone auto TILE NOT found  ----default id %i   (%i, %i)", 
+        TraceLog(LOG_INFO, "................ u=%i  r=%i   d=%i   l=%i.....................(ZONE %i) zone auto TILE NOT found  ----default id %i   (%i, %i)", 
             this_tile_marked_sides[TILESIDE_UP],
             this_tile_marked_sides[TILESIDE_RIGHT],
             this_tile_marked_sides[TILESIDE_DOWN],
@@ -1306,7 +1257,7 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
     for(int tag = 0; tag < tj["enumTags"].size(); tag++) {
         LDTKEnumTag new_tag;
         new_tag.value_string = tj["enumTags"][tag]["enumValueId"];
-        //TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
+        TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
 
         for(int tid = 0; tid <  tj["enumTags"][tag]["tileIds"].size(); tid++) {
             int id = tj["enumTags"][tag]["tileIds"][tid];
@@ -1349,13 +1300,13 @@ void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
                         
                         new_tile.marked_sides = TileIdGetAutotile((TILEID)new_tile.tile_id);
                         this_tileset.tile_lookup[(TILEID)alatered_id] = new_tile;
-/*                         TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
+                         TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
                             alatered_id, 
                             new_tile.marked_sides[0],
                             new_tile.marked_sides[1],
                             new_tile.marked_sides[2],
                             new_tile.marked_sides[3]
-                            ); */
+                            );
                     }
                 }
             }
@@ -1427,7 +1378,7 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
 
     TraceLog(LOG_INFO, "building premade structuires  # of tiles in grid  %i", grid_tiles.size());
 
-    std::vector<Rectangle> bounding_rects;
+    //std::vector<Rectangle> bounding_rects;
 
     for(int r = 0; r < structure_bounding_entities.size(); r++) {
         Rectangle new_rect;
@@ -1588,10 +1539,10 @@ void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::
 }
 
 
-void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size) {
-
-    int x_patches = (_tileset.map_size.x/patch_size);
-    int y_patches = (_tileset.map_size.y/patch_size);
+void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size) {
+/* 
+    int x_patches = (wg_plan.map_size.x/patch_size);
+    int y_patches = (wg_plan.map_size.y/patch_size);
 
     TraceLog(LOG_INFO, "------ x patches %i   y patches %i  ", x_patches, y_patches);
     //int num_structure_patches = x_patches + y_patches;
@@ -1611,42 +1562,42 @@ void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size) {
             new_patch.height = patch_size;
 
             if(new_patch.x < 0) {new_patch.x = 0;}
-            if(new_patch.x > _tileset.map_size.x-1) { new_patch.x = _tileset.map_size.x-1;}
-            if(new_patch.x + patch_size > _tileset.map_size.x) {
-                int diff = (new_patch.x + patch_size) - _tileset.map_size.x;
+            if(new_patch.x > wg_plan.map_size.x-1) { new_patch.x = wg_plan.map_size.x-1;}
+            if(new_patch.x + patch_size > wg_plan.map_size.x) {
+                int diff = (new_patch.x + patch_size) - wg_plan.map_size.x;
                 new_patch.width -= diff;
             }
 
             if(new_patch.y < 0) {new_patch.y = 0;}
-            if(new_patch.y + patch_size > _tileset.map_size.y-1) { new_patch.y = _tileset.map_size.y-1;}
-            if(new_patch.y + patch_size > _tileset.map_size.y) {
-                int diff = (new_patch.y + patch_size) - _tileset.map_size.y;
+            if(new_patch.y + patch_size > wg_plan.map_size.y-1) { new_patch.y = wg_plan.map_size.y-1;}
+            if(new_patch.y + patch_size > wg_plan.map_size.y) {
+                int diff = (new_patch.y + patch_size) - wg_plan.map_size.y;
                 new_patch.height -= diff;
             }
 
 
-            _tileset.poi_patches.push_back(new_patch);
+            wg_plan.poi_patches.push_back(new_patch);
 
-            /* TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
+             TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
                 new_patch.x,
                 new_patch.y,
                 new_patch.width,
-                new_patch.height); */
+                new_patch.height); 
         }
-    }
+    } */
 }
 
 
 Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset) {
 
-
+/* 
     std::vector<int> index_choices;
 
-    for(int i = 0; i < _tileset.poi_patches.size(); i++ ) {
+    for(int i = 0; i < _tileset.wg_plan.poi_patches.size(); i++ ) {
         bool found = false;
-        for(int patch : _tileset.used_poi_patches) {
+        for(int patch : _tileset.wg_plan.used_poi_patches) {
             if(i == patch) {
-                found = true;
+                found = true;s
             }
         }
 
@@ -1661,17 +1612,19 @@ Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset) {
     
     int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
 
-    _tileset.used_poi_patches.push_back(choice);
+    _tileset.wg_plan.used_poi_patches.push_back(choice);
 
-    return _tileset.poi_patches[choice];
-
+    return _tileset.wg_plan.poi_patches[choice];
+    */
+   Rectangle rect;
+   return rect;
 
 }
 
 
 
 void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
-
+/* 
     int x_patches = (_tileset.map_size.x/patch_size);
     int y_patches = (_tileset.map_size.y/patch_size);
 
@@ -1707,15 +1660,16 @@ void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
                 new_patch.height -= diff;
             }
 
-            _tileset.spawn_patches.push_back(new_patch);
+            _tileset.wg_plan.spawn_patches.push_back(new_patch);
 
             /* TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
                 new_patch.x,
                 new_patch.y,
                 new_patch.width,
-                new_patch.height); */
+                new_patch.height);
         }
-    }
+    } 
+    */
 }
 
 
@@ -1723,9 +1677,9 @@ Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
 
     std::vector<int> index_choices;
 
-    for(int i = 0; i < _tileset.spawn_patches.size(); i++ ) {
+    for(int i = 0; i < _tileset.wg_plan.spawn_patches.size(); i++ ) {
         bool found = false;
-        for(int patch : _tileset.used_spawn_patches) {
+        for(int patch : _tileset.wg_plan.used_spawn_patches) {
             if(i == patch) {
                 found = true;
             }
@@ -1742,9 +1696,9 @@ Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
     
     int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
 
-    _tileset.used_spawn_patches.push_back(choice);
+    _tileset.wg_plan.used_spawn_patches.push_back(choice);
 
-    return _tileset.spawn_patches[choice];
+    return _tileset.wg_plan.spawn_patches[choice];
 
 }
 
@@ -1928,10 +1882,12 @@ TILEID StrToTileId(const std::string& s) {
         {"TILE_ID_FENCE_END_LEFT_LOWER",          TILEID::TILE_ID_FENCE_END_LEFT_LOWER},
         {"TILE_ID_FENCE_MID_HORIZANTAL_LOWER",          TILEID::TILE_ID_FENCE_MID_HORIZANTAL_LOWER},
 
+        {"TILE_ID_ROAD_UP_RIGHT_LEFT",          TILEID::TILE_ID_ROAD_UP_RIGHT_LEFT},
         {"TILE_ID_ROAD_UP_RIGHT_DOWN",          TILEID::TILE_ID_ROAD_UP_RIGHT_DOWN},
         {"TILE_ID_ROAD_UP_DOWN_LEFT",           TILEID::TILE_ID_ROAD_UP_DOWN_LEFT},
         {"TILE_ID_ROAD_RIGHT_DOWN_LEFT",       TILEID::TILE_ID_ROAD_RIGHT_DOWN_LEFT},
         {"TILE_ID_ROAD_CENTER",                 TILEID::TILE_ID_ROAD_CENTER},
+        {"TILE_ID_DEBUG_1",                 TILEID::TILE_ID_DEBUG_1},
 
 
     };
@@ -1943,6 +1899,22 @@ TILEID StrToTileId(const std::string& s) {
     return TILEID::TILE_ID_NONE;
 }
 
+
+
+BIOME_TYPE StrToBiomeId(const std::string& s) {
+
+    static const std::unordered_map<std::string, BIOME_TYPE> lookup_table = {
+        {"BIOME_PLAINS",                     BIOME_TYPE::BIOME_PLAINS},
+        {"BIOME_FORREST",                     BIOME_TYPE::BIOME_FORREST},
+        {"BIOME_HILLS",                     BIOME_TYPE::BIOME_HILLS},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "the BIOME_TYPE ID is not found ---- %s", s.c_str());
+    return BIOME_TYPE::BIOME_NONE;
+}
 
 
 std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
@@ -2008,7 +1980,7 @@ std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
     if (auto it = side_map.find(tile_id); it != side_map.end()) {
         return it->second;
     }
-    //TraceLog(LOG_INFO, "autotile ID not found ");
+    TraceLog(LOG_INFO, "autotile ID not found %i", tile_id);
     return {false, false, false, false};
 }
 
@@ -2025,15 +1997,316 @@ void LoadMapGenData(json &j) {
         new_data.grass_coverage = j[map]["grass_coverage"];        
         new_data.terrrain_set_name = j[map]["tileset_terrain_name"];
         new_data.structure_set_name = j[map]["tileset_structure_name"];
-        new_data.village_count = j[map]["village_count"];
-        new_data.structure_count = j[map]["structure_count"];
         new_data.has_shelter = j[map]["has_shelter"];
+
+
+        for(int r = 0; r < j[map]["biomes"].size(); r++) {
+
+            WorldGenBiomeData new_biome;
+            new_biome.type = StrToBiomeId(j[map]["biomes"][r]["type"]);
+            new_biome.coverage = j[map]["biomes"][r]["coverage"];
+            new_data.biome_data.push_back(new_biome);
+        }
+
+        for(int l = 0; l < j[map]["structures"].size(); l++) {
+            WorldGenLandmark new_structure;
+            new_structure.id = j[map]["structures"][l]["id"];
+            new_structure.biome = StrToBiomeId(j[map]["structures"][l]["prefer_region"]);
+            new_structure.count_min = j[map]["structures"][l]["count"][0];
+            new_structure.count_max = j[map]["structures"][l]["count"][1];
+            new_structure.min_distance = j[map]["structures"][l]["min_distance"];
+
+            new_data.structure_data.push_back(new_structure);
+        }
+
+        WorldGenTerrain new_terrain;
+
+        new_terrain.hill_patches = j[map]["terrain"]["hill_patches"];
+        new_terrain.hill_size = j[map]["terrain"]["hill_size"];
+        new_terrain.dirt_patches = j[map]["terrain"]["dirt_patches"];
+        new_terrain.dirt_size = j[map]["terrain"]["dirt_size"];
+
+        new_data.terrain = new_terrain;
+
 
         for(int s = 0; s < j[map]["exits"].size(); s++) {
             std::string d_string = j[map]["exits"][s];
             new_data.exit_dest_strings.push_back(d_string);
         }
         g_worldgen_data.push_back(new_data);
+        TraceLog(LOG_INFO, "-----------------wg data map: %s  ", new_data.map_name.c_str());
     }
 
+}
+
+
+//  PLAN
+
+WorldGenPlan GenerateWorldGenPlan(WorldGenData &wg_data) {
+    WorldGenPlan new_plan;
+
+    new_plan.map_size = {(float)wg_data.map_width, (float)wg_data.map_height};
+
+    CreatePoiPatches(new_plan, 1);
+    PlanGeography(wg_data, new_plan);
+    PlanRegions(wg_data, new_plan);
+    PlanRoads(wg_data, new_plan);
+    PlanStructures(wg_data, new_plan);
+
+    return new_plan;
+}
+
+
+
+void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
+
+    wg_plan.exit_dest_strings = wg_data.exit_dest_strings;
+
+    int fourty_percent_x = (int)(wg_plan.map_size.x * 0.4f);
+    int fourty_percent_y = (int)(wg_plan.map_size.y * 0.4f);
+
+    int max_exits = wg_plan.exit_dest_strings.size();
+    
+    wg_plan.road_midpoint.x = GetRandomValue(fourty_percent_x, wg_plan.map_size.x - fourty_percent_x);
+    wg_plan.road_midpoint.y = GetRandomValue(fourty_percent_y, wg_plan.map_size.y - fourty_percent_y);
+
+    std::vector<Vector2> exit_positions;
+ 
+    Vector2 up = {wg_plan.road_midpoint.x, 1};
+    Vector2 right = { wg_plan.map_size.x - 1, wg_plan.road_midpoint.y};
+    Vector2 down = {wg_plan.road_midpoint.x, wg_plan.map_size.y - 1};
+    Vector2 left = {1, wg_plan.road_midpoint.y};
+
+    exit_positions.push_back(up);
+    exit_positions.push_back(right);
+    exit_positions.push_back(down);
+    exit_positions.push_back(left);
+
+    for(int i = 0; i < exit_positions.size(); i++) {
+        int j = GetRandomValue(0, i);
+        std::swap(exit_positions[i], exit_positions[j]);
+    }
+    for(int exit = 0; exit < wg_plan.exit_dest_strings.size(); exit++) {
+        
+        Vector2 exit_pos = exit_positions[exit];
+
+        wg_plan.exit_positions.push_back(exit_pos);
+    }
+}
+
+
+
+void PlanRegions(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
+    int patch_size = 10;
+
+
+    int x_patches = (wg_plan.map_size.x/patch_size);
+    int y_patches = (wg_plan.map_size.y/patch_size);
+
+    std::vector<Rectangle> region_rects;
+
+    TraceLog(LOG_INFO, "region patches------ x patches %i   y patches %i  ", x_patches, y_patches);
+    //int num_structure_patches = x_patches + y_patches;
+
+    int x_patch_size = patch_size;
+    int y_patch_size = patch_size;
+
+    for(int y_patch = 0; y_patch < y_patches; y_patch++ ) {
+        for(int x_patch = 0; x_patch < x_patches; x_patch++) {
+            int x_pos = (x_patch * x_patch_size);
+            int y_pos = (y_patch * y_patch_size);
+
+            Rectangle new_rect;
+            new_rect.x = x_pos;
+            new_rect.y = y_pos;
+            new_rect.width = patch_size;
+            new_rect.height = patch_size;
+
+            if(new_rect.x < 0) {new_rect.x = 0;}
+            if(new_rect.x > wg_plan.map_size.x-1) { new_rect.x = wg_plan.map_size.x-1;}
+            if(new_rect.x + patch_size > wg_plan.map_size.x) {
+                int diff = (new_rect.x + patch_size) - wg_plan.map_size.x;
+                new_rect.width -= diff;
+            }
+
+            if(new_rect.y < 0) {new_rect.y = 0;}
+            if(new_rect.y + patch_size > wg_plan.map_size.y-1) { new_rect.y = wg_plan.map_size.y-1;}
+            if(new_rect.y + patch_size > wg_plan.map_size.y) {
+                int diff = (new_rect.y + patch_size) - wg_plan.map_size.y;
+                new_rect.height -= diff;
+            }
+
+
+            region_rects.push_back(new_rect);
+        }
+    }
+
+    for(Rectangle r : region_rects)
+    {
+        WorldGenBiome biome;
+        biome.type = ChooseBiome(wg_data);// (BIOME_TYPE)GetRandomValue(BIOME_PLAINS, BIOME_FORREST); // forest/plains/hills
+        TraceLog(LOG_INFO, "-----------------biome id: %i  ", biome.type);
+        biome.rect = r;
+
+        wg_plan.biomes.push_back(biome);
+    }
+
+
+/* 
+
+    int depth = 2;
+    int num_regions = 15; //GetRandomValue(10,20);
+
+    Rectangle base_rect;
+
+    std::vector<Rectangle> region_rects;
+
+    base_rect = {
+        .x = 0,
+        .y = 0,
+        .width = wg_plan.map_size.x,
+        .height = wg_plan.map_size.y
+    };
+
+    region_rects.push_back(base_rect);
+
+    while(region_rects.size() < num_regions) {
+        SplitRegion(region_rects);
+    }
+
+    for(Rectangle r : region_rects)
+    {
+        WorldGenBiome biome;
+        biome.type = ChooseBiome(wg_data);// (BIOME_TYPE)GetRandomValue(BIOME_PLAINS, BIOME_FORREST); // forest/plains/hills
+        TraceLog(LOG_INFO, "-----------------biome id: %i  ", biome.type);
+        biome.rect = r;
+
+        wg_plan.biomes.push_back(biome);
+    } */
+}
+
+
+void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
+
+    if(wg_data.has_shelter) {
+        Vector2 shelter_position = wg_plan.road_midpoint;
+
+        //shelter_position.x = wg_plan.map_size.x/2;
+        //shelter_position.y = wg_plan.map_size.y/2;
+
+        TraceLog(LOG_INFO, "++++++------------shelter position planned at %0.0f  %0.0f", shelter_position.x, shelter_position.y);
+        wg_plan.structure_positions.push_back(shelter_position);
+    }
+}
+
+
+
+void PlanRoads(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
+
+    for(int position_index = 0; position_index < wg_plan.exit_positions.size(); position_index++) {
+        Vector2 start_position = wg_plan.road_midpoint;
+
+        Rectangle new_rect;
+        new_rect.x = start_position.x;
+        new_rect.y = start_position.y;
+
+        if(wg_plan.exit_positions[position_index].y == wg_plan.road_midpoint.y) {
+            if(wg_plan.exit_positions[position_index].x < wg_plan.road_midpoint.x) {
+                new_rect.width = start_position.x;
+                new_rect.height = 2;
+            }
+            else {
+                new_rect.width = wg_plan.map_size.x -  start_position.x;
+                new_rect.height = 2;
+            }
+        }
+        else {
+            if(wg_plan.exit_positions[position_index].y < wg_plan.road_midpoint.y) {
+                new_rect.height = start_position.y;
+                new_rect.width = 2;
+            }
+            else {
+                new_rect.height = wg_plan.map_size.y -  start_position.y;
+                new_rect.width = 2; 
+            }
+        }
+
+        wg_plan.reserved_rects.push_back(new_rect);
+    }
+}
+
+
+BIOME_TYPE ChooseBiome(WorldGenData &wg_data) {
+
+    int total = 0;
+
+    for(WorldGenBiomeData &biome_data : wg_data.biome_data) {
+        //TraceLog(LOG_INFO, "-----------------biome id: %i  ", biome_data.type);
+        total += biome_data.coverage * 100;
+    }
+
+        int roll = GetRandomValue(0, total - 1);
+        int acc = 0;
+
+    for(WorldGenBiomeData &biome_data : wg_data.biome_data) {
+        acc += biome_data.coverage * 100;
+
+        if(roll < acc) {
+            return biome_data.type;
+        }
+
+    }
+    return BIOME_NONE;
+}
+
+
+void SplitRegion(std::vector<Rectangle>& regions)
+{
+
+    int min_size = 10;
+
+    int idx = GetRandomValue(0, regions.size()-1);
+    Rectangle r = regions[idx];
+
+    while(r.width < min_size*2 or r.height < min_size*2) {
+        idx = GetRandomValue(0, regions.size()-1);
+        r = regions[idx];
+    }
+
+    bool vertical = GetRandomValue(0,1);
+
+    Rectangle a, b;
+
+    if(vertical)
+    {
+        float cut = r.width * (GetRandomValue(35, 65) * 0.01f);
+
+        a = { r.x, r.y, cut, r.height };
+        b = { r.x + cut, r.y, r.width - cut, r.height };
+    }
+    else
+    {
+        float cut = r.height * (GetRandomValue(35, 65) * 0.01f);
+
+        a = { r.x, r.y, r.width, cut };
+        b = { r.x, r.y + cut, r.width, r.height - cut };
+    }
+
+    regions.erase(regions.begin() + idx);
+    regions.push_back(a);
+    regions.push_back(b);
+}
+
+WorldGenBiome *GetBiome(Vector2 position, WorldGenTileSet &_tileset) {
+
+
+    for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
+        if( (position.x > biome.rect.x and position.x < biome.rect.x + biome.rect.width ) and 
+            (position.y > biome.rect.y and position.y < biome.rect.y + biome.rect.height)  ) {
+
+                return &biome;
+        }
+    }
+
+    return nullptr;
 }

@@ -3,15 +3,81 @@
     {
         "map_name":"ForrestWG",
         "has_shelter": true,
-        "map_w":200,
-        "map_h":200,
+        "map_w":150,
+        "map_h":150,
         "tileset_terrain_name":"Forrest",
         "tileset_structure_name":"Forrest_structures",
-        "tree_coverage":0.10,
+        "tree_coverage":0.08,
         "grass_coverage":0.7,
+        "village_count":0,
+        "structure_count":0,
+        "exits":["DesertWG","SwampWG"],
+
+
+        "biomes":[
+            {"type":"BIOME_PLAINS","coverage":0.3},
+            {"type":"BIOME_FORREST","coverage":0.7},
+            {"type":"BIOME_HILLS","coverage":0.1}
+        ],
+
+        "structures":[
+            {
+            "id":"house",
+            "count":[1,2],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            }
+        ],
+
+        "terrain":{
+            "hill_patches":10,
+            "hill_size":5,
+            "dirt_patches":40,
+            "dirt_size":3
+        }
+
+    },
+    {
+        "map_name":"SwampWG",
+        "has_shelter": true,
+        "map_w":100,
+        "map_h":100,
+        "tileset_terrain_name":"Forrest",
+        "tileset_structure_name":"Forrest_structures",
+        "tree_coverage":0.05,
+        "grass_coverage":0.5,
         "village_count":1,
-        "structure_count":10,
-        "exits":["DesertWG","SwampWG"]
+        "structure_count":3,
+        "hill_patches":5,
+        "hill_step":2,
+        "hill_size":4,
+        "dirt_patches":5,
+        "dirt_step":1,
+        "dirt_size":3,
+        "exits":["DesertWG", "ForrestWG"],
+
+
+
+        "biomes":[
+            {"type":"BIOME_PLAINS","coverage":0.5},
+            {"type":"BIOME_FORREST","coverage":0.5}
+        ],
+
+        "structures":[
+            {
+            "id":"village",
+            "count":[1,2],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            }
+        ],
+
+        "terrain":{
+            "hill_patches":10,
+            "hill_size":5,
+            "dirt_patches":40,
+            "dirt_size":3
+        }
 
     },
     {
@@ -25,7 +91,35 @@
         "grass_coverage":0.5,
         "village_count":1,
         "structure_count":3,
-        "exits":["SwampWG"]
+        "hill_patches":5,
+        "hill_step":2,
+        "hill_size":4,
+        "dirt_patches":5,
+        "dirt_step":1,
+        "dirt_size":3,
+        "exits":["SwampWG", "ForrestWG"],
+
+
+        "biomes":[
+            {"type":"BIOME_PLAINS","coverage":0.5},
+            {"type":"BIOME_FORREST","coverage":0.5}
+        ],
+
+        "structures":[
+            {
+            "id":"village",
+            "count":[1,2],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            }
+        ],
+
+        "terrain":{
+            "hill_patches":10,
+            "hill_size":5,
+            "dirt_patches":40,
+            "dirt_size":3
+        }
     }
 ],
 

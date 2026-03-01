@@ -91,12 +91,16 @@ enum TILEID {
     TILE_ID_FENCE_END,
 
     TILE_ID_ROAD_START,
+
     TILE_ID_ROAD_UP_RIGHT_DOWN,
     TILE_ID_ROAD_UP_DOWN_LEFT,
     TILE_ID_ROAD_RIGHT_DOWN_LEFT,
     TILE_ID_ROAD_UP_RIGHT_LEFT,
     TILE_ID_ROAD_CENTER,
+    
     TILE_ID_ROAD_END,
+
+    TILE_ID_DEBUG_1,
 
     TILE_ID_MAX,
 };
@@ -121,6 +125,7 @@ enum TILESIDE {
 enum MAPZONE {
     ZONE_NONE = -1,
     ZONE_GRASS,
+    ZONE_FORREST,
     ZONE_DIRT,
     ZONE_PATH,
     ZONE_PATH_SIDE,
@@ -135,6 +140,15 @@ enum MAPZONE {
     ZONE_DECCO_ENTITY,
     ZONE_CREATURE,
     ZONE_ROAD,
+    Zone_ROAD_SIDE,
+};
+
+
+enum BIOME_TYPE {
+    BIOME_NONE = -1,
+    BIOME_PLAINS,
+    BIOME_FORREST,
+    BIOME_HILLS,
 };
 
 
@@ -154,6 +168,7 @@ struct SortedTiles {
     std::vector<TILEID> path_tiles;
     std::vector<TILEID> dirt_tiles;
     std::vector<TILEID> fence_tiles;
+    std::vector<TILEID> road_tiles;
 };
 
 
@@ -178,24 +193,95 @@ struct WorldGenDeccoEntityData {
 
 };
 
+struct WorldGenBiomeData {
+    BIOME_TYPE type;
+    float coverage;
+};
+
+struct WorldGenLandmark {
+    std::string id;
+    BIOME_TYPE biome;
+    int count_min;
+    int count_max;
+    int min_distance;
+};
+
+
+struct WorldGenTerrain {
+    int hill_patches;
+    int hill_size;
+    int dirt_patches;
+    int dirt_size;
+};
+
+
 struct WorldGenData {
+    
     std::string map_name;
     int map_width;
     int map_height;
-    int village_count;
-    int structure_count;
+
     float tree_coverage;
     float grass_coverage;
+
     bool has_shelter;
+
     std::string terrrain_set_name;
     std::string structure_set_name;
+
+    WorldGenTerrain terrain;
+
     std::vector<std::string> exit_dest_strings;
+    std::vector< WorldGenBiomeData > biome_data;
+    std::vector< WorldGenLandmark> structure_data;
 };
 
 extern std::vector<WorldGenData> g_worldgen_data;
 
 
+
+struct WorldGenBiome {
+    BIOME_TYPE type;
+    Rectangle rect;
+};
+
+
+struct PoiPatch {
+    Rectangle rect;
+    float road_proximity;
+    float shelter_proximity;
+};
+
+
+struct WorldGenPlan {
+
+    Vector2 map_size;
+
+    Vector2 road_midpoint;
+
+    std::vector< std::vector<Vector2> > paths;
+    std::vector<Vector2> structure_positions;
+    std::vector<Vector2> exit_positions;
+    std::vector<std::string> exit_dest_strings;
+    std::vector<Rectangle> ruins_rects;
+
+
+    std::vector<WorldGenBiome> biomes;
+
+    std::vector<PoiPatch> poi_patches;
+
+    std::vector<Rectangle> spawn_patches;
+    std::vector<int> used_spawn_patches;
+
+    std::vector<Rectangle> reserved_rects;
+
+
+
+};
+
 struct WorldGenTileSet {
+    WorldGenPlan wg_plan;
+    WorldGenData wg_data;
     std::string identifier;
     int c_wid;
     int c_hei;
@@ -204,23 +290,8 @@ struct WorldGenTileSet {
     int px_wid;
     int px_hei;
     int tile_grid_size;
-    int num_paths;
+    //int num_paths;
     Vector2 map_size;
-
-
-    float tree_coverage;
-    float grass_coverage;
-    
-    int max_villages;
-    int max_structures;
-
-    std::vector<Rectangle> poi_patches;
-    std::vector<int> used_poi_patches;
-
-    std::vector<Rectangle> spawn_patches;
-    std::vector<int> used_spawn_patches;
-
-    bool has_shelter;
 
     int tilesheet_uid;
     int collision_layer_index = -1;
@@ -232,22 +303,15 @@ struct WorldGenTileSet {
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
     std::vector<MAPZONE> spawn_zone_grid;
+    std::vector<BIOME_TYPE> biome_grid;
     std::vector<int> collision_grid;
-    std::vector< std::vector<Vector2> > paths;
-    std::vector<Vector2> structure_positions;
-    std::vector<Vector2> exit_positions;
-    std::vector<Rectangle> ruins_rects;
+
     std::vector<WorldGenDeccoEntityData> layer_decco_data;
     std::vector<WorldGenDeccoEntityData> entity_decco_data;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
     std::unordered_map<std::string, WorldGenStructureData> layer_decco_lookup;
     std::unordered_map<std::string, WorldGenStructureData> entity_decco_lookup;
-    std::vector<std::string> exit_dest_strings;
-    //std::vector<int> house_transition_tiles;
-    //std::vector<int> shadow_tiles;
 };
-
-
 
 extern std::vector<WorldGenTileSet> g_worldgen_tilesets;
 
@@ -287,8 +351,9 @@ void CarveEmptySpace(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 
 //utils
+void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size);
 
-void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
+//void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
 Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset);
 
 void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size);
@@ -303,6 +368,25 @@ TILEID GetFenceTileBottom(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_
 
 TILEID StrToTileId(const std::string& s);
 
+
+
 std::array<bool,4> TileIdGetAutotile(TILEID tile_id);
 
 void LoadMapGenData(json &j);
+
+
+WorldGenPlan GenerateWorldGenPlan(WorldGenData &wg_data);
+
+void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan);
+
+void PlanRegions(WorldGenData &wg_data, WorldGenPlan &wg_plan);
+
+void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan);
+
+void PlanRoads(WorldGenData &wg_data, WorldGenPlan &wg_plan);
+
+BIOME_TYPE ChooseBiome(WorldGenData &wg_data);
+
+void SplitRegion(std::vector<Rectangle>& regions);
+
+WorldGenBiome* GetBiome(Vector2 position, WorldGenTileSet &_tileset);

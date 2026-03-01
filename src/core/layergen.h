@@ -16,3 +16,9 @@ void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
 void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset);
+
+
+void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+
+
+void GenerateDebugLayer(LDTKLevel &_level, WorldGenTileSet &_tileset);
