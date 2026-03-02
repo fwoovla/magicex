@@ -270,6 +270,7 @@ GameScene::~GameScene()
     g_sub_temp_containers.clear();
 
     ClearLevelData(level_data);
+    //g_ldtk_maps.levels.erase(g_ldtk_maps.levels.end());
 
     TraceLog(LOG_INFO, "SCENE DESTRUCTOR:  GAME");
     TraceLog(LOG_INFO, "\n\n");

@@ -22,11 +22,19 @@
 
         "structures":[
             {
-            "id":"house",
-            "count":[1,2],
+            "id":"spawn",
+            "count":[1,1],
+            "size":[10,10],
             "prefer_region":"BIOME_PLAINS",
             "min_distance":40
-            }
+            },
+            {
+            "id":"house",
+            "count":[5,5],
+            "size":[10,10],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            }            
         ],
 
         "terrain":{
@@ -65,8 +73,16 @@
 
         "structures":[
             {
+            "id":"spawn",
+            "count":[1,1],
+            "size":[10,10],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            },
+            {
             "id":"village",
             "count":[1,2],
+            "size":[10,10],
             "prefer_region":"BIOME_PLAINS",
             "min_distance":40
             }
@@ -107,8 +123,16 @@
 
         "structures":[
             {
+            "id":"spawn",
+            "count":[1,1],
+            "size":[10,10],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":40
+            },
+            {
             "id":"village",
             "count":[1,2],
+            "size":[10,10],
             "prefer_region":"BIOME_PLAINS",
             "min_distance":40
             }

@@ -247,9 +247,12 @@ obj/Debug/utils.o: src/core/utils.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/any \
  src/core/utils.h src/core/baseentity.h src/core/areas.h src/core/label.h \
  src/core/entities.h src/core/dialogue.h src/core/mapgen.h \
- src/core/resources.h src/core/itemgenerator.h src/core/loottables.h \
- src/core/data.h /usr/include/c++/13/span src/core/spells.h \
- src/core/events.h src/core/viewport.h src/core/input.h src/core/button.h \
+ /usr/include/c++/13/queue /usr/include/c++/13/deque \
+ /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
+ /usr/include/c++/13/bits/stl_queue.h src/core/resources.h \
+ src/core/itemgenerator.h src/core/loottables.h src/core/data.h \
+ /usr/include/c++/13/span src/core/spells.h src/core/events.h \
+ src/core/viewport.h src/core/input.h src/core/button.h \
  src/core/charactereffectentity\ .h src/core/modules.h \
  src/core/playercharacter.h src/core/entityspawner.h src/core/basescene.h \
  src/core/tilelayer.h src/core/uilayers.h src/core/scenes.h \
@@ -578,6 +581,11 @@ src/core/label.h:
 src/core/entities.h:
 src/core/dialogue.h:
 src/core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/core/resources.h:
 src/core/itemgenerator.h:
 src/core/loottables.h:

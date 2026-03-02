@@ -594,7 +594,7 @@ void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
                 }
                 else if(biome.type == BIOME_HILLS) {
                     _tileset.lower_zone_grid[index] = ZONE_GRASS;
-                    _tileset.upper_zone_grid[index] = ZONE_BORDER;
+                    //_tileset.upper_zone_grid[index] = ZONE_BORDER;
                 }
 
             }
@@ -603,7 +603,29 @@ void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 }
 
+void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
+    std::vector<Rectangle> hill_rects;
+
+    for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
+        if(biome.type == BIOME_HILLS) {
+            hill_rects.push_back(biome.rect);
+        }
+    }
+
+    
+
+
+    for(Rectangle &rect : hill_rects) {
+        for(int y = rect.y; y < rect.y + rect.height; y++) {
+            for(int x = rect.x; x < rect.x + rect.width; x++) {
+                int index = y * _tileset.map_size.x + x;
+                _tileset.upper_zone_grid[index] = ZONE_BORDER;
+
+            }
+        }
+    }
+}
 
 
 

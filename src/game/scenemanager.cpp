@@ -231,7 +231,9 @@ void InstanceLevelObjects(LevelData &level_data) {
 
         for(int level_index = 0; level_index < g_ldtk_maps.levels.size(); level_index++) {
             if(g_ldtk_maps.levels[level_index].identifier == new_area->payload_s) {
-                new_area->payload_i = level_index;
+                if(level_data.level_transitions[t_index].identifier != "LevelTransition") {
+                    new_area->payload_i = level_index;
+                }
             }
         }
         TraceLog(LOG_INFO, "-- transition to level index %i --", new_area->payload_i);

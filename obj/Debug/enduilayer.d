@@ -253,7 +253,9 @@ obj/Debug/enduilayer.o: src/game/scenes/enduilayer.cpp \
  src/game/scenes/../../core/areas.h src/game/scenes/../../core/label.h \
  src/game/scenes/../../core/entities.h \
  src/game/scenes/../../core/dialogue.h \
- src/game/scenes/../../core/mapgen.h \
+ src/game/scenes/../../core/mapgen.h /usr/include/c++/13/queue \
+ /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
+ /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_queue.h \
  src/game/scenes/../../core/resources.h \
  src/game/scenes/../../core/itemgenerator.h \
  src/game/scenes/../../core/loottables.h \
@@ -595,6 +597,11 @@ src/game/scenes/../../core/label.h:
 src/game/scenes/../../core/entities.h:
 src/game/scenes/../../core/dialogue.h:
 src/game/scenes/../../core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/game/scenes/../../core/resources.h:
 src/game/scenes/../../core/itemgenerator.h:
 src/game/scenes/../../core/loottables.h:

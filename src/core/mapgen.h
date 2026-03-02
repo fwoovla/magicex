@@ -1,5 +1,6 @@
 #pragma once
 #include "gamedefs.h"
+#include <queue>
 
 
 enum TILEID {
@@ -198,7 +199,16 @@ struct WorldGenBiomeData {
     float coverage;
 };
 
-struct WorldGenLandmark {
+struct StructureProfile {
+    float wants_road   = 0.0f;
+    float wants_center = 0.0f;
+    float wants_edge   = 0.0f;
+    float wants_forrest = 0.0f;
+};
+
+struct WorldGenStructure {
+    StructureProfile profile;
+    Vector2 size;
     std::string id;
     BIOME_TYPE biome;
     int count_min;
@@ -233,7 +243,7 @@ struct WorldGenData {
 
     std::vector<std::string> exit_dest_strings;
     std::vector< WorldGenBiomeData > biome_data;
-    std::vector< WorldGenLandmark> structure_data;
+    std::vector< WorldGenStructure> structure_data;
 };
 
 extern std::vector<WorldGenData> g_worldgen_data;
@@ -246,34 +256,55 @@ struct WorldGenBiome {
 };
 
 
-struct PoiPatch {
+enum InfluenceType {
+    INF_ROAD,
+    INF_SHELTER,
+    INF_WILDERNESS,
+    INF_CENTER,
+    INF_EDGE
+};
+
+
+struct InfluenceCell {
     Rectangle rect;
+    bool reserverd = false;
+    float road = 0.0f;
+    float shelter = 0.0f;
+    float forrest = 0.0f;
+    float center = 0.0f;
+    float edge = 0.0f;
+};
+
+
+struct StructurePatch {
+    Rectangle rect;
+    std::string id;
     float road_proximity;
     float shelter_proximity;
+    float forrest_proximity;
+    float center_proximity;
+    float edge_proximity;
 };
 
 
 struct WorldGenPlan {
 
     Vector2 map_size;
-
     Vector2 road_midpoint;
-
     std::vector< std::vector<Vector2> > paths;
     std::vector<Vector2> structure_positions;
     std::vector<Vector2> exit_positions;
     std::vector<std::string> exit_dest_strings;
     std::vector<Rectangle> ruins_rects;
-
-
     std::vector<WorldGenBiome> biomes;
-
-    std::vector<PoiPatch> poi_patches;
-
+    std::vector<StructurePatch> poi_patches;
     std::vector<Rectangle> spawn_patches;
     std::vector<int> used_spawn_patches;
-
     std::vector<Rectangle> reserved_rects;
+
+    std::vector<Vector2> road_positions;
+    std::vector<Vector2> edge_positions;
+    std::vector<InfluenceCell> influence_grid;
 
 
 
@@ -299,7 +330,6 @@ struct WorldGenTileSet {
     SortedTiles sorted_tiles;
     std::vector <LDTKEnumTag> tile_tags;
     std::unordered_map <int, WorldGenAutoTile> tile_lookup;
-    //std::vector<PathWorm> path_worms;
     std::vector<MAPZONE> lower_zone_grid;
     std::vector<MAPZONE> upper_zone_grid;
     std::vector<MAPZONE> spawn_zone_grid;
@@ -325,8 +355,6 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset);
 void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
 void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset);
 void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities, std::unordered_map<std::string, WorldGenStructureData> &structure_lookup);
-//void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities);
-//void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> decco_bounding_entities);
 void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities);
 
 //worldgen
@@ -334,27 +362,8 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name);
 
 void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
-void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
-void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
-void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateExits(LDTKLevel &level, WorldGenTileSet &_tileset);
-void GenerateCreatureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
-void FillWithHillZone(LDTKLevel &level, WorldGenTileSet &_tileset);
-void CarveEmptySpace(LDTKLevel &level, WorldGenTileSet &_tileset);
-
-
 //utils
-void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size);
 
-//void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
-Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset);
 
 void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size);
 Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset);
@@ -390,3 +399,34 @@ BIOME_TYPE ChooseBiome(WorldGenData &wg_data);
 void SplitRegion(std::vector<Rectangle>& regions);
 
 WorldGenBiome* GetBiome(Vector2 position, WorldGenTileSet &_tileset);
+
+void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size);
+
+Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset);
+
+
+float& GetInfluenceChannel(InfluenceCell& c, InfluenceType t);
+
+void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x, int start_y, float strength, float decay, InfluenceType type);
+
+void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size);
+
+StructureProfile BuildStructureProfile(WorldGenStructure &structure);
+
+
+//unused
+//void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
+//void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
+//void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateVillageZone(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateStructureZone(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateHillZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateHillZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
+//void GenerateRuinsZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateExits(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void GenerateCreatureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void FillWithHillZone(LDTKLevel &level, WorldGenTileSet &_tileset);
+//void CarveEmptySpace(LDTKLevel &level, WorldGenTileSet &_tileset);

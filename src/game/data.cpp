@@ -767,19 +767,17 @@ void SaveGame(LevelData &level_data) {
     wgfile >> wgj;
     wgfile.close(); 
 
-/*     
-        */
-        
 
+    //NOT SAVING
     for(LDTKLevel &level : g_ldtk_maps.levels) {
 
-        bool already_saved = false;
+        bool already_saved = true;
 
-        for(int _l = 0; _l < wgj["levels"].size(); _l++) {
+/*         for(int _l = 0; _l < wgj["levels"].size(); _l++) {
             if(level.identifier == wgj["levels"][_l]["identifier"]) {
                 already_saved = true;
             }
-        }
+        } */
 
         if (level.is_worldgen and !already_saved) {
             TraceLog(LOG_INFO, "SAVING LEVEL  %s", level.identifier.c_str());
@@ -1070,6 +1068,12 @@ void LoadLevelData(LevelData &level_data) {
 
     else if (g_game_data.next_map_index == -1) {
         //LDTKLevel new_level;
+        for(int l = 0; l < g_ldtk_maps.levels.size(); l++) {
+            if(g_ldtk_maps.levels[l].identifier == g_game_data.level_name_to_create) {
+                g_ldtk_maps.levels.erase(g_ldtk_maps.levels.begin() + l);
+            }
+        }
+        
         map_index = g_ldtk_maps.levels.size();
         g_ldtk_maps.levels.emplace_back();
 

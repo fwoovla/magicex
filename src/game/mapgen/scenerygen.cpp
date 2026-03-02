@@ -24,15 +24,7 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         int index = y * temp_grid_size.x + x;
         int zone_index = y/2 * (_tileset.map_size.x) + x/2;
 
-        //WorldGenBiome *this_biome = nullptr;
-    /*         
-        for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
-            if( (x/2 > biome.rect.x and x/2 < biome.rect.x + biome.rect.width ) and (y/2 > biome.rect.y and y/2 < biome.rect.y + biome.rect.height)  ) {
-                this_biome = &biome;
-            }
-        }
-    */
-               
+    
         WorldGenBiome *this_biome = GetBiome((Vector2){(float)x/2,(float)y/2}, _tileset);
 
         if(this_biome != nullptr) {
@@ -186,15 +178,6 @@ void PopulateGrass(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         int index = y * temp_grid_size.x + x;
 
         int zone_index = y/2 * (_tileset.map_size.x) + x/2;
-
-        //WorldGenBiome *this_biome = nullptr;
-        /* 
-        for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
-            if( (x/2 > biome.rect.x and x/2 < biome.rect.x + biome.rect.width ) and (y/2 > biome.rect.y and y/2 < biome.rect.y + biome.rect.height)  ) {
-                this_biome = &biome;
-                }
-            }
-         */
 
         WorldGenBiome *this_biome = GetBiome((Vector2){(float)x/2,(float)y/2}, _tileset);
 

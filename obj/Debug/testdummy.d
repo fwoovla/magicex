@@ -255,7 +255,9 @@ obj/Debug/testdummy.o: src/game/entities/testdummy.cpp \
  src/game/entities/../../core/label.h \
  src/game/entities/../../core/entities.h \
  src/game/entities/../../core/dialogue.h \
- src/game/entities/../../core/mapgen.h \
+ src/game/entities/../../core/mapgen.h /usr/include/c++/13/queue \
+ /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
+ /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_queue.h \
  src/game/entities/../../core/resources.h \
  src/game/entities/../../core/itemgenerator.h \
  src/game/entities/../../core/loottables.h \
@@ -599,6 +601,11 @@ src/game/entities/../../core/label.h:
 src/game/entities/../../core/entities.h:
 src/game/entities/../../core/dialogue.h:
 src/game/entities/../../core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/game/entities/../../core/resources.h:
 src/game/entities/../../core/itemgenerator.h:
 src/game/entities/../../core/loottables.h:

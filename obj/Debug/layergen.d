@@ -253,7 +253,9 @@ obj/Debug/layergen.o: src/game/mapgen/layergen.cpp \
  src/game/mapgen/../../core/areas.h src/game/mapgen/../../core/label.h \
  src/game/mapgen/../../core/entities.h \
  src/game/mapgen/../../core/dialogue.h \
- src/game/mapgen/../../core/mapgen.h \
+ src/game/mapgen/../../core/mapgen.h /usr/include/c++/13/queue \
+ /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
+ /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_queue.h \
  src/game/mapgen/../../core/resources.h \
  src/game/mapgen/../../core/itemgenerator.h \
  src/game/mapgen/../../core/loottables.h \
@@ -596,6 +598,11 @@ src/game/mapgen/../../core/label.h:
 src/game/mapgen/../../core/entities.h:
 src/game/mapgen/../../core/dialogue.h:
 src/game/mapgen/../../core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/game/mapgen/../../core/resources.h:
 src/game/mapgen/../../core/itemgenerator.h:
 src/game/mapgen/../../core/loottables.h:

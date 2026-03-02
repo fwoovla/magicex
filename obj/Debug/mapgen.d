@@ -249,19 +249,22 @@ obj/Debug/mapgen.o: src/game/mapgen.cpp /usr/include/stdc-predef.h \
  src/game/../core/utils.h src/game/../core/baseentity.h \
  src/game/../core/areas.h src/game/../core/label.h \
  src/game/../core/entities.h src/game/../core/dialogue.h \
- src/game/../core/mapgen.h src/game/../core/resources.h \
- src/game/../core/itemgenerator.h src/game/../core/loottables.h \
- src/game/../core/data.h /usr/include/c++/13/span \
- src/game/../core/spells.h src/game/../core/events.h \
- src/game/../core/viewport.h src/game/../core/input.h \
- src/game/../core/button.h src/game/../core/charactereffectentity\ .h \
- src/game/../core/modules.h src/game/../core/playercharacter.h \
- src/game/../core/entityspawner.h src/game/../core/basescene.h \
- src/game/../core/tilelayer.h src/game/../core/uilayers.h \
- src/game/../core/scenes.h src/game/../core/scenemanager.h \
- src/game/../core/game.h src/game/../core/layergen.h \
- src/game/../core/pathgen.h src/game/../core/scenerygen.h \
- /usr/include/c++/13/random /usr/include/c++/13/bits/random.h \
+ src/game/../core/mapgen.h /usr/include/c++/13/queue \
+ /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
+ /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_queue.h \
+ src/game/../core/resources.h src/game/../core/itemgenerator.h \
+ src/game/../core/loottables.h src/game/../core/data.h \
+ /usr/include/c++/13/span src/game/../core/spells.h \
+ src/game/../core/events.h src/game/../core/viewport.h \
+ src/game/../core/input.h src/game/../core/button.h \
+ src/game/../core/charactereffectentity\ .h src/game/../core/modules.h \
+ src/game/../core/playercharacter.h src/game/../core/entityspawner.h \
+ src/game/../core/basescene.h src/game/../core/tilelayer.h \
+ src/game/../core/uilayers.h src/game/../core/scenes.h \
+ src/game/../core/scenemanager.h src/game/../core/game.h \
+ src/game/../core/layergen.h src/game/../core/pathgen.h \
+ src/game/../core/scenerygen.h /usr/include/c++/13/random \
+ /usr/include/c++/13/bits/random.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h \
  /usr/include/c++/13/bits/random.tcc
 /usr/include/stdc-predef.h:
@@ -588,6 +591,11 @@ src/game/../core/label.h:
 src/game/../core/entities.h:
 src/game/../core/dialogue.h:
 src/game/../core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/game/../core/resources.h:
 src/game/../core/itemgenerator.h:
 src/game/../core/loottables.h:

@@ -253,7 +253,9 @@ obj/Debug/magicmissle.o: src/game/spells/magicmissle.cpp \
  src/game/spells/../../core/areas.h src/game/spells/../../core/label.h \
  src/game/spells/../../core/entities.h \
  src/game/spells/../../core/dialogue.h \
- src/game/spells/../../core/mapgen.h \
+ src/game/spells/../../core/mapgen.h /usr/include/c++/13/queue \
+ /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
+ /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_queue.h \
  src/game/spells/../../core/resources.h \
  src/game/spells/../../core/itemgenerator.h \
  src/game/spells/../../core/loottables.h \
@@ -595,6 +597,11 @@ src/game/spells/../../core/label.h:
 src/game/spells/../../core/entities.h:
 src/game/spells/../../core/dialogue.h:
 src/game/spells/../../core/mapgen.h:
+/usr/include/c++/13/queue:
+/usr/include/c++/13/deque:
+/usr/include/c++/13/bits/stl_deque.h:
+/usr/include/c++/13/bits/deque.tcc:
+/usr/include/c++/13/bits/stl_queue.h:
 src/game/spells/../../core/resources.h:
 src/game/spells/../../core/itemgenerator.h:
 src/game/spells/../../core/loottables.h:
