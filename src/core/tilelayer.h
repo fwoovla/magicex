@@ -20,3 +20,6 @@ bool CollideAndSlide(BaseEntity *checker, CollisionResult &collision_result, Vec
 
 bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result);
 
+
+void DrawMapGenDebugVisuals(LevelData &level_data);
+

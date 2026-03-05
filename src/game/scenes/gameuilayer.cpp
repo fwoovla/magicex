@@ -38,6 +38,8 @@ void GameUILayer::Draw() {
     if(!g_game_settings.show_debug){
         return;
     }
+
+
     DrawLabelCentered(title_label);
 
     DrawLabel(debug_zoom_level);

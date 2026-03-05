@@ -630,7 +630,7 @@ void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 
-void GenerateDebugLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
+void GenerateDebugVisuals(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     LDTKLayerInstance new_layer;
     new_layer.identifier = "TerrainDebug";
     new_layer.type = "Tiles";
@@ -639,7 +639,9 @@ void GenerateDebugLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     new_layer.c_wid = _tileset.map_size.x;
     new_layer.c_hei = _tileset.map_size.y;
 
-     _level.layer_instances.push_back(new_layer);
+    _level.layer_instances.push_back(new_layer);
+
+
 
 
 }

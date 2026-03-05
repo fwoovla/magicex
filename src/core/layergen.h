@@ -22,4 +22,5 @@ void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 
 void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset);
 
-void GenerateDebugLayer(LDTKLevel &_level, WorldGenTileSet &_tileset);
+void GenerateDebugVisuals(LDTKLevel &_level, WorldGenTileSet &_tileset);
+

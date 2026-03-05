@@ -90,6 +90,9 @@ float ShortestAngleDiffRad(float from, float to);
 
 float RotateTowardsRad(float current, float target, float maxTurn, float dt);
 
+float RectCenterDistSq(const Rectangle& a, const Rectangle& b);
+
+
 void SetCursorPosition(Vector2 _pos);
 
 

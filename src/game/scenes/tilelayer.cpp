@@ -172,3 +172,39 @@ bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result) {
 
     return collided;
 }
+
+
+
+
+
+
+void DrawMapGenDebugVisuals(LevelData &level_data) {
+
+    int ts = level_data.precalc.tile_size;
+
+    for(InfluenceCell cell : g_debug_plan.influence_grid) {
+        Color color = {
+            (unsigned char)(cell.road * 150),
+            (unsigned char)(cell.road * 150),
+            (unsigned char)(cell.road * 150),
+            //(unsigned char)(cell.center * 100), 
+            //(unsigned char)(cell.edge * 100), 
+            (unsigned char)180.0}  ;//BLANK;
+            //Color color = TRANSDARKERGRAY;
+        if(cell.reserved) {
+            color = DARKRED;
+        }
+        DrawRectangle(cell.rect.x * ts, cell.rect.y * ts, cell.rect.width * ts, cell.rect.height * ts, color);
+        DrawRectangleLines(cell.rect.x * ts, cell.rect.y * ts, cell.rect.width * ts, cell.rect.height * ts, RAYWHITE);
+    }
+
+    for(StructurePatch patch : g_debug_plan.poi_patches) {
+        //Rectangle rect = patch.rect;
+        DrawRectangle((patch.rect.x + 1) * ts, (patch.rect.y + 1) * ts, (patch.rect.width - 2) * ts, (patch.rect.height - 2) * ts, DARKGREEN);
+    }
+
+    for(Rectangle rect : g_debug_plan.reserved_rects) {
+        //Rectangle rect = patch.rect;
+        DrawRectangleLines((rect.x * ts) - 1, (rect.y * ts) - 1, (rect.width * ts) + 2, (rect.height * ts) + 2, GOLD);
+    }
+}

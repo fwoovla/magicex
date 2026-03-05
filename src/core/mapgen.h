@@ -267,7 +267,7 @@ enum InfluenceType {
 
 struct InfluenceCell {
     Rectangle rect;
-    bool reserverd = false;
+    bool reserved = false;
     float road = 0.0f;
     float shelter = 0.0f;
     float forrest = 0.0f;
@@ -309,6 +309,8 @@ struct WorldGenPlan {
 
 
 };
+
+extern WorldGenPlan g_debug_plan;
 
 struct WorldGenTileSet {
     WorldGenPlan wg_plan;
@@ -412,6 +414,20 @@ void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x,
 void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size);
 
 StructureProfile BuildStructureProfile(WorldGenStructure &structure);
+
+
+bool IsFarEnough(Rectangle& rect, std::vector<StructurePatch>& placed, float min_dist);
+
+bool IsRectFree(Rectangle& candidate, std::vector<Rectangle>& reserved);
+
+
+
+
+
+
+
+
+
 
 
 //unused

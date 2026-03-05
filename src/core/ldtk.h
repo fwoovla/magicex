@@ -9,6 +9,7 @@
 #include "areas.h"
 #include "entities.h"
 #include "dialogue.h"
+//#include "mapgen.h"
 
 
 #define MAX_TILE_SHEETS 10
@@ -155,6 +156,7 @@ struct LDTKEnvironmentData {
 };
 
 struct LDTKLevel {
+
     bool is_shelter = false;
     bool is_sub_map = false;
     bool is_worldgen = false;

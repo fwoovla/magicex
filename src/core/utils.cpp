@@ -130,6 +130,20 @@ float ShortestAngleDiffRad(float from, float to) {
 }
 
 
+float RectCenterDistSq(const Rectangle& a, const Rectangle& b)
+{
+    float ax = a.x + a.width  * 0.5f;
+    float ay = a.y + a.height * 0.5f;
+    float bx = b.x + b.width  * 0.5f;
+    float by = b.y + b.height * 0.5f;
+
+    float dx = ax - bx;
+    float dy = ay - by;
+
+    return dx*dx + dy*dy;
+}
+
+
 void SetCursorPosition(Vector2 _pos) {
     g_cursor.poisition = _pos;
     g_cursor.sprite.position = _pos;

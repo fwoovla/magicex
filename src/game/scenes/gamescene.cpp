@@ -191,11 +191,17 @@ void GameScene::DrawScene()
         BeginMode2D(g_camera);
         g_debug_data.tiles_drawn = LDTKDrawMap(g_current_player->position);
 
+        if(g_game_settings.show_debug){
+            DrawMapGenDebugVisuals(level_data);
+        }
+
+
         for (auto e : level_data.draw_list)
         {
             e->Draw();
         }
         g_debug_data.entities_drawn = level_data.draw_list.size();
+        
 
         // LDTKDrawShadows(g_current_player->position);
         DL_Draw(level_data.ui_entities);

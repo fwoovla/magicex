@@ -104,6 +104,7 @@ void SceneManager::CleanUp() {
 void SceneManager::DrawScene() {
 
     g_current_scene->DrawScene();
+    
 
 }
 

@@ -192,7 +192,7 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
     }
 
     if(wg_data == nullptr) {
-        TraceLog(LOG_INFO, "WORLD GEN DATA NOT FOUND %s", map_name.c_str());
+        TraceLog(LOG_INFO, "WORLD GEN DATA NOT FOUND FOR MAP: %s", map_name.c_str());
         return;
     }
 
@@ -271,6 +271,7 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
     TraceLog(LOG_INFO, "-------------------------------------------");
 
     this_tileset->wg_plan = GenerateWorldGenPlan(this_tileset->wg_data);
+    g_debug_plan = this_tileset->wg_plan;
 
     GenerateEntitiesLayer(new_level, *this_tileset);
     GenerateZones(new_level, *this_tileset);
@@ -295,6 +296,8 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
     PlaceCreatureEntities(new_level, *this_tileset);
     
     GenerateCollisionLayer(new_level, *this_tileset);
+
+    GenerateDebugVisuals(new_level, *this_tileset);
 }
 
 
@@ -1290,35 +1293,110 @@ void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
 
 
     for(WorldGenStructure & structure : wg_data.structure_data) {
-        int count = GetRandomValue(structure.count_min, structure.count_max);
-        Vector2 size = structure.size;
-        StructureProfile &p = structure.profile;
 
+        int count = GetRandomValue(structure.count_min, structure.count_max);
+        StructureProfile &p = structure.profile;
+        Vector2 structure_size = Vector2Add(structure.size, (Vector2){(float)structure.min_distance, (float)structure.min_distance});
+
+
+        TraceLog(LOG_INFO, "placing structure: %s ", structure.id.c_str());
 
         for(int i = 0; i < count; i++) {
+            std::vector<std::pair<InfluenceCell*, float>> candidates;
 
-            float best_score = 0.0f;
-            InfluenceCell *best_cell = nullptr;
-            
+
             for(InfluenceCell &cell : wg_plan.influence_grid) {
-                if(!cell.reserverd) {
 
-                    float _score =      (cell.center  * p.wants_center) + 
-                    (cell.road  * p.wants_road) +
-                    (cell.forrest  * p.wants_forrest) +
-                    (cell.edge * p.wants_edge);
+                if(!cell.reserved) {
+
+                    float min_dist = (float)structure.min_distance * 16.0f;
                     
-                    if(_score > best_score) {
-                        best_score = _score;
-                        best_cell = &cell;
+                    if(IsFarEnough(cell.rect, wg_plan.poi_patches, min_dist)) {
+
+                        float score = 
+                        (cell.center  * p.wants_center) + 
+                        (cell.road  * p.wants_road) +
+                        (cell.forrest  * p.wants_forrest) +
+                        (cell.edge * p.wants_edge);
+
+                        if (score > 0.001f) {
+
+                            Vector2 center = {cell.rect.x + (cell.rect.width/2), cell.rect.y + (cell.rect.height/2)};
+
+                            float structure_half_w = structure_size.x/2;
+                            float structure_half_h = structure_size.y/2;
+
+                            Rectangle  footprint;
+                            footprint.x = center.x - structure_half_w;
+                            footprint.y = center.y - structure_half_h;
+                            footprint.width = structure_size.x;
+                            footprint.height =structure_size.y;
+
+                            if(IsRectFree(footprint, wg_plan.reserved_rects)) {
+                                candidates.push_back({ &cell, score });
+                                //wg_plan.reserved_rects.push_back(footprint);
+                            }
+
+                        }
+
                     }
                 }
             }
-            if(best_cell != nullptr) {
-                best_cell->reserverd = true;
-                TraceLog(LOG_INFO, "++++++-----------structure %s planned at %0.0f  %0.0f", structure.id.c_str() , best_cell->rect.x, best_cell->rect.y);
-                //place structure patch and reserve rectange
+
+            if(!candidates.empty()) {
+
+                TraceLog(LOG_INFO, "choosing from %i candidate cells ", candidates.size());
+                            
+                std::sort(candidates.begin(), candidates.end(), [](const auto& a, const auto& b){
+                    return a.second > b.second;
+                });
+
+                int top_range = std::min(5, (int)candidates.size());
+                int choice = GetRandomValue(0, top_range - 1);
+
+                InfluenceCell* chosen = candidates[choice].first;
+                chosen->reserved = true;
+               
+                float cell_half_w = chosen->rect.width/2;
+                float cell_half_h = chosen->rect.height/2;
+
+                float structure_half_w = structure_size.x/2;
+                float structure_half_h = structure_size.y/2;
+
+                Vector2 center = {chosen->rect.x + cell_half_w, chosen->rect.y + cell_half_h};
+
+                Rectangle  footprint;
+                footprint.x = center.x - structure_half_w;
+                footprint.y = center.y - structure_half_h;
+                footprint.width = structure_size.x;
+                footprint.height =structure_size.y;
+
+
+                StructurePatch patch;
+                patch.rect = footprint;
+                patch.id = structure.id;
+
+                // Store influence context (useful later for AI or loot logic)
+                patch.road_proximity    = chosen->road;
+                patch.shelter_proximity = chosen->shelter;
+                patch.forrest_proximity = chosen->forrest;
+                patch.center_proximity  = chosen->center;
+                patch.edge_proximity    = chosen->edge;
+
+                wg_plan.poi_patches.push_back(patch);
+
+                wg_plan.reserved_rects.push_back(patch.rect);
+
+                TraceLog(LOG_INFO, "Planned structure %s at %.0f %.0f",
+                    structure.id.c_str(),
+                    center.x,
+                    center.y);
+ 
             }
+            else {
+                TraceLog(LOG_INFO, "no available candadate cells");
+            }
+
         }
     }
 
@@ -1570,7 +1648,8 @@ void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x,
             int nx = x + d[0];
             int ny = y + d[1];
 
-            if(nx<0||ny<0||nx>w||ny>h)
+            //if(nx<0||ny<0||nx>w||ny>h)
+            if (nx < 0 || ny < 0 || nx >= w || ny >= h)
                 continue;
 
             float& neighbor =
@@ -1633,7 +1712,7 @@ void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size) {
         int y = (int)r_pos.y;
         int gx = (int)(x / patch_size);
         int gy = (int)(y / patch_size);
-        PaintInfluence(wg_plan.influence_grid, grid_w, grid_h, gx, gy, 1.0f, 0.1f, INF_ROAD);
+        PaintInfluence(wg_plan.influence_grid, grid_w, grid_h, gx, gy, 1.0f, 0.2f, INF_ROAD);
     }
 
 
@@ -1659,7 +1738,7 @@ void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size) {
         
         int x = i%(int)(wg_plan.map_size.x/patch_size);
         int y = i/(int)(wg_plan.map_size.y/patch_size);
-        TraceLog(LOG_INFO, "infl cell: #%i    (%i,%i)  r:%0.2f  c:%0.2f  e:%0.2f s:%0.2f f:%0.2f    rect %0.2f %0.2f %0.2f %0.2f ", i, x, y, 
+/*         TraceLog(LOG_INFO, "infl cell: #%i    (%i,%i)  r:%0.2f  c:%0.2f  e:%0.2f s:%0.2f f:%0.2f    rect %0.2f %0.2f %0.2f %0.2f ", i, x, y, 
             cell.road,
             cell.center,
             cell.edge,
@@ -1669,7 +1748,7 @@ void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size) {
             cell.rect.y,
             cell.rect.width,
             cell.rect.height            
-        ); 
+        );  */
         i++;
     }
 
@@ -1679,7 +1758,7 @@ void CreateInfluenceGrid(WorldGenPlan &wg_plan, int patch_size) {
 StructureProfile BuildStructureProfile(WorldGenStructure &structure) {
     StructureProfile p;
 
-    switch(structure.biome)
+/*     switch(structure.biome)
     {
         case BIOME_PLAINS:
             p.wants_road   = 0.6f;
@@ -1695,22 +1774,54 @@ StructureProfile BuildStructureProfile(WorldGenStructure &structure) {
             p.wants_edge = 0.6f;
             break;
     }
-
+ */
     // shelters tend to cluster slightly
     if(structure.id == "house"){
-        p.wants_road += 0.1f;
+        p.wants_road = 0.5f;
+        p.wants_edge = 0.0f;
+        p.wants_center = 0.5f;
     }
     if(structure.id == "spawn"){
-        p.wants_road = 0.6f;
-        p.wants_edge = 0.4f;
+        p.wants_road = 0.5f;
+        p.wants_edge = 0.0f;
+        p.wants_center = -0.5f;
     }
-    if(structure.id == "village"){
-        p.wants_road += 0.1f;
-        p.wants_edge = 0.3f;
+    if(structure.id == "ruins"){
+        p.wants_road = -0.5f;
+        p.wants_edge = 0.5f;
+        p.wants_center = 0.5f;
     }
 
     return p;
 }
+
+
+
+
+bool IsFarEnough(Rectangle& rect, std::vector<StructurePatch>& placed, float min_dist) {
+    float min_dist_sq = min_dist * min_dist;
+
+    for (StructurePatch& p : placed)
+    {
+        if (RectCenterDistSq(rect, p.rect) < min_dist_sq)
+            return false;
+    }
+
+    return true;
+}
+
+
+bool IsRectFree(Rectangle& candidate, std::vector<Rectangle>& reserved) {
+
+    for (const Rectangle& r : reserved)
+    {
+        if (CheckCollisionRecs(candidate, r))
+            return false;
+    }
+    return true;
+}
+
+
 
 
 

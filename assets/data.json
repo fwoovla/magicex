@@ -24,17 +24,24 @@
             {
             "id":"spawn",
             "count":[1,1],
-            "size":[10,10],
+            "size":[15,15],
             "prefer_region":"BIOME_PLAINS",
-            "min_distance":40
+            "min_distance":10
             },
             {
             "id":"house",
-            "count":[5,5],
+            "count":[2,2],
             "size":[10,10],
             "prefer_region":"BIOME_PLAINS",
-            "min_distance":40
-            }            
+            "min_distance":0
+            },
+            {
+            "id":"ruins",
+            "count":[2,2],
+            "size":[2,2],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":1
+            }              
         ],
 
         "terrain":{
