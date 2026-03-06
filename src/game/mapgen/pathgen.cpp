@@ -5,84 +5,80 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
 
     std::vector<Vector2> positions;
 
-    for(Vector2 position : _tileset.wg_plan.structure_positions){ positions.push_back(position);}
-    //for(Vector2 position : _tileset.exit_positions){ positions.push_back(position);}
+    positions.push_back(_tileset.wg_plan.road_midpoint);
+    TraceLog(LOG_INFO, "road midpoint %0.0f %0.0f", _tileset.wg_plan.road_midpoint.x, _tileset.wg_plan.road_midpoint.y);
+
+    for(Vector2 &position : _tileset.wg_plan.connected_positions){ positions.push_back(position);}
 
     for(int position_index = 0; position_index < positions.size()-1; position_index++) {
-        //Vector2 start_position = _tileset.structure_positions[structure_index];
-        //Vector2 start_position = _tileset.structure_positions[0];
-        //Vector2 end_position = _tileset.structure_positions[(structure_index +1)];
 
         Vector2 end_position = positions[0];
-        Vector2 start_position = positions[(position_index +1)];
+        Vector2 start_position = positions[position_index + 1];
 
         std::vector<Vector2> new_path;
         Vector2 p = start_position;
 
-
         new_path.push_back(p);
 
-        while(p.x != end_position.x or p.y != end_position.y) {
+        int px = (int)p.x;
+        int py = (int)p.y;
 
-            //TraceLog(LOG_INFO, "worm pos %0.0f %0.0f", worm.position.x, worm.position.y);
+        while(px != (int)end_position.x or py != (int)end_position.y) {
+            
 
             std::vector<Vector2> choices;
 
-            if (p.x < end_position.x) {
-                //choices.push_back({ p.x + 1, p.y });
+            if (px < (int)end_position.x) {
                 choices.push_back({ 1, 0 });
             } 
-            if (p.x > end_position.x){  
-                //choices.push_back({ p.x - 1, p.y });
+            if (px > (int)end_position.x){  
                 choices.push_back({ -1, 0 });
             }   
 
-
-            if (p.y < end_position.y) {
-                //choices.push_back({ p.x, p.y + 1 });
+            if (py < (int)end_position.y) {
                 choices.push_back({ 0, 1 });
             }
-            if (p.y > end_position.y) {
-                //choices.push_back({ p.x, p.y - 1 });
+            if (py > (int)end_position.y) {
                 choices.push_back({ 0, -1 });
             }
 
-
-
-
             int choice = rand() % choices.size();
-            p = Vector2Add(p, choices[choice]);
+
+            p = Vector2Add(p , choices[choice]);
+            px += choices[choice].x;
+            py += choices[choice].y;
 
             if (p.x < 0) {p.x = 0;}
             if (p.x > _tileset.map_size.x-1) {p.x = _tileset.map_size.x-1;}
             if (p.y < 0) {p.y = 0;}
             if (p.y > _tileset.map_size.y-1) {p.y = _tileset.map_size.y-1;}
 
+            TraceLog(LOG_INFO, "p %i %i      %0.0f %0.0f     %0.0f %0.0f",px, py, p.x, p.y, end_position.x, end_position.y);
+
             new_path.push_back(p);
 
-            int index = p.y * _tileset.map_size.x + p.x;
-
+            int index = py * _tileset.map_size.x + px;
 
             _tileset.upper_zone_grid[index] = ZONE_PATH;
             _tileset.collision_grid[index] = 0;
 
-            int index_right = p.y * _tileset.map_size.x + (p.x+1);
-            if(p.x+1 >= _tileset.map_size.x) {
+            int index_right = py * _tileset.map_size.x + (px+1);
+            if(px+1 >= _tileset.map_size.x) {
                 index_right = index;
             }
 
-            int index_left = p.y * _tileset.map_size.x + (p.x-1);
-            if(p.x-1 < 0) {
+            int index_left = py * _tileset.map_size.x + (px-1);
+            if(px-1 < 0) {
                 index_left = index;
             }
 
-            int index_down = (p.y+1) * _tileset.map_size.x + p.x;
-            if(p.y+1 >= _tileset.map_size.y) {
+            int index_down = (py+1) * _tileset.map_size.x + px;
+            if(py+1 >= _tileset.map_size.y) {
                 index_down = index;
             }
 
-            int index_up = (p.y-1) * _tileset.map_size.x + p.x;
-            if(p.y-1 < 0) {
+            int index_up = (py-1) * _tileset.map_size.x + px;
+            if(py-1 < 0) {
                 index_up = index;
             }
 
@@ -103,14 +99,12 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
                 _tileset.collision_grid[index_left] = 0;
             }
 
-
-
-            if(GetRandomValue(0, 1000) > 985 ) {
+            /* if(GetRandomValue(0, 1000) > 985 ) {
                 WorldGenDeccoEntityData new_decco_entity;
                 new_decco_entity.decco_name = "DeccoEntity_2";
                 new_decco_entity.position = {p.x+ GetRandomValue(-1,1), p.y+ GetRandomValue(-1,1)};
                 _tileset.entity_decco_data.push_back(new_decco_entity);
-            }
+            } */
         }
     }
 }
@@ -143,7 +137,7 @@ void BuildRoads(WorldGenTileSet &_tileset) {
 
 
         Vector2 end_position = _tileset.wg_plan.road_midpoint;
-        Vector2 start_position = _tileset.wg_plan.exit_positions[(position_index)];
+        Vector2 start_position = _tileset.wg_plan.exit_positions[position_index];
 
         std::vector<Vector2> new_path;
         Vector2 p = start_position;

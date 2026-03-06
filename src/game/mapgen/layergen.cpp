@@ -258,6 +258,15 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
                     new_layer.grid_tiles.push_back(new_tile_ldtk);
                 }
             }
+            LDTKGridTile new_tile_ldtk;
+                    
+            new_tile_ldtk.px.push_back(_tileset.wg_plan.road_midpoint.x *_tileset.tile_grid_size);
+            new_tile_ldtk.px.push_back(_tileset.wg_plan.road_midpoint.y *_tileset.tile_grid_size);
+            new_tile_ldtk.src.push_back( _tileset.tile_lookup[TILE_ID_DEBUG_1].atlas_position.x);
+            new_tile_ldtk.src.push_back(_tileset.tile_lookup[TILE_ID_DEBUG_1].atlas_position.y);
+            new_tile_ldtk.t = TILE_ID_DEBUG_1;
+                    
+            new_layer.grid_tiles.push_back(new_tile_ldtk);
         }
     }
 
@@ -289,38 +298,51 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
     new_layer.c_wid = current_tileset.map_size.x;
     new_layer.c_hei = current_tileset.map_size.y;
     
-    std::vector<std::string>  structure_names;
 
-    for(auto &structure :structure_tileset.structure_lookup) {
-        if(structure.first != "STARTINGSHELTER")
-        structure_names.push_back(structure.first);
-    }
-
-    for(Vector2 structure_pos : current_tileset.wg_plan.structure_positions) {
+    for(StructurePatch &s_patch : current_tileset.wg_plan.poi_patches) {
+    //for(Vector2 structure_pos : current_tileset.wg_plan.structure_positions) {
         std::string name_choice;
 
-        Vector2 s_pos = structure_pos;
+        int fx = (int)s_patch.center.x;
+        int fy = (int)s_patch.center.y;
 
 
-        if(s_pos != current_tileset.wg_plan.structure_positions[0]) {
-            name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
+        Vector2 s_pos = {(float)fx, (float)fy};
+
+        std::vector<std::string>  structure_names;
+        std::unordered_map<std::string, WorldGenStructureData> *this_lookup;
+
+        if(s_patch.id == "house") {
+            this_lookup = &structure_tileset.house_lookup;
         }
-        else {
-            name_choice = "STARTINGSHELTER";
-            //s_pos.y -= 3;
+        if(s_patch.id == "spawn") {
+            this_lookup = &structure_tileset.spawn_lookup;
+        }
+        if(s_patch.id == "ruins") {
+            this_lookup = &structure_tileset.ruins_lookup;
         }
 
+        for(auto &structure : *this_lookup) {
+            structure_names.push_back(structure.first);
+        }
 
-        int half_width = structure_tileset.structure_lookup[name_choice].structure_size.x/2;
-        int half_height = structure_tileset.structure_lookup[name_choice].structure_size.y/2;
+        name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
+
+
+        int half_width = (*this_lookup)[name_choice].structure_size.x/2;
+        int half_height = (*this_lookup)[name_choice].structure_size.y/2;
 
         Vector2 corner_offset = {s_pos.x - half_width, s_pos.y - half_height};
 
-        for(WorldGenAutoTile tile : structure_tileset.structure_lookup[name_choice].structure_grid_tiles) { 
+        for(WorldGenAutoTile tile : (*this_lookup)[name_choice].structure_grid_tiles) { 
             
+
+            int px = (int)((corner_offset.x * current_tileset.tile_grid_size) + tile.position.x);
+            int py = (int)((corner_offset.y * current_tileset.tile_grid_size) + tile.position.y);
+
             LDTKGridTile new_tile_ldtk;
-            new_tile_ldtk.px.push_back( (corner_offset.x * current_tileset.tile_grid_size) + tile.position.x );
-            new_tile_ldtk.px.push_back( (corner_offset.y * current_tileset.tile_grid_size) + tile.position.y);
+            new_tile_ldtk.px.push_back( px );
+            new_tile_ldtk.px.push_back( py );
             new_tile_ldtk.src.push_back( tile.atlas_position.x);
             new_tile_ldtk.src.push_back(tile.atlas_position.y);
             new_tile_ldtk.t = tile.tile_id;
@@ -328,8 +350,8 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
             new_layer.grid_tiles.push_back(new_tile_ldtk);
                 
                 
-            int x = new_tile_ldtk.px[0]/current_tileset.tile_grid_size;
-            int y = new_tile_ldtk.px[1]/current_tileset.tile_grid_size;
+            int x = px/current_tileset.tile_grid_size;
+            int y = py/current_tileset.tile_grid_size;
 
             if(x <  1) {x = 1;}
             if(y <  1) {y = 1;}
@@ -338,18 +360,14 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
 
             int index = (y * current_tileset.map_size.x + x);
 
-
-            //TraceLog(LOG_INFO, "------tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
-
-
             if(tile.has_collision == true) {
-                    //TraceLog(LOG_INFO, "structure tile");
+                //TraceLog(LOG_INFO, "structure tile");
                 current_tileset.upper_zone_grid[index] = ZONE_STRUCTURE;
                 current_tileset.lower_zone_grid[index] = ZONE_DIRT;
                 current_tileset.collision_grid[index] = 1;
             }
             else {
-                    //TraceLog(LOG_INFO, "shadow tile");
+                //TraceLog(LOG_INFO, "shadow tile");
                 current_tileset.upper_zone_grid[index] = ZONE_NONE;
                 current_tileset.lower_zone_grid[index] = ZONE_DIRT;
                 current_tileset.collision_grid[index] = 0;
@@ -364,12 +382,8 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                             //TraceLog(LOG_INFO, "      ---DOOR TILE FOUND---");
 
                             LDTKEntityInstance new_entity;
-                            if(name_choice == "STARTINGSHELTER") {
-                                new_entity.identifier = "ShelterTransition";
-                            }
-                            else {
-                                new_entity.identifier = "HouseTransition";
-                            }
+                            
+                            new_entity.identifier = "HouseTransition";
 
                             //TraceLog(LOG_INFO, "++++++------------NEW ENTITY %s", new_entity.identifier.c_str());
 
@@ -382,7 +396,8 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                             LDTKFieldInstance dest_map_field;
                             dest_map_field.identifier = "DestMapString";
                             
-                            if(name_choice == "STARTINGSHELTER") {
+                            if(name_choice.rfind("SPAWN", 0) == 0) {
+                                new_entity.identifier = "ShelterTransition";
                                 dest_map_field.value_s = "StartingShelter";
                                 //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
                             }
@@ -493,16 +508,14 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
         return;
     }
 
-
-    TraceLog(LOG_INFO, "++++++------------structure position size %i", _tileset.wg_plan.structure_positions.size());
     LDTKEntityInstance spawn_point;
-    spawn_point.px.push_back( _tileset.wg_plan.structure_positions[0].x * _tileset.tile_grid_size);
-    spawn_point.px.push_back( (_tileset.wg_plan.structure_positions[0].y + 4) * _tileset.tile_grid_size);
+    spawn_point.px.push_back( _tileset.wg_plan.road_midpoint.x * _tileset.tile_grid_size);
+    spawn_point.px.push_back( (_tileset.wg_plan.road_midpoint.y + 4) * _tileset.tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
     entity_layer->entity_instances.push_back(spawn_point);
 
-
-    for(int exit  = 0; exit < _tileset.wg_plan.exit_positions.size(); exit++) {
+    //place exit triggers
+    /* for(int exit  = 0; exit < _tileset.wg_plan.exit_positions.size(); exit++) {
         if(exit < _tileset.wg_plan.exit_dest_strings.size()) {
 
             LDTKEntityInstance new_entity;
@@ -524,7 +537,7 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
             entity_layer->entity_instances.push_back(new_entity);
             
         }
-    }
+    } */
 
 }
 

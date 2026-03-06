@@ -551,25 +551,6 @@ void LDTKDrawShadows(Vector2 focus_position) {
     float inv_tile_size = level_data->precalc.inv_tile_size;
     int map_width = level_data->precalc.map_width;
 
-
-    if(g_game_settings.show_debug) { //Draw Polys
-
-        for(auto &poly : level_data->collision_polys) {
-                    
-            int p_n = poly.points.size();
-            if(p_n >= 3) {
-                for(int i = 1; i < p_n - 1; ++i) {
-                    DrawTriangle(
-                        poly.points[0],
-                        poly.points[i+1],
-                        poly.points[i],
-                        DARKRED
-                    );
-                } 
-            }
-        }
-    }
-
     float extrudeDist = 1500.0f;
     Color shadowColor = {0, 0, 0, 5};
     //Color shadowColor = DARKERGRAY;
@@ -622,3 +603,47 @@ void LDTKDrawShadows(Vector2 focus_position) {
 }
 
 
+void LDTKDrawCollisionDebug(Vector2 focus_position) {
+    LevelData *level_data = nullptr;
+
+    if(g_game_data.is_in_sub_map) {
+        level_data = &g_sub_scene->level_data;
+    }
+    else {
+        level_data = &g_current_scene->level_data;
+    }
+
+    if(level_data == nullptr) {
+        return;
+    }
+
+    LDTKLevel &this_level = g_ldtk_maps.levels[level_data->precalc.map_index];
+
+    if(level_data->precalc.collision_layer_index == -1) {
+        return;
+    }
+    LDTKLayerInstance &col_layer = this_level.layer_instances[level_data->precalc.collision_layer_index];
+
+    int tile_size = level_data->precalc.tile_size;
+    float inv_tile_size = level_data->precalc.inv_tile_size;
+    int map_width = level_data->precalc.map_width;
+
+
+    if(g_game_settings.show_debug) { //Draw Polys
+
+        for(auto &poly : level_data->collision_polys) {
+                    
+            int p_n = poly.points.size();
+            if(p_n >= 3) {
+                for(int i = 1; i < p_n - 1; ++i) {
+                    DrawTriangle(
+                        poly.points[0],
+                        poly.points[i+1],
+                        poly.points[i],
+                        TRANSDARKRED
+                    );
+                } 
+            }
+        }
+    }
+}

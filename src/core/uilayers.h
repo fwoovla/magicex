@@ -635,6 +635,9 @@ class GameUILayer : public BaseUILayer {
     StatusBar health_bar;
     StatusBar stamina_bar;
 
+    Button debug_poi_layer_button;
+    Button debug_toggle_poi_layer_button;
+
 };
 
 

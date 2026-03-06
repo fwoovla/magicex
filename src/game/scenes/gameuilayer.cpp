@@ -3,14 +3,18 @@
 GameUILayer::GameUILayer() {
 
     CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, RAYWHITE, "...");
-    CreateLabel(debug_zoom_level, {20, 320 / g_scale}, 20/g_scale, RAYWHITE, "zoom...");
+    CreateLabel(debug_zoom_level, {20, 320 / g_scale}, FONTSIZE_20, RAYWHITE, "zoom...");
 
     CreateButton(quit_button, {g_resolution.x - 10, 10}, {30/g_scale , 30/g_scale}, RED, "X");
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-    //CreateLabel(power_label, {20, g_resolution.y - 40}, FONTSIZE_50, RAYWHITE, "power...");
-    //CreateLabel(sat_label, {20, g_resolution.y - 85}, FONTSIZE_50, RAYWHITE, "SAT...");
+    CreateButton(debug_poi_layer_button, {20, 420 / g_scale}, {150/g_scale , 40/g_scale}, ORANGE, "poi layer");
+    debug_poi_layer_button.text_size = FONTSIZE_30;
+
+    CreateButton(debug_toggle_poi_layer_button, {20, 460 / g_scale}, {200/g_scale , 40/g_scale}, ORANGE, "toggle poi layer");
+    debug_toggle_poi_layer_button.text_size = FONTSIZE_30;
+    
     
     CreateStatusBar(health_bar,{20, g_resolution.y - 60}, g_active_creature_data[g_current_player->uid].max_health, 100.0f, 10.0f, RED);
     CreateStatusBar(power_bar,{20, g_resolution.y - 45}, g_active_creature_data[g_current_player->uid].max_power, 100.0f, 10.0f, WEAPONCOLOR);
@@ -28,8 +32,6 @@ GameUILayer::~GameUILayer() {
 void GameUILayer::Draw() {
 
     DrawButton(quit_button);
-    //DrawLabel(power_label);
-    //DrawLabel(sat_label);
     DrawStatusBar(health_bar);
     DrawStatusBar(saturation_bar);
     DrawStatusBar(power_bar);
@@ -43,6 +45,9 @@ void GameUILayer::Draw() {
     DrawLabelCentered(title_label);
 
     DrawLabel(debug_zoom_level);
+
+    DrawButton(debug_poi_layer_button);
+    DrawButton(debug_toggle_poi_layer_button);
 
 }
 
@@ -72,5 +77,27 @@ void GameUILayer::Update() {
     if(!g_game_settings.show_debug){
         return;
     }
+
+    if(IsButtonHovered(debug_poi_layer_button, g_scale)){
+        if(debug_poi_layer_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            g_debug_data.poi_layer++;
+            g_debug_data.poi_layer = g_debug_data.poi_layer % 4;
+            
+        }        
+    }
+
+    if(IsButtonHovered(debug_toggle_poi_layer_button, g_scale)){
+        if(debug_toggle_poi_layer_button.already_hovered == false) {
+            //PlaySound(button_sound);
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            g_debug_data.show_poi_layer = !g_debug_data.show_poi_layer;
+            
+        }        
+    }
+
     debug_zoom_level.text = TextFormat("zoom %0.2f", g_camera.zoom);
 }

@@ -55,6 +55,8 @@ struct DebugData {
     int tiles_drawn;
     int entities_drawn;
     int collisions_checked;
+    int poi_layer = 0;
+    bool show_poi_layer;
 };
 
 extern DebugData g_debug_data;

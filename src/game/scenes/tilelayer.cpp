@@ -179,23 +179,38 @@ bool CollideWithTile(BaseEntity *checker, CollisionResult &collision_result) {
 
 
 void DrawMapGenDebugVisuals(LevelData &level_data) {
+    if(!g_debug_data.show_poi_layer) {
+        return;
+    }
 
     int ts = level_data.precalc.tile_size;
 
+    
+
     for(InfluenceCell cell : g_debug_plan.influence_grid) {
-        Color color = {
-            (unsigned char)(cell.road * 150),
-            (unsigned char)(cell.road * 150),
-            (unsigned char)(cell.road * 150),
-            //(unsigned char)(cell.center * 100), 
-            //(unsigned char)(cell.edge * 100), 
-            (unsigned char)180.0}  ;//BLANK;
-            //Color color = TRANSDARKERGRAY;
-        if(cell.reserved) {
-            color = DARKRED;
+        Color color = BLANK;
+        
+        if(g_debug_data.poi_layer == 0) {
+            color.r = cell.road * 150;
+            color.a = 255;
         }
+        if(g_debug_data.poi_layer == 1) {
+            color.g = cell.center * 150;
+            color.a = 255;
+        }
+        if(g_debug_data.poi_layer == 2) {
+            color.b = cell.edge * 150;
+            color.a = 255;
+        }
+        if(g_debug_data.poi_layer == 3) {
+            color.b = cell.forrest * 150;
+            color.g = cell.forrest * 150;
+            color.a = 255;
+        }
+
+        
         DrawRectangle(cell.rect.x * ts, cell.rect.y * ts, cell.rect.width * ts, cell.rect.height * ts, color);
-        DrawRectangleLines(cell.rect.x * ts, cell.rect.y * ts, cell.rect.width * ts, cell.rect.height * ts, RAYWHITE);
+        DrawRectangleLines(cell.rect.x * ts, cell.rect.y * ts, cell.rect.width * ts, cell.rect.height * ts, DARKERGRAY);
     }
 
     for(StructurePatch patch : g_debug_plan.poi_patches) {
@@ -206,5 +221,11 @@ void DrawMapGenDebugVisuals(LevelData &level_data) {
     for(Rectangle rect : g_debug_plan.reserved_rects) {
         //Rectangle rect = patch.rect;
         DrawRectangleLines((rect.x * ts) - 1, (rect.y * ts) - 1, (rect.width * ts) + 2, (rect.height * ts) + 2, GOLD);
+    }
+
+    DrawRectangle(g_debug_plan.road_midpoint.x * ts, g_debug_plan.road_midpoint.y * ts, 2 * ts, 2 * ts, WHITE);
+
+    for(Vector2 &con_pos : g_debug_plan.connected_positions) {
+        DrawRectangle(con_pos.x * ts, con_pos.y * ts, 2 * ts, 2 * ts, WHITE);
     }
 }

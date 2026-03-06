@@ -281,6 +281,8 @@ void LDTKSetColision(Vector2 position, bool value);
 
 void LDTKDrawShadows(Vector2 focus_position);
 
+void LDTKDrawCollisionDebug(Vector2 focus_position);
+
 inline int load_ldtk_maps(std::string ldtk_map_path) {
 
     TraceLog(LOG_INFO, "++++++++++++++++++++++++++++++++ LOADING LDTK DATA....  (*.ldtk) ++++++++++++++++++++++++++\n");

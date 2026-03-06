@@ -258,8 +258,8 @@ struct WorldGenBiome {
 
 enum InfluenceType {
     INF_ROAD,
-    INF_SHELTER,
-    INF_WILDERNESS,
+    //INF_SHELTER,
+    INF_FORREST,
     INF_CENTER,
     INF_EDGE
 };
@@ -269,7 +269,7 @@ struct InfluenceCell {
     Rectangle rect;
     bool reserved = false;
     float road = 0.0f;
-    float shelter = 0.0f;
+    //float shelter = 0.0f;
     float forrest = 0.0f;
     float center = 0.0f;
     float edge = 0.0f;
@@ -278,6 +278,7 @@ struct InfluenceCell {
 
 struct StructurePatch {
     Rectangle rect;
+    Vector2 center;
     std::string id;
     float road_proximity;
     float shelter_proximity;
@@ -305,6 +306,8 @@ struct WorldGenPlan {
     std::vector<Vector2> road_positions;
     std::vector<Vector2> edge_positions;
     std::vector<InfluenceCell> influence_grid;
+
+    std::vector<Vector2> connected_positions;
 
 
 
@@ -341,8 +344,15 @@ struct WorldGenTileSet {
     std::vector<WorldGenDeccoEntityData> layer_decco_data;
     std::vector<WorldGenDeccoEntityData> entity_decco_data;
     std::unordered_map<std::string, WorldGenStructureData> structure_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> house_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> ruins_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> spawn_lookup;
     std::unordered_map<std::string, WorldGenStructureData> layer_decco_lookup;
     std::unordered_map<std::string, WorldGenStructureData> entity_decco_lookup;
+
+    std::vector<std::string> ruins_id_strings;
+    std::vector<std::string> spawn_id_strings;
+    std::vector<std::string> house_id_strings;
 };
 
 extern std::vector<WorldGenTileSet> g_worldgen_tilesets;
@@ -421,6 +431,7 @@ bool IsFarEnough(Rectangle& rect, std::vector<StructurePatch>& placed, float min
 bool IsRectFree(Rectangle& candidate, std::vector<Rectangle>& reserved);
 
 
+void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 
 
 
@@ -433,7 +444,6 @@ bool IsRectFree(Rectangle& candidate, std::vector<Rectangle>& reserved);
 //unused
 //void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);
 //void GenerateDirtZonesRect(LDTKLevel &level, WorldGenTileSet &_tileset);
-//void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size);
 //void GenerateTreeZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 //void GenerateStructureZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 //void GenerateStartingShelter(LDTKLevel &level, WorldGenTileSet &_tileset);

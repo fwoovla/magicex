@@ -192,6 +192,7 @@ void GameScene::DrawScene()
         g_debug_data.tiles_drawn = LDTKDrawMap(g_current_player->position);
 
         if(g_game_settings.show_debug){
+            LDTKDrawCollisionDebug(g_current_player->position);
             DrawMapGenDebugVisuals(level_data);
         }
 
@@ -202,8 +203,7 @@ void GameScene::DrawScene()
         }
         g_debug_data.entities_drawn = level_data.draw_list.size();
         
-
-        // LDTKDrawShadows(g_current_player->position);
+        //LDTKDrawShadows(g_current_player->position);
         DL_Draw(level_data.ui_entities);
         EndMode2D();
     }
