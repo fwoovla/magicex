@@ -1,6 +1,6 @@
 obj/Debug/scenerygen.o: src/game/mapgen/scenerygen.cpp \
- /usr/include/stdc-predef.h src/game/mapgen/../../core/scenerygen.h \
- src/game/mapgen/../../core/gamedefs.h /usr/local/include/raylib.h \
+ /usr/include/stdc-predef.h src/game/mapgen/../../core/gamedefs.h \
+ /usr/local/include/raylib.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  src/game/mapgen/../../core/sprite.h /usr/local/include/raymath.h \
  /usr/include/c++/13/math.h /usr/include/c++/13/cmath \
@@ -274,7 +274,6 @@ obj/Debug/scenerygen.o: src/game/mapgen/scenerygen.cpp \
  src/game/mapgen/../../core/scenemanager.h \
  src/game/mapgen/../../core/game.h
 /usr/include/stdc-predef.h:
-src/game/mapgen/../../core/scenerygen.h:
 src/game/mapgen/../../core/gamedefs.h:
 /usr/local/include/raylib.h:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:

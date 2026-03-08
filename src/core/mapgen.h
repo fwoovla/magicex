@@ -184,6 +184,7 @@ struct WorldGenStructureData {
     Vector2 position;
     Vector2 structure_size;
     int uid;
+    std::string decco_base;
 
 };
 
@@ -292,19 +293,26 @@ struct WorldGenPlan {
 
     Vector2 map_size;
     Vector2 road_midpoint;
-    std::vector< std::vector<Vector2> > paths;
-    std::vector<Vector2> structure_positions;
+    Vector2 spawn_position;
+
+    //std::vector< std::vector<Vector2> > paths;
+
+    //std::vector<Vector2> structure_positions;
+    //std::vector<Rectangle> ruins_rects;
+    //std::vector<Rectangle> spawn_patches;
+    //std::vector<int> used_spawn_patches;
+
     std::vector<Vector2> exit_positions;
     std::vector<std::string> exit_dest_strings;
-    std::vector<Rectangle> ruins_rects;
+
     std::vector<WorldGenBiome> biomes;
+
     std::vector<StructurePatch> poi_patches;
-    std::vector<Rectangle> spawn_patches;
-    std::vector<int> used_spawn_patches;
     std::vector<Rectangle> reserved_rects;
 
     std::vector<Vector2> road_positions;
     std::vector<Vector2> edge_positions;
+
     std::vector<InfluenceCell> influence_grid;
 
     std::vector<Vector2> connected_positions;
@@ -349,10 +357,12 @@ struct WorldGenTileSet {
     std::unordered_map<std::string, WorldGenStructureData> spawn_lookup;
     std::unordered_map<std::string, WorldGenStructureData> layer_decco_lookup;
     std::unordered_map<std::string, WorldGenStructureData> entity_decco_lookup;
+    std::unordered_map<std::string, WorldGenStructureData> exit_lookup;
 
     std::vector<std::string> ruins_id_strings;
     std::vector<std::string> spawn_id_strings;
     std::vector<std::string> house_id_strings;
+    std::vector<std::string> exit_id_strings;
 };
 
 extern std::vector<WorldGenTileSet> g_worldgen_tilesets;
@@ -377,8 +387,8 @@ void GenerateZones(LDTKLevel &level, WorldGenTileSet &_tileset);
 //utils
 
 
-void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size);
-Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset);
+//void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size);
+//Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset);
 
 
 TILEID GetAutoTile(std::vector<TILEID> &tile_list, WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, MAPZONE target_zone, int grid_index);
@@ -412,11 +422,6 @@ void SplitRegion(std::vector<Rectangle>& regions);
 
 WorldGenBiome* GetBiome(Vector2 position, WorldGenTileSet &_tileset);
 
-void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size);
-
-Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset);
-
-
 float& GetInfluenceChannel(InfluenceCell& c, InfluenceType t);
 
 void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x, int start_y, float strength, float decay, InfluenceType type);
@@ -436,10 +441,30 @@ void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int bru
 
 
 
+//layers
+void GenerateDeccoLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
+void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset);
+void GenerateUpperTerrainLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateStructuresLayer(LDTKLevel &level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
+void GenerateCollisionLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateEntitiesLayer(LDTKLevel &level, WorldGenTileSet &_tileset);
+void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset);
+void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset);
+void GenerateDebugVisuals(LDTKLevel &_level, WorldGenTileSet &_tileset);
+std::string ChooseDeccoEntity(std::string base_decco_string, WorldGenTileSet &structure_tileset);
 
 
+//scenery
+void PopulateGrass(LDTKLevel &level, WorldGenTileSet &_tileset);
+void PopulateTrees(LDTKLevel &level, WorldGenTileSet &_tileset);
+void AddMushroomZones(LDTKLevel &level, WorldGenTileSet &_tileset);
+void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset);
 
-
+//path
+void ConnectStructuresWithPaths(WorldGenTileSet &_tileset);
+void BuildRoads(WorldGenTileSet &_tileset);
 
 //unused
 //void CreatePoiPatches(WorldGenTileSet &_tileset, int patch_size);

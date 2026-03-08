@@ -1,4 +1,4 @@
-#include "../../core/layergen.h"
+#include "../../core/gamedefs.h"
 
 void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     LDTKLayerInstance new_layer;
@@ -54,7 +54,6 @@ void GenerateLowerTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
             //TraceLog(LOG_INFO, "making tile   id: %i  px: %i %i    src  %i %i",tile_id, new_tile_ldtk.px[0], new_tile_ldtk.px[1], new_tile_ldtk.src[0], new_tile_ldtk.src[1]);
         }
     }
-    //GenerateDirtPatch(new_layer, _tileset, _map_size);
     _level.layer_instances.push_back(new_layer);
 
 }
@@ -143,130 +142,54 @@ void GenerateUpperTerrainLayer(LDTKLevel &_level, WorldGenTileSet &_tileset) {
             int index = y * _tileset.map_size.x + x;
 
 
+            TILEID tile_id = TILE_ID_NONE;
+
             if(_tileset.upper_zone_grid[index] == ZONE_ROAD) {
-                TILEID id =  GetAutoTile(_tileset.sorted_tiles.road_tiles, _tileset, _tileset.upper_zone_grid, ZONE_ROAD, index);
-                if(id != TILE_ID_NONE) {
-                    //TraceLog(LOG_INFO, "PATH zone  %i ", index);
-                    
-                    LDTKGridTile new_tile_ldtk;
-                    
-                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
-                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
-                    //TILEID id = TILE_ID_DIRT_MID;
-                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
-                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
-                    new_tile_ldtk.t = id;
-                    
-                    new_layer.grid_tiles.push_back(new_tile_ldtk);
+                tile_id = GetAutoTile(_tileset.sorted_tiles.road_tiles, _tileset, _tileset.upper_zone_grid, ZONE_ROAD, index);
+            }
+
+            else if(_tileset.upper_zone_grid[index] == ZONE_ROAD) {
+                tile_id =  GetAutoTile(_tileset.sorted_tiles.road_tiles, _tileset, _tileset.upper_zone_grid, ZONE_ROAD, index);
+            }
+
+            else if(_tileset.upper_zone_grid[index] == ZONE_PATH) {
+                tile_id =  GetAutoTile(_tileset.sorted_tiles.path_tiles, _tileset, _tileset.upper_zone_grid, ZONE_PATH, index);
+            }
+
+            else if(_tileset.upper_zone_grid[index] == ZONE_BORDER) {
+                tile_id =  GetAutoTile(_tileset.sorted_tiles.border_tiles, _tileset, _tileset.upper_zone_grid, ZONE_BORDER, index);
+                if(tile_id != TILE_ID_NONE) {
+                    _tileset.collision_grid[index] = 1;     
                 }
                 else {
-                    //_tileset.upper_zone_grid[index] = ZONE_NONE;
                     _tileset.collision_grid[index] = 0;
                 }
             }
 
-            if(_tileset.upper_zone_grid[index] == ZONE_PATH) {
-
-                TILEID id =  GetAutoTile(_tileset.sorted_tiles.path_tiles, _tileset, _tileset.upper_zone_grid, ZONE_PATH, index);
-                if(id != TILE_ID_NONE) {
-                    //TraceLog(LOG_INFO, "PATH zone  %i ", index);
-                    
-                    LDTKGridTile new_tile_ldtk;
-                    
-                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
-                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
-                    //TILEID id = TILE_ID_DIRT_MID;
-                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
-                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
-                    new_tile_ldtk.t = id;
-                    
-                    new_layer.grid_tiles.push_back(new_tile_ldtk);
-                }
-                else {
-                    _tileset.upper_zone_grid[index] = ZONE_NONE;
-                    _tileset.collision_grid[index] = 0;
-                }
-
+            else if(_tileset.upper_zone_grid[index] == ZONE_FENCE) { 
+                tile_id =  GetFenceTileTop(_tileset, _tileset.upper_zone_grid, x, y); //TILE_ID_FENCE_END_DOWN;
             }
 
-            if(_tileset.upper_zone_grid[index] == ZONE_BORDER) {
-                //TraceLog(LOG_INFO, "BORDER zone  %i-  %i %i", index, x, y);
-                TILEID id =  GetAutoTile(_tileset.sorted_tiles.border_tiles, _tileset, _tileset.upper_zone_grid, ZONE_BORDER, index);
+            else if(_tileset.upper_zone_grid[index] == ZONE_FENCE_BOTTOM) { 
+                tile_id = GetFenceTileBottom(_tileset, _tileset.upper_zone_grid, x, y);
 
-                if(id == TILE_ID_NONE) {
-                    _tileset.upper_zone_grid[index] = ZONE_NONE;
-                    _tileset.collision_grid[index] = 0;
-                    //TraceLog(LOG_INFO, "no tile found  %i", id);
-                }
-                else {
-
-                    LDTKGridTile new_tile_ldtk;
-                    
-                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
-                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
-                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
-                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
-                    new_tile_ldtk.t = id;
-                    
-                    new_layer.grid_tiles.push_back(new_tile_ldtk);
-                    _tileset.collision_grid[index] = 1;
+                if(tile_id != TILE_ID_NONE) {
+                    _tileset.collision_grid[index] = 0;     
                 }
             }
 
-            if(_tileset.upper_zone_grid[index] == ZONE_FENCE) { 
-
-                TILEID id =  GetFenceTileTop(_tileset, _tileset.upper_zone_grid, x, y); //TILE_ID_FENCE_END_DOWN;
-
-                if(id == TILE_ID_NONE) {
-                    //_tileset.upper_zone_grid[index] = ZONE_NONE;
-                    //_tileset.collision_grid[index] = 0;
-                    //TraceLog(LOG_INFO, "no tile found  %i", id);
-                }
-                else {
-
-                    LDTKGridTile new_tile_ldtk;
-                    
-                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
-                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
-                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
-                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
-                    new_tile_ldtk.t = id;
-                    
-                    new_layer.grid_tiles.push_back(new_tile_ldtk);
-                    _tileset.collision_grid[index] = 1;
-                }
+            if(tile_id != TILE_ID_NONE) {
+                LDTKGridTile _new_tile_ldtk;
+                
+                _new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
+                _new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
+                //TILEID id = TILE_ID_DIRT_MID;
+                _new_tile_ldtk.src.push_back( _tileset.tile_lookup[tile_id].atlas_position.x);
+                _new_tile_ldtk.src.push_back(_tileset.tile_lookup[tile_id].atlas_position.y);
+                _new_tile_ldtk.t = tile_id;
+                new_layer.grid_tiles.push_back(_new_tile_ldtk);
             }
 
-            if(_tileset.upper_zone_grid[index] == ZONE_FENCE_BOTTOM) { 
-                TILEID id = GetFenceTileBottom(_tileset, _tileset.upper_zone_grid, x, y);
-
-                if(id == TILE_ID_NONE) {
-                    //_tileset.upper_zone_grid[index] = ZONE_NONE;
-                    //_tileset.collision_grid[index] = 0;
-                TraceLog(LOG_INFO, "no fence bottom tile found  %i", id);
-                }
-                else {
-                    //TraceLog(LOG_INFO, "fence bottom tile found  %i", id);
-                    LDTKGridTile new_tile_ldtk;
-                    
-                    new_tile_ldtk.px.push_back((float)x*_tileset.tile_grid_size);
-                    new_tile_ldtk.px.push_back((float)y*_tileset.tile_grid_size);
-                    new_tile_ldtk.src.push_back( _tileset.tile_lookup[id].atlas_position.x);
-                    new_tile_ldtk.src.push_back(_tileset.tile_lookup[id].atlas_position.y);
-                    new_tile_ldtk.t = id;
-                    
-                    new_layer.grid_tiles.push_back(new_tile_ldtk);
-                }
-            }
-            LDTKGridTile new_tile_ldtk;
-                    
-            new_tile_ldtk.px.push_back(_tileset.wg_plan.road_midpoint.x *_tileset.tile_grid_size);
-            new_tile_ldtk.px.push_back(_tileset.wg_plan.road_midpoint.y *_tileset.tile_grid_size);
-            new_tile_ldtk.src.push_back( _tileset.tile_lookup[TILE_ID_DEBUG_1].atlas_position.x);
-            new_tile_ldtk.src.push_back(_tileset.tile_lookup[TILE_ID_DEBUG_1].atlas_position.y);
-            new_tile_ldtk.t = TILE_ID_DEBUG_1;
-                    
-            new_layer.grid_tiles.push_back(new_tile_ldtk);
         }
     }
 
@@ -301,7 +224,6 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
 
     for(StructurePatch &s_patch : current_tileset.wg_plan.poi_patches) {
     //for(Vector2 structure_pos : current_tileset.wg_plan.structure_positions) {
-        std::string name_choice;
 
         int fx = (int)s_patch.center.x;
         int fy = (int)s_patch.center.y;
@@ -312,25 +234,45 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
         std::vector<std::string>  structure_names;
         std::unordered_map<std::string, WorldGenStructureData> *this_lookup;
 
+        TraceLog(LOG_INFO, "++++++------------NEW STRUCTURE DECCO patch id %s", s_patch.id.c_str());
         if(s_patch.id == "house") {
-            this_lookup = &structure_tileset.house_lookup;
+            this_lookup = &structure_tileset.house_lookup;            
         }
         if(s_patch.id == "spawn") {
             this_lookup = &structure_tileset.spawn_lookup;
+            current_tileset.wg_plan.spawn_position = s_pos;
         }
         if(s_patch.id == "ruins") {
             this_lookup = &structure_tileset.ruins_lookup;
+        }
+        if(s_patch.id == "exit") {
+            this_lookup = &structure_tileset.exit_lookup;
         }
 
         for(auto &structure : *this_lookup) {
             structure_names.push_back(structure.first);
         }
 
-        name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
+        std::string name_choice = structure_names[GetRandomValue(0, structure_names.size() - 1 )];
 
+        std::string decco_entity = ChooseDeccoEntity((*this_lookup)[name_choice].decco_base, structure_tileset);
+        TraceLog(LOG_INFO, "++++++------------NEW STRUCTURE DECCO ENTITY %s", decco_entity.c_str());
+
+        if(decco_entity != "NONE") {
+            WorldGenDeccoEntityData new_decco_entity;
+            new_decco_entity.decco_name = decco_entity;
+            new_decco_entity.position = {s_patch.rect.x + (s_patch.rect.width/2), s_patch.rect.y + (s_patch.rect.height/2)};
+
+            current_tileset.entity_decco_data.push_back(new_decco_entity);
+        }
+
+        if((*this_lookup)[name_choice].decco_base != "")
+
+        std::string decco_base = (*this_lookup)[name_choice].decco_base;
 
         int half_width = (*this_lookup)[name_choice].structure_size.x/2;
         int half_height = (*this_lookup)[name_choice].structure_size.y/2;
+
 
         Vector2 corner_offset = {s_pos.x - half_width, s_pos.y - half_height};
 
@@ -396,7 +338,7 @@ void GenerateStructuresLayer(LDTKLevel &_level, WorldGenTileSet &current_tileset
                             LDTKFieldInstance dest_map_field;
                             dest_map_field.identifier = "DestMapString";
                             
-                            if(name_choice.rfind("SPAWN", 0) == 0) {
+                            if(name_choice.rfind("EXIT", 0) == 0) {
                                 new_entity.identifier = "ShelterTransition";
                                 dest_map_field.value_s = "StartingShelter";
                                 //TraceLog(LOG_INFO, "++++++--------------------------------ENTITY FIELD %s", dest_map_field.identifier.c_str());
@@ -509,8 +451,8 @@ void PlaceEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
     }
 
     LDTKEntityInstance spawn_point;
-    spawn_point.px.push_back( _tileset.wg_plan.road_midpoint.x * _tileset.tile_grid_size);
-    spawn_point.px.push_back( (_tileset.wg_plan.road_midpoint.y + 4) * _tileset.tile_grid_size);
+    spawn_point.px.push_back( _tileset.wg_plan.spawn_position.x * _tileset.tile_grid_size);
+    spawn_point.px.push_back( (_tileset.wg_plan.spawn_position.y) * _tileset.tile_grid_size);
     spawn_point.identifier = "SpawnPoint";
     entity_layer->entity_instances.push_back(spawn_point);
 
@@ -591,8 +533,6 @@ void PlaceCreatureEntities(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 
-
-
 void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
     for(WorldGenBiome &biome : _tileset.wg_plan.biomes) {
         for(int y = biome.rect.y; y < biome.rect.y + biome.rect.height; y++) {
@@ -615,6 +555,8 @@ void GenerateTerrainZones(LDTKLevel &level, WorldGenTileSet &_tileset) {
         }
     }
 }
+
+
 
 void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
@@ -643,6 +585,24 @@ void ShapeHills(LDTKLevel &level, WorldGenTileSet &_tileset) {
 
 
 
+std::string ChooseDeccoEntity(std::string base_decco_string, WorldGenTileSet &structure_tileset) {
+    std::string return_string = "NONE";
+    std::vector<std::string> available_choices;
+
+    for(auto &structure : structure_tileset.entity_decco_lookup) {
+        TraceLog(LOG_INFO, "structuire field   %s", base_decco_string.c_str());
+        if(structure.first.rfind(base_decco_string, 0)== 0) {
+            available_choices.push_back(structure.first);
+        }
+    }
+    if(available_choices.size() > 0) {
+        return_string = available_choices[GetRandomValue(0, available_choices.size() - 1)];
+    }
+    return return_string;
+}
+
+
+
 void GenerateDebugVisuals(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     LDTKLayerInstance new_layer;
     new_layer.identifier = "TerrainDebug";
@@ -651,12 +611,7 @@ void GenerateDebugVisuals(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     new_layer.grid_size = _tileset.tile_grid_size;
     new_layer.c_wid = _tileset.map_size.x;
     new_layer.c_hei = _tileset.map_size.y;
-
     _level.layer_instances.push_back(new_layer);
-
-
-
-
 }
 
 

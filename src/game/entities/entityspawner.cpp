@@ -105,6 +105,28 @@ void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
         this_scene = g_current_scene.get();
     }
 
+    if(this_scene) {
+        if(payload.spell_type == SPELL_TYPE_BOLT) {
+            this_spell = std::make_unique<BoltSpell>(payload, _data);
+        }
+        if(payload.spell_type == SPELL_TYPE_AOE) {
+            this_spell = std::make_unique<AoeSpell>(payload, _data);
+        }
+        if(payload.spell_type == SPELL_TYPE_INSTANT) {
+            this_spell = std::make_unique<InstantSpell>(payload, _data);
+        }
+
+
+        if(this_spell) {
+            DL_Add( this_scene->level_data.spell_list, std::move(this_spell));
+        }
+    }
+    
+    TraceLog(LOG_INFO, "spell list size  %i", this_scene->level_data.spell_list.size()); 
+}
+
+/* 
+
     if(_data->spell_id >= SPELL_ID_MAGICMISSLE_1 and _data->spell_id <= SPELL_ID_MAGICMISSLE_4) {
         this_spell = std::make_unique<MagicMissle>(payload, _data);
     }
@@ -120,10 +142,7 @@ void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
 
     if(this_scene and this_spell) {
         DL_Add( this_scene->level_data.spell_list, std::move(this_spell));
-    }
-
-    TraceLog(LOG_INFO, "spell list size  %i", this_scene->level_data.spell_list.size()); 
-}
+    } */
 
 
 

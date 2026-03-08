@@ -107,6 +107,7 @@ struct WeaponData {
     ItemID weapon_id;
     float cooldown;
     SpellID spell_id;
+    SPELL_TYPE spell_type;
     float max_power;
     float current_power;
     int damage;
@@ -381,6 +382,13 @@ ItemRarity StrToItemRarity(const std::string& s);
 ItemType StrToItemType(const std::string& s);
 
 SpellID StrToSpellId(const std::string& s);
+
+SPELL_EFFECT StrToSpellEffectId(std::string str);
+
+SPELL_TYPE StrToSpellTypeId(std::string str);
+
+
+
 
 AIID StrToAiId(const std::string& s);
 

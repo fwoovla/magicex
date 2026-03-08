@@ -262,9 +262,7 @@ obj/Debug/mapgen.o: src/game/mapgen.cpp /usr/include/stdc-predef.h \
  src/game/../core/basescene.h src/game/../core/tilelayer.h \
  src/game/../core/uilayers.h src/game/../core/scenes.h \
  src/game/../core/scenemanager.h src/game/../core/game.h \
- src/game/../core/layergen.h src/game/../core/pathgen.h \
- src/game/../core/scenerygen.h /usr/include/c++/13/random \
- /usr/include/c++/13/bits/random.h \
+ /usr/include/c++/13/random /usr/include/c++/13/bits/random.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h \
  /usr/include/c++/13/bits/random.tcc
 /usr/include/stdc-predef.h:
@@ -616,9 +614,6 @@ src/game/../core/uilayers.h:
 src/game/../core/scenes.h:
 src/game/../core/scenemanager.h:
 src/game/../core/game.h:
-src/game/../core/layergen.h:
-src/game/../core/pathgen.h:
-src/game/../core/scenerygen.h:
 /usr/include/c++/13/random:
 /usr/include/c++/13/bits/random.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h:

@@ -169,6 +169,7 @@ void LoadGameData() {
         int speed = cj["spell_data"][i]["speed"];
         float radius = cj["spell_data"][i]["radius"];
         float knockback = cj["spell_data"][i]["knockback"];
+        SPELL_EFFECT spell_effect = StrToSpellEffectId(cj["spell_data"][i]["spell_effect"]);
 
         new_spell.lifetime = lifetime;
         new_spell.damage = damage;
@@ -177,6 +178,7 @@ void LoadGameData() {
         new_spell.speed = speed;
         new_spell.spell_name = name;
         new_spell.knockback = knockback;
+        new_spell.spell_effect = spell_effect;
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
@@ -227,6 +229,8 @@ void LoadGameData() {
 
         SpellID spell_id = StrToSpellId(cj["weapon_data"][i]["spell_id"]);
 
+        SPELL_TYPE spell_type = StrToSpellTypeId(cj["weapon_data"][i]["spell_type"]);
+
         float max_power = cj["weapon_data"][i]["max_power"];
 
         int damage = cj["weapon_data"][i]["damage"];
@@ -244,6 +248,7 @@ void LoadGameData() {
             .weapon_id = w_id,
             .cooldown = cooldown,
             .spell_id = spell_id,
+            .spell_type = spell_type,
             .max_power = max_power,
             .damage = damage,
             .recoil = recoil,
@@ -647,6 +652,7 @@ void SaveGame(LevelData &level_data) {
                 {"mod_slots", inst.weapon_data.mod_slots},
                 {"pps", inst.weapon_data.pps},
                 {"accuracy", inst.weapon_data.accuracy},
+                {"spell_type", inst.weapon_data.spell_type},
             };
             
             instance["weapon_data"] = new_weapon;
@@ -695,6 +701,7 @@ void SaveGame(LevelData &level_data) {
                 {"lifetime", inst.spell_data.lifetime},
                 {"radius", inst.spell_data.radius},
                 {"knockback", inst.spell_data.knockback},
+                {"spell_effect", inst.spell_data.spell_effect},
             };
 
             instance["spell_data"] = new_spell;
@@ -1686,27 +1693,27 @@ ItemType StrToItemType(const std::string& s) {
 SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
-        {"None",                          SpellID::SPELL_ID_NONE},
-        {"SPELL_ID_MAGICMISSLE_1",        SpellID::SPELL_ID_MAGICMISSLE_1},
-        {"SPELL_ID_MAGICMISSLE_2",        SpellID::SPELL_ID_MAGICMISSLE_2},
-        {"SPELL_ID_MAGICMISSLE_3",           SpellID::SPELL_ID_MAGICMISSLE_3},
-        {"SPELL_ID_MAGICMISSLE_4",           SpellID::SPELL_ID_MAGICMISSLE_4},
+        {"None",                   SpellID::SPELL_ID_NONE},
+        {"SPELL_ID_FORCE_1",       SpellID::SPELL_ID_FORCE_1},
+        {"SPELL_ID_FORCE_2",       SpellID::SPELL_ID_FORCE_2},
+        {"SPELL_ID_FORCE_3",       SpellID::SPELL_ID_FORCE_3},
+        {"SPELL_ID_FORCE_4",       SpellID::SPELL_ID_FORCE_4},
 
-        {"SPELL_ID_FIREBALL_1",        SpellID::SPELL_ID_FIREBALL_1},
-        {"SPELL_ID_FIREBALL_2",        SpellID::SPELL_ID_FIREBALL_2},
-        {"SPELL_ID_FIREBALL_3",           SpellID::SPELL_ID_FIREBALL_3},
-        {"SPELL_ID_FIREBALL_4",           SpellID::SPELL_ID_FIREBALL_4},
+        {"SPELL_ID_FIRE_1",        SpellID::SPELL_ID_FIRE_1},
+        {"SPELL_ID_FIRE_2",        SpellID::SPELL_ID_FIRE_2},
+        {"SPELL_ID_FIRE_3",        SpellID::SPELL_ID_FIRE_3},
+        {"SPELL_ID_FIRE_4",        SpellID::SPELL_ID_FIRE_4},
 
 
-        {"SPELL_ID_LIGHTNING_1",          SpellID::SPELL_ID_LIGHTNING_1},
-        {"SPELL_ID_LIGHTNING_2",          SpellID::SPELL_ID_LIGHTNING_2},
-        {"SPELL_ID_LIGHTNING_3",          SpellID::SPELL_ID_LIGHTNING_3},
-        {"SPELL_ID_LIGHTNING_4",          SpellID::SPELL_ID_LIGHTNING_4},
+        {"SPELL_ID_LIGHTNING_1",   SpellID::SPELL_ID_LIGHTNING_1},
+        {"SPELL_ID_LIGHTNING_2",   SpellID::SPELL_ID_LIGHTNING_2},
+        {"SPELL_ID_LIGHTNING_3",   SpellID::SPELL_ID_LIGHTNING_3},
+        {"SPELL_ID_LIGHTNING_4",   SpellID::SPELL_ID_LIGHTNING_4},
 
-        {"SPELL_ID_POISON_1",          SpellID::SPELL_ID_POISON_1},
-        {"SPELL_ID_POISON_2",          SpellID::SPELL_ID_POISON_2},
-        {"SPELL_ID_POISON_3",          SpellID::SPELL_ID_POISON_3},
-        {"SPELL_ID_POISON_4",          SpellID::SPELL_ID_POISON_4},
+        {"SPELL_ID_POISON_1",      SpellID::SPELL_ID_POISON_1},
+        {"SPELL_ID_POISON_2",      SpellID::SPELL_ID_POISON_2},
+        {"SPELL_ID_POISON_3",      SpellID::SPELL_ID_POISON_3},
+        {"SPELL_ID_POISON_4",      SpellID::SPELL_ID_POISON_4},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1717,13 +1724,47 @@ SpellID StrToSpellId(const std::string& s) {
     return SpellID::SPELL_ID_NONE;
 }
 
+
+SPELL_EFFECT StrToSpellEffectId(std::string s) {
+
+    static const std::unordered_map<std::string, SPELL_EFFECT> lookup_table = {
+        {"SPELL_EFFECT_FORCE",              SPELL_EFFECT::SPELL_EFFECT_FORCE},
+        {"SPELL_EFFECT_FIRE",               SPELL_EFFECT::SPELL_EFFECT_FIRE},
+        {"SPELL_EFFECT_LIGHTNING",          SPELL_EFFECT::SPELL_EFFECT_LIGHTNING},
+        {"SPELL_EFFECT_POISON",             SPELL_EFFECT::SPELL_EFFECT_POISON},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "spell effect ID not found ");
+    return SPELL_EFFECT::SPELL_EFFECT_NONE;
+}
+
+
+SPELL_TYPE StrToSpellTypeId(std::string s) {
+
+    static const std::unordered_map<std::string, SPELL_TYPE> lookup_table = {
+        {"SPELL_TYPE_BOLT",             SPELL_TYPE::SPELL_TYPE_BOLT},
+        {"SPELL_TYPE_AOE",              SPELL_TYPE::SPELL_TYPE_AOE},
+        {"SPELL_TYPE_INSTANT",          SPELL_TYPE::SPELL_TYPE_INSTANT},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "spell type ID not found ");
+    return SPELL_TYPE::SPELL_TYPE_NONE;
+}
+
+
 CreatureID StrToCreatureId(const std::string& s) {
 
     static const std::unordered_map<std::string, CreatureID> lookup_table = {
-        {"CREATURE_TESTDUMMY",                      CreatureID::CREATURE_TESTDUMMY},
-        {"CREATURE_BUNNY",                          CreatureID::CREATURE_BUNNY},
-        {"CREATURE_SCAVENGER",                      CreatureID::CREATURE_SCAVENGER},
-        {"CREATURE_TRADER",                      CreatureID::CREATURE_TRADER},
+        {"CREATURE_TESTDUMMY",                  CreatureID::CREATURE_TESTDUMMY},
+        {"CREATURE_BUNNY",                      CreatureID::CREATURE_BUNNY},
+        {"CREATURE_SCAVENGER",                  CreatureID::CREATURE_SCAVENGER},
+        {"CREATURE_TRADER",                     CreatureID::CREATURE_TRADER},
         {"CREATURE_SLIME",                      CreatureID::CREATURE_SLIME},
         {"CREATURE_NPC_1",                      CreatureID::CREATURE_NPC_1},
     };
@@ -1748,7 +1789,7 @@ ItemID StrToItemId(const std::string& s) {
 
 /*         {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
         {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF}, */
-
+/* 
         {"ITEM_ID_NEWWAND1",            ItemID::ITEM_ID_NEWWAND1},
         {"ITEM_ID_NEWWAND2",            ItemID::ITEM_ID_NEWWAND2},
         {"ITEM_ID_NEWWAND3",            ItemID::ITEM_ID_NEWWAND3},
@@ -1764,57 +1805,55 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_NEWWAND13",            ItemID::ITEM_ID_NEWWAND13},
         {"ITEM_ID_NEWWAND14",            ItemID::ITEM_ID_NEWWAND14},
         {"ITEM_ID_NEWWAND15",            ItemID::ITEM_ID_NEWWAND15},
-        {"ITEM_ID_NEWWAND16",            ItemID::ITEM_ID_NEWWAND16},
+        {"ITEM_ID_NEWWAND16",            ItemID::ITEM_ID_NEWWAND16}, */
 
-/*         {"ITEM_ID_MAGICMISSLE_WAND",            ItemID::ITEM_ID_MAGICMISSLE_WAND},
-        {"ITEM_ID_FIREBALL_WAND",            ItemID::ITEM_ID_FIREBALL_WAND},
-        {"ITEM_ID_LIGHTNING_WAND",            ItemID::ITEM_ID_LIGHTNING_WAND},
-        {"ITEM_ID_POISON_WAND",            ItemID::ITEM_ID_POISON_WAND}, */
+        {"ITEM_ID_FORCECASTER1",           ItemID::ITEM_ID_FORCECASTER1},
+        {"ITEM_ID_FORCECASTER2",           ItemID::ITEM_ID_FORCECASTER2},
+        {"ITEM_ID_FORCECASTER3",           ItemID::ITEM_ID_FORCECASTER3},
+        {"ITEM_ID_FORCECASTER4",           ItemID::ITEM_ID_FORCECASTER4},
+        {"ITEM_ID_FIRECASTER1",            ItemID::ITEM_ID_FIRECASTER1},
+        {"ITEM_ID_FIRECASTER2",            ItemID::ITEM_ID_FIRECASTER2},
+        {"ITEM_ID_FIRECASTER3",            ItemID::ITEM_ID_FIRECASTER3},
+        {"ITEM_ID_FIRECASTER4",            ItemID::ITEM_ID_FIRECASTER4},
+        {"ITEM_ID_POISONCASTER1",          ItemID::ITEM_ID_POISONCASTER1},
+        {"ITEM_ID_POISONCASTER2",          ItemID::ITEM_ID_POISONCASTER2},
+        {"ITEM_ID_POISONCASTER3",          ItemID::ITEM_ID_POISONCASTER3},
+        {"ITEM_ID_POISONCASTER4",          ItemID::ITEM_ID_POISONCASTER4},
+        {"ITEM_ID_LIGHTNINGCASTER1",       ItemID::ITEM_ID_LIGHTNINGCASTER1},
+        {"ITEM_ID_LIGHTNINGCASTER2",       ItemID::ITEM_ID_LIGHTNINGCASTER2},
+        {"ITEM_ID_LIGHTNINGCASTER3",       ItemID::ITEM_ID_LIGHTNINGCASTER3},
+        {"ITEM_ID_LIGHTNINGCASTER4",       ItemID::ITEM_ID_LIGHTNINGCASTER4},
 
-/* 
-        {"ITEM_ID_MAGICMISSLE_STAFF",           ItemID::ITEM_ID_MAGICMISSLE_STAFF},
-        {"ITEM_ID_FIREBALL_STAFF",           ItemID::ITEM_ID_FIREBALL_STAFF},
-        {"ITEM_ID_LIGHTNING_STAFF",           ItemID::ITEM_ID_LIGHTNING_STAFF},
-        {"ITEM_ID_POISON_STAFF",           ItemID::ITEM_ID_POISON_STAFF}, */
+        {"ITEM_ID_MUSHROOM",               ItemID::ITEM_ID_MUSHROOM},
+        {"ITEM_ID_MUSHROOM_JUICE",         ItemID::ITEM_ID_MUSHROOM_JUICE},
 
+        {"ITEM_ID_HELMET",                 ItemID::ITEM_ID_HELMET},
+        {"ITEM_ID_BOOTS",                  ItemID::ITEM_ID_BOOTS},
+        {"ITEM_ID_BODY",                   ItemID::ITEM_ID_BODY},
+        {"ITEM_ID_GLOVES",                 ItemID::ITEM_ID_GLOVES},
+        {"ITEM_ID_LEGGINGS",               ItemID::ITEM_ID_LEGGINGS},
 
-        {"ITEM_ID_MUSHROOM",           ItemID::ITEM_ID_MUSHROOM},
-        {"ITEM_ID_MUSHROOM_JUICE",     ItemID::ITEM_ID_MUSHROOM_JUICE},
+        {"ITEM_ID_APPLE",                  ItemID::ITEM_ID_APPLE},
+        {"ITEM_ID_CHEESE",                 ItemID::ITEM_ID_CHEESE},
+        {"ITEM_ID_BREAD",                  ItemID::ITEM_ID_BREAD},
+        {"ITEM_ID_MEAT",                   ItemID::ITEM_ID_MEAT},
 
-        {"ITEM_ID_HELMET",    ItemID::ITEM_ID_HELMET},
-        {"ITEM_ID_BOOTS",    ItemID::ITEM_ID_BOOTS},
-        {"ITEM_ID_BODY",     ItemID::ITEM_ID_BODY},
-        {"ITEM_ID_GLOVES",   ItemID::ITEM_ID_GLOVES},
-        {"ITEM_ID_LEGGINGS",   ItemID::ITEM_ID_LEGGINGS},
+        {"ITEM_ID_RING",                   ItemID::ITEM_ID_RING},
 
-/* 
-        {"ITEM_ID_SCROLL",          ItemID::ITEM_ID_SCROLL},
-        {"ITEM_ID_SWIFTNESS_SCROLL",          ItemID::ITEM_ID_SWIFTNESS_SCROLL},
-        {"ITEM_ID_DAMAGE_SCROLL",          ItemID::ITEM_ID_DAMAGE_SCROLL},
-        {"ITEM_ID_TOUGHNESS_SCROLL",          ItemID::ITEM_ID_TOUGHNESS_SCROLL},
-        {"ITEM_ID_RESIST_SCROLL",          ItemID::ITEM_ID_RESIST_SCROLL}, */
+        {"ITEM_ID_STOVE_PLAN",             ItemID::ITEM_ID_STOVE_PLAN},
+        {"ITEM_ID_MUSHROOMPRESS_PLAN",     ItemID::ITEM_ID_MUSHROOMPRESS_PLAN},
 
-        {"ITEM_ID_APPLE",           ItemID::ITEM_ID_APPLE},
-        {"ITEM_ID_CHEESE",          ItemID::ITEM_ID_CHEESE},
-        {"ITEM_ID_BREAD",           ItemID::ITEM_ID_BREAD},
-        {"ITEM_ID_MEAT",            ItemID::ITEM_ID_MEAT},
+        {"ITEM_ID_HAMMER",                 ItemID::ITEM_ID_HAMMER},
+        {"ITEM_ID_SAW",                    ItemID::ITEM_ID_SAW},
+        {"ITEM_ID_SHOVEL",                 ItemID::ITEM_ID_SHOVEL},
+        {"ITEM_ID_TONGS",                  ItemID::ITEM_ID_TONGS},
+        {"ITEM_ID_ANVIL",                  ItemID::ITEM_ID_ANVIL},
 
-        {"ITEM_ID_RING",            ItemID::ITEM_ID_RING},
-
-        {"ITEM_ID_STOVE_PLAN",            ItemID::ITEM_ID_STOVE_PLAN},
-        {"ITEM_ID_MUSHROOMPRESS_PLAN",    ItemID::ITEM_ID_MUSHROOMPRESS_PLAN},
-
-        {"ITEM_ID_HAMMER",    ItemID::ITEM_ID_HAMMER},
-        {"ITEM_ID_SAW",    ItemID::ITEM_ID_SAW},
-        {"ITEM_ID_SHOVEL",    ItemID::ITEM_ID_SHOVEL},
-        {"ITEM_ID_TONGS",    ItemID::ITEM_ID_TONGS},
-        {"ITEM_ID_ANVIL",    ItemID::ITEM_ID_ANVIL},
-
-        {"ITEM_ID_CHARCOAL",    ItemID::ITEM_ID_CHARCOAL},
-        {"ITEM_ID_RESIN",    ItemID::ITEM_ID_RESIN},
-        {"ITEM_ID_BONE",    ItemID::ITEM_ID_BONE},
-        {"ITEM_ID_ROPE",    ItemID::ITEM_ID_ROPE},
-        {"ITEM_ID_BUCKET",    ItemID::ITEM_ID_BUCKET},
+        {"ITEM_ID_CHARCOAL",               ItemID::ITEM_ID_CHARCOAL},
+        {"ITEM_ID_RESIN",                  ItemID::ITEM_ID_RESIN},
+        {"ITEM_ID_BONE",                   ItemID::ITEM_ID_BONE},
+        {"ITEM_ID_ROPE",                   ItemID::ITEM_ID_ROPE},
+        {"ITEM_ID_BUCKET",                 ItemID::ITEM_ID_BUCKET},
     };
 
 
@@ -1832,8 +1871,9 @@ EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s) {
         {"Tree2",                        EnvironmentSpriteID::SPRITE_ENVIRO_TREE2},
         {"Grass1",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS1},
         {"Grass2",                       EnvironmentSpriteID::SPRITE_ENVIRO_GRASS2},
-        {"DeccoEntity_1",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1},
-        {"DeccoEntity_2",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2},        
+        //{"RUINS_ENTITY_1",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1},
+        {"SPAWN_ENTITY_1",               EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_2},
+        {"EXIT_ENTITY_1",                EnvironmentSpriteID::SPRITE_ENVIRO_DECCO_1},        
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1891,20 +1931,20 @@ std::string ModuleIdToStr(const int id) {
 
 std::string ItemTypeToStr(const int id) {
     static const std::unordered_map<ItemType , std::string> lookup_table = {
-        {ItemType::TYPE_ARMOR,     "Armor"},
+        {ItemType::TYPE_ARMOR,          "Armor"},
         {ItemType::TYPE_HEAD_ARMOR,     "Head Armor"},
         {ItemType::TYPE_BODY_ARMOR,     "Body Armor"},
-        {ItemType::TYPE_LEG_ARMOR,     "Leg Armor"},
+        {ItemType::TYPE_LEG_ARMOR,      "Leg Armor"},
         {ItemType::TYPE_FEET_ARMOR,     "Foot Armor"},
         {ItemType::TYPE_HAND_ARMOR,     "Hand Armor"},
-        {ItemType::TYPE_CONSUMEABLE,     "Consumeable"},
-        {ItemType::TYPE_RESOURCE,     "Resource"},
-        {ItemType::TYPE_PLAN,     "Plan"},
-        {ItemType::TYPE_SCROLL,     "Scroll"},
-        {ItemType::TYPE_FOOD,     "Food"},
-        {ItemType::TYPE_CHARM,     "Charm"},
-        {ItemType::TYPE_WEAPON,     "Weapon"},
-        {ItemType::TYPE_ALL,     "All"},
+        {ItemType::TYPE_CONSUMEABLE,    "Consumeable"},
+        {ItemType::TYPE_RESOURCE,       "Resource"},
+        {ItemType::TYPE_PLAN,           "Plan"},
+        {ItemType::TYPE_SCROLL,         "Scroll"},
+        {ItemType::TYPE_FOOD,            "Food"},
+        {ItemType::TYPE_CHARM,          "Charm"},
+        {ItemType::TYPE_WEAPON,         "Weapon"},
+        {ItemType::TYPE_ALL,            "All"},
     };
 
     if (auto it = lookup_table.find((ItemType)id); it != lookup_table.end()) {
@@ -1965,6 +2005,7 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_weapon.mod_slots = j["weapon_data"]["mod_slots"];
         new_weapon.pps = j["weapon_data"]["pps"];
         new_weapon.accuracy = j["weapon_data"]["accuracy"];
+        new_weapon.spell_type = j["weapon_data"]["spell_type"];
         i.weapon_data = new_weapon;
         TraceLog(LOG_INFO, "loaded weapon data found for %s", i.item_name.c_str());
     } 
@@ -1993,6 +2034,7 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_spell.radius = j["spell_data"]["radius"];
         new_spell.speed = j["spell_data"]["speed"];
         new_spell.knockback = j["spell_data"]["knockback"];
+        new_spell.spell_effect = j["spell_data"]["spell_effect"];
         i.spell_data = new_spell;
         TraceLog(LOG_INFO, "loaded spell data found for %s", i.item_name.c_str());
     }

@@ -78,7 +78,9 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/aoespell.o
 GENERATED += $(OBJDIR)/areas.o
+GENERATED += $(OBJDIR)/boltspell.o
 GENERATED += $(OBJDIR)/charactereffectentity.o
 GENERATED += $(OBJDIR)/charactermenu.o
 GENERATED += $(OBJDIR)/containerentity.o
@@ -98,6 +100,7 @@ GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
 GENERATED += $(OBJDIR)/input.o
+GENERATED += $(OBJDIR)/instantspell.o
 GENERATED += $(OBJDIR)/itemgenerator.o
 GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
@@ -135,7 +138,9 @@ GENERATED += $(OBJDIR)/tradegrid.o
 GENERATED += $(OBJDIR)/transitions.o
 GENERATED += $(OBJDIR)/utils.o
 GENERATED += $(OBJDIR)/viewport.o
+OBJECTS += $(OBJDIR)/aoespell.o
 OBJECTS += $(OBJDIR)/areas.o
+OBJECTS += $(OBJDIR)/boltspell.o
 OBJECTS += $(OBJDIR)/charactereffectentity.o
 OBJECTS += $(OBJDIR)/charactermenu.o
 OBJECTS += $(OBJDIR)/containerentity.o
@@ -155,6 +160,7 @@ OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
 OBJECTS += $(OBJDIR)/input.o
+OBJECTS += $(OBJDIR)/instantspell.o
 OBJECTS += $(OBJDIR)/itemgenerator.o
 OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
@@ -402,7 +408,16 @@ $(OBJDIR)/titleuilayer.o: src/game/scenes/titleuilayer.cpp
 $(OBJDIR)/transitions.o: src/game/scenes/transitions.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/aoespell.o: src/game/spells/aoespell.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/boltspell.o: src/game/spells/boltspell.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/fireball.o: src/game/spells/fireball.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/instantspell.o: src/game/spells/instantspell.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/lightning.o: src/game/spells/lightning.cpp

@@ -314,6 +314,7 @@ void PlayerCharacter::CheckInput() {
                 payload.shooter_id = uid;
                 payload.target_position = aim_position;//g_input.world_mouse_position;
                 payload.spread = 0.0f;
+                payload.spell_type = current_primary_data->weapon_data.spell_type;
                 TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
 
                 //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());

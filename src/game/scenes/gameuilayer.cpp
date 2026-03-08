@@ -9,11 +9,11 @@ GameUILayer::GameUILayer() {
     quit_button.default_color = DARKRED;
     quit_button.text_size = 20/g_scale;
 
-    CreateButton(debug_poi_layer_button, {20, 420 / g_scale}, {150/g_scale , 40/g_scale}, ORANGE, "poi layer");
-    debug_poi_layer_button.text_size = FONTSIZE_30;
+    CreateButton(debug_poi_layer_button, {100, 450 / g_scale}, {150/g_scale , 40/g_scale}, ORANGE, "poi layer");
+    debug_poi_layer_button.text_size = FONTSIZE_24;
 
-    CreateButton(debug_toggle_poi_layer_button, {20, 460 / g_scale}, {200/g_scale , 40/g_scale}, ORANGE, "toggle poi layer");
-    debug_toggle_poi_layer_button.text_size = FONTSIZE_30;
+    CreateButton(debug_toggle_poi_layer_button, {100, 520 / g_scale}, {200/g_scale , 40/g_scale}, ORANGE, "toggle poi layer");
+    debug_toggle_poi_layer_button.text_size = FONTSIZE_24;
     
     
     CreateStatusBar(health_bar,{20, g_resolution.y - 60}, g_active_creature_data[g_current_player->uid].max_health, 100.0f, 10.0f, RED);
@@ -85,6 +85,7 @@ void GameUILayer::Update() {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             g_debug_data.poi_layer++;
             g_debug_data.poi_layer = g_debug_data.poi_layer % 4;
+            debug_poi_layer_button.text = "layer " + std::to_string(g_debug_data.poi_layer);
             
         }        
     }

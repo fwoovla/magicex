@@ -1,7 +1,7 @@
 #include "../core/gamedefs.h"
-#include "../core/layergen.h"
-#include "../core/pathgen.h"
-#include "../core/scenerygen.h"
+//#include "../core/layergen.h"
+//#include "../core/pathgen.h"
+//#include "../core/scenerygen.h"
 #include <algorithm>
 #include <random>
 
@@ -204,6 +204,25 @@ void GenerateWorldGenTilesets(std::string _path) {
                                 }                                
                             }
                         }
+                        else if(this_layer.identifier == "Exits") {
+                            json *bounds_layer = nullptr;
+
+                            for(int l = 0; l < j["levels"][level]["layerInstances"].size(); l++) {
+                                if( j["levels"][level]["layerInstances"][l]["__identifier"] == "ExitsBounds") {
+                                    bounds_layer = &j["levels"][level]["layerInstances"][l];
+                                    break;
+                                }
+                            }
+
+                            if(bounds_layer) {
+                                std::vector<LDTKEntityInstance> structure_bounding_entities;
+                                ExtractStructureBounds(*bounds_layer, structure_bounding_entities);
+                                BuildPremadeStructures(j["levels"][level]["layerInstances"][layer]["gridTiles"], *this_tileset, structure_bounding_entities, this_tileset->exit_lookup);
+                                for(auto &structure : this_tileset->spawn_lookup) {
+                                    this_tileset->exit_id_strings.push_back(structure.first);
+                                }                                
+                            }
+                        }
                     }
                 }
             }
@@ -330,7 +349,7 @@ void GenerateMap(LDTKLevel &new_level, std::string map_name) {
     GenerateDeccoLayer(new_level, *this_tileset,  g_worldgen_tilesets[1]);
     GenerateLowerTerrainLayer(new_level, *this_tileset);
 
-    //PopulateDeccoEntities(new_level, *this_tileset,  g_worldgen_tilesets[1]);
+    PopulateDeccoEntities(new_level, *this_tileset,  g_worldgen_tilesets[1]);
 
     PopulateGrass(new_level, *this_tileset);
     PopulateTrees(new_level, *this_tileset);
@@ -598,13 +617,13 @@ void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bound
             new_entity.width = bounds["entityInstances"][entity]["width"];
             new_entity.height = bounds["entityInstances"][entity]["height"];
 
-            LDTKFieldInstance new_field;
-
-            if(bounds["entityInstances"][entity]["fieldInstances"].size() > 0) {
-
-                new_field.identifier = bounds["entityInstances"][entity]["fieldInstances"][0]["__identifier"];
-                new_field.value_s = bounds["entityInstances"][entity]["fieldInstances"][0]["__value"];   
+            
+            for(int field = 0; field < bounds["entityInstances"][entity]["fieldInstances"].size(); field++) {
+                LDTKFieldInstance new_field;
+                new_field.identifier = bounds["entityInstances"][entity]["fieldInstances"][field]["__identifier"];
+                new_field.value_s = bounds["entityInstances"][entity]["fieldInstances"][field]["__value"];   
                 new_entity.field_instances.push_back(new_field);
+                TraceLog(LOG_INFO, "structuire field   %s", new_field.value_s.c_str());
             } 
             bounding_entities.push_back(new_entity);        
         }
@@ -626,12 +645,14 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         new_rect.height = structure_bounding_entities[r].height;
 
         std::string structure_id_string = structure_bounding_entities[r].field_instances[0].value_s;
+        std::string decco_base_string = structure_bounding_entities[r].field_instances[1].value_s;
 
         TraceLog(LOG_INFO, "%s structure rect at x:%0.0f y:%0.0f w:%0.0f h:%0.0f", structure_id_string.c_str() , new_rect.x, new_rect.y, new_rect.width, new_rect.height);
 
         WorldGenStructureData new_structure;
         new_structure.position = {0,0};
         new_structure.structure_size = {new_rect.width/this_tileset.tile_grid_size, new_rect.height/this_tileset.tile_grid_size};
+        new_structure.decco_base = decco_base_string;
 
         for( int tile = 0; tile < grid_tiles.size(); tile++) {
             int tile_x = grid_tiles[tile]["px"][0];
@@ -655,6 +676,7 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
                 //TraceLog(LOG_INFO, "new tile %i    at x:%0.0f y:%0.0f", new_tile.tile_id, new_tile.position.x, new_tile.position.y);
             }
         }
+
         if(structure_id_string.rfind("HOUSE", 0)== 0) {
             TraceLog(LOG_INFO, "house  ");
         }
@@ -664,6 +686,10 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         if(structure_id_string.rfind("SPAWN", 0)== 0) {
             TraceLog(LOG_INFO, "spawn  ");
         }
+        if(structure_id_string.rfind("EXIT", 0)== 0) {
+            TraceLog(LOG_INFO, "exit  ");
+        }
+
         structure_lookup[structure_id_string] = new_structure;
     }
 
@@ -675,6 +701,10 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         }
     }    
 }
+
+
+
+
 
 void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities){
 
@@ -785,8 +815,13 @@ void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::
 }
 
 
-void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
+
+
+
+
 /* 
+void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
+
     int x_patches = (_tileset.map_size.x/patch_size);
     int y_patches = (_tileset.map_size.y/patch_size);
 
@@ -831,10 +866,10 @@ void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
                 new_patch.height);
         }
     } 
-    */
+
 }
-
-
+ */
+/* 
 Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
 
     std::vector<int> index_choices;
@@ -863,7 +898,7 @@ Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
 
 }
 
-
+ */
 
 TILEID GetFenceTileTop(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y) {
 
@@ -1206,10 +1241,10 @@ void LoadMapGenData(json &j) {
         new_data.terrain = new_terrain;
 
 
-        for(int s = 0; s < j[map]["exits"].size(); s++) {
+/*         for(int s = 0; s < j[map]["exits"].size(); s++) {
             std::string d_string = j[map]["exits"][s];
             new_data.exit_dest_strings.push_back(d_string);
-        }
+        } */
         g_worldgen_data.push_back(new_data);
         TraceLog(LOG_INFO, "-----------------wg data map: %s  ", new_data.map_name.c_str());
     }
@@ -1245,7 +1280,7 @@ void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
     int fourty_percent_x = (int)(wg_plan.map_size.x * 0.4f);
     int fourty_percent_y = (int)(wg_plan.map_size.y * 0.4f);
 
-    int max_exits = wg_plan.exit_dest_strings.size();
+    int max_exits = GetRandomValue(2,2);
     
     wg_plan.road_midpoint.x = GetRandomValue(fourty_percent_x, wg_plan.map_size.x - fourty_percent_x);
     wg_plan.road_midpoint.y = GetRandomValue(fourty_percent_y, wg_plan.map_size.y - fourty_percent_y);
@@ -1266,14 +1301,11 @@ void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
         int j = GetRandomValue(0, i);
         std::swap(exit_positions[i], exit_positions[j]);
     }
-    for(int exit = 0; exit < wg_plan.exit_dest_strings.size(); exit++) {
-        
-        Vector2 exit_pos = exit_positions[exit];
 
+    for(int exit = 0; exit < max_exits; exit++) {
+        Vector2 exit_pos = exit_positions[exit];
         wg_plan.exit_positions.push_back(exit_pos);
     }
-
-
 
 
     for(int y = 0; y <= wg_plan.map_size.y; y++) {
@@ -1284,9 +1316,6 @@ void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
             }
         }
     }
-
-
-
 }
 
 
@@ -1344,14 +1373,11 @@ void PlanRegions(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
 
 void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
 
-
-
     for(WorldGenStructure & structure : wg_data.structure_data) {
 
         int count = GetRandomValue(structure.count_min, structure.count_max);
         StructureProfile &p = structure.profile;
         Vector2 structure_size = Vector2Add(structure.size, (Vector2){(float)structure.min_distance, (float)structure.min_distance});
-
 
         TraceLog(LOG_INFO, "placing structure: %s ", structure.id.c_str());
 
@@ -1390,9 +1416,7 @@ void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
                                 candidates.push_back({ &cell, score });
                                 //wg_plan.reserved_rects.push_back(footprint);
                             }
-
                         }
-
                     }
                 }
             }
@@ -1425,7 +1449,6 @@ void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
                 footprint.width = structure_size.x;
                 footprint.height =structure_size.y;
 
-
                 StructurePatch patch;
                 patch.rect = footprint;
                 patch.center = center;
@@ -1439,19 +1462,16 @@ void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
                 patch.edge_proximity    = chosen->edge;
 
                 wg_plan.poi_patches.push_back(patch);
-
                 wg_plan.reserved_rects.push_back(patch.rect);
-
                 
-                wg_plan.connected_positions.push_back(center);
                 if(patch.id == "house") {
+                    wg_plan.connected_positions.push_back(center);
                 }
 
                 TraceLog(LOG_INFO, "Planned structure %s at %.0f %.0f",
                     structure.id.c_str(),
                     center.x,
                     center.y);
- 
             }
             else {
                 TraceLog(LOG_INFO, "no available candadate cells");
@@ -1589,88 +1609,6 @@ WorldGenBiome *GetBiome(Vector2 position, WorldGenTileSet &_tileset) {
     }
 
     return nullptr;
-}
-
-
-void CreatePoiPatches(WorldGenPlan &wg_plan, int patch_size) {
-
-    int x_patches = (wg_plan.map_size.x/patch_size);
-    int y_patches = (wg_plan.map_size.y/patch_size);
-    
-    TraceLog(LOG_INFO, "Generating POI Patches------ x patches %i   y patches %i  ", x_patches, y_patches);
-    //int num_structure_patches = x_patches + y_patches;
-    
-    /* 
-
-    for(int y_patch = 1; y_patch < y_patches - 1; y_patch++ ) {
-        for(int x_patch = 1; x_patch < x_patches - 1; x_patch++) {
-            int x_pos = (x_patch * x_patch_size);
-            int y_pos = (y_patch * y_patch_size);
-
-            Rectangle new_patch;
-            new_patch.x = x_pos;
-            new_patch.y = y_pos;
-            new_patch.width = patch_size;
-            new_patch.height = patch_size;
-
-            if(new_patch.x < 0) {new_patch.x = 0;}
-            if(new_patch.x > wg_plan.map_size.x-1) { new_patch.x = wg_plan.map_size.x-1;}
-            if(new_patch.x + patch_size > wg_plan.map_size.x) {
-                int diff = (new_patch.x + patch_size) - wg_plan.map_size.x;
-                new_patch.width -= diff;
-            }
-
-            if(new_patch.y < 0) {new_patch.y = 0;}
-            if(new_patch.y + patch_size > wg_plan.map_size.y-1) { new_patch.y = wg_plan.map_size.y-1;}
-            if(new_patch.y + patch_size > wg_plan.map_size.y) {
-                int diff = (new_patch.y + patch_size) - wg_plan.map_size.y;
-                new_patch.height -= diff;
-            }
-
-
-            wg_plan.poi_patches.push_back(new_patch);
-
-             TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
-                new_patch.x,
-                new_patch.y,
-                new_patch.width,
-                new_patch.height); 
-        }
-    } */
-}
-
-
-Rectangle GetAvailablePoiPatch(WorldGenTileSet &_tileset) {
-
-/* 
-    std::vector<int> index_choices;
-
-    for(int i = 0; i < _tileset.wg_plan.poi_patches.size(); i++ ) {
-        bool found = false;
-        for(int patch : _tileset.wg_plan.used_poi_patches) {
-            if(i == patch) {
-                found = true;s
-            }
-        }
-
-        if(!found) {index_choices.push_back(i);}
-    }
-
-
-    if(index_choices.size() < 1) {
-        Rectangle empty_rect;
-        return empty_rect;
-    }
-    
-    int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
-
-    _tileset.wg_plan.used_poi_patches.push_back(choice);
-
-    return _tileset.wg_plan.poi_patches[choice];
-    */
-   Rectangle rect;
-   return rect;
-
 }
 
 
@@ -1866,6 +1804,12 @@ StructureProfile BuildStructureProfile(WorldGenStructure &structure) {
         p.wants_forrest = 0.0f;
     }
     if(structure.id == "ruins"){
+        p.wants_road = -0.01f;
+        p.wants_center = -0.2f;
+        p.wants_edge = -0.01f;
+        p.wants_forrest = 0.1f;
+    }
+    if(structure.id == "exit"){
         p.wants_road = -0.01f;
         p.wants_center = -0.2f;
         p.wants_edge = -0.01f;

@@ -1,4 +1,4 @@
-#include "../../core/pathgen.h"
+#include "../../core/gamedefs.h"
 
 
 void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
@@ -53,7 +53,7 @@ void ConnectStructuresWithPaths(WorldGenTileSet &_tileset) {
             if (p.y < 0) {p.y = 0;}
             if (p.y > _tileset.map_size.y-1) {p.y = _tileset.map_size.y-1;}
 
-            TraceLog(LOG_INFO, "p %i %i      %0.0f %0.0f     %0.0f %0.0f",px, py, p.x, p.y, end_position.x, end_position.y);
+            //TraceLog(LOG_INFO, "p %i %i      %0.0f %0.0f     %0.0f %0.0f",px, py, p.x, p.y, end_position.x, end_position.y);
 
             new_path.push_back(p);
 

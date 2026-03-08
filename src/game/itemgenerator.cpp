@@ -143,10 +143,8 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     instance.weapon_data.accuracy = base_accuracy + _a;
     if(instance.weapon_data.accuracy > 1.0f) {instance.weapon_data.accuracy = 1.0f;}
 
-
     instance.mod_slots = GetRandomValue(0, (loot_level));
 
-    
     instance.spell_id = instance.weapon_data.spell_id;
     
     if(instance.spell_id != SPELL_ID_NONE) {

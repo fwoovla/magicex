@@ -6,15 +6,15 @@
 
 enum SpellID {
     SPELL_ID_NONE = -1,
-    SPELL_ID_MAGICMISSLE_1,
-    SPELL_ID_MAGICMISSLE_2,
-    SPELL_ID_MAGICMISSLE_3,
-    SPELL_ID_MAGICMISSLE_4,
+    SPELL_ID_FORCE_1,
+    SPELL_ID_FORCE_2,
+    SPELL_ID_FORCE_3,
+    SPELL_ID_FORCE_4,
 
-    SPELL_ID_FIREBALL_1,
-    SPELL_ID_FIREBALL_2,
-    SPELL_ID_FIREBALL_3,
-    SPELL_ID_FIREBALL_4,
+    SPELL_ID_FIRE_1,
+    SPELL_ID_FIRE_2,
+    SPELL_ID_FIRE_3,
+    SPELL_ID_FIRE_4,
 
     SPELL_ID_LIGHTNING_1,
     SPELL_ID_LIGHTNING_2,
@@ -29,10 +29,26 @@ enum SpellID {
 };
 
 
+enum SPELL_TYPE {
+    SPELL_TYPE_NONE = -1,
+    SPELL_TYPE_BOLT,
+    SPELL_TYPE_AOE,
+    SPELL_TYPE_INSTANT,
 
+};
+
+enum SPELL_EFFECT {
+    SPELL_EFFECT_NONE = -1,
+    SPELL_EFFECT_FORCE,
+    SPELL_EFFECT_FIRE,
+    SPELL_EFFECT_LIGHTNING,
+    SPELL_EFFECT_POISON,
+
+};
 
 struct SpellData {
     std::string spell_name;
+    SPELL_EFFECT spell_effect;
     SpellID spell_id;
     int shooter_id;
     float damage;
@@ -51,8 +67,15 @@ struct NewSpellPayload {
     float rotation;
     int shooter_id;
     int spread;
+    SPELL_TYPE spell_type;
     //SpellData *spell_data;
 };
+
+
+
+
+
+
 
 
 class BaseSpell : public AnimatedSpriteEntity {
@@ -123,6 +146,53 @@ class Lightning : public BaseSpell {
 
     Lightning(NewSpellPayload payload, SpellData *_data);
     ~Lightning() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void OnLifetimeTimeout() override;
+    void TakeDamage(DamagePayload _payload) override;
+
+};
+
+
+
+
+
+
+class BoltSpell : public BaseSpell {
+    public:
+
+    BoltSpell(NewSpellPayload payload, SpellData *_data);
+    ~BoltSpell() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void OnLifetimeTimeout() override;
+    void TakeDamage(DamagePayload _payload) override;
+
+};
+
+class AoeSpell : public BaseSpell {
+    public:
+
+    AoeSpell(NewSpellPayload payload, SpellData *_data);
+    ~AoeSpell() override;
+    void Update() override;
+    void Draw() override;
+    void DrawUI() override;
+    float GetYSort() override;
+    void OnLifetimeTimeout() override;
+    void TakeDamage(DamagePayload _payload) override;
+
+};
+
+class InstantSpell : public BaseSpell {
+    public:
+
+    InstantSpell(NewSpellPayload payload, SpellData *_data);
+    ~InstantSpell() override;
     void Update() override;
     void Draw() override;
     void DrawUI() override;

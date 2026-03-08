@@ -41,7 +41,14 @@
             "size":[10,10],
             "prefer_region":"BIOME_PLAINS",
             "min_distance":1
-            }              
+            },
+            {
+            "id":"exit",
+            "count":[1,3],
+            "size":[5,5],
+            "prefer_region":"BIOME_PLAINS",
+            "min_distance":1
+            }            
         ],
 
         "terrain":{
@@ -203,107 +210,105 @@
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
-
-
         {
-            "item_name": "Force Bolt Wand",
-            "item_id":"ITEM_ID_NEWWAND1",
+            "item_name": "Level 1 Force Caster",
+            "item_id":"ITEM_ID_FORCECASTER1",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 2 Force Caster",
+            "item_id":"ITEM_ID_FORCECASTER2",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 3 Force Caster",
+            "item_id":"ITEM_ID_FORCECASTER3",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 4 Force Caster",
+            "item_id":"ITEM_ID_FORCECASTER4",
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
 
         {
-            "item_name": "Force Rain Wand",
-            "item_id":"ITEM_ID_NEWWAND2",
-            "value":40,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Force Smash Wand",
-            "item_id":"ITEM_ID_NEWWAND3",
-            "value":70,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Force 4 Wand",
-            "item_id":"ITEM_ID_NEWWAND4",
-            "value":100,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Fire Bolt Wand",
-            "item_id":"ITEM_ID_NEWWAND5",
+            "item_name": "Level 1 Fire Caster",
+            "item_id":"ITEM_ID_FIRECASTER1",
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
         {
-            "item_name": "Fire Rain Wand",
-            "item_id":"ITEM_ID_NEWWAND6",
-            "value":40,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Fire Ball Wand",
-            "item_id":"ITEM_ID_NEWWAND7",
-            "value":70,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Inferno Burst Wand",
-            "item_id":"ITEM_ID_NEWWAND8",
-            "value":100,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Lightning Bolt Wand",
-            "item_id":"ITEM_ID_NEWWAND9",
+            "item_name": "Level 2 Fire Caster",
+            "item_id":"ITEM_ID_FIRECASTER2",
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
         {
-            "item_name": "Lightning Rain Wand",
-            "item_id":"ITEM_ID_NEWWAND10",
-            "value":40,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Chain Lightning Wand",
-            "item_id":"ITEM_ID_NEWWAND11",
-            "value":70,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Lightning Storm Wand",
-            "item_id":"ITEM_ID_NEWWAND12",
-            "value":100,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Poison Bolt Wand",
-            "item_id":"ITEM_ID_NEWWAND13",
+            "item_name": "Level 3 Fire Caster",
+            "item_id":"ITEM_ID_FIRECASTER3",
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
         {
-            "item_name": "Poison Rain Wand",
-            "item_id":"ITEM_ID_NEWWAND14",
-            "value":40,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Contaigous Wand",
-            "item_id":"ITEM_ID_NEWWAND15",
-            "value":70,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Toxic Cloud Wand",
-            "item_id":"ITEM_ID_NEWWAND16",
-            "value":100,
+            "item_name": "Level 4 Fire Caster",
+            "item_id":"ITEM_ID_FIRECASTER4",
+            "value":20,
             "item_type":"TYPE_WEAPON"
         },
 
+        {
+            "item_name": "Level 1 Poison Caster",
+            "item_id":"ITEM_ID_POISONCASTER1",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 2 Poison Caster",
+            "item_id":"ITEM_ID_POISONCASTER2",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 3 Poison Caster",
+            "item_id":"ITEM_ID_POISONCASTER3",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 4 Poison Caster",
+            "item_id":"ITEM_ID_POISONCASTER4",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
 
+        {
+            "item_name": "Level 1 Lightning Caster",
+            "item_id":"ITEM_ID_LIGHTNINGCASTER1",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 2 Lightning Caster",
+            "item_id":"ITEM_ID_LIGHTNINGCASTER2",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 3 Lightning Caster",
+            "item_id":"ITEM_ID_LIGHTNINGCASTER3",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Level 4 Lightning Caster",
+            "item_id":"ITEM_ID_LIGHTNINGCASTER4",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
 
 
 
@@ -479,159 +484,172 @@
     "spell_data": [
 
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
-            "spell_name":"Force Bolt",
+            "spell_id":"SPELL_ID_FORCE_1",
+            "spell_name":"Force1",
             "lifetime":1.0,
-
             "speed": 250,
             "damage":2,
             "radius":2,
-            "knockback":10
+            "knockback":10,
+            "spell_effect":"SPELL_EFFECT_NONE"
         },
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
-            "spell_name":"Force Rain",
+            "spell_id":"SPELL_ID_FORCE_2",
+            "spell_name":"Force2",
             "lifetime":1.0,
             "speed": 250,
             "damage":5,
             "radius":2,
-            "knockback":30
+            "knockback":30,
+            "spell_effect":"SPELL_EFFECT_NONE"
         },
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
-            "spell_name":"Force Smash",
+            "spell_id":"SPELL_ID_FORCE_3",
+            "spell_name":"Force3",
             "lifetime":1.0,
             "speed": 200,
             "damage":10,
             "radius":20,
-            "knockback":80
+            "knockback":80,
+            "spell_effect":"SPELL_EFFECT_NONE"
         },
         {
-            "spell_id":"SPELL_ID_MAGICMISSLE_4",
+            "spell_id":"SPELL_ID_FORCE_4",
             "spell_name":"Force 4",
             "lifetime":1.0,
             "speed": 200,
             "damage":20,
             "radius":20,
-            "knockback":100
+            "knockback":100,
+            "spell_effect":"SPELL_EFFECT_NONE"
         },
 
 
-
-
         {
-            "spell_id":"SPELL_ID_FIREBALL_1",
-            "spell_name":"Fire Bolt",
+            "spell_id":"SPELL_ID_FIRE_1",
+            "spell_name":"Fire 1",
             "lifetime":1.0,
             "speed": 300,
             "damage":5,
             "radius":2,
-            "knockback":20
+            "knockback":20,
+            "spell_effect":"SPELL_EFFECT_FIRE"
         },
         {
-            "spell_id":"SPELL_ID_FIREBALL_2",
-            "spell_name":"Fire Rain",
+            "spell_id":"SPELL_ID_FIRE_2",
+            "spell_name":"Fire 2",
             "lifetime":1.0,
             "speed": 400,
             "damage":5,
             "radius":2,
-            "knockback":20
+            "knockback":20,
+            "spell_effect":"SPELL_EFFECT_FIRE"
         },
         {
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "spell_name":"Fire Ball",
+            "spell_id":"SPELL_ID_FIRE_3",
+            "spell_name":"Fire 3",
             "lifetime":1.0,
             "speed": 200,
             "damage":10,
             "radius":20,
-            "knockback":80
+            "knockback":80,
+            "spell_effect":"SPELL_EFFECT_FIRE"
         },
         {
-            "spell_id":"SPELL_ID_FIREBALL_4",
-            "spell_name":"Inferno Burst",
+            "spell_id":"SPELL_ID_FIRE_4",
+            "spell_name":"Fire 4",
             "lifetime":1.0,
             "speed": 400,
             "damage":30,
             "radius":20,
-            "knockback":100
+            "knockback":100,
+            "spell_effect":"SPELL_EFFECT_FIRE"
         },
 
 
 
         {
             "spell_id":"SPELL_ID_LIGHTNING_1",
-            "spell_name":"Lightning Bolt",
+            "spell_name":"Lightning 1",
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
-            "knockback":30
+            "knockback":30,
+            "spell_effect":"SPELL_EFFECT_LIGHTNING"
         },
-                {
+        {
             "spell_id":"SPELL_ID_LIGHTNING_2",
-            "spell_name":"Lightning Rain",
+            "spell_name":"Lightning 2",
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
-            "knockback":30
+            "knockback":30,
+            "spell_effect":"SPELL_EFFECT_LIGHTNING"
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_3",
-            "spell_name":"Chain Lightning",
+            "spell_name":"Lightning 3",
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
-            "knockback":20
+            "knockback":20,
+            "spell_effect":"SPELL_EFFECT_LIGHTNING"
         },
         {
             "spell_id":"SPELL_ID_LIGHTNING_4",
-            "spell_name":"Lightning Storm",
+            "spell_name":"Lightning 4",
             "lifetime":1.0,
             "speed": 700,
             "damage":5,
             "radius":2,
-            "knockback":40
+            "knockback":40,
+            "spell_effect":"SPELL_EFFECT_LIGHTNING"
         },
 
 
 
         {
             "spell_id":"SPELL_ID_POISON_1",
-            "spell_name":"Poison Bolt",
+            "spell_name":"Poison 1",
             "lifetime":1.0,
             "speed": 200,
             "damage":2,
             "radius":2,
-            "knockback":10
+            "knockback":10,
+            "spell_effect":"SPELL_EFFECT_POISON"
         },
-                {
+        {
             "spell_id":"SPELL_ID_POISON_2",
-            "spell_name":"Poison Rain",
+            "spell_name":"Poison 2",
             "lifetime":1.0,
             "speed": 200,
             "damage":5,
             "radius":2,
-            "knockback":10
+            "knockback":10,
+            "spell_effect":"SPELL_EFFECT_POISON"
         },
         {
             "spell_id":"SPELL_ID_POISON_3",
-            "spell_name":"Containgous Gas",
+            "spell_name":"Poison 3",
             "lifetime":1.0,
             "speed": 200,
             "damage":8,
             "radius":2,
-            "knockback":40
+            "knockback":40,
+            "spell_effect":"SPELL_EFFECT_POISON"
         },
         {
             "spell_id":"SPELL_ID_POISON_4",
-            "spell_name":"Toxic Cloud",
+            "spell_name":"Poison 4",
             "lifetime":1.0,
             "speed": 300,
             "damage":5,
             "radius":2,
-            "knockback":10
+            "knockback":10,
+            "spell_effect":"SPELL_EFFECT_POISON"
         }
     ],
 
@@ -643,6 +661,7 @@
             "weapon_name": "Dagger",
             "cooldown": 0.50,
             "spell_id":"SPELL_ID_NONE",
+            "spell_type":"SPELL_TYPE_NONE",
             "max_power":0,
             "damage":2,
             "recoil":0,
@@ -656,6 +675,7 @@
             "weapon_name": "Sword",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
+            "spell_type":"SPELL_TYPE_NONE",
             "max_power":0,
             "damage":3,
             "recoil":0,
@@ -669,6 +689,7 @@
             "weapon_name": "Spear",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
+            "spell_type":"SPELL_TYPE_NONE",
             "max_power":0,
             "damage":4,
             "recoil":0,
@@ -682,6 +703,7 @@
             "weapon_name": "Axe",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
+            "spell_type":"SPELL_TYPE_NONE",
             "max_power":0,
             "damage":2,
             "recoil":0,
@@ -695,6 +717,7 @@
             "weapon_name": "Bow",
             "cooldown": 0.80,
             "spell_id":"SPELL_ID_NONE",
+            "spell_type":"SPELL_TYPE_NONE",
             "max_power":0,
             "damage":1,
             "recoil":0,
@@ -704,216 +727,240 @@
             "accuracy":1.0        
         },
 
-        
+
+
+
 
         {
-            "weapon_id": "ITEM_ID_NEWWAND1",
-            "weapon_name": "Force Bolt",
-            "spell_id":"SPELL_ID_MAGICMISSLE_1",
+            "weapon_id": "ITEM_ID_FORCECASTER1",
+            "weapon_name": "Force 1",
+            "spell_id":"SPELL_ID_FORCE_1",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
             "cooldown": 0.60,
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND2",
-            "weapon_name": "Force Rain",
-            "cooldown": 0.50,
-            "spell_id":"SPELL_ID_MAGICMISSLE_2",
+            "weapon_id": "ITEM_ID_FORCECASTER2",
+            "weapon_name": "Force 2",
+            "spell_id":"SPELL_ID_FORCE_2",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 0.20,
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND3",
-            "weapon_name": "Force Smash",
-            "cooldown": 0.25,
-            "spell_id":"SPELL_ID_MAGICMISSLE_3",
+            "weapon_id": "ITEM_ID_FORCECASTER3",
+            "weapon_name": "Force 3",
+            "spell_id":"SPELL_ID_FORCE_3",
+            "spell_type":"SPELL_TYPE_AOE",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 2.00,
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND4",
+            "weapon_id": "ITEM_ID_FORCECASTER4",
             "weapon_name": "Force 4",
-            "cooldown": 0.15,
-            "spell_id":"SPELL_ID_MAGICMISSLE_4",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
+            "spell_id":"SPELL_ID_FORCE_4",
+            "spell_type":"SPELL_TYPE_INSTANT",
             "knockback":0,
+            "damage":0,
             "mod_slots":0,
+            "cooldown": 2.60,
+            "max_power":100,
+            "recoil":50,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND5",
-            "weapon_name": "Fire Bolt",
+            "weapon_id": "ITEM_ID_FIRECASTER1",
+            "weapon_name": "Fire 1",
+            "spell_id":"SPELL_ID_FIRE_1",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
             "cooldown": 0.60,
-            "spell_id":"SPELL_ID_FIREBALL_1",
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND6",
-            "weapon_name": "Fire Rain",
+            "weapon_id": "ITEM_ID_FIRECASTER2",
+            "weapon_name": "Fire 2",
+            "spell_id":"SPELL_ID_FIRE_2",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
             "cooldown": 0.20,
-            "spell_id":"SPELL_ID_FIREBALL_2",
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND7",
-            "weapon_name": "Fire Ball",
-            "cooldown": 0.30,
-            "spell_id":"SPELL_ID_FIREBALL_3",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
+            "weapon_id": "ITEM_ID_FIRECASTER3",
+            "weapon_name": "Fire 3",
+            "spell_id":"SPELL_ID_FIRE_3",
+            "spell_type":"SPELL_TYPE_AOE",
             "knockback":0,
+            "damage":0,
             "mod_slots":0,
+            "cooldown": 2.00,
+            "max_power":100,
+            "recoil":50,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND8",
-            "weapon_name": "Inferno Burst",
-            "cooldown": 0.15,
-            "spell_id":"SPELL_ID_FIREBALL_4",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
+            "weapon_id": "ITEM_ID_FIRECASTER4",
+            "weapon_name": "Fire 4",
+            "spell_id":"SPELL_ID_FIRE_4",
+            "spell_type":"SPELL_TYPE_INSTANT",
             "knockback":0,
+            "damage":0,
             "mod_slots":0,
+            "cooldown": 2.60,
+            "max_power":100,
+            "recoil":50,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND9",
-            "weapon_name": "Lightning Bolt",
-            "cooldown": 0.5,
+            "weapon_id": "ITEM_ID_LIGHTNINGCASTER1",
+            "weapon_name": "Lightning 1",
             "spell_id":"SPELL_ID_LIGHTNING_1",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
+            "spell_type":"SPELL_TYPE_BOLT",
             "knockback":0,
-            "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND10",
-            "weapon_name": "Lightning Rain",
-            "cooldown": 0.6,
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "max_power":100,
             "damage":0,
-            "recoil":50,
-            "knockback":0,
             "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND11",
-            "weapon_name": "Chain Lightning",
-            "cooldown": 0.8,
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND12",
-            "weapon_name": "Lightning Storm",
-            "cooldown": 0.40,
-            "spell_id":"SPELL_ID_LIGHTNING_4",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND13",
-            "weapon_name": "Poison Bolt",
             "cooldown": 0.60,
-            "spell_id":"SPELL_ID_POISON_1",
             "max_power":100,
-            "damage":0,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND14",
-            "weapon_name": "Poison Rain",
-            "cooldown": 0.50,
-            "spell_id":"SPELL_ID_POISON_2",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
         },
         {
-            "weapon_id": "ITEM_ID_NEWWAND15",
-            "weapon_name": "Containgous Gas",
-            "cooldown": 0.6,
-            "spell_id":"SPELL_ID_POISON_3",
-            "max_power":100,
-            "damage":0,
-            "recoil":50,
+            "weapon_id": "ITEM_ID_LIGHTNINGCASTER2",
+            "weapon_name": "Lightning 2",
+            "spell_id":"SPELL_ID_LIGHTNING_2",
+            "spell_type":"SPELL_TYPE_BOLT",
             "knockback":0,
+            "damage":0,
             "mod_slots":0,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_NEWWAND16",
-            "weapon_name": "Toxic Cloud",
             "cooldown": 0.20,
-            "spell_id":"SPELL_ID_POISON_4",
             "max_power":100,
-            "damage":2,
             "recoil":50,
-            "knockback":0,
-            "mod_slots":0,
             "pps":10,
             "accuracy":0.4        
-        }        
+        },
+        {
+            "weapon_id": "ITEM_ID_LIGHTNINGCASTER3",
+            "weapon_name": "Lightning 3",
+            "spell_id":"SPELL_ID_LIGHTNING_3",
+            "spell_type":"SPELL_TYPE_AOE",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 2.00,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        },
+        {
+            "weapon_id": "ITEM_ID_LIGHTNINGCASTER4",
+            "weapon_name": "Lightning 4",
+            "spell_id":"SPELL_ID_LIGHTNING_4",
+            "spell_type":"SPELL_TYPE_INSTANT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 2.60,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        },
+        {
+            "weapon_id": "ITEM_ID_POISONCASTER1",
+            "weapon_name": "Poison 1",
+            "spell_id":"SPELL_ID_POISON_1",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 0.60,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        },
+        {
+            "weapon_id": "ITEM_ID_POISONCASTER2",
+            "weapon_name": "Poison 2",
+            "spell_id":"SPELL_ID_POISON_2",
+            "spell_type":"SPELL_TYPE_BOLT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 0.20,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        },
+        {
+            "weapon_id": "ITEM_ID_POISONCASTER3",
+            "weapon_name": "Poison 3",
+            "spell_id":"SPELL_ID_POISON_3",
+            "spell_type":"SPELL_TYPE_AOE",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 2.00,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        },
+        {
+            "weapon_id": "ITEM_ID_POISONCASTER4",
+            "weapon_name": "Poison 4",
+            "spell_id":"SPELL_ID_POISON_4",
+            "spell_type":"SPELL_TYPE_INSTANT",
+            "knockback":0,
+            "damage":0,
+            "mod_slots":0,
+            "cooldown": 2.60,
+            "max_power":100,
+            "recoil":50,
+            "pps":10,
+            "accuracy":0.4        
+        }
+
+
+
+
+
+
     ],
 
 
@@ -1262,85 +1309,84 @@
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND1",
+              "item_id":"ITEM_ID_FORCECASTER1",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND2",
+              "item_id":"ITEM_ID_FORCECASTER2",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND3",
+              "item_id":"ITEM_ID_FORCECASTER3",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND4",
+              "item_id":"ITEM_ID_FORCECASTER4",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND5",
+              "item_id":"ITEM_ID_FIRECASTER1",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND6",
+              "item_id":"ITEM_ID_FIRECASTER2",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND7",
+              "item_id":"ITEM_ID_FIRECASTER3",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND8",
+              "item_id":"ITEM_ID_FIRECASTER4",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },{
+              "item_id":"ITEM_ID_LIGHTNINGCASTER1",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND9",
+              "item_id":"ITEM_ID_LIGHTNINGCASTER2",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND10",
+              "item_id":"ITEM_ID_LIGHTNINGCASTER3",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND11",
+              "item_id":"ITEM_ID_LIGHTNINGCASTER4",
+              "weight":10,
+              "min_rarity":"LOOTRARITY_COMMON"
+            },{
+              "item_id":"ITEM_ID_POISONCASTER1",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND12",
+              "item_id":"ITEM_ID_POISONCASTER2",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND13",
+              "item_id":"ITEM_ID_POISONCASTER3",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             },
             {
-              "item_id":"ITEM_ID_NEWWAND14",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_NEWWAND15",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_NEWWAND16",
+              "item_id":"ITEM_ID_POISONCASTER4",
               "weight":10,
               "min_rarity":"LOOTRARITY_COMMON"
             }
+
           ]
           
         },

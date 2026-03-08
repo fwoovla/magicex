@@ -1,4 +1,4 @@
-#include "../../core/scenerygen.h"
+#include "../../core/gamedefs.h"
 
 void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
     Vector2 temp_grid_size = {(_tileset.map_size.x*2), (_tileset.map_size.y*2)};
@@ -14,7 +14,6 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
             free_tiles++;
         }
     }
-
 
     int num_trees = free_tiles * _tileset.wg_data.tree_coverage;
 
@@ -50,19 +49,13 @@ void PopulateTrees(LDTKLevel &_level, WorldGenTileSet &_tileset) {
 void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, WorldGenTileSet &structure_tileset) {
 
 
-    std::vector<std::string>  structure_names;
-
-    for(auto &structure :structure_tileset.entity_decco_lookup) {
-        structure_names.push_back(structure.first);
-    }
-
-
     for(WorldGenDeccoEntityData &decco_entity : current_tileset.entity_decco_data) {
 
-        std::string name_choice;
+        std::string name_choice = decco_entity.decco_name;
 
-        Vector2 s_pos = decco_entity.position;
-        name_choice = decco_entity.decco_name;
+        int fx = (int)decco_entity.position.x;
+        int fy = (int)decco_entity.position.y;
+        Vector2 s_pos = {(float)fx, (float)fy};
 
         int half_width = structure_tileset.entity_decco_lookup[name_choice].structure_size.x/2;
         int half_height = structure_tileset.entity_decco_lookup[name_choice].structure_size.y/2;
@@ -88,7 +81,7 @@ void PopulateDeccoEntities(LDTKLevel &_level, WorldGenTileSet &current_tileset, 
 
             int index = (y * current_tileset.map_size.x + x);
 
-            //TraceLog(LOG_INFO, "------fake decco entity tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
+            TraceLog(LOG_INFO, "------fake decco entity tile %i   index %i at position %i %i",new_tile_ldtk.t, index, new_tile_ldtk.px[0], new_tile_ldtk.px[1]);
 
             if(tile.has_collision == true) {
                     //TraceLog(LOG_INFO, "structure tile");
@@ -128,7 +121,7 @@ void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         TraceLog(LOG_INFO, "no entities layer");
         return;
     }
-
+/* 
     for(Rectangle patch : _tileset.wg_plan.ruins_rects) {
         LDTKEntityInstance new_shroom_zone;
         new_shroom_zone.identifier = "MushroomZone";
@@ -147,7 +140,7 @@ void AddMushroomZones(LDTKLevel &_level, WorldGenTileSet &_tileset) {
         entity_layer->entity_instances.push_back(new_shroom_zone);
         //TraceLog(LOG_INFO, "shroom zone");
     }
-
+ */
 }
 
 

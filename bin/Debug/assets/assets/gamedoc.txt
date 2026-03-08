@@ -437,3 +437,174 @@ need enough variety
     example: 
     force bolt level 2 spell pressed onto wand might have a damage of: base spell damage + level 2 damage increase +/- skill midifier
 
+
+
+
+1. Force Crystal
+
+Theme: motion, pressure, impact
+
+Major:
+
+Knockback / push / pull
+
+Minor modifiers:
+
++range
+
++velocity
+
+-damage
+
++cooldown reduction
+
+Example combos:
+
+Force + Fire → explosive blast
+
+Force + Ice → shrapnel burst
+
+Force + Lightning → chain knockback
+
+
+
+
+2. Fire Crystal
+
+Theme: destruction, energy release
+Major:
+    Direct damage
+
+Minor modifiers:
+    Explosive radius
+    Burn damage over time
+    -cooldown
+    +mana cost
+
+Example combos:
+    Fire + Force → rocket blast
+    Fire + Nature → wildfire spread
+    Fire + Lightning → plasma bolt
+
+
+
+
+3. Frost Crystal
+
+Theme: control and slowing
+Major:
+    Slow / freeze
+
+Minor modifiers:
+
+    duration
+    projectile splitting
+    area field
+    -speed
+
+Example combos:
+    Frost + Force → ice shotgun
+    Frost + Nature → entangling roots
+    Frost + Lightning → freezing chain
+
+4. Lightning Crystal
+
+Theme: speed and chaining
+Major:
+    chain between targets
+
+Minor modifiers:
+    instant cast
+    cooldown reduction
+    jump range
+    reduced damage
+
+Example combos:
+    Lightning + Force → railgun
+    Lightning + Fire → plasma arc
+    Lightning + Frost → cryo lightning
+
+
+
+weapon parts:
+    copper
+    steel
+    silver
+    gold
+    diamond
+
+    igniter: cooldown
+    spell core: damage
+    caster base: 
+
+"level 1 lightning caster"
+"level 3 force caster" - shoots aoe knockback slow
+
+spells
+    level 1 spells: - single fire average damage
+        
+        bolt
+
+    level 2 spells: - rapid fire lower damage lower pps
+        rain
+        
+    level 3 spells: - aoe  slow fire
+        launcher
+    
+    level 4 spells: - hit scan
+        beam
+
+
+weapon traits:
+    wait tim between attacks
+    cooldown:
+
+
+    attack damage
+    damage:
+
+    how much the attack knocks back the target
+    knockback:
+    damage cooldown
+
+    how much the attack knocks back the shooter
+    recoil: damage cooldown
+
+    how fast does the attack aim
+    accuracy: recoil cooldown
+
+    weapon power
+    power: 100
+
+    attack power use  (power per shot)
+    pps: (cooldown/power) * .01
+
+
+
+
+    catster:
+    1:
+        shoots bolt spell with effect
+        slow shot
+
+    2:
+        shoots bolt spell with effect
+        fast shot, lower damage
+
+    3:
+        shoots aoe spell with effect
+        slowest shot high damage
+
+    4:
+        shoots instant spell
+        high damage slow shot
+
+    weapons = casters
+
+    casters have 4 types:  single shot, rapid fire, aoe, and instant
+
+    casters of each type can shoot spells of a certin type: force, fire, lightning, poison
+
+    weapons are can be upgraded with charms or other items: ex: rabbit charm = faster cooldown
+
+    weapons are not constructed, only found and upgraded.
