@@ -512,7 +512,7 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
     for(int tag = 0; tag < tj["enumTags"].size(); tag++) {
         LDTKEnumTag new_tag;
         new_tag.value_string = tj["enumTags"][tag]["enumValueId"];
-        TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
+        //TraceLog(LOG_INFO, "====enum tag %s", new_tag.value_string.c_str());
 
         for(int tid = 0; tid <  tj["enumTags"][tag]["tileIds"].size(); tid++) {
             int id = tj["enumTags"][tag]["tileIds"][tid];
@@ -521,7 +521,7 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
             
         }
         this_tileset.tile_tags.push_back(new_tag);
-        //TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
+        TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
         
     }
 } 
@@ -555,13 +555,13 @@ void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
                         
                         new_tile.marked_sides = TileIdGetAutotile((TILEID)new_tile.tile_id);
                         this_tileset.tile_lookup[(TILEID)alatered_id] = new_tile;
-                         TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
+                        /* TraceLog(LOG_INFO, "tile found id: %i  u%i r%i d%i l%i\n", 
                             alatered_id, 
                             new_tile.marked_sides[0],
                             new_tile.marked_sides[1],
                             new_tile.marked_sides[2],
                             new_tile.marked_sides[3]
-                            );
+                            ); */
                     }
                 }
             }
@@ -703,9 +703,6 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
 }
 
 
-
-
-
 void BuildStructureParts(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities){
 
 std::vector<Rectangle> bounding_rects;
@@ -814,91 +811,6 @@ void BuildDeccoStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::
     }    
 }
 
-
-
-
-
-
-/* 
-void CreateSpawnPatches(WorldGenTileSet &_tileset, int patch_size) {
-
-    int x_patches = (_tileset.map_size.x/patch_size);
-    int y_patches = (_tileset.map_size.y/patch_size);
-
-    TraceLog(LOG_INFO, "------ x patches %i   y patches %i  ", x_patches, y_patches);
-    //int num_structure_patches = x_patches + y_patches;
-
-    int x_patch_size = patch_size;
-    int y_patch_size = patch_size;
-
-    for(int y_patch = 1; y_patch < y_patches - 1; y_patch++ ) {
-        for(int x_patch = 1; x_patch < x_patches - 1; x_patch++) {
-            int x_pos = (x_patch * x_patch_size);
-            int y_pos = (y_patch * y_patch_size);
-
-            Rectangle new_patch;
-            new_patch.x = x_pos;
-            new_patch.y = y_pos;
-            new_patch.width = patch_size;
-            new_patch.height = patch_size;
-
-
-            if(new_patch.x < 0) {new_patch.x = 0;}
-            if(new_patch.x > _tileset.map_size.x-1) { new_patch.x = _tileset.map_size.x-1;}
-            if(new_patch.x + patch_size > _tileset.map_size.x) {
-                int diff = (new_patch.x + patch_size) - _tileset.map_size.x;
-                new_patch.width -= diff;
-            }
-
-            if(new_patch.y < 0) {new_patch.y = 0;}
-            if(new_patch.y + patch_size > _tileset.map_size.y-1) { new_patch.y = _tileset.map_size.y-1;}
-            if(new_patch.y + patch_size > _tileset.map_size.y) {
-                int diff = (new_patch.y + patch_size) - _tileset.map_size.y;
-                new_patch.height -= diff;
-            }
-
-            _tileset.wg_plan.spawn_patches.push_back(new_patch);
-
-            /* TraceLog(LOG_INFO, "------ patch  x %0.0f   y %0.0f    w %0.0f    h %0.0f",
-                new_patch.x,
-                new_patch.y,
-                new_patch.width,
-                new_patch.height);
-        }
-    } 
-
-}
- */
-/* 
-Rectangle GetAvailableSpawnPatch(WorldGenTileSet &_tileset) {
-
-    std::vector<int> index_choices;
-
-    for(int i = 0; i < _tileset.wg_plan.spawn_patches.size(); i++ ) {
-        bool found = false;
-        for(int patch : _tileset.wg_plan.used_spawn_patches) {
-            if(i == patch) {
-                found = true;
-            }
-        }
-
-        if(!found) {index_choices.push_back(i);}
-    }
-
-    if(index_choices.size() < 1) {
-        Rectangle empty_rect;
-        return empty_rect;
-    }
-    
-    int choice = index_choices[GetRandomValue(0, index_choices.size()-1)];
-
-    _tileset.wg_plan.used_spawn_patches.push_back(choice);
-
-    return _tileset.wg_plan.spawn_patches[choice];
-
-}
-
- */
 
 TILEID GetFenceTileTop(WorldGenTileSet &_tileset, std::vector<MAPZONE> &zone_grid, int tile_x, int tile_y) {
 
@@ -1177,7 +1089,7 @@ std::array<bool,4> TileIdGetAutotile(TILEID tile_id) {
     if (auto it = side_map.find(tile_id); it != side_map.end()) {
         return it->second;
     }
-    TraceLog(LOG_INFO, "autotile ID not found %i", tile_id);
+    //TraceLog(LOG_INFO, "autotile ID not found %i", tile_id);
     return {false, false, false, false};
 }
 
@@ -1253,7 +1165,6 @@ void LoadMapGenData(json &j) {
 
 
 //  PLAN
-
 WorldGenPlan GenerateWorldGenPlan(WorldGenData &wg_data) {
     WorldGenPlan new_plan;
 
@@ -1317,7 +1228,6 @@ void PlanGeography(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
         }
     }
 }
-
 
 
 void PlanRegions(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
@@ -1489,7 +1399,6 @@ void PlanStructures(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
 }
 
 
-
 void PlanRoads(WorldGenData &wg_data, WorldGenPlan &wg_plan) {
 
     for(int position_index = 0; position_index < wg_plan.exit_positions.size(); position_index++) {
@@ -1612,7 +1521,6 @@ WorldGenBiome *GetBiome(Vector2 position, WorldGenTileSet &_tileset) {
 }
 
 
-
 void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x, int start_y, float strength, float decay, InfluenceType type) {
     std::queue<std::pair<int,int>> q;
 
@@ -1658,7 +1566,6 @@ void PaintInfluence(std::vector<InfluenceCell>& grid, int w, int h, int start_x,
         }
     }
 }
-
 
 
 float& GetInfluenceChannel(InfluenceCell& c, InfluenceType t)
@@ -1821,7 +1728,6 @@ StructureProfile BuildStructureProfile(WorldGenStructure &structure) {
 
 
 
-
 bool IsFarEnough(Rectangle& rect, std::vector<StructurePatch>& placed, float min_dist) {
     float min_dist_sq = min_dist * min_dist;
 
@@ -1844,7 +1750,6 @@ bool IsRectFree(Rectangle& candidate, std::vector<Rectangle>& reserved) {
     }
     return true;
 }
-
 
 
 void GenerateDirtZonesBrush(LDTKLevel &level, WorldGenTileSet &_tileset, int brush_size) {

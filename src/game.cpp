@@ -21,7 +21,13 @@ std::vector<FoodData> g_food_data;
 std::vector<FoodModData> g_food_mod_data;
 //std::vector<ItemModData> g_equipment_mod_data;
 
-std::vector<SpellData> g_spell_data;
+std::vector<CasterBaseData> g_casterbase_data;
+std::vector<IgniterData> g_igniter_data;
+std::vector<CouplerData> g_coupler_data;
+std::vector<RodData> g_rod_data;
+
+
+//std::vector<SpellData> g_spell_data;
 std::vector<ModuleData> g_module_data;
 std::vector<AiData> g_ai_data;
 
@@ -45,6 +51,7 @@ std::vector<WorldGenTileSet> g_worldgen_tilesets;
 std::vector<WorldGenData> g_worldgen_data;
 WorldGenPlan g_debug_plan;
 
+std::vector<Color> g_spell_effect_colors;
 std::vector<Color> g_item_type_colors;
 std::vector<Color> g_rarity_colors;
 std::vector<std::string> g_sub_map_string_names;
@@ -54,8 +61,6 @@ Texture2D g_main_sprite_sheet;
 Texture2D g_tile_sheets[MAX_SPRITES];
 Texture2D g_character_sprite_sheets[MAX_SPRITES];
 Texture2D g_creature_sprite_sheets[MAX_SPRITES];
-Texture2D g_item_sprites[MAX_SPRITES];
-Texture2D g_icon_sprites[MAX_SPRITES];
 Texture2D g_ui_sprites[MAX_SPRITES];
 Texture2D g_container_sprites[MAX_SPRITES];
 Texture2D g_portrait_sprites[MAX_SPRITES];
@@ -66,6 +71,13 @@ Texture2D g_environment_sprites[MAX_SPRITES];
 Texture2D g_shadow_sprites[MAX_SPRITES];
 Texture2D g_module_sprites[MAX_SPRITES];
 Texture2D g_door_sprites[MAX_SPRITES];
+
+Texture2D g_item_sprites[MAX_SPRITES];
+Texture2D g_icon_sprites[MAX_SPRITES];
+Texture2D g_icon_part_sprites[MAX_SPRITES];
+Texture2D g_item_part_sprites[MAX_SPRITES];
+
+Texture2D g_spell_sheet;
 
 
 //PlayerData g_player_data;

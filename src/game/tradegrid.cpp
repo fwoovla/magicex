@@ -194,13 +194,13 @@ void TradeGrid::SetItems(std::vector<int> *list) {
                 
                 auto itter = g_item_instances.find((*item_list)[i]);
                 if(itter != g_item_instances.end()) {
-                    _id = itter->second.icon_id;
+                    //_id = itter->second.icon_id;
 
+                    LoadSpriteCentered(sp, itter->second.icon_texture, {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                    //LoadSpriteCentered(sp, g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                    ScaleSprite(sp, {2,2});
+                    item_sprites.push_back(sp);
                 }
-                LoadSpriteCentered(sp, g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-                //LoadSpriteCentered(sp, g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-                ScaleSprite(sp, {2,2});
-                item_sprites.push_back(sp);
                 //TraceLog(LOG_INFO, "item grid %i   item id %i  ", this_grid, (*item_list)[i]);
             }
             else {
@@ -267,7 +267,7 @@ bool TradeGrid::CanAddItem(int item_id, Vector2 dest_cell) {
 
 void TradeGrid::AddItem(int item_id) {
     //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
-    int _id = ITEM_ID_ERROR;
+    //int _id = ITEM_ID_ERROR;
     for(int i = 0; i < item_list->size(); i++) {
         if((*item_list)[i] == -1) {
             int x = i%(cols);
@@ -276,9 +276,9 @@ void TradeGrid::AddItem(int item_id) {
         
             auto itter = g_item_instances.find(item_id);
             if(itter != g_item_instances.end()) {
-                    _id = itter->second.icon_id;
+                    //_id = itter->second.icon_id;
                     itter->second.container_id = container_iid;
-                    LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                    LoadSpriteCentered(item_sprites[i], itter->second.icon_texture, {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
                     ScaleSprite(item_sprites[i], {2,2});
                     break;
                 }
@@ -288,17 +288,17 @@ void TradeGrid::AddItem(int item_id) {
 
 void TradeGrid::AddItem(int item_id, Vector2 dest_cell) {
     int index = dest_cell.y * cols + dest_cell.x;
-    int _id = ITEM_ID_ERROR;
+    //int _id = ITEM_ID_ERROR;
 
     (*item_list)[index] = item_id;
 
     auto itter = g_item_instances.find(item_id);
     if(itter != g_item_instances.end()) {
-        _id = itter->second.icon_id;
+        //_id = itter->second.icon_id;
         itter->second.container_id = container_iid;
+        LoadSpriteCentered(item_sprites[index], itter->second.icon_texture, {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
+        ScaleSprite(item_sprites[index], {2,2});
     }
-    LoadSpriteCentered(item_sprites[index], g_icon_sprites[_id ], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
-    ScaleSprite(item_sprites[index], {2,2});
 }
 
 bool TradeGrid::CanRemoveItem(Vector2 source_cell) {

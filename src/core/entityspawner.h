@@ -3,7 +3,7 @@
 #include "basescene.h"
 #include "gamedefs.h"
 
-void SpawnSpell(NewSpellPayload payload, SpellData *_data);
+void SpawnSpell(NewSpellPayload payload, CasterData  *_data);
 
 void SpawnCharacterMessage(Vector2 _position, std::string _text, Color _color, float _delay_seconds);
 

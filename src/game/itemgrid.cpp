@@ -154,13 +154,13 @@ void ItemGrid::Update() {
                     (*item_list)[dest_index] = (*item_list)[source_index];
 
                     auto itter = g_item_instances.find(shared_data->item_id);
-                    int _id = ITEM_ID_ERROR;
+                    //int _id = ITEM_ID_ERROR;
                     if(itter != g_item_instances.end()) {
-                        _id = itter->second.icon_id;
+                        //_id = itter->second.icon_id;
+                        
+                        LoadSpriteCentered(item_sprites[dest_index], itter->second.icon_texture, {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
+                        ScaleSprite(item_sprites[dest_index], {2,2});
                     }
-
-                    LoadSpriteCentered(item_sprites[dest_index], g_icon_sprites[_id], {position.x + (hovered_cell.x * grid_size) + (grid_size/2), position.y + (hovered_cell.y * grid_size) + (grid_size/2) });
-                    ScaleSprite(item_sprites[dest_index], {2,2});
                     
                     (*item_list)[source_index] = -1;
                     item_sprites[source_index].position = {position.x + (selected_cell.x * grid_size) + (grid_size/2), position.y + (selected_cell.y * grid_size) + (grid_size/2) };
@@ -235,17 +235,16 @@ void ItemGrid::SetItems(std::vector<int> *list) {
                 Sprite sp;
                 int x = i%(cols);
                 int y = i/(cols);
-                int _id = ITEM_ID_ERROR;
+                //int _id = ITEM_ID_ERROR;
                 
                 auto itter = g_item_instances.find((*item_list)[i]);
                 if(itter != g_item_instances.end()) {
-                    _id = itter->second.icon_id;
-
+                    //_id = itter->second.icon_id;   
+                    LoadSpriteCentered(sp, itter->second.icon_texture, {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                    ScaleSprite(sp, {2,2});
+                    item_sprites.push_back(sp);
                 }
-                LoadSpriteCentered(sp, g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-                //LoadSpriteCentered(sp, g_icon_sprites[g_item_data[ (*item_list)[i] ].id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-                ScaleSprite(sp, {2,2});
-                item_sprites.push_back(sp);
+
                 //TraceLog(LOG_INFO, "item grid %i   item id %i  ", this_grid, (*item_list)[i]);
             }
             else {
@@ -312,7 +311,7 @@ bool ItemGrid::CanAddItem(int item_id, Vector2 dest_cell) {
 
 void ItemGrid::AddItem(int item_id) {
     //TraceLog(LOG_INFO, "moving item to :%s", container_iid.c_str());
-    int _id = ITEM_ID_ERROR;
+    //int _id = ITEM_ID_ERROR;
     for(int i = 0; i < item_list->size(); i++) {
         if((*item_list)[i] == -1) {
             int x = i%(cols);
@@ -321,12 +320,12 @@ void ItemGrid::AddItem(int item_id) {
         
             auto itter = g_item_instances.find(item_id);
             if(itter != g_item_instances.end()) {
-                    _id = itter->second.icon_id;
-                    itter->second.container_id = container_iid;
-                    LoadSpriteCentered(item_sprites[i], g_icon_sprites[_id], {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
-                    ScaleSprite(item_sprites[i], {2,2});
-                    break;
-                }
+                //_id = itter->second.icon_id;
+                itter->second.container_id = container_iid;
+                LoadSpriteCentered(item_sprites[i], itter->second.icon_texture, {position.x + (x * grid_size) + (grid_size/2), position.y + (y * grid_size) + (grid_size/2) });
+                ScaleSprite(item_sprites[i], {2,2});
+                break;
+            }
         }
     }
 }
@@ -339,11 +338,11 @@ void ItemGrid::AddItem(int item_id, Vector2 dest_cell) {
 
     auto itter = g_item_instances.find(item_id);
     if(itter != g_item_instances.end()) {
-        _id = itter->second.icon_id;
+        //_id = itter->second.icon_id;
         itter->second.container_id = container_iid;
+        LoadSpriteCentered(item_sprites[index], itter->second.icon_texture, {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
+        ScaleSprite(item_sprites[index], {2,2});
     }
-    LoadSpriteCentered(item_sprites[index], g_icon_sprites[_id ], {position.x + (dest_cell.x * grid_size) + (grid_size/2), position.y + (dest_cell.y * grid_size) + (grid_size/2) });
-    ScaleSprite(item_sprites[index], {2,2});
 }
 
 bool ItemGrid::CanRemoveItem(Vector2 source_cell) {

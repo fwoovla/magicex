@@ -16,6 +16,12 @@ inline const Color RARECOLOR = {.r = 197, .g = 143, .b = 143, .a = 255};
 inline const Color VERYRARECOLOR = {.r = 197, .g = 143, .b = 187, .a = 255};
 inline const Color ULTRARARECOLOR = {.r = 169, .g = 113, .b = 204, .a = 255};
 
+inline const Color POISONCOLOR = {.r = 47, .g = 201, .b = 35, .a = 255};
+inline const Color FORCECOLOR = {.r = 219, .g = 113, .b = 255, .a = 255};
+inline const Color LIGHTNINGCOLOR = {.r = 99, .g = 255, .b = 220, .a = 255};
+inline const Color FIRECOLOR = {.r = 223, .g = 113, .b = 38, .a = 255};
+inline const Color BASESPELLCOLOR = {.r = 251, .g = 242, .b = 54, .a = 255};
+
 
 inline const Color DARKRED = {.r = 131, .g = 12, .b = 0, .a = 255};
 

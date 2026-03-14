@@ -26,12 +26,25 @@ void LoadGameData() {
     g_item_type_colors[TYPE_CONSUMEABLE] = DEFAULTITEMCOLOR;
 
 
+    g_spell_effect_colors.resize(SPELL_EFFECT_COUNT);
+    g_spell_effect_colors[SPELL_EFFECT_NONE] = BASESPELLCOLOR;
+    g_spell_effect_colors[SPELL_EFFECT_FORCE] = FORCECOLOR;
+    g_spell_effect_colors[SPELL_EFFECT_FIRE] = FIRECOLOR;
+    g_spell_effect_colors[SPELL_EFFECT_LIGHTNING] = LIGHTNINGCOLOR;
+    g_spell_effect_colors[SPELL_EFFECT_POISON]= POISONCOLOR;
+
+
     g_rarity_colors.resize(10);
     g_rarity_colors[0] = COMMONCOLOR;
     g_rarity_colors[1] = UNCOMMONCOLOR;
     g_rarity_colors[2] = RARECOLOR;
     g_rarity_colors[3] = VERYRARECOLOR;
     g_rarity_colors[4] = ULTRARARECOLOR;
+    g_rarity_colors[5] = ULTRARARECOLOR;
+    g_rarity_colors[6] = ULTRARARECOLOR;
+    g_rarity_colors[7] = ULTRARARECOLOR;
+    g_rarity_colors[8] = ULTRARARECOLOR;
+    g_rarity_colors[9] = ULTRARARECOLOR;
 
 
     g_font = LoadFontEx("assets/FFatF.ttf", 128, nullptr, 0);
@@ -153,8 +166,76 @@ void LoadGameData() {
     }
 
 
+//---------------------caster data
+    g_casterbase_data.resize(cj["caster_data"].size());
+    TraceLog(LOG_INFO, "caster_data size %i  ", cj["caster_data"].size());
+    TraceLog(LOG_INFO, "g_casterbase_data size %i  ", g_casterbase_data.size());
+
+    for(int i = 0; i < cj["caster_data"].size(); i++) {
+        CasterBaseData new_base;
+        new_base.name = cj["caster_data"][i]["part_name"];
+        new_base.id = StrToItemId(cj["caster_data"][i]["part_id"]);
+        new_base.accuracy = cj["caster_data"][i]["accuracy"];
+
+        TraceLog(LOG_INFO, "caster_base_data Loaded  id: %i  %s", new_base.id, new_base.name.c_str());
+        g_casterbase_data[(int)new_base.id - ITEM_ID_CASTERBASE] = new_base;
+    }
+    TraceLog(LOG_INFO, "caster_base_data size %i  ", g_casterbase_data.size());
+
+//---------------------caster data
+    g_igniter_data.resize(cj["igniter_data"].size());
+    for(int i = 0; i < cj["igniter_data"].size(); i++) {
+        IgniterData new_igniter;
+        new_igniter.name = cj["igniter_data"][i]["part_name"];
+        new_igniter.id = StrToItemId(cj["igniter_data"][i]["part_id"]);
+        new_igniter.effect = StrToSpellEffectId( cj["igniter_data"][i]["spell_effect"]);
+        new_igniter.max_power = cj["igniter_data"][i]["max_power"];
+        new_igniter.recoil = cj["igniter_data"][i]["recoil"];
+
+        g_igniter_data[(int)new_igniter.id - ITEM_ID_IGNITER_1] = new_igniter;
+        TraceLog(LOG_INFO, "igniter_data Loaded  id: %i  %s", new_igniter.id, new_igniter.name.c_str());
+    }
+    TraceLog(LOG_INFO, "g_igniter_data size %i  ", g_igniter_data.size());
+
+
+//---------------------caster data
+    g_coupler_data.resize(cj["coupler_data"].size());
+    for(int i = 0; i < cj["coupler_data"].size(); i++) {
+        CouplerData new_coupler;
+        new_coupler.name = cj["coupler_data"][i]["part_name"];
+        new_coupler.id = StrToItemId(cj["coupler_data"][i]["part_id"]);
+        new_coupler.type = StrToSpellTypeId(cj["coupler_data"][i]["spell_type"]);
+        new_coupler.pps = cj["coupler_data"][i]["pps"];
+        new_coupler.radius = cj["coupler_data"][i]["radius"];
+        new_coupler.damage = cj["coupler_data"][i]["damage"];
+        new_coupler.cooldown = cj["coupler_data"][i]["cooldown"];
+        new_coupler.speed = cj["coupler_data"][i]["speed"];
+
+        g_coupler_data[(int)new_coupler.id - ITEM_ID_COUPLER_1] = new_coupler;
+        TraceLog(LOG_INFO, "coupler_data Loaded  id: %i  %s  type: %i", new_coupler.id, new_coupler.name.c_str(), new_coupler.type);
+    }
+    //TraceLog(LOG_INFO, "g_coupler_data size %i  ", g_coupler_data.size());
+
+
+//---------------------caster data
+    g_rod_data.resize(cj["rod_data"].size());
+
+    for(int i = 0; i < cj["rod_data"].size(); i++) {
+        RodData new_rod;
+        new_rod.name = cj["rod_data"][i]["part_name"];
+        new_rod.id = StrToItemId( cj["rod_data"][i]["part_id"] );
+        new_rod.knockback = cj["rod_data"][i]["knockback"];
+        new_rod.damage = cj["rod_data"][i]["damage"];
+
+        g_rod_data[(int)new_rod.id - ITEM_ID_ROD_1] = new_rod;
+        TraceLog(LOG_INFO, "rod_data Loaded  id: %i  %s", new_rod.id, new_rod.name.c_str());
+
+    }
+    //TraceLog(LOG_INFO, "g_rod_data size %i  ", g_rod_data.size());
+
+
 //---------------------spell data
-    g_spell_data.resize(cj["spell_data"].size());
+ /*    g_spell_data.resize(cj["spell_data"].size());
 
     for(int i = 0; i < cj["spell_data"].size(); i++) {
         SpellData new_spell;
@@ -182,7 +263,7 @@ void LoadGameData() {
         
         g_spell_data[spell_id] = new_spell;
         TraceLog(LOG_INFO, "Spell Data Loaded  id: %i  %s", spell_id, sp_id.c_str());
-    }
+    } */
 
 //------------------------------------armor data
     g_armor_data.resize(cj["armor_data"].size());
@@ -193,9 +274,6 @@ void LoadGameData() {
         ItemID w_id = StrToItemId(w_id_s);
 
         std::string name = cj["armor_data"][i]["armor_name"];
-
-        std::string sp_id = cj["armor_data"][i]["spell_id"];
-        SpellID spell_id = StrToSpellId(sp_id);
 
         int defence = cj["armor_data"][i]["defence"];
 
@@ -227,11 +305,7 @@ void LoadGameData() {
         std::string name = cj["weapon_data"][i]["weapon_name"];
         float cooldown = cj["weapon_data"][i]["cooldown"];
 
-        SpellID spell_id = StrToSpellId(cj["weapon_data"][i]["spell_id"]);
-
-        SPELL_TYPE spell_type = StrToSpellTypeId(cj["weapon_data"][i]["spell_type"]);
-
-        float max_power = cj["weapon_data"][i]["max_power"];
+        WEAPON_TYPE weapon_type = StrToWeaponTypeId(cj["weapon_data"][i]["weapon_type"]);
 
         int damage = cj["weapon_data"][i]["damage"];
 
@@ -239,26 +313,22 @@ void LoadGameData() {
         float knockback = cj["weapon_data"][i]["knockback"];
 
         int mod_slots = cj["weapon_data"][i]["mod_slots"];
-        float pps = cj["weapon_data"][i]["pps"];
-        float accuracy = cj["weapon_data"][i]["accuracy"];
+        
+        
 
 
         WeaponData new_weapon = {
             .weapon_name = name,
             .weapon_id = w_id,
+            .weapon_type = weapon_type,
             .cooldown = cooldown,
-            .spell_id = spell_id,
-            .spell_type = spell_type,
-            .max_power = max_power,
             .damage = damage,
             .recoil = recoil,
             .knockback = knockback,
             .mod_slots = mod_slots,
-            .pps = pps,
-            .accuracy = accuracy,
         };
 
-        TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s  power %f", w_id, name.c_str(), max_power);
+        TraceLog(LOG_INFO, "Weapon Data Loaded  id: %i  %s  type: %i", w_id, name.c_str(), weapon_type);
         g_weapon_data[(int)w_id - ITEM_ID_DAGGER] = new_weapon;
     }
 
@@ -277,15 +347,11 @@ void LoadGameData() {
 
         std::string name = cj["food_data"][i]["food_name"];
 
-        std::string sp_id = cj["food_data"][i]["spell_id"];
-        SpellID spell_id = StrToSpellId(sp_id);
-
         float saturation = cj["food_data"][i]["saturation"];
 
         FoodData new_food = {
             .food_id = f_id,
             .food_name = name,
-            .spell_id = spell_id,
             .saturation = saturation
 
         };
@@ -630,7 +696,6 @@ void SaveGame(LevelData &level_data) {
 
             {"container_id", inst.container_id},
             {"item_id", inst.item_id},
-            {"icon_id", inst.icon_id},
             {"level", inst.level},
             {"sprite_id", inst.sprite_id},
             {"rarity", inst.rarity},
@@ -643,20 +708,57 @@ void SaveGame(LevelData &level_data) {
                 {"weapon_id", inst.weapon_data.weapon_id},
                 {"weapon_name", inst.weapon_data.weapon_name},
                 {"cooldown", inst.weapon_data.cooldown},
-                {"spell_id", inst.weapon_data.spell_id},
-                {"max_power", inst.weapon_data.max_power},
-                {"current_power", inst.weapon_data.current_power},
+                //{"spell_id", inst.weapon_data.spell_id},
                 {"damage", inst.weapon_data.damage},
                 {"recoil", inst.weapon_data.recoil},
                 {"knockback", inst.weapon_data.knockback},
                 {"mod_slots", inst.weapon_data.mod_slots},
-                {"pps", inst.weapon_data.pps},
-                {"accuracy", inst.weapon_data.accuracy},
-                {"spell_type", inst.weapon_data.spell_type},
+                {"weapon_type", inst.weapon_data.weapon_type},
+                {"max_power", inst.weapon_data.max_power},
+                {"current_power", inst.weapon_data.current_power},
             };
+
+            if(inst.weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
+            
+
+                json caster;// = json::array();
+
+                caster["base"] = {
+                    {"part_id", inst.weapon_data.caster_data.base.id},
+                    {"part_name", inst.weapon_data.caster_data.base.name},
+                    {"accuracy", inst.weapon_data.caster_data.base.accuracy},
+                };
+                caster["igniter"] = {
+                    {"part_id", inst.weapon_data.caster_data.igniter.id},
+                    {"part_name", inst.weapon_data.caster_data.igniter.name},
+                    {"spell_effect", inst.weapon_data.caster_data.igniter.effect},
+                    {"max_power", inst.weapon_data.caster_data.igniter.max_power},
+                    {"recoil", inst.weapon_data.caster_data.igniter.recoil},
+                };
+
+                caster["coupler"] = {
+                    {"part_id", inst.weapon_data.caster_data.coupler.id},
+                    {"part_name", inst.weapon_data.caster_data.coupler.name},
+                    {"spell_type", inst.weapon_data.caster_data.coupler.type},
+                    {"cooldown", inst.weapon_data.caster_data.coupler.cooldown},
+                    {"damage", inst.weapon_data.caster_data.coupler.damage},
+                    {"pps", inst.weapon_data.caster_data.coupler.pps},
+                    {"radius", inst.weapon_data.caster_data.coupler.radius},
+                    {"speed", inst.weapon_data.caster_data.coupler.speed},
+                };
+
+                caster["rod"] = {
+                    {"part_id", inst.weapon_data.caster_data.rod.id},
+                    {"part_name", inst.weapon_data.caster_data.rod.name},
+                    {"knockback", inst.weapon_data.caster_data.rod.knockback},
+                    {"damage", inst.weapon_data.caster_data.rod.damage},
+                };
+
+                new_weapon.push_back(caster);
+            }
             
             instance["weapon_data"] = new_weapon;
-            //TraceLog(LOG_INFO, "saving weapon data %s", new_weapon["weapon_name"]);
+            TraceLog(LOG_INFO, "saving weapon data %s", new_weapon["weapon_name"]);
         }
     
         instance["armor_id"] = inst.armor_id;
@@ -668,7 +770,7 @@ void SaveGame(LevelData &level_data) {
                 {"defence", inst.armor_data.defence},
                 {"magic_defence", inst.armor_data.magic_defence},
                 {"mod_slots", inst.armor_data.mod_slots},
-                {"spell_id", inst.armor_data.spell_id},
+                //{"spell_id", inst.armor_data.spell_id},
             };
             
             instance["armor_data"] = new_armor;
@@ -688,25 +790,6 @@ void SaveGame(LevelData &level_data) {
             //TraceLog(LOG_INFO, "saving food data %s", new_food["food_name"]);
         }
     
-    
-        instance["spell_id"] = inst.spell_id;
-        if(inst.spell_id != -1) {
-
-            json new_spell = {
-                {"spell_id", inst.spell_data.spell_id},
-                {"spell_name", inst.spell_data.spell_name},
-                {"shooter_id", inst.spell_data.shooter_id},
-                {"speed", inst.spell_data.speed},
-                {"damage", inst.spell_data.damage},
-                {"lifetime", inst.spell_data.lifetime},
-                {"radius", inst.spell_data.radius},
-                {"knockback", inst.spell_data.knockback},
-                {"spell_effect", inst.spell_data.spell_effect},
-            };
-
-            instance["spell_data"] = new_spell;
-            //TraceLog(LOG_INFO, "saving spell data %s", inst.spell_data.spell_name.c_str());
-        }
 
 
         json_item_instances.push_back(instance);
@@ -1552,7 +1635,7 @@ ModuleID StrToModuleId(const std::string& s) {
 }
 
 
-CharEffectID StrToCharEffectId(const std::string& s) {
+/* CharEffectID StrToCharEffectId(const std::string& s) {
 
     static const std::unordered_map<std::string, CharEffectID> lookup_table = {
         {"CHAREFFECT_SPEED1",       CharEffectID::CHAREFFECT_SPEED1},
@@ -1574,9 +1657,9 @@ CharEffectID StrToCharEffectId(const std::string& s) {
     }
     //TraceLog(LOG_INFO, "Spell ID not found ");
     return CharEffectID::CHAREFFECT_NONE;
-}
+} */
 
-CharModID StrToCharModId(const std::string& s) {
+/* CharModID StrToCharModId(const std::string& s) {
 
     static const std::unordered_map<std::string, CharModID> lookup_table = {
         {"CHARMOD_HEALTH1",       CharModID::CHARMOD_HEALTH1},
@@ -1604,35 +1687,12 @@ CharModID StrToCharModId(const std::string& s) {
     }
     //TraceLog(LOG_INFO, "Spell ID not found ");
     return CharModID::CHARMOD_NONE;
-}
+} */
 
 ItemModID StrToItemModId(const std::string& s) {
 
     static const std::unordered_map<std::string, ItemModID> lookup_table = {
         {"ITEMMOD_NONE",       ItemModID::ITEMMOD_NONE},
-        {"ITEMMOD_SWIFTNESS1",     ItemModID::ITEMMOD_SWIFTNESS1},
-        {"ITEMMOD_SWIFTNESS2",     ItemModID::ITEMMOD_SWIFTNESS2},
-        {"ITEMMOD_SWIFTNESS3",     ItemModID::ITEMMOD_SWIFTNESS3},
-        {"ITEMMOD_SWIFTNESS4",     ItemModID::ITEMMOD_SWIFTNESS4},
-        {"ITEMMOD_SWIFTNESS5",     ItemModID::ITEMMOD_SWIFTNESS5},
-
-        {"ITEMMOD_DAMAGE1",         ItemModID::ITEMMOD_DAMAGE1},
-        {"ITEMMOD_DAMAGE2",         ItemModID::ITEMMOD_DAMAGE2},
-        {"ITEMMOD_DAMAGE3",         ItemModID::ITEMMOD_DAMAGE3},
-        {"ITEMMOD_DAMAGE4",         ItemModID::ITEMMOD_DAMAGE4},
-        {"ITEMMOD_DAMAGE5",         ItemModID::ITEMMOD_DAMAGE5},
-        
-        {"ITEMMOD_TOUGHNESS1",     ItemModID::ITEMMOD_TOUGHNESS1},
-        {"ITEMMOD_TOUGHNESS2",     ItemModID::ITEMMOD_TOUGHNESS2},
-        {"ITEMMOD_TOUGHNESS3",     ItemModID::ITEMMOD_TOUGHNESS3},
-        {"ITEMMOD_TOUGHNESS4",     ItemModID::ITEMMOD_TOUGHNESS4},
-        {"ITEMMOD_TOUGHNESS5",     ItemModID::ITEMMOD_TOUGHNESS5},
-
-        {"ITEMMOD_RESIST1",     ItemModID::ITEMMOD_RESIST1},
-        {"ITEMMOD_RESIST2",     ItemModID::ITEMMOD_RESIST2},
-        {"ITEMMOD_RESIST3",     ItemModID::ITEMMOD_RESIST3},
-        {"ITEMMOD_RESIST4",     ItemModID::ITEMMOD_RESIST4},
-        {"ITEMMOD_RESIST5",     ItemModID::ITEMMOD_RESIST5},
 
         {"ITEMMOD_NUTRITIOUS",     ItemModID::ITEMMOD_NUTRITIOUS},
 
@@ -1690,7 +1750,10 @@ ItemType StrToItemType(const std::string& s) {
     return ItemType::TYPE_RESOURCE;  
 }
 
-SpellID StrToSpellId(const std::string& s) {
+
+
+
+/* SpellID StrToSpellId(const std::string& s) {
 
     static const std::unordered_map<std::string, SpellID> lookup_table = {
         {"None",                   SpellID::SPELL_ID_NONE},
@@ -1723,9 +1786,26 @@ SpellID StrToSpellId(const std::string& s) {
     //TraceLog(LOG_INFO, "Spell ID not found ");
     return SpellID::SPELL_ID_NONE;
 }
+ */
+
+CASTER_PART StrToCasterPart(const std::string& s) {
+
+    static const std::unordered_map<std::string, CASTER_PART> lookup_table = {
+        {"CASTER_PART_BASE",             CASTER_PART::CASTER_PART_BASE},
+        {"CASTER_PART_COPLER",           CASTER_PART::CASTER_PART_COPLER},
+        {"CASTER_PART_IGNITER",          CASTER_PART::CASTER_PART_IGNITER},
+        {"CASTER_PART_ROD",              CASTER_PART::CASTER_PART_ROD},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "caster part ID not found ");
+    return CASTER_PART::CASTER_PART_NONE; 
+}
 
 
-SPELL_EFFECT StrToSpellEffectId(std::string s) {
+SPELL_EFFECT StrToSpellEffectId(const std::string& s) {
 
     static const std::unordered_map<std::string, SPELL_EFFECT> lookup_table = {
         {"SPELL_EFFECT_FORCE",              SPELL_EFFECT::SPELL_EFFECT_FORCE},
@@ -1742,7 +1822,7 @@ SPELL_EFFECT StrToSpellEffectId(std::string s) {
 }
 
 
-SPELL_TYPE StrToSpellTypeId(std::string s) {
+SPELL_TYPE StrToSpellTypeId(const std::string& s) {
 
     static const std::unordered_map<std::string, SPELL_TYPE> lookup_table = {
         {"SPELL_TYPE_BOLT",             SPELL_TYPE::SPELL_TYPE_BOLT},
@@ -1755,6 +1835,22 @@ SPELL_TYPE StrToSpellTypeId(std::string s) {
     }
     TraceLog(LOG_INFO, "spell type ID not found ");
     return SPELL_TYPE::SPELL_TYPE_NONE;
+}
+
+
+WEAPON_TYPE StrToWeaponTypeId(const std::string& s) {
+
+    static const std::unordered_map<std::string, WEAPON_TYPE> lookup_table = {
+        {"WEAPON_TYPE_MELE",                                WEAPON_TYPE::WEAPON_TYPE_MELE},
+        {"WEAPON_TYPE_RANGED",                              WEAPON_TYPE::WEAPON_TYPE_RANGED},
+        {"WEAPON_TYPE_CASTER",                              WEAPON_TYPE::WEAPON_TYPE_CASTER}
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "WEAPON_TYPE ID not found ");
+    return WEAPON_TYPE::WEAPON_TYPE_NONE; 
 }
 
 
@@ -1787,43 +1883,25 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
         {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
 
-/*         {"ITEM_ID_WAND",            ItemID::ITEM_ID_WAND},
-        {"ITEM_ID_STAFF",           ItemID::ITEM_ID_STAFF}, */
-/* 
-        {"ITEM_ID_NEWWAND1",            ItemID::ITEM_ID_NEWWAND1},
-        {"ITEM_ID_NEWWAND2",            ItemID::ITEM_ID_NEWWAND2},
-        {"ITEM_ID_NEWWAND3",            ItemID::ITEM_ID_NEWWAND3},
-        {"ITEM_ID_NEWWAND4",            ItemID::ITEM_ID_NEWWAND4},
-        {"ITEM_ID_NEWWAND5",            ItemID::ITEM_ID_NEWWAND5},
-        {"ITEM_ID_NEWWAND6",            ItemID::ITEM_ID_NEWWAND6},
-        {"ITEM_ID_NEWWAND7",            ItemID::ITEM_ID_NEWWAND7},
-        {"ITEM_ID_NEWWAND8",            ItemID::ITEM_ID_NEWWAND8},
-        {"ITEM_ID_NEWWAND9",            ItemID::ITEM_ID_NEWWAND9},
-        {"ITEM_ID_NEWWAND10",            ItemID::ITEM_ID_NEWWAND10},
-        {"ITEM_ID_NEWWAND11",            ItemID::ITEM_ID_NEWWAND11},
-        {"ITEM_ID_NEWWAND12",            ItemID::ITEM_ID_NEWWAND12},
-        {"ITEM_ID_NEWWAND13",            ItemID::ITEM_ID_NEWWAND13},
-        {"ITEM_ID_NEWWAND14",            ItemID::ITEM_ID_NEWWAND14},
-        {"ITEM_ID_NEWWAND15",            ItemID::ITEM_ID_NEWWAND15},
-        {"ITEM_ID_NEWWAND16",            ItemID::ITEM_ID_NEWWAND16}, */
+        {"ITEM_ID_CASTERBASE",             ItemID::ITEM_ID_CASTERBASE},
 
-        {"ITEM_ID_FORCECASTER1",           ItemID::ITEM_ID_FORCECASTER1},
-        {"ITEM_ID_FORCECASTER2",           ItemID::ITEM_ID_FORCECASTER2},
-        {"ITEM_ID_FORCECASTER3",           ItemID::ITEM_ID_FORCECASTER3},
-        {"ITEM_ID_FORCECASTER4",           ItemID::ITEM_ID_FORCECASTER4},
-        {"ITEM_ID_FIRECASTER1",            ItemID::ITEM_ID_FIRECASTER1},
-        {"ITEM_ID_FIRECASTER2",            ItemID::ITEM_ID_FIRECASTER2},
-        {"ITEM_ID_FIRECASTER3",            ItemID::ITEM_ID_FIRECASTER3},
-        {"ITEM_ID_FIRECASTER4",            ItemID::ITEM_ID_FIRECASTER4},
-        {"ITEM_ID_POISONCASTER1",          ItemID::ITEM_ID_POISONCASTER1},
-        {"ITEM_ID_POISONCASTER2",          ItemID::ITEM_ID_POISONCASTER2},
-        {"ITEM_ID_POISONCASTER3",          ItemID::ITEM_ID_POISONCASTER3},
-        {"ITEM_ID_POISONCASTER4",          ItemID::ITEM_ID_POISONCASTER4},
-        {"ITEM_ID_LIGHTNINGCASTER1",       ItemID::ITEM_ID_LIGHTNINGCASTER1},
-        {"ITEM_ID_LIGHTNINGCASTER2",       ItemID::ITEM_ID_LIGHTNINGCASTER2},
-        {"ITEM_ID_LIGHTNINGCASTER3",       ItemID::ITEM_ID_LIGHTNINGCASTER3},
-        {"ITEM_ID_LIGHTNINGCASTER4",       ItemID::ITEM_ID_LIGHTNINGCASTER4},
+        {"ITEM_ID_IGNITER_1",             ItemID::ITEM_ID_IGNITER_1},
+        {"ITEM_ID_IGNITER_2",             ItemID::ITEM_ID_IGNITER_2},
+        {"ITEM_ID_IGNITER_3",             ItemID::ITEM_ID_IGNITER_3},
+        {"ITEM_ID_IGNITER_4",             ItemID::ITEM_ID_IGNITER_4},
 
+        {"ITEM_ID_COUPLER_1",             ItemID::ITEM_ID_COUPLER_1},
+        {"ITEM_ID_COUPLER_2",             ItemID::ITEM_ID_COUPLER_2},
+        {"ITEM_ID_COUPLER_3",             ItemID::ITEM_ID_COUPLER_3},
+        {"ITEM_ID_COUPLER_4",             ItemID::ITEM_ID_COUPLER_4},
+
+        {"ITEM_ID_ROD_1",             ItemID::ITEM_ID_ROD_1},
+        {"ITEM_ID_ROD_2",             ItemID::ITEM_ID_ROD_2},
+        {"ITEM_ID_ROD_3",             ItemID::ITEM_ID_ROD_3},
+        {"ITEM_ID_ROD_4",             ItemID::ITEM_ID_ROD_4},
+
+
+        
         {"ITEM_ID_MUSHROOM",               ItemID::ITEM_ID_MUSHROOM},
         {"ITEM_ID_MUSHROOM_JUICE",         ItemID::ITEM_ID_MUSHROOM_JUICE},
 
@@ -1984,7 +2062,6 @@ void from_json(const json &j, ItemInstanceData &i) {
     j.at("item_name").get_to(i.item_name);
     j.at("container_id").get_to(i.container_id);
     j.at("item_id").get_to(i.item_id);
-    j.at("icon_id").get_to(i.icon_id);
     j.at("level").get_to(i.level);
     j.at("sprite_id").get_to(i.sprite_id);
     j.at("rarity").get_to(i.rarity);
@@ -1996,16 +2073,54 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_weapon.weapon_id = j["weapon_data"]["weapon_id"];
         new_weapon.weapon_name = j["weapon_data"]["weapon_name"];        
         new_weapon.cooldown = j["weapon_data"]["cooldown"];        
-        new_weapon.spell_id = j["weapon_data"]["spell_id"];        
-        new_weapon.max_power = j["weapon_data"]["max_power"];        
-        new_weapon.current_power = j["weapon_data"]["current_power"];        
         new_weapon.damage = j["weapon_data"]["damage"];
         new_weapon.recoil = j["weapon_data"]["recoil"];        
         new_weapon.knockback = j["weapon_data"]["knockback"];
         new_weapon.mod_slots = j["weapon_data"]["mod_slots"];
-        new_weapon.pps = j["weapon_data"]["pps"];
-        new_weapon.accuracy = j["weapon_data"]["accuracy"];
-        new_weapon.spell_type = j["weapon_data"]["spell_type"];
+        new_weapon.weapon_type = j["weapon_data"]["weapon_type"];
+        new_weapon.max_power = j["weapon_data"]["max_power"];
+        new_weapon.current_power = j["weapon_data"]["current_power"];
+
+        if(new_weapon.weapon_type == WEAPON_TYPE_CASTER) {
+            CasterData caster;
+
+            CasterBaseData base;
+            base.name = j["weapon_data"]["caster_data"]["base"]["part_name"];
+            base.id = j["weapon_data"]["caster_data"]["base"]["part_id"];
+            base.accuracy = j["weapon_data"]["caster_data"]["base"]["accuracy"];
+
+            IgniterData igniter;
+            igniter.name = j["weapon_data"]["caster_data"]["igniter"]["part_name"];
+            igniter.id = j["weapon_data"]["caster_data"]["igniter"]["part_id"];
+            igniter.effect = j["weapon_data"]["caster_data"]["igniter"]["spell_effect"];
+            igniter.recoil = j["weapon_data"]["caster_data"]["igniter"]["recoil"];
+            igniter.max_power = j["weapon_data"]["caster_data"]["igniter"]["max_power"];
+
+            CouplerData coupler;
+            coupler.name = j["weapon_data"]["caster_data"]["coupler"]["part_name"];
+            coupler.id = j["weapon_data"]["caster_data"]["coupler"]["part_name"];
+            coupler.cooldown = j["weapon_data"]["caster_data"]["coupler"]["cooldown"];
+            coupler.damage = j["weapon_data"]["caster_data"]["coupler"]["damage"];
+            coupler.pps = j["weapon_data"]["caster_data"]["coupler"]["pps"];
+            coupler.radius = j["weapon_data"]["caster_data"]["coupler"]["radius"];
+            coupler.speed = j["weapon_data"]["caster_data"]["coupler"]["speed"];
+            coupler.type = j["weapon_data"]["caster_data"]["coupler"]["spell_type"];
+
+            RodData rod;
+            rod.name = j["weapon_data"]["caster_data"]["rod"]["part_name"];
+            rod.id = j["weapon_data"]["caster_data"]["rod"]["part_id"];
+            rod.knockback = j["weapon_data"]["caster_data"]["rod"]["knockback"];
+            rod.damage = j["weapon_data"]["caster_data"]["rod"]["damage"];
+
+            caster.base = base;
+            caster.igniter = igniter;
+            caster.coupler = coupler;
+            caster.rod = rod;
+
+            new_weapon.caster_data = caster;
+        }
+
+
         i.weapon_data = new_weapon;
         TraceLog(LOG_INFO, "loaded weapon data found for %s", i.item_name.c_str());
     } 
@@ -2017,28 +2132,13 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_armor.armor_name = j["armor_data"]["armor_name"];
         new_armor.defence = j["armor_data"]["defence"];
         new_armor.magic_defence = j["armor_data"]["magic_defence"];
-        new_armor.spell_id = j["armor_data"]["spell_id"];
+        //new_armor.spell_id = j["armor_data"]["spell_id"];
         new_armor.mod_slots = j["armor_data"]["mod_slots"];
         i.armor_data = new_armor;
         TraceLog(LOG_INFO, "loaded armor data found for %s", i.item_name.c_str());
     }
 
-    j.at("spell_id").get_to(i.spell_id);
-    SpellData new_spell = {};
-    if(i.spell_id != SPELL_ID_NONE) {
-        new_spell.spell_id = j["spell_data"]["spell_id"];
-        new_spell.spell_name = j["spell_data"]["spell_name"];
-        new_spell.shooter_id = j["spell_data"]["shooter_id"];
-        new_spell.damage = j["spell_data"]["damage"];
-        new_spell.lifetime = j["spell_data"]["lifetime"];
-        new_spell.radius = j["spell_data"]["radius"];
-        new_spell.speed = j["spell_data"]["speed"];
-        new_spell.knockback = j["spell_data"]["knockback"];
-        new_spell.spell_effect = j["spell_data"]["spell_effect"];
-        i.spell_data = new_spell;
-        TraceLog(LOG_INFO, "loaded spell data found for %s", i.item_name.c_str());
-    }
-    
+
     j.at("food_id").get_to(i.food_id);
     FoodData food_data = {};
     if(i.food_id != ITEM_ID_NONE) {

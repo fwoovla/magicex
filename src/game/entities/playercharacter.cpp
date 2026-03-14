@@ -245,8 +245,8 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(current_primary_data != nullptr) {
-        aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.accuracy * 0.1f);
-        aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, current_primary_data->weapon_data.accuracy * 0.1f);
+        aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, current_primary_data->weapon_data.caster_data.base.accuracy * 0.1f);
+        aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, current_primary_data->weapon_data.caster_data.base.accuracy * 0.1f);
     }
     else {
         aim_position = g_input.world_mouse_position;
@@ -302,7 +302,9 @@ void PlayerCharacter::CheckInput() {
 
     if(g_input.mouse_left_down and can_use_spell) {
         if(current_primary_data != nullptr) {
-            if(current_primary_data->spell_id != -1) {
+
+
+            if(current_primary_data->weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
                 
                 if(g_active_creature_data[uid].current_power < current_primary_data->weapon_data.pps) {
                     return;
@@ -314,13 +316,13 @@ void PlayerCharacter::CheckInput() {
                 payload.shooter_id = uid;
                 payload.target_position = aim_position;//g_input.world_mouse_position;
                 payload.spread = 0.0f;
-                payload.spell_type = current_primary_data->weapon_data.spell_type;
-                TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
+                payload.spell_type = current_primary_data->weapon_data.caster_data.coupler.type;
+                TraceLog(LOG_INFO, "casting spell type %i", payload.spell_type);
 
                 //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
                 //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
                 
-                SpawnSpell(payload, &current_primary_data->spell_data);
+                SpawnSpell(payload, &current_primary_data->weapon_data.caster_data);
 
                 g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                 current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;
@@ -338,6 +340,8 @@ void PlayerCharacter::CheckInput() {
                 aim_position = Vector2Add( aim_position, recoil_dir );
                 TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_active_creature_data[uid].current_power, g_active_creature_data[uid].max_power);
             }
+
+            
         }
     }
 }
@@ -360,7 +364,7 @@ void PlayerCharacter::Equip(int item_id) {
             g_active_creature_data[uid].max_power += item_it->second.weapon_data.max_power;
 
             _id = item_it->second.sprite_id;
-            LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
+            LoadSpriteCentered(weapon_sprite, item_it->second.item_texture, position);
             weapon_sprite.center.x -= weapon_sprite.center.x - 3;
             current_primary_data = &item_it->second;
             TraceLog(LOG_INFO, "equiping primary weapon %i sprite_id %i", item_id, _id);

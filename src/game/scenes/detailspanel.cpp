@@ -103,7 +103,7 @@ void DetailsPanel::Update() {
         power_label.text = "power: " + cpower + "/" + mpower;
 
 
-        if(item_data->spell_id != SPELL_ID_NONE) {
+/*         if(item_data->spell_id != SPELL_ID_NONE) {
             std::string damage = TextFormat("%i", (int)item_data->spell_data.damage);
             damage_label.text = "damage: " + damage;
 
@@ -116,7 +116,7 @@ void DetailsPanel::Update() {
 
             std::string knock = TextFormat("%0.2f",item_data->weapon_data.knockback);
             knockback_label.text = "knockback: " + knock;
-        }
+        } */
 
 
         std::string cool = TextFormat("%0.2f",item_data->weapon_data.cooldown);
@@ -125,8 +125,8 @@ void DetailsPanel::Update() {
         std::string recoil = TextFormat("%0.0f",item_data->weapon_data.recoil);
         recoil_label.text = "recoil: " + recoil;
 
-        std::string accuracy = TextFormat("%0.0f", (item_data->weapon_data.accuracy * 100));
-        accuracy_label.text = "accuracy: " + accuracy + "%";
+/*         std::string accuracy = TextFormat("%0.0f", (item_data->weapon_data.accuracy * 100));
+        accuracy_label.text = "accuracy: " + accuracy + "%"; */
 
         int s = item_data->weapon_data.max_power / item_data->weapon_data.pps;
         std::string shots = TextFormat("%i", s );

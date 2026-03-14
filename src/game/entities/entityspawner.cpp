@@ -93,7 +93,7 @@ int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data
 
 
 
-void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
+void SpawnSpell(NewSpellPayload payload, CasterData *_data) {
 
     BaseScene *this_scene = nullptr;
     std::unique_ptr<BaseSpell> this_spell = nullptr;
@@ -124,33 +124,6 @@ void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
     
     TraceLog(LOG_INFO, "spell list size  %i", this_scene->level_data.spell_list.size()); 
 }
-
-/* 
-
-    if(_data->spell_id >= SPELL_ID_MAGICMISSLE_1 and _data->spell_id <= SPELL_ID_MAGICMISSLE_4) {
-        this_spell = std::make_unique<MagicMissle>(payload, _data);
-    }
-    if(_data->spell_id >= SPELL_ID_FIREBALL_1 and _data->spell_id <= SPELL_ID_FIREBALL_4) {
-        this_spell = std::make_unique<FireBall>(payload, _data);
-    }
-    if(_data->spell_id >= SPELL_ID_LIGHTNING_1 and _data->spell_id <= SPELL_ID_LIGHTNING_4) {
-        this_spell = std::make_unique<Lightning>(payload, _data);
-    }
-    if(_data->spell_id >= SPELL_ID_POISON_1 and _data->spell_id <= SPELL_ID_POISON_4) {
-        this_spell = std::make_unique<Poison>(payload, _data);
-    }
-
-    if(this_scene and this_spell) {
-        DL_Add( this_scene->level_data.spell_list, std::move(this_spell));
-    } */
-
-
-
-
-
-
-
-
 
 
 

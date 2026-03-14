@@ -159,6 +159,8 @@ void CreatureEntity::Update() {
 
         if(GetRandomValue(0,10) > 5 and should_use_spell) {
             if(current_primary_data != nullptr) {
+
+               /*  
                 if(current_primary_data->spell_id != -1) {
                     TraceLog(LOG_INFO, "casting spell");
                     
@@ -174,7 +176,7 @@ void CreatureEntity::Update() {
                     payload.target_position = target_creature->position;
                     payload.spread = 0.0f;
                     payload.spell_type = current_primary_data->weapon_data.spell_type;
-                    TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
+                    //TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
                     //TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
 
                     SpawnSpell(payload, &current_primary_data->spell_data);
@@ -186,7 +188,7 @@ void CreatureEntity::Update() {
                     should_use_spell = false;
                     //weapon_state = WSTATE_MELE;
                     velocity = Vector2Rotate( {-current_primary_data->weapon_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
-                }
+                } */
             }
         }
     }
@@ -226,8 +228,8 @@ void CreatureEntity::Draw() {
 
     if(!is_obstructed) {
         DrawSprite(shadow_sprite);
-        DrawSprite(weapon_sprite);
         DrawSprite(sprite);
+        DrawSprite(weapon_sprite);
     }
 
     if(g_game_settings.show_debug == true) {
@@ -260,25 +262,25 @@ bool CreatureEntity::CanEquip(int item_id) {
 void CreatureEntity::Equip(int item_id) {
     //TraceLog(LOG_INFO, "%i trying to equip item %i", uid, item_id);
 
-    int _id = ITEM_ID_NONE;
+    //int _id = ITEM_ID_NONE;
 
     auto item_it = g_item_instances.find(item_id);
     if(item_it != g_item_instances.end()) {
         if(item_it->second.type == TYPE_WEAPON) {
             data->max_power += item_it->second.weapon_data.max_power;
             data->current_power = item_it->second.weapon_data.current_power;
-            _id = item_it->second.sprite_id;
-            LoadSpriteCentered(weapon_sprite, g_item_sprites[ _id ], position);
+            //_id = item_it->second.sprite_id;
+            LoadSpriteCentered(weapon_sprite, item_it->second.item_texture, position);
             weapon_sprite.center.x -= weapon_sprite.center.x - 3;
             current_primary_data = &item_it->second;
-            TraceLog(LOG_INFO, "equiping primary weapon %i sprite_id %i", item_id, _id);
+            TraceLog(LOG_INFO, "equiping primary weapon %i item_id %i", item_id, item_it->second.item_id);
         }
         
         if(item_it->second.type >= TYPE_HEAD_ARMOR and item_it->second.type <= TYPE_HAND_ARMOR) {
-            _id = item_it->second.sprite_id;
+            //_id = item_it->second.sprite_id;
             data->defence += item_it->second.armor_data.defence;
             data->magic_defence += item_it->second.armor_data.magic_defence;
-            TraceLog(LOG_INFO, "equiping armor %i sprite_id %i", item_id, _id);
+            TraceLog(LOG_INFO, "equiping armor %i item_id %i", item_id, item_it->second.item_id);
         }
         
 /*         for(int mod = 0; mod < item_it->second.char_mods.size(); mod++) {

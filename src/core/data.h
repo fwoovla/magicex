@@ -48,7 +48,18 @@ enum ItemType {
     TYPE_MAX
 };
 
+
+enum WEAPON_TYPE {
+    WEAPON_TYPE_NONE = -1,
+    WEAPON_TYPE_MELE,
+    WEAPON_TYPE_RANGED,
+    WEAPON_TYPE_CASTER
+};
+
+
 extern std::vector<Color> g_item_type_colors;
+
+extern std::vector<Color> g_spell_effect_colors;
 
 extern std::vector<Color> g_rarity_colors;
 
@@ -64,26 +75,10 @@ struct FoodModData {
 extern std::vector<FoodModData> g_food_mod_data;
 
 
-/* struct ItemModData {
-    ItemModID mod_id;
-    std::string mod_name;
-
-    float saturation;
-    int defence;
-    int magic_defence;
-    float cooldown;
-    int max_power;
-    int damage;
-    int rarity;
-};
-
-extern std::vector<ItemModData> g_equipment_mod_data;
- */
-
 struct FoodData {
     ItemID food_id;
     std::string food_name;
-    SpellID spell_id;
+    //SpellID spell_id;
     float saturation;
     //int rarity;
 };
@@ -104,26 +99,27 @@ extern std::vector<ItemData> g_item_data;
 
 struct WeaponData {
     std::string weapon_name;
-    ItemID weapon_id;
+    ItemID weapon_id = ITEM_ID_NONE;
+    WEAPON_TYPE weapon_type = WEAPON_TYPE_NONE;
+    CasterData caster_data;
     float cooldown;
-    SpellID spell_id;
-    SPELL_TYPE spell_type;
-    float max_power;
-    float current_power;
     int damage;
     float recoil;
     float knockback;
     int mod_slots;
+
+    float max_power;
+    float current_power;
     float pps;
-    float accuracy;
 };
+
+
 
 extern std::vector<WeaponData> g_weapon_data;
 
 struct ArmorData {
     std::string armor_name;
     ItemID armor_id;
-    SpellID spell_id;
     int defence;
     int magic_defence;
     int mod_slots;
@@ -132,16 +128,8 @@ struct ArmorData {
 extern std::vector<ArmorData> g_armor_data;
 
 
-/* struct CharmData {
-    std::string charm_name;
-    ItemID charm_id;
-    ItemModID mod_id;
-    ItemType use_type;
 
-};
 
-extern std::vector<CharmData> g_charm_data;
- */
 struct RecipieData {
     std::string recipie_name;
     RecipieID recipie_id;
@@ -163,8 +151,7 @@ extern std::vector<PlanData> g_plan_data;
 
 
 struct ItemInstanceData {
-    SpellID spell_id;
-    SpellData spell_data;
+    //SpellID spell_id;
     ItemID weapon_id;
     WeaponData weapon_data;
     ItemID armor_id;
@@ -179,7 +166,11 @@ struct ItemInstanceData {
     int instance_id;
     int value;
     int sprite_id;
-    int icon_id;
+    //int icon_id;
+    std::vector<ItemID> sprite_ids;
+    std::vector<ItemID> icon_ids;
+    Texture2D item_texture;
+    Texture2D icon_texture;
     int level;
     int rarity;
     int mod_slots;
@@ -371,9 +362,9 @@ ItemInstanceData* InstanceCharacterItem(ItemID item_id, int character_uid);
 ItemInstanceData* InstanceRandomCharacterItem(ItemID item_id, int character_uid, int _level);
 
 
-CharEffectID StrToCharEffectId(const std::string& s);
+//CharEffectID StrToCharEffectId(const std::string& s);
 
-CharModID StrToCharModId(const std::string& s);
+//CharModID StrToCharModId(const std::string& s);
 
 ItemModID StrToItemModId(const std::string& s);
 
@@ -381,13 +372,14 @@ ItemRarity StrToItemRarity(const std::string& s);
 
 ItemType StrToItemType(const std::string& s);
 
-SpellID StrToSpellId(const std::string& s);
-
-SPELL_EFFECT StrToSpellEffectId(std::string str);
-
-SPELL_TYPE StrToSpellTypeId(std::string str);
+CASTER_PART StrToCasterPart(const std::string& s);
 
 
+SPELL_EFFECT StrToSpellEffectId(const std::string& s);
+
+SPELL_TYPE StrToSpellTypeId(const std::string& s);
+
+WEAPON_TYPE StrToWeaponTypeId(const std::string& s);
 
 
 AIID StrToAiId(const std::string& s);

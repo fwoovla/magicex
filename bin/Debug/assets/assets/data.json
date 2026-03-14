@@ -210,105 +210,96 @@
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
+
+
+
+
+    
+
+
+
+
+
+
+
         {
-            "item_name": "Level 1 Force Caster",
-            "item_id":"ITEM_ID_FORCECASTER1",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Level 2 Force Caster",
-            "item_id":"ITEM_ID_FORCECASTER2",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Level 3 Force Caster",
-            "item_id":"ITEM_ID_FORCECASTER3",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Level 4 Force Caster",
-            "item_id":"ITEM_ID_FORCECASTER4",
+            "item_name": "Caster",
+            "item_id":"ITEM_ID_CASTERBASE",
             "value":20,
             "item_type":"TYPE_WEAPON"
         },
 
+
+
         {
-            "item_name": "Level 1 Fire Caster",
-            "item_id":"ITEM_ID_FIRECASTER1",
+            "item_name": "Igniter",
+            "item_id":"ITEM_ID_IGNITER_1",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 2 Fire Caster",
-            "item_id":"ITEM_ID_FIRECASTER2",
+            "item_name": "Fire Igniter",
+            "item_id":"ITEM_ID_IGNITER_2",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 3 Fire Caster",
-            "item_id":"ITEM_ID_FIRECASTER3",
+            "item_name": "Lightning Igniter",
+            "item_id":"ITEM_ID_IGNITER_3",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 4 Fire Caster",
-            "item_id":"ITEM_ID_FIRECASTER4",
+            "item_name": "Toxic Igniter",
+            "item_id":"ITEM_ID_IGNITER_4",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
 
         {
-            "item_name": "Level 1 Poison Caster",
-            "item_id":"ITEM_ID_POISONCASTER1",
+            "item_name": "Basic Coupler",
+            "item_id":"ITEM_ID_COUPLER_1",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 2 Poison Caster",
-            "item_id":"ITEM_ID_POISONCASTER2",
+            "item_name": "Advanced Coupler",
+            "item_id":"ITEM_ID_COUPLER_2",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 3 Poison Caster",
-            "item_id":"ITEM_ID_POISONCASTER3",
+            "item_name": "Blast Coupler",
+            "item_id":"ITEM_ID_COUPLER_3",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
         {
-            "item_name": "Level 4 Poison Caster",
-            "item_id":"ITEM_ID_POISONCASTER4",
+            "item_name": "Strike Coupler",
+            "item_id":"ITEM_ID_COUPLER_4",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
 
+
+
         {
-            "item_name": "Level 1 Lightning Caster",
-            "item_id":"ITEM_ID_LIGHTNINGCASTER1",
+            "item_name": "Glass Rod",
+            "item_id":"ITEM_ID_ROD_1",
             "value":20,
-            "item_type":"TYPE_WEAPON"
+            "item_type":"TYPE_RESOURCE"
         },
-        {
-            "item_name": "Level 2 Lightning Caster",
-            "item_id":"ITEM_ID_LIGHTNINGCASTER2",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Level 3 Lightning Caster",
-            "item_id":"ITEM_ID_LIGHTNINGCASTER3",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
-        {
-            "item_name": "Level 4 Lightning Caster",
-            "item_id":"ITEM_ID_LIGHTNINGCASTER4",
-            "value":20,
-            "item_type":"TYPE_WEAPON"
-        },
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -491,7 +482,7 @@
             "damage":2,
             "radius":2,
             "knockback":10,
-            "spell_effect":"SPELL_EFFECT_NONE"
+            "spell_effect":"SPELL_EFFECT_FORCE"
         },
         {
             "spell_id":"SPELL_ID_FORCE_2",
@@ -501,7 +492,7 @@
             "damage":5,
             "radius":2,
             "knockback":30,
-            "spell_effect":"SPELL_EFFECT_NONE"
+            "spell_effect":"SPELL_EFFECT_FORCE"
         },
         {
             "spell_id":"SPELL_ID_FORCE_3",
@@ -511,7 +502,7 @@
             "damage":10,
             "radius":20,
             "knockback":80,
-            "spell_effect":"SPELL_EFFECT_NONE"
+            "spell_effect":"SPELL_EFFECT_FORCE"
         },
         {
             "spell_id":"SPELL_ID_FORCE_4",
@@ -521,7 +512,7 @@
             "damage":20,
             "radius":20,
             "knockback":100,
-            "spell_effect":"SPELL_EFFECT_NONE"
+            "spell_effect":"SPELL_EFFECT_FORCE"
         },
 
 
@@ -659,313 +650,179 @@
         {
             "weapon_id": "ITEM_ID_DAGGER",
             "weapon_name": "Dagger",
+            "weapon_type":"WEAPON_TYPE_MELE",
             "cooldown": 0.50,
-            "spell_id":"SPELL_ID_NONE",
-            "spell_type":"SPELL_TYPE_NONE",
-            "max_power":0,
             "damage":2,
-            "recoil":0,
+            "recoil":10,
             "knockback":10,
-            "mod_slots":0,
-            "pps":0,
-            "accuracy":1.0
+            "mod_slots":0
         },
         {
             "weapon_id": "ITEM_ID_SWORD",
             "weapon_name": "Sword",
-            "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
-            "spell_type":"SPELL_TYPE_NONE",
-            "max_power":0,
-            "damage":3,
-            "recoil":0,
-            "knockback":30,
-            "mod_slots":0,
-            "pps":0,
-            "accuracy":1.0        
+            "weapon_type":"WEAPON_TYPE_MELE",
+            "cooldown": 0.50,
+            "damage":2,
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":0        
         },
         {
             "weapon_id": "ITEM_ID_SPEAR",
             "weapon_name": "Spear",
-            "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
-            "spell_type":"SPELL_TYPE_NONE",
-            "max_power":0,
-            "damage":4,
-            "recoil":0,
-            "knockback":40,
-            "mod_slots":0,
-            "pps":0,
-            "accuracy":1.0        
+            "weapon_type":"WEAPON_TYPE_MELE",
+            "cooldown": 0.50,
+            "damage":2,
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":0        
         },
         {
             "weapon_id": "ITEM_ID_AXE",
             "weapon_name": "Axe",
-            "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
-            "spell_type":"SPELL_TYPE_NONE",
-            "max_power":0,
+            "weapon_type":"WEAPON_TYPE_MELE",
+            "cooldown": 0.50,
             "damage":2,
-            "recoil":0,
-            "knockback":30,
-            "mod_slots":0,
-            "pps":0,
-            "accuracy":1.0        
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":0        
         },
         {
             "weapon_id": "ITEM_ID_BOW",
             "weapon_name": "Bow",
-            "cooldown": 0.80,
-            "spell_id":"SPELL_ID_NONE",
-            "spell_type":"SPELL_TYPE_NONE",
-            "max_power":0,
-            "damage":1,
-            "recoil":0,
+            "weapon_type":"WEAPON_TYPE_RANGED",
+            "cooldown": 0.50,
+            "damage":2,
+            "recoil":10,
             "knockback":10,
-            "mod_slots":0,
-            "pps":0,
-            "accuracy":1.0        
+            "mod_slots":0        
         },
 
 
 
 
 
+
         {
-            "weapon_id": "ITEM_ID_FORCECASTER1",
-            "weapon_name": "Force 1",
-            "spell_id":"SPELL_ID_FORCE_1",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FORCECASTER2",
-            "weapon_name": "Force 2",
-            "spell_id":"SPELL_ID_FORCE_2",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.20,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FORCECASTER3",
-            "weapon_name": "Force 3",
-            "spell_id":"SPELL_ID_FORCE_3",
-            "spell_type":"SPELL_TYPE_AOE",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.00,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FORCECASTER4",
-            "weapon_name": "Force 4",
-            "spell_id":"SPELL_ID_FORCE_4",
-            "spell_type":"SPELL_TYPE_INSTANT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FIRECASTER1",
-            "weapon_name": "Fire 1",
-            "spell_id":"SPELL_ID_FIRE_1",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FIRECASTER2",
-            "weapon_name": "Fire 2",
-            "spell_id":"SPELL_ID_FIRE_2",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.20,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FIRECASTER3",
-            "weapon_name": "Fire 3",
-            "spell_id":"SPELL_ID_FIRE_3",
-            "spell_type":"SPELL_TYPE_AOE",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.00,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_FIRECASTER4",
-            "weapon_name": "Fire 4",
-            "spell_id":"SPELL_ID_FIRE_4",
-            "spell_type":"SPELL_TYPE_INSTANT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNINGCASTER1",
-            "weapon_name": "Lightning 1",
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNINGCASTER2",
-            "weapon_name": "Lightning 2",
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.20,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNINGCASTER3",
-            "weapon_name": "Lightning 3",
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "spell_type":"SPELL_TYPE_AOE",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.00,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_LIGHTNINGCASTER4",
-            "weapon_name": "Lightning 4",
-            "spell_id":"SPELL_ID_LIGHTNING_4",
-            "spell_type":"SPELL_TYPE_INSTANT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_POISONCASTER1",
-            "weapon_name": "Poison 1",
-            "spell_id":"SPELL_ID_POISON_1",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_POISONCASTER2",
-            "weapon_name": "Poison 2",
-            "spell_id":"SPELL_ID_POISON_2",
-            "spell_type":"SPELL_TYPE_BOLT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 0.20,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_POISONCASTER3",
-            "weapon_name": "Poison 3",
-            "spell_id":"SPELL_ID_POISON_3",
-            "spell_type":"SPELL_TYPE_AOE",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.00,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
-        },
-        {
-            "weapon_id": "ITEM_ID_POISONCASTER4",
-            "weapon_name": "Poison 4",
-            "spell_id":"SPELL_ID_POISON_4",
-            "spell_type":"SPELL_TYPE_INSTANT",
-            "knockback":0,
-            "damage":0,
-            "mod_slots":0,
-            "cooldown": 2.60,
-            "max_power":100,
-            "recoil":50,
-            "pps":10,
-            "accuracy":0.4        
+            "weapon_id": "ITEM_ID_CASTERBASE",
+            "weapon_name": "Caster",
+            "weapon_type":"WEAPON_TYPE_CASTER",
+            "cooldown": 0.50,
+            "damage":2,
+            "recoil":10,
+            "knockback":10,
+            "mod_slots":0      
         }
-
-
-
-
 
 
     ],
 
 
 
-    "spacer11234131":"---------------------------------------------------------------------------------------------------------",
+"spacer1fds1234131":"---------------------------------------------------------------------------------------------------------",
+
+    "caster_data": [
+        {
+            "part_id": "ITEM_ID_CASTERBASE",
+            "part_name": "Caster",
+            "accuracy": 0.5
+        }
+    ],
+
+
+"spacer1fds12d34131":"---------------------------------------------------------------------------------------------------------",
+
+    "igniter_data": [
+        {
+            "part_id": "ITEM_ID_IGNITER_1",
+            "part_name": "Igniter",
+            "spell_effect": "SPELL_EFFECT_NONE",
+            "recoil": 20,
+            "max_power": 100
+        },
+        {
+            "part_id": "ITEM_ID_IGNITER_2",
+            "part_name": "Fire Igniter",
+            "spell_effect": "SPELL_EFFECT_FIRE",
+            "recoil": 20,
+            "max_power": 100
+        },
+        {
+            "part_id": "ITEM_ID_IGNITER_3",
+            "part_name": "Lightning Igniter",
+            "spell_effect": "SPELL_EFFECT_LIGHTNING",
+            "recoil": 20,
+            "max_power": 100
+        },
+        {
+            "part_id": "ITEM_ID_IGNITER_4",
+            "part_name": "Toxic Igniter",
+            "spell_effect": "SPELL_EFFECT_POISON",
+            "recoil": 20,
+            "max_power": 100
+        }
+    ],
+
+"spacerd1fds1234131":"---------------------------------------------------------------------------------------------------------",
+
+    "coupler_data": [
+        {
+            "part_id": "ITEM_ID_COUPLER_1",
+            "part_name": "Basic Coupler",
+            "spell_type": "SPELL_TYPE_BOLT",
+            "radius":2,
+            "cooldown":0.5,
+            "pps":5,
+            "damage":5,
+            "speed":500
+        },
+        {
+            "part_id": "ITEM_ID_COUPLER_2",
+            "part_name": "Advanced Coupler",
+            "spell_type": "SPELL_TYPE_BOLT",
+            "radius":2,
+            "cooldown":0.2,
+            "pps":5,
+            "damage":5,
+            "speed":600
+        },
+        {
+            "part_id": "ITEM_ID_COUPLER_3",
+            "part_name": "Blast Coupler",
+            "spell_type": "SPELL_TYPE_AOE",
+            "radius":20,
+            "cooldown":2.0,
+            "pps":15,
+            "damage":25,
+            "speed":200
+        },
+        {
+            "part_id": "ITEM_ID_COUPLER_4",
+            "part_name": "Strike Coupler",
+            "spell_type": "SPELL_TYPE_INSTANT",
+            "radius":20,
+            "cooldown":2.5,
+            "pps":20,
+            "damage":50,
+            "speed":0
+        }
+    ],
+
+
+
+"spacerj1fds1234131":"---------------------------------------------------------------------------------------------------------",
+
+    "rod_data": [
+        {
+            "part_id": "ITEM_ID_ROD_1",
+            "part_name": "Glass Rod",
+            "knockback": 20,
+            "damage":0
+        }
+    ],
+
+
+"spacer11234131":"---------------------------------------------------------------------------------------------------------",
 
     "food_data": [
         {
@@ -1134,6 +991,22 @@
     ],
 
 
+        "igniter_modifiers": [
+
+        {
+            "mod_id":"ITEMMOD_NUTRITIOUS",
+            "mod_name":"Nutritious",
+            "rarity":"RARITY_COMMON",
+            "saturation":0.4
+        },
+        {
+            "mod_id":"ITEMMOD_MOLDY",
+            "mod_name":"Moldy",
+            "rarity":"RARITY_COMMON",
+            "saturation":-0.4
+        }
+    ],
+
     "space4r1123131":"---------------------------------------------------------------------------------------------------------",
 
 
@@ -1284,240 +1157,150 @@
           
         },
         {
-          "pool_id":"POOL_WEAPONS",
-          "rolls_min":1,
-          "rolls_max":4,
-          "entries":[
-            {
-              "item_id":"ITEM_ID_DAGGER",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_SPEAR",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_SWORD",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_AXE",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FORCECASTER1",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FORCECASTER2",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FORCECASTER3",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FORCECASTER4",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FIRECASTER1",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FIRECASTER2",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FIRECASTER3",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_FIRECASTER4",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },{
-              "item_id":"ITEM_ID_LIGHTNINGCASTER1",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_LIGHTNINGCASTER2",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_LIGHTNINGCASTER3",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_LIGHTNINGCASTER4",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },{
-              "item_id":"ITEM_ID_POISONCASTER1",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_POISONCASTER2",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_POISONCASTER3",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_POISONCASTER4",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            }
+            "pool_id":"POOL_WEAPONS",
+            "rolls_min":1,
+            "rolls_max":4,
+            "entries":[
+                {
+                "item_id":"ITEM_ID_CASTERBASE",
+                "weight":10,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_CASTERBASE",
+                "weight":10,
+                "min_rarity":"LOOTRARITY_COMMON"
+                }
+            ]
+          
+        },
+        {
+            "pool_id":"POOL_ARMOR",
+            "rolls_min":1,
+            "rolls_max":3,
+            "entries":[
+                {
+                "item_id":"ITEM_ID_BOOTS",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_LEGGINGS",
+                "weight":15,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_BODY",
+                "weight":15,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_GLOVES",
+                "weight":15,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_HELMET",
+                "weight":15,
+                "min_rarity":"LOOTRARITY_COMMON"
+                }
+            ]
+          
+        },
+        {
+            "pool_id":"POOL_RESOURCE",
+            "rolls_min":1,
+            "rolls_max":2,
+            "entries":[
+                {
+                "item_id":"ITEM_ID_MUSHROOM",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_MUSHROOM_JUICE",
+                "weight":15,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
 
-          ]
-          
+                {
+                "item_id":"ITEM_ID_HAMMER",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_SAW",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_SHOVEL",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_TONGS",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_ANVIL",
+                "weight":20,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_CHARCOAL",
+                "weight":50,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_RESIN",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_BONE",
+                "weight":50,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_ROPE",
+                "weight":40,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_BUCKET",
+                "weight":30,
+                "min_rarity":"LOOTRARITY_COMMON"
+                }
+            ] 
         },
         {
-          "pool_id":"POOL_ARMOR",
-          "rolls_min":1,
-          "rolls_max":3,
-          "entries":[
-            {
-              "item_id":"ITEM_ID_BOOTS",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_LEGGINGS",
-              "weight":15,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_BODY",
-              "weight":15,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_GLOVES",
-              "weight":15,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_HELMET",
-              "weight":15,
-              "min_rarity":"LOOTRARITY_COMMON"
-            }
-          ]
-          
-        },
-        {
-          "pool_id":"POOL_RESOURCE",
-          "rolls_min":1,
-          "rolls_max":2,
-          "entries":[
-            {
-              "item_id":"ITEM_ID_MUSHROOM",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_MUSHROOM_JUICE",
-              "weight":15,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-
-            {
-              "item_id":"ITEM_ID_HAMMER",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_SAW",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_SHOVEL",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_TONGS",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_ANVIL",
-              "weight":20,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_CHARCOAL",
-              "weight":50,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_RESIN",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_BONE",
-              "weight":50,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_ROPE",
-              "weight":40,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_BUCKET",
-              "weight":30,
-              "min_rarity":"LOOTRARITY_COMMON"
-            }
-          ]
-          
-        },
-        {
-          "pool_id":"POOL_FOOD",
-          "rolls_min":1,
-          "rolls_max":3,
-          "entries":[
-            {
-              "item_id":"ITEM_ID_APPLE",
-              "weight":20,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_BREAD",
-              "weight":20,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_MEAT",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            },
-            {
-              "item_id":"ITEM_ID_CHEESE",
-              "weight":10,
-              "min_rarity":"LOOTRARITY_COMMON"
-            }
-          ]
+            "pool_id":"POOL_FOOD",
+            "rolls_min":1,
+            "rolls_max":3,
+            "entries":[
+                {
+                "item_id":"ITEM_ID_APPLE",
+                "weight":20,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_BREAD",
+                "weight":20,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_MEAT",
+                "weight":10,
+                "min_rarity":"LOOTRARITY_COMMON"
+                },
+                {
+                "item_id":"ITEM_ID_CHEESE",
+                "weight":10,
+                "min_rarity":"LOOTRARITY_COMMON"
+                }
+            ]
         }
     ],
 
@@ -1527,32 +1310,32 @@
 
   "loot_tables":[
     {
-      "table_id":"LT_STARINGCHEST",
-      "pools":[
-        "POOL_STARINGCHEST"
-      ]
+        "table_id":"LT_STARINGCHEST",
+        "pools":[
+            "POOL_STARINGCHEST"
+        ]
     },
     {
-      "table_id":"LT_SCAVENGER",
-      "pools":[
-        "POOL_WEAPONS",
-        "POOL_FOOD"
-      ]
+        "table_id":"LT_SCAVENGER",
+        "pools":[
+            "POOL_WEAPONS",
+            "POOL_FOOD"
+        ]
     },
     {
-      "table_id":"LT_ANIMAL",
-      "pools":[
-        "POOL_FOOD"
-      ]
+        "table_id":"LT_ANIMAL",
+        "pools":[
+         "POOL_FOOD"
+        ]
     },
     {
-      "table_id":"LT_COMMON_CHEST",
-      "pools":[
-        "POOL_WEAPONS",
-        "POOL_FOOD",
-        "POOL_RESOURCE",
-        "POOL_ARMOR"
-      ]
+        "table_id":"LT_COMMON_CHEST",
+        "pools":[
+            "POOL_WEAPONS",
+            "POOL_FOOD",
+            "POOL_RESOURCE",
+            "POOL_ARMOR"
+        ]
     }
   ]
 

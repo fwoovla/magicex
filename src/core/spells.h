@@ -2,64 +2,87 @@
 
 #include "gamedefs.h"
 
-
-
-enum SpellID {
-    SPELL_ID_NONE = -1,
-    SPELL_ID_FORCE_1,
-    SPELL_ID_FORCE_2,
-    SPELL_ID_FORCE_3,
-    SPELL_ID_FORCE_4,
-
-    SPELL_ID_FIRE_1,
-    SPELL_ID_FIRE_2,
-    SPELL_ID_FIRE_3,
-    SPELL_ID_FIRE_4,
-
-    SPELL_ID_LIGHTNING_1,
-    SPELL_ID_LIGHTNING_2,
-    SPELL_ID_LIGHTNING_3,
-    SPELL_ID_LIGHTNING_4,
-
-    SPELL_ID_POISON_1,
-    SPELL_ID_POISON_2,
-    SPELL_ID_POISON_3,
-    SPELL_ID_POISON_4,
-
-};
-
-
 enum SPELL_TYPE {
     SPELL_TYPE_NONE = -1,
     SPELL_TYPE_BOLT,
     SPELL_TYPE_AOE,
     SPELL_TYPE_INSTANT,
+    SPELL_TYPE_COUNT,
 
 };
 
 enum SPELL_EFFECT {
-    SPELL_EFFECT_NONE = -1,
+    SPELL_EFFECT_NONE = 0,
     SPELL_EFFECT_FORCE,
     SPELL_EFFECT_FIRE,
     SPELL_EFFECT_LIGHTNING,
     SPELL_EFFECT_POISON,
+    SPELL_EFFECT_COUNT,
 
 };
 
-struct SpellData {
-    std::string spell_name;
-    SPELL_EFFECT spell_effect;
-    SpellID spell_id;
-    int shooter_id;
-    float damage;
-    float lifetime;
+
+enum CASTER_PART {
+    CASTER_PART_NONE = -1,
+    CASTER_PART_BASE,
+    CASTER_PART_IGNITER,
+    CASTER_PART_COPLER,
+    CASTER_PART_ROD
+};
+
+
+struct CasterBaseData {
+    std::string name;
+    ItemID id;
+    float accuracy;
+};
+extern std::vector<CasterBaseData> g_casterbase_data;
+
+
+struct IgniterData {
+    std::string name;
+    ItemID id;
+    SPELL_EFFECT effect;
+    float recoil;
+    float max_power;
+};
+extern std::vector<IgniterData> g_igniter_data;
+
+
+struct CouplerData {
+    std::string name;
+    ItemID id;
+    SPELL_TYPE type;
     float radius;
+    float cooldown;
+    float pps;
+    float damage;
     float speed;
-    //float pps;
+};
+extern std::vector<CouplerData> g_coupler_data;
+
+
+struct RodData {
+    std::string name;
+    ItemID id;
     float knockback;
+    float damage;
+};
+extern std::vector<RodData> g_rod_data;
+
+
+struct CasterData {
+    std::string caster_name;
+    
+    CasterBaseData base;
+    IgniterData igniter;
+    CouplerData coupler;
+    RodData rod;
+    
+    //int spell_sprite_id;
 };
 
-extern std::vector<SpellData> g_spell_data;
+//extern std::vector<SpellData> g_spell_data;
 
 struct NewSpellPayload {
     Vector2 position;
@@ -70,12 +93,6 @@ struct NewSpellPayload {
     SPELL_TYPE spell_type;
     //SpellData *spell_data;
 };
-
-
-
-
-
-
 
 
 class BaseSpell : public AnimatedSpriteEntity {
@@ -92,78 +109,19 @@ class BaseSpell : public AnimatedSpriteEntity {
     float target_rotation;
     float dist_scale;
 
-    SpellData *data;
+    CasterData *data;
     Timer lifetime_timer;
     Vector2 velocity;
     Vector2 target_position;
 
 };
 
-class Poison : public BaseSpell {
-    public:
-
-    Poison(NewSpellPayload payload, SpellData *_data);
-    ~Poison() override;
-    void Update() override;
-    void Draw() override;
-    void DrawUI() override;
-    float GetYSort() override;
-    void OnLifetimeTimeout() override;
-    void TakeDamage(DamagePayload _payload) override;
-
-};
-
-class MagicMissle : public BaseSpell {
-    public:
-
-    MagicMissle(NewSpellPayload payload, SpellData *_data);
-    ~MagicMissle() override;
-    void Update() override;
-    void Draw() override;
-    void DrawUI() override;
-    float GetYSort() override;
-    void OnLifetimeTimeout() override;
-    void TakeDamage(DamagePayload _payload) override;
-
-};
-
-class FireBall : public BaseSpell {
-    public:
-
-    FireBall(NewSpellPayload payload, SpellData *_data);
-    ~FireBall() override;
-    void Update() override;
-    void Draw() override;
-    void DrawUI() override;
-    float GetYSort() override;
-    void OnLifetimeTimeout() override;
-    void TakeDamage(DamagePayload _payload) override;
-
-};
-
-class Lightning : public BaseSpell {
-    public:
-
-    Lightning(NewSpellPayload payload, SpellData *_data);
-    ~Lightning() override;
-    void Update() override;
-    void Draw() override;
-    void DrawUI() override;
-    float GetYSort() override;
-    void OnLifetimeTimeout() override;
-    void TakeDamage(DamagePayload _payload) override;
-
-};
-
-
-
-
 
 
 class BoltSpell : public BaseSpell {
     public:
 
-    BoltSpell(NewSpellPayload payload, SpellData *_data);
+    BoltSpell(NewSpellPayload payload, CasterData *_data);
     ~BoltSpell() override;
     void Update() override;
     void Draw() override;
@@ -177,7 +135,7 @@ class BoltSpell : public BaseSpell {
 class AoeSpell : public BaseSpell {
     public:
 
-    AoeSpell(NewSpellPayload payload, SpellData *_data);
+    AoeSpell(NewSpellPayload payload, CasterData *_data);
     ~AoeSpell() override;
     void Update() override;
     void Draw() override;
@@ -191,7 +149,7 @@ class AoeSpell : public BaseSpell {
 class InstantSpell : public BaseSpell {
     public:
 
-    InstantSpell(NewSpellPayload payload, SpellData *_data);
+    InstantSpell(NewSpellPayload payload, CasterData *_data);
     ~InstantSpell() override;
     void Update() override;
     void Draw() override;

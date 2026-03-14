@@ -533,78 +533,108 @@ weapon parts:
     gold
     diamond
 
-    igniter: cooldown
-    spell core: damage
-    caster base: 
 
-"level 1 lightning caster"
-"level 3 force caster" - shoots aoe knockback slow
+technology:
+glass "wires" transmitting magic
+towers "producing" magic
+ruins that have artifacts and mushrooms
+mushrooms grow around centers of magic
+crystals are grown in ruined factories
 
-spells
-    level 1 spells: - single fire average damage
+
+
+    weapon base:
+        condition:
+            cracked,....qualilty
+        "accuracy"
+        "weapon_name"
+
+    igniter:
+        condition:
+            cracked,....qualilty
+        "spell_effect"
+        "recoil"
+        "max_power"
+
+
+    coupler:
+        condition:
+            cracked,....qualilty
+        "spell_type"
+            "radius"
+
+            "cooldown"
+            "pps"
+            "damage"
         
-        bolt
-
-    level 2 spells: - rapid fire lower damage lower pps
-        rain
-        
-    level 3 spells: - aoe  slow fire
-        launcher
     
-    level 4 spells: - hit scan
-        beam
-
-
-weapon traits:
-    wait tim between attacks
-    cooldown:
-
-
-    attack damage
-    damage:
-
-    how much the attack knocks back the target
-    knockback:
-    damage cooldown
-
-    how much the attack knocks back the shooter
-    recoil: damage cooldown
-
-    how fast does the attack aim
-    accuracy: recoil cooldown
-
-    weapon power
-    power: 100
-
-    attack power use  (power per shot)
-    pps: (cooldown/power) * .01
+    glassrod
+        condition:
+            cracked,....qualilty
+        "knockback"
+        "damage"
 
 
 
+    "lifetime"
+    "speed"
+    
+        
 
-    catster:
-    1:
-        shoots bolt spell with effect
-        slow shot
+base weapon = old crossbow, (something else?)
 
-    2:
-        shoots bolt spell with effect
-        fast shot, lower damage
+igniter = is the spell_effect / recoil / max power
+- cracked,...quality
 
-    3:
-        shoots aoe spell with effect
-        slowest shot high damage
 
-    4:
-        shoots instant spell
-        high damage slow shot
+    - plain
+        - effect = none
+        - rc = 20
+        - power = 100
 
-    weapons = casters
+    -ruby
+        - effect = fire
+        - rc = 20
+        - poser = 100
 
-    casters have 4 types:  single shot, rapid fire, aoe, and instant
+    - quartz
+        - effect = lightning
+        - rc = 20
+        - power = 100
+    - jade
+        - effect = poison
+        - rc = 20
+        - power = 100
 
-    casters of each type can shoot spells of a certin type: force, fire, lightning, poison
+coupler = spell_type / cooldown / base damage / pps
+- cracked,...quality
+    - single shot  
+        effect = choose one SPELL_EFFECT
+        cd = .5
+        base damage = 5
+        pps = 5
 
-    weapons are can be upgraded with charms or other items: ex: rabbit charm = faster cooldown
+    - rapid shot
+        effect = choose one SPELL_EFFECT
+        cd = .2
+        damage = 5
+        pps = 5
 
-    weapons are not constructed, only found and upgraded.
+    - aoe
+        effect = choose one SPELL_EFFECT
+        cd = 2.0
+        damage = 10
+        pps = 10
+
+    - instant
+        effect = choose one SPELL_EFFECT
+        cd = 2.0
+        damage = 10
+        pps = 10
+
+
+glass rod = knockback / +damage
+- cracked,...quality
+    knockback  = 20
+    damage = 0
+

@@ -95,7 +95,6 @@ GENERATED += $(OBJDIR)/enduilayer.o
 GENERATED += $(OBJDIR)/entityspawner.o
 GENERATED += $(OBJDIR)/environmentalentity.o
 GENERATED += $(OBJDIR)/events.o
-GENERATED += $(OBJDIR)/fireball.o
 GENERATED += $(OBJDIR)/game.o
 GENERATED += $(OBJDIR)/gamescene.o
 GENERATED += $(OBJDIR)/gameuilayer.o
@@ -106,9 +105,7 @@ GENERATED += $(OBJDIR)/itemgrid.o
 GENERATED += $(OBJDIR)/label.o
 GENERATED += $(OBJDIR)/layergen.o
 GENERATED += $(OBJDIR)/ldtk.o
-GENERATED += $(OBJDIR)/lightning.o
 GENERATED += $(OBJDIR)/loottables.o
-GENERATED += $(OBJDIR)/magicmissle.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/mapgen.o
 GENERATED += $(OBJDIR)/mapmenu.o
@@ -119,7 +116,6 @@ GENERATED += $(OBJDIR)/npcentity.o
 GENERATED += $(OBJDIR)/pathgen.o
 GENERATED += $(OBJDIR)/pausemenu.o
 GENERATED += $(OBJDIR)/playercharacter.o
-GENERATED += $(OBJDIR)/poison.o
 GENERATED += $(OBJDIR)/resources.o
 GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/scenerygen.o
@@ -155,7 +151,6 @@ OBJECTS += $(OBJDIR)/enduilayer.o
 OBJECTS += $(OBJDIR)/entityspawner.o
 OBJECTS += $(OBJDIR)/environmentalentity.o
 OBJECTS += $(OBJDIR)/events.o
-OBJECTS += $(OBJDIR)/fireball.o
 OBJECTS += $(OBJDIR)/game.o
 OBJECTS += $(OBJDIR)/gamescene.o
 OBJECTS += $(OBJDIR)/gameuilayer.o
@@ -166,9 +161,7 @@ OBJECTS += $(OBJDIR)/itemgrid.o
 OBJECTS += $(OBJDIR)/label.o
 OBJECTS += $(OBJDIR)/layergen.o
 OBJECTS += $(OBJDIR)/ldtk.o
-OBJECTS += $(OBJDIR)/lightning.o
 OBJECTS += $(OBJDIR)/loottables.o
-OBJECTS += $(OBJDIR)/magicmissle.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/mapgen.o
 OBJECTS += $(OBJDIR)/mapmenu.o
@@ -179,7 +172,6 @@ OBJECTS += $(OBJDIR)/npcentity.o
 OBJECTS += $(OBJDIR)/pathgen.o
 OBJECTS += $(OBJDIR)/pausemenu.o
 OBJECTS += $(OBJDIR)/playercharacter.o
-OBJECTS += $(OBJDIR)/poison.o
 OBJECTS += $(OBJDIR)/resources.o
 OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/scenerygen.o
@@ -414,19 +406,7 @@ $(OBJDIR)/aoespell.o: src/game/spells/aoespell.cpp
 $(OBJDIR)/boltspell.o: src/game/spells/boltspell.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/fireball.o: src/game/spells/fireball.cpp
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/instantspell.o: src/game/spells/instantspell.cpp
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/lightning.o: src/game/spells/lightning.cpp
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/magicmissle.o: src/game/spells/magicmissle.cpp
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/poison.o: src/game/spells/poison.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/statusbar.o: src/game/statusbar.cpp
