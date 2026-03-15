@@ -16,18 +16,13 @@ std::vector<RecipieData> g_recipie_data;
 std::vector<PlanData> g_plan_data;
 std::vector<ArmorData> g_armor_data;
 std::vector<FoodData> g_food_data;
-//std::vector<ArmorModData> g_armor_mod_data;
-//std::vector<CharmData> g_charm_data;
 std::vector<FoodModData> g_food_mod_data;
-//std::vector<ItemModData> g_equipment_mod_data;
 
 std::vector<CasterBaseData> g_casterbase_data;
 std::vector<IgniterData> g_igniter_data;
 std::vector<CouplerData> g_coupler_data;
 std::vector<RodData> g_rod_data;
 
-
-//std::vector<SpellData> g_spell_data;
 std::vector<ModuleData> g_module_data;
 std::vector<AiData> g_ai_data;
 
@@ -36,10 +31,12 @@ std::unordered_map<std::string, ContainerData> g_persistant_containers;
 std::unordered_map<std::string, ContainerData> g_sub_temp_containers;
 
 std::unordered_map<ItemType, std::vector<ItemID>> g_loot_tables;
-//std::unordered_map<CreatureID, std::vector<ItemID>> g_creature_loot_tables;
 std::unordered_map<LootTableID, LootTable> g_creature_loot_tables;
 std::unordered_map<LootPoolID, LootPool> g_creature_loot_pools;
-//std::vector<std::vector<int>> g_loot_tables;
+std::vector<std::vector<int>> g_tier_tables;
+std::vector<Limit> g_stat_limits;
+std::vector<StatGenData> g_statgen_data;
+
 
 GameData g_game_data;
 DebugData g_debug_data;
@@ -78,9 +75,6 @@ Texture2D g_icon_part_sprites[MAX_SPRITES];
 Texture2D g_item_part_sprites[MAX_SPRITES];
 
 Texture2D g_spell_sheet;
-
-
-//PlayerData g_player_data;
 
 std::unordered_map< int, CharacterData> g_active_creature_data;
 

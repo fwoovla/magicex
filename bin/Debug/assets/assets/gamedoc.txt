@@ -638,3 +638,8 @@ glass rod = knockback / +damage
     knockback  = 20
     damage = 0
 
+
+
+caster name:
+
+tier x effect caster type

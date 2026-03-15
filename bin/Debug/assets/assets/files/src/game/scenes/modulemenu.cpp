@@ -1,0 +1,341 @@
+#include "../../core/gamedefs.h"
+
+
+ModuleMenu::ModuleMenu() {
+
+    selected_button_index = -1;
+    CreateLabel(title_label, {g_screen_center.x, 20 / g_scale}, 40/g_scale, WHITE, "MODULE MENU");
+
+    panel_bg = g_ui_panels[PANEL_MODULE_SCREEN];
+    panel_rect = {
+        .x = 50,
+        .y = 60,
+        .width = ((float)g_resolution.x - 100),
+        .height = ((float)g_resolution.y - 100)
+    };
+
+    rpo = {panel_rect.x + 30, panel_rect.y + 50};
+    inpo = {panel_rect.x + 250, panel_rect.y + 50};
+    ipo = {panel_rect.x + 470, panel_rect.y + 50};
+
+    CreateLabel(recipie_header, rpo, FONTSIZE_50, WHITE, "RECIPIES");
+    CreateLabel(recipie_label, {rpo.x, rpo.y + 50}, FONTSIZE_50, WHITE, "");
+
+    CreateLabel(ingredient_header, inpo, FONTSIZE_50, WHITE, "REQUIRED");
+    CreateLabel(ingredient_label, {inpo.x, inpo.y + 50}, FONTSIZE_40, WHITE, "");
+
+    CreateLabel(inventory_header, ipo, FONTSIZE_50, WHITE, "INVENTORY");
+
+    inventory_grid = new ItemGrid(5, 6, 50, {ipo.x + 50, ipo.y + 50}, &shared_data);
+
+    CreateButton(craft_button, {inpo.x + 100, panel_rect.height }, {100, 30}, YELLOW, "CRAFT");
+    craft_button.default_color = DARKYELLOW;
+    craft_button.text_size = FONTSIZE_30;
+}
+
+ModuleMenu::~ModuleMenu() {
+    //UnloadSound(button_sound);
+    delete inventory_grid;
+    TraceLog(LOG_INFO, "UI DESTRUCTOR:  MODULEMENU ");
+}
+
+void ModuleMenu::Draw() {
+    DrawRectangleRec({0,0,g_resolution.x,g_resolution.y}, TRANSDARKERGRAY);
+    DrawTexturePro(panel_bg, {0,0,(float)panel_bg.width, (float)panel_bg.height}, panel_rect, {0,0}, 0.0f, WHITE);
+    DrawLabelCentered(title_label);
+    DrawLabel(recipie_header);
+    DrawLabel(ingredient_header);
+    DrawLabel(recipie_label);
+
+    if(selected_button_index >= 0) {
+        if(button_lookup[selected_button_index] == 1) {
+            ingredient_label.default_color = GREEN;
+            DrawButton(craft_button);
+        }
+        else {
+            ingredient_label.default_color = RED;
+        }
+    }
+
+    DrawLabel(ingredient_label);
+    DrawLabel(inventory_header);
+
+    for(int i = 0; i < recipie_buttons.size(); i ++) {
+        if(i == selected_button_index) {
+            recipie_buttons[i].default_color.a = 150;
+        }
+        else {
+            recipie_buttons[i].default_color.a = 60;
+        }
+        DrawButton(recipie_buttons[i]);
+    }
+
+    inventory_grid->DrawGrid();
+    inventory_grid->DrawItems();
+
+    //DrawCircleV(rpo, 2, RED);
+    //DrawCircleV(ipo, 2, RED);
+    //DrawCircleV(inpo, 2, RED);
+}
+
+void ModuleMenu::Update() {
+    recipie_label.text = "";
+    ingredient_label.text = "";
+
+    if(selected_button_index >= 0) {
+        if(!plan_selected) {
+
+            for(int i = 0; i < g_recipie_data[g_module_data[module_id].recipies[selected_button_index]].ingredients.size(); i++) {
+                ingredient_label.text += "- " + g_item_data[g_recipie_data[g_module_data[module_id].recipies[selected_button_index]].ingredients[i]].item_name + "\n";
+            }   
+        }
+        else {
+            //int plan_index = selected_button_index - (button_lookup.size() - 2);
+
+            int lookup = selected_button_index - (button_lookup.size() - 2);
+/*             TraceLog(LOG_INFO, "looking for plan %i module id  %i  ingredients %i",
+                lookup,
+                module_id,
+                g_module_data[module_id].accepted_plans[lookup]
+            ); */
+
+                
+            for(int item = 0; item < g_plan_data[ g_module_data[module_id].accepted_plans[lookup] - ITEM_ID_STOVE_PLAN].ingredients.size(); item++) {
+                ingredient_label.text += "- " + g_item_data[g_plan_data[ g_module_data[module_id].accepted_plans[lookup] - ITEM_ID_STOVE_PLAN].ingredients[item]].item_name + "\n";                
+            }
+        }
+    }
+        
+    for(int b = 0; b <recipie_buttons.size(); b++) {
+
+        if(IsButtonHovered(recipie_buttons[b], g_scale)){
+            if(recipie_buttons[b].already_hovered == false) {
+            }
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                selected_button_index = b;
+
+                plan_selected = false;
+                for(int i = 0; i < plan_indexes.size(); i ++) {
+                    if(plan_indexes[i] == selected_button_index) {
+                        plan_selected = true;
+                    }
+                }
+                if(plan_selected) {
+                    //TraceLog(LOG_INFO, "selected plan ingredient list size %i", module_data.accepted_plans.size());
+                }
+                else{
+                    //TraceLog(LOG_INFO, "selected recipie %i", module_data.recipies[b]);
+                }
+            }        
+        }
+    }
+
+    if(IsButtonHovered(craft_button, g_scale)){
+        if(craft_button.already_hovered == false) {
+            //TraceLog(LOG_INFO, "selected hovered");
+            //recipie_selected.EmitSignal();
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            //TraceLog(LOG_INFO, "crafting recipie %i", module_data.recipies[selected_button_index]);
+            RecipieSelected();
+            //recipie_selected.EmitSignal();
+        }        
+    }
+}
+
+void ModuleMenu::OpenModule() {
+    inventory_grid->SetItems(&g_active_creature_data[g_current_player->uid].inventory);
+    selected_button_index = -1;
+    recipie_buttons.clear();
+    button_lookup.clear();
+    plan_selected = false;
+
+    module_id = g_game_data.current_module_id;
+
+    module_data = g_module_data[module_id];
+
+    title_label.text = module_data.module_name.c_str();
+    TraceLog(LOG_INFO, " MODULEMENU %s  recipies %i", module_data.module_name.c_str(), module_data.recipies.size());
+
+    int y_index = 0;
+    for(int i = 0; i < module_data.recipies.size(); i++) {
+        TraceLog(LOG_INFO, "recipie data available");
+        TraceLog(LOG_INFO, " recipies %s", g_recipie_data[module_data.recipies[i]].recipie_name.c_str());
+
+        Button new_button;
+        CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, g_recipie_data[module_data.recipies[i]].recipie_name.c_str());
+        new_button.text_size = FONTSIZE_20;
+        new_button.default_color = BLANK;
+        int ingredients_types_found = 0;
+        int num_ingredients_types = g_recipie_data[module_data.recipies[i]].ingredients.size();
+        bool can_craft = false;
+
+        for(int ingredient = 0; ingredient < g_recipie_data[module_data.recipies[i]].ingredients.size(); ingredient++) {
+            int ingredient_id = g_recipie_data[module_data.recipies[i]].ingredients[ingredient];
+            TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
+
+
+            for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+                auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
+                if(i_itter != g_item_instances.end()) {
+                    if(ingredient_id == i_itter->second.item_id) {
+                        TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
+                        ingredients_types_found++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(ingredients_types_found < num_ingredients_types) {
+            new_button.text_color = DARKRED;
+            new_button.text_color_focus = RED;
+            new_button.focus_color = TRANSRED;
+            new_button.default_color = TRANSDARKRED;
+        }
+        else {
+            new_button.text_color = DARKGREEN;
+            new_button.text_color_focus = GREEN; 
+            new_button.focus_color = TRANSGREEN;
+            new_button.default_color = TRANSDARKGREEN;
+            can_craft = true;
+        }
+        recipie_buttons.push_back(new_button);
+        button_lookup.push_back(can_craft);
+        y_index ++;
+
+    }
+
+    TraceLog(LOG_INFO, "plans  available %i", module_data.accepted_plans.size());
+    for(int i = 0; i < module_data.accepted_plans.size(); i++) {
+        int offset = module_data.accepted_plans[i] - ITEM_ID_STOVE_PLAN;
+
+        TraceLog(LOG_INFO, "index %i  plan id %i", i, module_data.accepted_plans[i]);
+
+        TraceLog(LOG_INFO, "plan data available for %s ", g_plan_data[offset].plan_name.c_str());
+
+        //auto p_itter = g_plan_data[module_data.accepted_plans[i]];
+
+        std::string module_name = g_module_data[ g_plan_data[offset].module_id].module_name;
+
+        Button new_button;
+        CreateButton(new_button, {rpo.x + 78, rpo.y + 50 + ( 40 * y_index)} , {200, 40}, BLANK, module_name.c_str());
+        new_button.text_size = 20;
+        new_button.default_color = BLANK;
+
+        int ingredients_types_found = 0;
+        int num_ingredients_types = g_plan_data[offset].ingredients.size();
+        bool can_craft = false;
+
+        TraceLog(LOG_INFO, " ingredient list size  %i",  g_plan_data[offset].ingredients.size());
+        for(int ingredient = 0; ingredient < g_plan_data[offset].ingredients.size(); ingredient++) {
+
+            TraceLog(LOG_INFO, " ingredient id      %i", g_plan_data[offset].ingredients[ingredient]);
+            int ingredient_id = g_plan_data[offset].ingredients[ingredient];
+            TraceLog(LOG_INFO, " ingredient id %i", ingredient_id);
+
+
+            for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+
+                auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
+                if(i_itter != g_item_instances.end()) {
+                    if(ingredient_id == i_itter->second.item_id) {
+                        TraceLog(LOG_INFO, " found ingredient %i", i_itter->second.item_id);
+                        ingredients_types_found++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(ingredients_types_found < num_ingredients_types) {
+            new_button.text_color = DARKRED;
+            new_button.text_color_focus = RED;
+            new_button.focus_color = TRANSRED;
+            new_button.default_color = TRANSDARKRED;
+        }
+        else {
+            new_button.text_color = DARKGREEN;
+            new_button.text_color_focus = GREEN; 
+            new_button.focus_color = TRANSGREEN;
+            new_button.default_color = TRANSDARKGREEN;
+            can_craft = true;
+        }
+        recipie_buttons.push_back(new_button);
+        button_lookup.push_back(can_craft);
+        plan_indexes.push_back(button_lookup.size() - 1);
+        y_index ++;
+
+    }
+}
+
+void ModuleMenu::RecipieSelected() {
+    if(selected_button_index < 0) {
+        return;
+    }
+
+    if(button_lookup[selected_button_index] == 0) {
+        TraceLog(LOG_INFO, "cannot craft item not enough resources");
+        return;
+    }
+
+    if(!plan_selected) {
+
+        TraceLog(LOG_INFO, "crafting %i", g_recipie_data[module_data.recipies[selected_button_index]].produces);
+        
+        InstanceCharacterItem(g_recipie_data[module_data.recipies[selected_button_index]].produces, g_current_player->uid);
+        
+        int instance_id;
+        int item_id;
+        int num_needed = 1;
+        int num_found = 0;
+
+        for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
+            if(i_itter != g_item_instances.end() and num_found < num_needed) {
+                item_id = i_itter->second.item_id;
+                instance_id = i_itter->second.instance_id;
+
+                for(int ingredient = 0; ingredient < g_recipie_data[module_data.recipies[selected_button_index]].ingredients.size(); ingredient++) {
+                    if(item_id == g_recipie_data[module_data.recipies[selected_button_index]].ingredients[ingredient]) {
+                        g_item_instances.erase(instance_id);
+                        g_active_creature_data[g_current_player->uid].inventory[item] = -1;
+                        num_found++;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        int lookup = selected_button_index - (button_lookup.size() - 2);
+        TraceLog(LOG_INFO, "crafting module  %i --------- COMMING SOON!!!!!", g_plan_data[module_data.accepted_plans[lookup]].module_id);
+
+        //InstancePlayerItem(r_itter->second.produces);
+        
+        int instance_id;
+        int item_id;
+
+        for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+            auto i_itter = g_item_instances.find(g_active_creature_data[g_current_player->uid].inventory[item]);
+            if(i_itter != g_item_instances.end()) {
+                item_id = i_itter->second.item_id;
+                instance_id = i_itter->second.instance_id;
+
+                for(int ingredient = 0; ingredient < g_plan_data[module_data.accepted_plans[lookup]].ingredients.size(); ingredient++) {
+                    if(item_id == g_plan_data[module_data.accepted_plans[lookup]].ingredients[ingredient]) {
+                        g_item_instances.erase(instance_id);
+                        g_active_creature_data[g_current_player->uid].inventory[item] = -1;
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    for(int item = 0; item < g_active_creature_data[g_current_player->uid].inventory.size(); item++) {
+        TraceLog(LOG_INFO, "player has %i in inventory", g_active_creature_data[g_current_player->uid].inventory[item]);        
+    }
+    OpenModule();
+}

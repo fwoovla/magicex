@@ -159,9 +159,8 @@ void CreatureEntity::Update() {
 
         if(GetRandomValue(0,10) > 5 and should_use_spell) {
             if(current_primary_data != nullptr) {
-
-               /*  
-                if(current_primary_data->spell_id != -1) {
+ 
+                if(current_primary_data->weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
                     TraceLog(LOG_INFO, "casting spell");
                     
                     if(g_active_creature_data[uid].current_power < current_primary_data->weapon_data.pps) {
@@ -175,11 +174,11 @@ void CreatureEntity::Update() {
                     payload.shooter_id = uid;
                     payload.target_position = target_creature->position;
                     payload.spread = 0.0f;
-                    payload.spell_type = current_primary_data->weapon_data.spell_type;
+                    payload.spell_type = current_primary_data->weapon_data.caster_data.coupler.type;
                     //TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
                     //TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
 
-                    SpawnSpell(payload, &current_primary_data->spell_data);
+                    SpawnSpell(payload, &current_primary_data->weapon_data.caster_data);
 
                     g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                     current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power; 
@@ -187,8 +186,21 @@ void CreatureEntity::Update() {
                     can_use_spell = false;
                     should_use_spell = false;
                     //weapon_state = WSTATE_MELE;
-                    velocity = Vector2Rotate( {-current_primary_data->weapon_data.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
-                } */
+
+                    int recoil = current_primary_data->weapon_data.caster_data.igniter.recoil;
+                int dirx = 1;
+                int diry = 1;
+                if(GetRandomValue(0, 100) < 50) {dirx = -1;}
+                if(GetRandomValue(0, 100) < 50) {diry = -1;}
+
+                velocity = Vector2Rotate( {(float)-recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                Vector2 recoil_dir = { (float)recoil * dirx, (float)recoil * diry};
+                aim_position = Vector2Add( aim_position, recoil_dir );
+                TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_active_creature_data[uid].current_power, g_active_creature_data[uid].max_power);
+
+
+                //velocity = Vector2Rotate( {-current_primary_data->weapon_data.caster_data.igniter.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
+                }
             }
         }
     }

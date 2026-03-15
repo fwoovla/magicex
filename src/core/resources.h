@@ -44,6 +44,15 @@ enum CreatureID {
 
 extern Texture2D g_creature_sprite_sheets[MAX_SPRITES];
 
+enum ITEM_TIER {
+    TIER_1 = 0,
+    TIER_2,
+    TIER_3,
+    TIER_4,
+    TIER_5,
+    TIER_MAX,
+};
+
 enum ItemID {
     ITEM_ID_NONE = -1,
     ITEM_ID_DAGGER,         

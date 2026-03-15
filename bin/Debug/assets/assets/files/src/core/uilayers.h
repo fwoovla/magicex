@@ -1,0 +1,655 @@
+#pragma once
+#include "gamedefs.h"
+
+enum INVENTORYGRIDS {
+    GRID_NONE = -1,
+    GRID_GROUND,
+    GRID_INVENTORY,
+    GRID_HOTBAR,
+    GRID_PRIMARY,
+    GRID_SECONDARY,
+    GRID_HEAD,
+    GRID_BODY,
+    GRID_LEGS,
+    GRID_FEET,
+    GRID_HANDS,
+    GRID_NUM_GRIDS
+};
+
+
+struct UnitPortrait{
+    int id;
+    Texture2D texture;
+};
+
+class BaseUILayer{
+    public:
+    virtual ~BaseUILayer(){};
+    virtual void Update() = 0;
+    virtual void Draw() = 0;
+};
+
+struct SharedItemData {
+    int item_id;
+    int use_id;
+    bool showing_details;
+    //bool is_using;
+    //std::vector<int> *source_list;
+    //std::vector<int> *dest_list;
+    INVENTORYGRIDS source_grid;
+    INVENTORYGRIDS dest_grid;
+    Vector2 source_cell;
+    Vector2 dest_cell;
+    //int source_index
+};
+
+
+
+struct StatusBar {
+/*     StatusBar(Vector2 _position, float _max_value, Color _bar_color, float _width, float _height);
+    //~StatusBar() {};
+    void Update();
+    void Draw(); */
+
+    Color bar_color;
+    Vector2 position;
+    float max_value;
+    float current_value;
+    float width;
+    float height;
+    float unit_ratio;
+
+
+};
+
+void CreateStatusBar (StatusBar &bar, Vector2 _position, float _max_value, float _width, float _height, Color _color);
+void DrawStatusBar(StatusBar &bar);
+void UpdateStatusBar(StatusBar &bar);
+
+
+class ItemGrid {
+    public:
+    ItemGrid(int c, int r, int s, Vector2 p, SharedItemData *sd);
+    ~ItemGrid();
+    void Update();
+    void DrawGrid();
+    void DrawItems();
+    void SetItems(std::vector<int> *list);
+
+    bool CanAddItem(int item_id, Vector2 dest_cell);
+    bool HasRoom();
+    void AddItem(int item_id, Vector2 dest_cell);
+    void AddItem(int item_id);
+    bool CanRemoveItem(Vector2 source_cell);
+    void RemoveItem(Vector2 source_cell);
+
+    std::string CreateDetails(ItemInstanceData &item_data);
+
+    INVENTORYGRIDS this_grid;
+    ItemType accepted_type;
+
+    SharedItemData *shared_data;
+
+    int rows = 0;
+    int cols = 0;
+    int grid_size = 0;
+    float hovered_time;
+    Vector2 position;
+
+    bool grid_is_selectable;
+    bool can_select;
+    bool cell_hovered;
+    bool cell_selected;
+    bool show_details;
+    //bool is_using;
+    Vector2 hovered_cell;
+    Vector2 last_hovered_cell;
+    Vector2 selected_cell;
+
+    std::string container_iid;
+    //Vector2 return_position;
+
+    std::vector<Sprite> item_sprites;
+
+    std::vector<int> *item_list;
+
+    Label name_label;
+    Label details_label;
+
+    Signal selecting;
+    Signal not_selecting;
+    Signal transfer_item;
+    Signal pickup;
+    Signal use_item;
+    Signal putdown_or_equip;
+    Signal open_details;
+    Signal close_details;
+
+};
+
+class TradeGrid {
+
+    public:
+    TradeGrid(int c, int r, int s, Vector2 p, SharedItemData *sd);
+    ~TradeGrid();
+    void Update();
+    void DrawGrid();
+    void DrawItems();
+    void SetItems(std::vector<int> *list);
+
+    bool CanAddItem(int item_id, Vector2 dest_cell);
+    bool HasRoom();
+    void AddItem(int item_id, Vector2 dest_cell);
+    void AddItem(int item_id);
+    bool CanRemoveItem(Vector2 source_cell);
+    void RemoveItem(Vector2 source_cell);
+    void RemoveItem(int item_id);
+
+    std::string CreateDetails(ItemInstanceData &item_data);
+
+    INVENTORYGRIDS this_grid;
+    ItemType accepted_type;
+
+    SharedItemData *shared_data;
+
+    int rows = 0;
+    int cols = 0;
+    int grid_size = 0;
+    float hovered_time;
+    Vector2 position;
+
+    bool grid_is_selectable;
+    bool can_select;
+    bool cell_hovered;
+    bool cell_selected;
+    bool show_details;
+    //bool is_using;
+    Vector2 hovered_cell;
+    Vector2 last_hovered_cell;
+    Vector2 selected_cell;
+
+    std::string container_iid;
+    //Vector2 return_position;
+
+    std::vector<Sprite> item_sprites;
+
+    std::vector<int> *item_list;
+    std::vector<Vector2> selected_cells;
+
+    Label name_label;
+    Label details_label;
+
+    Signal selected;
+    Signal unselected;
+    Signal open_details;
+    Signal close_details;
+
+};
+
+
+class DetailsPanel : public BaseUILayer {
+
+    public:
+    DetailsPanel();
+    ~DetailsPanel() override;
+    void Update() override;
+    void Draw() override;
+    void OpenPanel(ItemInstanceData *_data);
+
+    ItemInstanceData *item_data;
+    Rectangle panel_rect;
+
+
+    Label item_name_label;
+    Label item_type_label;
+    Label value_label;
+
+    Label modslots_label;
+
+    Label power_label;
+    Label damage_label;
+    Label recoil_label;
+    Label accuracy_label;
+    Label pps_label;
+    Label cooldown_label;
+    Label knockback_label;
+
+    Label defence_label;
+    Label magicdefence_label;
+
+    Label saturation_label;
+
+    Label slot_label;
+};
+
+
+class PauseMenu : public BaseUILayer {
+
+    public:
+    PauseMenu();
+    ~PauseMenu() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    Button back_to_menu_button;
+    Signal back_to_menu_pressed;
+
+    Button continue_button;
+    Signal continue_pressed;
+
+    Button save_button;
+    Signal save_pressed;
+
+    Button quit_button;
+    Signal quit_pressed;
+
+};
+
+class MapMenu : public BaseUILayer {
+
+    public:
+    MapMenu();
+    ~MapMenu() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    Rectangle panel_rect;
+
+    Vector2 map_list_pos;
+    std::vector<Button> map_buttons;
+
+    Signal map_selected;
+
+};
+
+
+class ModuleMenu : public BaseUILayer {
+
+    public:
+    ModuleMenu();
+    ~ModuleMenu() override;
+    void Update() override;
+    void Draw() override;
+    void OpenModule();
+    void RecipieSelected();
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    int module_id;
+
+    ModuleData module_data;
+
+    Vector2 rpo;
+    Vector2 inpo;
+    Vector2 ipo;
+
+    Label recipie_header;
+    Label ingredient_header;
+    Label inventory_header;
+
+    Label recipie_label;
+    Label ingredient_label;
+    
+    std::vector<Button> recipie_buttons;
+    std::vector<int> button_lookup;
+    std::vector<int> plan_indexes;
+    int selected_button_index;
+    bool plan_selected;
+
+    Signal recipie_hovered;
+    Signal recipie_selected;
+
+    ItemGrid *inventory_grid;
+    SharedItemData shared_data;
+
+    Button craft_button;
+
+};
+
+class DialogueMenu : public BaseUILayer {
+
+    public:
+    DialogueMenu();
+    ~DialogueMenu() override;
+    void Update() override;
+    void Draw() override;
+    void DrawHotBarOnly();
+    void Open();
+    void OpenWith(NpcEntity  *npc_entity);
+
+    void OnItemSelected();
+    void OnItemUnSelected();
+    
+    void OnOpenDetails();
+    void OnCloseDetails();
+    void ClearTrade();
+
+
+    bool use_ground;
+
+    bool trading;
+
+    std::vector<int> blank_list;
+    std::string default_iid;
+
+
+    SharedItemData shared_data;
+    std::vector<TradeGrid *> grid_list;
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    Label ground_header_label;
+    Label character_header_label;
+    Label inventory_label_header;
+
+    
+    Vector2 gpo; // ground position offset
+    TradeGrid *ground_grid;
+    std::vector<int> g_item_list;
+    
+    Vector2 cpo;
+    Vector2 ppo; //portrait offset
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+
+    Label character_name_label;
+
+    Label character_dialogue_label;
+
+
+    std::vector<Button> response_buttons;
+
+    Button clear_sale_button;
+    Button buy_button;
+    
+    Vector2 ipo;
+    TradeGrid *inventory_grid;
+
+    bool show_details;
+    DetailsPanel *details_panel;
+
+    std::vector<int> items_to_buy;
+    std::vector<int> items_to_sell;
+
+    Label sale_label;
+
+    int buy_items_value;
+    int sell_items_value;
+
+
+    //ActiveDialogue this_dialogue;
+
+
+};
+
+class CharacterMenu : public BaseUILayer {
+
+    public:
+    CharacterMenu();
+    ~CharacterMenu() override;
+    void Update() override;
+    void Draw() override;
+    void DrawHotBarOnly();
+    void Open();
+    void OpenWith(BaseContainerEntity *container);
+
+    void OnItemSelected();
+    void OnItemDeselected();
+
+    void OnTransferItem();
+
+    void OnPickup();
+    void OnPutDownOrEquip();
+
+    void OnUseItem();
+
+    void OnOpenDetails();
+    void OnCloseDetails();
+
+
+    bool use_ground;
+    std::vector<int> blank_list;
+    std::string default_iid;
+
+
+    SharedItemData shared_data;
+    std::vector<ItemGrid *> grid_list;
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    Label ground_header_label;
+    Label character_header_label;
+    Label inventory_label_header;
+
+    
+    Vector2 gpo; // ground position offset
+    ItemGrid *ground_grid;
+    std::vector<int> g_item_list;
+    
+    Vector2 cpo;
+    Vector2 ppo; //portrait offset
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+    Label character_label;
+    Label character_stat_label;
+
+    Label primary_header_label;
+    ItemGrid *primary_grid;
+    Label secondary_header_label;
+    ItemGrid *secondary_grid;
+    Label head_header_label;
+    ItemGrid *head_grid;
+    Label body_header_label;
+    ItemGrid *body_grid;
+    Label legs_header_label;
+    ItemGrid *legs_grid;
+    Label hands_header_label;
+    ItemGrid *hands_grid;
+    Label feet_header_label;
+    ItemGrid *feet_grid;
+
+    Vector2 hpo;
+    ItemGrid *hotbar_grid;
+    
+    Vector2 ipo;
+    ItemGrid *inventory_grid;
+
+
+    Vector2 spo; 
+    Label speed_label;
+    Label health_label;
+    Label exp_label;
+    Label defence_label;
+    Label magic_defence_label;
+    Label max_power_label;
+    Label current_power_label;
+    Label sat_label;
+
+    bool show_details;
+    DetailsPanel *details_panel;
+};
+
+class TitleUILayer : public BaseUILayer {
+
+    public:
+    TitleUILayer();
+    ~TitleUILayer() override;
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+
+    Button continue_button;
+    Signal continue_pressed;
+
+    Button start_button;
+    Signal play_pressed;
+
+    Button settings_button;
+    Signal settings_pressed;
+
+    Button quit_button;
+    Signal quit_pressed;
+
+};
+
+class StagingUILayer : public BaseUILayer {
+
+    public:
+    StagingUILayer();
+    ~StagingUILayer() override;
+    
+    void Update() override;
+    void UpdateSelectPanel();
+    void UpdateCharacterInfo();
+    void Draw() override;
+    void DrawSelectPanel();
+    void DrawCharacterInfo();
+    void SetPlayer(int uid);
+    void ItemSelected(int item_id);
+    void SpellSelected(int spell_id);
+
+    Label title_label;
+
+    Button start_button;
+    Signal play_pressed;
+
+    Button settings_button;
+    Signal settings_pressed;
+
+    Button quit_button;
+    Signal quit_pressed;
+
+
+    Vector2 spo; //select_panel_offest
+    Button select_character_left_button;
+    Button select_character_right_button;
+    Sprite select_character_panel_sprite;
+    AnimatedSprite select_chatacter_sprite;
+    Button select_chatacter_button;
+    Label select_character_label;
+    
+    int select_index;
+    bool is_selecting;
+    Signal character_selected;
+    Signal character_left_pressed;
+    Signal character_right_pressed;
+
+    Vector2 cpo;
+    Rectangle character_bounding_rect;
+    Sprite character_panel_sprite;
+    AnimatedSprite character_sprite;
+    Label character_label;
+    Label character_stat_label;
+
+    std::vector<UnitPortrait > portraits;
+
+    std::unique_ptr<ItemGrid> inventory_grid;
+
+    //ItemGrid *inventory_grid;
+    
+    SharedItemData shared_data;
+
+    Vector2 tw_offset;
+    Vector2 ts_offset;
+    Vector2 tf_offset;
+
+    bool show_weapons;
+    Label take_weapon_label;
+    Rectangle take_weapon_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_weapon_buttons;
+    std::vector<int> weapon_ids;
+
+    bool show_spells;
+    Label take_spell_label;
+    Rectangle take_spell_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_spell_buttons;
+    std::vector<int> spell_ids;
+
+    bool show_food;
+    Label take_food_label;
+    Rectangle take_food_rect;  //visual
+    std::vector<std::unique_ptr<Button>> take_food_buttons;
+    std::vector<int> food_ids;
+
+};
+
+class ShelterUILayer : public BaseUILayer {
+
+    public:
+    ShelterUILayer();
+    ~ShelterUILayer() override;
+    void Update() override;
+    void Draw() override;
+
+    //void DrawDebug();
+   
+    Button start_button;
+    Signal start_pressed;
+
+    Button quit_button;
+    Signal quit_pressed;
+
+    Label title_label;
+    //Label debug_label;
+};
+
+
+class GameUILayer : public BaseUILayer {
+
+    public:
+    GameUILayer();
+    ~GameUILayer() override;
+    void Update() override;
+    void Draw() override;
+
+    //void DrawDebug();
+
+    Button quit_button;
+    Signal quit_pressed;
+
+    Label title_label;
+
+    Label debug_zoom_level;
+
+    Label power_label;
+    Label sat_label;
+
+    StatusBar saturation_bar;
+    StatusBar power_bar;
+    float last_max_power;
+
+    StatusBar health_bar;
+    StatusBar stamina_bar;
+
+    Button debug_poi_layer_button;
+    Button debug_toggle_poi_layer_button;
+
+};
+
+
+class EndUILayer : public BaseUILayer {
+
+    public:
+    EndUILayer();
+    ~EndUILayer() override;
+    
+    void Update() override;
+    void Draw() override;
+
+    Label title_label;
+};
+

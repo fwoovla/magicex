@@ -1,0 +1,486 @@
+#include "../core/gamedefs.h"
+
+static std::string text = "CHEST";
+/////TRANSITION AREA
+
+TransitionArea::~TransitionArea() {
+    TraceLog(LOG_INFO, "TransitionArea AREA DESTROYED, %s", identifier.c_str());
+}
+
+void TransitionArea::Update() {
+    hovered = false;
+    
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+            hovered = true;
+            in_range = false;
+            int grid_size = g_ldtk_maps.default_grid_size;
+
+            float lx = g_input.screen_mouse_position.x * g_inv_scale;
+            float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+            CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "open");
+
+            if(identifier == "HouseTransition") {
+                if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+                    g_game_data.sub_return_position = payload_v * 2;
+                    g_game_data.sub_map_index = payload_i;
+                    g_game_data.sub_map_uid = uid ;
+                    in_range = true;
+                }
+            }
+            else if (identifier == "LevelTransition"){
+                label.text = "go to " + payload_s;
+                if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+                    g_game_data.next_map_index = payload_i;
+                    g_game_data.level_name_to_create = payload_s;
+                    //if(identifier == "LevelTransition") {
+                    //}
+                    in_range = true;
+                }
+            }
+            else if (identifier == "ShelterTransition"){
+                label.text = "go to " + payload_s;
+                if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+                    g_game_data.next_map_index = payload_i;
+                    g_game_data.level_name_to_create = payload_s;
+                    //if(identifier == "LevelTransition") {
+                    //}
+                    in_range = true;
+                }
+            }
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > 1.0f) {
+            time_pressed = 1.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void TransitionArea::Draw() {
+    if(hovered) {
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        //DrawLabelCentered(label);
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////CONTAINER AREA
+
+ContainerArea::~ContainerArea() {
+    TraceLog(LOG_INFO, "ContainerArea AREA DESTROYED, %s", identifier.c_str());
+}
+
+void ContainerArea::Update() {
+    hovered = false;
+    
+    float max_time_to_press = 1.0f;
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+    //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
+        hovered = true;
+        in_range = false;
+
+        int grid_size = g_ldtk_maps.default_grid_size;
+
+        float lx = g_input.screen_mouse_position.x * g_inv_scale;
+        float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+        text = "";
+        
+        if(identifier == "GroundContainerEntity") {
+            int count = 0;
+            for(int i = 0; i < item_list.size(); i++) {
+                if(item_list[i] != -1) {
+                    text += g_item_instances[item_list[i]].item_name + "\n";
+                }
+            }
+            text.pop_back();
+            max_time_to_press = 0.4f;
+        }
+        else if(identifier == "Mushroom") { 
+            max_time_to_press = 0.4f;
+            text = "mushroom";
+        }
+        else {
+            text = "open";
+        }
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
+
+        if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+            in_range = true;
+        }
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > max_time_to_press) {
+            time_pressed = 0.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void ContainerArea::Draw() {
+    
+    if(hovered) {
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////MODULE AREA
+
+ModuleArea::~ModuleArea() {
+    TraceLog(LOG_INFO, "ContainerArea AREA DESTROYED, %s", identifier.c_str());
+}
+
+void ModuleArea::Update() {
+    
+    float max_time_to_press = 1.0f;
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+    in_range = false;
+
+    if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+            in_range = true;
+    }
+    //TraceLog(LOG_INFO, "MODULE AREA update, %s", identifier.c_str());
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        //TraceLog(LOG_INFO, "CONTAINER AREA update, %s", identifier.c_str());
+        hovered = true;
+
+        int grid_size = g_ldtk_maps.default_grid_size;
+
+        float lx = g_input.screen_mouse_position.x * g_inv_scale;
+        float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+        text = "";
+
+        text = g_module_data[payload_i].module_name;
+
+        
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, text.c_str());
+
+        
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > max_time_to_press) {
+            time_pressed = 0.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void ModuleArea::Draw() {
+    
+
+    if(hovered) {
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DialogeArea::~DialogeArea() {
+    TraceLog(LOG_INFO, "dialogue AREA DESTROYED, %s", identifier.c_str());
+}
+
+void DialogeArea::Update() {
+    //TraceLog(LOG_INFO, "dialige area update %0.0f %0.0f", size.x, size.y);
+    hovered = false;
+    
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        hovered = true;
+        in_range = false;
+        int grid_size = g_ldtk_maps.default_grid_size;
+
+        float lx = g_input.screen_mouse_position.x * g_inv_scale;
+        float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "talk");
+
+        if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+
+            in_range = true;
+        }
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > 1.0f) {
+            time_pressed = 0.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void DialogeArea::Draw() {
+    if(hovered) {
+        //TraceLog(LOG_INFO, "dialige area draw");
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        //DrawLabelCentered(label);
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+DoorArea::~DoorArea() {
+    TraceLog(LOG_INFO, "Door AREA DESTROYED, %s", identifier.c_str());
+}
+
+void DoorArea::Update() {
+    //TraceLog(LOG_INFO, "dialige area update %0.0f %0.0f", size.x, size.y);
+    hovered = false;
+    
+    Rectangle area_rect = {
+        .x = position.x,
+        .y = position.y,
+        .width = (float)size.x,
+        .height = (float)size.y
+    };
+
+    if(CheckCollisionPointRec( g_input.world_mouse_position, area_rect) ) {
+        hovered = true;
+        in_range = false;
+        int grid_size = g_ldtk_maps.default_grid_size;
+
+        float lx = g_input.screen_mouse_position.x * g_inv_scale;
+        float ly = (g_input.screen_mouse_position.y - 50) * g_inv_scale;
+
+        CreateLabel(label, {lx, ly}, FONTSIZE_30, WHITE, "open door");
+
+        if(CheckCollisionCircleRec(g_current_player->position, 16, area_rect) ) {
+
+            in_range = true;
+        }
+    }
+    else {
+        hovered = false;
+
+    }
+    if(hovered and g_input.key_use and in_range) {
+        time_pressed += 1.0f * GetFrameTime();
+        if(time_pressed > 1.0f) {
+            time_pressed = 0.0f;
+            area_activated.EmitSignal();
+        }
+    }
+    else {
+        time_pressed = 0.0f;
+    }
+}
+
+void DoorArea::Draw() {
+    if(hovered) {
+        //TraceLog(LOG_INFO, "dialige area draw");
+        if(in_range) {
+            label.default_color = GREEN;
+        }
+        else {
+            label.default_color = WHITE;
+        }
+        //DrawLabelCentered(label);
+        DrawLabelCenteredWithBG(label, BLACK);
+
+        if(time_pressed > 0) {
+            Rectangle rect = {
+                .x = label.position.x - 20,
+                .y = label.position.y - 30,
+                .width = (20 * 2) * time_pressed,
+                .height = 8
+            };
+            DrawRectangleRec(rect, RED);
+        }
+    }
+}
+

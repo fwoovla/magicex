@@ -1,0 +1,316 @@
+#pragma once
+#include <raylib.h>
+#include <raymath.h>
+#include <string>
+#include <fstream>
+
+#include "json.hpp"
+#include "utils.h"
+#include "areas.h"
+#include "entities.h"
+#include "dialogue.h"
+//#include "mapgen.h"
+
+
+#define MAX_TILE_SHEETS 10
+
+using json = nlohmann::json;
+
+struct LDTKLayer {
+    std::string type;
+    std::string identifier;
+    std::string layer_type;
+    int64_t uid;
+    nlohmann::json doc;
+    nlohmann::json ui_color;
+    int64_t grid_size;
+    int64_t guide_grid_wid;
+    int64_t guide_grid_hei;
+    int64_t display_opacity;
+    int64_t inactive_opacity;
+    bool hide_in_list;
+    bool hide_fields_when_inactive;
+    bool can_select_when_inactive;
+    bool render_in_world_view;
+    int64_t px_offset_x;
+    int64_t px_offset_y;
+    int64_t parallax_factor_x;
+    int64_t parallax_factor_y;
+    bool parallax_scaling;
+    std::vector<nlohmann::json> required_tags;
+    std::vector<nlohmann::json> excluded_tags;
+    nlohmann::json auto_tiles_killed_by_other_layer_uid;
+    std::vector<nlohmann::json> ui_filter_tags;
+    bool use_async_render;
+    std::vector<nlohmann::json> int_grid_values;
+    std::vector<nlohmann::json> int_grid_values_groups;
+    std::vector<nlohmann::json> auto_rule_groups;
+    nlohmann::json auto_source_layer_def_uid;
+    int64_t tileset_def_uid;
+    int64_t tile_pivot_x;
+    int64_t tile_pivot_y;
+    nlohmann::json biome_field_uid;
+};
+
+struct LDTKCachedPixelData {
+    std::string opaque_tiles;
+    std::string average_colors;
+};
+
+struct LDTKEnumTag {
+    std::string value_string;
+    std::vector<int> tile_ids;
+};
+
+struct LDTKTileset {
+    int64_t c_wid;
+    int64_t c_hei;
+    std::string identifier;
+    int64_t uid;
+    std::string rel_path;
+    nlohmann::json embed_atlas;
+    int64_t px_wid;
+    int64_t px_hei;
+    int64_t tile_grid_size;
+    int64_t spacing;
+    int64_t padding;
+    std::vector<nlohmann::json> tags;
+    nlohmann::json tags_source_enum_uid;
+    std::vector<LDTKEnumTag> enum_tags;
+    std::vector<nlohmann::json> custom_data;
+    std::vector<nlohmann::json> saved_selections;
+    LDTKCachedPixelData cached_pixel_data;
+};
+
+struct LDTKDefs {
+    std::vector<LDTKLayer> layers;
+    std::vector<nlohmann::json> entities;
+    std::vector<LDTKTileset> tilesets;
+    std::vector<nlohmann::json> enums;
+    std::vector<nlohmann::json> external_enums;
+    std::vector<nlohmann::json> level_fields;
+};
+
+struct LDTKHeader {
+    std::string file_type;
+    std::string app;
+    std::string doc;
+    std::string schema;
+    std::string app_author;
+    std::string app_version;
+    std::string url;
+};
+
+struct LDTKGridTile {
+    std::vector<int64_t> px;
+    std::vector<int64_t> src;
+    int64_t f;
+    int64_t t;
+    std::vector<int64_t> d;
+    int64_t a;
+};
+
+
+struct LDTKFieldInstance {
+    std::string identifier;
+    std::string value_s;
+    Vector2 value_v;
+    int value_i;
+    std::vector<int> i_list;
+};
+
+
+
+struct LDTKEntityInstance {
+    std::string identifier;
+    std::string iid;
+    int64_t width;
+    int64_t height;
+    int64_t def_uid;
+    std::vector<int64_t> px;
+    std::vector<LDTKFieldInstance> field_instances;
+};
+
+
+struct LDTKLayerInstance {
+    std::string identifier;
+    std::string type;
+    int64_t c_wid;
+    int64_t c_hei;
+    int64_t grid_size;
+    int64_t tileset_def_uid;
+    std::string tileset_rel_path;
+    int64_t level_id;
+    int64_t layer_def_uid;
+    int64_t px_offset_x;
+    int64_t px_offset_y;
+    std::vector<int64_t> int_grid;
+    std::vector<nlohmann::json> auto_layer_tiles;
+    std::vector<LDTKGridTile> grid_tiles;
+    std::vector<LDTKEntityInstance> entity_instances;
+};
+
+struct LDTKEnvironmentData {
+    Vector2 position;
+    std::string item_string;
+};
+
+struct LDTKLevel {
+
+    bool is_shelter = false;
+    bool is_sub_map = false;
+    bool is_worldgen = false;
+    std::string identifier;
+    std::string iid;
+    int64_t uid;
+    //int64_t world_x;
+    //int64_t world_y;
+    //int64_t world_depth;
+    int64_t px_wid;
+    int64_t px_hei;
+    //std::string bg_color;
+    //bool use_auto_identifier;
+    //nlohmann::json bg_rel_path;
+    //nlohmann::json level_bg_pos;
+    std::vector<nlohmann::json> field_instances;
+    std::vector<LDTKLayerInstance> layer_instances;
+    std::vector<LDTKEnvironmentData> environment_data;
+};
+
+struct LDTKMaps {
+    LDTKHeader header;
+    std::string iid;
+    std::string json_version;
+    int64_t app_build_id;
+    int64_t next_uid;
+    std::string identifier_style;
+    std::vector<nlohmann::json> toc;
+    std::string world_layout;
+    int64_t world_grid_width;
+    int64_t world_grid_height;
+    int64_t default_level_width;
+    int64_t default_level_height;
+    int64_t default_pivot_x;
+    int64_t default_pivot_y;
+    int64_t default_grid_size;
+    int64_t default_entity_width;
+    int64_t default_entity_height;
+    std::string bg_color;
+    std::string default_level_bg_color;
+    bool minify_json;
+    bool external_levels;
+    bool export_tiled;
+    bool simplified_export;
+    std::string image_export_mode;
+    bool export_level_bg;
+    nlohmann::json png_file_pattern;
+    bool backup_on_save;
+    int64_t backup_limit;
+    nlohmann::json backup_rel_path;
+    std::string level_name_pattern;
+    nlohmann::json tutorial_desc;
+    std::vector<nlohmann::json> custom_commands;
+    std::vector<nlohmann::json> flags;
+    LDTKDefs defs;
+    std::vector<LDTKLevel> levels;
+    std::vector<nlohmann::json> worlds;
+    std::string dummy_world_iid;
+    std::vector<LDTKTileset> tilesets;
+
+};
+
+
+
+
+
+struct TileSheetData {
+    int uid;
+    Texture2D texture;
+};
+
+
+struct GameData {
+    //bool is_new_player = true;
+    bool save_available = false;
+    bool using_saved_data;
+    bool paused = false;
+    SCENE_ID current_scene_id;
+
+    std::string level_name_to_create;
+
+    int current_map_index;
+    int next_map_index;
+    int shelter_map_index;
+
+    int sub_map_index;
+    bool is_in_sub_map;
+    Vector2 sub_return_position;
+    std::string sub_map_uid;
+
+    int current_module_id;
+
+    int loot_table_id;
+    std::vector<int> *loot_table;
+    BaseContainerEntity *return_container;
+
+    NpcEntity *return_npc;
+    Vector2 return_door_pos;
+
+    std::vector<DIALOGUE_TOPIC> return_topics;
+    
+};
+
+extern GameData g_game_data;
+
+extern LDTKMaps g_ldtk_maps;
+
+extern std::unordered_map<int, TileSheetData> g_ldtk_tilesheets;
+//extern std::vector<LDTKLevel> g_ldtk_levels;
+
+
+
+void LDTKLoadTileSets (json &mj);
+void LDTKLoadMaps (json &mj);
+int LDTKDrawMap(Vector2 focus_position);
+
+void LDTKToggleColision(Vector2 position);
+
+void LDTKSetColision(Vector2 position, bool value);
+
+//void LDTKDrawForegroundLayer(Vector2 focus_position);
+
+void LDTKDrawShadows(Vector2 focus_position);
+
+void LDTKDrawCollisionDebug(Vector2 focus_position);
+
+inline int load_ldtk_maps(std::string ldtk_map_path) {
+
+    TraceLog(LOG_INFO, "++++++++++++++++++++++++++++++++ LOADING LDTK DATA....  (*.ldtk) ++++++++++++++++++++++++++\n");
+
+    std::ifstream mfile(ldtk_map_path);
+    if (!mfile.is_open()) {
+        TraceLog(LOG_INFO, "-CANNOT OPEN FILE");
+        return 0;
+    }
+    
+    json mj;
+    mfile>>mj;
+    TraceLog(LOG_INFO, "+FOUND MAP FILE");
+
+    LDTKLoadTileSets(mj);
+
+    LDTKLoadMaps(mj);
+
+    mfile.close();
+
+    return 1;
+}
+
+
+
+
+
+
+
+
+

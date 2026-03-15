@@ -5,8 +5,8 @@ needs raylib
 Main Engine Features
 
 
-custom LDTK level importer
-custom LDTK tileset creator
+custom LDTK based level importer
+custom LDTK based tileset creator
 proceedural level generation
 vission occlusion 
 shadow system
@@ -17,7 +17,6 @@ dialogue system
 simple crafting
 trading system
 mele weapons
-spell wand system
 working doors
 level transitions
 explorable structures
@@ -27,5 +26,6 @@ passive/npc/hostile mobs
 player tracking ai
 mob vision tracking
 loot drops
+procgen weapons
 
 

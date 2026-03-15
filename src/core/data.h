@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "spells.h"
 #include "areas.h"
+#include "loottables.h"
 #include "spells.h"
 #include "baseentity.h"
 #include "entities.h"
@@ -56,6 +57,10 @@ enum WEAPON_TYPE {
     WEAPON_TYPE_CASTER
 };
 
+
+
+
+extern std::vector<std::vector<int>> g_tier_tables;
 
 extern std::vector<Color> g_item_type_colors;
 
@@ -111,6 +116,7 @@ struct WeaponData {
     float max_power;
     float current_power;
     float pps;
+    ITEM_TIER tier;
 };
 
 
@@ -123,6 +129,7 @@ struct ArmorData {
     int defence;
     int magic_defence;
     int mod_slots;
+    ITEM_TIER tier;
 };
 
 extern std::vector<ArmorData> g_armor_data;
@@ -174,6 +181,7 @@ struct ItemInstanceData {
     int level;
     int rarity;
     int mod_slots;
+    ITEM_TIER tier;
 
 };
 
@@ -381,6 +389,8 @@ SPELL_TYPE StrToSpellTypeId(const std::string& s);
 
 WEAPON_TYPE StrToWeaponTypeId(const std::string& s);
 
+ITEM_TIER StrToTier(const std::string& s);
+//ITEM_TIER GetTier(int loot_level);
 
 AIID StrToAiId(const std::string& s);
 
@@ -403,6 +413,11 @@ RecipieID StrToRecipieId(const std::string& s);
 EnvironmentSpriteID StrToEnviroSpriteId(const std::string& s);
 
 std::string EnvironmentalIdToStr(const int id);
+
+std::string SpellEffectToStr(SPELL_EFFECT effect);
+
+std::string SpellTypeToStr(SPELL_TYPE type);
+
 
 void from_json(const json &j, ItemInstanceData &i);
 

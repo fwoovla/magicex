@@ -166,6 +166,38 @@ void LoadGameData() {
     }
 
 
+//tier tables
+
+    g_tier_tables.resize(TYPE_ALL+1);
+    for(std::vector table : g_tier_tables) {
+        table.resize(TIER_MAX, 0);
+    }
+
+    TraceLog(LOG_INFO, "tier_tables size %i  ", cj["tier_tables"].size());
+    TraceLog(LOG_INFO, "g_tier_tables size %i  ", g_tier_tables.size());
+
+    for(int table = 0; table < cj["tier_tables"].size(); table++) {
+
+        int index = StrToItemType( cj["tier_tables"][table]["type"]);
+        std::vector<int> bonuses;
+        bonuses.resize(TIER_MAX, 0);
+
+        for(int tier = 0; tier < cj["tier_tables"][table]["tiers"].size(); tier++) {
+            //ITEM_TIER this_tier = StrToTier(cj["tier_tables"][table]["tiers"][tier]);
+            bonuses[tier] = cj["tier_tables"][table]["tiers"][tier]["bonus_percent"].get<int>();
+
+            TraceLog(LOG_INFO, "tier_tables:%s index %i    tier %i  bonus_percent: %i ",cj["tier_tables"][table]["type"], 
+                index, 
+                tier, 
+                cj["tier_tables"][table]["tiers"][tier]["bonus_percent"].get<int>()
+            );
+        }
+        g_tier_tables[index] = bonuses;
+        
+    } 
+    TraceLog(LOG_INFO, "tier_tables size %i  ", g_tier_tables.size());
+
+
 //---------------------caster data
     g_casterbase_data.resize(cj["caster_data"].size());
     TraceLog(LOG_INFO, "caster_data size %i  ", cj["caster_data"].size());
@@ -599,6 +631,9 @@ void LoadGameData() {
 
 
         //--------------------creature loot tables
+
+    LoadStatLimits(cj["stat_limits"]);
+    LoadStatGenData(cj["stat_generation_data"]);
 
     LoadLootTables(cj["loot_tables"]);
 
@@ -1144,8 +1179,6 @@ void ClearLevelData(LevelData &level_data) {
 
 
 void LoadLevelData(LevelData &level_data) {
-
-
 
     int map_index = 0;
     
@@ -1854,6 +1887,25 @@ WEAPON_TYPE StrToWeaponTypeId(const std::string& s) {
 }
 
 
+
+ITEM_TIER StrToTier(const std::string& s) {
+    static const std::unordered_map<std::string, ITEM_TIER> lookup_table = {
+        {"TIER_1",              ITEM_TIER::TIER_1},
+        {"TIER_2",              ITEM_TIER::TIER_2},
+        {"TIER_3",              ITEM_TIER::TIER_3},
+        {"TIER_4",              ITEM_TIER::TIER_4},
+        {"TIER_5",              ITEM_TIER::TIER_5},
+        
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "ITEM TIER not found ");
+    return ITEM_TIER::TIER_1;  
+}
+
+
 CreatureID StrToCreatureId(const std::string& s) {
 
     static const std::unordered_map<std::string, CreatureID> lookup_table = {
@@ -2032,6 +2084,32 @@ std::string ItemTypeToStr(const int id) {
     return "";
 }
 
+
+std::string SpellEffectToStr(SPELL_EFFECT effect) {
+    static const std::unordered_map<int , std::string> lookup_table = {
+        {SPELL_EFFECT::SPELL_EFFECT_FORCE,      "Force"},
+        {SPELL_EFFECT::SPELL_EFFECT_FIRE,       "Fire"},
+        {SPELL_EFFECT::SPELL_EFFECT_LIGHTNING,  "Lightning"},
+        {SPELL_EFFECT::SPELL_EFFECT_POISON,     "Poison"},
+    };
+    if (auto it = lookup_table.find(effect); it != lookup_table.end()) {
+        return it->second;
+    }
+    return "";
+}
+
+
+std::string SpellTypeToStr(SPELL_TYPE type) {
+    static const std::unordered_map<int , std::string> lookup_table = {
+        {SPELL_TYPE::SPELL_TYPE_BOLT,      "Bolt"},
+        {SPELL_TYPE::SPELL_TYPE_AOE,       "Blast"},
+        {SPELL_TYPE::SPELL_TYPE_INSTANT,  "Strike"},
+    };
+    if (auto it = lookup_table.find(type); it != lookup_table.end()) {
+        return it->second;
+    }
+    return "";    
+}
 
 SpriteSheetID StrToSpriteId(const std::string& s) {
 

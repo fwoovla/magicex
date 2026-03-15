@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gamedefs.h"
+//#include "loottables.h"
 
 enum SPELL_TYPE {
     SPELL_TYPE_NONE = -1,
@@ -35,6 +36,7 @@ struct CasterBaseData {
     std::string name;
     ItemID id;
     float accuracy;
+    ITEM_TIER tier;
 };
 extern std::vector<CasterBaseData> g_casterbase_data;
 
@@ -45,6 +47,7 @@ struct IgniterData {
     SPELL_EFFECT effect;
     float recoil;
     float max_power;
+    ITEM_TIER tier;
 };
 extern std::vector<IgniterData> g_igniter_data;
 
@@ -58,6 +61,7 @@ struct CouplerData {
     float pps;
     float damage;
     float speed;
+    ITEM_TIER tier;
 };
 extern std::vector<CouplerData> g_coupler_data;
 
@@ -67,6 +71,7 @@ struct RodData {
     ItemID id;
     float knockback;
     float damage;
+    ITEM_TIER tier;
 };
 extern std::vector<RodData> g_rod_data;
 
@@ -78,6 +83,7 @@ struct CasterData {
     IgniterData igniter;
     CouplerData coupler;
     RodData rod;
+    ITEM_TIER tier;
     
     //int spell_sprite_id;
 };
@@ -93,6 +99,7 @@ struct NewSpellPayload {
     SPELL_TYPE spell_type;
     //SpellData *spell_data;
 };
+
 
 
 class BaseSpell : public AnimatedSpriteEntity {

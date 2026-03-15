@@ -10,6 +10,22 @@
 #define MAX_SIGNAL_CONNECTIONS 256
 
 
+enum STAT_ID {
+    STAT_DAMAGE,
+    STAT_PPS,
+    STAT_COOLDOWN,
+    STAT_KNOCKBACK,
+    STAT_RECOIL,
+    STAT_ACCURACY,
+    STAT_MAX_POWER,
+    STAT_COUNT
+};
+
+struct Limit {
+    float min;
+    float max;
+};
+
 enum SIGNAL {
     END_GAME,
     TIMER_TIMEOUT,

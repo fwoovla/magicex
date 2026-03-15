@@ -1,0 +1,404 @@
+#include "../core/gamedefs.h"
+
+
+void SceneManager::UpdateScene() {
+    SCENE_ID new_scene_id = NO_SCENE;
+
+    if(g_current_scene == nullptr){
+        return;
+    }
+    
+    if(can_delete_transition) {
+        can_delete_transition = false;
+        is_transitioning = false;
+        fade_transition.reset();
+
+    }
+    
+    GetInputFromPlayer();
+
+    SetCursorPosition(g_input.screen_mouse_position / g_scale);
+    g_cursor.sprite.texture = g_ui_sprites[g_cursor.state];
+    
+    //SetCursorPosition(g_input.screen_mouse_position);
+
+
+
+        
+    if(g_game_data.paused == false) {
+        new_scene_id = g_current_scene->Update();
+    }
+    else {
+        pause_menu->Update();
+    }
+    if(!is_transitioning) {
+        switch (new_scene_id) {
+            case NO_SCENE:
+                break;
+
+            default:
+            TransitionSceneTo(new_scene_id);
+            return;
+            //is_transitioning = false;
+        }
+    }
+
+    if(g_input.keys_pressed[0] == KEY_ESCAPE) {
+        g_game_data.paused = !g_game_data.paused;
+    }
+
+    if(g_input.keys_pressed[0] == KEY_TAB) {
+        g_game_settings.show_debug = !g_game_settings.show_debug;
+    }
+
+    if(is_transitioning and fade_transition) {
+        fade_transition->Update();
+        return;
+    }
+
+    if(g_game_settings.show_debug) {
+        debug_label.text = TextFormat( "mmp %0.2f  %0.2f \n  player pos  %0.2f   %0.2f \n player cell %i %i \n cti %i %i \ncamera target %f %f \nfps %i\ntiles drawn %i\nentities drawn %i\n", 
+        g_input.world_mouse_position.x, g_input.world_mouse_position.y,
+        g_current_player->position.x, g_current_player->position.y,
+        (int)(g_current_player->position.x / 16), (int)(g_current_player->position.y / 16),
+        (int)g_camera.target.x, (int)g_camera.target.y,
+        g_camera.target.x, g_camera.target.y,
+        GetFPS(),
+        g_debug_data.tiles_drawn,
+        g_debug_data.entities_drawn);
+    }
+}
+
+
+void SceneManager::Init() {
+    g_current_scene = std::make_unique<SplashScreen>();
+
+    g_game_data.current_scene_id = SPLASH_SCENE;
+    fade_transition = nullptr;
+
+    is_transitioning = false;
+    can_delete_transition = false;
+
+    pause_menu = std::make_unique<PauseMenu>();
+    pause_menu->continue_pressed.Connect( [&](){OnPausePressed();} );
+    pause_menu->save_pressed.Connect( [&](){OnSavePressed();} );
+    pause_menu->back_to_menu_pressed.Connect( [&](){OnBackToMenuPressed();} );
+    pause_menu->quit_pressed.Connect( [&](){OnQuitPressed();} );
+
+    LoadSpriteCentered( g_cursor.sprite, g_ui_sprites[UI_ID_CROSSHAIR], {0,0} );
+    CreateLabel(debug_label, {20 / g_scale}, 40/g_scale, RAYWHITE, "DEBUG");
+}
+
+
+void SceneManager::CleanUp() {
+
+    TraceLog(LOG_INFO, "cleaning up scene manager");
+    if(g_game_data.is_in_sub_map) {
+        g_sub_scene.reset();
+    }
+    g_current_scene.reset();
+
+}
+
+
+void SceneManager::DrawScene() {
+
+    g_current_scene->DrawScene();
+    
+
+}
+
+void SceneManager::DrawUI() {
+
+    g_current_scene->DrawUI();
+
+    if(g_game_data.paused == true) {
+        pause_menu->Draw();
+    }
+    DrawSprite(g_cursor.sprite);
+
+    if(is_transitioning and fade_transition != nullptr) {
+        fade_transition->Draw();
+    }
+    if(g_game_settings.show_debug) {
+        DrawLabel(debug_label);
+    }
+}
+
+
+void SceneManager::ChangeSceneTo(SCENE_ID new_scene_id) {
+    
+    
+    g_current_scene.reset();
+    g_game_data.current_map_index = g_game_data.next_map_index;
+
+    switch (new_scene_id) {
+        case SPLASH_SCENE:
+            g_current_scene = std::make_unique<SplashScreen>();
+            break;
+
+        case TITLE_SCENE:
+            g_current_scene = std::make_unique<TitleScene>();
+            break;
+
+        case STAGING_SCENE:
+            g_current_scene = std::make_unique<StagingScene>();
+            break;
+
+        case SHELTER_SCENE:
+            g_current_scene = std::make_unique<ShelterScene>();
+            break;
+
+        case GAME_SCENE:
+            g_current_scene = std::make_unique<GameScene>();
+            break;
+
+        case END_SCENE:
+            g_current_scene = std::make_unique<EndScene>();
+            break;
+
+        default:
+            break;
+    }
+    g_game_data.current_scene_id = new_scene_id;
+}
+
+
+void SceneManager::TransitionSceneTo(SCENE_ID new_scene_id) {
+    next_scene_id = new_scene_id;
+    ChangeSceneTo(next_scene_id);
+/*     is_transitioning = true;
+    fade_transition = std::make_unique<FadeTransition>(1);
+    fade_transition->transition_ended.Connect( [&](){OnTransitionEnded();} );
+    fade_transition->transition_midpoint.Connect( [&](){OnTransitionMidpoint();} ); */
+}
+
+
+void SceneManager::OnPausePressed() {
+    g_game_data.paused = !g_game_data.paused;
+}
+
+void SceneManager::OnSavePressed() {
+    SaveGame(g_current_scene->level_data);
+    TraceLog(LOG_INFO, "GAME SAVED ");
+}
+
+void SceneManager::OnBackToMenuPressed() {
+    //SaveGame();
+    if (g_current_player != nullptr) {
+        g_current_player.reset();
+    }
+    g_game_data.paused = false;
+    g_game_data.next_map_index = g_game_data.shelter_map_index;
+    g_game_data.is_in_sub_map = false;
+    ChangeSceneTo(TITLE_SCENE);
+}
+
+
+void SceneManager::OnQuitPressed() {
+    g_game_running = false;
+}
+
+
+void InstanceLevelObjects(LevelData &level_data) {
+
+     bool is_shelter = false;
+    if(g_game_data.current_map_index ==  g_game_data.shelter_map_index) {
+        is_shelter = true;
+    }
+
+    TraceLog(LOG_INFO, "INSTANCING GAME OBJECTS");
+
+    TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   g_item_instance before new level size %i", g_item_instances.size());
+    TraceLog(LOG_INFO, " ||||||||||||||||||||||||||   transition  size %i", level_data.level_transitions.size());
+
+
+//transition areas
+    for(int t_index = 0; t_index < level_data.level_transitions.size(); t_index++) {
+        Vector2 t_posisition = level_data.level_transitions[t_index].position_i;
+
+        std::unique_ptr<TransitionArea> new_area = std::make_unique<TransitionArea>();
+
+        new_area->identifier = level_data.level_transitions[t_index].identifier;
+        new_area->position = t_posisition;
+        new_area->size = {level_data.level_transitions[t_index].size.x, level_data.level_transitions[t_index].size.y};
+        new_area->payload_s = level_data.level_transitions[t_index].dest_string;
+        new_area->uid = level_data.level_transitions[t_index].uid;
+        new_area->payload_i = -1;
+        
+        if(level_data.level_transitions[t_index].identifier == "HouseTransition") {
+            new_area->payload_v = level_data.level_transitions[t_index].return_position;
+        }
+
+        for(int level_index = 0; level_index < g_ldtk_maps.levels.size(); level_index++) {
+            if(g_ldtk_maps.levels[level_index].identifier == new_area->payload_s) {
+                if(level_data.level_transitions[t_index].identifier != "LevelTransition") {
+                    new_area->payload_i = level_index;
+                }
+            }
+        }
+        TraceLog(LOG_INFO, "-- transition to level index %i --", new_area->payload_i);
+
+
+        //TraceLog(LOG_INFO, "instacing transition %s  level index %i  uid %s", new_area->identifier.c_str(), new_area->payload_i, new_area->uid.c_str());
+        level_data.game_areas.push_back(std::move(new_area));
+    }
+
+//containers
+    for(int c_index = 0; c_index < level_data.container_data.size(); c_index++) {
+        Vector2 pos = level_data.container_data[c_index].position_i;
+        
+        if(level_data.container_data[c_index].identifier == "PermContainerEntity") {
+            TraceLog(LOG_INFO, "instacing perm container");
+            int spi = level_data.container_data[c_index].sprite_id;
+            int lti = level_data.container_data[c_index].loot_table_id;
+            std::unique_ptr<PermContainerEntity> new_container = std::make_unique<PermContainerEntity>(pos, spi, lti);
+
+            
+            new_container->is_persistant = (is_shelter or g_game_data.is_in_sub_map);
+            new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->iid = level_data.container_data[c_index].iid;
+            new_container->loot_table_id = level_data.container_data[c_index].loot_table_id;
+            new_container->level_index = g_game_data.current_map_index;
+            
+            new_container->c_area.identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.position = pos;
+            new_container->c_area.loot_table_id = level_data.container_data[c_index].loot_table_id;
+            new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
+            //GenerateContainerItemList(lti, new_container->c_area.item_list);
+            
+            if( (g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) or (g_game_data.is_in_sub_map and g_game_data.using_saved_data) )  {
+                for (auto& [key, value] : g_item_instances) {
+                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    if(key, value.container_id == new_container->iid) {
+                        //TraceLog(LOG_INFO, "ITEM FOUND");
+                        new_container->c_area.item_list.push_back(value.instance_id);
+                    }
+                }
+            }
+            else {
+                int loot_level = level_data.container_data[c_index].loot_level;
+
+                new_container->c_area.item_list = GenerateItemsFromLootTable((LootTableID)level_data.container_data[c_index].loot_table_id, new_container->iid, loot_level);
+
+            }
+            
+            level_data.entity_list.push_back(std::move(new_container));
+
+        }
+
+        if(level_data.container_data[c_index].identifier == "GroundContainerEntity") {
+            //TraceLog(LOG_INFO, "instacing ground container");
+
+            int spi = ITEM_ID_ERROR;// g_item_data[ level_data.container_data[c_index].item_list[0]].id;
+
+            std::unique_ptr<GroundContainerEntity> new_container = std::make_unique<GroundContainerEntity>(pos, spi);
+            
+            new_container->is_persistant = is_shelter;
+            new_container->identifier = level_data.container_data[c_index].identifier;
+            new_container->iid = level_data.container_data[c_index].iid;
+            new_container->level_index = g_game_data.current_map_index;
+            
+            new_container->c_area.identifier = level_data.container_data[c_index].identifier;
+            new_container->c_area.position = pos;
+            new_container->c_area.size = {level_data.container_data[c_index].size.x, level_data.container_data[c_index].size.y};
+            
+            if(g_game_data.using_saved_data and g_game_data.current_map_index == g_game_data.shelter_map_index) {
+                for (auto& [key, value] : g_item_instances) {
+                    //TraceLog(LOG_INFO, "checking item %i\n   --%s  |  %s", key, value.container_id.c_str(), new_container->iid.c_str());
+                    if(key, value.container_id == new_container->iid) {
+                        //TraceLog(LOG_INFO, "ITEM FOUND");
+                        new_container->c_area.item_list.push_back(value.instance_id);
+                        new_container->SetSprite(value.item_id);
+                    }
+                }
+            }
+            else {
+                InstanceItemList(level_data.container_data[c_index].item_list, new_container->c_area.item_list, new_container->iid);
+            }
+            //TraceLog(LOG_INFO, "instacing ground container %i %s", spi, new_container->c_area.identifier.c_str());
+            //DL_Add(level_data.entity_list, std::move(new_container));
+            level_data.entity_list.push_back(std::move(new_container));
+
+        }        
+    }
+
+    for(int m_index = 0; m_index < level_data.module_data.size(); m_index++) {
+        //TraceLog(LOG_INFO, "instacing module");
+ 
+        Vector2 pos = level_data.module_data[m_index].position_i;
+        int module_id = level_data.module_data[m_index].module_id;
+
+        std::unique_ptr<ModuleEntity> new_module = std::make_unique<ModuleEntity>(pos, module_id);
+        
+        new_module->is_persistant = is_shelter;
+        new_module->identifier = level_data.module_data[m_index].identifier;
+        new_module->iid = level_data.module_data[m_index].iid;
+        new_module->level_index = g_game_data.current_map_index;
+        
+        new_module->m_area.identifier = level_data.module_data[m_index].identifier;
+        new_module->m_area.position = pos;
+        new_module->m_area.size = {level_data.module_data[m_index].size.x, level_data.module_data[m_index].size.y};
+        new_module->m_area.payload_i = level_data.module_data[m_index].module_id;
+        //DL_Add(level_data.entity_list, std::move(new_module));
+
+        level_data.entity_list.push_back(std::move(new_module));
+   
+    }
+
+
+//mushroom zones
+    for(int zone = 0; zone < level_data.mushroom_zones.size(); zone++) {
+
+        Vector2 zone_pos = level_data.mushroom_zones[zone].position_i;
+
+        int num_mushrooms = GetRandomValue(1, level_data.mushroom_zones[zone].max_mushrooms);
+
+        int min_x = level_data.mushroom_zones[zone].position_i.x + 1;
+        int min_y = level_data.mushroom_zones[zone].position_i.y + 1;
+        int max_x = level_data.mushroom_zones[zone].position_i.x + level_data.mushroom_zones[zone].size.x-2;
+        int max_y = level_data.mushroom_zones[zone].position_i.y + level_data.mushroom_zones[zone].size.y-2;
+
+        for(int i = 0; i < num_mushrooms; i++) {
+            int x = GetRandomValue(min_x, max_x);
+            int y = GetRandomValue(min_y, max_y);
+            Vector2 pos = {(float)x,(float)y};
+
+            std::unique_ptr<MushroomEntity> new_mushroom = std::make_unique<MushroomEntity>(pos);
+
+            new_mushroom->identifier = "Mushroom";
+            new_mushroom->c_area.identifier = "Mushroom";
+            new_mushroom->c_area.position = Vector2Add(pos, {4,4});
+            new_mushroom->c_area.size = {8,8};
+
+            std::vector<int> temp_list;
+            temp_list.push_back(ITEM_ID_MUSHROOM);
+            InstanceItemList(temp_list, new_mushroom->c_area.item_list, "none");
+
+            //DL_Add(level_data.entity_list, std::move(new_mushroom));
+            level_data.entity_list.push_back(std::move(new_mushroom));
+            //TraceLog(LOG_INFO, "instacing mushroom");
+            
+        }
+    }
+
+    for(int creature = 0; creature < level_data.creature_data.size(); creature++) {
+        SpawnCreature(level_data, level_data.creature_data[creature].spawn_position, creature );
+    }
+
+
+    for(int door = 0; door < level_data.door_data.size(); door++) {
+        SpawnDoor(level_data, level_data.door_data[door].position);
+        
+        //make sure collision is set by this point  --maybe fix function?  idk
+        //LDTKSetColision(level_data.door_data[door].position, true);
+    }
+
+
+
+    TraceLog(LOG_INFO, "  END INSTANCE GAME OBJECTS   |||||||||||||||||||||||   level_data.entity_list size %i", level_data.entity_list.size());
+    for(auto &entity : level_data.entity_list) {
+        //TraceLog(LOG_INFO, "  entity %s", entity->identifier.c_str());
+    }
+}
+

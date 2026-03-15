@@ -58,6 +58,88 @@ void LoadLootPools(json &j) {
 }
 
 
+void LoadStatLimits(json &j) {
+
+    g_stat_limits.resize(STAT_COUNT, {0,0});
+
+    g_stat_limits[STAT_DAMAGE] = {
+        j["damage_min"],
+        j["damage_max"],
+    };
+
+    g_stat_limits[STAT_COOLDOWN] = {
+        j["cooldown_min"],
+        j["cooldown_max"],
+    };
+
+    g_stat_limits[STAT_PPS] = {
+        j["pps_min"],
+        j["pps_max"],
+    };
+
+    g_stat_limits[STAT_MAX_POWER] = {
+        j["max_power_min"],
+        j["max_power_max"],
+    };
+
+    g_stat_limits[STAT_RECOIL] = {
+        j["recoil_min"],
+        j["recoil_max"],
+    };
+
+    g_stat_limits[STAT_KNOCKBACK] = {
+        j["knockback_min"],
+        j["knockback_max"],
+    };
+
+    g_stat_limits[STAT_ACCURACY] = {
+        j["accuracy_min"],
+        j["accuracy_max"],
+    };
+    
+}
+
+
+void LoadStatGenData(json &j) {
+    g_statgen_data.resize(STAT_COUNT);
+
+    g_statgen_data[STAT_DAMAGE] = {
+        j["damage"]["cost"],
+        j["damage"]["step"]
+    };
+
+    g_statgen_data[STAT_PPS] = {
+        j["pps"]["cost"],
+        j["pps"]["step"]
+    };
+
+    g_statgen_data[STAT_COOLDOWN] = {
+        j["cooldown"]["cost"],
+        j["cooldown"]["step"]
+    };
+
+    g_statgen_data[STAT_KNOCKBACK] = {
+        j["knockback"]["cost"],
+        j["knockback"]["step"]
+    };
+
+    g_statgen_data[STAT_RECOIL] = {
+        j["recoil"]["cost"],
+        j["recoil"]["step"]
+    };
+
+    g_statgen_data[STAT_ACCURACY] = {
+        j["accuracy"]["cost"],
+        j["accuracy"]["step"]
+    };
+
+    g_statgen_data[STAT_MAX_POWER] = {
+        j["max_power"]["cost"],
+        j["max_power"]["step"]
+    };
+}
+
+
 //returns a list of instance ids
 std::vector<int> GenerateItemsFromLootTable(LootTableID table_id, std::string container_id, int level) {
     
@@ -118,6 +200,29 @@ ItemID RollWeighted(std::vector<LootEntry>& entries, int max_rarity) {
 }
 
 
+
+STAT_ID StrToStatId(const std::string& s) {
+
+    static const std::unordered_map<std::string, STAT_ID> lookup_table = {
+
+        {"STAT_DAMAGE",     STAT_ID::STAT_DAMAGE},
+        {"STAT_PPS",        STAT_ID::STAT_PPS},
+        {"STAT_COOLDOWN",   STAT_ID::STAT_COOLDOWN},
+        {"STAT_KNOCKBACK",  STAT_ID::STAT_KNOCKBACK},
+        {"STAT_RECOIL",     STAT_ID::STAT_RECOIL},
+        {"STAT_ACCURACY",   STAT_ID::STAT_ACCURACY},
+       
+
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+        
+    }
+    TraceLog(LOG_INFO, "STAT_ID  not found ");
+    return STAT_ID::STAT_DAMAGE;
+
+}
 
 
 LootTableID StrToLootTableId(const std::string& s) {

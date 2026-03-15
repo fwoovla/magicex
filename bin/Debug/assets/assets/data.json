@@ -472,177 +472,6 @@
 
     "spacer11231":"---------------------------------------------------------------------------------------------------------",
 
-    "spell_data": [
-
-        {
-            "spell_id":"SPELL_ID_FORCE_1",
-            "spell_name":"Force1",
-            "lifetime":1.0,
-            "speed": 250,
-            "damage":2,
-            "radius":2,
-            "knockback":10,
-            "spell_effect":"SPELL_EFFECT_FORCE"
-        },
-        {
-            "spell_id":"SPELL_ID_FORCE_2",
-            "spell_name":"Force2",
-            "lifetime":1.0,
-            "speed": 250,
-            "damage":5,
-            "radius":2,
-            "knockback":30,
-            "spell_effect":"SPELL_EFFECT_FORCE"
-        },
-        {
-            "spell_id":"SPELL_ID_FORCE_3",
-            "spell_name":"Force3",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":10,
-            "radius":20,
-            "knockback":80,
-            "spell_effect":"SPELL_EFFECT_FORCE"
-        },
-        {
-            "spell_id":"SPELL_ID_FORCE_4",
-            "spell_name":"Force 4",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":20,
-            "radius":20,
-            "knockback":100,
-            "spell_effect":"SPELL_EFFECT_FORCE"
-        },
-
-
-        {
-            "spell_id":"SPELL_ID_FIRE_1",
-            "spell_name":"Fire 1",
-            "lifetime":1.0,
-            "speed": 300,
-            "damage":5,
-            "radius":2,
-            "knockback":20,
-            "spell_effect":"SPELL_EFFECT_FIRE"
-        },
-        {
-            "spell_id":"SPELL_ID_FIRE_2",
-            "spell_name":"Fire 2",
-            "lifetime":1.0,
-            "speed": 400,
-            "damage":5,
-            "radius":2,
-            "knockback":20,
-            "spell_effect":"SPELL_EFFECT_FIRE"
-        },
-        {
-            "spell_id":"SPELL_ID_FIRE_3",
-            "spell_name":"Fire 3",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":10,
-            "radius":20,
-            "knockback":80,
-            "spell_effect":"SPELL_EFFECT_FIRE"
-        },
-        {
-            "spell_id":"SPELL_ID_FIRE_4",
-            "spell_name":"Fire 4",
-            "lifetime":1.0,
-            "speed": 400,
-            "damage":30,
-            "radius":20,
-            "knockback":100,
-            "spell_effect":"SPELL_EFFECT_FIRE"
-        },
-
-
-
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_1",
-            "spell_name":"Lightning 1",
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":5,
-            "radius":2,
-            "knockback":30,
-            "spell_effect":"SPELL_EFFECT_LIGHTNING"
-        },
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_2",
-            "spell_name":"Lightning 2",
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":5,
-            "radius":2,
-            "knockback":30,
-            "spell_effect":"SPELL_EFFECT_LIGHTNING"
-        },
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_3",
-            "spell_name":"Lightning 3",
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":5,
-            "radius":2,
-            "knockback":20,
-            "spell_effect":"SPELL_EFFECT_LIGHTNING"
-        },
-        {
-            "spell_id":"SPELL_ID_LIGHTNING_4",
-            "spell_name":"Lightning 4",
-            "lifetime":1.0,
-            "speed": 700,
-            "damage":5,
-            "radius":2,
-            "knockback":40,
-            "spell_effect":"SPELL_EFFECT_LIGHTNING"
-        },
-
-
-
-        {
-            "spell_id":"SPELL_ID_POISON_1",
-            "spell_name":"Poison 1",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":2,
-            "radius":2,
-            "knockback":10,
-            "spell_effect":"SPELL_EFFECT_POISON"
-        },
-        {
-            "spell_id":"SPELL_ID_POISON_2",
-            "spell_name":"Poison 2",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":5,
-            "radius":2,
-            "knockback":10,
-            "spell_effect":"SPELL_EFFECT_POISON"
-        },
-        {
-            "spell_id":"SPELL_ID_POISON_3",
-            "spell_name":"Poison 3",
-            "lifetime":1.0,
-            "speed": 200,
-            "damage":8,
-            "radius":2,
-            "knockback":40,
-            "spell_effect":"SPELL_EFFECT_POISON"
-        },
-        {
-            "spell_id":"SPELL_ID_POISON_4",
-            "spell_name":"Poison 4",
-            "lifetime":1.0,
-            "speed": 300,
-            "damage":5,
-            "radius":2,
-            "knockback":10,
-            "spell_effect":"SPELL_EFFECT_POISON"
-        }
-    ],
 
     "spacer1123131":"---------------------------------------------------------------------------------------------------------",
 
@@ -707,10 +536,10 @@
             "weapon_id": "ITEM_ID_CASTERBASE",
             "weapon_name": "Caster",
             "weapon_type":"WEAPON_TYPE_CASTER",
-            "cooldown": 0.50,
-            "damage":2,
-            "recoil":10,
-            "knockback":10,
+            "cooldown": 0.0,
+            "damage":0,
+            "recoil":0,
+            "knockback":0,
             "mod_slots":0      
         }
 
@@ -725,7 +554,7 @@
         {
             "part_id": "ITEM_ID_CASTERBASE",
             "part_name": "Caster",
-            "accuracy": 0.5
+            "accuracy": 30
         }
     ],
 
@@ -737,29 +566,29 @@
             "part_id": "ITEM_ID_IGNITER_1",
             "part_name": "Igniter",
             "spell_effect": "SPELL_EFFECT_NONE",
-            "recoil": 20,
-            "max_power": 100
+            "recoil": 50,
+            "max_power": 25
         },
         {
             "part_id": "ITEM_ID_IGNITER_2",
             "part_name": "Fire Igniter",
             "spell_effect": "SPELL_EFFECT_FIRE",
-            "recoil": 20,
-            "max_power": 100
+            "recoil": 50,
+            "max_power": 50
         },
         {
             "part_id": "ITEM_ID_IGNITER_3",
             "part_name": "Lightning Igniter",
             "spell_effect": "SPELL_EFFECT_LIGHTNING",
-            "recoil": 20,
-            "max_power": 100
+            "recoil": 50,
+            "max_power": 50
         },
         {
             "part_id": "ITEM_ID_IGNITER_4",
             "part_name": "Toxic Igniter",
             "spell_effect": "SPELL_EFFECT_POISON",
-            "recoil": 20,
-            "max_power": 100
+            "recoil": 50,
+            "max_power": 50
         }
     ],
 
@@ -771,8 +600,8 @@
             "part_name": "Basic Coupler",
             "spell_type": "SPELL_TYPE_BOLT",
             "radius":2,
-            "cooldown":0.5,
-            "pps":5,
+            "cooldown":80,
+            "pps":10,
             "damage":5,
             "speed":500
         },
@@ -781,8 +610,8 @@
             "part_name": "Advanced Coupler",
             "spell_type": "SPELL_TYPE_BOLT",
             "radius":2,
-            "cooldown":0.2,
-            "pps":5,
+            "cooldown":50,
+            "pps":10,
             "damage":5,
             "speed":600
         },
@@ -791,8 +620,8 @@
             "part_name": "Blast Coupler",
             "spell_type": "SPELL_TYPE_AOE",
             "radius":20,
-            "cooldown":2.0,
-            "pps":15,
+            "cooldown":200,
+            "pps":25,
             "damage":25,
             "speed":200
         },
@@ -801,8 +630,8 @@
             "part_name": "Strike Coupler",
             "spell_type": "SPELL_TYPE_INSTANT",
             "radius":20,
-            "cooldown":2.5,
-            "pps":20,
+            "cooldown":250,
+            "pps":40,
             "damage":50,
             "speed":0
         }
@@ -1121,6 +950,80 @@
 
 
 
+    "tier_tables": [
+        {
+            "type": "TYPE_WEAPON",
+            "tiers":[
+                {"tier": "TIER_1","bonus_percent":5},
+                {"tier": "TIER_2","bonus_percent":15},
+                {"tier": "TIER_3","bonus_percent":25},
+                {"tier": "TIER_4","bonus_percent":35},
+                {"tier": "TIER_5","bonus_percent":45}
+            ]
+            
+        }
+
+    ],
+
+    "stat_limits":{
+        "damage_min":1,
+        "damage_max": 100,
+
+        "cooldown_min": 10,
+        "cooldown_max": 300,
+
+        "pps_min": 1,
+        "pps_max": 100,
+
+        "max_power_min": 20,
+        "max_power_max": 100,
+
+        "knockback_min": 2,
+        "knockback_max": 100,
+
+        "recoil_min": 2,
+        "recoil_max": 100,
+
+        "accuracy_min": 2,
+        "accuracy_max": 100
+    },
+    
+    "stat_generation_data": {
+        "damage": {
+            "cost": 1,
+            "step": 0.5
+        },
+
+        "pps": {
+            "cost": 1,
+            "step": -0.25
+        },
+
+        "cooldown": {
+            "cost": 1,
+            "step": -0.75
+        },
+
+        "knockback": {
+            "cost": 1,
+            "step": 1
+        },
+
+        "recoil": {
+            "cost": 1,
+            "step": -0.5
+        },
+
+        "accuracy": {
+            "cost": 1,
+            "step": 0.5
+        },
+
+        "max_power": {
+            "cost": 1,
+            "step": 1.0
+        }
+    },
 
     "loot_pools":[
         {

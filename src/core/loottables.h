@@ -1,9 +1,12 @@
+#pragma once
+
 #include "gamedefs.h"
-//#include "data.h"
+//#include "loottables.h"
 
 
 struct ItemInstanceData;
 enum ItemID;
+
 
 
 enum LootRarity {
@@ -11,9 +14,6 @@ enum LootRarity {
     LOOTRARITY_UNCOMMON,
     LOOTRARITY_RARE,
 };
-
-
-
 
 enum LootTableID {
     LT_NONE = -1,
@@ -65,10 +65,16 @@ void LoadLootTables(json &j);
 
 void LoadLootPools(json &j);
 
+void LoadStatLimits(json &j);
+
+void LoadStatGenData(json &j);
+
 ItemID RollWeighted(std::vector<LootEntry>& entries, int max_rarity);
 
 std::vector<int> GenerateItemsFromLootTable(LootTableID table_id, std::string container_id, int level);
 
+
+STAT_ID StrToStatId(const std::string& s);
 
 LootTableID StrToLootTableId(const std::string& s);
 

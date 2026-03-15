@@ -1408,7 +1408,7 @@
 							"px": [192,32],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
-								{ "__identifier": "loot_level", "__type": "Int", "__value": 1, "__tile": null, "defUid": 69, "realEditorValues": [] },
+								{ "__identifier": "loot_level", "__type": "Int", "__value": 5, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
 								{ "__identifier": "loot_table", "__type": "LocalEnum.LootTables", "__value": "LT_COMMON_CHEST", "__tile": null, "defUid": 90, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["LT_COMMON_CHEST"]
