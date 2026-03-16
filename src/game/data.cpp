@@ -789,7 +789,7 @@ void SaveGame(LevelData &level_data) {
                     {"damage", inst.weapon_data.caster_data.rod.damage},
                 };
 
-                new_weapon.push_back(caster);
+                new_weapon["caster_data"] = caster;
             }
             
             instance["weapon_data"] = new_weapon;

@@ -199,24 +199,34 @@ class DetailsPanel : public BaseUILayer {
     ItemInstanceData *item_data;
     Rectangle panel_rect;
 
-
     Label item_name_label;
     Label item_type_label;
     Label value_label;
 
-    Label modslots_label;
-
+//weapon
     Label power_label;
+    StatusBar power_bar;
     Label damage_label;
+    StatusBar damage_bar;
     Label recoil_label;
+    StatusBar recoil_bar;
     Label accuracy_label;
+    StatusBar accuracy_bar;
     Label pps_label;
+    StatusBar pps_bar;
     Label cooldown_label;
+    StatusBar cooldown_bar;
     Label knockback_label;
+    StatusBar knockback_bar;
 
+    Label effect_label;
+    Label type_label;
+
+//armor
     Label defence_label;
     Label magicdefence_label;
 
+//food
     Label saturation_label;
 
     Label slot_label;
