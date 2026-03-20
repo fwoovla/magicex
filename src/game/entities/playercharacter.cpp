@@ -245,7 +245,8 @@ void PlayerCharacter::CheckInput() {
     }
 
     if(current_primary_data != nullptr) {
-        float adjusted_accuracy = current_primary_data->weapon_data.caster_data.base.accuracy * .01;
+        float adjusted_accuracy = current_primary_data->weapon_data.accuracy * .01;
+            
         aim_position.y = Lerp(aim_position.y, g_input.world_mouse_position.y, adjusted_accuracy * 0.1f);
         aim_position.x = Lerp(aim_position.x, g_input.world_mouse_position.x, adjusted_accuracy * 0.1f);
     }
@@ -317,20 +318,21 @@ void PlayerCharacter::CheckInput() {
                 payload.shooter_id = uid;
                 payload.target_position = aim_position;//g_input.world_mouse_position;
                 payload.spread = 0.0f;
-                payload.spell_type = current_primary_data->weapon_data.caster_data.coupler.type;
+                int spell_index = current_primary_data->weapon_data.wand_data.active_spell_index;
+                payload.spell_type = current_primary_data->weapon_data.wand_data.spells[spell_index].delivery_type;
                 TraceLog(LOG_INFO, "casting spell type %i", payload.spell_type);
 
                 //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
                 //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
                 
-                SpawnSpell(payload, &current_primary_data->weapon_data.caster_data);
+                SpawnSpell(payload, &current_primary_data->weapon_data.wand_data.spells[spell_index]);
 
                 g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                 current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;
-                spell_timer.Start(current_primary_data->weapon_data.caster_data.coupler.cooldown * 0.01, true);
+                spell_timer.Start(current_primary_data->weapon_data.wand_data.spells[spell_index].chargetime * 0.01, true);
                 can_use_spell = false;
 
-                int recoil = current_primary_data->weapon_data.caster_data.igniter.recoil;
+                int recoil = current_primary_data->weapon_data.recoil;
                 int dirx = 1;
                 int diry = 1;
                 if(GetRandomValue(0, 100) < 50) {dirx = -1;}

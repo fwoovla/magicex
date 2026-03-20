@@ -1396,7 +1396,7 @@
 						},
 						{
 							"__identifier": "PermContainerEntity",
-							"__grid": [12,2],
+							"__grid": [13,12],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
@@ -1405,7 +1405,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 47,
-							"px": [192,32],
+							"px": [208,192],
 							"fieldInstances": [
 								{ "__identifier": "sprite_id", "__type": "Int", "__value": 0, "__tile": null, "defUid": 48, "realEditorValues": [] },
 								{ "__identifier": "loot_level", "__type": "Int", "__value": 5, "__tile": null, "defUid": 69, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
@@ -1414,8 +1414,8 @@
 									"params": ["LT_COMMON_CHEST"]
 								}] }
 							],
-							"__worldX": 192,
-							"__worldY": 32
+							"__worldX": 208,
+							"__worldY": 192
 						},
 						{
 							"__identifier": "PermContainerEntity",
@@ -1632,6 +1632,22 @@
 							"fieldInstances": [{ "__identifier": "locked", "__type": "Bool", "__value": false, "__tile": null, "defUid": 92, "realEditorValues": [] }],
 							"__worldX": 48,
 							"__worldY": 144
+						},
+						{
+							"__identifier": "ModuleEntity",
+							"__grid": [10,13],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#17CFC5",
+							"iid": "f1300100-21a0-11f1-bb61-4369d7e37428",
+							"width": 16,
+							"height": 16,
+							"defUid": 66,
+							"px": [160,208],
+							"fieldInstances": [{ "__identifier": "module_id", "__type": "Int", "__value": 3, "__tile": null, "defUid": 67, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }],
+							"__worldX": 160,
+							"__worldY": 208
 						}
 					]
 				},

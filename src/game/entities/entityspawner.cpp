@@ -93,7 +93,7 @@ int CalculateDamage(DamagePayload &damage_payload, CharacterData &character_data
 
 
 
-void SpawnSpell(NewSpellPayload payload, CasterData *_data) {
+void SpawnSpell(NewSpellPayload payload, SpellData *_data) {
 
     BaseScene *this_scene = nullptr;
     std::unique_ptr<BaseSpell> this_spell = nullptr;
@@ -106,15 +106,17 @@ void SpawnSpell(NewSpellPayload payload, CasterData *_data) {
     }
 
     if(this_scene) {
-        if(payload.spell_type == SPELL_TYPE_BOLT) {
+        this_spell = std::make_unique<BoltSpell>(payload, _data);
+
+/*         if(payload.spell_type == DELIVERY_PROJECTILE) {
             this_spell = std::make_unique<BoltSpell>(payload, _data);
         }
-        if(payload.spell_type == SPELL_TYPE_AOE) {
+        if(payload.spell_type == DELIVERY_PROJECTILE) {
             this_spell = std::make_unique<AoeSpell>(payload, _data);
         }
-        if(payload.spell_type == SPELL_TYPE_INSTANT) {
+        if(payload.spell_type == DELIVERY_INSTANT) {
             this_spell = std::make_unique<InstantSpell>(payload, _data);
-        }
+        } */
 
 
         if(this_spell) {

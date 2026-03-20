@@ -167,14 +167,14 @@ void CreatureEntity::Update() {
                         return;
                     }
                     
-                    
+                /*     
                     NewSpellPayload payload;
                     payload.position = position;
                     payload.rotation = weapon_sprite.rotation;
                     payload.shooter_id = uid;
                     payload.target_position = target_creature->position;
                     payload.spread = 0.0f;
-                    payload.spell_type = current_primary_data->weapon_data.caster_data.coupler.type;
+                    payload.spell_type = DELIVERY_PROJECTILE;
                     //TraceLog(LOG_INFO, "casting spell id %i", current_primary_data->spell_id);
                     //TraceLog(LOG_INFO, "power %0.2f/  %0.2f   rotation %0.2f   ", g_character_data[uid].current_power, g_character_data[uid].max_power, payload.rotation);
 
@@ -198,7 +198,7 @@ void CreatureEntity::Update() {
                 aim_position = Vector2Add( aim_position, recoil_dir );
                 TraceLog(LOG_INFO, "power %0.2f/  %0.2f", g_active_creature_data[uid].current_power, g_active_creature_data[uid].max_power);
 
-
+ */
                 //velocity = Vector2Rotate( {-current_primary_data->weapon_data.caster_data.igniter.recoil, 0}, weapon_sprite.rotation * DEG2RAD);
                 }
             }

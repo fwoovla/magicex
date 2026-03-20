@@ -121,6 +121,9 @@ GENERATED += $(OBJDIR)/scenemanager.o
 GENERATED += $(OBJDIR)/scenerygen.o
 GENERATED += $(OBJDIR)/shelterscene.o
 GENERATED += $(OBJDIR)/shelteruilayer.o
+GENERATED += $(OBJDIR)/spelldata.o
+GENERATED += $(OBJDIR)/spelldetailspanel.o
+GENERATED += $(OBJDIR)/spellgenmenu.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
@@ -177,6 +180,9 @@ OBJECTS += $(OBJDIR)/scenemanager.o
 OBJECTS += $(OBJDIR)/scenerygen.o
 OBJECTS += $(OBJDIR)/shelterscene.o
 OBJECTS += $(OBJDIR)/shelteruilayer.o
+OBJECTS += $(OBJDIR)/spelldata.o
+OBJECTS += $(OBJDIR)/spelldetailspanel.o
+OBJECTS += $(OBJDIR)/spellgenmenu.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
@@ -376,6 +382,12 @@ $(OBJDIR)/shelterscene.o: src/game/scenes/shelterscene.cpp
 $(OBJDIR)/shelteruilayer.o: src/game/scenes/shelteruilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/spelldetailspanel.o: src/game/scenes/spelldetailspanel.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/spellgenmenu.o: src/game/scenes/spellgenmenu.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/splashscene.o: src/game/scenes/splashscene.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -398,6 +410,9 @@ $(OBJDIR)/titleuilayer.o: src/game/scenes/titleuilayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/transitions.o: src/game/scenes/transitions.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/spelldata.o: src/game/spelldata.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/aoespell.o: src/game/spells/aoespell.cpp

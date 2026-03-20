@@ -13,12 +13,12 @@ void LoadLootTables(json &j) {
 
         new_table.table_id = StrToLootTableId(j[table]["table_id"]);
 
-        TraceLog(LOG_INFO, "++++++ LOOT TABLE Data  Loading  id: %i  ", new_table.table_id);
+        //TraceLog(LOG_INFO, "++++++ LOOT TABLE Data  Loading  id: %i  ", new_table.table_id);
 
         for(int pool = 0; pool < j[table]["pools"].size(); pool++) {
             LootPoolID id = StrToLootPoolId(j[table]["pools"][pool]);
             new_table.pool_ids.push_back(id);
-            TraceLog(LOG_INFO, "        pool id: %i  ", id);
+            //TraceLog(LOG_INFO, "        pool id: %i  ", id);
         }
 
         g_creature_loot_tables[new_table.table_id] = new_table;
@@ -38,7 +38,7 @@ void LoadLootPools(json &j) {
         new_pool.min_rolls = j[pool]["rolls_min"];
         new_pool.max_rolls = j[pool]["rolls_max"];
 
-        TraceLog(LOG_INFO, "----- POOL Data  Loading  id: %i  ", new_pool.pool_id);
+        //TraceLog(LOG_INFO, "----- POOL Data  Loading  id: %i  ", new_pool.pool_id);
 
         for( int entry = 0; entry < j[pool]["entries"].size(); entry++) {
             LootEntry new_entry;
@@ -48,7 +48,7 @@ void LoadLootPools(json &j) {
             new_entry.rarity = StrToLootRarity(j[pool]["entries"][entry]["min_rarity"]);
 
             new_pool.entries.push_back(new_entry);
-            TraceLog(LOG_INFO, "LOOT POOL ENTRY Data  Loaded  id: %i  ", new_entry.item_id);
+            //TraceLog(LOG_INFO, "LOOT POOL ENTRY Data  Loaded  id: %i  ", new_entry.item_id);
 
         }
         g_creature_loot_pools[new_pool.pool_id] = new_pool;

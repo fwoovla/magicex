@@ -114,6 +114,9 @@ class ShelterScene : public  BaseScene{
         ModuleMenu *module_menu;
         bool module_menu_visible = false;
 
+        SpellGenMeneu *spell_menu;
+        bool spell_menu_visible = false;
+
         DialogueMenu *dialogue_menu;
         bool dialogue_menu_visible = false;
 
@@ -151,6 +154,9 @@ class SubScene : public  BaseScene{
 
         ModuleMenu *module_menu;
         bool module_menu_visible;
+
+        SpellGenMeneu *spell_menu;
+        bool spell_menu_visible = false;
 
         DialogueMenu *dialogue_menu;
         bool dialogue_menu_visible = false;
@@ -203,6 +209,9 @@ class GameScene : public  BaseScene{
 
         ModuleMenu *module_menu;
         bool module_menu_visible = false;
+
+        SpellGenMeneu *spell_menu;
+        bool spell_menu_visible = false;
 
         DialogueMenu *dialogue_menu;
         bool dialogue_menu_visible = false;

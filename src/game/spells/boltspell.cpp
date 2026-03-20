@@ -1,7 +1,7 @@
 #include "../../core/gamedefs.h"
 
 
-BoltSpell::BoltSpell(NewSpellPayload payload, CasterData *_data){
+BoltSpell::BoltSpell(NewSpellPayload payload, SpellData *_data){
 
     data = _data;
     should_delete = false;
@@ -10,7 +10,7 @@ BoltSpell::BoltSpell(NewSpellPayload payload, CasterData *_data){
 
     position = payload.position;
     centered_offset = {0,0};
-    collision_radius = data->coupler.radius;
+    collision_radius = data->radius;
     collided = false;
     collision_rect = { position.x - centered_offset.x , position.y - centered_offset.y, 16, 16 }; 
     is_on_screen = true;
@@ -21,10 +21,10 @@ BoltSpell::BoltSpell(NewSpellPayload payload, CasterData *_data){
     
     target_rotation = GetAngleFromTo(position, target_position);
     rotation = (target_rotation * RAD2DEG) + GetRandomValue(-payload.spread, payload.spread);
-    velocity = Vector2Rotate({data->coupler.speed, 0}, rotation * DEG2RAD );
+    velocity = Vector2Rotate({data->speed, 0}, rotation * DEG2RAD );
     
     target_dist = Vector2Distance(position, target_position);
-    dist_scale = target_dist/data->coupler.speed;
+    dist_scale = target_dist/data->speed;
     //TraceLog(LOG_INFO, "scale %f", dist_scale);
 
     lifetime_timer.timer_timeout.Connect([&](){this->OnLifetimeTimeout();});
@@ -32,16 +32,16 @@ BoltSpell::BoltSpell(NewSpellPayload payload, CasterData *_data){
 
     sprite = {};
 
-    int effect = data->igniter.effect;
+/*     int effect = data->effect;
     int type = data->coupler.type;
-
+ */
      
 
 
 
-    LoadSpriteCentered(sprite, g_spell_sprites[data->coupler.type], position);
+    LoadSpriteCentered(sprite, g_spell_sprites[data->delivery_type], position);
     sprite.rotation = rotation;
-    sprite.modulate = g_spell_effect_colors[data->igniter.effect];
+    //sprite.modulate = g_spell_effect_colors[data->igniter.effect];
 
 }
 
@@ -68,7 +68,7 @@ void BoltSpell::Update() {
 
     vClamp(velocity, 1.0);
     //TraceLog(LOG_INFO, "rotating: %f  ", rotation);
-    velocity = Vector2ClampValue(velocity, -data->coupler.speed , data->coupler.speed);
+    velocity = Vector2ClampValue(velocity, -data->speed , data->speed);
 
     position = Vector2Add(position, velocity * GetFrameTime());
 
@@ -83,8 +83,8 @@ void BoltSpell::Update() {
             TraceLog(LOG_INFO, "collider %s", result.collider->identifier.c_str());
             DamagePayload new_payload;
             new_payload.attacker_id = shooter_id;
-            new_payload.damage = data->coupler.damage;
-            new_payload.knockback = Vector2Rotate( {data->rod.knockback, 0}, rotation * DEG2RAD);
+            new_payload.damage = data->damage;
+            new_payload.knockback = Vector2Rotate( {data->knockback, 0}, rotation * DEG2RAD);
             result.collider->TakeDamage(new_payload);
     
             should_delete = true;

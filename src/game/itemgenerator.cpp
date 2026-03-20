@@ -20,7 +20,7 @@ ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id)
     
     new_instance.weapon_id = ITEM_ID_NONE;
     new_instance.weapon_data = {};
-    new_instance.weapon_data.caster_data = {};
+    //new_instance.weapon_data.caster_data = {};
 
     new_instance.armor_id = ITEM_ID_NONE;
     new_instance.armor_data = {};
@@ -69,7 +69,7 @@ ItemInstanceData GenerateRandomItem(ItemID item_id, int uid, std::string contain
     
     new_instance.weapon_id = ITEM_ID_NONE;
     new_instance.weapon_data = {};
-    new_instance.weapon_data.caster_data = {};
+    //new_instance.weapon_data.caster_data = {};
 
     new_instance.armor_id = ITEM_ID_NONE;
     new_instance.armor_data = {};
@@ -120,11 +120,15 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     }
 
     TraceLog(LOG_INFO, "making new weapon %s  %i   weapon_id= %i ", instance.item_name.c_str(), instance.item_id, instance.weapon_id);
-/*     TraceLog(LOG_INFO, "-----max power %0.2f ", instance.weapon_data.max_power);
+     
+    TraceLog(LOG_INFO, "-----max power %0.2f ", instance.weapon_data.max_power);
     TraceLog(LOG_INFO, "-----current_power %0.2f ", instance.weapon_data.current_power);
     TraceLog(LOG_INFO, "-----cooldown %0.2f ", instance.weapon_data.cooldown);
-    TraceLog(LOG_INFO, "-----knockback %0.2f ", instance.weapon_data.weapon_type);
-    TraceLog(LOG_INFO, "-----weapon type %i ", instance.weapon_data.weapon_type); */
+    TraceLog(LOG_INFO, "-----knockback %0.2f ", instance.weapon_data.knockback);
+    TraceLog(LOG_INFO, "-----accuracy %0.02f ", instance.weapon_data.accuracy);
+    TraceLog(LOG_INFO, "-----weapon type %i ", instance.weapon_data.weapon_type); 
+    TraceLog(LOG_INFO, "-----# of spells %i ", instance.weapon_data.wand_data.spells.size());
+
     
 }
 
@@ -162,9 +166,28 @@ void GenerateCaster(ItemInstanceData &instance, int loot_level, bool random) {
 
     //TraceLog(LOG_INFO, "making new caster weapon %s  %i   weapon_id= %i ", instance.item_name.c_str(), instance.item_id, instance.weapon_id);
 
-    TraceLog(LOG_INFO, "caster creater %i %i %i %i ", g_casterbase_data.size(), g_igniter_data.size(), g_coupler_data.size(), g_rod_data.size() );
+    TraceLog(LOG_INFO, "wand creater ");
 
-    int base = GetRandomValue(0, g_casterbase_data.size()-1);
+    WandData new_wand;
+    new_wand.slot_count = 1;
+    new_wand.profile = g_wand_profiles[GetRandomValue(0, g_wand_profiles.size()-1)];
+    new_wand.spells.push_back(GenerateSpell(instance));
+    new_wand.spells.push_back(GenerateSpell(instance));
+    new_wand.spells.push_back(GenerateSpell(instance));
+
+    instance.weapon_data.wand_data = new_wand;
+
+    instance.weapon_data.max_power = 100;
+    instance.weapon_data.current_power = 100;
+    instance.weapon_data.pps = 10;
+    instance.weapon_data.cooldown = new_wand.spells[new_wand.active_spell_index].chargetime;
+
+    instance.sprite_ids.push_back(instance.item_id);
+    BuildItemSprite(instance);
+
+
+
+/*     int base = GetRandomValue(0, g_casterbase_data.size()-1);
     int igniter = GetRandomValue(0, g_igniter_data.size()-1);
     int coupler = GetRandomValue(0, g_coupler_data.size()-1);
     int rod = GetRandomValue(0, g_rod_data.size()-1);
@@ -204,18 +227,33 @@ void GenerateCaster(ItemInstanceData &instance, int loot_level, bool random) {
     //TraceLog(LOG_INFO, "+++--tier %i ", tier);
 
 
+    */
 
-    TraceLog(LOG_INFO, "-------accuracy %0.2f ", instance.weapon_data.caster_data.base.accuracy);
-    TraceLog(LOG_INFO, "-------recoil %0.2f ", instance.weapon_data.caster_data.igniter.recoil);
-    TraceLog(LOG_INFO, "-------max power %0.2f ", instance.weapon_data.caster_data.igniter.max_power);
-    TraceLog(LOG_INFO, "-------cooldown %0.2f ", instance.weapon_data.caster_data.coupler.cooldown);
-    TraceLog(LOG_INFO, "-------damage %0.2f ", instance.weapon_data.caster_data.coupler.damage);
-    TraceLog(LOG_INFO, "-------pps %0.2f ", instance.weapon_data.caster_data.coupler.pps);
-    TraceLog(LOG_INFO, "-------knockback %0.2f ", instance.weapon_data.caster_data.rod.knockback);
-    //TraceLog(LOG_INFO, "-----spell sprite id %i ", instance.weapon_data.caster_data.spell_sprite_id);
+    TraceLog(LOG_INFO, "-------chargetime %0.2f ", instance.weapon_data.wand_data.spells[0].chargetime);
+
 }
 
+SpellData GenerateSpell(ItemInstanceData &instance) {
 
+    SpellData new_spell;
+
+    new_spell.chargetime = g_spell_rules.chargetime_base;
+    TraceLog(LOG_INFO, "-------chargetime %0.2f ", g_spell_rules.chargetime_base);
+    new_spell.damage = g_spell_rules.damage_base;
+    new_spell.radius = g_spell_rules.radius_base;
+    new_spell.durration = g_spell_rules.duration_base;
+
+    new_spell.delivery_type = (SPELL_DELIVERY)GetRandomValue(0, DELIVERY_PROJECTILE);//DELIVERY_PROJECTILE;
+    new_spell.effect_type = SPELL_EFFECT_NONE;
+    new_spell.speed = 300.0f;
+    new_spell.is_exploding = false;
+    new_spell.is_exploding = false;
+    new_spell.tick_damage = 0.0f;
+    new_spell.tick_rate = 0.0f;
+
+    return new_spell;
+
+}
 
 void BuildItemSprite(ItemInstanceData &instance) {
     TraceLog(LOG_INFO, "            -S----building item sprite and icon sprite----- #ids %i", instance.sprite_ids.size());
@@ -273,7 +311,7 @@ void BuildItemSprite(ItemInstanceData &instance) {
 
 
 //===========================================================
-
+/* 
 
 CasterBaseData GenerateBase(CasterBaseData &base, ITEM_TIER tier) {
 
@@ -405,7 +443,7 @@ void ApplyTierBonusPercent(float &stat, STAT_ID id, float bonus) {
     //points -= gen.cost;
     TraceLog(LOG_INFO, "%i  stat---new  value %0.02f  tier bonus:%0.02f", id, new_value, bonus);
 }
-
+ */
 
 void ClampStat(float &stat, STAT_ID id) {
     auto &lim = g_stat_limits[id];
@@ -447,11 +485,12 @@ void GenerateItemName(ItemInstanceData &instance) {
 
     if(instance.weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
         int best_tier = 0;
-        if(instance.weapon_data.caster_data.base.tier > best_tier) best_tier = instance.weapon_data.caster_data.base.tier;
-        if(instance.weapon_data.caster_data.igniter.tier > best_tier) best_tier = instance.weapon_data.caster_data.igniter.tier;
-        if(instance.weapon_data.caster_data.coupler.tier > best_tier) best_tier = instance.weapon_data.caster_data.coupler.tier;
-        if(instance.weapon_data.caster_data.rod.tier > best_tier) best_tier = instance.weapon_data.caster_data.rod.tier;
-        std::string tier_str = std::to_string(best_tier);
+        //if(instance.weapon_data.caster_data.base.tier > best_tier) best_tier = instance.weapon_data.caster_data.base.tier;
+        //if(instance.weapon_data.caster_data.igniter.tier > best_tier) best_tier = instance.weapon_data.caster_data.igniter.tier;
+        //if(instance.weapon_data.caster_data.coupler.tier > best_tier) best_tier = instance.weapon_data.caster_data.coupler.tier;
+        //if(instance.weapon_data.caster_data.rod.tier > best_tier) best_tier = instance.weapon_data.caster_data.rod.tier;
+
+/*         std::string tier_str = std::to_string(best_tier);
         new_name += "Tier " + tier_str + " ";
 
         std::string type_str = SpellTypeToStr(instance.weapon_data.caster_data.coupler.type);
@@ -459,6 +498,8 @@ void GenerateItemName(ItemInstanceData &instance) {
 
         std::string effect_str = SpellEffectToStr(instance.weapon_data.caster_data.igniter.effect);
         new_name += effect_str + " Caster";
+         */
+        new_name = "non specified wand";
     }
 
     instance.item_name = new_name;

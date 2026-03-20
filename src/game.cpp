@@ -18,10 +18,10 @@ std::vector<ArmorData> g_armor_data;
 std::vector<FoodData> g_food_data;
 std::vector<FoodModData> g_food_mod_data;
 
-std::vector<CasterBaseData> g_casterbase_data;
+/* std::vector<CasterBaseData> g_casterbase_data;
 std::vector<IgniterData> g_igniter_data;
 std::vector<CouplerData> g_coupler_data;
-std::vector<RodData> g_rod_data;
+std::vector<RodData> g_rod_data; */
 
 std::vector<ModuleData> g_module_data;
 std::vector<AiData> g_ai_data;
@@ -36,6 +36,14 @@ std::unordered_map<LootPoolID, LootPool> g_creature_loot_pools;
 std::vector<std::vector<int>> g_tier_tables;
 std::vector<Limit> g_stat_limits;
 std::vector<StatGenData> g_statgen_data;
+
+
+
+std::vector<WandProfile> g_wand_profiles;
+std::vector<WandWood> g_wand_woods;
+SpellRules g_spell_rules;
+
+
 
 
 GameData g_game_data;
@@ -73,6 +81,8 @@ Texture2D g_item_sprites[MAX_SPRITES];
 Texture2D g_icon_sprites[MAX_SPRITES];
 Texture2D g_icon_part_sprites[MAX_SPRITES];
 Texture2D g_item_part_sprites[MAX_SPRITES];
+
+Texture2D g_spell_icon_delivery[MAX_SPRITES];
 
 Texture2D g_spell_sheet;
 

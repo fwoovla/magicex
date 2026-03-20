@@ -144,6 +144,10 @@ float RectCenterDistSq(const Rectangle& a, const Rectangle& b)
 }
 
 
+void DrawLineLine(Line &line, Color &color) {
+    DrawLineV(line.start, line.end, color);
+}
+
 void SetCursorPosition(Vector2 _pos) {
     g_cursor.poisition = _pos;
     g_cursor.sprite.position = _pos;

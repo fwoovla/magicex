@@ -69,6 +69,8 @@ void LoadStatLimits(json &j);
 
 void LoadStatGenData(json &j);
 
+
+
 ItemID RollWeighted(std::vector<LootEntry>& entries, int max_rarity);
 
 std::vector<int> GenerateItemsFromLootTable(LootTableID table_id, std::string container_id, int level);

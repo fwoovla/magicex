@@ -553,7 +553,7 @@ void CharacterMenu::OnOpenDetails() {
 void CharacterMenu::OnCloseDetails() {
     if(show_details) {
         show_details = false;
-        
+        details_panel->ClosePanel();
         shared_data.dest_cell = {-1,-1};
         shared_data.dest_grid = GRID_NONE;
         shared_data.item_id = -1;

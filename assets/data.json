@@ -218,7 +218,18 @@
 
 
 
-
+        {
+            "item_name": "Fresh Wand",
+            "item_id":"ITEM_ID_WAND_FRESH",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
+        {
+            "item_name": "Aged Wand",
+            "item_id":"ITEM_ID_WAND_AGED",
+            "value":20,
+            "item_type":"TYPE_WEAPON"
+        },
 
 
 
@@ -484,6 +495,7 @@
             "damage":2,
             "recoil":10,
             "knockback":10,
+            "accuracy":100,
             "mod_slots":0
         },
         {
@@ -494,6 +506,7 @@
             "damage":2,
             "recoil":10,
             "knockback":10,
+            "accuracy":100,
             "mod_slots":0        
         },
         {
@@ -504,6 +517,7 @@
             "damage":2,
             "recoil":10,
             "knockback":10,
+            "accuracy":100,
             "mod_slots":0        
         },
         {
@@ -514,6 +528,7 @@
             "damage":2,
             "recoil":10,
             "knockback":10,
+            "accuracy":100,
             "mod_slots":0        
         },
         {
@@ -524,11 +539,33 @@
             "damage":2,
             "recoil":10,
             "knockback":10,
+            "accuracy":100,
             "mod_slots":0        
         },
 
 
-
+        {
+            "weapon_id": "ITEM_ID_WAND_FRESH",
+            "weapon_name": "fresh wand",
+            "weapon_type":"WEAPON_TYPE_CASTER",
+            "cooldown": 0.0,
+            "damage":0,
+            "recoil":30,
+            "knockback":30,
+            "accuracy":30,
+            "mod_slots":0      
+        },
+        {
+            "weapon_id": "ITEM_ID_WAND_AGED",
+            "weapon_name": "aged wand",
+            "weapon_type":"WEAPON_TYPE_CASTER",
+            "cooldown": 0.0,
+            "damage":0,
+            "recoil":30,
+            "knockback":40,
+            "accuracy":50,
+            "mod_slots":0      
+        },
 
 
 
@@ -540,6 +577,7 @@
             "damage":0,
             "recoil":0,
             "knockback":0,
+            "accuracy":1.0,
             "mod_slots":0      
         }
 
@@ -550,10 +588,107 @@
 
 "spacer1fds1234131":"---------------------------------------------------------------------------------------------------------",
 
+    "wand_data": {
+        
+            "wood_types":[ 
+                {
+                    "name":"fresh",
+                    "bonus_points":0,
+                    "wood_type":"WANDWOOD_FRESH"
+                },
+                {
+                    "name":"aged",
+                    "bonus_points":10,
+                    "wood_type":"WANDWOOD_AGED"
+                }
+            ],
+            "wand_profile":[ 
+                {
+                    "name":"basic",
+                    "charge_bonus":0,
+                    "damage_bonus":0,
+                    "duration_bonus":0,
+                    "radius_bonus":0
+                },
+                {
+                    "name":"power",
+                    "charge_bonus":0,
+                    "damage_bonus":10,
+                    "duration_bonus":0,
+                    "radius_bonus":0
+                }
+            ]
+        
+        },
+
+"spacer1fdse1234131":"---------------------------------------------------------------------------------------------------------",
+
+    "spell_data": {
+        "spell_generation": {
+            "base":{
+                "charge": 50.0,
+                "radius": 2.0,
+                "duration": 0.0,
+                "damage": 1.0
+            },
+            "costs": {
+                "charge":1,
+                "damage":1,
+                "duration":1,
+                "radius":1
+            },
+            "scaling": {
+                "charge":0.5,
+                "damage":2,
+                "radius":10,
+                "duration":0.25
+            }
+        },
+
+
+
+        "spell_effects": [
+
+            {
+                "id": "fire",
+                "color": [255, 100, 50],
+                "behavior": {
+                    "type": "dot_boost",
+                    "multiplier": 1.2
+                }
+            },
+            {
+                "id": "ice",
+                "color": [100, 150, 255],
+                "behavior": {
+                    "type": "slow",
+                    "multiplier": 1.2
+                }
+            },
+            {
+                "id": "poison",
+                "color": [100, 255, 100],
+                "behavior": {
+                    "type": "stacking_dot",
+                    "multiplier": 1.2
+                }
+            }
+        ],
+
+        "spell_levels": [
+            { "level": 1, "points": 10 },
+            { "level": 2, "points": 20 },
+            { "level": 3, "points": 35 }
+        ]
+    },
+
+
+"spaceasr1fds1234131":"---------------------------------------------------------------------------------------------------------",
+
     "caster_data": [
         {
             "part_id": "ITEM_ID_CASTERBASE",
-            "part_name": "Caster",
+            "part_name": "Base",
             "accuracy": 30
         }
     ],
@@ -564,10 +699,10 @@
     "igniter_data": [
         {
             "part_id": "ITEM_ID_IGNITER_1",
-            "part_name": "Igniter",
+            "part_name": "Basic Igniter",
             "spell_effect": "SPELL_EFFECT_NONE",
             "recoil": 50,
-            "max_power": 25
+            "max_power": 50
         },
         {
             "part_id": "ITEM_ID_IGNITER_2",
@@ -619,7 +754,7 @@
             "part_id": "ITEM_ID_COUPLER_3",
             "part_name": "Blast Coupler",
             "spell_type": "SPELL_TYPE_AOE",
-            "radius":20,
+            "radius":2,
             "cooldown":200,
             "pps":25,
             "damage":25,
@@ -629,9 +764,9 @@
             "part_id": "ITEM_ID_COUPLER_4",
             "part_name": "Strike Coupler",
             "spell_type": "SPELL_TYPE_INSTANT",
-            "radius":20,
+            "radius":2,
             "cooldown":250,
-            "pps":40,
+            "pps":25,
             "damage":50,
             "speed":0
         }
@@ -769,6 +904,12 @@
             "module_name":"MushroomPress",
             "recipies":["RECIPIE_ID_MUSHROOMJUICE"],
             "accepted_plans":[]
+        },
+        {
+            "module_id":"MODULE_ID_SPELLGENERATOR",
+            "module_name":"Spell Generator",
+            "recipies":[""],
+            "accepted_plans":[]
         }
     ],
 
@@ -804,23 +945,6 @@
     "spaer1123131":"---------------------------------------------------------------------------------------------------------",
 
     "food_modifiers": [
-
-        {
-            "mod_id":"ITEMMOD_NUTRITIOUS",
-            "mod_name":"Nutritious",
-            "rarity":"RARITY_COMMON",
-            "saturation":0.4
-        },
-        {
-            "mod_id":"ITEMMOD_MOLDY",
-            "mod_name":"Moldy",
-            "rarity":"RARITY_COMMON",
-            "saturation":-0.4
-        }
-    ],
-
-
-        "igniter_modifiers": [
 
         {
             "mod_id":"ITEMMOD_NUTRITIOUS",
@@ -972,7 +1096,7 @@
         "cooldown_min": 10,
         "cooldown_max": 300,
 
-        "pps_min": 1,
+        "pps_min": 10,
         "pps_max": 100,
 
         "max_power_min": 20,
@@ -1065,12 +1189,12 @@
             "rolls_max":4,
             "entries":[
                 {
-                "item_id":"ITEM_ID_CASTERBASE",
+                "item_id":"ITEM_ID_WAND_FRESH",
                 "weight":10,
                 "min_rarity":"LOOTRARITY_COMMON"
                 },
                 {
-                "item_id":"ITEM_ID_CASTERBASE",
+                "item_id":"ITEM_ID_WAND_AGED",
                 "weight":10,
                 "min_rarity":"LOOTRARITY_COMMON"
                 }

@@ -61,6 +61,8 @@ enum ItemID {
     ITEM_ID_AXE,
     ITEM_ID_BOW,
     
+    ITEM_ID_WAND_FRESH,
+    ITEM_ID_WAND_AGED,
     ITEM_ID_CASTERBASE,
 
     ITEM_ID_IGNITER_1,
@@ -118,6 +120,7 @@ extern Texture2D g_item_sprites[MAX_SPRITES];
 extern Texture2D g_icon_sprites[MAX_SPRITES];
 extern Texture2D g_icon_part_sprites[MAX_SPRITES];
 extern Texture2D g_item_part_sprites[MAX_SPRITES];
+extern Texture2D g_spell_icon_delivery[MAX_SPRITES];
 
 
 enum RecipieID {
@@ -152,6 +155,7 @@ enum ModuleID {
     MODULE_ID_WORKBENCH,
     MODULE_ID_STOVE,
     MODULE_ID_MUSHROOMPRESS,
+    MODULE_ID_SPELLGENERATOR,
 };
 
 extern Texture2D g_module_sprites[MAX_SPRITES];
@@ -204,7 +208,8 @@ enum UIPanelID {
     PANEL_WOOD_LARGE,
     PANEL_NUM_SPRITES,
     PANEL_CHAR_SCREEN,
-    PANEL_MODULE_SCREEN
+    PANEL_MODULE_SCREEN,
+    PANEL_SPELLGEN_SCREEN
 };
 
 extern Texture2D g_ui_panels[MAX_SPRITES];

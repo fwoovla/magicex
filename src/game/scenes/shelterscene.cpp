@@ -19,6 +19,7 @@ ShelterScene::ShelterScene() {
     character_menu_visible = false;
     module_menu_visible = false;
     dialogue_menu_visible = false;
+    spell_menu_visible = false;
     g_game_data.is_in_sub_map = false;
     
     LoadLevelData(level_data);
@@ -63,6 +64,8 @@ ShelterScene::ShelterScene() {
 
     dialogue_menu = new DialogueMenu();
 
+    spell_menu = new SpellGenMeneu();
+
     show_map_menu = false;
 
     g_current_player->position = level_data.spawn_position;
@@ -95,6 +98,9 @@ SCENE_ID ShelterScene::Update() {
         else if(dialogue_menu_visible) {
             dialogue_menu->Update();
         }
+        else if(spell_menu_visible) {
+            spell_menu->Update();
+        }
         else {
             ui_layer->Update();
             for(int i = 0; i < level_data.game_areas.size(); i++) {
@@ -115,7 +121,7 @@ SCENE_ID ShelterScene::Update() {
 
 
 
-        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible) {
+        if(g_input.keys_pressed[0] == KEY_E and !module_menu_visible and !dialogue_menu_visible and !spell_menu_visible) {
             character_menu_visible = !character_menu_visible;
             if(character_menu_visible) {  //open
 
@@ -143,6 +149,9 @@ SCENE_ID ShelterScene::Update() {
         }
         if(g_input.keys_pressed[0] == KEY_E and dialogue_menu_visible) {
             dialogue_menu_visible = false;
+        }
+        if(g_input.keys_pressed[0] == KEY_E and spell_menu_visible) {
+            spell_menu_visible = false;
         }
     }
 
@@ -191,6 +200,9 @@ void ShelterScene::DrawUI() {
     }
     else if(dialogue_menu_visible) {
         dialogue_menu->Draw();
+    }
+    else if(spell_menu_visible) {
+        spell_menu->Draw();
     }
     else {
         for(int i = 0; i < level_data.game_areas.size(); i++) {
@@ -272,8 +284,14 @@ void ShelterScene::OnModuleUsed() {
     }
     //TraceLog(LOG_INFO, "OPENNING CONTAINER");
 
-    module_menu->OpenModule();
-    module_menu_visible = true;
+    if(g_game_data.current_module_id != MODULE_ID_SPELLGENERATOR) {
+        module_menu->OpenModule();
+        module_menu_visible = true;
+    }
+    else {
+        spell_menu->OpenModule();
+        spell_menu_visible = true;
+    }
 
 }
 

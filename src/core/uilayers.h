@@ -187,6 +187,21 @@ class TradeGrid {
 };
 
 
+class SpellDetailsPanel : public BaseUILayer {
+
+    public:
+    SpellDetailsPanel(SpellData *_data, Vector2 position, float width, float height);
+    ~SpellDetailsPanel() override;
+    void Update() override;
+    void Draw() override;
+    //void OpenPanel();
+
+    SpellData *data;
+    Rectangle panel_rect;
+    Sprite spell_icon;
+    Label details_label;
+};
+
 class DetailsPanel : public BaseUILayer {
 
     public:
@@ -195,32 +210,73 @@ class DetailsPanel : public BaseUILayer {
     void Update() override;
     void Draw() override;
     void OpenPanel(ItemInstanceData *_data);
+    void ClosePanel();
 
     ItemInstanceData *item_data;
     Rectangle panel_rect;
+    Rectangle ws_rect;
 
     Label item_name_label;
     Label item_type_label;
     Label value_label;
 
+    Vector2 stat_pos;
+    int padding;
+    int label_spacing;
+
 //weapon
+
+    std::vector<std::unique_ptr<SpellDetailsPanel> > spell_details;
+
+
+
     Label power_label;
     StatusBar power_bar;
+    Label power_value_label;
+
+    Label shots_label;
+    StatusBar shots_bar;
+    Label shots_value_label;
+
     Label damage_label;
     StatusBar damage_bar;
+    Label damage_value_label;
+
     Label recoil_label;
     StatusBar recoil_bar;
+    Label recoil_value_label;
+
     Label accuracy_label;
     StatusBar accuracy_bar;
+    Label accuracy_value_label;
+
     Label pps_label;
     StatusBar pps_bar;
+    Label pps_value_label;
+
     Label cooldown_label;
     StatusBar cooldown_bar;
+    Label cooldown_value_label;
+
     Label knockback_label;
     StatusBar knockback_bar;
+    Label knockback_value_label;
 
     Label effect_label;
     Label type_label;
+
+    Label base_label;
+    Label base_tier_label;
+    Label base_quality_label;
+    Label igniter_label;
+    Label igniter_tier_label;
+    Label igniter_quality_label;
+    Label coupler_label;
+    Label coupler_tier_label;
+    Label coupler_quality_label;
+    Label rod_label;
+    Label rod_tier_label;
+    Label rod_quality_label;
 
 //armor
     Label defence_label;
@@ -320,6 +376,37 @@ class ModuleMenu : public BaseUILayer {
     SharedItemData shared_data;
 
     Button craft_button;
+
+};
+
+
+class SpellGenMeneu : public BaseUILayer {
+
+    public:
+    SpellGenMeneu();
+    ~SpellGenMeneu() override;
+    void Update() override;
+    void Draw() override;
+    void OpenModule();
+    void RecipieSelected();
+
+    Label title_label;
+
+    Rectangle panel_rect;
+    Texture2D panel_bg;
+
+    Label points_label;
+
+    Label charge_label;
+    Label charge_cost_label;
+    Label damage_label;
+    Label damage_cost_label;
+    
+
+    std::vector<Vector2> charge_ticks;
+    std::vector<Vector2> damage_ticks;
+
+    int available_points;
 
 };
 

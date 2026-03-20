@@ -167,7 +167,7 @@ void LoadGameData() {
 
 
 //tier tables
-
+/* 
     g_tier_tables.resize(TYPE_ALL+1);
     for(std::vector table : g_tier_tables) {
         table.resize(TIER_MAX, 0);
@@ -245,12 +245,12 @@ void LoadGameData() {
 
         g_coupler_data[(int)new_coupler.id - ITEM_ID_COUPLER_1] = new_coupler;
         TraceLog(LOG_INFO, "coupler_data Loaded  id: %i  %s  type: %i", new_coupler.id, new_coupler.name.c_str(), new_coupler.type);
-    }
+    } */
     //TraceLog(LOG_INFO, "g_coupler_data size %i  ", g_coupler_data.size());
 
 
 //---------------------caster data
-    g_rod_data.resize(cj["rod_data"].size());
+/*     g_rod_data.resize(cj["rod_data"].size());
 
     for(int i = 0; i < cj["rod_data"].size(); i++) {
         RodData new_rod;
@@ -262,7 +262,7 @@ void LoadGameData() {
         g_rod_data[(int)new_rod.id - ITEM_ID_ROD_1] = new_rod;
         TraceLog(LOG_INFO, "rod_data Loaded  id: %i  %s", new_rod.id, new_rod.name.c_str());
 
-    }
+    } */
     //TraceLog(LOG_INFO, "g_rod_data size %i  ", g_rod_data.size());
 
 
@@ -344,6 +344,8 @@ void LoadGameData() {
         float recoil = cj["weapon_data"][i]["recoil"];
         float knockback = cj["weapon_data"][i]["knockback"];
 
+        float accuracy = cj["weapon_data"][i]["accuracy"];
+
         int mod_slots = cj["weapon_data"][i]["mod_slots"];
         
         
@@ -357,6 +359,7 @@ void LoadGameData() {
             .damage = damage,
             .recoil = recoil,
             .knockback = knockback,
+            .accuracy = accuracy,
             .mod_slots = mod_slots,
         };
 
@@ -635,21 +638,20 @@ void LoadGameData() {
     LoadStatLimits(cj["stat_limits"]);
     LoadStatGenData(cj["stat_generation_data"]);
 
+    TraceLog(LOG_INFO, "loading wands");
+
+    LoadWandData(cj["wand_data"]);
+
+    LoadSpellData(cj["spell_data"]);
+
     LoadLootTables(cj["loot_tables"]);
 
     LoadLootPools(cj["loot_pools"]);
 
-
-
     LoadMapGenData(cj["map_gen"]);
-
-
-
 
     cfile.close();
  
-
-
     //TraceLog(LOG_INFO, "==========check save data================");
 
     if(std::filesystem::exists(data_save_path)) {
@@ -747,6 +749,7 @@ void SaveGame(LevelData &level_data) {
                 {"damage", inst.weapon_data.damage},
                 {"recoil", inst.weapon_data.recoil},
                 {"knockback", inst.weapon_data.knockback},
+                {"accuracy", inst.weapon_data.accuracy},
                 {"mod_slots", inst.weapon_data.mod_slots},
                 {"weapon_type", inst.weapon_data.weapon_type},
                 {"max_power", inst.weapon_data.max_power},
@@ -756,8 +759,8 @@ void SaveGame(LevelData &level_data) {
             if(inst.weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
             
 
-                json caster;// = json::array();
-
+                json wand;// = json::array();
+/* 
                 caster["base"] = {
                     {"part_id", inst.weapon_data.caster_data.base.id},
                     {"part_name", inst.weapon_data.caster_data.base.name},
@@ -788,8 +791,8 @@ void SaveGame(LevelData &level_data) {
                     {"knockback", inst.weapon_data.caster_data.rod.knockback},
                     {"damage", inst.weapon_data.caster_data.rod.damage},
                 };
-
-                new_weapon["caster_data"] = caster;
+ */
+                new_weapon["wand_data"] = wand;
             }
             
             instance["weapon_data"] = new_weapon;
@@ -1657,6 +1660,7 @@ ModuleID StrToModuleId(const std::string& s) {
         {"MODULE_ID_WORKBENCH",         ModuleID::MODULE_ID_WORKBENCH},
         {"MODULE_ID_STOVE",             ModuleID::MODULE_ID_STOVE},
         {"MODULE_ID_MUSHROOMPRESS",     ModuleID::MODULE_ID_MUSHROOMPRESS},
+        {"MODULE_ID_SPELLGENERATOR",     ModuleID::MODULE_ID_SPELLGENERATOR},
     };
 
     if (auto it = lookup_table.find(s); it != lookup_table.end()) {
@@ -1820,7 +1824,7 @@ ItemType StrToItemType(const std::string& s) {
     return SpellID::SPELL_ID_NONE;
 }
  */
-
+/* 
 CASTER_PART StrToCasterPart(const std::string& s) {
 
     static const std::unordered_map<std::string, CASTER_PART> lookup_table = {
@@ -1836,8 +1840,8 @@ CASTER_PART StrToCasterPart(const std::string& s) {
     TraceLog(LOG_INFO, "caster part ID not found ");
     return CASTER_PART::CASTER_PART_NONE; 
 }
-
-
+ */
+/* 
 SPELL_EFFECT StrToSpellEffectId(const std::string& s) {
 
     static const std::unordered_map<std::string, SPELL_EFFECT> lookup_table = {
@@ -1869,7 +1873,7 @@ SPELL_TYPE StrToSpellTypeId(const std::string& s) {
     TraceLog(LOG_INFO, "spell type ID not found ");
     return SPELL_TYPE::SPELL_TYPE_NONE;
 }
-
+ */
 
 WEAPON_TYPE StrToWeaponTypeId(const std::string& s) {
 
@@ -1935,7 +1939,9 @@ ItemID StrToItemId(const std::string& s) {
         {"ITEM_ID_AXE",             ItemID::ITEM_ID_AXE},
         {"ITEM_ID_BOW",             ItemID::ITEM_ID_BOW},
 
-        {"ITEM_ID_CASTERBASE",             ItemID::ITEM_ID_CASTERBASE},
+        {"ITEM_ID_WAND_FRESH",            ItemID::ITEM_ID_WAND_FRESH},
+        {"ITEM_ID_WAND_AGED",             ItemID::ITEM_ID_WAND_AGED},
+        {"ITEM_ID_CASTERBASE",            ItemID::ITEM_ID_CASTERBASE},
 
         {"ITEM_ID_IGNITER_1",             ItemID::ITEM_ID_IGNITER_1},
         {"ITEM_ID_IGNITER_2",             ItemID::ITEM_ID_IGNITER_2},
@@ -2049,8 +2055,9 @@ std::string ModuleIdToStr(const int id) {
 
     static const std::unordered_map<int , std::string> lookup_table = {
         {ModuleID::MODULE_ID_WORKBENCH,     "WORKBENCH"},
-         {ModuleID::MODULE_ID_STOVE,     "STOVE"},
-          {ModuleID::MODULE_ID_MUSHROOMPRESS,     "MUSHROOMPRESS"},
+        {ModuleID::MODULE_ID_STOVE,     "STOVE"},
+        {ModuleID::MODULE_ID_MUSHROOMPRESS,     "MUSHROOMPRESS"},
+        {ModuleID::MODULE_ID_SPELLGENERATOR,     "SPELLGENERATOR"},
     };
     if (auto it = lookup_table.find(id); it != lookup_table.end()) {
         return it->second;
@@ -2154,15 +2161,16 @@ void from_json(const json &j, ItemInstanceData &i) {
         new_weapon.damage = j["weapon_data"]["damage"];
         new_weapon.recoil = j["weapon_data"]["recoil"];        
         new_weapon.knockback = j["weapon_data"]["knockback"];
+        new_weapon.accuracy = j["weapon_data"]["accuracy"];
         new_weapon.mod_slots = j["weapon_data"]["mod_slots"];
         new_weapon.weapon_type = j["weapon_data"]["weapon_type"];
         new_weapon.max_power = j["weapon_data"]["max_power"];
         new_weapon.current_power = j["weapon_data"]["current_power"];
 
         if(new_weapon.weapon_type == WEAPON_TYPE_CASTER) {
-            CasterData caster;
+            WandData wand;
 
-            CasterBaseData base;
+/*             CasterBaseData base;
             base.name = j["weapon_data"]["caster_data"]["base"]["part_name"];
             base.id = j["weapon_data"]["caster_data"]["base"]["part_id"];
             base.accuracy = j["weapon_data"]["caster_data"]["base"]["accuracy"];
@@ -2193,9 +2201,9 @@ void from_json(const json &j, ItemInstanceData &i) {
             caster.base = base;
             caster.igniter = igniter;
             caster.coupler = coupler;
-            caster.rod = rod;
+            caster.rod = rod; */
 
-            new_weapon.caster_data = caster;
+            new_weapon.wand_data = wand;
         }
 
 
@@ -2277,3 +2285,14 @@ void YSortEntities(LevelData & _level_data) {
     });
     //TraceLog(LOG_INFO, "sorted entities  %i", _level_data.draw_list.size());
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -106,11 +106,13 @@ struct WeaponData {
     std::string weapon_name;
     ItemID weapon_id = ITEM_ID_NONE;
     WEAPON_TYPE weapon_type = WEAPON_TYPE_NONE;
-    CasterData caster_data;
+    //CasterData caster_data;
+    WandData wand_data;
     float cooldown;
     int damage;
     float recoil;
     float knockback;
+    float accuracy;
     int mod_slots;
 
     float max_power;
@@ -380,12 +382,13 @@ ItemRarity StrToItemRarity(const std::string& s);
 
 ItemType StrToItemType(const std::string& s);
 
-CASTER_PART StrToCasterPart(const std::string& s);
+//CASTER_PART StrToCasterPart(const std::string& s);
 
+/* WANDWOOD_TYPE StrToWandWoodType(const std::string &s);
 
-SPELL_EFFECT StrToSpellEffectId(const std::string& s);
+SPELL_EFFECT StrToSpellEffectId(const std::string& s); */
 
-SPELL_TYPE StrToSpellTypeId(const std::string& s);
+//SPELL_TYPE StrToSpellTypeId(const std::string& s);
 
 WEAPON_TYPE StrToWeaponTypeId(const std::string& s);
 

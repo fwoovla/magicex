@@ -93,14 +93,14 @@ void GenerateWorldGenTilesets(std::string _path) {
                     this_layer.tileset_def_uid = j["levels"][level]["layerInstances"][layer]["__tilesetDefUid"];
                     this_layer.c_hei = j["levels"][level]["layerInstances"][layer]["__cHei"];
                     this_layer.c_wid = j["levels"][level]["layerInstances"][layer]["__cWid"];
-                    TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES FOUND %s tileset uid %i", this_layer.identifier.c_str(), this_layer.tileset_def_uid);
+                    //TraceLog(LOG_INFO, "++++++--------------------------------GRID TILES FOUND %s tileset uid %i", this_layer.identifier.c_str(), this_layer.tileset_def_uid);
                     
                     WorldGenTileSet *this_tileset = nullptr;
                     
                     for(int ts = 0; ts < g_worldgen_tilesets.size(); ts++) {
                         if(g_worldgen_tilesets[ts].uid == this_layer.tileset_def_uid) {
                             this_tileset = &g_worldgen_tilesets[ts];
-                            TraceLog(LOG_INFO, "++++++----tileset %i has %i tile tags", g_worldgen_tilesets[ts].uid, g_worldgen_tilesets[ts].tile_tags.size());
+                            //TraceLog(LOG_INFO, "++++++----tileset %i has %i tile tags", g_worldgen_tilesets[ts].uid, g_worldgen_tilesets[ts].tile_tags.size());
                         }
                     }
 
@@ -521,14 +521,14 @@ void EctractTileData(json &tj, WorldGenTileSet &this_tileset){
             
         }
         this_tileset.tile_tags.push_back(new_tag);
-        TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
+        //TraceLog(LOG_INFO, "====tiles tags loaded_____________ %i\n", this_tileset.tile_tags.size());
         
     }
 } 
 
 
 void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
-    TraceLog(LOG_INFO, "building terrain tileset");
+    //TraceLog(LOG_INFO, "building terrain tileset");
     for( int tile = 0; tile < grid_tiles.size(); tile++) {
         Vector2 atlas_pos;
         atlas_pos.x = grid_tiles[tile]["src"][0];
@@ -571,7 +571,7 @@ void BuildTerrainTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
     
 
 void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
-    TraceLog(LOG_INFO, "building structuire tileset");
+    //TraceLog(LOG_INFO, "building structuire tileset");
     for( int tile = 0; tile < grid_tiles.size(); tile++) {
         Vector2 atlas_pos;
         atlas_pos.x = grid_tiles[tile]["src"][0];
@@ -604,13 +604,13 @@ void BuildStructureTileSet(json &grid_tiles, WorldGenTileSet &this_tileset){
 
 
 void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bounding_entities) {
-    TraceLog(LOG_INFO, "extracting structure bounds");
+    //TraceLog(LOG_INFO, "extracting structure bounds");
     for (int entity = 0; entity < bounds["entityInstances"].size(); entity++) {
         if(bounds["entityInstances"][entity]["__identifier"] == "StructureBounds") {
 
             LDTKEntityInstance new_entity;
             new_entity.identifier = bounds["entityInstances"][entity]["__identifier"];
-            TraceLog(LOG_INFO, "++++++------------NEW ENTITY FOUND %s", new_entity.identifier.c_str());
+            //TraceLog(LOG_INFO, "++++++------------NEW ENTITY FOUND %s", new_entity.identifier.c_str());
             new_entity.iid = bounds["entityInstances"][entity]["iid"];
             new_entity.px.push_back(bounds["entityInstances"][entity]["px"][0]);
             new_entity.px.push_back(bounds["entityInstances"][entity]["px"][1]);
@@ -623,7 +623,7 @@ void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bound
                 new_field.identifier = bounds["entityInstances"][entity]["fieldInstances"][field]["__identifier"];
                 new_field.value_s = bounds["entityInstances"][entity]["fieldInstances"][field]["__value"];   
                 new_entity.field_instances.push_back(new_field);
-                TraceLog(LOG_INFO, "structuire field   %s", new_field.value_s.c_str());
+                //TraceLog(LOG_INFO, "structuire field   %s", new_field.value_s.c_str());
             } 
             bounding_entities.push_back(new_entity);        
         }
@@ -632,7 +632,7 @@ void ExtractStructureBounds(json &bounds, std::vector<LDTKEntityInstance> &bound
 
 void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std::vector<LDTKEntityInstance> structure_bounding_entities, std::unordered_map<std::string, WorldGenStructureData> &structure_lookup){
 
-    TraceLog(LOG_INFO, "building premade structuires  # of tiles in grid  %i", grid_tiles.size());
+    //TraceLog(LOG_INFO, "building premade structuires  # of tiles in grid  %i", grid_tiles.size());
 
     //std::vector<Rectangle> bounding_rects;
 
@@ -647,7 +647,7 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         std::string structure_id_string = structure_bounding_entities[r].field_instances[0].value_s;
         std::string decco_base_string = structure_bounding_entities[r].field_instances[1].value_s;
 
-        TraceLog(LOG_INFO, "%s structure rect at x:%0.0f y:%0.0f w:%0.0f h:%0.0f", structure_id_string.c_str() , new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+        //TraceLog(LOG_INFO, "%s structure rect at x:%0.0f y:%0.0f w:%0.0f h:%0.0f", structure_id_string.c_str() , new_rect.x, new_rect.y, new_rect.width, new_rect.height);
 
         WorldGenStructureData new_structure;
         new_structure.position = {0,0};
@@ -678,23 +678,23 @@ void BuildPremadeStructures(json &grid_tiles, WorldGenTileSet &this_tileset, std
         }
 
         if(structure_id_string.rfind("HOUSE", 0)== 0) {
-            TraceLog(LOG_INFO, "house  ");
+            //TraceLog(LOG_INFO, "house  ");
         }
         if(structure_id_string.rfind("RUINS", 0)== 0) {
-            TraceLog(LOG_INFO, "ruins  ");
+            //TraceLog(LOG_INFO, "ruins  ");
         }
         if(structure_id_string.rfind("SPAWN", 0)== 0) {
-            TraceLog(LOG_INFO, "spawn  ");
+            //TraceLog(LOG_INFO, "spawn  ");
         }
         if(structure_id_string.rfind("EXIT", 0)== 0) {
-            TraceLog(LOG_INFO, "exit  ");
+            //TraceLog(LOG_INFO, "exit  ");
         }
 
         structure_lookup[structure_id_string] = new_structure;
     }
 
     for(auto &structure : structure_lookup) {
-        TraceLog(LOG_INFO, "structure loaded  %s", structure.first.c_str());
+        //TraceLog(LOG_INFO, "structure loaded  %s", structure.first.c_str());
         //TraceLog(LOG_INFO, "structure tiles  %i", structure.second.structure_grid_tiles.size());
         for(WorldGenAutoTile &tile : structure.second.structure_grid_tiles) {
             //TraceLog(LOG_INFO, "------tile id %i relitive position x %0.0f y %0.0f", tile.tile_id, tile.position.x, tile.position.y);
@@ -1134,13 +1134,13 @@ void LoadMapGenData(json &j) {
         }
 
 
-        for(WorldGenStructure &structure : new_data.structure_data) {
+/*         for(WorldGenStructure &structure : new_data.structure_data) {
             TraceLog(LOG_INFO, "-----------------structure data: %s  ", structure.id.c_str());
             TraceLog(LOG_INFO, "-------------------------- wants_road: %0.2f  ", structure.profile.wants_road);
             TraceLog(LOG_INFO, "-------------------------- wants_center: %0.2f  ", structure.profile.wants_center);
             TraceLog(LOG_INFO, "-------------------------- wants_edge: %0.2f  ", structure.profile.wants_edge);
             TraceLog(LOG_INFO, "-------------------------- wants_forrest: %0.2f  ", structure.profile.wants_forrest);
-        }
+        } */
 
 
         WorldGenTerrain new_terrain;
@@ -1158,7 +1158,7 @@ void LoadMapGenData(json &j) {
             new_data.exit_dest_strings.push_back(d_string);
         } */
         g_worldgen_data.push_back(new_data);
-        TraceLog(LOG_INFO, "-----------------wg data map: %s  ", new_data.map_name.c_str());
+        //TraceLog(LOG_INFO, "-----------------wg data map: %s  ", new_data.map_name.c_str());
     }
 
 }

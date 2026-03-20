@@ -87,6 +87,13 @@ struct Polygon {
     Color color;
 };
 
+struct Line {
+    Vector2 start;
+    Vector2 end;
+};
+
+//void DrawLineLine(Line &line);
+
 Vector2 vClamp(Vector2 v, float maxLength);
 
 

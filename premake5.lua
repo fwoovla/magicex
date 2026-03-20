@@ -7,9 +7,9 @@ project "magicex"
    targetdir "bin/%{cfg.buildcfg}"
 
    files {
-          "**.h",
-          "**.hpp",
-          "**.cpp",
+          "src/**.h",
+          "src/**.hpp",
+          "src/**.cpp",
          }
    
    links {

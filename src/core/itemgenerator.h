@@ -31,15 +31,17 @@ void BuildItemSprite(ItemInstanceData &instance);
 
 void GenerateItemName(ItemInstanceData &instance);
 
+SpellData GenerateSpell(ItemInstanceData &instance);
+
 //void AddSpellToItem(ItemInstanceData &instance, SpellID spell_id);
 
-CasterBaseData GenerateBase(CasterBaseData &base, ITEM_TIER tier);
+/* CasterBaseData GenerateBase(CasterBaseData &base, ITEM_TIER tier);
 
 IgniterData GenerateIgniter(IgniterData &base, ITEM_TIER tier);
 
 CouplerData GenerateCoupler(CouplerData &base, ITEM_TIER tier);
 
-RodData GenerateRod(RodData &base, ITEM_TIER tier);
+RodData GenerateRod(RodData &base, ITEM_TIER tier); */
 
 void SpendStatPoints(float &stat, STAT_ID id, int &points);
 
