@@ -624,28 +624,48 @@
 "spacer1fdse1234131":"---------------------------------------------------------------------------------------------------------",
 
     "spell_data": {
-        "spell_generation": {
-            "base":{
-                "charge": 50.0,
-                "radius": 2.0,
-                "duration": 0.0,
-                "damage": 1.0
+
+        "stats" : [
+            {
+                "stat_id" : "SPELLSTAT_CHARGE",
+                "base":300.0,
+                "cost":2,
+                "step":-50,
+                "min":10,
+                "max":300,
+                "scale": 0.01
             },
-            "costs": {
-                "charge":1,
-                "damage":1,
-                "duration":1,
-                "radius":1
+            {
+                "stat_id" : "SPELLSTAT_DAMAGE",
+                "base":1.0,
+                "cost":2,
+                "step":1,
+                "min":1,
+                "max":100,
+                "scale": 1.0
             },
-            "scaling": {
-                "charge":0.5,
-                "damage":0.5,
-                "radius":0.5,
-                "duration":0.25
+            {
+                "stat_id" : "SPELLSTAT_RADIUS",
+                "base":2.0,
+                "cost":1,
+                "step":10,
+                "min":1,
+                "max":300,
+                "scale": 1.0
+            },
+            {
+                "stat_id" : "SPELLSTAT_DURATION",
+                "base":0.0,
+                "cost":2,
+                "step":0.5,
+                "min":0,
+                "max":300,
+                "scale": 0.01
             }
-        },
+        ],
 
 
+        
 
         "spell_effects": [
 

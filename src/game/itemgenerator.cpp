@@ -237,11 +237,11 @@ SpellData GenerateSpell(ItemInstanceData &instance) {
 
     SpellData new_spell;
 
-    new_spell.chargetime = g_spell_rules.chargetime_base;
-    TraceLog(LOG_INFO, "-------chargetime %0.2f ", g_spell_rules.chargetime_base);
-    new_spell.damage = g_spell_rules.damage_base;
-    new_spell.radius = g_spell_rules.radius_base;
-    new_spell.durration = g_spell_rules.duration_base;
+    new_spell.chargetime = g_spell_rules.stats[SPELLSTAT_CHARGE].base;
+    TraceLog(LOG_INFO, "-------chargetime %0.2f ", g_spell_rules.stats[SPELLSTAT_CHARGE].base);
+    new_spell.damage = g_spell_rules.stats[SPELLSTAT_DAMAGE].base;
+    new_spell.radius = g_spell_rules.stats[SPELLSTAT_RADIUS].base;
+    new_spell.durration = g_spell_rules.stats[SPELLSTAT_DURATION].base;
 
     new_spell.delivery_type = (SPELL_DELIVERY)GetRandomValue(0, DELIVERY_PROJECTILE);//DELIVERY_PROJECTILE;
     new_spell.effect_type = SPELL_EFFECT_NONE;
@@ -456,7 +456,7 @@ void ClampStat(float &stat, STAT_ID id) {
 }
 
 void SpendStatPoints(float &stat, STAT_ID id, int &points) {
-    auto &gen = g_statgen_data[id];
+/*     auto &gen = g_statgen_data[id];
     auto &lim = g_stat_limits[id];
 
     if(points < gen.cost) {
@@ -474,7 +474,7 @@ void SpendStatPoints(float &stat, STAT_ID id, int &points) {
     
     stat = new_value;
     //points -= gen.cost;
-    TraceLog(LOG_INFO, "---new  stat value %0.02f  points left:%i", new_value, points);
+    TraceLog(LOG_INFO, "---new  stat value %0.02f  points left:%i", new_value, points); */
 }
 
 

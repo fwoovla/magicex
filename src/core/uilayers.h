@@ -33,24 +33,22 @@ struct SharedItemData {
     int item_id;
     int use_id;
     bool showing_details;
-    //bool is_using;
-    //std::vector<int> *source_list;
-    //std::vector<int> *dest_list;
     INVENTORYGRIDS source_grid;
     INVENTORYGRIDS dest_grid;
     Vector2 source_cell;
     Vector2 dest_cell;
-    //int source_index
+};
+
+struct SharedSpellData {
+    SpellBuildData working_spell;
+    int points_total;
+    int points_available;
+    SPELL_STAT source_stat;
+    bool add_stat = true; // is adding or subtracting? 
 };
 
 
-
 struct StatusBar {
-/*     StatusBar(Vector2 _position, float _max_value, Color _bar_color, float _width, float _height);
-    //~StatusBar() {};
-    void Update();
-    void Draw(); */
-
     Color bar_color;
     Vector2 position;
     float max_value;
@@ -169,7 +167,6 @@ class TradeGrid {
     Vector2 selected_cell;
 
     std::string container_iid;
-    //Vector2 return_position;
 
     std::vector<Sprite> item_sprites;
 
@@ -194,7 +191,6 @@ class SpellDetailsPanel : public BaseUILayer {
     ~SpellDetailsPanel() override;
     void Update() override;
     void Draw() override;
-    //void OpenPanel();
 
     SpellData *data;
     Rectangle panel_rect;
@@ -380,6 +376,39 @@ class ModuleMenu : public BaseUILayer {
 };
 
 
+class SpellStatInterface : public BaseUILayer {
+
+    public:
+    SpellStatInterface(std::string stat_name,Vector2 p, Vector2 s, SharedSpellData *shared_data);
+    ~SpellStatInterface() override;
+    void Update() override;
+    void Draw() override;
+    
+
+
+    Signal stat_changed;
+
+    SharedSpellData *shared_spell;
+
+    SPELL_STAT this_stat;
+
+    Button plus_button;
+    Button minus_button;
+    Label points_label;
+    Label stat_name_label;
+    Label stat_value_label;
+
+    Vector2 position;
+    Vector2 size;
+
+    Vector2 bar_pos;
+
+
+    std::vector<Rectangle> tick_rects;
+
+
+};
+
 class SpellGenMeneu : public BaseUILayer {
 
     public:
@@ -387,13 +416,20 @@ class SpellGenMeneu : public BaseUILayer {
     ~SpellGenMeneu() override;
     void Update() override;
     void Draw() override;
+    void OnStatChanged();
     void OpenModule();
-    void RecipieSelected();
 
     Label title_label;
 
     Rectangle panel_rect;
     Texture2D panel_bg;
+
+
+    SpellStatInterface *charge_interface;
+    SpellStatInterface *damage_interface;
+
+    SharedSpellData shared_spell;
+
 
     Label points_label;
 
@@ -406,7 +442,7 @@ class SpellGenMeneu : public BaseUILayer {
     std::vector<Vector2> charge_ticks;
     std::vector<Vector2> damage_ticks;
 
-    int available_points;
+    //int available_points;
 
 };
 
@@ -482,10 +518,6 @@ class DialogueMenu : public BaseUILayer {
 
     int buy_items_value;
     int sell_items_value;
-
-
-    //ActiveDialogue this_dialogue;
-
 
 };
 
@@ -655,8 +687,6 @@ class StagingUILayer : public BaseUILayer {
     std::vector<UnitPortrait > portraits;
 
     std::unique_ptr<ItemGrid> inventory_grid;
-
-    //ItemGrid *inventory_grid;
     
     SharedItemData shared_data;
 
@@ -691,9 +721,7 @@ class ShelterUILayer : public BaseUILayer {
     ~ShelterUILayer() override;
     void Update() override;
     void Draw() override;
-
-    //void DrawDebug();
-   
+  
     Button start_button;
     Signal start_pressed;
 
@@ -701,7 +729,6 @@ class ShelterUILayer : public BaseUILayer {
     Signal quit_pressed;
 
     Label title_label;
-    //Label debug_label;
 };
 
 
@@ -712,8 +739,6 @@ class GameUILayer : public BaseUILayer {
     ~GameUILayer() override;
     void Update() override;
     void Draw() override;
-
-    //void DrawDebug();
 
     Button quit_button;
     Signal quit_pressed;

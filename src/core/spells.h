@@ -1,8 +1,15 @@
 #pragma once
 
 #include "gamedefs.h"
-//#include "loottables.h"
 
+
+enum SPELL_STAT {
+    SPELLSTAT_CHARGE,
+    SPELLSTAT_DAMAGE,
+    SPELLSTAT_RADIUS,
+    SPELLSTAT_DURATION,
+    SPELLSTAT_COUNT
+};
 
 
 
@@ -21,23 +28,7 @@ enum SPELL_EFFECT {
 };
 
 
-
-struct SpellBuildData {
-
-    int charge_points;
-    int damage_points;
-
-    bool is_lingering;
-    int duration_points;
-
-    bool is_exploding;
-    int radius_points;
-
-    SPELL_EFFECT SPELL_EFFECT_NONE;
-
-    SPELL_DELIVERY DELIVERY_PROJECTILE;
-};
-
+ 
 struct SpellData {
 
     float chargetime;
@@ -58,7 +49,6 @@ struct SpellData {
     SPELL_EFFECT effect_type;
 
 };
-
 
 
 
@@ -104,29 +94,37 @@ struct SpellEffectData {
 
 };
 
+
+struct SpellStat {
+    SPELL_STAT stat_id;
+    Limit limit;
+    int cost;
+    float base;
+    float step;
+    float scale;
+
+};
+
 struct SpellRules {
 
     std::vector<SpellEffectData> effects;
     std::vector<int> level_points;
-    float chargetime_base;
-    //float chargetime_min;
-    float duration_base;
-    float radius_base;
-    float damage_base;
-    float damage_per_point;
-    float charge_per_point;
-    float radius_per_point;
-    float duration_per_point;
-    int charge_cost;
-    int damage_cost;
-    int duration_cost;
-    int radius_cost;
+
+    std::vector<SpellStat> stats;
 
 };
 
-
 extern SpellRules g_spell_rules;
 
+
+struct SpellBuildData {
+    std::vector<int> stat_points;
+    int total_points;
+    bool is_lingering = false;
+    bool is_exploding = false;
+    SPELL_EFFECT spell_effect_id;
+    SPELL_DELIVERY spell_delivery_id;
+};
 
 
 
@@ -134,13 +132,14 @@ extern SpellRules g_spell_rules;
 
 WANDWOOD_TYPE StrToWandWoodType(const std::string &s);
 SPELL_EFFECT StrToSpellEffectId(const std::string& s);
+SPELL_STAT StrToSpellStatId(const std::string& s);
 
 void LoadSpellData(json &j);
 void LoadWandData(json &j);
-//SPELL_TYPE StrToSpellTypeId(const std::string& s);
 
-
-
+int GetUsedSpellPoints(const SpellBuildData &build_data);
+int GetRemainingSpellPoints(const SpellBuildData &build_data);
+bool CanAddSpellPoint(const SpellBuildData &build_data, int cost = 1);
 
 
 enum SPELL_TYPE {

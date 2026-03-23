@@ -81,7 +81,7 @@ DetailsPanel::DetailsPanel() {
 
 //coupler
     CreateLabel(cooldown_label, {stat_pos.x + (padding*2) + (quarter_x*1.5f), 260}, FONTSIZE_30, RAYWHITE, "cooldown");
-    CreateStatusBar(cooldown_bar,{cooldown_label.position.x + quarter_x, cooldown_label.position.y + (bar_height/2)}, g_stat_limits[STAT_COOLDOWN].max, 100.0f, bar_height, YELLOW);
+    CreateStatusBar(cooldown_bar,{cooldown_label.position.x + quarter_x, cooldown_label.position.y + (bar_height/2)}, g_stat_limits[STAT_CHARGE].max, 100.0f, bar_height, YELLOW);
     CreateLabel(cooldown_value_label, { cooldown_label.position.x + (quarter_x*2), 260}, FONTSIZE_30, RAYWHITE, "c");
 
     CreateLabel(pps_label, {stat_pos.x + (padding*2) + (quarter_x*1.5f), 280}, FONTSIZE_30, RAYWHITE, "pps");

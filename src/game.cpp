@@ -35,7 +35,7 @@ std::unordered_map<LootTableID, LootTable> g_creature_loot_tables;
 std::unordered_map<LootPoolID, LootPool> g_creature_loot_pools;
 std::vector<std::vector<int>> g_tier_tables;
 std::vector<Limit> g_stat_limits;
-std::vector<StatGenData> g_statgen_data;
+//std::vector<StatGenData> g_statgen_data;
 
 
 

@@ -13,7 +13,7 @@
 enum STAT_ID {
     STAT_DAMAGE,
     STAT_PPS,
-    STAT_COOLDOWN,
+    STAT_CHARGE,
     STAT_KNOCKBACK,
     STAT_RECOIL,
     STAT_ACCURACY,
@@ -22,8 +22,8 @@ enum STAT_ID {
 };
 
 struct Limit {
-    float min;
-    float max;
+    float min = 0.0f;
+    float max = 0.0f;
 };
 
 enum SIGNAL {

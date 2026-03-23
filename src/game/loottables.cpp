@@ -67,7 +67,7 @@ void LoadStatLimits(json &j) {
         j["damage_max"],
     };
 
-    g_stat_limits[STAT_COOLDOWN] = {
+    g_stat_limits[STAT_CHARGE] = {
         j["cooldown_min"],
         j["cooldown_max"],
     };
@@ -101,7 +101,7 @@ void LoadStatLimits(json &j) {
 
 
 void LoadStatGenData(json &j) {
-    g_statgen_data.resize(STAT_COUNT);
+/*     g_statgen_data.resize(STAT_COUNT);
 
     g_statgen_data[STAT_DAMAGE] = {
         j["damage"]["cost"],
@@ -136,7 +136,7 @@ void LoadStatGenData(json &j) {
     g_statgen_data[STAT_MAX_POWER] = {
         j["max_power"]["cost"],
         j["max_power"]["step"]
-    };
+    }; */
 }
 
 
@@ -207,7 +207,7 @@ STAT_ID StrToStatId(const std::string& s) {
 
         {"STAT_DAMAGE",     STAT_ID::STAT_DAMAGE},
         {"STAT_PPS",        STAT_ID::STAT_PPS},
-        {"STAT_COOLDOWN",   STAT_ID::STAT_COOLDOWN},
+        {"STAT_CHARGE",   STAT_ID::STAT_CHARGE},
         {"STAT_KNOCKBACK",  STAT_ID::STAT_KNOCKBACK},
         {"STAT_RECOIL",     STAT_ID::STAT_RECOIL},
         {"STAT_ACCURACY",   STAT_ID::STAT_ACCURACY},

@@ -40,26 +40,25 @@ void LoadSpellData(json &j) {
     TraceLog(LOG_INFO, "LOADING SPELL GEN RULES ");
     SpellRules new_rules;
     
-    new_rules.charge_cost = j["spell_generation"]["costs"]["charge"];
-    new_rules.damage_cost = j["spell_generation"]["costs"]["damage"];
-    new_rules.radius_cost = j["spell_generation"]["costs"]["radius"];
-    new_rules.duration_cost = j["spell_generation"]["costs"]["duration"];
+    new_rules.stats.resize(SPELLSTAT_COUNT);
 
-    new_rules.charge_per_point = j["spell_generation"]["scaling"]["charge"];
-    new_rules.damage_per_point = j["spell_generation"]["scaling"]["damage"];
-    new_rules.radius_per_point = j["spell_generation"]["scaling"]["radius"];
-    new_rules.duration_per_point = j["spell_generation"]["scaling"]["duration"];
+    for(int stat = 0; stat < j["stats"].size(); stat++) {
 
-    TraceLog(LOG_INFO, "charge_per_point %0.02f", new_rules.charge_per_point);
-    TraceLog(LOG_INFO, "damage_per_point %0.02f", new_rules.damage_per_point);
-    TraceLog(LOG_INFO, "radius_per_point %0.02f", new_rules.radius_per_point);
-    TraceLog(LOG_INFO, "duration_per_point %0.02f", new_rules.duration_per_point);
+        SpellStat new_stat;
+        
+        SPELL_STAT stat_id =  StrToSpellStatId(j["stats"][stat]["stat_id"]);
 
+        new_stat.stat_id = stat_id;
+        new_stat.base = j["stats"][stat]["base"];
+        new_stat.cost = j["stats"][stat]["cost"];
+        new_stat.step = j["stats"][stat]["step"];
+        new_stat.scale = j["stats"][stat]["scale"];
+        new_stat.limit.min = j["stats"][stat]["min"];
+        new_stat.limit.max = j["stats"][stat]["max"];
+        
+        new_rules.stats[stat_id] = new_stat;
+    }
 
-    new_rules.chargetime_base = j["spell_generation"]["base"]["charge"];
-    new_rules.damage_base = j["spell_generation"]["base"]["damage"];
-    new_rules.radius_base = j["spell_generation"]["base"]["radius"];
-    new_rules.duration_base = j["spell_generation"]["base"]["duration"]; 
 
     new_rules.effects.resize(SPELL_EFFECT_COUNT);
     for(int effect = 0; effect < j["spell_effects"].size(); effect++) {
@@ -101,6 +100,22 @@ SPELL_EFFECT StrToSpellEffectId(const std::string& s) {
 }
 
 
+SPELL_STAT StrToSpellStatId(const std::string& s) {
+
+    static const std::unordered_map<std::string, SPELL_STAT> lookup_table = {
+        {"SPELLSTAT_CHARGE",          SPELL_STAT::SPELLSTAT_CHARGE},
+        {"SPELLSTAT_DAMAGE",          SPELL_STAT::SPELLSTAT_DAMAGE},
+        {"SPELLSTAT_RADIUS",          SPELL_STAT::SPELLSTAT_RADIUS},
+        {"SPELLSTAT_DURATION",        SPELL_STAT::SPELLSTAT_DURATION},
+    };
+
+    if (auto it = lookup_table.find(s); it != lookup_table.end()) {
+        return it->second;
+    }
+    TraceLog(LOG_INFO, "SPELL_STAT ID not found ");
+    return SPELL_STAT::SPELLSTAT_CHARGE;
+}
+
 WANDWOOD_TYPE StrToWandWoodType(const std::string &s) {
     static const std::unordered_map<std::string, WANDWOOD_TYPE> lookup_table = {
         {"WANDWOOD_FRESH",                        WANDWOOD_TYPE::WANDWOOD_FRESH},
@@ -113,4 +128,27 @@ WANDWOOD_TYPE StrToWandWoodType(const std::string &s) {
     }
     TraceLog(LOG_INFO, "spell WANDWOOD_TYPE ID not found ");
     return WANDWOOD_TYPE::WANDWOOD_FRESH;
+}
+
+
+int GetUsedSpellPoints(const SpellBuildData &build_data) {
+    int used = 0;
+
+    used += build_data.stat_points[SPELLSTAT_CHARGE];
+    used += build_data.stat_points[SPELLSTAT_DAMAGE];
+    used += build_data.stat_points[SPELLSTAT_RADIUS];
+    used += build_data.stat_points[SPELLSTAT_DURATION];
+
+    if (build_data.is_lingering) used += 2;
+    if (build_data.is_exploding) used += 2;
+
+    return used;
+}
+
+int GetRemainingSpellPoints(const SpellBuildData &build_data) {
+    return build_data.total_points - GetUsedSpellPoints(build_data);
+}
+
+bool CanAddSpellPoint(const SpellBuildData &build_data, int cost) {
+    return GetRemainingSpellPoints(build_data) >= cost;
 }

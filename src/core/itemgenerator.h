@@ -12,7 +12,7 @@ struct StatGenData
 
 
 extern std::vector<Limit> g_stat_limits;
-extern std::vector<StatGenData> g_statgen_data;
+//extern std::vector<StatGenData> g_statgen_data;
 
 
 ItemInstanceData GenerateItem(ItemID item_id, int uid, std::string container_id);
@@ -45,9 +45,9 @@ RodData GenerateRod(RodData &base, ITEM_TIER tier); */
 
 void SpendStatPoints(float &stat, STAT_ID id, int &points);
 
-void ApplyTierBonusPercent(float &stat, STAT_ID id, float bonus);
+//void ApplyTierBonusPercent(float &stat, STAT_ID id, float bonus);
 
-void ApplyTierBonusPoints(float &stat, STAT_ID id, float bonus);
+//void ApplyTierBonusPoints(float &stat, STAT_ID id, float bonus);
 
 
 void ClampStat(float &stat, STAT_ID id);

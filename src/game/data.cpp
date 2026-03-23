@@ -636,7 +636,7 @@ void LoadGameData() {
         //--------------------creature loot tables
 
     LoadStatLimits(cj["stat_limits"]);
-    LoadStatGenData(cj["stat_generation_data"]);
+    //LoadStatGenData(cj["stat_generation_data"]);
 
     TraceLog(LOG_INFO, "loading wands");
 

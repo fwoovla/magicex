@@ -124,6 +124,7 @@ GENERATED += $(OBJDIR)/shelteruilayer.o
 GENERATED += $(OBJDIR)/spelldata.o
 GENERATED += $(OBJDIR)/spelldetailspanel.o
 GENERATED += $(OBJDIR)/spellgenmenu.o
+GENERATED += $(OBJDIR)/spellstatinterface.o
 GENERATED += $(OBJDIR)/splashscene.o
 GENERATED += $(OBJDIR)/stagingscene.o
 GENERATED += $(OBJDIR)/staginguilayer.o
@@ -183,6 +184,7 @@ OBJECTS += $(OBJDIR)/shelteruilayer.o
 OBJECTS += $(OBJDIR)/spelldata.o
 OBJECTS += $(OBJDIR)/spelldetailspanel.o
 OBJECTS += $(OBJDIR)/spellgenmenu.o
+OBJECTS += $(OBJDIR)/spellstatinterface.o
 OBJECTS += $(OBJDIR)/splashscene.o
 OBJECTS += $(OBJDIR)/stagingscene.o
 OBJECTS += $(OBJDIR)/staginguilayer.o
@@ -386,6 +388,9 @@ $(OBJDIR)/spelldetailspanel.o: src/game/scenes/spelldetailspanel.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/spellgenmenu.o: src/game/scenes/spellgenmenu.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/spellstatinterface.o: src/game/scenes/spellstatinterface.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/splashscene.o: src/game/scenes/splashscene.cpp
