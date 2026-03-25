@@ -161,7 +161,7 @@ void CreatureEntity::Update() {
             if(current_primary_data != nullptr) {
  
                 if(current_primary_data->weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
-                    TraceLog(LOG_INFO, "casting spell");
+                    //TraceLog(LOG_INFO, "casting spell");
                     
                     if(g_active_creature_data[uid].current_power < current_primary_data->weapon_data.pps) {
                         return;

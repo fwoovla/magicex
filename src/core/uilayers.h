@@ -383,8 +383,6 @@ class SpellStatInterface : public BaseUILayer {
     ~SpellStatInterface() override;
     void Update() override;
     void Draw() override;
-    
-
 
     Signal stat_changed;
 
@@ -401,12 +399,14 @@ class SpellStatInterface : public BaseUILayer {
     Vector2 position;
     Vector2 size;
 
-    Vector2 bar_pos;
+    Vector2 bar_start;
+    Vector2 bar_end;
 
+    StatusBar bar;
 
     std::vector<Rectangle> tick_rects;
 
-
+    
 };
 
 class SpellGenMeneu : public BaseUILayer {
@@ -417,13 +417,16 @@ class SpellGenMeneu : public BaseUILayer {
     void Update() override;
     void Draw() override;
     void OnStatChanged();
-    void OpenModule();
+    void OpenModule(int instance_id);
 
     Label title_label;
 
+    Vector2 center;
     Rectangle panel_rect;
     Texture2D panel_bg;
 
+    Sprite wand_sprite;
+    //ItemGrid wand_grid;
 
     SpellStatInterface *charge_interface;
     SpellStatInterface *damage_interface;
@@ -433,16 +436,11 @@ class SpellGenMeneu : public BaseUILayer {
 
     Label points_label;
 
-    Label charge_label;
-    Label charge_cost_label;
-    Label damage_label;
-    Label damage_cost_label;
-    
-
     std::vector<Vector2> charge_ticks;
     std::vector<Vector2> damage_ticks;
 
-    //int available_points;
+    Label error_label;
+    bool wand_equipped;
 
 };
 

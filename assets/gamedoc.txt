@@ -825,7 +825,7 @@ lingering (costs points)
 exploding (costs points)
     radius (+/-) 
 
-
+!!!NO MULTIPLE SPELL SLOTS!!!!
 
 casting:
     chargetime

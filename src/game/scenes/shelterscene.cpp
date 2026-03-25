@@ -289,7 +289,7 @@ void ShelterScene::OnModuleUsed() {
         module_menu_visible = true;
     }
     else {
-        spell_menu->OpenModule();
+        spell_menu->OpenModule(g_active_creature_data[g_current_player->uid].primary[0]);
         spell_menu_visible = true;
     }
 

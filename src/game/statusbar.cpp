@@ -12,6 +12,7 @@ void CreateStatusBar (StatusBar &bar, Vector2 _position, float _max_value, float
 }
 
 void DrawStatusBar(StatusBar &bar) {
+    UpdateStatusBar(bar);
     Rectangle max_rect = {
         .x = bar.position.x,
         .y = bar.position.y,
@@ -32,5 +33,5 @@ void DrawStatusBar(StatusBar &bar) {
 }
 
 void UpdateStatusBar(StatusBar &bar) {
-
+    bar.unit_ratio =  bar.width / bar.max_value;
 }

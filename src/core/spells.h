@@ -83,8 +83,8 @@ struct WandData{
     WandProfile profile;
 
     int slot_count;
-    int active_spell_index = 0;
-    std::vector<SpellData> spells;
+    //int active_spell_index = 0;
+    SpellData spell;
 };
 
 

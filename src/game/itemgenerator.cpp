@@ -127,7 +127,7 @@ void GenerateWeapon(ItemInstanceData &instance, int loot_level, bool random) {
     TraceLog(LOG_INFO, "-----knockback %0.2f ", instance.weapon_data.knockback);
     TraceLog(LOG_INFO, "-----accuracy %0.02f ", instance.weapon_data.accuracy);
     TraceLog(LOG_INFO, "-----weapon type %i ", instance.weapon_data.weapon_type); 
-    TraceLog(LOG_INFO, "-----# of spells %i ", instance.weapon_data.wand_data.spells.size());
+    //TraceLog(LOG_INFO, "-----# of spells %i ", instance.weapon_data.wand_data.spells.size());
 
     
 }
@@ -171,16 +171,15 @@ void GenerateCaster(ItemInstanceData &instance, int loot_level, bool random) {
     WandData new_wand;
     new_wand.slot_count = 1;
     new_wand.profile = g_wand_profiles[GetRandomValue(0, g_wand_profiles.size()-1)];
-    new_wand.spells.push_back(GenerateSpell(instance));
-    new_wand.spells.push_back(GenerateSpell(instance));
-    new_wand.spells.push_back(GenerateSpell(instance));
+    new_wand.spell = GenerateSpell(instance);
+
 
     instance.weapon_data.wand_data = new_wand;
 
     instance.weapon_data.max_power = 100;
     instance.weapon_data.current_power = 100;
     instance.weapon_data.pps = 10;
-    instance.weapon_data.cooldown = new_wand.spells[new_wand.active_spell_index].chargetime;
+    instance.weapon_data.cooldown = new_wand.spell.chargetime;
 
     instance.sprite_ids.push_back(instance.item_id);
     BuildItemSprite(instance);
@@ -229,7 +228,7 @@ void GenerateCaster(ItemInstanceData &instance, int loot_level, bool random) {
 
     */
 
-    TraceLog(LOG_INFO, "-------chargetime %0.2f ", instance.weapon_data.wand_data.spells[0].chargetime);
+    TraceLog(LOG_INFO, "-------chargetime %0.2f ", instance.weapon_data.wand_data.spell.chargetime);
 
 }
 

@@ -274,21 +274,20 @@ void DetailsPanel::OpenPanel(ItemInstanceData *_data) {
 
     if(_data->type == TYPE_WEAPON) {
         if(_data->weapon_data.weapon_type ==WEAPON_TYPE_CASTER) {
-            for(int i = 0; i < _data->weapon_data.wand_data.spells.size(); i++) {
+                
+            Vector2 position = (Vector2){stat_pos.x, stat_pos.y + 80 + 80};
+            Vector2 size = (Vector2){panel_rect.width - (padding * 2), 75};
+
+            std::unique_ptr<SpellDetailsPanel> new_details = std::make_unique<SpellDetailsPanel>(
+                &_data->weapon_data.wand_data.spell,
+                position,
+                size.x,
+                size.y
+
+            );
+
+            spell_details.push_back( std::move(new_details));
             
-                Vector2 position = (Vector2){stat_pos.x, stat_pos.y + 80 + (80*i)};
-                Vector2 size = (Vector2){panel_rect.width - (padding * 2), 75};
-
-                std::unique_ptr<SpellDetailsPanel> new_details = std::make_unique<SpellDetailsPanel>(
-                    &_data->weapon_data.wand_data.spells[i],
-                    position,
-                    size.x,
-                    size.y
-
-                );
-
-                spell_details.push_back( std::move(new_details));
-            } 
         }
     }
     //TraceLog(LOG_INFO, "DETAILS PANEL open %s ", item_data->item_name.c_str());

@@ -318,18 +318,18 @@ void PlayerCharacter::CheckInput() {
                 payload.shooter_id = uid;
                 payload.target_position = aim_position;//g_input.world_mouse_position;
                 payload.spread = 0.0f;
-                int spell_index = current_primary_data->weapon_data.wand_data.active_spell_index;
-                payload.spell_type = current_primary_data->weapon_data.wand_data.spells[spell_index].delivery_type;
+                //int spell_index = current_primary_data->weapon_data.wand_data.active_spell_index;
+                payload.spell_type = current_primary_data->weapon_data.wand_data.spell.delivery_type;
                 TraceLog(LOG_INFO, "casting spell type %i", payload.spell_type);
 
                 //TraceLog(LOG_INFO, "casting spell id %i  %s", current_primary_data->spell_id, g_spell_data[current_primary_data->spell_id].spell_name.c_str());
                 //TraceLog(LOG_INFO, "casting payload   %0.2f", current_primary_data->spell_data.speed);
                 
-                SpawnSpell(payload, &current_primary_data->weapon_data.wand_data.spells[spell_index]);
+                SpawnSpell(payload, &current_primary_data->weapon_data.wand_data.spell);
 
                 g_active_creature_data[uid].current_power -= current_primary_data->weapon_data.pps;
                 current_primary_data->weapon_data.current_power = g_active_creature_data[uid].current_power;
-                spell_timer.Start(current_primary_data->weapon_data.wand_data.spells[spell_index].chargetime * 0.01, true);
+                spell_timer.Start(current_primary_data->weapon_data.wand_data.spell.chargetime * 0.01, true);
                 can_use_spell = false;
 
                 int recoil = current_primary_data->weapon_data.recoil;
