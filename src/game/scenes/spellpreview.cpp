@@ -42,16 +42,18 @@ void SpellPreview::Update() {
 //charge
     //value from points
     float charge_vfp =
-    (shared_spell->working_spell.stat_points[SPELLSTAT_CHARGE] * g_spell_rules.stats[SPELLSTAT_CHARGE].step)/g_spell_rules.stats[SPELLSTAT_CHARGE].cost;
-    float charge_base = g_spell_rules.stats[SPELLSTAT_CHARGE].base;
-    generated_spell->chargetime = (charge_base + charge_vfp);
+    (shared_spell->spell_build.stat_points[SPELLSTAT_CHARGE] * g_spell_rules.stats[SPELLSTAT_CHARGE].step)/g_spell_rules.stats[SPELLSTAT_CHARGE].cost;
 
-    std::string charge_string = TextFormat("%0.02f", generated_spell->chargetime * g_spell_rules.stats[SPELLSTAT_CHARGE].scale);
+    float charge_base = g_spell_rules.stats[SPELLSTAT_CHARGE].base;
+    float charge_total = charge_vfp;
+    //generated_spell->chargetime = (charge_base + charge_vfp);
+
+    std::string charge_string = TextFormat("%0.02f", charge_total * g_spell_rules.stats[SPELLSTAT_CHARGE].scale);
     charge_label.text = "charge " + charge_string;
 
 //damage
     float damage_vfp =
-    (shared_spell->working_spell.stat_points[SPELLSTAT_DAMAGE] * g_spell_rules.stats[SPELLSTAT_DAMAGE].step)/g_spell_rules.stats[SPELLSTAT_DAMAGE].cost;
+    (shared_spell->spell_build.stat_points[SPELLSTAT_DAMAGE] * g_spell_rules.stats[SPELLSTAT_DAMAGE].step)/g_spell_rules.stats[SPELLSTAT_DAMAGE].cost;
     float damage_base = g_spell_rules.stats[SPELLSTAT_DAMAGE].base;
     generated_spell->damage = (damage_base + damage_vfp);
 
@@ -60,7 +62,7 @@ void SpellPreview::Update() {
 
 //duration
     float duration_vfp =
-    (shared_spell->working_spell.stat_points[SPELLSTAT_DURATION] * g_spell_rules.stats[SPELLSTAT_DURATION].step)/g_spell_rules.stats[SPELLSTAT_DURATION].cost;
+    (shared_spell->spell_build.stat_points[SPELLSTAT_DURATION] * g_spell_rules.stats[SPELLSTAT_DURATION].step)/g_spell_rules.stats[SPELLSTAT_DURATION].cost;
     float duration_base = g_spell_rules.stats[SPELLSTAT_DURATION].base;
     generated_spell->durration = (duration_base + duration_vfp);
 
@@ -69,7 +71,7 @@ void SpellPreview::Update() {
 
 
 //delivery
-    SPELL_DELIVERY delivery = shared_spell->working_spell.spell_delivery_id;
+    SPELL_DELIVERY delivery = shared_spell->spell_build.spell_delivery_id;
 
     if(delivery == DELIVERY_INSTANT) {
         delivery_label.text = "Instant";
@@ -82,7 +84,7 @@ void SpellPreview::Update() {
 
 //radius
     float radius_vfp =
-    (shared_spell->working_spell.stat_points[SPELLSTAT_RADIUS] * g_spell_rules.stats[SPELLSTAT_DURATION].step)/g_spell_rules.stats[SPELLSTAT_RADIUS].cost;
+    (shared_spell->spell_build.stat_points[SPELLSTAT_RADIUS] * g_spell_rules.stats[SPELLSTAT_DURATION].step)/g_spell_rules.stats[SPELLSTAT_RADIUS].cost;
     float radius_base = g_spell_rules.stats[SPELLSTAT_RADIUS].base;
     generated_spell->radius = (radius_base + radius_vfp);
 
@@ -92,7 +94,5 @@ void SpellPreview::Update() {
 }
 
 void SpellPreview::SetSpellPreview(int instance_id, SpellData *spell_data) {
-
     generated_spell = spell_data;
-
 }

@@ -110,10 +110,9 @@ void SpellGenMeneu::OnStatChanged() {
     TraceLog(LOG_INFO, "stat changed  %i  %i cost %i step %0.02f min %0.02f max %0.02f", shared_spell.source_stat,
         shared_spell.add_stat, cost, step, limit.min, limit.max);
 
-    int prev_points = shared_spell.working_spell.stat_points[stat_id];
+    int prev_points = shared_spell.spell_build.stat_points[stat_id];
     int new_points = prev_points + (cost*dir);
 
-        
     if(abs(prev_points) > abs(new_points) ) { //we are "taking back" points
         shared_spell.points_available += cost;
     }
@@ -124,7 +123,8 @@ void SpellGenMeneu::OnStatChanged() {
         shared_spell.points_available -= cost;
     }
         
-    shared_spell.working_spell.stat_points[stat_id] = abs(new_points);
+    shared_spell.spell_build.stat_points[stat_id] = abs(new_points);
+
 }
 
 void SpellGenMeneu::OpenModule(int instance_id) {
@@ -144,19 +144,24 @@ void SpellGenMeneu::OpenModule(int instance_id) {
         return;
     }
     
+    wand_equipped = true;
+
     SpellData *this_spell = &g_item_instances[instance_id].weapon_data.wand_data.spell;
 
-    wand_equipped = true;
     SpellBuildData this_build;
     this_build.is_exploding = this_spell->is_exploding;
     this_build.is_lingering = this_spell->is_lingering;
     this_build.spell_delivery_id = this_spell->delivery_type;
     this_build.spell_effect_id = this_spell->effect_type;
+    this_build.stat_points.resize(SPELLSTAT_COUNT);
+    this_build.stat_points[SPELLSTAT_CHARGE] = abs(this_spell->chargetime / g_spell_rules.stats[SPELLSTAT_CHARGE].step) * g_spell_rules.stats[SPELLSTAT_CHARGE].cost;
 
-    shared_spell.working_spell = this_build;
+    shared_spell.spell_build = this_build;
+    
     shared_spell.points_total = 10;
     shared_spell.points_available = shared_spell.points_total;
-    shared_spell.working_spell.stat_points.resize(SPELLSTAT_COUNT);
+
+    shared_spell.spell = this_spell;
 
     LoadSpriteCentered(wand_sprite, g_item_instances[instance_id].icon_texture, {center.x, center.y - 150});
     ScaleSprite(wand_sprite, {4,4});
@@ -164,12 +169,10 @@ void SpellGenMeneu::OpenModule(int instance_id) {
     preview->SetSpellPreview(instance_id, this_spell);
 
     TraceLog(LOG_INFO, "spell menu open  " );    
-
 }
+
 
 void SpellGenMeneu::GenerateSpell() {
     ui_closed.EmitSignal();
     SpawnCharacterMessage (g_current_player->position, "Spell Created!", RAYWHITE, 1.0f);
-    
-
 }

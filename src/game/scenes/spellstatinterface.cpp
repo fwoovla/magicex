@@ -75,7 +75,7 @@ void SpellStatInterface::Draw() {
 
 void SpellStatInterface::Update() {
 
-    int spent_points = shared_spell->working_spell.stat_points[this_stat];
+    int spent_points = shared_spell->spell_build.stat_points[this_stat];
     int unspent_points = shared_spell->points_available;
     int total_points = shared_spell->points_total;
     float step = g_spell_rules.stats[this_stat].step;

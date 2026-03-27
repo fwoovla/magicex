@@ -641,7 +641,7 @@
                 "cost":2,
                 "step":1,
                 "min":2,
-                "max":10,
+                "max":100,
                 "scale": 1.0
             },
             {
@@ -657,7 +657,7 @@
                 "stat_id" : "SPELLSTAT_DURATION",
                 "base":0.0,
                 "cost":2,
-                "step":0.5,
+                "step":50,
                 "min":0,
                 "max":300,
                 "scale": 0.01

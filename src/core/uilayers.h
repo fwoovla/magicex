@@ -40,7 +40,8 @@ struct SharedItemData {
 };
 
 struct SharedSpellData {
-    SpellBuildData working_spell;
+    SpellBuildData spell_build;
+    SpellData *spell;
     int points_total;
     int points_available;
     SPELL_STAT source_stat;
