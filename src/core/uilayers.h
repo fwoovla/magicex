@@ -44,7 +44,8 @@ struct SharedSpellData {
     int points_total;
     int points_available;
     SPELL_STAT source_stat;
-    bool add_stat = true; // is adding or subtracting? 
+    bool add_stat = true; // is adding or subtracting?
+
 };
 
 
@@ -389,6 +390,7 @@ class SpellStatInterface : public BaseUILayer {
     SharedSpellData *shared_spell;
 
     SPELL_STAT this_stat;
+    std::string stat_string;
 
     Button plus_button;
     Button minus_button;
@@ -409,6 +411,33 @@ class SpellStatInterface : public BaseUILayer {
     
 };
 
+class SpellPreview : public BaseUILayer {
+    public:
+    SpellPreview(Vector2 _center, SharedSpellData *shared_data);
+    ~SpellPreview() override;
+    void Update() override;
+    void Draw() override;
+    void SetSpellPreview(int instance_id, SpellData *spell_data);
+
+    SpellData *generated_spell;
+
+    Vector2 center;
+    Sprite delivery_sprite;
+    Sprite charge_sprite;
+    Sprite duration_sprite;
+    Sprite explode_sprite;
+    Sprite effect_sprite;
+
+    Label charge_label;
+    Label delivery_label;
+    Label damage_label;
+    Label duration_label;
+    Label radius_label;
+
+    SharedSpellData *shared_spell;
+
+};
+
 class SpellGenMeneu : public BaseUILayer {
 
     public:
@@ -418,27 +447,29 @@ class SpellGenMeneu : public BaseUILayer {
     void Draw() override;
     void OnStatChanged();
     void OpenModule(int instance_id);
+    void GenerateSpell();
+
+    Signal ui_closed;
 
     Label title_label;
+
+    Button generate_button;
 
     Vector2 center;
     Rectangle panel_rect;
     Texture2D panel_bg;
 
-    Sprite wand_sprite;
-    //ItemGrid wand_grid;
-
     SpellStatInterface *charge_interface;
     SpellStatInterface *damage_interface;
 
+    Sprite wand_sprite;
+
+    SpellPreview *preview;
+
     SharedSpellData shared_spell;
 
-
     Label points_label;
-
-    std::vector<Vector2> charge_ticks;
-    std::vector<Vector2> damage_ticks;
-
+    
     Label error_label;
     bool wand_equipped;
 

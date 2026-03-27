@@ -105,6 +105,8 @@ class ShelterScene : public  BaseScene{
 
         void OnStartDialogue();
 
+        void OnUIClosed();
+
         //ShelterUILayer *ui_layer;
         GameUILayer *ui_layer;
 
@@ -143,6 +145,7 @@ class SubScene : public  BaseScene{
         void OnDoorOpened() override;
 
         void OnModuleUsed();
+       
 
         void OnMapTransitionEntered();
         void OnMapTransitionActivated();

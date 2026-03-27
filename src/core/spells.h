@@ -152,74 +152,6 @@ enum SPELL_TYPE {
 };
 
 
-/* 
-
-enum CASTER_PART {
-    CASTER_PART_NONE = -1,
-    CASTER_PART_BASE,
-    CASTER_PART_IGNITER,
-    CASTER_PART_COPLER,
-    CASTER_PART_ROD
-};
-
-
-struct CasterBaseData {
-    std::string name;
-    ItemID id;
-    float accuracy;
-    ITEM_TIER tier;
-};
-extern std::vector<CasterBaseData> g_casterbase_data;
-
-
-struct IgniterData {
-    std::string name;
-    ItemID id;
-    SPELL_EFFECT effect;
-    float recoil;
-    float max_power;
-    ITEM_TIER tier;
-};
-extern std::vector<IgniterData> g_igniter_data;
-
-
-struct CouplerData {
-    std::string name;
-    ItemID id;
-    SPELL_TYPE type;
-    float radius;
-    float cooldown;
-    float pps;
-    float damage;
-    float speed;
-    ITEM_TIER tier;
-};
-extern std::vector<CouplerData> g_coupler_data;
-
-
-struct RodData {
-    std::string name;
-    ItemID id;
-    float knockback;
-    float damage;
-    ITEM_TIER tier;
-};
-extern std::vector<RodData> g_rod_data;
-
-
-struct CasterData {
-    std::string caster_name;
-    
-    CasterBaseData base;
-    IgniterData igniter;
-    CouplerData coupler;
-    RodData rod;
-    ITEM_TIER tier;
-    
-    //int spell_sprite_id;
-};
- */
-//extern std::vector<SpellData> g_spell_data;
 
 struct NewSpellPayload {
     Vector2 position;
@@ -230,15 +162,6 @@ struct NewSpellPayload {
     SPELL_DELIVERY spell_type;
     //SpellData *spell_data;
 };
-
-
-
-
-
-
-
-
-
 
 
 

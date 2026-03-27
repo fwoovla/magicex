@@ -186,48 +186,6 @@ void GenerateCaster(ItemInstanceData &instance, int loot_level, bool random) {
 
 
 
-/*     int base = GetRandomValue(0, g_casterbase_data.size()-1);
-    int igniter = GetRandomValue(0, g_igniter_data.size()-1);
-    int coupler = GetRandomValue(0, g_coupler_data.size()-1);
-    int rod = GetRandomValue(0, g_rod_data.size()-1);
-
-    ITEM_TIER base_tier = GetTier(loot_level);
-    ITEM_TIER igniter_tier = GetTier(loot_level);
-    ITEM_TIER coupler_tier = GetTier(loot_level);
-    ITEM_TIER rod_tier = GetTier(loot_level);
-
-    TraceLog(LOG_INFO, "-----type %i ", instance.weapon_data.caster_data.coupler.type);
-    TraceLog(LOG_INFO, "-----base %i tier %i ", base, base_tier);
-    TraceLog(LOG_INFO, "-----igniter %i tier %i ", igniter, igniter_tier);
-    TraceLog(LOG_INFO, "-----coupler %i tier  %i ", coupler, coupler_tier);
-    TraceLog(LOG_INFO, "-----rod %i tier  %i ", rod, rod_tier);
-
-    instance.weapon_data.caster_data.base = GenerateBase(g_casterbase_data[base], base_tier);
-    instance.sprite_ids.push_back(instance.weapon_data.caster_data.base.id);
-
-    instance.weapon_data.caster_data.igniter = GenerateIgniter(g_igniter_data[igniter], igniter_tier);
-    instance.sprite_ids.push_back(instance.weapon_data.caster_data.igniter.id);
-
-    instance.weapon_data.caster_data.coupler = GenerateCoupler(g_coupler_data[coupler], coupler_tier);
-    instance.sprite_ids.push_back(instance.weapon_data.caster_data.coupler.id);
-
-    instance.weapon_data.caster_data.rod = GenerateRod(g_rod_data[rod], rod_tier);
-    instance.sprite_ids.push_back(instance.weapon_data.caster_data.rod.id);
-
-    //int points = g_tier_tables[TYPE_WEAPON][tier];
-    
-    instance.weapon_data.max_power = instance.weapon_data.caster_data.igniter.max_power;
-    instance.weapon_data.current_power = instance.weapon_data.max_power;
-    instance.weapon_data.pps = instance.weapon_data.caster_data.coupler.pps;
-    instance.weapon_data.cooldown = instance.weapon_data.caster_data.coupler.cooldown;
-
-    BuildItemSprite(instance);
-    //TraceLog(LOG_INFO, "caster creater  " );
-    //TraceLog(LOG_INFO, "+++--tier %i ", tier);
-
-
-    */
-
     TraceLog(LOG_INFO, "-------chargetime %0.2f ", instance.weapon_data.wand_data.spell.chargetime);
 
 }
@@ -305,145 +263,6 @@ void BuildItemSprite(ItemInstanceData &instance) {
 
 
 
-
-
-
-
-//===========================================================
-/* 
-
-CasterBaseData GenerateBase(CasterBaseData &base, ITEM_TIER tier) {
-
-    
-    CasterBaseData new_base = base;
-    new_base.tier = tier;
-
-    int max = g_tier_tables[TYPE_WEAPON][tier];
-    int min = (int)(g_tier_tables[TYPE_WEAPON][tier]/2);
-
-    float points = GetRandomValue(min, max);
-    float bonus_percent = points/100.0f;
-
-    TraceLog(LOG_INFO, "generating caster base %s -----tier %i   bonus_percent %0.02f", base.name.c_str(), tier, bonus_percent);
-
-    //ApplyTierBonusPercent(new_base.accuracy, STAT_ACCURACY, bonus_percent);
-
-     
-
-    ApplyTierBonusPoints(new_base.accuracy, STAT_ACCURACY, points);
-
-    ClampStat(new_base.accuracy, STAT_ACCURACY);
-
-    return new_base;
-}
-
-
-IgniterData GenerateIgniter(IgniterData &base, ITEM_TIER tier) {
-
-    IgniterData new_igniter = base;
-    new_igniter.tier = tier;
-    int max = g_tier_tables[TYPE_WEAPON][tier];
-    int min = (int)(g_tier_tables[TYPE_WEAPON][tier]/2);
-
-    float points = GetRandomValue(min, max);
-    float bonus_percent = points/100.0f;
-
-    TraceLog(LOG_INFO, "generating igniter %s -----tier %i   bonus_percent %0.02f", base.name.c_str(), tier, bonus_percent);
-
-    //ApplyTierBonusPercent(new_igniter.recoil, STAT_RECOIL, bonus_percent);
-    //ApplyTierBonusPercent(new_igniter.max_power, STAT_MAX_POWER, bonus_percent);
-
-    ApplyTierBonusPoints(new_igniter.recoil, STAT_RECOIL, points);
-    ApplyTierBonusPoints(new_igniter.max_power, STAT_MAX_POWER, points);
-
-    ClampStat(new_igniter.recoil, STAT_RECOIL);
-    ClampStat(new_igniter.max_power, STAT_MAX_POWER);
-
-    return new_igniter;
-}
-
-CouplerData GenerateCoupler(CouplerData &base, ITEM_TIER tier) {
-
-    CouplerData new_coupler = base;
-    new_coupler.tier = tier;
-    int max = g_tier_tables[TYPE_WEAPON][tier];
-    int min = (int)(g_tier_tables[TYPE_WEAPON][tier]/2);
-
-    float points = GetRandomValue(min, max);
-    float bonus_percent = points/100.0f;
-
-    TraceLog(LOG_INFO, "generating coupler %s -----tier %i   bonus_percent %0.02f", base.name.c_str(), tier, bonus_percent);
-
-
-    //ApplyTierBonusPercent(new_coupler.cooldown, STAT_COOLDOWN, bonus_percent);
-    //ApplyTierBonusPercent(new_coupler.damage, STAT_DAMAGE, bonus_percent);
-    //ApplyTierBonusPercent(new_coupler.pps, STAT_PPS, bonus_percent);
-
-
-    ApplyTierBonusPoints(new_coupler.cooldown, STAT_COOLDOWN, points);
-    ApplyTierBonusPoints(new_coupler.damage, STAT_DAMAGE, points);
-    ApplyTierBonusPoints(new_coupler.pps, STAT_PPS, points);
-
-    ClampStat(new_coupler.cooldown, STAT_COOLDOWN);
-    ClampStat(new_coupler.damage, STAT_DAMAGE);
-    ClampStat(new_coupler.pps, STAT_PPS);
-
-    return new_coupler;
-
-}
-
-RodData GenerateRod(RodData &base, ITEM_TIER tier) {
-
-    RodData new_rod = base;
-    new_rod.tier = tier;
-    int max = g_tier_tables[TYPE_WEAPON][tier];
-    int min = (int)(g_tier_tables[TYPE_WEAPON][tier]/2);
-
-    float points = GetRandomValue(min, max);
-    float bonus_percent = points/100.0f;
-
-    TraceLog(LOG_INFO, "generating rod %s -----tier %i   bonus_percent %0.02f", base.name.c_str(), tier, bonus_percent);
-
-    //ApplyTierBonusPercent(new_rod.knockback, STAT_KNOCKBACK, bonus_percent);
-
-    ApplyTierBonusPoints(new_rod.knockback, STAT_KNOCKBACK, points);
-
-    ClampStat(new_rod.knockback, STAT_KNOCKBACK);
-
-    return new_rod;
-}
-
-
-void ApplyTierBonusPoints(float &stat, STAT_ID id, float points) {
-
-    auto &gen = g_statgen_data[id];
-
-    float delta = points * gen.step;
-    float new_value = stat + delta;
-    stat = new_value;
-    TraceLog(LOG_INFO, "%i  stat---new  value %0.02f  bonus points:%0.02f  delta: %0.02f", id, new_value, points, delta);  
-}
-
-void ApplyTierBonusPercent(float &stat, STAT_ID id, float bonus) {
-    //auto &gen = g_statgen_data[id];
-    //auto &lim = g_stat_limits[id];
-
-    float delta;
-    if(id == STAT_COOLDOWN || id == STAT_RECOIL || id == STAT_PPS){
-        delta =  stat * -bonus;
-    }
-    else {
-        delta =  stat * bonus;
-    }
-    
-    float new_value = stat + delta;
-    
-    stat = new_value;
-    //points -= gen.cost;
-    TraceLog(LOG_INFO, "%i  stat---new  value %0.02f  tier bonus:%0.02f", id, new_value, bonus);
-}
- */
-
 void ClampStat(float &stat, STAT_ID id) {
     auto &lim = g_stat_limits[id];
 
@@ -455,25 +274,7 @@ void ClampStat(float &stat, STAT_ID id) {
 }
 
 void SpendStatPoints(float &stat, STAT_ID id, int &points) {
-/*     auto &gen = g_statgen_data[id];
-    auto &lim = g_stat_limits[id];
 
-    if(points < gen.cost) {
-        points -= gen.cost;
-        return;
-    }
-
-    float new_value = stat + gen.step;
-    
-    points -= gen.cost;
-    
-    if(new_value < lim.min || new_value > lim.max) {
-        return;
-    }
-    
-    stat = new_value;
-    //points -= gen.cost;
-    TraceLog(LOG_INFO, "---new  stat value %0.02f  points left:%i", new_value, points); */
 }
 
 
@@ -484,20 +285,7 @@ void GenerateItemName(ItemInstanceData &instance) {
 
     if(instance.weapon_data.weapon_type == WEAPON_TYPE_CASTER) {
         int best_tier = 0;
-        //if(instance.weapon_data.caster_data.base.tier > best_tier) best_tier = instance.weapon_data.caster_data.base.tier;
-        //if(instance.weapon_data.caster_data.igniter.tier > best_tier) best_tier = instance.weapon_data.caster_data.igniter.tier;
-        //if(instance.weapon_data.caster_data.coupler.tier > best_tier) best_tier = instance.weapon_data.caster_data.coupler.tier;
-        //if(instance.weapon_data.caster_data.rod.tier > best_tier) best_tier = instance.weapon_data.caster_data.rod.tier;
 
-/*         std::string tier_str = std::to_string(best_tier);
-        new_name += "Tier " + tier_str + " ";
-
-        std::string type_str = SpellTypeToStr(instance.weapon_data.caster_data.coupler.type);
-        new_name += type_str + " ";
-
-        std::string effect_str = SpellEffectToStr(instance.weapon_data.caster_data.igniter.effect);
-        new_name += effect_str + " Caster";
-         */
         new_name = "non specified wand";
     }
 

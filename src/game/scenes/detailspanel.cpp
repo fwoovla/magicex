@@ -132,56 +132,7 @@ void DetailsPanel::Draw() {
             }
             TraceLog(LOG_INFO, "\n");
         }
-/* 
-        DrawRectangleRec(ws_rect, DARKERGRAY);
 
-        DrawLabel(damage_label);
-        DrawStatusBar(damage_bar);
-        DrawLabel(damage_value_label);
-     
-        
-        DrawLabelCentered(base_label);
-        DrawLabelCentered(base_tier_label);
-        DrawLabelCentered(base_quality_label);
-        DrawLine(stat_pos.x, ws_rect.y + (ws_rect.height*0.25f), stat_pos.x + ws_rect.width, ws_rect.y + (ws_rect.height*0.25f), WHITE);
-        DrawLabelCentered(igniter_label);
-        DrawLabelCentered(igniter_tier_label);
-        DrawLabelCentered(igniter_quality_label);
-        DrawLine(stat_pos.x, ws_rect.y + (ws_rect.height*0.5f), stat_pos.x + ws_rect.width, ws_rect.y + (ws_rect.height*0.5f), WHITE);
-        DrawLabelCentered(coupler_label);
-        DrawLabelCentered(coupler_tier_label);
-        DrawLabelCentered(coupler_quality_label);
-        DrawLine(stat_pos.x, ws_rect.y + (ws_rect.height*0.75f), stat_pos.x + ws_rect.width, ws_rect.y + (ws_rect.height*0.75f), WHITE);
-        DrawLabelCentered(rod_label);
-        DrawLabelCentered(rod_tier_label);
-        DrawLabelCentered(rod_quality_label);
-
-        DrawLabel(accuracy_label);
-        DrawStatusBar(accuracy_bar);
-        DrawLabel(accuracy_value_label);
-
-        DrawLabel(recoil_label);
-        DrawStatusBar(recoil_bar);
-        DrawLabel(recoil_value_label);
-
-        DrawLabel(power_label);
-        DrawStatusBar(power_bar);
-        DrawLabel(power_value_label);
-
-        DrawLabel(cooldown_label);
-        DrawStatusBar(cooldown_bar);
-        DrawLabel(cooldown_value_label);
-             
-        
-        DrawLabel(pps_label);
-        DrawStatusBar(pps_bar);
-        DrawLabel(pps_value_label);
-
-        DrawLabel(knockback_label);
-        DrawStatusBar(knockback_bar); 
-        DrawLabel(knockback_value_label);
- */
-        //DrawLabelCentered(slot_label);
     }
 
 
@@ -197,8 +148,7 @@ void DetailsPanel::Draw() {
         //DrawLabelCentered(defence_label);
 
         DrawLabel(magicdefence_label);
-        //DrawLabelCentered(magicdefence_label);
-        //DrawLabelCentered(slot_label);
+
     }
 
 }
@@ -275,7 +225,7 @@ void DetailsPanel::OpenPanel(ItemInstanceData *_data) {
     if(_data->type == TYPE_WEAPON) {
         if(_data->weapon_data.weapon_type ==WEAPON_TYPE_CASTER) {
                 
-            Vector2 position = (Vector2){stat_pos.x, stat_pos.y + 80 + 80};
+            Vector2 position = (Vector2){stat_pos.x, stat_pos.y + 80};
             Vector2 size = (Vector2){panel_rect.width - (padding * 2), 75};
 
             std::unique_ptr<SpellDetailsPanel> new_details = std::make_unique<SpellDetailsPanel>(

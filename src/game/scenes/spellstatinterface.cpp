@@ -4,6 +4,7 @@
 
 
 SpellStatInterface::SpellStatInterface(std::string stat_name, Vector2 p, Vector2 s, SharedSpellData *shared_data) {
+    stat_string =  stat_name;
     shared_spell = shared_data;
     position = p;
     size = s;
@@ -15,13 +16,13 @@ SpellStatInterface::SpellStatInterface(std::string stat_name, Vector2 p, Vector2
 
     bar_start = {
         .x = (center.x - size.x/2) + (size.y + 10),
-        .y = position.y + (size.y/4)
+        .y = position.y + (size.y/4) + 10
     };
 
 
     bar_end = {
         .x = center.x + (size.x/2) - (size.y + 10),
-        .y = position.y + (size.y/4)
+        .y = position.y + (size.y/4) + 10
     };
     
 
@@ -33,7 +34,7 @@ SpellStatInterface::SpellStatInterface(std::string stat_name, Vector2 p, Vector2
     CreateButton(plus_button, {p.x + size.x - 20 , p.y + (size.y/2)}, {size.y, size.y}, YELLOW, "+" );
     plus_button.text_size = FONTSIZE_30;
 
-    CreateLabel(stat_name_label, {center.x, center.y - 10}, FONTSIZE_30, RAYWHITE, stat_name);
+    CreateLabel(stat_name_label, {center.x, center.y - 10}, FONTSIZE_30, RAYWHITE, stat_string);
     CreateLabel(points_label, bar_end, FONTSIZE_30, RAYWHITE, "?/?");
     CreateLabel(stat_value_label, {center.x, center.y + 20}, FONTSIZE_30, RAYWHITE, "?");
 
@@ -63,18 +64,17 @@ void SpellStatInterface::Draw() {
     }
 
     DrawLabelCentered(stat_name_label);
-    DrawLabelCentered(stat_value_label);
+    //DrawLabelCentered(stat_value_label);
     
     DrawButton(plus_button);
     DrawButton(minus_button);
-    DrawLabel(points_label);
-
+    if(g_game_settings.show_debug) {
+        DrawLabel(points_label);   
+    }
 }
 
 void SpellStatInterface::Update() {
 
-
-    
     int spent_points = shared_spell->working_spell.stat_points[this_stat];
     int unspent_points = shared_spell->points_available;
     int total_points = shared_spell->points_total;
@@ -83,7 +83,6 @@ void SpellStatInterface::Update() {
     if(unspent_points < 0) {
         unspent_points = 0;
     }
-
    
     float added_value = (spent_points * step)/ g_spell_rules.stats[this_stat].cost;
     float stat_base = g_spell_rules.stats[this_stat].base;
@@ -92,8 +91,9 @@ void SpellStatInterface::Update() {
     bar.max_value = shared_spell->points_total;
     bar.current_value = spent_points;
     
-    std::string as = TextFormat("%0.02f",  accumulated_stat);
-    stat_value_label.text = as;
+    
+/*     
+    stat_name_label.text = stat_string + " " + as ; */
     
     float min_value = g_spell_rules.stats[this_stat].limit.min;
     float max_value = g_spell_rules.stats[this_stat].limit.max;
@@ -101,12 +101,6 @@ void SpellStatInterface::Update() {
     float over_value = accumulated_stat + step;
     float under_value = accumulated_stat - step;
 
-/*     if(g_spell_rules.stats[this_stat].step < 0) {
-        float temp = max_value;
-        max_value = min_value;
-        min_value = temp;
-    }
- */
     if(IsButtonHovered(minus_button, g_scale)){
         if(minus_button.already_hovered == false) {
         }
@@ -133,8 +127,8 @@ void SpellStatInterface::Update() {
         if(plus_button.already_hovered == false) {
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if(step > 0) {
 
+            if(step > 0) {
                 if(over_value <= max_value) {           
                     shared_spell->add_stat = true;
                     shared_spell->source_stat = this_stat;
@@ -152,10 +146,12 @@ void SpellStatInterface::Update() {
         
     }
 
-        
-    std::string over = std::to_string(over_value);
-    std::string under = std::to_string(under_value);
-    std::string st = std::to_string(g_spell_rules.stats[this_stat].step);
-    points_label.text = "under " + under + "      over " + over + "  as " + as + " step " + st; 
+    if(g_game_settings.show_debug) {
+        std::string as = TextFormat("%0.02f",  accumulated_stat * g_spell_rules.stats[this_stat].scale);
+        std::string over = std::to_string(over_value);
+        std::string under = std::to_string(under_value);
+        std::string st = std::to_string(g_spell_rules.stats[this_stat].step);
+        points_label.text = "under " + under + "      over " + over + "  as " + as + " step " + st; 
+    }       
    
 }

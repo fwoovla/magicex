@@ -65,6 +65,7 @@ ShelterScene::ShelterScene() {
     dialogue_menu = new DialogueMenu();
 
     spell_menu = new SpellGenMeneu();
+    spell_menu->ui_closed.Connect( [this](){OnUIClosed();} );
 
     show_map_menu = false;
 
@@ -299,4 +300,11 @@ void ShelterScene::OnStartDialogue() {
     TraceLog(LOG_INFO, "STARTING DIALOGUE");
     dialogue_menu-> OpenWith(g_game_data.return_npc);
     dialogue_menu_visible = true;
+}
+
+void ShelterScene::OnUIClosed() {
+    dialogue_menu_visible = false;
+    spell_menu_visible = false;
+    module_menu_visible = false;
+    character_menu_visible = false;
 }
